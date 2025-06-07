@@ -37,6 +37,8 @@ const DEFAULT_SETTINGS: GameSettings = {
 const STORAGE_KEY = 'tetris-game-settings';
 
 function saveToLocalStorage(settings: GameSettings): void {
+  if (typeof window === 'undefined') return;
+  
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
   } catch (error) {
@@ -45,6 +47,8 @@ function saveToLocalStorage(settings: GameSettings): void {
 }
 
 function loadFromLocalStorage(): GameSettings | null {
+  if (typeof window === 'undefined') return null;
+  
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
@@ -108,6 +112,8 @@ export function useSettings() {
 
   // localStorage変更の監視（他のタブでの変更を検知）
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === STORAGE_KEY && e.newValue) {
         try {

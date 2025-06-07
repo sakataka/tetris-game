@@ -43,6 +43,8 @@ export function useSounds({ initialVolume = 0.5, initialMuted = false }: UseSoun
 
   // 音声ファイルを初期化
   const initializeSounds = useCallback(() => {
+    if (typeof window === 'undefined') return;
+    
     Object.entries(soundFiles).forEach(([key, src]) => {
       const soundKey = key as SoundKey;
       
