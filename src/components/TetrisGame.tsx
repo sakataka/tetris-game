@@ -94,7 +94,7 @@ export default function TetrisGame() {
   // useCallbackでコールバック関数を最適化
   const handleParticleUpdate = useCallback((particles: typeof oldGameState.lineEffect.particles) => {
     updateParticles(particles);
-  }, [updateParticles, oldGameState]);
+  }, [updateParticles]);
 
   const handleReset = useCallback(() => {
     // onGameStart(); // Track new game start - 一時的に無効化

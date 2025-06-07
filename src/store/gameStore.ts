@@ -69,290 +69,294 @@ const DEFAULT_GAME_STATE: GameState = {
 
 type GameStore = GlobalGameState & GameStoreActions;
 
-export const useGameStore = create<GameStore>()(
-  persist(
-    immer((set) => ({
-      // Initial state
-      ...DEFAULT_GAME_STATE,
-      settings: DEFAULT_SETTINGS,
-      highScores: [],
-      statistics: DEFAULT_STATISTICS,
-      theme: DEFAULT_THEME_STATE,
-      errors: [],
-      currentSession: null,
-      playSessions: [],
 
-      // Game state actions
-      setGameState: (gameState: Partial<GameState>) => {
-        set((state) => {
-          Object.assign(state, gameState);
-        });
-      },
+export const useGameStore = create<GameStore>()((set) => ({
+  // Initial state
+  ...DEFAULT_GAME_STATE,
+  settings: DEFAULT_SETTINGS,
+  highScores: [],
+  statistics: DEFAULT_STATISTICS,
+  theme: DEFAULT_THEME_STATE,
+  errors: [],
+  currentSession: null,
+  playSessions: [],
 
-      resetGame: () => {
-        set((state) => {
-          const newGameState = {
-            ...DEFAULT_GAME_STATE,
-            board: createEmptyBoard(),
-            currentPiece: getRandomTetromino(),
-            nextPiece: getRandomTetromino()
-          };
-          Object.assign(state, newGameState);
-          
-          // Update statistics
-          state.statistics.totalGames += 1;
-          if (state.statistics.totalGames > 0) {
-            state.statistics.averageScore = Math.floor(
-              state.statistics.totalScore / state.statistics.totalGames
-            );
-          }
-        });
-      },
+  // Game state actions
+  setGameState: (gameState: Partial<GameState>) => {
+    set((state) => ({
+      ...state,
+      ...gameState
+    }));
+  },
 
-      togglePause: () => {
-        set((state) => {
-          state.isPaused = !state.isPaused;
-        });
-      },
+  resetGame: () => {
+    set((state) => {
+      const newGameState = {
+        ...DEFAULT_GAME_STATE,
+        board: createEmptyBoard(),
+        currentPiece: getRandomTetromino(),
+        nextPiece: getRandomTetromino()
+      };
+      
+      const newStatistics = {
+        ...state.statistics,
+        totalGames: state.statistics.totalGames + 1
+      };
+      newStatistics.averageScore = newStatistics.totalGames > 0 
+        ? Math.floor(newStatistics.totalScore / newStatistics.totalGames)
+        : 0;
+      
+      return {
+        ...state,
+        ...newGameState,
+        statistics: newStatistics
+      };
+    });
+  },
 
-      // Settings actions
-      updateSettings: (settings: Partial<GameSettings>) => {
-        set((state) => {
-          Object.assign(state.settings, settings);
-        });
-      },
+  togglePause: () => {
+    set((state) => ({
+      ...state,
+      isPaused: !state.isPaused
+    }));
+  },
 
-      // High scores actions
-      addHighScore: (score: HighScore) => {
-        set((state) => {
-          state.highScores.push(score);
-          // Keep only top 10 scores
-          state.highScores.sort((a, b) => b.score - a.score);
-          if (state.highScores.length > 10) {
-            state.highScores.splice(10);
-          }
-          
-          // Update best score in statistics
-          if (score.score > state.statistics.bestScore) {
-            state.statistics.bestScore = score.score;
-          }
-        });
-      },
+  // Settings actions
+  updateSettings: (settings: Partial<GameSettings>) => {
+    set((state) => ({
+      ...state,
+      settings: { ...state.settings, ...settings }
+    }));
+  },
 
-      clearHighScores: () => {
-        set((state) => {
-          state.highScores.splice(0);
-        });
-      },
+  // High scores actions
+  addHighScore: (score: HighScore) => {
+    set((state) => {
+      const newHighScores = [...state.highScores, score]
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 10);
+      
+      const newStatistics = {
+        ...state.statistics,
+        bestScore: Math.max(state.statistics.bestScore, score.score)
+      };
+      
+      return {
+        ...state,
+        highScores: newHighScores,
+        statistics: newStatistics
+      };
+    });
+  },
 
-      // Statistics actions
-      updateStatistics: (stats: Partial<GameStatistics>) => {
-        set((state) => {
-          Object.assign(state.statistics, stats);
-          
-          // Recalculate derived values
-          if (state.statistics.totalGames > 0) {
-            state.statistics.averageScore = Math.floor(
-              state.statistics.totalScore / state.statistics.totalGames
-            );
-          }
-        });
-      },
+  clearHighScores: () => {
+    set((state) => ({
+      ...state,
+      highScores: []
+    }));
+  },
 
-      resetStatistics: () => {
-        set((state) => {
-          Object.assign(state.statistics, DEFAULT_STATISTICS);
-        });
-      },
-
-      // Theme actions
-      setTheme: (theme: ThemeVariant) => {
-        set((state) => {
-          state.theme.current = theme;
-          state.settings.theme = theme;
-        });
-      },
-
-      updateThemeState: (themeState: Partial<ThemeState>) => {
-        set((state) => {
-          Object.assign(state.theme, themeState);
-        });
-      },
-
-      // Error handling actions
-      addError: (error: GameError) => {
-        set((state) => {
-          state.errors.push(error);
-          // Keep only last 50 errors
-          if (state.errors.length > 50) {
-            state.errors.splice(0, state.errors.length - 50);
-          }
-        });
-      },
-
-      clearErrors: () => {
-        set((state) => {
-          state.errors.splice(0);
-        });
-      },
-
-      clearError: (errorId: string) => {
-        set((state) => {
-          const index = state.errors.findIndex(error => 
-            error.timestamp.toString() === errorId
-          );
-          if (index !== -1) {
-            state.errors.splice(index, 1);
-          }
-        });
-      },
-
-      // Session tracking actions
-      startPlaySession: () => {
-        set((state) => {
-          // End current session if exists
-          if (state.currentSession?.isActive) {
-            const completedSession: PlaySession = {
-              ...state.currentSession,
-              endTime: Date.now(),
-              isActive: false
-            };
-            state.playSessions.push(completedSession);
-          }
-
-          // Start new session
-          const newSession: PlaySession = {
-            id: `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-            startTime: Date.now(),
-            gameCount: 0,
-            isActive: true
-          };
-          state.currentSession = newSession;
-        });
-      },
-
-      endPlaySession: () => {
-        set((state) => {
-          if (state.currentSession?.isActive) {
-            const completedSession: PlaySession = {
-              ...state.currentSession,
-              endTime: Date.now(),
-              isActive: false
-            };
-            
-            // Only add if not already in the list (prevent duplicates)
-            const existingSession = state.playSessions.find(s => s.id === completedSession.id);
-            if (!existingSession) {
-              state.playSessions.push(completedSession);
-              
-              // Update play time statistics
-              const sessionDuration = (completedSession.endTime! - completedSession.startTime) / 1000; // seconds
-              state.statistics.playTime += sessionDuration;
-            }
-            
-            state.currentSession = null;
-          }
-        });
-      },
-
-      incrementGameCount: () => {
-        set((state) => {
-          if (state.currentSession?.isActive) {
-            // Immer allows mutation of readonly properties
-            const mutableSession = state.currentSession as {
-              gameCount: number;
-              id: string;
-              startTime: number;
-              endTime?: number;
-              isActive: boolean;
-            };
-            mutableSession.gameCount += 1;
-          }
-          state.statistics.totalGames += 1;
-        });
+  // Statistics actions
+  updateStatistics: (stats: Partial<GameStatistics>) => {
+    set((state) => {
+      const newStatistics = { ...state.statistics, ...stats };
+      if (newStatistics.totalGames > 0) {
+        newStatistics.averageScore = Math.floor(
+          newStatistics.totalScore / newStatistics.totalGames
+        );
       }
-    })),
-    {
-      name: 'tetris-game-store',
-      storage: createJSONStorage(() => localStorage),
-      // Only persist settings, high scores, statistics, theme, and sessions
-      partialize: (state) => ({
-        settings: state.settings,
-        highScores: state.highScores,
-        statistics: state.statistics,
-        theme: state.theme,
-        playSessions: state.playSessions
-      }),
-      // SSR support
-      skipHydration: true,
-      version: 1,
-      migrate: (persistedState: unknown, version: number) => {
-        if (version < 1) {
-          // Migration logic for future versions
-          const state = persistedState as {
-            settings?: Partial<GameSettings>;
-            statistics?: Partial<GameStatistics>;
-            theme?: Partial<ThemeState>;
-            highScores?: HighScore[];
-          };
-          return {
-            settings: { ...DEFAULT_SETTINGS, ...(state?.settings || {}) },
-            statistics: { ...DEFAULT_STATISTICS, ...(state?.statistics || {}) },
-            theme: { ...DEFAULT_THEME_STATE, ...(state?.theme || {}) },
-            highScores: state?.highScores || []
-          };
+      return {
+        ...state,
+        statistics: newStatistics
+      };
+    });
+  },
+
+  resetStatistics: () => {
+    set((state) => ({
+      ...state,
+      statistics: DEFAULT_STATISTICS
+    }));
+  },
+
+  // Theme actions
+  setTheme: (theme: ThemeVariant) => {
+    set((state) => ({
+      ...state,
+      theme: { ...state.theme, current: theme },
+      settings: { ...state.settings, theme }
+    }));
+  },
+
+  updateThemeState: (themeState: Partial<ThemeState>) => {
+    set((state) => ({
+      ...state,
+      theme: { ...state.theme, ...themeState }
+    }));
+  },
+
+  // Error handling actions
+  addError: (error: GameError) => {
+    set((state) => {
+      const newErrors = [...state.errors, error];
+      if (newErrors.length > 50) {
+        newErrors.splice(0, newErrors.length - 50);
+      }
+      return {
+        ...state,
+        errors: newErrors
+      };
+    });
+  },
+
+  clearErrors: () => {
+    set((state) => ({
+      ...state,
+      errors: []
+    }));
+  },
+
+  clearError: (errorId: string) => {
+    set((state) => ({
+      ...state,
+      errors: state.errors.filter(error => 
+        error.timestamp.toString() !== errorId
+      )
+    }));
+  },
+
+  // Session tracking actions
+  startPlaySession: () => {
+    set((state) => {
+      let newPlaySessions = [...state.playSessions];
+      
+      // End current session if exists
+      if (state.currentSession?.isActive) {
+        const completedSession: PlaySession = {
+          ...state.currentSession,
+          endTime: Date.now(),
+          isActive: false
+        };
+        newPlaySessions.push(completedSession);
+      }
+
+      // Start new session
+      const newSession: PlaySession = {
+        id: `session_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
+        startTime: Date.now(),
+        gameCount: 0,
+        isActive: true
+      };
+      
+      return {
+        ...state,
+        currentSession: newSession,
+        playSessions: newPlaySessions
+      };
+    });
+  },
+
+  endPlaySession: () => {
+    set((state) => {
+      if (!state.currentSession?.isActive) {
+        return state;
+      }
+      
+      const completedSession: PlaySession = {
+        ...state.currentSession,
+        endTime: Date.now(),
+        isActive: false
+      };
+      
+      // Only add if not already in the list (prevent duplicates)
+      const existingSession = state.playSessions.find(s => s.id === completedSession.id);
+      let newPlaySessions = [...state.playSessions];
+      let newStatistics = { ...state.statistics };
+      
+      if (!existingSession) {
+        newPlaySessions.push(completedSession);
+        
+        // Update play time statistics
+        const sessionDuration = (completedSession.endTime! - completedSession.startTime) / 1000; // seconds
+        newStatistics.playTime += sessionDuration;
+      }
+      
+      return {
+        ...state,
+        currentSession: null,
+        playSessions: newPlaySessions,
+        statistics: newStatistics
+      };
+    });
+  },
+
+  incrementGameCount: () => {
+    set((state) => {
+      let newCurrentSession = state.currentSession;
+      if (state.currentSession?.isActive) {
+        newCurrentSession = {
+          ...state.currentSession,
+          gameCount: state.currentSession.gameCount + 1
+        };
+      }
+      
+      return {
+        ...state,
+        currentSession: newCurrentSession,
+        statistics: {
+          ...state.statistics,
+          totalGames: state.statistics.totalGames + 1
         }
-        return persistedState;
-      }
-    }
-  )
-);
-
-// Utility hooks for specific parts of the store
-export const useGameState = () => useGameStore((state) => ({
-  board: state.board,
-  currentPiece: state.currentPiece,
-  nextPiece: state.nextPiece,
-  score: state.score,
-  level: state.level,
-  lines: state.lines,
-  gameOver: state.gameOver,
-  isPaused: state.isPaused,
-  lineEffect: state.lineEffect
+      };
+    });
+  }
 }));
 
-export const useGameActions = () => useGameStore((state) => ({
-  setGameState: state.setGameState,
-  resetGame: state.resetGame,
-  togglePause: state.togglePause
-}));
+// Simple selectors that return individual values to avoid object recreation
+export const useGameActions = () => {
+  const setGameState = useGameStore(state => state.setGameState);
+  const resetGame = useGameStore(state => state.resetGame);
+  const togglePause = useGameStore(state => state.togglePause);
+  
+  return { setGameState, resetGame, togglePause };
+};
 
-export const useSettings = () => useGameStore((state) => ({
-  settings: state.settings,
-  updateSettings: state.updateSettings
-}));
+export const useSettings = () => {
+  const settings = useGameStore(state => state.settings);
+  const updateSettings = useGameStore(state => state.updateSettings);
+  
+  return { settings, updateSettings };
+};
 
-export const useHighScores = () => useGameStore((state) => ({
-  highScores: state.highScores,
-  addHighScore: state.addHighScore,
-  clearHighScores: state.clearHighScores
-}));
+export const useHighScores = () => {
+  const highScores = useGameStore(state => state.highScores);
+  const addHighScore = useGameStore(state => state.addHighScore);
+  const clearHighScores = useGameStore(state => state.clearHighScores);
+  
+  return { highScores, addHighScore, clearHighScores };
+};
 
-export const useStatistics = () => useGameStore((state) => ({
-  statistics: state.statistics,
-  updateStatistics: state.updateStatistics,
-  resetStatistics: state.resetStatistics
-}));
+export const useStatistics = () => {
+  const statistics = useGameStore(state => state.statistics);
+  const updateStatistics = useGameStore(state => state.updateStatistics);
+  const resetStatistics = useGameStore(state => state.resetStatistics);
+  
+  return { statistics, updateStatistics, resetStatistics };
+};
 
-export const useTheme = () => useGameStore((state) => ({
-  theme: state.theme,
-  setTheme: state.setTheme,
-  updateThemeState: state.updateThemeState
-}));
+export const useTheme = () => {
+  const theme = useGameStore(state => state.theme);
+  const setTheme = useGameStore(state => state.setTheme);
+  const updateThemeState = useGameStore(state => state.updateThemeState);
+  
+  return { theme, setTheme, updateThemeState };
+};
 
-export const useErrors = () => useGameStore((state) => ({
-  errors: state.errors,
-  addError: state.addError,
-  clearErrors: state.clearErrors,
-  clearError: state.clearError
-}));
+export const useErrors = () => {
+  const errors = useGameStore(state => state.errors);
+  const addError = useGameStore(state => state.addError);
+  const clearErrors = useGameStore(state => state.clearErrors);
+  const clearError = useGameStore(state => state.clearError);
+  
+  return { errors, addError, clearErrors, clearError };
+};
