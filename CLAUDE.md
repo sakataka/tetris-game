@@ -55,6 +55,12 @@ The game uses a refined custom hook architecture with optimized dependencies:
 - Handles keyboard input mapping (Arrow keys + WASD + spacebar)
 - Controls game loop timing based on level progression
 
+**`useSounds`** (Audio System):
+- Manages 6 distinct game audio effects with HTML5 Audio API
+- Provides volume control and mute functionality
+- Handles audio initialization and playback optimization
+- Integrates with game state for contextual sound triggering
+
 ### Cyberpunk Visual Design System
 
 **CSS Variable Architecture**:
@@ -102,7 +108,8 @@ The game uses a refined custom hook architecture with optimized dependencies:
 - Game over/pause overlays with themed styling
 
 **GameInfo** (Themed UI Panels):
-- Five distinct themed panels: Score Data, Next Piece, Controls, Buttons, Scoring
+- Six distinct themed panels: Score Data, Next Piece, Controls, Audio, Buttons, Scoring
+- Audio panel includes volume slider and mute toggle with cyberpunk styling
 - Each panel uses unique hologram backgrounds and neon borders
 - Enhanced buttons with gradient effects and hover animations
 - Consistent cyberpunk typography and spacing
@@ -129,6 +136,13 @@ The game uses a refined custom hook architecture with optimized dependencies:
 - **Themed Overlays**: Game over and pause screens with cyberpunk styling
 - **Floating Animation**: Subtle game board hover effect
 
+**Audio Features**:
+- **Contextual Sound Effects**: 6 distinct audio cues for game events
+- **Interactive Audio**: Piece rotation, landing, hard drop, line clear sounds
+- **Game State Audio**: Tetris bonus and game over sound effects
+- **Audio Controls**: Real-time volume adjustment and mute toggle
+- **Performance Optimized**: Preloaded audio with efficient playback management
+
 ### Technical Implementation Details
 
 **CSS Variable System**:
@@ -143,10 +157,17 @@ The game uses a refined custom hook architecture with optimized dependencies:
 - Enhanced visual rendering with scale and rotation effects
 - Memory-efficient object pooling pattern
 
+**Audio System Architecture**:
+- HTML5 Audio API with preloaded sound files in `/public/sounds/`
+- Six audio files: `line-clear.mp3`, `piece-land.mp3`, `piece-rotate.mp3`, `tetris.mp3`, `game-over.mp3`, `hard-drop.mp3`
+- Sound integration through hook dependency injection pattern
+- Volume and mute state management with real-time audio object updates
+
 **Performance Characteristics**:
 - Zero infinite render loops through optimized dependencies
 - ~90% reduction in CSS duplication through variable system
 - Memory leak prevention through proper timeout management
+- Audio preloading and efficient playback management
 - Production-ready performance optimizations
 
 ## Current Codebase Quality
@@ -179,6 +200,12 @@ The game uses a refined custom hook architecture with optimized dependencies:
 - All game state changes go through `calculatePiecePlacementState` for consistency
 - Use `useRef` for timeouts to prevent memory leaks
 - Particle updates are decoupled from main state to avoid render thrashing
+
+**Audio Integration**:
+- Sound effects triggered through dependency injection pattern in hooks
+- `playSound` function passed from `useSounds` to `useGameState` and `useGameControls`
+- Audio files must be placed in `/public/sounds/` directory with specific naming
+- All audio interactions respect mute state and volume settings
 
 ## Future Enhancement Opportunities
 
