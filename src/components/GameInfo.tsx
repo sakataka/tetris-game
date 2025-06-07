@@ -1,9 +1,11 @@
 'use client';
 
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { Tetromino } from '../types/tetris';
 import HighScoreDisplay from './HighScoreDisplay';
-import { useHighScores } from '../store/gameStore';
+import StatisticsDashboard from './StatisticsDashboard';
+import { useHighScores, useGameStore } from '../store/gameStore';
+import { calculateEnhancedStatistics } from '../utils/statisticsUtils';
 
 interface GameInfoProps {
   score: number;
@@ -35,9 +37,54 @@ const GameInfo = memo(function GameInfo({
   onVolumeChange
 }: GameInfoProps) {
   const { highScores } = useHighScores();
+  const { statistics } = useGameStore((state) => ({
+    statistics: state.statistics
+  }));
+  
+  const [activeTab, setActiveTab] = useState<'game' | 'stats'>('game');
+
+  // Calculate enhanced statistics
+  const enhancedStats = calculateEnhancedStatistics(
+    statistics,
+    [], // We'll use playSessions later for more detailed tracking
+    highScores
+  );
+
   return (
     <div className="text-white space-y-6 min-w-[280px]">
-      {/* スコア情報 */}
+      {/* Tab Navigation */}
+      <div className="flex space-x-2">
+        <button
+          onClick={() => setActiveTab('game')}
+          className={`px-4 py-2 rounded-t-lg font-semibold transition-colors ${
+            activeTab === 'game'
+              ? 'bg-cyan-500/20 text-cyan-400 border-b-2 border-cyan-400'
+              : 'bg-gray-800/50 text-gray-400 hover:text-cyan-400'
+          }`}
+        >
+          Game Info
+        </button>
+        <button
+          onClick={() => setActiveTab('stats')}
+          className={`px-4 py-2 rounded-t-lg font-semibold transition-colors ${
+            activeTab === 'stats'
+              ? 'bg-purple-500/20 text-purple-400 border-b-2 border-purple-400'
+              : 'bg-gray-800/50 text-gray-400 hover:text-purple-400'
+          }`}
+        >
+          Statistics
+        </button>
+      </div>
+
+      {activeTab === 'stats' ? (
+        <StatisticsDashboard
+          statistics={enhancedStats}
+          highScores={highScores}
+          showDetailedView={true}
+        />
+      ) : (
+        <>
+          {/* スコア情報 */}
       <div className="hologram-cyan neon-border p-6 rounded-lg relative overflow-hidden">
         <h3 className="text-xl font-bold mb-4 text-cyan-400 relative">SCORE DATA</h3>
         <div className="space-y-3 relative">
@@ -220,6 +267,8 @@ const GameInfo = memo(function GameInfo({
         maxDisplay={5}
         className="text-sm"
       />
+        </>
+      )}
     </div>
   );
 });

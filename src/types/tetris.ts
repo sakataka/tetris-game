@@ -157,6 +157,17 @@ export interface GlobalGameState extends GameState {
   readonly statistics: GameStatistics;
   readonly theme: ThemeState;
   readonly errors: readonly GameError[];
+  readonly currentSession: PlaySession | null;
+  readonly playSessions: readonly PlaySession[];
+}
+
+// Play session tracking
+export interface PlaySession {
+  readonly id: string;
+  readonly startTime: number;
+  readonly endTime?: number;
+  readonly gameCount: number;
+  readonly isActive: boolean;
 }
 
 // Zustand store actions interface
@@ -185,4 +196,9 @@ export interface GameStoreActions {
   addError: (error: GameError) => void;
   clearErrors: () => void;
   clearError: (errorId: string) => void;
+  
+  // Session tracking actions
+  startPlaySession: () => void;
+  endPlaySession: () => void;
+  incrementGameCount: () => void;
 }

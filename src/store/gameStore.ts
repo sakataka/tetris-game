@@ -12,7 +12,8 @@ import {
   GameError,
   ThemeVariant,
   DifficultyLevel,
-  GameMode
+  GameMode,
+  PlaySession
 } from '../types/tetris';
 import { createEmptyBoard, getRandomTetromino } from '../utils/tetrisUtils';
 
@@ -78,6 +79,8 @@ export const useGameStore = create<GameStore>()(
       statistics: DEFAULT_STATISTICS,
       theme: DEFAULT_THEME_STATE,
       errors: [],
+      currentSession: null,
+      playSessions: [],
 
       // Game state actions
       setGameState: (gameState: Partial<GameState>) => {
@@ -202,17 +205,69 @@ export const useGameStore = create<GameStore>()(
             state.errors.splice(index, 1);
           }
         });
+      },
+
+      // Session tracking actions
+      startPlaySession: () => {
+        set((state) => {
+          // End current session if exists
+          if (state.currentSession?.isActive) {
+            const completedSession: PlaySession = {
+              ...state.currentSession,
+              endTime: Date.now(),
+              isActive: false
+            };
+            state.playSessions.push(completedSession);
+          }
+
+          // Start new session
+          const newSession: PlaySession = {
+            id: `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            startTime: Date.now(),
+            gameCount: 0,
+            isActive: true
+          };
+          state.currentSession = newSession;
+        });
+      },
+
+      endPlaySession: () => {
+        set((state) => {
+          if (state.currentSession?.isActive) {
+            const completedSession: PlaySession = {
+              ...state.currentSession,
+              endTime: Date.now(),
+              isActive: false
+            };
+            state.playSessions.push(completedSession);
+            state.currentSession = null;
+
+            // Update play time statistics
+            const sessionDuration = (completedSession.endTime! - completedSession.startTime) / 1000; // seconds
+            state.statistics.playTime += sessionDuration;
+          }
+        });
+      },
+
+      incrementGameCount: () => {
+        set((state) => {
+          if (state.currentSession?.isActive) {
+            state.currentSession.gameCount += 1;
+          }
+          state.statistics.totalGames += 1;
+        });
       }
     })),
     {
       name: 'tetris-game-store',
       storage: createJSONStorage(() => localStorage),
-      // Only persist settings, high scores, statistics, and theme
+      // Only persist settings, high scores, statistics, theme, and sessions
       partialize: (state) => ({
         settings: state.settings,
         highScores: state.highScores,
         statistics: state.statistics,
-        theme: state.theme
+        theme: state.theme,
+        playSessions: state.playSessions
       }),
       version: 1,
       migrate: (persistedState: unknown, version: number) => {

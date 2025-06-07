@@ -12,6 +12,7 @@ import {
   useSettings 
 } from '../store/gameStore';
 import { useHighScoreManager } from '../hooks/useHighScoreManager';
+import { useSessionTracking } from '../hooks/useSessionTracking';
 
 export default function TetrisGame() {
   // Zustand状態管理
@@ -65,6 +66,9 @@ export default function TetrisGame() {
     playSound
   });
 
+  // セッション管理
+  const { onGameStart } = useSessionTracking();
+
   // ゲームループとキーボード入力
   useGameLoop({
     gameState: oldGameState,
@@ -85,8 +89,9 @@ export default function TetrisGame() {
   }, [updateParticles, oldGameState]);
 
   const handleReset = useCallback(() => {
+    onGameStart(); // Track new game start
     resetGame();
-  }, [resetGame]);
+  }, [onGameStart, resetGame]);
 
   const handleTogglePause = useCallback(() => {
     togglePause();
