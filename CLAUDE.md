@@ -27,6 +27,13 @@ npm run lint   # ESLint validation - expect warnings about useCallback dependenc
 npx tsc --noEmit  # TypeScript type checking without compilation
 ```
 
+### Testing
+```bash
+npm test        # Run tests in watch mode
+npm run test:run   # Run tests once
+npm run test:coverage  # Run tests with coverage report
+```
+
 ### Development Notes
 - Build warnings about `useCallback` dependencies are expected and intentional for performance optimization
 - The game runs on `http://localhost:3000` in development mode
@@ -60,6 +67,13 @@ The game uses a refined custom hook architecture with optimized dependencies:
 - Provides volume control and mute functionality
 - Handles audio initialization and playback optimization
 - Integrates with game state for contextual sound triggering
+- Robust error handling for missing audio files with graceful degradation
+
+**`useSettings`** (Configuration Management):
+- Unified settings management with LocalStorage persistence
+- Auto-save/restore of user preferences (volume, key bindings, theme)
+- Cross-tab synchronization of settings changes
+- Fallback to default settings with data validation
 
 ### Cyberpunk Visual Design System
 
@@ -93,13 +107,16 @@ The game uses a refined custom hook architecture with optimized dependencies:
 - Centralized particle physics constants: `PARTICLE_GRAVITY`, `PARTICLE_MAX_Y`
 - Visual effect constants: `PARTICLE_SCALE_BASE`, `PARTICLE_OPACITY_MULTIPLIER`
 - All magic numbers replaced with typed constants in `types/tetris.ts`
+- Strict typing for audio system with `SoundKey` union type
+- Error handling types for graceful failure management
 
 ### Component Architecture
 
 **TetrisGame** (Main Orchestrator):
-- Composes three custom hooks for complete game functionality
+- Composes multiple custom hooks for complete game functionality (useGameState, useGameControls, useGameLoop, useSounds, useSettings)
 - Enhanced visual layout with cyberpunk gradient effects
 - Optimized callback functions with `useCallback` for child components
+- Centralized settings integration with LocalStorage persistence
 
 **TetrisBoard** (Visual Display Layer):
 - Cyberpunk-themed game board with hologram background
@@ -162,6 +179,14 @@ The game uses a refined custom hook architecture with optimized dependencies:
 - Six audio files: `line-clear.mp3`, `piece-land.mp3`, `piece-rotate.mp3`, `tetris.mp3`, `game-over.mp3`, `hard-drop.mp3`
 - Sound integration through hook dependency injection pattern
 - Volume and mute state management with real-time audio object updates
+- Comprehensive error handling for missing files with loading state tracking
+- Graceful degradation when audio files are unavailable
+
+**Settings & Persistence Architecture**:
+- LocalStorage-based persistence with automatic save/restore
+- Settings validation and sanitization with fallback to defaults
+- Cross-tab synchronization through storage event listeners
+- Type-safe configuration management with `GameSettings` interface
 
 **Performance Characteristics**:
 - Zero infinite render loops through optimized dependencies
@@ -177,6 +202,8 @@ The game uses a refined custom hook architecture with optimized dependencies:
 - **Type Safety**: Comprehensive TypeScript coverage with centralized constants
 - **Performance**: Optimized rendering and memory management
 - **Maintainability**: Unified styling system and consistent patterns
+- **Test Coverage**: Comprehensive test suite with Vitest covering utilities, hooks, and error scenarios
+- **Error Resilience**: Robust error handling for audio, storage, and game state failures
 
 ### Visual Design System
 - **Consistent Theme**: Cyberpunk aesthetic across all components
@@ -206,20 +233,166 @@ The game uses a refined custom hook architecture with optimized dependencies:
 - `playSound` function passed from `useSounds` to `useGameState` and `useGameControls`
 - Audio files must be placed in `/public/sounds/` directory with specific naming
 - All audio interactions respect mute state and volume settings
+- Error handling prevents crashes when audio files are missing or fail to load
 
-## Future Enhancement Opportunities
+**Settings Management**:
+- All user preferences automatically saved to LocalStorage on change
+- Settings loaded and validated on application startup with default fallbacks
+- Use `useSettings` hook for any configurable game options
+- Settings persist across browser sessions and sync across tabs
+
+## Future Enhancement Roadmap
+
+### Phase 2: Core Feature Expansion (2-3 weeks)
+**Target**: Enhanced user experience and mobile support
+
+**State Management Standardization**:
+```typescript
+interface GlobalGameState extends GameState {
+  settings: GameSettings;
+  highScores: HighScore[];
+  statistics: GameStatistics;
+  theme: ThemeState;
+}
+```
+- Zustand or enhanced Context API integration
+- State normalization and performance optimization
+- Time-travel debugging capabilities
+- State change audit logging
+
+**High Score & Statistics System**:
+- Local high score management (Top 10)
+- Session statistics tracking (total lines, games, best streak, average score)
+- Achievement system with unlockable rewards
+- Play time and efficiency analysis
+- Statistical data visualization
+
+**Mobile & Responsive Enhancement**:
+- Swipe gesture support (move, rotate, drop)
+- Optional virtual button overlay
+- Haptic feedback integration
+- Screen size-specific layout optimization
+- Device rotation support
+
+**Customizable Theme System**:
+- Additional preset themes (classic, retro, minimal, neon)
+- Custom color palette editor
+- Color-blind friendly configurations
+- Contrast adjustment controls
+- Animation intensity settings
+
+**Component Modularization**:
+- GameInfo panel subdivision into reusable components
+- Shared UI component library (HologramPanel, NeonButton, VolumeSlider)
+- Enhanced testability and maintainability
+
+### Phase 3: Advanced Features (1-2 months)
+**Target**: Platform-level capabilities and accessibility
+
+**Multiplayer Foundation**:
+```typescript
+interface MultiplayerArchitecture {
+  gameMode: 'single' | 'versus' | 'cooperative' | 'battle';
+  players: Player[];
+  syncEngine: StateSyncEngine;
+  networking: NetworkLayer;
+}
+```
+- Local multiplayer (same-screen 2-player)
+- WebSocket/WebRTC communication layer
+- State synchronization with conflict resolution
+- Real-time 1vs1 competitive mode
+- Cooperative line-clearing mode
+
+**Internationalization (i18n)**:
+```typescript
+interface I18nSystem {
+  languages: ['ja', 'en', 'es', 'fr', 'de', 'ko', 'zh'];
+  translations: TranslationMap;
+  formatters: LocaleFormatters;
+  rtlSupport: RTLConfig;
+}
+```
+- Multi-language UI support
+- Regional number and date formatting
+- Right-to-left language support
+- Localized audio files
+- Regional keyboard layout adaptation
+
+**Accessibility Enhancement (WCAG Compliance)**:
+```typescript
+interface AccessibilityFeatures {
+  screenReader: ScreenReaderConfig;
+  keyboardNav: KeyboardNavConfig;
+  visualAids: VisualAidConfig;
+  motorSupport: MotorSupportConfig;
+}
+```
+- Complete screen reader support
+- Keyboard-only navigation
+- High contrast mode
+- Reduced motion options
+- Alternative text and ARIA labels
+- Non-color-based information delivery
+
+**Advanced Game Modes**:
+```typescript
+type ExtendedGameMode = 'classic' | 'sprint' | 'ultra' | 'zen' | 'puzzle' | 'survival';
+```
+- Sprint Mode: Time-limited line clearing competition
+- Ultra Mode: Maximum score within time limit
+- Zen Mode: Relaxing unlimited play
+- Puzzle Mode: Complete specific arrangements
+- Survival Mode: Progressively increasing speed
+- Power-ups with temporary special effects
+- Daily challenges and missions
+
+**Plugin System**:
+```typescript
+interface GamePlugin {
+  manifest: PluginManifest;
+  hooks: PluginHooks;
+  components: PluginComponents;
+  assets: PluginAssets;
+}
+```
+- Third-party plugin support
+- Custom theme plugins
+- New game mode extensions
+- Enhanced effect plugins
+- Statistics and analysis tools
+- Streaming/content creator features
+
+### Technical Infrastructure Extensions
+
+**Performance Optimization**:
+- Web Workers for heavy computation isolation
+- Virtual scrolling for large data handling
+- Service Worker for offline support
+- Bundle splitting and lazy loading
+
+**Data Management**:
+- IndexedDB for large-capacity data storage
+- Optional cloud synchronization
+- Data backup and restoration
+- Migration system for version updates
 
 ### Extensibility Patterns
 - **Theme Variations**: Easy creation of new color schemes using CSS variables
 - **Effect Customization**: Configurable particle and animation parameters
 - **Component Reuse**: Hologram and neon effect classes for new features
 - **Performance Scaling**: Architecture ready for complex visual effects
+- **Plugin Architecture**: Extensible system for community contributions
 
 ### Architecture Benefits
 - **Maintainable Theming**: CSS variable system supports easy design changes
 - **Performance Ready**: Optimized for production deployment
 - **Type Safe**: Comprehensive constant definitions prevent runtime errors
 - **Memory Efficient**: Object pooling and proper cleanup patterns
+- **Test-Driven Development**: Comprehensive test coverage ensures reliability
+- **Error Resilient**: Graceful handling of failures maintains user experience
+- **Settings Persistence**: User preferences retained across sessions
+- **Scalable Architecture**: Ready for multiplayer and advanced features
 
 # important-instruction-reminders
 Do what has been asked; nothing more, nothing less.
