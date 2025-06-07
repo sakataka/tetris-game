@@ -2,10 +2,12 @@ import { useCallback } from 'react';
 import { GameState, Tetromino, HARD_DROP_BONUS_MULTIPLIER } from '../types/tetris';
 import { isValidPosition, rotatePiece } from '../utils/tetrisUtils';
 
+import type { SoundKey } from './useSounds';
+
 interface UseGameControlsProps {
   setGameState: React.Dispatch<React.SetStateAction<GameState>>;
   calculatePiecePlacementState: (prevState: GameState, piece: Tetromino, bonusPoints?: number) => GameState;
-  playSound: (soundType: 'lineClear' | 'pieceLand' | 'pieceRotate' | 'tetris' | 'gameOver' | 'hardDrop') => void;
+  playSound: (soundType: SoundKey) => void;
 }
 
 export function useGameControls({

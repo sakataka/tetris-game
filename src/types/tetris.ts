@@ -1,15 +1,18 @@
 export type TetrominoType = 'I' | 'O' | 'T' | 'S' | 'Z' | 'J' | 'L';
+export type ThemeVariant = 'cyberpunk' | 'classic' | 'neon';
+export type GameMode = 'single' | 'versus' | 'cooperative';
+export type DifficultyLevel = 'easy' | 'normal' | 'hard' | 'extreme';
 
 export interface Position {
-  x: number;
-  y: number;
+  readonly x: number;
+  readonly y: number;
 }
 
 export interface Tetromino {
-  type: TetrominoType;
-  shape: number[][];
-  position: Position;
-  color: string;
+  readonly type: TetrominoType;
+  readonly shape: number[][];
+  readonly position: Position;
+  readonly color: string;
 }
 
 export interface Particle {
@@ -38,6 +41,18 @@ export interface GameState {
   gameOver: boolean;
   isPaused: boolean;
   lineEffect: LineEffectState;
+}
+
+// エラーハンドリング用の型定義
+export interface GameError {
+  readonly type: 'AUDIO_LOAD_ERROR' | 'STORAGE_ERROR' | 'GAME_STATE_ERROR';
+  readonly message: string;
+  readonly timestamp: number;
+}
+
+export interface ErrorState {
+  readonly errors: readonly GameError[];
+  readonly hasErrors: boolean;
 }
 
 export const BOARD_WIDTH = 10;

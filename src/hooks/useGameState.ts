@@ -17,8 +17,10 @@ import {
 
 const INITIAL_DROP_TIME = 1000;
 
+import type { SoundKey } from './useSounds';
+
 interface UseGameStateProps {
-  playSound?: (soundType: 'lineClear' | 'pieceLand' | 'pieceRotate' | 'tetris' | 'gameOver' | 'hardDrop') => void;
+  playSound?: (soundType: SoundKey) => void;
 }
 
 export function useGameState(props: UseGameStateProps = {}) {

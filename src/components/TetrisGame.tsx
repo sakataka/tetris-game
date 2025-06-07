@@ -7,8 +7,16 @@ import { useGameState } from '../hooks/useGameState';
 import { useGameControls } from '../hooks/useGameControls';
 import { useGameLoop } from '../hooks/useGameLoop';
 import { useSounds } from '../hooks/useSounds';
+import { useSettings } from '../hooks/useSettings';
 
 export default function TetrisGame() {
+  // 設定システム
+  const {
+    settings,
+    setVolume,
+    toggleAudio
+  } = useSettings();
+
   // 音効果システム
   const {
     playSound,
@@ -17,7 +25,10 @@ export default function TetrisGame() {
     setVolumeLevel,
     toggleMute,
     initializeSounds
-  } = useSounds();
+  } = useSounds({
+    initialVolume: settings.volume,
+    initialMuted: !settings.audioEnabled
+  });
 
   // ゲーム状態管理
   const {
@@ -76,6 +87,16 @@ export default function TetrisGame() {
     togglePause();
   }, [togglePause]);
 
+  const handleVolumeChange = useCallback((newVolume: number) => {
+    setVolume(newVolume);
+    setVolumeLevel(newVolume);
+  }, [setVolume, setVolumeLevel]);
+
+  const handleToggleMute = useCallback(() => {
+    toggleAudio();
+    toggleMute();
+  }, [toggleAudio, toggleMute]);
+
   return (
     <div className="flex gap-12 items-start justify-center relative">
       {/* ゲームボード */}
@@ -108,8 +129,8 @@ export default function TetrisGame() {
           onTogglePause={handleTogglePause}
           isMuted={isMuted}
           volume={volume}
-          onToggleMute={toggleMute}
-          onVolumeChange={setVolumeLevel}
+          onToggleMute={handleToggleMute}
+          onVolumeChange={handleVolumeChange}
         />
         
         {/* 情報パネル周りのエフェクト */}
