@@ -12,6 +12,20 @@ export interface Tetromino {
   color: string;
 }
 
+export interface LineEffectState {
+  flashingLines: number[];
+  shaking: boolean;
+  particles: Array<{
+    id: string;
+    x: number;
+    y: number;
+    color: string;
+    vx: number;
+    vy: number;
+    life: number;
+  }>;
+}
+
 export interface GameState {
   board: (string | null)[][];
   currentPiece: Tetromino | null;
@@ -21,6 +35,7 @@ export interface GameState {
   lines: number;
   gameOver: boolean;
   isPaused: boolean;
+  lineEffect: LineEffectState;
 }
 
 export const BOARD_WIDTH = 10;

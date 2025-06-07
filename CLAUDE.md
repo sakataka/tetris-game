@@ -5,32 +5,24 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Status
 
-This is a Tetris game built with Next.js 15, TypeScript, and Tailwind CSS v4. The game is fully functional with modern React patterns using hooks and client-side state management.
+This is a Tetris game built with Next.js 15, TypeScript, and Tailwind CSS v4. The game is fully functional with modern React patterns using hooks and client-side state management, featuring advanced visual effects for line clearing animations.
 
-## Development Setup
+## Development Commands
 
-### Running the Development Server
+### Development Server
 ```bash
-cd tetris-game
 npm run dev    # Uses Turbopack for faster development builds
 ```
 
-### Building for Production
+### Build and Deploy
 ```bash
-cd tetris-game
-npm run build
+npm run build  # Build for production
+npm run start  # Start production server
 ```
 
-### Production Server
+### Code Quality
 ```bash
-cd tetris-game
-npm run start
-```
-
-### Linting
-```bash
-cd tetris-game
-npm run lint
+npm run lint   # ESLint validation
 ```
 
 ## Architecture
@@ -39,25 +31,61 @@ npm run lint
 The game follows a unidirectional data flow pattern:
 1. **Game State** - Centralized in `TetrisGame.tsx` using `useState`
 2. **Game Loop** - `useEffect` with `setInterval` for automatic piece dropping
-3. **Input Handling** - Global keyboard event listeners for real-time controls
+3. **Input Handling** - Global keyboard event listeners (Arrow keys + WASD)
 4. **Collision Detection** - Pure functions in `tetrisUtils.ts` for position validation
 5. **Rendering** - Board state computed on each render with current piece overlay
 
-### Key Game Systems
-- **Piece Generation**: Random tetromino creation with standard shapes and colors
-- **Movement Validation**: Boundary and collision checking before state updates
-- **Line Clearing**: Row detection and removal with cascading gravity
-- **Scoring System**: Points based on lines cleared, level multipliers, and hard drops
-- **Level Progression**: Speed increases every 10 lines cleared
+### Visual Effects System
+The game features a sophisticated animation system for line clearing:
 
-### State Management Pattern
-All game state is managed in `TetrisGame.tsx` with immutable updates. Components receive props for display and callbacks for actions. No external state management library is used.
+**Effect State Management (`LineEffectState`)**:
+- `flashingLines`: Array of row indices for flash effects
+- `shaking`: Boolean for board shake animation
+- `particles`: Array of particle objects with physics properties
+
+**Effect Components**:
+- **TetrisGame**: Manages effect lifecycle with 300ms auto-reset
+- **TetrisBoard**: Applies CSS animations based on effect state
+- **ParticleEffect**: Handles particle physics with `requestAnimationFrame`
+
+**Animation Types**:
+- Flash effect: Cleared lines turn white with `animate-pulse`
+- Shake effect: Board bounces with `animate-bounce`
+- Particle explosion: 3 particles per cleared cell with gravity simulation
+
+### Component Architecture
+
+**TetrisGame (Main Controller)**:
+- Centralized state management for all game data
+- Effect coordination and timing control
+- Callback management for particle updates
+
+**TetrisBoard (Display Layer)**:
+- Ghost piece rendering (dashed preview of drop position)
+- Dynamic styling based on game and effect states
+- Integration with particle system
+
+**ParticleEffect (Animation System)**:
+- Physics simulation for particle movement
+- Automatic cleanup of expired particles
+- Performance-optimized rendering loop
+
+### Game Features
+- **Ghost Piece**: Dashed outline showing drop destination
+- **Hard Drop**: Space bar for instant piece placement with bonus points
+- **Extended Controls**: Both arrow keys and WASD support
+- **Dynamic Difficulty**: Speed increases every 10 lines cleared
+- **Tetris Bonus**: 4-line clear bonus scoring
 
 ### TypeScript Architecture
-- `GameState` interface defines the complete game state shape
+- `GameState` interface includes `lineEffect` for animation state
+- `LineEffectState` defines particle and effect properties
 - `Tetromino` interface encapsulates piece data with position and shape
 - Utility functions are pure and type-safe for reliable game logic
-- Enum-like constants for tetromino types ensure type safety
+- Enhanced `clearLines` function returns cleared line indices for effects
 
-### Styling Approach
-Uses Tailwind CSS with dynamic styles for game pieces. Board grid is CSS Grid with individual cell styling based on piece colors.
+### Styling and Performance
+- Tailwind CSS with dynamic animations and transitions
+- CSS Grid-based board layout with individual cell styling
+- `requestAnimationFrame` for smooth particle animations
+- Automatic particle cleanup to prevent memory leaks

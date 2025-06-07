@@ -83,7 +83,8 @@ export function placePiece(
 
 export function clearLines(board: (string | null)[][]): { 
   newBoard: (string | null)[][]; 
-  linesCleared: number 
+  linesCleared: number;
+  linesToClear: number[];
 } {
   const linesToClear: number[] = [];
   
@@ -94,7 +95,7 @@ export function clearLines(board: (string | null)[][]): {
   }
   
   if (linesToClear.length === 0) {
-    return { newBoard: board, linesCleared: 0 };
+    return { newBoard: board, linesCleared: 0, linesToClear: [] };
   }
   
   const newBoard = board.filter((_, index) => !linesToClear.includes(index));
@@ -103,7 +104,49 @@ export function clearLines(board: (string | null)[][]): {
     newBoard.unshift(Array(BOARD_WIDTH).fill(null));
   }
   
-  return { newBoard, linesCleared: linesToClear.length };
+  return { newBoard, linesCleared: linesToClear.length, linesToClear };
+}
+
+export function createParticles(linesToClear: number[], board: (string | null)[][]): Array<{
+  id: string;
+  x: number;
+  y: number;
+  color: string;
+  vx: number;
+  vy: number;
+  life: number;
+}> {
+  const particles: Array<{
+    id: string;
+    x: number;
+    y: number;
+    color: string;
+    vx: number;
+    vy: number;
+    life: number;
+  }> = [];
+  
+  linesToClear.forEach(lineIndex => {
+    for (let x = 0; x < BOARD_WIDTH; x++) {
+      const cellColor = board[lineIndex][x];
+      if (cellColor) {
+        // 各セルから複数のパーティクルを生成
+        for (let i = 0; i < 3; i++) {
+          particles.push({
+            id: `${lineIndex}-${x}-${i}`,
+            x: x * 24 + 12 + 8, // セル中央 + ボード位置調整
+            y: lineIndex * 24 + 12 + 8,
+            color: cellColor,
+            vx: (Math.random() - 0.5) * 8, // 水平方向のランダムな速度
+            vy: Math.random() * -4 - 2, // 上向きの速度
+            life: 60 // 60フレーム持続
+          });
+        }
+      }
+    }
+  });
+  
+  return particles;
 }
 
 export function getDropPosition(
