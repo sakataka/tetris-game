@@ -1,295 +1,49 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { 
-  GameState,
-  Tetromino,
-  EFFECT_RESET_DELAY,
-  HARD_DROP_BONUS_MULTIPLIER,
-  TETRIS_BONUS_POINTS,
-  BASE_LINE_POINTS
-} from '../types/tetris';
-import { 
-  createEmptyBoard,
-  getRandomTetromino,
-  rotatePiece,
-  isValidPosition,
-  placePiece,
-  clearLines,
-  createParticles
-} from '../utils/tetrisUtils';
 import TetrisBoard from './TetrisBoard';
 import GameInfo from './GameInfo';
-
-const INITIAL_DROP_TIME = 1000;
+import { useGameState } from '../hooks/useGameState';
+import { useGameControls } from '../hooks/useGameControls';
+import { useGameLoop } from '../hooks/useGameLoop';
 
 export default function TetrisGame() {
-  const [gameState, setGameState] = useState<GameState>(() => ({
-    board: createEmptyBoard(),
-    currentPiece: getRandomTetromino(),
-    nextPiece: getRandomTetromino(),
-    score: 0,
-    level: 1,
-    lines: 0,
-    gameOver: false,
-    isPaused: false,
-    lineEffect: {
-      flashingLines: [],
-      shaking: false,
-      particles: []
-    }
-  }));
+  // ゲーム状態管理
+  const {
+    gameState,
+    setGameState,
+    dropTime,
+    setDropTime,
+    updateParticles,
+    calculatePiecePlacementState,
+    resetGame,
+    togglePause,
+    INITIAL_DROP_TIME
+  } = useGameState();
 
-  const [dropTime, setDropTime] = useState(INITIAL_DROP_TIME);
+  // ゲーム操作
+  const {
+    movePiece,
+    rotatePieceClockwise,
+    dropPiece,
+    hardDrop
+  } = useGameControls({
+    setGameState,
+    calculatePiecePlacementState
+  });
 
-  const updateParticles = useCallback((newParticles: typeof gameState.lineEffect.particles) => {
-    setGameState(prevState => ({
-      ...prevState,
-      lineEffect: {
-        ...prevState.lineEffect,
-        particles: newParticles
-      }
-    }));
-  }, []);
-
-  const calculatePiecePlacementState = useCallback((prevState: GameState, piece: Tetromino, bonusPoints: number = 0): GameState => {
-    const newBoard = placePiece(prevState.board, piece);
-    const { newBoard: clearedBoard, linesCleared, linesToClear } = clearLines(newBoard);
-    
-    const newLines = prevState.lines + linesCleared;
-    const newLevel = Math.floor(newLines / 10) + 1;
-    const newScore = prevState.score + 
-      (linesCleared * BASE_LINE_POINTS * newLevel) + 
-      (linesCleared === 4 ? TETRIS_BONUS_POINTS * newLevel : 0) + // Tetris bonus
-      bonusPoints;
-
-    const nextPiece = getRandomTetromino();
-    
-    // ライン消去アニメーション効果
-    let newLineEffect = { ...prevState.lineEffect };
-    if (linesCleared > 0) {
-      newLineEffect = {
-        flashingLines: linesToClear,
-        shaking: true,
-        particles: [
-          ...prevState.lineEffect.particles,
-          ...createParticles(linesToClear, newBoard)
-        ]
-      };
-      
-      // アニメーション後にエフェクトをリセット
-      setTimeout(() => {
-        setGameState(currentState => ({
-          ...currentState,
-          lineEffect: {
-            ...currentState.lineEffect,
-            flashingLines: [],
-            shaking: false
-          }
-        }));
-      }, EFFECT_RESET_DELAY);
-    }
-    
-    // Check if game is over
-    if (!isValidPosition(clearedBoard, prevState.nextPiece!, prevState.nextPiece!.position)) {
-      return {
-        ...prevState,
-        board: clearedBoard,
-        gameOver: true,
-        score: newScore,
-        level: newLevel,
-        lines: newLines,
-        lineEffect: newLineEffect
-      };
-    }
-
-    return {
-      ...prevState,
-      board: clearedBoard,
-      currentPiece: prevState.nextPiece,
-      nextPiece: nextPiece,
-      score: newScore,
-      level: newLevel,
-      lines: newLines,
-      lineEffect: newLineEffect
-    };
-  }, []);
-
-  const resetGame = useCallback(() => {
-    setGameState({
-      board: createEmptyBoard(),
-      currentPiece: getRandomTetromino(),
-      nextPiece: getRandomTetromino(),
-      score: 0,
-      level: 1,
-      lines: 0,
-      gameOver: false,
-      isPaused: false,
-      lineEffect: {
-        flashingLines: [],
-        shaking: false,
-        particles: []
-      }
-    });
-    setDropTime(INITIAL_DROP_TIME);
-  }, []);
-
-  const movePiece = useCallback((dir: { x: number; y: number }) => {
-    setGameState(prevState => {
-      if (!prevState.currentPiece || prevState.gameOver || prevState.isPaused) {
-        return prevState;
-      }
-
-      const newPosition = {
-        x: prevState.currentPiece.position.x + dir.x,
-        y: prevState.currentPiece.position.y + dir.y
-      };
-
-      if (isValidPosition(prevState.board, prevState.currentPiece, newPosition)) {
-        return {
-          ...prevState,
-          currentPiece: {
-            ...prevState.currentPiece,
-            position: newPosition
-          }
-        };
-      }
-
-      if (dir.y > 0) {
-        // Piece hit bottom, place it
-        return calculatePiecePlacementState(prevState, prevState.currentPiece, 0);
-      }
-
-      return prevState;
-    });
-  }, [calculatePiecePlacementState]);
-
-  const rotatePieceClockwise = useCallback(() => {
-    setGameState(prevState => {
-      if (!prevState.currentPiece || prevState.gameOver || prevState.isPaused) {
-        return prevState;
-      }
-
-      const rotatedPiece = rotatePiece(prevState.currentPiece);
-      
-      if (isValidPosition(prevState.board, rotatedPiece, rotatedPiece.position)) {
-        return {
-          ...prevState,
-          currentPiece: rotatedPiece
-        };
-      }
-
-      return prevState;
-    });
-  }, []);
-
-  const dropPiece = useCallback(() => {
-    movePiece({ x: 0, y: 1 });
-  }, [movePiece]);
-
-  const hardDrop = useCallback(() => {
-    setGameState(prevState => {
-      if (!prevState.currentPiece || prevState.gameOver || prevState.isPaused) {
-        return prevState;
-      }
-
-      let dropY = prevState.currentPiece.position.y;
-      while (isValidPosition(prevState.board, prevState.currentPiece, { 
-        x: prevState.currentPiece.position.x, 
-        y: dropY + 1 
-      })) {
-        dropY++;
-      }
-
-      const droppedPiece = {
-        ...prevState.currentPiece,
-        position: { x: prevState.currentPiece.position.x, y: dropY }
-      };
-
-      const hardDropBonus = (dropY - prevState.currentPiece.position.y) * HARD_DROP_BONUS_MULTIPLIER;
-      return calculatePiecePlacementState(prevState, droppedPiece, hardDropBonus);
-    });
-  }, [calculatePiecePlacementState]);
-
-  const togglePause = useCallback(() => {
-    setGameState(prevState => ({
-      ...prevState,
-      isPaused: !prevState.isPaused
-    }));
-  }, []);
-
-  // Handle keyboard input
-  useEffect(() => {
-    const handleKeyPress = (event: KeyboardEvent) => {
-      if (gameState.gameOver) {
-        if (event.key === 'Enter' || event.key === ' ') {
-          resetGame();
-        }
-        return;
-      }
-
-      switch (event.key) {
-        case 'ArrowLeft':
-        case 'a':
-        case 'A':
-          event.preventDefault();
-          movePiece({ x: -1, y: 0 });
-          break;
-        case 'ArrowRight':
-        case 'd':
-        case 'D':
-          event.preventDefault();
-          movePiece({ x: 1, y: 0 });
-          break;
-        case 'ArrowDown':
-        case 's':
-        case 'S':
-          event.preventDefault();
-          movePiece({ x: 0, y: 1 });
-          break;
-        case 'ArrowUp':
-        case 'w':
-        case 'W':
-          event.preventDefault();
-          rotatePieceClockwise();
-          break;
-        case ' ':
-          event.preventDefault();
-          hardDrop();
-          break;
-        case 'p':
-        case 'P':
-          event.preventDefault();
-          togglePause();
-          break;
-        case 'r':
-        case 'R':
-          event.preventDefault();
-          resetGame();
-          break;
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [gameState.gameOver, movePiece, rotatePieceClockwise, hardDrop, togglePause, resetGame]);
-
-  // Game loop
-  useEffect(() => {
-    if (gameState.gameOver || gameState.isPaused) return;
-
-    const gameLoop = setInterval(() => {
-      dropPiece();
-    }, dropTime);
-
-    return () => clearInterval(gameLoop);
-  }, [dropPiece, dropTime, gameState.gameOver, gameState.isPaused]);
-
-  // Update drop time based on level
-  useEffect(() => {
-    const newDropTime = Math.max(50, INITIAL_DROP_TIME - (gameState.level - 1) * 100);
-    setDropTime(newDropTime);
-  }, [gameState.level]);
+  // ゲームループとキーボード入力
+  useGameLoop({
+    gameState,
+    dropTime,
+    setDropTime,
+    dropPiece,
+    movePiece,
+    rotatePieceClockwise,
+    hardDrop,
+    togglePause,
+    resetGame,
+    INITIAL_DROP_TIME
+  });
 
   return (
     <div className="flex gap-8 items-start">
