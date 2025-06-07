@@ -48,6 +48,8 @@ npm test -- --run src/test/statisticsUtils.test.ts
 - Build warnings about `useCallback` dependencies are expected and intentional for performance optimization
 - The game runs on `http://localhost:3000` in development mode
 - Uses Turbopack for faster development builds
+- **Always run `npm run build` before committing** to ensure no build errors
+- ESLint warnings about missing dependencies in useCallback are intentional for infinite loop prevention
 
 ## Architecture Overview
 
@@ -306,6 +308,12 @@ Legacy and specialized business logic hooks:
 - Zustand selectors use individual value selection to prevent object recreation and infinite renders
 - Avoid including mutable objects (like game state) in useCallback dependencies
 
+**Zustand Store Infinite Loop Prevention**:
+- NEVER return new objects from selector functions - use individual value selectors
+- Selector functions like `useGameActions()` extract individual functions to prevent recreation
+- Avoid complex object destructuring in selectors that could cause reference changes
+- Use `// eslint-disable-next-line react-hooks/exhaustive-deps` when intentionally excluding dependencies
+
 **Styling System**:
 - Use CSS variables from `globals.css` for all cyberpunk theming
 - Prefer `.hologram-*` and `.neon-border-*` classes over inline styles
@@ -516,6 +524,20 @@ interface GamePlugin {
 - Use `beforeEach` to reset all mocks and test state
 - Test both happy paths and error conditions extensively
 - Validate both business logic and UI behavior
+
+## Development Workflow
+
+**Pre-Commit Checklist**:
+1. Run `npm test` to ensure all tests pass
+2. Run `npm run build` to verify no build errors
+3. Check for TypeScript errors with `npx tsc --noEmit`
+4. Review ESLint warnings (some are intentional for performance)
+5. Only then commit and push to GitHub
+
+**Common Issues & Solutions**:
+- **Infinite Loop Errors**: Usually caused by object recreation in Zustand selectors
+- **SSR Hydration Issues**: Temporarily disable persist middleware if needed
+- **Build Failures**: Often due to unused imports or TypeScript errors
 
 # important-instruction-reminders
 Do what has been asked; nothing more, nothing less.
