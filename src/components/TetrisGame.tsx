@@ -11,6 +11,7 @@ import {
   useGameActions, 
   useSettings 
 } from '../store/gameStore';
+import { useHighScoreManager } from '../hooks/useHighScoreManager';
 
 export default function TetrisGame() {
   // Zustand状態管理
@@ -55,6 +56,12 @@ export default function TetrisGame() {
   } = useGameControls({
     setGameState,
     calculatePiecePlacementState,
+    playSound
+  });
+
+  // ハイスコア管理
+  useHighScoreManager({
+    gameState: oldGameState,
     playSound
   });
 

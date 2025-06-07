@@ -2,6 +2,8 @@
 
 import { memo } from 'react';
 import { Tetromino } from '../types/tetris';
+import HighScoreDisplay from './HighScoreDisplay';
+import { useHighScores } from '../store/gameStore';
 
 interface GameInfoProps {
   score: number;
@@ -32,6 +34,7 @@ const GameInfo = memo(function GameInfo({
   onToggleMute,
   onVolumeChange
 }: GameInfoProps) {
+  const { highScores } = useHighScores();
   return (
     <div className="text-white space-y-6 min-w-[280px]">
       {/* スコア情報 */}
@@ -210,6 +213,13 @@ const GameInfo = memo(function GameInfo({
           </div>
         </div>
       </div>
+
+      {/* ハイスコア */}
+      <HighScoreDisplay 
+        highScores={highScores} 
+        maxDisplay={5}
+        className="text-sm"
+      />
     </div>
   );
 });
