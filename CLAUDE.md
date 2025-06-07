@@ -6,7 +6,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Status
 
-This is a cyberpunk-themed Tetris game built with Next.js 15, TypeScript, and Tailwind CSS v4. The game features a sophisticated custom hook architecture, comprehensive performance optimizations, and a unified cyberpunk visual design system with neon effects, holographic backgrounds, and enhanced particle animations.
+This is a cyberpunk-themed Tetris game built with Next.js 15, TypeScript, and Tailwind CSS v4. The game features a sophisticated Zustand-based state management system, comprehensive TDD test coverage (66+ tests), and a unified cyberpunk visual design system with neon effects, holographic backgrounds, and enhanced particle animations.
+
+**Phase 2 Complete**: Full high score and statistics system with automatic persistence, real-time ranking, and comprehensive error handling.
 
 ## Development Commands
 
@@ -32,6 +34,12 @@ npx tsc --noEmit  # TypeScript type checking without compilation
 npm test        # Run tests in watch mode
 npm run test:run   # Run tests once
 npm run test:coverage  # Run tests with coverage report
+
+# Run specific test files (useful for TDD development)
+npm test -- --run src/test/gameStore.test.ts
+npm test -- --run src/test/highScoreUtils.test.ts
+npm test -- --run src/test/useHighScoreManager.test.ts
+npm test -- --run src/test/HighScoreDisplay.test.tsx
 ```
 
 ### Development Notes
@@ -41,10 +49,26 @@ npm run test:coverage  # Run tests with coverage report
 
 ## Architecture Overview
 
-This Tetris game uses a sophisticated three-layer architecture: **State Management** (custom hooks), **Visual Design** (CSS variables + themed components), and **Performance** (object pooling + memoization). All components are interconnected through a unidirectional data flow pattern.
+This Tetris game uses a sophisticated four-layer architecture: **Zustand State Management** (centralized store with persistence), **Custom Hooks** (business logic), **Visual Design** (CSS variables + themed components), and **Performance** (object pooling + memoization). The architecture follows TDD principles with comprehensive test coverage.
 
-### Hook-Based State Management
-The game uses a refined custom hook architecture with optimized dependencies:
+### Zustand State Management (Primary)
+The game uses Zustand with Immer for type-safe, persistent state management:
+
+**`useGameStore`** (Central Store):
+- Global state container with LocalStorage persistence
+- Handles high scores, statistics, settings, theme, and errors
+- Immutable state updates with Immer middleware
+- Automatic data migration and validation
+- Selective hooks: `useHighScores`, `useStatistics`, `useSettings`, `useTheme`
+
+**State Persistence Strategy**:
+- Only user data persisted: settings, high scores, statistics, theme
+- Game state (board, pieces) is ephemeral and reset on each game
+- Cross-tab synchronization with storage events
+- Fallback to defaults with comprehensive error handling
+
+### Hook-Based Business Logic
+Legacy and specialized business logic hooks:
 
 **`useGameState`** (Primary State Management):
 - Manages all game state including board, pieces, score, effects
@@ -69,11 +93,16 @@ The game uses a refined custom hook architecture with optimized dependencies:
 - Integrates with game state for contextual sound triggering
 - Robust error handling for missing audio files with graceful degradation
 
-**`useSettings`** (Configuration Management):
-- Unified settings management with LocalStorage persistence
-- Auto-save/restore of user preferences (volume, key bindings, theme)
-- Cross-tab synchronization of settings changes
-- Fallback to default settings with data validation
+**`useHighScoreManager`** (High Score System):
+- Automatic high score detection and saving on game end
+- Real-time ranking calculation and score validation
+- Sound effect integration for achievements (1st place gets special sound)
+- Comprehensive statistics tracking with game count and averages
+- Memory management to prevent duplicate processing
+
+**`useSettings`** (Legacy Configuration):
+- Still used for some legacy settings functionality
+- Gradually being migrated to Zustand store
 
 ### Cyberpunk Visual Design System
 
@@ -125,11 +154,19 @@ The game uses a refined custom hook architecture with optimized dependencies:
 - Game over/pause overlays with themed styling
 
 **GameInfo** (Themed UI Panels):
-- Six distinct themed panels: Score Data, Next Piece, Controls, Audio, Buttons, Scoring
+- Seven distinct themed panels: Score Data, Next Piece, Controls, Audio, Buttons, Scoring, High Scores
+- High score panel displays Top 5 with rank, score, level, lines, date, and player name
 - Audio panel includes volume slider and mute toggle with cyberpunk styling
 - Each panel uses unique hologram backgrounds and neon borders
 - Enhanced buttons with gradient effects and hover animations
 - Consistent cyberpunk typography and spacing
+
+**HighScoreDisplay** (Ranking System UI):
+- Configurable display count (default Top 5 in GameInfo)
+- Optional rank display with cyberpunk styling
+- Player name support with validation
+- Date formatting in Japanese locale
+- Empty state handling with appropriate messaging
 
 **ParticleEffect** (Enhanced Animation System)**:
 - Uses particle pool for memory efficiency
@@ -157,8 +194,17 @@ The game uses a refined custom hook architecture with optimized dependencies:
 - **Contextual Sound Effects**: 6 distinct audio cues for game events
 - **Interactive Audio**: Piece rotation, landing, hard drop, line clear sounds
 - **Game State Audio**: Tetris bonus and game over sound effects
+- **Achievement Audio**: Special sound effects for high score achievements
 - **Audio Controls**: Real-time volume adjustment and mute toggle
 - **Performance Optimized**: Preloaded audio with efficient playback management
+
+**High Score & Statistics System**:
+- **Automatic Tracking**: Game end detection with automatic high score registration
+- **Top 10 Rankings**: Persistent local high score table with automatic sorting
+- **Comprehensive Statistics**: Total games, lines, score, averages, best scores
+- **Achievement Recognition**: Rank-based celebration messages and sound effects
+- **Data Persistence**: LocalStorage with cross-tab synchronization
+- **Validation & Security**: Input sanitization and data integrity checks
 
 ### Technical Implementation Details
 
@@ -182,11 +228,23 @@ The game uses a refined custom hook architecture with optimized dependencies:
 - Comprehensive error handling for missing files with loading state tracking
 - Graceful degradation when audio files are unavailable
 
-**Settings & Persistence Architecture**:
-- LocalStorage-based persistence with automatic save/restore
-- Settings validation and sanitization with fallback to defaults
-- Cross-tab synchronization through storage event listeners
-- Type-safe configuration management with `GameSettings` interface
+**Zustand Store Architecture**:
+- Immer integration for immutable state updates
+- Persistent middleware with selective data storage
+- Migration system for version updates and data structure changes
+- Type-safe actions with comprehensive error boundaries
+
+**High Score System Architecture**:
+- `highScoreUtils.ts`: Pure utility functions for ranking, validation, statistics
+- `useHighScoreManager.ts`: React hook for automatic game end detection
+- `HighScoreDisplay.tsx`: Reusable UI component with cyberpunk theming
+- Comprehensive test coverage with 66+ unit and integration tests
+
+**TDD Development Approach**:
+- Test-first development for all new features
+- Comprehensive mocking strategies for Zustand store testing
+- Component testing with React Testing Library
+- Utility function testing with edge case coverage
 
 **Performance Characteristics**:
 - Zero infinite render loops through optimized dependencies
@@ -198,12 +256,13 @@ The game uses a refined custom hook architecture with optimized dependencies:
 ## Current Codebase Quality
 
 ### Code Organization
-- **Clean Architecture**: Separation of concerns across hooks and components
-- **Type Safety**: Comprehensive TypeScript coverage with centralized constants
-- **Performance**: Optimized rendering and memory management
+- **Clean Architecture**: Separation of concerns with Zustand store, hooks, and components
+- **Type Safety**: Comprehensive TypeScript coverage with readonly arrays and strict typing
+- **Performance**: Optimized rendering and memory management with object pooling
 - **Maintainability**: Unified styling system and consistent patterns
-- **Test Coverage**: Comprehensive test suite with Vitest covering utilities, hooks, and error scenarios
+- **Test Coverage**: 66+ tests with comprehensive TDD coverage for all high score features
 - **Error Resilience**: Robust error handling for audio, storage, and game state failures
+- **State Management**: Centralized Zustand store with persistence and validation
 
 ### Visual Design System
 - **Consistent Theme**: Cyberpunk aesthetic across all components
@@ -235,56 +294,67 @@ The game uses a refined custom hook architecture with optimized dependencies:
 - All audio interactions respect mute state and volume settings
 - Error handling prevents crashes when audio files are missing or fail to load
 
-**Settings Management**:
-- All user preferences automatically saved to LocalStorage on change
-- Settings loaded and validated on application startup with default fallbacks
-- Use `useSettings` hook for any configurable game options
-- Settings persist across browser sessions and sync across tabs
+**Zustand Store Integration**:
+- Use `useGameStore` for centralized state access and mutations
+- Leverage selective hooks: `useHighScores`, `useStatistics`, `useSettings`, `useTheme`
+- All user data automatically persisted with validation and error handling
+- State changes are immutable through Immer middleware integration
+
+**High Score System Integration**:
+- `useHighScoreManager` automatically handles game end detection and score saving
+- `HighScoreDisplay` component for displaying ranked scores with theming
+- Use `highScoreUtils` functions for score validation and ranking calculations
+- All high score data persists across browser sessions with LocalStorage
 
 ## Future Enhancement Roadmap
 
-### Phase 2: Core Feature Expansion (2-3 weeks)
+### Phase 2: Core Feature Expansion (COMPLETED ✅)
 **Target**: Enhanced user experience and mobile support
 
-**State Management Standardization**:
+**State Management Standardization** (✅ COMPLETED):
 ```typescript
 interface GlobalGameState extends GameState {
   settings: GameSettings;
-  highScores: HighScore[];
+  highScores: readonly HighScore[];
   statistics: GameStatistics;
   theme: ThemeState;
+  errors: readonly GameError[];
 }
 ```
-- Zustand or enhanced Context API integration
-- State normalization and performance optimization
-- Time-travel debugging capabilities
-- State change audit logging
+- ✅ Zustand with Immer integration implemented
+- ✅ State persistence with LocalStorage
+- ✅ Comprehensive error handling and validation
+- ✅ Type-safe readonly arrays
 
-**High Score & Statistics System**:
-- Local high score management (Top 10)
-- Session statistics tracking (total lines, games, best streak, average score)
+**High Score & Statistics System** (✅ COMPLETED):
+- ✅ Local high score management (Top 10) with automatic sorting
+- ✅ Session statistics tracking (total lines, games, best streak, average score)
+- ✅ Real-time achievement recognition with sound effects
+- ✅ Comprehensive test coverage (66+ tests)
+- ✅ Statistical data display in GameInfo panel
+
+**Remaining Phase 2 Items**:
+
+**Statistics Dashboard Implementation** (NEXT):
+- Detailed statistics visualization with charts
+- Play time tracking and efficiency metrics
 - Achievement system with unlockable rewards
-- Play time and efficiency analysis
-- Statistical data visualization
+- Historical performance analysis
+- Statistical data export functionality
 
-**Mobile & Responsive Enhancement**:
+**Customizable Theme System** (PENDING):
+- Additional preset themes (classic, retro, minimal, neon)
+- Custom color palette editor stored in Zustand
+- Color-blind friendly configurations
+- Contrast adjustment controls
+- Animation intensity settings
+
+**Mobile & Responsive Enhancement** (PENDING):
 - Swipe gesture support (move, rotate, drop)
 - Optional virtual button overlay
 - Haptic feedback integration
 - Screen size-specific layout optimization
 - Device rotation support
-
-**Customizable Theme System**:
-- Additional preset themes (classic, retro, minimal, neon)
-- Custom color palette editor
-- Color-blind friendly configurations
-- Contrast adjustment controls
-- Animation intensity settings
-
-**Component Modularization**:
-- GameInfo panel subdivision into reusable components
-- Shared UI component library (HologramPanel, NeonButton, VolumeSlider)
-- Enhanced testability and maintainability
 
 ### Phase 3: Advanced Features (1-2 months)
 **Target**: Platform-level capabilities and accessibility
@@ -386,13 +456,27 @@ interface GamePlugin {
 
 ### Architecture Benefits
 - **Maintainable Theming**: CSS variable system supports easy design changes
-- **Performance Ready**: Optimized for production deployment
-- **Type Safe**: Comprehensive constant definitions prevent runtime errors
+- **Performance Ready**: Optimized for production deployment with Zustand persistence
+- **Type Safe**: Comprehensive TypeScript with readonly arrays and strict typing
 - **Memory Efficient**: Object pooling and proper cleanup patterns
-- **Test-Driven Development**: Comprehensive test coverage ensures reliability
+- **Test-Driven Development**: 66+ tests ensure reliability and prevent regressions
 - **Error Resilient**: Graceful handling of failures maintains user experience
-- **Settings Persistence**: User preferences retained across sessions
-- **Scalable Architecture**: Ready for multiplayer and advanced features
+- **Data Persistence**: Comprehensive LocalStorage with cross-tab synchronization
+- **Scalable Architecture**: Zustand foundation ready for advanced features and multiplayer
+
+## TDD Development Guidelines
+
+**Test Structure**:
+- Use Vitest with React Testing Library for component testing
+- Mock Zustand store with custom test stores for isolated testing
+- Test utilities as pure functions with comprehensive edge case coverage
+- Component tests focus on user interactions and visual output
+
+**Testing Patterns**:
+- Create test-specific mock stores to avoid cross-test contamination
+- Use `beforeEach` to reset all mocks and test state
+- Test both happy paths and error conditions extensively
+- Validate both business logic and UI behavior
 
 # important-instruction-reminders
 Do what has been asked; nothing more, nothing less.
