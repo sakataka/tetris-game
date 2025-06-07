@@ -9,28 +9,22 @@ import { useGameLoop } from '../hooks/useGameLoop';
 import { useSounds } from '../hooks/useSounds';
 import { 
   useGameActions, 
-  useSettings,
-  useGameStore
+  useSettings
 } from '../store/gameStore';
 import { useHighScoreManager } from '../hooks/useHighScoreManager';
-import { useSessionTracking } from '../hooks/useSessionTracking';
+// import { useSessionTracking } from '../hooks/useSessionTracking';
 
 export default function TetrisGame() {
   // Zustand状態管理
   const { resetGame, togglePause } = useGameActions();
   const { settings, updateSettings } = useSettings();
 
-  // SSR hydration handling
+  // SSR hydration handling - 簡素化
   const [isHydrated, setIsHydrated] = useState(false);
   
   useEffect(() => {
-    const unsubscribe = useGameStore.persist.onFinishHydration(() => {
-      setIsHydrated(true);
-    });
-    
-    useGameStore.persist.rehydrate();
-    
-    return unsubscribe;
+    // Simple hydration check
+    setIsHydrated(true);
   }, []);
 
   // 音効果システム
@@ -80,8 +74,8 @@ export default function TetrisGame() {
     playSound
   });
 
-  // セッション管理
-  const { onGameStart } = useSessionTracking();
+  // セッション管理 - 一時的に無効化
+  // const { onGameStart } = useSessionTracking();
 
   // ゲームループとキーボード入力
   useGameLoop({
@@ -103,9 +97,9 @@ export default function TetrisGame() {
   }, [updateParticles, oldGameState]);
 
   const handleReset = useCallback(() => {
-    onGameStart(); // Track new game start
+    // onGameStart(); // Track new game start - 一時的に無効化
     resetGame();
-  }, [onGameStart, resetGame]);
+  }, [resetGame]);
 
   const handleTogglePause = useCallback(() => {
     togglePause();

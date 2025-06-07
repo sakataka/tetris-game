@@ -3,9 +3,9 @@
 import { memo, useState } from 'react';
 import { Tetromino } from '../types/tetris';
 import HighScoreDisplay from './HighScoreDisplay';
-import StatisticsDashboard from './StatisticsDashboard';
-import { useHighScores, useGameStore } from '../store/gameStore';
-import { calculateEnhancedStatistics } from '../utils/statisticsUtils';
+// import StatisticsDashboard from './StatisticsDashboard';
+import { useHighScores } from '../store/gameStore';
+// import { calculateEnhancedStatistics } from '../utils/statisticsUtils';
 
 interface GameInfoProps {
   score: number;
@@ -37,18 +37,19 @@ const GameInfo = memo(function GameInfo({
   onVolumeChange
 }: GameInfoProps) {
   const { highScores } = useHighScores();
-  const { statistics } = useGameStore((state) => ({
-    statistics: state.statistics
-  }));
+  // 一時的に統計機能を無効化
+  // const { statistics } = useGameStore((state) => ({
+  //   statistics: state.statistics
+  // }));
   
   const [activeTab, setActiveTab] = useState<'game' | 'stats'>('game');
 
-  // Calculate enhanced statistics
-  const enhancedStats = calculateEnhancedStatistics(
-    statistics,
-    [], // We'll use playSessions later for more detailed tracking
-    highScores
-  );
+  // Calculate enhanced statistics - 一時的に無効化
+  // const enhancedStats = calculateEnhancedStatistics(
+  //   statistics,
+  //   [], // We'll use playSessions later for more detailed tracking
+  //   highScores
+  // );
 
   return (
     <div className="text-white space-y-6 min-w-[280px]">
@@ -77,11 +78,11 @@ const GameInfo = memo(function GameInfo({
       </div>
 
       {activeTab === 'stats' ? (
-        <StatisticsDashboard
-          statistics={enhancedStats}
-          highScores={highScores}
-          showDetailedView={true}
-        />
+        <div className="hologram-purple p-6 rounded-lg">
+          <div className="text-center text-purple-400">
+            Statistics Dashboard temporarily disabled
+          </div>
+        </div>
       ) : (
         <>
           {/* スコア情報 */}
