@@ -62,7 +62,7 @@ const GameInfo = memo(function GameInfo({
                       backgroundColor: cell ? nextPiece.color : 'transparent'
                     }}
                   >
-                    {cell && (
+                    {cell === 1 && (
                       <div className="absolute inset-0 bg-current opacity-20 blur-sm"></div>
                     )}
                   </div>
