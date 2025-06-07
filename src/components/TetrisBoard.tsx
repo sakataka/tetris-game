@@ -1,5 +1,6 @@
 'use client';
 
+import { memo, useMemo } from 'react';
 import { Tetromino, LineEffectState } from '../types/tetris';
 import { getDropPosition } from '../utils/tetrisUtils';
 import ParticleEffect from './ParticleEffect';
@@ -13,7 +14,7 @@ interface TetrisBoardProps {
   onParticleUpdate: (particles: LineEffectState['particles']) => void;
 }
 
-export default function TetrisBoard({ 
+const TetrisBoard = memo(function TetrisBoard({ 
   board, 
   currentPiece, 
   gameOver, 
@@ -21,43 +22,47 @@ export default function TetrisBoard({
   lineEffect,
   onParticleUpdate
 }: TetrisBoardProps) {
-  // Create display board with current piece and ghost piece
-  const displayBoard = board.map(row => [...row]);
-  
-  // Add ghost piece (preview of where piece will land)
-  if (currentPiece && !gameOver && !isPaused) {
-    const ghostY = getDropPosition(board, currentPiece);
+  // Create display board with current piece and ghost piece (useMemoで最適化)
+  const displayBoard = useMemo(() => {
+    const newDisplayBoard = board.map(row => [...row]);
     
-    // Add ghost piece
-    for (let y = 0; y < currentPiece.shape.length; y++) {
-      for (let x = 0; x < currentPiece.shape[y].length; x++) {
-        if (currentPiece.shape[y][x]) {
-          const boardX = currentPiece.position.x + x;
-          const boardY = ghostY + y;
-          
-          if (boardY >= 0 && boardY < board.length && boardX >= 0 && boardX < board[0].length) {
-            if (!displayBoard[boardY][boardX]) {
-              displayBoard[boardY][boardX] = 'ghost';
+    // Add ghost piece (preview of where piece will land)
+    if (currentPiece && !gameOver && !isPaused) {
+      const ghostY = getDropPosition(board, currentPiece);
+      
+      // Add ghost piece
+      for (let y = 0; y < currentPiece.shape.length; y++) {
+        for (let x = 0; x < currentPiece.shape[y].length; x++) {
+          if (currentPiece.shape[y][x]) {
+            const boardX = currentPiece.position.x + x;
+            const boardY = ghostY + y;
+            
+            if (boardY >= 0 && boardY < board.length && boardX >= 0 && boardX < board[0].length) {
+              if (!newDisplayBoard[boardY][boardX]) {
+                newDisplayBoard[boardY][boardX] = 'ghost';
+              }
+            }
+          }
+        }
+      }
+      
+      // Add current piece
+      for (let y = 0; y < currentPiece.shape.length; y++) {
+        for (let x = 0; x < currentPiece.shape[y].length; x++) {
+          if (currentPiece.shape[y][x]) {
+            const boardX = currentPiece.position.x + x;
+            const boardY = currentPiece.position.y + y;
+            
+            if (boardY >= 0 && boardY < board.length && boardX >= 0 && boardX < board[0].length) {
+              newDisplayBoard[boardY][boardX] = currentPiece.color;
             }
           }
         }
       }
     }
     
-    // Add current piece
-    for (let y = 0; y < currentPiece.shape.length; y++) {
-      for (let x = 0; x < currentPiece.shape[y].length; x++) {
-        if (currentPiece.shape[y][x]) {
-          const boardX = currentPiece.position.x + x;
-          const boardY = currentPiece.position.y + y;
-          
-          if (boardY >= 0 && boardY < board.length && boardX >= 0 && boardX < board[0].length) {
-            displayBoard[boardY][boardX] = currentPiece.color;
-          }
-        }
-      }
-    }
-  }
+    return newDisplayBoard;
+  }, [board, currentPiece, gameOver, isPaused]);
 
   const getCellStyle = (cell: string | null, rowIndex: number) => {
     let baseStyle = '';
@@ -127,4 +132,6 @@ export default function TetrisBoard({
       )}
     </div>
   );
-}
+});
+
+export default TetrisBoard;

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { 
   GameState,
   Tetromino,
@@ -35,6 +35,7 @@ export function useGameState() {
   }));
 
   const [dropTime, setDropTime] = useState(INITIAL_DROP_TIME);
+  const effectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const updateParticles = useCallback((newParticles: typeof gameState.lineEffect.particles) => {
     setGameState(prevState => ({
@@ -71,8 +72,13 @@ export function useGameState() {
         ]
       };
       
+      // 既存のタイマーをクリア
+      if (effectTimeoutRef.current) {
+        clearTimeout(effectTimeoutRef.current);
+      }
+      
       // アニメーション後にエフェクトをリセット
-      setTimeout(() => {
+      effectTimeoutRef.current = setTimeout(() => {
         setGameState(currentState => ({
           ...currentState,
           lineEffect: {
@@ -81,6 +87,7 @@ export function useGameState() {
             shaking: false
           }
         }));
+        effectTimeoutRef.current = null;
       }, EFFECT_RESET_DELAY);
     }
     
@@ -110,6 +117,12 @@ export function useGameState() {
   }, []);
 
   const resetGame = useCallback(() => {
+    // エフェクトタイマーをクリア
+    if (effectTimeoutRef.current) {
+      clearTimeout(effectTimeoutRef.current);
+      effectTimeoutRef.current = null;
+    }
+    
     setGameState({
       board: createEmptyBoard(),
       currentPiece: getRandomTetromino(),
@@ -133,6 +146,15 @@ export function useGameState() {
       ...prevState,
       isPaused: !prevState.isPaused
     }));
+  }, []);
+
+  // クリーンアップ
+  useEffect(() => {
+    return () => {
+      if (effectTimeoutRef.current) {
+        clearTimeout(effectTimeoutRef.current);
+      }
+    };
   }, []);
 
   return {

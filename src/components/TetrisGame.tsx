@@ -1,5 +1,6 @@
 'use client';
 
+import { useCallback } from 'react';
 import TetrisBoard from './TetrisBoard';
 import GameInfo from './GameInfo';
 import { useGameState } from '../hooks/useGameState';
@@ -45,6 +46,19 @@ export default function TetrisGame() {
     INITIAL_DROP_TIME
   });
 
+  // useCallbackでコールバック関数を最適化
+  const handleParticleUpdate = useCallback((particles: typeof gameState.lineEffect.particles) => {
+    updateParticles(particles);
+  }, [updateParticles]);
+
+  const handleReset = useCallback(() => {
+    resetGame();
+  }, [resetGame]);
+
+  const handleTogglePause = useCallback(() => {
+    togglePause();
+  }, [togglePause]);
+
   return (
     <div className="flex gap-8 items-start">
       <TetrisBoard 
@@ -53,7 +67,7 @@ export default function TetrisGame() {
         gameOver={gameState.gameOver}
         isPaused={gameState.isPaused}
         lineEffect={gameState.lineEffect}
-        onParticleUpdate={updateParticles}
+        onParticleUpdate={handleParticleUpdate}
       />
       <GameInfo 
         score={gameState.score}
@@ -62,8 +76,8 @@ export default function TetrisGame() {
         nextPiece={gameState.nextPiece}
         gameOver={gameState.gameOver}
         isPaused={gameState.isPaused}
-        onReset={resetGame}
-        onTogglePause={togglePause}
+        onReset={handleReset}
+        onTogglePause={handleTogglePause}
       />
     </div>
   );

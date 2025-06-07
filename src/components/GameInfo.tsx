@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import { Tetromino } from '../types/tetris';
 
 interface GameInfoProps {
@@ -13,7 +14,7 @@ interface GameInfoProps {
   onTogglePause: () => void;
 }
 
-export default function GameInfo({
+const GameInfo = memo(function GameInfo({
   score,
   level,
   lines,
@@ -116,4 +117,6 @@ export default function GameInfo({
       </div>
     </div>
   );
-}
+});
+
+export default GameInfo;

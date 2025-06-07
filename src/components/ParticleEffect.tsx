@@ -1,29 +1,44 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, memo } from 'react';
 import { LineEffectState } from '../types/tetris';
+import { particlePool } from '../utils/particlePool';
 
 interface ParticleEffectProps {
   lineEffect: LineEffectState;
   onParticleUpdate: (particles: LineEffectState['particles']) => void;
 }
 
-export default function ParticleEffect({ lineEffect, onParticleUpdate }: ParticleEffectProps) {
+const ParticleEffect = memo(function ParticleEffect({ lineEffect, onParticleUpdate }: ParticleEffectProps) {
   const animationRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     if (lineEffect.particles.length === 0) return;
 
     const animate = () => {
-      const updatedParticles = lineEffect.particles
-        .map(particle => ({
+      const updatedParticles: LineEffectState['particles'] = [];
+      const expiredParticles: LineEffectState['particles'] = [];
+
+      lineEffect.particles.forEach(particle => {
+        const updatedParticle = {
           ...particle,
           x: particle.x + particle.vx,
           y: particle.y + particle.vy,
           vy: particle.vy + 0.2, // 重力効果
           life: particle.life - 1
-        }))
-        .filter(particle => particle.life > 0 && particle.y < 500); // 画面外に出たら削除
+        };
+
+        if (updatedParticle.life > 0 && updatedParticle.y < 500) {
+          updatedParticles.push(updatedParticle);
+        } else {
+          expiredParticles.push(particle);
+        }
+      });
+
+      // 期限切れのパーティクルをプールに戻す
+      if (expiredParticles.length > 0) {
+        particlePool.releaseParticles(expiredParticles);
+      }
 
       onParticleUpdate(updatedParticles);
 
@@ -58,4 +73,6 @@ export default function ParticleEffect({ lineEffect, onParticleUpdate }: Particl
       ))}
     </div>
   );
-}
+});
+
+export default ParticleEffect;

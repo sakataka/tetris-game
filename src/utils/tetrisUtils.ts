@@ -9,6 +9,7 @@ import {
   PARTICLES_PER_CELL,
   PARTICLE_LIFE_DURATION
 } from '../types/tetris';
+import { particlePool } from './particlePool';
 
 export function createEmptyBoard(): (string | null)[][] {
   return Array(BOARD_HEIGHT).fill(null).map(() => Array(BOARD_WIDTH).fill(null));
@@ -117,17 +118,18 @@ export function createParticles(linesToClear: number[], board: (string | null)[]
     for (let x = 0; x < BOARD_WIDTH; x++) {
       const cellColor = board[lineIndex][x];
       if (cellColor) {
-        // 各セルから複数のパーティクルを生成
+        // 各セルから複数のパーティクルを生成（プールから取得）
         for (let i = 0; i < PARTICLES_PER_CELL; i++) {
-          particles.push({
-            id: `${lineIndex}-${x}-${i}`,
-            x: x * 24 + 12 + 8, // セル中央 + ボード位置調整
-            y: lineIndex * 24 + 12 + 8,
-            color: cellColor,
-            vx: (Math.random() - 0.5) * 8, // 水平方向のランダムな速度
-            vy: Math.random() * -4 - 2, // 上向きの速度
-            life: PARTICLE_LIFE_DURATION
-          });
+          const particle = particlePool.getParticle(
+            `${lineIndex}-${x}-${i}`,
+            x * 24 + 12 + 8, // セル中央 + ボード位置調整
+            lineIndex * 24 + 12 + 8,
+            cellColor,
+            (Math.random() - 0.5) * 8, // 水平方向のランダムな速度
+            Math.random() * -4 - 2, // 上向きの速度
+            PARTICLE_LIFE_DURATION
+          );
+          particles.push(particle);
         }
       }
     }
