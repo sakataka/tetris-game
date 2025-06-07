@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import TetrisBoard from './TetrisBoard';
 import GameInfo from './GameInfo';
 import { useGameState as useGameStateOld } from '../hooks/useGameState';
@@ -9,7 +9,8 @@ import { useGameLoop } from '../hooks/useGameLoop';
 import { useSounds } from '../hooks/useSounds';
 import { 
   useGameActions, 
-  useSettings 
+  useSettings,
+  useGameStore
 } from '../store/gameStore';
 import { useHighScoreManager } from '../hooks/useHighScoreManager';
 import { useSessionTracking } from '../hooks/useSessionTracking';
@@ -18,6 +19,19 @@ export default function TetrisGame() {
   // Zustand状態管理
   const { resetGame, togglePause } = useGameActions();
   const { settings, updateSettings } = useSettings();
+
+  // SSR hydration handling
+  const [isHydrated, setIsHydrated] = useState(false);
+  
+  useEffect(() => {
+    const unsubscribe = useGameStore.persist.onFinishHydration(() => {
+      setIsHydrated(true);
+    });
+    
+    useGameStore.persist.rehydrate();
+    
+    return unsubscribe;
+  }, []);
 
   // 音効果システム
   const {
@@ -106,6 +120,17 @@ export default function TetrisGame() {
     updateSettings({ isMuted: !settings.isMuted });
     toggleMute();
   }, [updateSettings, settings.isMuted, toggleMute]);
+
+  // Show loading until hydration is complete
+  if (!isHydrated) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-cyber-cyan text-2xl font-bold animate-pulse">
+          Loading Game...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex gap-12 items-start justify-center relative">

@@ -283,6 +283,8 @@ export const useGameStore = create<GameStore>()(
         theme: state.theme,
         playSessions: state.playSessions
       }),
+      // SSR support
+      skipHydration: true,
       version: 1,
       migrate: (persistedState: unknown, version: number) => {
         if (version < 1) {
