@@ -1,7 +1,8 @@
 # CLAUDE.md
 
-必ず日本語で回答して下さい。
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+**Important**: 必ず日本語で回答して下さい。 (Always respond in Japanese)
 
 ## Project Status
 
@@ -22,10 +23,18 @@ npm run start  # Start production server
 
 ### Code Quality
 ```bash
-npm run lint   # ESLint validation - clean codebase with optimized dependencies
+npm run lint   # ESLint validation - expect warnings about useCallback dependencies (intentional for performance)
+npx tsc --noEmit  # TypeScript type checking without compilation
 ```
 
-## Current Architecture
+### Development Notes
+- Build warnings about `useCallback` dependencies are expected and intentional for performance optimization
+- The game runs on `http://localhost:3000` in development mode
+- Uses Turbopack for faster development builds
+
+## Architecture Overview
+
+This Tetris game uses a sophisticated three-layer architecture: **State Management** (custom hooks), **Visual Design** (CSS variables + themed components), and **Performance** (object pooling + memoization). All components are interconnected through a unidirectional data flow pattern.
 
 ### Hook-Based State Management
 The game uses a refined custom hook architecture with optimized dependencies:
@@ -154,11 +163,22 @@ The game uses a refined custom hook architecture with optimized dependencies:
 - **Configurable Effects**: CSS variables for easy theme modifications
 - **Enhanced UX**: Smooth animations and visual feedback
 
-### Recent Optimizations
-- **Dependency Arrays**: Fixed infinite loop issues in particle updates
-- **CSS Variables**: Unified color and effect management
-- **Constant Definitions**: All magic numbers replaced with typed constants
-- **Style Consolidation**: Eliminated duplicate styling patterns
+### Critical Implementation Notes
+
+**Performance Optimizations**:
+- `updateParticles` uses empty dependency array to prevent infinite loops (intentional ESLint warning)
+- All components use `React.memo` - avoid breaking memoization when modifying props
+- Particle system uses object pooling - always return particles to pool when expired
+
+**Styling System**:
+- Use CSS variables from `globals.css` for all cyberpunk theming
+- Prefer `.hologram-*` and `.neon-border-*` classes over inline styles
+- All magic numbers are constants in `types/tetris.ts`
+
+**State Flow**:
+- All game state changes go through `calculatePiecePlacementState` for consistency
+- Use `useRef` for timeouts to prevent memory leaks
+- Particle updates are decoupled from main state to avoid render thrashing
 
 ## Future Enhancement Opportunities
 
