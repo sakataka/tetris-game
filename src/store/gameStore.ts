@@ -1,6 +1,4 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import { immer } from 'zustand/middleware/immer';
 import {
   GlobalGameState,
   GameStoreActions,
@@ -228,7 +226,7 @@ export const useGameStore = create<GameStore>()((set) => ({
   // Session tracking actions
   startPlaySession: () => {
     set((state) => {
-      let newPlaySessions = [...state.playSessions];
+      const newPlaySessions = [...state.playSessions];
       
       // End current session if exists
       if (state.currentSession?.isActive) {
@@ -270,8 +268,8 @@ export const useGameStore = create<GameStore>()((set) => ({
       
       // Only add if not already in the list (prevent duplicates)
       const existingSession = state.playSessions.find(s => s.id === completedSession.id);
-      let newPlaySessions = [...state.playSessions];
-      let newStatistics = { ...state.statistics };
+      const newPlaySessions = [...state.playSessions];
+      const newStatistics = { ...state.statistics };
       
       if (!existingSession) {
         newPlaySessions.push(completedSession);

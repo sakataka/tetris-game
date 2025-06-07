@@ -92,9 +92,10 @@ export default function TetrisGame() {
   });
 
   // useCallbackでコールバック関数を最適化
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleParticleUpdate = useCallback((particles: typeof oldGameState.lineEffect.particles) => {
     updateParticles(particles);
-  }, [updateParticles]);
+  }, [updateParticles]); // oldGameState意図的に除外（無限ループ防止）
 
   const handleReset = useCallback(() => {
     // onGameStart(); // Track new game start - 一時的に無効化

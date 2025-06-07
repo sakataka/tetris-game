@@ -79,7 +79,7 @@ export function useSounds({ initialVolume = 0.5, initialMuted = false }: UseSoun
         audioRefs.current[soundKey] = audio;
       }
     });
-  }, [volume, audioState.failed]);
+  }, [soundFiles, volume, audioState.failed]);
 
   // 音を再生
   const playSound = useCallback((soundType: SoundKey) => {

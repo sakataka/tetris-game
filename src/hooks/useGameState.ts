@@ -44,6 +44,7 @@ export function useGameState(props: UseGameStateProps = {}) {
   const [dropTime, setDropTime] = useState(INITIAL_DROP_TIME);
   const effectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const updateParticles = useCallback((newParticles: typeof gameState.lineEffect.particles) => {
     setGameState(prevState => ({
       ...prevState,
@@ -52,7 +53,7 @@ export function useGameState(props: UseGameStateProps = {}) {
         particles: newParticles
       }
     }));
-  }, []);
+  }, []); // gameState意図的に除外（無限ループ防止）
 
   const calculatePiecePlacementState = useCallback((prevState: GameState, piece: Tetromino, bonusPoints: number = 0): GameState => {
     const newBoard = placePiece(prevState.board, piece);
@@ -130,7 +131,7 @@ export function useGameState(props: UseGameStateProps = {}) {
       lines: newLines,
       lineEffect: newLineEffect
     };
-  }, []);
+  }, [playSound]); // playSound依存関係追加
 
   const resetGame = useCallback(() => {
     // エフェクトタイマーをクリア
