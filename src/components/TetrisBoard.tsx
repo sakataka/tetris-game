@@ -68,16 +68,16 @@ const TetrisBoard = memo(function TetrisBoard({
     let baseStyle = '';
     
     if (!cell) {
-      baseStyle = 'bg-gray-800 border border-gray-700';
+      baseStyle = 'bg-gray-900/50 border border-cyan-500/20 backdrop-blur-sm';
     } else if (cell === 'ghost') {
-      baseStyle = 'border-2 border-gray-400 bg-transparent border-dashed';
+      baseStyle = 'border-2 border-cyan-400/60 bg-transparent border-dashed shadow-[0_0_10px_rgba(0,255,255,0.3)]';
     } else {
-      baseStyle = 'border border-gray-900';
+      baseStyle = 'border border-gray-800 shadow-[0_0_5px_rgba(0,0,0,0.5)] transition-all duration-200';
     }
     
     // フラッシュエフェクト
     if (lineEffect.flashingLines.includes(rowIndex)) {
-      baseStyle += ' animate-pulse bg-white border-white';
+      baseStyle += ' animate-pulse bg-white border-white shadow-[0_0_20px_rgba(255,255,255,0.8)]';
     }
     
     return baseStyle;
@@ -94,16 +94,27 @@ const TetrisBoard = memo(function TetrisBoard({
 
   return (
     <div className="relative">
-      <div className={`grid grid-cols-10 gap-0 border-2 border-gray-600 bg-black p-2 transition-transform ${
+      <div className={`grid grid-cols-10 gap-0 neon-border hologram p-3 transition-transform relative overflow-hidden ${
         lineEffect.shaking ? 'animate-bounce' : ''
-      }`}>
+      }`} style={{
+        background: 'linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(10,10,15,0.9) 50%, rgba(5,5,10,0.8) 100%)',
+        backdropFilter: 'blur(10px)'
+      }}>
+        {/* 内側のグロー効果 */}
+        <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 via-transparent to-purple-400/10 pointer-events-none"></div>
+        
         {displayBoard.map((row, y) =>
           row.map((cell, x) => (
             <div
               key={`${y}-${x}`}
-              className={`w-6 h-6 ${getCellStyle(cell, y)}`}
+              className={`w-7 h-7 relative ${getCellStyle(cell, y)}`}
               style={getCellColor(cell, y)}
-            />
+            >
+              {/* ピースが存在する場合のネオン効果 */}
+              {cell && cell !== 'ghost' && (
+                <div className="absolute inset-0 bg-current opacity-20 blur-sm"></div>
+              )}
+            </div>
           ))
         )}
       </div>
@@ -114,19 +125,31 @@ const TetrisBoard = memo(function TetrisBoard({
       />
       
       {gameOver && (
-        <div className="absolute inset-0 bg-black bg-opacity-75 flex items-center justify-center">
-          <div className="text-center text-white">
-            <h2 className="text-3xl font-bold mb-4">ゲームオーバー</h2>
-            <p className="mb-4">Enterキーまたはスペースキーで再開</p>
+        <div className="absolute inset-0 hologram flex items-center justify-center" style={{
+          background: 'rgba(0,0,0,0.9)',
+          backdropFilter: 'blur(10px)'
+        }}>
+          <div className="text-center text-white p-8 neon-border rounded-lg">
+            <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-red-400 to-red-600 bg-clip-text text-transparent">
+              GAME OVER
+            </h2>
+            <p className="mb-4 text-cyan-400 font-mono">Enterキーまたはスペースキーで再開</p>
+            <div className="animate-pulse text-red-400">◆ ◆ ◆</div>
           </div>
         </div>
       )}
       
       {isPaused && !gameOver && (
-        <div className="absolute inset-0 bg-black bg-opacity-75 flex items-center justify-center">
-          <div className="text-center text-white">
-            <h2 className="text-3xl font-bold mb-4">一時停止</h2>
-            <p className="mb-4">Pキーで再開</p>
+        <div className="absolute inset-0 hologram flex items-center justify-center" style={{
+          background: 'rgba(0,0,0,0.9)',
+          backdropFilter: 'blur(10px)'
+        }}>
+          <div className="text-center text-white p-8 neon-border rounded-lg">
+            <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
+              PAUSED
+            </h2>
+            <p className="mb-4 text-cyan-400 font-mono">Pキーで再開</p>
+            <div className="animate-pulse text-yellow-400">◆ ◆ ◆</div>
           </div>
         </div>
       )}

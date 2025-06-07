@@ -25,94 +25,147 @@ const GameInfo = memo(function GameInfo({
   onTogglePause
 }: GameInfoProps) {
   return (
-    <div className="text-white space-y-6">
+    <div className="text-white space-y-6 min-w-[280px]">
       {/* スコア情報 */}
-      <div className="bg-gray-800 p-4 rounded-lg">
-        <h3 className="text-lg font-bold mb-3">スコア</h3>
-        <div className="space-y-2">
-          <div className="flex justify-between">
-            <span>スコア:</span>
-            <span className="font-mono">{score.toLocaleString()}</span>
+      <div className="hologram neon-border p-6 rounded-lg relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/5 via-transparent to-purple-400/5"></div>
+        <h3 className="text-xl font-bold mb-4 text-cyan-400 relative">SCORE DATA</h3>
+        <div className="space-y-3 relative">
+          <div className="flex justify-between items-center">
+            <span className="text-gray-300">SCORE</span>
+            <span className="font-mono text-2xl text-yellow-400 font-bold tracking-wider">{score.toLocaleString()}</span>
           </div>
-          <div className="flex justify-between">
-            <span>レベル:</span>
-            <span className="font-mono">{level}</span>
+          <div className="flex justify-between items-center">
+            <span className="text-gray-300">LEVEL</span>
+            <span className="font-mono text-xl text-green-400 font-bold">{level}</span>
           </div>
-          <div className="flex justify-between">
-            <span>ライン:</span>
-            <span className="font-mono">{lines}</span>
+          <div className="flex justify-between items-center">
+            <span className="text-gray-300">LINES</span>
+            <span className="font-mono text-xl text-blue-400 font-bold">{lines}</span>
           </div>
         </div>
       </div>
 
       {/* 次のピース */}
-      <div className="bg-gray-800 p-4 rounded-lg">
-        <h3 className="text-lg font-bold mb-3">次のピース</h3>
-        <div className="grid gap-0 w-fit mx-auto">
+      <div className="hologram neon-border p-6 rounded-lg relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-400/5 via-transparent to-cyan-400/5"></div>
+        <h3 className="text-xl font-bold mb-4 text-purple-400 relative">NEXT PIECE</h3>
+        <div className="grid gap-0 w-fit mx-auto p-4 bg-black/30 rounded-lg border border-purple-400/30">
           {nextPiece ? (
             nextPiece.shape.map((row, y) => (
               <div key={y} className="flex">
                 {row.map((cell, x) => (
                   <div
                     key={`${y}-${x}`}
-                    className={`w-4 h-4 border border-gray-700 ${
-                      cell ? '' : 'bg-transparent'
+                    className={`w-5 h-5 border border-gray-600/50 relative ${
+                      cell ? 'shadow-[0_0_10px_rgba(255,255,255,0.3)]' : 'bg-transparent'
                     }`}
                     style={{
                       backgroundColor: cell ? nextPiece.color : 'transparent'
                     }}
-                  />
+                  >
+                    {cell && (
+                      <div className="absolute inset-0 bg-current opacity-20 blur-sm"></div>
+                    )}
+                  </div>
                 ))}
               </div>
             ))
           ) : (
-            <div className="w-16 h-16 bg-gray-700 rounded"></div>
+            <div className="w-20 h-20 bg-gray-700/50 rounded border border-gray-500"></div>
           )}
         </div>
       </div>
 
       {/* コントロール */}
-      <div className="bg-gray-800 p-4 rounded-lg">
-        <h3 className="text-lg font-bold mb-3">コントロール</h3>
-        <div className="space-y-2 text-sm">
-          <div><span className="font-mono">←→</span> 移動</div>
-          <div><span className="font-mono">↓</span> 下移動</div>
-          <div><span className="font-mono">↑</span> 回転</div>
-          <div><span className="font-mono">スペース</span> ハードドロップ</div>
-          <div><span className="font-mono">P</span> 一時停止</div>
-          <div><span className="font-mono">R</span> リセット</div>
+      <div className="hologram neon-border p-6 rounded-lg relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-green-400/5 via-transparent to-blue-400/5"></div>
+        <h3 className="text-xl font-bold mb-4 text-green-400 relative">CONTROLS</h3>
+        <div className="space-y-3 text-sm relative">
+          <div className="flex justify-between items-center">
+            <span className="text-gray-300">移動</span>
+            <span className="font-mono bg-cyan-400/20 px-2 py-1 rounded text-cyan-400">←→</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-gray-300">下移動</span>
+            <span className="font-mono bg-cyan-400/20 px-2 py-1 rounded text-cyan-400">↓</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-gray-300">回転</span>
+            <span className="font-mono bg-cyan-400/20 px-2 py-1 rounded text-cyan-400">↑</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-gray-300">ハードドロップ</span>
+            <span className="font-mono bg-yellow-400/20 px-2 py-1 rounded text-yellow-400">SPACE</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-gray-300">一時停止</span>
+            <span className="font-mono bg-purple-400/20 px-2 py-1 rounded text-purple-400">P</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-gray-300">リセット</span>
+            <span className="font-mono bg-red-400/20 px-2 py-1 rounded text-red-400">R</span>
+          </div>
         </div>
       </div>
 
       {/* ボタン */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         <button
           onClick={onTogglePause}
           disabled={gameOver}
-          className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 
-                     text-white font-bold py-2 px-4 rounded transition-colors"
+          className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 
+                     disabled:from-gray-600 disabled:to-gray-700 text-white font-bold py-3 px-6 rounded-lg 
+                     transition-all duration-300 transform hover:scale-105 disabled:scale-100 
+                     shadow-[0_0_20px_rgba(0,255,255,0.3)] hover:shadow-[0_0_30px_rgba(0,255,255,0.5)]
+                     border border-cyan-400/50 relative overflow-hidden"
         >
-          {isPaused ? '再開' : '一時停止'}
+          <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-blue-400/20 blur-sm"></div>
+          <span className="relative font-mono text-lg">
+            {isPaused ? 'RESUME' : 'PAUSE'}
+          </span>
         </button>
         
         <button
           onClick={onReset}
-          className="w-full bg-red-600 hover:bg-red-700 text-white font-bold 
-                     py-2 px-4 rounded transition-colors"
+          className="w-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-400 hover:to-pink-400 
+                     text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform 
+                     hover:scale-105 shadow-[0_0_20px_rgba(255,0,0,0.3)] hover:shadow-[0_0_30px_rgba(255,0,0,0.5)]
+                     border border-red-400/50 relative overflow-hidden"
         >
-          リセット
+          <div className="absolute inset-0 bg-gradient-to-r from-red-400/20 to-pink-400/20 blur-sm"></div>
+          <span className="relative font-mono text-lg">RESET</span>
         </button>
       </div>
 
-      {/* ハイスコア目安 */}
-      <div className="bg-gray-800 p-4 rounded-lg">
-        <h3 className="text-lg font-bold mb-3">スコア目安</h3>
-        <div className="space-y-1 text-sm">
-          <div>1ライン: 100 × レベル</div>
-          <div>2ライン: 200 × レベル</div>
-          <div>3ライン: 300 × レベル</div>
-          <div>4ライン: 700 × レベル (テトリス!)</div>
-          <div>ハードドロップ: 距離 × 2</div>
+      {/* スコア目安 */}
+      <div className="hologram neon-border p-6 rounded-lg relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/5 via-transparent to-orange-400/5"></div>
+        <h3 className="text-xl font-bold mb-4 text-yellow-400 relative">SCORING</h3>
+        <div className="space-y-2 text-sm relative">
+          <div className="flex justify-between items-center text-gray-300">
+            <span>1 LINE</span>
+            <span className="font-mono text-blue-400">100 × LV</span>
+          </div>
+          <div className="flex justify-between items-center text-gray-300">
+            <span>2 LINES</span>
+            <span className="font-mono text-green-400">200 × LV</span>
+          </div>
+          <div className="flex justify-between items-center text-gray-300">
+            <span>3 LINES</span>
+            <span className="font-mono text-yellow-400">300 × LV</span>
+          </div>
+          <div className="flex justify-between items-center text-gray-300">
+            <span>4 LINES</span>
+            <span className="font-mono text-red-400 font-bold">700 × LV</span>
+          </div>
+          <div className="text-center text-red-400 text-xs animate-pulse mt-2">
+            ★ TETRIS BONUS! ★
+          </div>
+          <div className="flex justify-between items-center text-gray-300 border-t border-gray-600 pt-2">
+            <span>HARD DROP</span>
+            <span className="font-mono text-purple-400">DIST × 2</span>
+          </div>
         </div>
       </div>
     </div>

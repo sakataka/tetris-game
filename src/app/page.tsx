@@ -4,11 +4,33 @@ import TetrisGame from '../components/TetrisGame';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-white mb-8">テトリス</h1>
-        <TetrisGame />
+    <div className="min-h-screen grid-background flex items-center justify-center relative overflow-hidden">
+      {/* スキャンライン効果 */}
+      <div className="scanline"></div>
+      
+      {/* メインコンテンツ */}
+      <div className="text-center relative z-10">
+        <div className="mb-12">
+          <h1 className="text-6xl font-bold text-white mb-2 relative">
+            <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-yellow-400 bg-clip-text text-transparent">
+              TETRIS
+            </span>
+            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400 via-purple-400 to-yellow-400 rounded-lg blur opacity-25"></div>
+          </h1>
+          <div className="text-cyan-400 text-lg font-mono tracking-wider">
+            CYBER EDITION
+          </div>
+        </div>
+        
+        <div className="float-animation">
+          <TetrisGame />
+        </div>
       </div>
+      
+      {/* 背景エフェクト */}
+      <div className="absolute top-10 left-10 w-32 h-32 bg-cyan-400 rounded-full opacity-10 blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-10 right-10 w-40 h-40 bg-purple-400 rounded-full opacity-10 blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+      <div className="absolute top-1/2 left-1/4 w-20 h-20 bg-yellow-400 rounded-full opacity-10 blur-2xl animate-pulse" style={{animationDelay: '2s'}}></div>
     </div>
   );
 }

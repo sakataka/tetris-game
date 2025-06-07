@@ -60,25 +60,41 @@ export default function TetrisGame() {
   }, [togglePause]);
 
   return (
-    <div className="flex gap-8 items-start">
-      <TetrisBoard 
-        board={gameState.board}
-        currentPiece={gameState.currentPiece}
-        gameOver={gameState.gameOver}
-        isPaused={gameState.isPaused}
-        lineEffect={gameState.lineEffect}
-        onParticleUpdate={handleParticleUpdate}
-      />
-      <GameInfo 
-        score={gameState.score}
-        level={gameState.level}
-        lines={gameState.lines}
-        nextPiece={gameState.nextPiece}
-        gameOver={gameState.gameOver}
-        isPaused={gameState.isPaused}
-        onReset={handleReset}
-        onTogglePause={handleTogglePause}
-      />
+    <div className="flex gap-12 items-start justify-center relative">
+      {/* ゲームボード */}
+      <div className="relative">
+        <TetrisBoard 
+          board={gameState.board}
+          currentPiece={gameState.currentPiece}
+          gameOver={gameState.gameOver}
+          isPaused={gameState.isPaused}
+          lineEffect={gameState.lineEffect}
+          onParticleUpdate={handleParticleUpdate}
+        />
+        
+        {/* ゲームボード周りのエフェクト */}
+        <div className="absolute -inset-4 bg-gradient-to-r from-cyan-400/10 via-purple-400/10 to-yellow-400/10 rounded-lg blur-lg pointer-events-none"></div>
+      </div>
+      
+      {/* ゲーム情報 */}
+      <div className="relative">
+        <GameInfo 
+          score={gameState.score}
+          level={gameState.level}
+          lines={gameState.lines}
+          nextPiece={gameState.nextPiece}
+          gameOver={gameState.gameOver}
+          isPaused={gameState.isPaused}
+          onReset={handleReset}
+          onTogglePause={handleTogglePause}
+        />
+        
+        {/* 情報パネル周りのエフェクト */}
+        <div className="absolute -inset-2 bg-gradient-to-l from-purple-400/5 via-cyan-400/5 to-yellow-400/5 rounded-lg blur-md pointer-events-none"></div>
+      </div>
+      
+      {/* 接続線エフェクト */}
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-0.5 bg-gradient-to-r from-cyan-400 via-purple-400 to-yellow-400 opacity-30 blur-sm pointer-events-none"></div>
     </div>
   );
 }

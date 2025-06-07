@@ -57,20 +57,47 @@ const ParticleEffect = memo(function ParticleEffect({ lineEffect, onParticleUpda
   }, [lineEffect.particles, onParticleUpdate]);
 
   return (
-    <div className="absolute inset-0 pointer-events-none">
-      {lineEffect.particles.map(particle => (
-        <div
-          key={particle.id}
-          className="absolute w-1 h-1 rounded-full"
-          style={{
-            left: `${particle.x}px`,
-            top: `${particle.y}px`,
-            backgroundColor: particle.color,
-            opacity: particle.life / 60,
-            boxShadow: `0 0 4px ${particle.color}`
-          }}
-        />
-      ))}
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {lineEffect.particles.map(particle => {
+        const lifeRatio = particle.life / 60;
+        const scale = 0.5 + lifeRatio * 1.5;
+        const blur = (1 - lifeRatio) * 2;
+        
+        return (
+          <div
+            key={particle.id}
+            className="absolute rounded-full particle-enhanced"
+            style={{
+              left: `${particle.x}px`,
+              top: `${particle.y}px`,
+              width: `${2 + scale}px`,
+              height: `${2 + scale}px`,
+              backgroundColor: particle.color,
+              opacity: lifeRatio * 0.9,
+              transform: `scale(${scale}) rotate(${particle.life * 5}deg)`,
+              filter: `blur(${blur}px)`,
+              boxShadow: `
+                0 0 ${4 + scale * 2}px ${particle.color},
+                0 0 ${8 + scale * 4}px ${particle.color}40,
+                0 0 ${12 + scale * 6}px ${particle.color}20
+              `,
+              background: `radial-gradient(circle, ${particle.color} 0%, ${particle.color}80 50%, transparent 100%)`,
+              animationDuration: `${0.5 + Math.random() * 0.5}s`
+            }}
+          >
+            {/* 内側のコア */}
+            <div 
+              className="absolute inset-0 rounded-full"
+              style={{
+                background: `radial-gradient(circle, white 0%, ${particle.color} 30%, transparent 70%)`,
+                opacity: lifeRatio * 0.6,
+                transform: 'scale(0.3)'
+              }}
+            />
+          </div>
+        );
+      })}
+      
     </div>
   );
 });
