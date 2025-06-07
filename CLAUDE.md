@@ -252,10 +252,11 @@ Legacy and specialized business logic hooks:
 - Graceful degradation when audio files are unavailable
 
 **Zustand Store Architecture**:
-- Immer integration for immutable state updates
-- Persistent middleware with selective data storage
-- Migration system for version updates and data structure changes
+- Pure Zustand store without Immer (removed due to SSR hydration issues)
+- Immutable state updates using spread operators and functional patterns
+- Individual selector functions to prevent object recreation and infinite loops
 - Type-safe actions with comprehensive error boundaries
+- Persistence functionality temporarily disabled (can be re-enabled when needed)
 
 **Statistics & Analytics Architecture**:
 - `statisticsUtils.ts`: 14 pure utility functions for advanced statistics calculation
@@ -302,6 +303,8 @@ Legacy and specialized business logic hooks:
 - `updateParticles` uses empty dependency array to prevent infinite loops (intentional ESLint warning)
 - All components use `React.memo` - avoid breaking memoization when modifying props
 - Particle system uses object pooling - always return particles to pool when expired
+- Zustand selectors use individual value selection to prevent object recreation and infinite renders
+- Avoid including mutable objects (like game state) in useCallback dependencies
 
 **Styling System**:
 - Use CSS variables from `globals.css` for all cyberpunk theming
@@ -323,9 +326,10 @@ Legacy and specialized business logic hooks:
 **Zustand Store Integration**:
 - Use `useGameStore` for centralized state access and mutations
 - Leverage selective hooks: `useHighScores`, `useStatistics`, `useSettings`, `useTheme`
+- Individual selector functions prevent infinite render loops by avoiding object recreation
 - Session management actions: `startPlaySession`, `endPlaySession`, `incrementGameCount`
-- All user data automatically persisted with validation and error handling
-- State changes are immutable through Immer middleware integration
+- State changes are immutable through spread operators and functional patterns
+- Data persistence temporarily disabled (use localStorage directly if needed)
 
 **Statistics Dashboard Integration**:
 - Use `StatisticsDashboard` component with `EnhancedStatistics` interface
@@ -354,10 +358,11 @@ interface GlobalGameState extends GameState {
   errors: readonly GameError[];
 }
 ```
-- ✅ Zustand with Immer integration implemented
-- ✅ State persistence with LocalStorage
+- ✅ Zustand store implemented (Immer removed due to SSR issues)
+- ✅ Individual selector functions to prevent infinite loops
 - ✅ Comprehensive error handling and validation
 - ✅ Type-safe readonly arrays
+- ⚠️ State persistence temporarily disabled (can be re-enabled)
 
 **High Score & Statistics System** (✅ COMPLETED):
 - ✅ Local high score management (Top 10) with automatic sorting
