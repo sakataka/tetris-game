@@ -2,27 +2,22 @@ import { useEffect, useCallback } from 'react';
 import { useGameStore } from '../store/gameStore';
 
 export function useSessionTracking() {
-  const { 
-    currentSession, 
-    playSessions, 
-    startPlaySession, 
-    endPlaySession, 
-    incrementGameCount 
-  } = useGameStore((state) => ({
-    currentSession: state.currentSession,
-    playSessions: state.playSessions,
-    startPlaySession: state.startPlaySession,
-    endPlaySession: state.endPlaySession,
-    incrementGameCount: state.incrementGameCount
-  }));
+  const currentSession = useGameStore((state) => state.currentSession);
+  const playSessions = useGameStore((state) => state.playSessions);
+  const startPlaySession = useGameStore((state) => state.startPlaySession);
+  const endPlaySession = useGameStore((state) => state.endPlaySession);
+  const incrementGameCount = useGameStore((state) => state.incrementGameCount);
 
   // Start session when component mounts (user starts playing)
   useEffect(() => {
-    if (!currentSession?.isActive) {
+    // Only start session if there's no session at all
+    if (!currentSession) {
       startPlaySession();
     }
+  }, [currentSession, startPlaySession]);
 
-    // End session when page unloads
+  // Handle page unload
+  useEffect(() => {
     const handleBeforeUnload = () => {
       endPlaySession();
     };
@@ -31,10 +26,8 @@ export function useSessionTracking() {
     
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
-      // Also end session on cleanup
-      endPlaySession();
     };
-  }, [currentSession, startPlaySession, endPlaySession]);
+  }, [endPlaySession]);
 
   // Auto-end session after inactivity
   useEffect(() => {
@@ -45,7 +38,7 @@ export function useSessionTracking() {
     }, 30 * 60 * 1000); // 30 minutes of inactivity
 
     return () => clearTimeout(inactivityTimeout);
-  }, [currentSession, endPlaySession]);
+  }, [currentSession?.isActive, endPlaySession]);
 
   const onGameStart = useCallback(() => {
     if (!currentSession?.isActive) {

@@ -239,12 +239,18 @@ export const useGameStore = create<GameStore>()(
               endTime: Date.now(),
               isActive: false
             };
-            state.playSessions.push(completedSession);
+            
+            // Only add if not already in the list (prevent duplicates)
+            const existingSession = state.playSessions.find(s => s.id === completedSession.id);
+            if (!existingSession) {
+              state.playSessions.push(completedSession);
+              
+              // Update play time statistics
+              const sessionDuration = (completedSession.endTime! - completedSession.startTime) / 1000; // seconds
+              state.statistics.playTime += sessionDuration;
+            }
+            
             state.currentSession = null;
-
-            // Update play time statistics
-            const sessionDuration = (completedSession.endTime! - completedSession.startTime) / 1000; // seconds
-            state.statistics.playTime += sessionDuration;
           }
         });
       },
@@ -252,7 +258,15 @@ export const useGameStore = create<GameStore>()(
       incrementGameCount: () => {
         set((state) => {
           if (state.currentSession?.isActive) {
-            state.currentSession.gameCount += 1;
+            // Immer allows mutation of readonly properties
+            const mutableSession = state.currentSession as {
+              gameCount: number;
+              id: string;
+              startTime: number;
+              endTime?: number;
+              isActive: boolean;
+            };
+            mutableSession.gameCount += 1;
           }
           state.statistics.totalGames += 1;
         });
