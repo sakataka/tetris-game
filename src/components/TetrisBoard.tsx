@@ -70,7 +70,7 @@ const TetrisBoard = memo(function TetrisBoard({
     if (!cell) {
       baseStyle = 'bg-gray-900/50 border border-cyan-500/20 backdrop-blur-sm';
     } else if (cell === 'ghost') {
-      baseStyle = 'border-2 border-cyan-400/60 bg-transparent border-dashed shadow-[0_0_10px_rgba(0,255,255,0.3)]';
+      baseStyle = 'border-2 border-cyan-400/60 bg-transparent border-dashed shadow-[0_0_10px_var(--cyber-cyan-30)]';
     } else {
       baseStyle = 'border border-gray-800 shadow-[0_0_5px_rgba(0,0,0,0.5)] transition-all duration-200';
     }
@@ -96,12 +96,11 @@ const TetrisBoard = memo(function TetrisBoard({
     <div className="relative">
       <div className={`grid grid-cols-10 gap-0 neon-border hologram p-3 transition-transform relative overflow-hidden ${
         lineEffect.shaking ? 'animate-bounce' : ''
-      }`} style={{
-        background: 'linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(10,10,15,0.9) 50%, rgba(5,5,10,0.8) 100%)',
-        backdropFilter: 'blur(10px)'
       }}>
         {/* 内側のグロー効果 */}
-        <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 via-transparent to-purple-400/10 pointer-events-none"></div>
+        <div className="absolute inset-0 pointer-events-none" style={{
+          background: 'linear-gradient(135deg, var(--cyber-cyan-10) 0%, transparent 50%, var(--cyber-purple-10) 100%)'
+        }}></div>
         
         {displayBoard.map((row, y) =>
           row.map((cell, x) => (

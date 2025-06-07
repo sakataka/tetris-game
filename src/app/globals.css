@@ -6,6 +6,40 @@
   --accent-primary: #00ffff;
   --accent-secondary: #ff00ff;
   --accent-tertiary: #ffff00;
+  
+  /* サイバーパンクカラーパレット */
+  --cyber-cyan: #00ffff;
+  --cyber-purple: #ff00ff;
+  --cyber-yellow: #ffff00;
+  --cyber-green: #00ff00;
+  --cyber-red: #ff0040;
+  --cyber-blue: #0080ff;
+  
+  /* 透明度バリエーション */
+  --cyber-cyan-10: rgba(0, 255, 255, 0.1);
+  --cyber-cyan-20: rgba(0, 255, 255, 0.2);
+  --cyber-cyan-30: rgba(0, 255, 255, 0.3);
+  --cyber-cyan-60: rgba(0, 255, 255, 0.6);
+  --cyber-purple-10: rgba(255, 0, 255, 0.1);
+  --cyber-purple-20: rgba(255, 0, 255, 0.2);
+  --cyber-purple-30: rgba(255, 0, 255, 0.3);
+  --cyber-yellow-10: rgba(255, 255, 0, 0.1);
+  --cyber-yellow-20: rgba(255, 255, 0, 0.2);
+  
+  /* エフェクト値 */
+  --neon-blur-sm: 4px;
+  --neon-blur-md: 8px;
+  --neon-blur-lg: 12px;
+  --neon-blur-xl: 16px;
+  
+  /* パーティクル設定 */
+  --particle-gravity: 0.2;
+  --particle-max-y: 500;
+  --particle-life-max: 60;
+  
+  /* ホログラム背景 */
+  --hologram-bg: linear-gradient(45deg, var(--cyber-cyan-10) 0%, var(--cyber-purple-10) 50%, var(--cyber-yellow-10) 100%);
+  --hologram-border: 1px solid var(--cyber-cyan-30);
 }
 
 @theme inline {
@@ -38,27 +72,58 @@ body {
 /* グリッド背景 */
 .grid-background {
   background-image: 
-    linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+    linear-gradient(var(--cyber-cyan-10) 1px, transparent 1px),
+    linear-gradient(90deg, var(--cyber-cyan-10) 1px, transparent 1px);
   background-size: 50px 50px;
 }
 
 /* ホログラム効果 */
 .hologram {
-  background: linear-gradient(45deg, 
-    rgba(0, 255, 255, 0.1) 0%,
-    rgba(255, 0, 255, 0.1) 50%,
-    rgba(255, 255, 0, 0.1) 100%);
+  background: var(--hologram-bg);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 255, 255, 0.3);
+  border: var(--hologram-border);
 }
 
 /* ネオンボーダー */
 .neon-border {
-  border: 2px solid var(--accent-primary);
+  border: 2px solid var(--cyber-cyan);
   box-shadow: 
-    0 0 10px var(--accent-primary),
-    inset 0 0 10px rgba(0, 255, 255, 0.1);
+    0 0 var(--neon-blur-md) var(--cyber-cyan),
+    inset 0 0 var(--neon-blur-md) var(--cyber-cyan-10);
+}
+
+/* ネオンボーダーのバリエーション */
+.neon-border-purple {
+  border: 2px solid var(--cyber-purple);
+  box-shadow: 
+    0 0 var(--neon-blur-md) var(--cyber-purple),
+    inset 0 0 var(--neon-blur-md) var(--cyber-purple-10);
+}
+
+.neon-border-yellow {
+  border: 2px solid var(--cyber-yellow);
+  box-shadow: 
+    0 0 var(--neon-blur-md) var(--cyber-yellow),
+    inset 0 0 var(--neon-blur-md) var(--cyber-yellow-10);
+}
+
+/* ホログラム背景のバリエーション */
+.hologram-cyan {
+  background: linear-gradient(45deg, var(--cyber-cyan-10) 0%, transparent 50%, var(--cyber-purple-10) 100%);
+  backdrop-filter: blur(10px);
+  border: var(--hologram-border);
+}
+
+.hologram-purple {
+  background: linear-gradient(45deg, var(--cyber-purple-10) 0%, transparent 50%, var(--cyber-cyan-10) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--cyber-purple-30);
+}
+
+.hologram-yellow {
+  background: linear-gradient(45deg, var(--cyber-yellow-10) 0%, transparent 50%, var(--cyber-cyan-10) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--cyber-yellow-20);
 }
 
 /* 浮遊アニメーション */
@@ -71,26 +136,6 @@ body {
   animation: float 3s ease-in-out infinite;
 }
 
-/* スキャンライン効果 */
-@keyframes scanline {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(100vh); }
-}
-
-.scanline {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, 
-    transparent 0%,
-    var(--accent-primary) 50%,
-    transparent 100%);
-  animation: scanline 3s linear infinite;
-  z-index: 1000;
-  pointer-events: none;
-}
 
 /* パーティクルアニメーション */
 @keyframes particle-sparkle {

@@ -5,8 +5,6 @@ import TetrisGame from '../components/TetrisGame';
 export default function Home() {
   return (
     <div className="min-h-screen grid-background flex items-center justify-center relative overflow-hidden">
-      {/* スキャンライン効果 */}
-      <div className="scanline"></div>
       
       {/* メインコンテンツ */}
       <div className="text-center relative z-10">

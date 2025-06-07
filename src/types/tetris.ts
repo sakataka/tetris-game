@@ -51,6 +51,13 @@ export const HARD_DROP_BONUS_MULTIPLIER = 2;
 export const TETRIS_BONUS_POINTS = 300;
 export const BASE_LINE_POINTS = 100;
 
+// Particle physics constants
+export const PARTICLE_GRAVITY = 0.2;
+export const PARTICLE_MAX_Y = 500;
+export const PARTICLE_SCALE_BASE = 0.5;
+export const PARTICLE_SCALE_MULTIPLIER = 1.5;
+export const PARTICLE_OPACITY_MULTIPLIER = 0.9;
+
 export const TETROMINO_SHAPES: Record<TetrominoType, number[][]> = {
   I: [
     [1, 1, 1, 1]

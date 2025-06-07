@@ -27,8 +27,7 @@ const GameInfo = memo(function GameInfo({
   return (
     <div className="text-white space-y-6 min-w-[280px]">
       {/* スコア情報 */}
-      <div className="hologram neon-border p-6 rounded-lg relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/5 via-transparent to-purple-400/5"></div>
+      <div className="hologram-cyan neon-border p-6 rounded-lg relative overflow-hidden">
         <h3 className="text-xl font-bold mb-4 text-cyan-400 relative">SCORE DATA</h3>
         <div className="space-y-3 relative">
           <div className="flex justify-between items-center">
@@ -47,8 +46,7 @@ const GameInfo = memo(function GameInfo({
       </div>
 
       {/* 次のピース */}
-      <div className="hologram neon-border p-6 rounded-lg relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-400/5 via-transparent to-cyan-400/5"></div>
+      <div className="hologram-purple neon-border-purple p-6 rounded-lg relative overflow-hidden">
         <h3 className="text-xl font-bold mb-4 text-purple-400 relative">NEXT PIECE</h3>
         <div className="grid gap-0 w-fit mx-auto p-4 bg-black/30 rounded-lg border border-purple-400/30">
           {nextPiece ? (
@@ -79,7 +77,6 @@ const GameInfo = memo(function GameInfo({
 
       {/* コントロール */}
       <div className="hologram neon-border p-6 rounded-lg relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-green-400/5 via-transparent to-blue-400/5"></div>
         <h3 className="text-xl font-bold mb-4 text-green-400 relative">CONTROLS</h3>
         <div className="space-y-3 text-sm relative">
           <div className="flex justify-between items-center">
@@ -139,8 +136,7 @@ const GameInfo = memo(function GameInfo({
       </div>
 
       {/* スコア目安 */}
-      <div className="hologram neon-border p-6 rounded-lg relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/5 via-transparent to-orange-400/5"></div>
+      <div className="hologram-yellow neon-border-yellow p-6 rounded-lg relative overflow-hidden">
         <h3 className="text-xl font-bold mb-4 text-yellow-400 relative">SCORING</h3>
         <div className="space-y-2 text-sm relative">
           <div className="flex justify-between items-center text-gray-300">

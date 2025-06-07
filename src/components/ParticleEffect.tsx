@@ -1,7 +1,15 @@
 'use client';
 
 import { useEffect, useRef, memo } from 'react';
-import { LineEffectState } from '../types/tetris';
+import { 
+  LineEffectState, 
+  PARTICLE_GRAVITY, 
+  PARTICLE_MAX_Y, 
+  PARTICLE_LIFE_DURATION,
+  PARTICLE_SCALE_BASE,
+  PARTICLE_SCALE_MULTIPLIER,
+  PARTICLE_OPACITY_MULTIPLIER
+} from '../types/tetris';
 import { particlePool } from '../utils/particlePool';
 
 interface ParticleEffectProps {
@@ -24,11 +32,11 @@ const ParticleEffect = memo(function ParticleEffect({ lineEffect, onParticleUpda
           ...particle,
           x: particle.x + particle.vx,
           y: particle.y + particle.vy,
-          vy: particle.vy + 0.2, // 重力効果
+          vy: particle.vy + PARTICLE_GRAVITY,
           life: particle.life - 1
         };
 
-        if (updatedParticle.life > 0 && updatedParticle.y < 500) {
+        if (updatedParticle.life > 0 && updatedParticle.y < PARTICLE_MAX_Y) {
           updatedParticles.push(updatedParticle);
         } else {
           expiredParticles.push(particle);
@@ -59,8 +67,8 @@ const ParticleEffect = memo(function ParticleEffect({ lineEffect, onParticleUpda
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden">
       {lineEffect.particles.map(particle => {
-        const lifeRatio = particle.life / 60;
-        const scale = 0.5 + lifeRatio * 1.5;
+        const lifeRatio = particle.life / PARTICLE_LIFE_DURATION;
+        const scale = PARTICLE_SCALE_BASE + lifeRatio * PARTICLE_SCALE_MULTIPLIER;
         const blur = (1 - lifeRatio) * 2;
         
         return (
@@ -73,7 +81,7 @@ const ParticleEffect = memo(function ParticleEffect({ lineEffect, onParticleUpda
               width: `${2 + scale}px`,
               height: `${2 + scale}px`,
               backgroundColor: particle.color,
-              opacity: lifeRatio * 0.9,
+              opacity: lifeRatio * PARTICLE_OPACITY_MULTIPLIER,
               transform: `scale(${scale}) rotate(${particle.life * 5}deg)`,
               filter: `blur(${blur}px)`,
               boxShadow: `

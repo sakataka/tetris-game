@@ -45,7 +45,7 @@ export function useGameState() {
         particles: newParticles
       }
     }));
-  }, [gameState.lineEffect.particles]);
+  }, []);
 
   const calculatePiecePlacementState = useCallback((prevState: GameState, piece: Tetromino, bonusPoints: number = 0): GameState => {
     const newBoard = placePiece(prevState.board, piece);
