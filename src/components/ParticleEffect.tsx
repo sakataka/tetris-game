@@ -21,7 +21,14 @@ const ParticleEffect = memo(function ParticleEffect({ lineEffect, onParticleUpda
   const animationRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
-    if (lineEffect.particles.length === 0) return;
+    if (lineEffect.particles.length === 0) {
+      // パーティクルがない場合はアニメーションを停止
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+        animationRef.current = undefined;
+      }
+      return;
+    }
 
     const animate = () => {
       const updatedParticles: LineEffectState['particles'] = [];
@@ -50,16 +57,23 @@ const ParticleEffect = memo(function ParticleEffect({ lineEffect, onParticleUpda
 
       onParticleUpdate(updatedParticles);
 
+      // パーティクルが残っている場合のみ次のフレームを要求
       if (updatedParticles.length > 0) {
         animationRef.current = requestAnimationFrame(animate);
+      } else {
+        animationRef.current = undefined;
       }
     };
 
-    animationRef.current = requestAnimationFrame(animate);
+    // アニメーションが既に実行中でない場合のみ開始
+    if (!animationRef.current) {
+      animationRef.current = requestAnimationFrame(animate);
+    }
 
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
+        animationRef.current = undefined;
       }
     };
   }, [lineEffect.particles, onParticleUpdate]);

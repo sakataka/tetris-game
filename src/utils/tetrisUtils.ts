@@ -121,7 +121,7 @@ export function createParticles(linesToClear: number[], board: (string | null)[]
         // 各セルから複数のパーティクルを生成（プールから取得）
         for (let i = 0; i < PARTICLES_PER_CELL; i++) {
           const particle = particlePool.getParticle(
-            `${lineIndex}-${x}-${i}`,
+            `${Date.now()}-${lineIndex}-${x}-${i}-${Math.random()}`,
             x * 24 + 12 + 8, // セル中央 + ボード位置調整
             lineIndex * 24 + 12 + 8,
             cellColor,

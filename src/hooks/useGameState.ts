@@ -82,10 +82,7 @@ export function useGameState(props: UseGameStateProps = {}) {
       newLineEffect = {
         flashingLines: linesToClear,
         shaking: true,
-        particles: [
-          ...prevState.lineEffect.particles,
-          ...createParticles(linesToClear, newBoard)
-        ]
+        particles: createParticles(linesToClear, newBoard)
       };
       
       // 既存のタイマーをクリア
