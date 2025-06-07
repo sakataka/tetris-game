@@ -6,9 +6,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Status
 
-This is a cyberpunk-themed Tetris game built with Next.js 15, TypeScript, and Tailwind CSS v4. The game features a sophisticated Zustand-based state management system, comprehensive TDD test coverage (66+ tests), and a unified cyberpunk visual design system with neon effects, holographic backgrounds, and enhanced particle animations.
+This is a cyberpunk-themed Tetris game built with Next.js 15, TypeScript, and Tailwind CSS v4. The game features a sophisticated Zustand-based state management system, comprehensive TDD test coverage (125+ tests), and a unified cyberpunk visual design system with neon effects, holographic backgrounds, and enhanced particle animations.
 
-**Phase 2 Complete**: Full high score and statistics system with automatic persistence, real-time ranking, and comprehensive error handling.
+**Phase 2 Complete**: Full high score and statistics system with automatic persistence, real-time ranking, comprehensive error handling, statistics dashboard with enhanced metrics, and session tracking.
 
 ## Development Commands
 
@@ -40,6 +40,8 @@ npm test -- --run src/test/gameStore.test.ts
 npm test -- --run src/test/highScoreUtils.test.ts
 npm test -- --run src/test/useHighScoreManager.test.ts
 npm test -- --run src/test/HighScoreDisplay.test.tsx
+npm test -- --run src/test/StatisticsDashboard.test.tsx
+npm test -- --run src/test/statisticsUtils.test.ts
 ```
 
 ### Development Notes
@@ -49,23 +51,25 @@ npm test -- --run src/test/HighScoreDisplay.test.tsx
 
 ## Architecture Overview
 
-This Tetris game uses a sophisticated four-layer architecture: **Zustand State Management** (centralized store with persistence), **Custom Hooks** (business logic), **Visual Design** (CSS variables + themed components), and **Performance** (object pooling + memoization). The architecture follows TDD principles with comprehensive test coverage.
+This Tetris game uses a sophisticated four-layer architecture: **Zustand State Management** (centralized store with persistence), **Custom Hooks** (business logic), **Visual Design** (CSS variables + themed components), and **Performance** (object pooling + memoization). The architecture follows TDD principles with comprehensive test coverage and includes advanced statistics tracking with session management.
 
 ### Zustand State Management (Primary)
 The game uses Zustand with Immer for type-safe, persistent state management:
 
 **`useGameStore`** (Central Store):
 - Global state container with LocalStorage persistence
-- Handles high scores, statistics, settings, theme, and errors
+- Handles high scores, statistics, settings, theme, errors, and play sessions
 - Immutable state updates with Immer middleware
 - Automatic data migration and validation
+- Session tracking with automatic play time calculation
 - Selective hooks: `useHighScores`, `useStatistics`, `useSettings`, `useTheme`
 
 **State Persistence Strategy**:
-- Only user data persisted: settings, high scores, statistics, theme
+- Only user data persisted: settings, high scores, statistics, theme, play sessions
 - Game state (board, pieces) is ephemeral and reset on each game
 - Cross-tab synchronization with storage events
 - Fallback to defaults with comprehensive error handling
+- Session tracking with automatic inactivity detection (30-minute timeout)
 
 ### Hook-Based Business Logic
 Legacy and specialized business logic hooks:
@@ -99,6 +103,12 @@ Legacy and specialized business logic hooks:
 - Sound effect integration for achievements (1st place gets special sound)
 - Comprehensive statistics tracking with game count and averages
 - Memory management to prevent duplicate processing
+
+**`useSessionTracking`** (Session Management):
+- Automatic session start/end detection with play time tracking
+- Inactivity timeout management (30 minutes)
+- Game count tracking per session
+- Integration with Zustand store for persistence
 
 **`useSettings`** (Legacy Configuration):
 - Still used for some legacy settings functionality
@@ -153,13 +163,24 @@ Legacy and specialized business logic hooks:
 - Enhanced cell styling with CSS variable integration
 - Game over/pause overlays with themed styling
 
-**GameInfo** (Themed UI Panels):
-- Seven distinct themed panels: Score Data, Next Piece, Controls, Audio, Buttons, Scoring, High Scores
+**GameInfo** (Themed UI Panels with Tabs):
+- Tab-based interface switching between Game Info and Statistics Dashboard
+- Game Info tab: Seven themed panels (Score Data, Next Piece, Controls, Audio, Buttons, Scoring, High Scores)
+- Statistics tab: Comprehensive dashboard with enhanced metrics and analytics
 - High score panel displays Top 5 with rank, score, level, lines, date, and player name
 - Audio panel includes volume slider and mute toggle with cyberpunk styling
 - Each panel uses unique hologram backgrounds and neon borders
 - Enhanced buttons with gradient effects and hover animations
 - Consistent cyberpunk typography and spacing
+
+**StatisticsDashboard** (Advanced Analytics UI):
+- 15 enhanced statistical metrics (efficiency, consistency, favorite level, etc.)
+- Period filtering: Today, This Week, This Month, All Time
+- Real-time statistics calculation and display
+- Session analysis with longest session and games per session
+- Recent achievements display with top 3 high scores
+- Detailed view toggle for comprehensive or simplified display
+- Empty state handling for new players
 
 **HighScoreDisplay** (Ranking System UI):
 - Configurable display count (default Top 5 in GameInfo)
@@ -201,7 +222,9 @@ Legacy and specialized business logic hooks:
 **High Score & Statistics System**:
 - **Automatic Tracking**: Game end detection with automatic high score registration
 - **Top 10 Rankings**: Persistent local high score table with automatic sorting
-- **Comprehensive Statistics**: Total games, lines, score, averages, best scores
+- **Enhanced Statistics Dashboard**: 15 detailed metrics including efficiency (LPM), consistency, Tetris rate
+- **Session Tracking**: Automatic play session management with time tracking
+- **Real-time Analytics**: Live calculation of performance metrics and trends
 - **Achievement Recognition**: Rank-based celebration messages and sound effects
 - **Data Persistence**: LocalStorage with cross-tab synchronization
 - **Validation & Security**: Input sanitization and data integrity checks
@@ -234,11 +257,14 @@ Legacy and specialized business logic hooks:
 - Migration system for version updates and data structure changes
 - Type-safe actions with comprehensive error boundaries
 
-**High Score System Architecture**:
+**Statistics & Analytics Architecture**:
+- `statisticsUtils.ts`: 14 pure utility functions for advanced statistics calculation
+- `StatisticsDashboard.tsx`: Comprehensive analytics UI with period filtering
+- `useSessionTracking.ts`: Automatic session management with play time tracking
 - `highScoreUtils.ts`: Pure utility functions for ranking, validation, statistics
 - `useHighScoreManager.ts`: React hook for automatic game end detection
 - `HighScoreDisplay.tsx`: Reusable UI component with cyberpunk theming
-- Comprehensive test coverage with 66+ unit and integration tests
+- Comprehensive test coverage with 125+ unit and integration tests
 
 **TDD Development Approach**:
 - Test-first development for all new features
@@ -260,7 +286,7 @@ Legacy and specialized business logic hooks:
 - **Type Safety**: Comprehensive TypeScript coverage with readonly arrays and strict typing
 - **Performance**: Optimized rendering and memory management with object pooling
 - **Maintainability**: Unified styling system and consistent patterns
-- **Test Coverage**: 66+ tests with comprehensive TDD coverage for all high score features
+- **Test Coverage**: 125+ tests with comprehensive TDD coverage for all features including statistics dashboard
 - **Error Resilience**: Robust error handling for audio, storage, and game state failures
 - **State Management**: Centralized Zustand store with persistence and validation
 
@@ -297,8 +323,15 @@ Legacy and specialized business logic hooks:
 **Zustand Store Integration**:
 - Use `useGameStore` for centralized state access and mutations
 - Leverage selective hooks: `useHighScores`, `useStatistics`, `useSettings`, `useTheme`
+- Session management actions: `startPlaySession`, `endPlaySession`, `incrementGameCount`
 - All user data automatically persisted with validation and error handling
 - State changes are immutable through Immer middleware integration
+
+**Statistics Dashboard Integration**:
+- Use `StatisticsDashboard` component with `EnhancedStatistics` interface
+- `calculateEnhancedStatistics` for advanced metric calculation
+- Period filtering with `filterStatisticsByPeriod` utility function
+- Session tracking automatically updates play time and game counts
 
 **High Score System Integration**:
 - `useHighScoreManager` automatically handles game end detection and score saving
@@ -330,17 +363,18 @@ interface GlobalGameState extends GameState {
 - ✅ Local high score management (Top 10) with automatic sorting
 - ✅ Session statistics tracking (total lines, games, best streak, average score)
 - ✅ Real-time achievement recognition with sound effects
-- ✅ Comprehensive test coverage (66+ tests)
+- ✅ Comprehensive test coverage (125+ tests)
 - ✅ Statistical data display in GameInfo panel
 
-**Remaining Phase 2 Items**:
+**Statistics Dashboard Implementation** (✅ COMPLETED):
+- ✅ Advanced statistics dashboard with 15 detailed metrics
+- ✅ Play time tracking and efficiency metrics (Lines Per Minute)
+- ✅ Session management with automatic play time calculation
+- ✅ Period filtering (Today/Week/Month/All Time)
+- ✅ Enhanced UI with tab-based navigation in GameInfo
+- ✅ Comprehensive TDD test coverage (31 additional tests)
 
-**Statistics Dashboard Implementation** (NEXT):
-- Detailed statistics visualization with charts
-- Play time tracking and efficiency metrics
-- Achievement system with unlockable rewards
-- Historical performance analysis
-- Statistical data export functionality
+**Remaining Phase 2 Items**:
 
 **Customizable Theme System** (PENDING):
 - Additional preset themes (classic, retro, minimal, neon)
@@ -459,7 +493,7 @@ interface GamePlugin {
 - **Performance Ready**: Optimized for production deployment with Zustand persistence
 - **Type Safe**: Comprehensive TypeScript with readonly arrays and strict typing
 - **Memory Efficient**: Object pooling and proper cleanup patterns
-- **Test-Driven Development**: 66+ tests ensure reliability and prevent regressions
+- **Test-Driven Development**: 125+ tests ensure reliability and prevent regressions
 - **Error Resilient**: Graceful handling of failures maintains user experience
 - **Data Persistence**: Comprehensive LocalStorage with cross-tab synchronization
 - **Scalable Architecture**: Zustand foundation ready for advanced features and multiplayer
