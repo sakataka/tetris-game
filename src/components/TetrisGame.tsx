@@ -3,19 +3,19 @@
 import { useCallback, useEffect } from 'react';
 import TetrisBoard from './TetrisBoard';
 import GameInfo from './GameInfo';
-import { useGameState } from '../hooks/useGameState';
+import { useGameState as useGameStateOld } from '../hooks/useGameState';
 import { useGameControls } from '../hooks/useGameControls';
 import { useGameLoop } from '../hooks/useGameLoop';
 import { useSounds } from '../hooks/useSounds';
-import { useSettings } from '../hooks/useSettings';
+import { 
+  useGameActions, 
+  useSettings 
+} from '../store/gameStore';
 
 export default function TetrisGame() {
-  // 設定システム
-  const {
-    settings,
-    setVolume,
-    toggleAudio
-  } = useSettings();
+  // Zustand状態管理
+  const { resetGame, togglePause } = useGameActions();
+  const { settings, updateSettings } = useSettings();
 
   // 音効果システム
   const {
@@ -27,21 +27,19 @@ export default function TetrisGame() {
     initializeSounds
   } = useSounds({
     initialVolume: settings.volume,
-    initialMuted: !settings.audioEnabled
+    initialMuted: settings.isMuted
   });
 
-  // ゲーム状態管理
+  // 従来のhook（徐々に移行）
   const {
-    gameState,
+    gameState: oldGameState,
     setGameState,
     dropTime,
     setDropTime,
     updateParticles,
     calculatePiecePlacementState,
-    resetGame,
-    togglePause,
     INITIAL_DROP_TIME
-  } = useGameState({ playSound });
+  } = useGameStateOld({ playSound });
 
   // 音声初期化
   useEffect(() => {
@@ -62,7 +60,7 @@ export default function TetrisGame() {
 
   // ゲームループとキーボード入力
   useGameLoop({
-    gameState,
+    gameState: oldGameState,
     dropTime,
     setDropTime,
     dropPiece,
@@ -75,9 +73,9 @@ export default function TetrisGame() {
   });
 
   // useCallbackでコールバック関数を最適化
-  const handleParticleUpdate = useCallback((particles: typeof gameState.lineEffect.particles) => {
+  const handleParticleUpdate = useCallback((particles: typeof oldGameState.lineEffect.particles) => {
     updateParticles(particles);
-  }, [updateParticles]);
+  }, [updateParticles, oldGameState]);
 
   const handleReset = useCallback(() => {
     resetGame();
@@ -88,25 +86,25 @@ export default function TetrisGame() {
   }, [togglePause]);
 
   const handleVolumeChange = useCallback((newVolume: number) => {
-    setVolume(newVolume);
+    updateSettings({ volume: newVolume });
     setVolumeLevel(newVolume);
-  }, [setVolume, setVolumeLevel]);
+  }, [updateSettings, setVolumeLevel]);
 
   const handleToggleMute = useCallback(() => {
-    toggleAudio();
+    updateSettings({ isMuted: !settings.isMuted });
     toggleMute();
-  }, [toggleAudio, toggleMute]);
+  }, [updateSettings, settings.isMuted, toggleMute]);
 
   return (
     <div className="flex gap-12 items-start justify-center relative">
       {/* ゲームボード */}
       <div className="relative">
         <TetrisBoard 
-          board={gameState.board}
-          currentPiece={gameState.currentPiece}
-          gameOver={gameState.gameOver}
-          isPaused={gameState.isPaused}
-          lineEffect={gameState.lineEffect}
+          board={oldGameState.board}
+          currentPiece={oldGameState.currentPiece}
+          gameOver={oldGameState.gameOver}
+          isPaused={oldGameState.isPaused}
+          lineEffect={oldGameState.lineEffect}
           onParticleUpdate={handleParticleUpdate}
         />
         
@@ -119,12 +117,12 @@ export default function TetrisGame() {
       {/* ゲーム情報 */}
       <div className="relative">
         <GameInfo 
-          score={gameState.score}
-          level={gameState.level}
-          lines={gameState.lines}
-          nextPiece={gameState.nextPiece}
-          gameOver={gameState.gameOver}
-          isPaused={gameState.isPaused}
+          score={oldGameState.score}
+          level={oldGameState.level}
+          lines={oldGameState.lines}
+          nextPiece={oldGameState.nextPiece}
+          gameOver={oldGameState.gameOver}
+          isPaused={oldGameState.isPaused}
           onReset={handleReset}
           onTogglePause={handleTogglePause}
           isMuted={isMuted}

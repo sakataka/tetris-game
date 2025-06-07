@@ -112,3 +112,77 @@ export const TETROMINO_COLORS: Record<TetrominoType, string> = {
   J: '#0000f0',  // Blue
   L: '#f0a000'   // Orange
 };
+
+// Phase 2: Enhanced state management types
+export interface HighScore {
+  readonly id: string;
+  readonly score: number;
+  readonly level: number;
+  readonly lines: number;
+  readonly date: number;
+  readonly playerName?: string;
+}
+
+export interface GameStatistics {
+  readonly totalGames: number;
+  readonly totalLines: number;
+  readonly totalScore: number;
+  readonly bestScore: number;
+  readonly averageScore: number;
+  readonly playTime: number; // in seconds
+  readonly bestStreak: number;
+  readonly tetrisCount: number;
+}
+
+export interface GameSettings {
+  readonly volume: number;
+  readonly isMuted: boolean;
+  readonly theme: ThemeVariant;
+  readonly keyBindings: Record<string, string>;
+  readonly difficulty: DifficultyLevel;
+  readonly gameMode: GameMode;
+}
+
+export interface ThemeState {
+  readonly current: ThemeVariant;
+  readonly customColors?: Record<string, string>;
+  readonly effectIntensity: number;
+  readonly animations: boolean;
+}
+
+// Global state interface for Zustand store
+export interface GlobalGameState extends GameState {
+  readonly settings: GameSettings;
+  readonly highScores: readonly HighScore[];
+  readonly statistics: GameStatistics;
+  readonly theme: ThemeState;
+  readonly errors: readonly GameError[];
+}
+
+// Zustand store actions interface
+export interface GameStoreActions {
+  // Game state actions
+  setGameState: (gameState: Partial<GameState>) => void;
+  resetGame: () => void;
+  togglePause: () => void;
+  
+  // Settings actions
+  updateSettings: (settings: Partial<GameSettings>) => void;
+  
+  // High scores actions
+  addHighScore: (score: HighScore) => void;
+  clearHighScores: () => void;
+  
+  // Statistics actions
+  updateStatistics: (stats: Partial<GameStatistics>) => void;
+  resetStatistics: () => void;
+  
+  // Theme actions
+  setTheme: (theme: ThemeVariant) => void;
+  updateThemeState: (themeState: Partial<ThemeState>) => void;
+  
+  // Error handling actions
+  addError: (error: GameError) => void;
+  clearErrors: () => void;
+  clearError: (errorId: string) => void;
+}
