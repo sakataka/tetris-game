@@ -17,7 +17,12 @@ import {
 
 const INITIAL_DROP_TIME = 1000;
 
-export function useGameState() {
+interface UseGameStateProps {
+  playSound?: (soundType: 'lineClear' | 'pieceLand' | 'pieceRotate' | 'tetris' | 'gameOver' | 'hardDrop') => void;
+}
+
+export function useGameState(props: UseGameStateProps = {}) {
+  const { playSound } = props;
   const [gameState, setGameState] = useState<GameState>(() => ({
     board: createEmptyBoard(),
     currentPiece: getRandomTetromino(),
@@ -63,6 +68,15 @@ export function useGameState() {
     // ライン消去アニメーション効果
     let newLineEffect = { ...prevState.lineEffect };
     if (linesCleared > 0) {
+      // 音効果再生
+      if (playSound) {
+        if (linesCleared === 4) {
+          playSound('tetris');
+        } else {
+          playSound('lineClear');
+        }
+      }
+      
       newLineEffect = {
         flashingLines: linesToClear,
         shaking: true,
@@ -93,6 +107,9 @@ export function useGameState() {
     
     // Check if game is over
     if (!isValidPosition(clearedBoard, prevState.nextPiece!, prevState.nextPiece!.position)) {
+      if (playSound) {
+        playSound('gameOver');
+      }
       return {
         ...prevState,
         board: clearedBoard,

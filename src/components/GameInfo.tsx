@@ -12,6 +12,10 @@ interface GameInfoProps {
   isPaused: boolean;
   onReset: () => void;
   onTogglePause: () => void;
+  isMuted: boolean;
+  volume: number;
+  onToggleMute: () => void;
+  onVolumeChange: (volume: number) => void;
 }
 
 const GameInfo = memo(function GameInfo({
@@ -22,7 +26,11 @@ const GameInfo = memo(function GameInfo({
   gameOver,
   isPaused,
   onReset,
-  onTogglePause
+  onTogglePause,
+  isMuted,
+  volume,
+  onToggleMute,
+  onVolumeChange
 }: GameInfoProps) {
   return (
     <div className="text-white space-y-6 min-w-[280px]">
@@ -102,6 +110,44 @@ const GameInfo = memo(function GameInfo({
           <div className="flex justify-between items-center">
             <span className="text-gray-300">リセット</span>
             <span className="font-mono bg-red-400/20 px-2 py-1 rounded text-red-400">R</span>
+          </div>
+        </div>
+      </div>
+
+      {/* 音設定 */}
+      <div className="hologram-cyan neon-border p-6 rounded-lg relative overflow-hidden">
+        <h3 className="text-xl font-bold mb-4 text-cyan-400 relative">AUDIO</h3>
+        <div className="space-y-4 relative">
+          <div className="flex justify-between items-center">
+            <span className="text-gray-300">音量</span>
+            <div className="flex items-center space-x-2">
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.1"
+                value={volume}
+                onChange={(e) => onVolumeChange(parseFloat(e.target.value))}
+                className="w-20 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer
+                          [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 
+                          [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 
+                          [&::-webkit-slider-thumb]:shadow-[0_0_10px_rgba(0,255,255,0.5)]"
+              />
+              <span className="font-mono text-cyan-400 text-sm w-8">{Math.round(volume * 100)}</span>
+            </div>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-gray-300">ミュート</span>
+            <button
+              onClick={onToggleMute}
+              className={`px-3 py-1 rounded font-mono text-sm transition-all duration-300 ${
+                isMuted 
+                  ? 'bg-red-500/20 text-red-400 border border-red-400/50' 
+                  : 'bg-green-500/20 text-green-400 border border-green-400/50'
+              }`}
+            >
+              {isMuted ? 'OFF' : 'ON'}
+            </button>
           </div>
         </div>
       </div>

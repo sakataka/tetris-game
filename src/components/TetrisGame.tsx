@@ -1,13 +1,24 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import TetrisBoard from './TetrisBoard';
 import GameInfo from './GameInfo';
 import { useGameState } from '../hooks/useGameState';
 import { useGameControls } from '../hooks/useGameControls';
 import { useGameLoop } from '../hooks/useGameLoop';
+import { useSounds } from '../hooks/useSounds';
 
 export default function TetrisGame() {
+  // 音効果システム
+  const {
+    playSound,
+    isMuted,
+    volume,
+    setVolumeLevel,
+    toggleMute,
+    initializeSounds
+  } = useSounds();
+
   // ゲーム状態管理
   const {
     gameState,
@@ -19,7 +30,12 @@ export default function TetrisGame() {
     resetGame,
     togglePause,
     INITIAL_DROP_TIME
-  } = useGameState();
+  } = useGameState({ playSound });
+
+  // 音声初期化
+  useEffect(() => {
+    initializeSounds();
+  }, [initializeSounds]);
 
   // ゲーム操作
   const {
@@ -29,7 +45,8 @@ export default function TetrisGame() {
     hardDrop
   } = useGameControls({
     setGameState,
-    calculatePiecePlacementState
+    calculatePiecePlacementState,
+    playSound
   });
 
   // ゲームループとキーボード入力
@@ -89,6 +106,10 @@ export default function TetrisGame() {
           isPaused={gameState.isPaused}
           onReset={handleReset}
           onTogglePause={handleTogglePause}
+          isMuted={isMuted}
+          volume={volume}
+          onToggleMute={toggleMute}
+          onVolumeChange={setVolumeLevel}
         />
         
         {/* 情報パネル周りのエフェクト */}

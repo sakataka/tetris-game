@@ -5,11 +5,13 @@ import { isValidPosition, rotatePiece } from '../utils/tetrisUtils';
 interface UseGameControlsProps {
   setGameState: React.Dispatch<React.SetStateAction<GameState>>;
   calculatePiecePlacementState: (prevState: GameState, piece: Tetromino, bonusPoints?: number) => GameState;
+  playSound: (soundType: 'lineClear' | 'pieceLand' | 'pieceRotate' | 'tetris' | 'gameOver' | 'hardDrop') => void;
 }
 
 export function useGameControls({
   setGameState,
-  calculatePiecePlacementState
+  calculatePiecePlacementState,
+  playSound
 }: UseGameControlsProps) {
   
   const movePiece = useCallback((dir: { x: number; y: number }) => {
@@ -35,12 +37,13 @@ export function useGameControls({
 
       if (dir.y > 0) {
         // Piece hit bottom, place it
+        playSound('pieceLand');
         return calculatePiecePlacementState(prevState, prevState.currentPiece, 0);
       }
 
       return prevState;
     });
-  }, [calculatePiecePlacementState, setGameState]);
+  }, [calculatePiecePlacementState, setGameState, playSound]);
 
   const rotatePieceClockwise = useCallback(() => {
     setGameState(prevState => {
@@ -51,6 +54,7 @@ export function useGameControls({
       const rotatedPiece = rotatePiece(prevState.currentPiece);
       
       if (isValidPosition(prevState.board, rotatedPiece, rotatedPiece.position)) {
+        playSound('pieceRotate');
         return {
           ...prevState,
           currentPiece: rotatedPiece
@@ -59,7 +63,7 @@ export function useGameControls({
 
       return prevState;
     });
-  }, [setGameState]);
+  }, [setGameState, playSound]);
 
   const dropPiece = useCallback(() => {
     movePiece({ x: 0, y: 1 });
@@ -85,9 +89,10 @@ export function useGameControls({
       };
 
       const hardDropBonus = (dropY - prevState.currentPiece.position.y) * HARD_DROP_BONUS_MULTIPLIER;
+      playSound('hardDrop');
       return calculatePiecePlacementState(prevState, droppedPiece, hardDropBonus);
     });
-  }, [calculatePiecePlacementState, setGameState]);
+  }, [calculatePiecePlacementState, setGameState, playSound]);
 
   return {
     movePiece,
