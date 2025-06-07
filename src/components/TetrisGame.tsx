@@ -1,7 +1,14 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { GameState } from '../types/tetris';
+import { 
+  GameState,
+  Tetromino,
+  EFFECT_RESET_DELAY,
+  HARD_DROP_BONUS_MULTIPLIER,
+  TETRIS_BONUS_POINTS,
+  BASE_LINE_POINTS
+} from '../types/tetris';
 import { 
   createEmptyBoard,
   getRandomTetromino,
@@ -43,6 +50,69 @@ export default function TetrisGame() {
         particles: newParticles
       }
     }));
+  }, []);
+
+  const calculatePiecePlacementState = useCallback((prevState: GameState, piece: Tetromino, bonusPoints: number = 0): GameState => {
+    const newBoard = placePiece(prevState.board, piece);
+    const { newBoard: clearedBoard, linesCleared, linesToClear } = clearLines(newBoard);
+    
+    const newLines = prevState.lines + linesCleared;
+    const newLevel = Math.floor(newLines / 10) + 1;
+    const newScore = prevState.score + 
+      (linesCleared * BASE_LINE_POINTS * newLevel) + 
+      (linesCleared === 4 ? TETRIS_BONUS_POINTS * newLevel : 0) + // Tetris bonus
+      bonusPoints;
+
+    const nextPiece = getRandomTetromino();
+    
+    // ライン消去アニメーション効果
+    let newLineEffect = { ...prevState.lineEffect };
+    if (linesCleared > 0) {
+      newLineEffect = {
+        flashingLines: linesToClear,
+        shaking: true,
+        particles: [
+          ...prevState.lineEffect.particles,
+          ...createParticles(linesToClear, newBoard)
+        ]
+      };
+      
+      // アニメーション後にエフェクトをリセット
+      setTimeout(() => {
+        setGameState(currentState => ({
+          ...currentState,
+          lineEffect: {
+            ...currentState.lineEffect,
+            flashingLines: [],
+            shaking: false
+          }
+        }));
+      }, EFFECT_RESET_DELAY);
+    }
+    
+    // Check if game is over
+    if (!isValidPosition(clearedBoard, prevState.nextPiece!, prevState.nextPiece!.position)) {
+      return {
+        ...prevState,
+        board: clearedBoard,
+        gameOver: true,
+        score: newScore,
+        level: newLevel,
+        lines: newLines,
+        lineEffect: newLineEffect
+      };
+    }
+
+    return {
+      ...prevState,
+      board: clearedBoard,
+      currentPiece: prevState.nextPiece,
+      nextPiece: nextPiece,
+      score: newScore,
+      level: newLevel,
+      lines: newLines,
+      lineEffect: newLineEffect
+    };
   }, []);
 
   const resetGame = useCallback(() => {
@@ -87,70 +157,12 @@ export default function TetrisGame() {
 
       if (dir.y > 0) {
         // Piece hit bottom, place it
-        const newBoard = placePiece(prevState.board, prevState.currentPiece);
-        const { newBoard: clearedBoard, linesCleared, linesToClear } = clearLines(newBoard);
-        
-        const newLines = prevState.lines + linesCleared;
-        const newLevel = Math.floor(newLines / 10) + 1;
-        const newScore = prevState.score + 
-          (linesCleared * 100 * newLevel) + 
-          (linesCleared === 4 ? 300 * newLevel : 0); // Tetris bonus
-
-        const nextPiece = getRandomTetromino();
-        
-        // ライン消去アニメーション効果
-        let newLineEffect = { ...prevState.lineEffect };
-        if (linesCleared > 0) {
-          newLineEffect = {
-            flashingLines: linesToClear,
-            shaking: true,
-            particles: [
-              ...prevState.lineEffect.particles,
-              ...createParticles(linesToClear, newBoard)
-            ]
-          };
-          
-          // アニメーション後にエフェクトをリセット
-          setTimeout(() => {
-            setGameState(currentState => ({
-              ...currentState,
-              lineEffect: {
-                ...currentState.lineEffect,
-                flashingLines: [],
-                shaking: false
-              }
-            }));
-          }, 300);
-        }
-        
-        // Check if game is over
-        if (!isValidPosition(clearedBoard, prevState.nextPiece!, prevState.nextPiece!.position)) {
-          return {
-            ...prevState,
-            board: clearedBoard,
-            gameOver: true,
-            score: newScore,
-            level: newLevel,
-            lines: newLines,
-            lineEffect: newLineEffect
-          };
-        }
-
-        return {
-          ...prevState,
-          board: clearedBoard,
-          currentPiece: prevState.nextPiece,
-          nextPiece: nextPiece,
-          score: newScore,
-          level: newLevel,
-          lines: newLines,
-          lineEffect: newLineEffect
-        };
+        return calculatePiecePlacementState(prevState, prevState.currentPiece, 0);
       }
 
       return prevState;
     });
-  }, []);
+  }, [calculatePiecePlacementState]);
 
   const rotatePieceClockwise = useCallback(() => {
     setGameState(prevState => {
@@ -194,67 +206,10 @@ export default function TetrisGame() {
         position: { x: prevState.currentPiece.position.x, y: dropY }
       };
 
-      const newBoard = placePiece(prevState.board, droppedPiece);
-      const { newBoard: clearedBoard, linesCleared, linesToClear } = clearLines(newBoard);
-      
-      const newLines = prevState.lines + linesCleared;
-      const newLevel = Math.floor(newLines / 10) + 1;
-      const newScore = prevState.score + 
-        (linesCleared * 100 * newLevel) + 
-        (linesCleared === 4 ? 300 * newLevel : 0) +
-        (dropY - prevState.currentPiece.position.y) * 2; // Hard drop bonus
-
-      const nextPiece = getRandomTetromino();
-      
-      // ライン消去アニメーション効果
-      let newLineEffect = { ...prevState.lineEffect };
-      if (linesCleared > 0) {
-        newLineEffect = {
-          flashingLines: linesToClear,
-          shaking: true,
-          particles: [
-            ...prevState.lineEffect.particles,
-            ...createParticles(linesToClear, newBoard)
-          ]
-        };
-        
-        // アニメーション後にエフェクトをリセット
-        setTimeout(() => {
-          setGameState(currentState => ({
-            ...currentState,
-            lineEffect: {
-              ...currentState.lineEffect,
-              flashingLines: [],
-              shaking: false
-            }
-          }));
-        }, 300);
-      }
-      
-      if (!isValidPosition(clearedBoard, prevState.nextPiece!, prevState.nextPiece!.position)) {
-        return {
-          ...prevState,
-          board: clearedBoard,
-          gameOver: true,
-          score: newScore,
-          level: newLevel,
-          lines: newLines,
-          lineEffect: newLineEffect
-        };
-      }
-
-      return {
-        ...prevState,
-        board: clearedBoard,
-        currentPiece: prevState.nextPiece,
-        nextPiece: nextPiece,
-        score: newScore,
-        level: newLevel,
-        lines: newLines,
-        lineEffect: newLineEffect
-      };
+      const hardDropBonus = (dropY - prevState.currentPiece.position.y) * HARD_DROP_BONUS_MULTIPLIER;
+      return calculatePiecePlacementState(prevState, droppedPiece, hardDropBonus);
     });
-  }, []);
+  }, [calculatePiecePlacementState]);
 
   const togglePause = useCallback(() => {
     setGameState(prevState => ({

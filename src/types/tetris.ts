@@ -12,18 +12,20 @@ export interface Tetromino {
   color: string;
 }
 
+export interface Particle {
+  id: string;
+  x: number;
+  y: number;
+  color: string;
+  vx: number;
+  vy: number;
+  life: number;
+}
+
 export interface LineEffectState {
   flashingLines: number[];
   shaking: boolean;
-  particles: Array<{
-    id: string;
-    x: number;
-    y: number;
-    color: string;
-    vx: number;
-    vy: number;
-    life: number;
-  }>;
+  particles: Particle[];
 }
 
 export interface GameState {
@@ -40,6 +42,14 @@ export interface GameState {
 
 export const BOARD_WIDTH = 10;
 export const BOARD_HEIGHT = 20;
+
+// Animation and effect constants
+export const EFFECT_RESET_DELAY = 300; // ms
+export const PARTICLE_LIFE_DURATION = 60; // frames
+export const PARTICLES_PER_CELL = 3;
+export const HARD_DROP_BONUS_MULTIPLIER = 2;
+export const TETRIS_BONUS_POINTS = 300;
+export const BASE_LINE_POINTS = 100;
 
 export const TETROMINO_SHAPES: Record<TetrominoType, number[][]> = {
   I: [

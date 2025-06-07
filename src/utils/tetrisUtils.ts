@@ -1,10 +1,13 @@
 import { 
   Tetromino, 
   TetrominoType, 
+  Particle,
   TETROMINO_SHAPES, 
   TETROMINO_COLORS, 
   BOARD_WIDTH, 
-  BOARD_HEIGHT 
+  BOARD_HEIGHT,
+  PARTICLES_PER_CELL,
+  PARTICLE_LIFE_DURATION
 } from '../types/tetris';
 
 export function createEmptyBoard(): (string | null)[][] {
@@ -107,31 +110,15 @@ export function clearLines(board: (string | null)[][]): {
   return { newBoard, linesCleared: linesToClear.length, linesToClear };
 }
 
-export function createParticles(linesToClear: number[], board: (string | null)[][]): Array<{
-  id: string;
-  x: number;
-  y: number;
-  color: string;
-  vx: number;
-  vy: number;
-  life: number;
-}> {
-  const particles: Array<{
-    id: string;
-    x: number;
-    y: number;
-    color: string;
-    vx: number;
-    vy: number;
-    life: number;
-  }> = [];
+export function createParticles(linesToClear: number[], board: (string | null)[][]): Particle[] {
+  const particles: Particle[] = [];
   
   linesToClear.forEach(lineIndex => {
     for (let x = 0; x < BOARD_WIDTH; x++) {
       const cellColor = board[lineIndex][x];
       if (cellColor) {
         // 各セルから複数のパーティクルを生成
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < PARTICLES_PER_CELL; i++) {
           particles.push({
             id: `${lineIndex}-${x}-${i}`,
             x: x * 24 + 12 + 8, // セル中央 + ボード位置調整
@@ -139,7 +126,7 @@ export function createParticles(linesToClear: number[], board: (string | null)[]
             color: cellColor,
             vx: (Math.random() - 0.5) * 8, // 水平方向のランダムな速度
             vy: Math.random() * -4 - 2, // 上向きの速度
-            life: 60 // 60フレーム持続
+            life: PARTICLE_LIFE_DURATION
           });
         }
       }

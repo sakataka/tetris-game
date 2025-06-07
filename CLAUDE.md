@@ -89,3 +89,49 @@ The game features a sophisticated animation system for line clearing:
 - CSS Grid-based board layout with individual cell styling
 - `requestAnimationFrame` for smooth particle animations
 - Automatic particle cleanup to prevent memory leaks
+
+## Future Refactoring Guidelines
+
+### 1. State Management Separation
+**Current Issue**: `TetrisGame.tsx` is nearly 400 lines with too many responsibilities
+**Solution**: 
+- Extract game logic into custom hooks (`useGameState`, `useGameControls`)
+- Implement Context API to avoid props drilling
+- Separate effect management from core game logic
+
+### 2. Code Duplication Elimination
+**Current Issue**: Line clearing logic is duplicated in `movePiece` (lines 89-124) and `hardDrop` (lines 209-232)
+**Solution**:
+- Create unified `handlePiecePlacement` function
+- Extract common effect processing and score calculation
+- Consolidate animation timing logic
+
+### 3. Type Safety Improvements
+**Current Issue**: Particle type definition duplicated between `types/tetris.ts:18-26` and `utils/tetrisUtils.ts:110-127`
+**Solution**:
+- Define `Particle` interface in types file
+- Convert magic numbers to named constants (300ms timeout, 60 frame life, etc.)
+- Add stricter typing for game configuration
+
+### 4. Performance Optimization
+**Current Issue**: `setTimeout` for effect reset and potential re-renders
+**Solution**:
+- Replace setTimeout with useEffect cleanup or state-based timing
+- Implement React.memo for expensive components
+- Optimize particle system with object pooling
+
+### 5. Extensibility Enhancement
+**Current Issue**: Hard-coded game parameters and limited customization
+**Solution**:
+- Create configurable game options (speed, board size, colors)
+- Design pluggable effect system for different animation types
+- Abstract input handling for different control schemes
+- Implement game mode variants (time attack, multiplayer setup)
+
+### 6. Architecture Improvements
+**Priority Order**:
+1. Extract state management logic (highest impact)
+2. Eliminate code duplication (maintainability)
+3. Improve type safety (reliability)
+4. Optimize performance (user experience)
+5. Enhance extensibility (future features)
