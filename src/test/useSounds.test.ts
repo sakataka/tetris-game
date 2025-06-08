@@ -15,8 +15,15 @@ const mockAudio = {
   src: ''
 };
 
+// Mock the global Audio constructor
+Object.defineProperty(window, 'Audio', {
+  writable: true,
+  value: vi.fn(() => mockAudio)
+});
+
 beforeEach(() => {
   vi.clearAllMocks();
+  mockAudio.volume = 0.5;
 });
 
 describe('useSounds', () => {
@@ -106,17 +113,22 @@ describe('useSounds', () => {
   });
 
   it('should handle audio load errors gracefully', () => {
-    const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const mockAudioWithError = {
       ...mockAudio,
       addEventListener: vi.fn((event, callback) => {
         if (event === 'error') {
+          // Simulate error event
           callback(new Event('error'));
         }
       })
     };
     
-    (window.Audio as any) = vi.fn(() => mockAudioWithError);
+    // Temporarily replace the Audio constructor
+    const originalAudio = window.Audio;
+    Object.defineProperty(window, 'Audio', {
+      writable: true,
+      value: vi.fn(() => mockAudioWithError)
+    });
     
     const { result } = renderHook(() => useSounds());
     
@@ -124,8 +136,14 @@ describe('useSounds', () => {
       result.current.initializeSounds();
     });
     
-    expect(consoleSpy).toHaveBeenCalled();
-    consoleSpy.mockRestore();
+    // Check that failed sounds are tracked in audioState
+    expect(result.current.audioState.failed.size).toBeGreaterThan(0);
+    
+    // Restore original Audio constructor
+    Object.defineProperty(window, 'Audio', {
+      writable: true,
+      value: originalAudio
+    });
   });
 
   it('should set audio volume when playing sound', () => {
@@ -141,7 +159,12 @@ describe('useSounds', () => {
       })
     };
     
-    (window.Audio as any) = vi.fn(() => mockAudioWithCallback);
+    // Temporarily replace the Audio constructor
+    const originalAudio = window.Audio;
+    Object.defineProperty(window, 'Audio', {
+      writable: true,
+      value: vi.fn(() => mockAudioWithCallback)
+    });
     
     act(() => {
       result.current.initializeSounds();
@@ -152,5 +175,11 @@ describe('useSounds', () => {
     });
     
     expect(mockAudioWithCallback.volume).toBe(0.7);
+    
+    // Restore original Audio constructor
+    Object.defineProperty(window, 'Audio', {
+      writable: true,
+      value: originalAudio
+    });
   });
 });

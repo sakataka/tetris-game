@@ -3,14 +3,9 @@ import { renderHook, act } from '@testing-library/react';
 import { useHighScoreManager } from '../hooks/useHighScoreManager';
 import { GameState } from '../types/tetris';
 
-// Mock store hooks
-const mockHighScores = {
+// Mock store state
+const mockStoreState = {
   highScores: [],
-  addHighScore: vi.fn(),
-  clearHighScores: vi.fn()
-};
-
-const mockStatistics = {
   statistics: {
     totalGames: 0,
     totalLines: 0,
@@ -20,14 +15,21 @@ const mockStatistics = {
     playTime: 0,
     bestStreak: 0,
     tetrisCount: 0
-  },
-  updateStatistics: vi.fn(),
-  resetStatistics: vi.fn()
+  }
 };
 
-vi.mock('../store/gameStore', () => ({
-  useHighScores: () => mockHighScores,
-  useStatistics: () => mockStatistics
+// Mock store actions
+const mockActions = {
+  addHighScore: vi.fn(),
+  updateStatistics: vi.fn()
+};
+
+// Mock the new statisticsStore
+vi.mock('../store/statisticsStore', () => ({
+  useStatisticsActions: () => mockActions,
+  useStatisticsStore: {
+    getState: () => mockStoreState
+  }
 }));
 
 const createMockGameState = (overrides: Partial<GameState> = {}): GameState => ({
@@ -53,8 +55,10 @@ describe('useHighScoreManager', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockPlaySound = vi.fn();
-    mockHighScores.highScores = [];
-    mockStatistics.statistics = {
+    
+    // Reset mock store state
+    mockStoreState.highScores = [];
+    mockStoreState.statistics = {
       totalGames: 0,
       totalLines: 0,
       totalScore: 0,
@@ -78,7 +82,7 @@ describe('useHighScoreManager', () => {
     });
 
     it('既存のハイスコアより高いスコアがハイスコアと判定される', () => {
-      mockHighScores.highScores = [
+      mockStoreState.highScores = [
         { id: '1', score: 10000, level: 5, lines: 25, date: Date.now() }
       ];
 
@@ -92,7 +96,7 @@ describe('useHighScoreManager', () => {
     });
 
     it('現在のハイスコアを正しく取得できる', () => {
-      mockHighScores.highScores = [
+      mockStoreState.highScores = [
         { id: '1', score: 25000, level: 8, lines: 40, date: Date.now() },
         { id: '2', score: 15000, level: 5, lines: 25, date: Date.now() }
       ];
@@ -117,7 +121,7 @@ describe('useHighScoreManager', () => {
 
   describe('スコアランク機能', () => {
     beforeEach(() => {
-      mockHighScores.highScores = [
+      mockStoreState.highScores = [
         { id: '1', score: 30000, level: 8, lines: 40, date: Date.now() },
         { id: '2', score: 20000, level: 6, lines: 30, date: Date.now() },
         { id: '3', score: 10000, level: 4, lines: 20, date: Date.now() }
@@ -144,7 +148,7 @@ describe('useHighScoreManager', () => {
 
     it('ランクインしないスコアではnullを返す', () => {
       // 10個のハイスコアで満杯にする
-      mockHighScores.highScores = Array.from({ length: 10 }, (_, i) => ({
+      mockStoreState.highScores = Array.from({ length: 10 }, (_, i) => ({
         id: `${i}`,
         score: (10 - i) * 1000, // 10000, 9000, ..., 1000
         level: 5,
@@ -187,7 +191,7 @@ describe('useHighScoreManager', () => {
         rerender({ gameState: gameOverState, playSound: mockPlaySound });
       });
 
-      expect(mockStatistics.updateStatistics).toHaveBeenCalledWith(
+      expect(mockActions.updateStatistics).toHaveBeenCalledWith(
         expect.objectContaining({
           totalGames: 1,
           totalScore: 15000,
@@ -221,7 +225,7 @@ describe('useHighScoreManager', () => {
         rerender({ gameState: gameOverState, playSound: mockPlaySound });
       });
 
-      expect(mockHighScores.addHighScore).toHaveBeenCalledWith(
+      expect(mockActions.addHighScore).toHaveBeenCalledWith(
         expect.objectContaining({
           score: 25000,
           level: 7,
@@ -277,7 +281,7 @@ describe('useHighScoreManager', () => {
       });
 
       // 統計更新は1回だけ呼ばれるべき
-      expect(mockStatistics.updateStatistics).toHaveBeenCalledTimes(1);
+      expect(mockActions.updateStatistics).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -290,7 +294,7 @@ describe('useHighScoreManager', () => {
 
       const savedEntry = result.current.manualSaveHighScore(20000, 6, 30, 'TestPlayer');
 
-      expect(mockHighScores.addHighScore).toHaveBeenCalledWith(savedEntry);
+      expect(mockActions.addHighScore).toHaveBeenCalledWith(savedEntry);
       expect(savedEntry.score).toBe(20000);
       expect(savedEntry.level).toBe(6);
       expect(savedEntry.lines).toBe(30);
