@@ -174,6 +174,7 @@ export interface PlaySession {
 export interface GameStoreActions {
   // Game state actions
   setGameState: (gameState: Partial<GameState>) => void;
+  updateParticles: (particles: Particle[]) => void;
   resetGame: () => void;
   togglePause: () => void;
   

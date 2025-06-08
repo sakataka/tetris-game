@@ -8,6 +8,8 @@ import { useGameControls } from '../hooks/useGameControls';
 import { useGameLoop } from '../hooks/useGameLoop';
 import { useSounds } from '../hooks/useSounds';
 import { 
+  useGameState,
+  useGameActions,
   useSettings
 } from '../store/gameStore';
 import { useHighScoreManager } from '../hooks/useHighScoreManager';
@@ -15,6 +17,8 @@ import { useHighScoreManager } from '../hooks/useHighScoreManager';
 
 export default function TetrisGame() {
   // Zustand状態管理
+  const gameState = useGameState();
+  const { updateParticles, resetGame, togglePause } = useGameActions();
   const { settings, updateSettings } = useSettings();
 
   // SSR hydration handling - 簡素化
@@ -41,13 +45,10 @@ export default function TetrisGame() {
   // 従来のhook（徐々に移行）
   const {
     gameState: oldGameState,
-    setGameState,
+    setGameState: setGameStateOld,
     dropTime,
     setDropTime,
-    updateParticles,
     calculatePiecePlacementState,
-    resetGame: resetGameOld,
-    togglePause: togglePauseOld,
     INITIAL_DROP_TIME
   } = useGameStateOld({ playSound });
 
@@ -63,7 +64,7 @@ export default function TetrisGame() {
     dropPiece,
     hardDrop
   } = useGameControls({
-    setGameState,
+    setGameState: setGameStateOld,
     calculatePiecePlacementState,
     playSound
   });
@@ -86,25 +87,25 @@ export default function TetrisGame() {
     movePiece,
     rotatePieceClockwise,
     hardDrop,
-    togglePause: togglePauseOld,
-    resetGame: resetGameOld,
+    togglePause,
+    resetGame,
     INITIAL_DROP_TIME
   });
 
   // useCallbackでコールバック関数を最適化
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const handleParticleUpdate = useCallback((particles: typeof oldGameState.lineEffect.particles) => {
+  const handleParticleUpdate = useCallback((particles: typeof gameState.lineEffect.particles) => {
     updateParticles(particles);
-  }, [updateParticles]); // oldGameState意図的に除外（無限ループ防止）
+  }, [updateParticles]); // gameState意図的に除外（無限ループ防止）
 
   const handleReset = useCallback(() => {
     // onGameStart(); // Track new game start - 一時的に無効化
-    resetGameOld();
-  }, [resetGameOld]);
+    resetGame();
+  }, [resetGame]);
 
   const handleTogglePause = useCallback(() => {
-    togglePauseOld();
-  }, [togglePauseOld]);
+    togglePause();
+  }, [togglePause]);
 
   const handleVolumeChange = useCallback((newVolume: number) => {
     updateSettings({ volume: newVolume });
@@ -132,11 +133,11 @@ export default function TetrisGame() {
       {/* ゲームボード */}
       <div className="relative">
         <TetrisBoard 
-          board={oldGameState.board}
-          currentPiece={oldGameState.currentPiece}
-          gameOver={oldGameState.gameOver}
-          isPaused={oldGameState.isPaused}
-          lineEffect={oldGameState.lineEffect}
+          board={gameState.board}
+          currentPiece={gameState.currentPiece}
+          gameOver={gameState.gameOver}
+          isPaused={gameState.isPaused}
+          lineEffect={gameState.lineEffect}
           onParticleUpdate={handleParticleUpdate}
         />
         
@@ -149,12 +150,12 @@ export default function TetrisGame() {
       {/* ゲーム情報 */}
       <div className="relative">
         <GameInfo 
-          score={oldGameState.score}
-          level={oldGameState.level}
-          lines={oldGameState.lines}
-          nextPiece={oldGameState.nextPiece}
-          gameOver={oldGameState.gameOver}
-          isPaused={oldGameState.isPaused}
+          score={gameState.score}
+          level={gameState.level}
+          lines={gameState.lines}
+          nextPiece={gameState.nextPiece}
+          gameOver={gameState.gameOver}
+          isPaused={gameState.isPaused}
           onReset={handleReset}
           onTogglePause={handleTogglePause}
           isMuted={isMuted}

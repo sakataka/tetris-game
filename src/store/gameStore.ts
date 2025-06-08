@@ -11,7 +11,8 @@ import {
   ThemeVariant,
   DifficultyLevel,
   GameMode,
-  PlaySession
+  PlaySession,
+  Particle
 } from '../types/tetris';
 import { createEmptyBoard, getRandomTetromino } from '../utils/tetrisUtils';
 
@@ -84,6 +85,16 @@ export const useGameStore = create<GameStore>()((set) => ({
     set((state) => ({
       ...state,
       ...gameState
+    }));
+  },
+
+  updateParticles: (particles: Particle[]) => {
+    set((state) => ({
+      ...state,
+      lineEffect: {
+        ...state.lineEffect,
+        particles
+      }
     }));
   },
 
@@ -311,12 +322,30 @@ export const useGameStore = create<GameStore>()((set) => ({
 }));
 
 // Simple selectors that return individual values to avoid object recreation
+export const useGameState = () => {
+  const board = useGameStore(state => state.board);
+  const currentPiece = useGameStore(state => state.currentPiece);
+  const nextPiece = useGameStore(state => state.nextPiece);
+  const score = useGameStore(state => state.score);
+  const level = useGameStore(state => state.level);
+  const lines = useGameStore(state => state.lines);
+  const gameOver = useGameStore(state => state.gameOver);
+  const isPaused = useGameStore(state => state.isPaused);
+  const lineEffect = useGameStore(state => state.lineEffect);
+  
+  return { 
+    board, currentPiece, nextPiece, score, level, lines, 
+    gameOver, isPaused, lineEffect 
+  };
+};
+
 export const useGameActions = () => {
   const setGameState = useGameStore(state => state.setGameState);
+  const updateParticles = useGameStore(state => state.updateParticles);
   const resetGame = useGameStore(state => state.resetGame);
   const togglePause = useGameStore(state => state.togglePause);
   
-  return { setGameState, resetGame, togglePause };
+  return { setGameState, updateParticles, resetGame, togglePause };
 };
 
 export const useSettings = () => {
