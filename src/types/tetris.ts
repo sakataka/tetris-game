@@ -1,47 +1,76 @@
+// 基本的なゲーム要素の型定義
 export type TetrominoType = 'I' | 'O' | 'T' | 'S' | 'Z' | 'J' | 'L';
 export type ThemeVariant = 'cyberpunk' | 'classic' | 'retro' | 'minimal' | 'neon';
 export type GameMode = 'single' | 'versus' | 'cooperative';
 export type DifficultyLevel = 'easy' | 'normal' | 'hard' | 'extreme';
+
+// アクセシビリティ関連の型定義
 export type ColorBlindnessType = 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia';
 export type ContrastLevel = 'low' | 'normal' | 'high';
 export type AnimationIntensity = 'none' | 'reduced' | 'normal' | 'enhanced';
+
+// 音響システムの厳密な型定義
 export type SoundKey = 'lineClear' | 'pieceLand' | 'pieceRotate' | 'tetris' | 'gameOver' | 'hardDrop';
+export type SoundCategory = 'effect' | 'music' | 'ui' | 'ambient';
+export type VolumeLevel = 0 | 0.1 | 0.2 | 0.3 | 0.4 | 0.5 | 0.6 | 0.7 | 0.8 | 0.9 | 1.0;
+
+// ゲーム状態の厳密な型定義
+export type GameStatus = 'idle' | 'playing' | 'paused' | 'gameOver' | 'loading';
+export type InputSource = 'keyboard' | 'touch' | 'gamepad' | 'mouse';
+
+// パフォーマンス関連の型定義
+export type RendererType = 'dom' | 'canvas' | 'webgl';
+export type PerformanceLevel = 'excellent' | 'good' | 'fair' | 'poor';
+
+// データ範囲の制約型
+export type ScoreRange = number; // 0以上の整数
+export type LevelRange = number; // 1以上の整数
+export type LineRange = number; // 0以上の整数
+
+// ブランド型による型安全性の向上
+export type PlayerId = string & { readonly __brand: 'PlayerId' };
+export type SessionId = string & { readonly __brand: 'SessionId' };
+export type GameId = string & { readonly __brand: 'GameId' };
 
 export interface Position {
   readonly x: number;
   readonly y: number;
 }
 
+// 不変のTetromino定義（形状データは読み取り専用）
 export interface Tetromino {
   readonly type: TetrominoType;
-  readonly shape: number[][];
+  readonly shape: ReadonlyArray<ReadonlyArray<number>>;
   readonly position: Position;
   readonly color: string;
 }
 
+// パーティクルは可変（アニメーション用）
 export interface Particle {
-  id: string;
+  id: string; // プールでの再利用のため可変
   x: number;
   y: number;
-  color: string;
+  color: string; // プールでの再利用のため可変
   vx: number;
   vy: number;
   life: number;
 }
 
+// ラインエフェクト状態（パーティクル配列は可変）
 export interface LineEffectState {
-  flashingLines: number[];
-  shaking: boolean;
-  particles: Particle[];
+  readonly flashingLines: ReadonlyArray<number>;
+  readonly shaking: boolean;
+  particles: Particle[]; // アニメーション更新のため可変
 }
 
+// ゲーム状態（スコア等は変更可能、ボードは可変）
 export interface GameState {
-  board: (string | null)[][];
-  currentPiece: Tetromino | null;
-  nextPiece: Tetromino | null;
-  score: number;
-  level: number;
-  lines: number;
+  board: (string | null)[][]; // ゲーム進行で変更される
+  currentPiece: Readonly<Tetromino> | null;
+  nextPiece: Readonly<Tetromino> | null;
+  score: ScoreRange;
+  level: LevelRange;
+  lines: LineRange;
   gameOver: boolean;
   isPaused: boolean;
   lineEffect: LineEffectState;

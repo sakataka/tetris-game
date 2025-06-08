@@ -1,10 +1,16 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { HighScore, GameStatistics } from '../types/tetris';
 
+// 型安全なストア状態の型定義
+interface TestStoreState {
+  highScores: HighScore[];
+  statistics: GameStatistics;
+}
+
 // テスト専用のストア作成関数をモック
 const createTestStore = () => {
-  let state = {
-    highScores: [] as HighScore[],
+  let state: TestStoreState = {
+    highScores: [],
     statistics: {
       totalGames: 0,
       totalLines: 0,
@@ -14,12 +20,12 @@ const createTestStore = () => {
       playTime: 0,
       bestStreak: 0,
       tetrisCount: 0
-    } as GameStatistics
+    }
   };
 
   return {
     getState: () => state,
-    setState: (newState: any) => {
+    setState: (newState: Partial<TestStoreState>) => {
       state = { ...state, ...newState };
     },
     addHighScore: (score: HighScore) => {

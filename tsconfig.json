@@ -13,6 +13,20 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    
+    // 厳密な型チェック設定（実用的なレベル）
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": false, // 開発中は許可
+    "noUnusedParameters": false, // 開発中は許可
+    "exactOptionalPropertyTypes": false, // 実用性のため無効
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": false, // 実用性のため無効
+    "strictNullChecks": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
     "plugins": [
       {
         "name": "next"

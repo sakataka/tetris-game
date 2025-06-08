@@ -2,10 +2,11 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useHighScoreManager } from '../hooks/useHighScoreManager';
 import { GameState } from '../types/tetris';
+import { MockPlaySound, MockStoreState } from './types/mockTypes';
 
 // Mock store state
-const mockStoreState = {
-  highScores: [] as {id: string; score: number; level: number; lines: number; date: number}[],
+const mockStoreState: MockStoreState = {
+  highScores: [],
   statistics: {
     totalGames: 0,
     totalLines: 0,
@@ -50,11 +51,11 @@ const createMockGameState = (overrides: Partial<GameState> = {}): GameState => (
 });
 
 describe('useHighScoreManager', () => {
-  let mockPlaySound: any;
+  let mockPlaySound: MockPlaySound;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockPlaySound = vi.fn();
+    mockPlaySound = vi.fn() as MockPlaySound;
     
     // Reset mock store state
     mockStoreState.highScores = [];
