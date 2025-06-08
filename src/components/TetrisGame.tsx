@@ -1,26 +1,41 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import type { Particle } from '../types/tetris';
+import type { Particle, Tetromino, GameState } from '../types/tetris';
 import TetrisBoard from './TetrisBoard';
 import GameInfo from './GameInfo';
 import VirtualControls from './VirtualControls';
 import LoadingMessage from './LoadingMessage';
 import ErrorBoundary from './ErrorBoundary';
-import { useGameState as useLegacyGameState } from '../hooks/useGameState';
 import { useGameControls } from '../hooks/useGameControls';
 import { useGameLoop } from '../hooks/useGameLoop';
 import { useSounds } from '../hooks/useSounds';
 import { useMobileDetection } from '../hooks/useMobileDetection';
 import { 
-  useSettings
-} from '../store/gameStore';
+  useSettings,
+  useSettingsActions
+} from '../store/settingsStore';
+import { 
+  useGameState,
+  useDropTime,
+  useGameStateActions
+} from '../store/gameStateStore';
 import { useHighScoreManager } from '../hooks/useHighScoreManager';
 import { useSessionTracking } from '../hooks/useSessionTracking';
 
 export default function TetrisGame() {
-  // Zustand状態管理
-  const { settings, updateSettings } = useSettings();
+  // 新しい分割Zustandストア
+  const settings = useSettings();
+  const { updateSettings } = useSettingsActions();
+  const gameState = useGameState();
+  const dropTime = useDropTime();
+  const { 
+    setGameState, 
+    updateParticles, 
+    resetGame, 
+    togglePause, 
+    setDropTime 
+  } = useGameStateActions();
 
   // モバイルデバイス検出
   const { isMobile } = useMobileDetection();
@@ -47,23 +62,38 @@ export default function TetrisGame() {
     initialMuted: settings.isMuted
   });
 
-  // レガシーhook（段階的移行中）
-  const {
-    gameState: legacyGameState,
-    setGameState: setLegacyGameState,
-    dropTime,
-    setDropTime,
-    calculatePiecePlacementState,
-    resetGame: resetLegacyGame,
-    togglePause: toggleLegacyPause,
-    updateParticles: updateLegacyParticles,
-    INITIAL_DROP_TIME
-  } = useLegacyGameState({ playSound });
+  // 新しいZustandストアからCalculatePiecePlacementState取得
+  const { calculatePiecePlacementState } = useGameStateActions();
+  const INITIAL_DROP_TIME = 1000; // 定数化
 
   // 音声初期化
   useEffect(() => {
     initializeSounds();
   }, [initializeSounds]);
+
+  // useGameControlsにsetStateアダプターを提供
+  const setGameStateAdapter = useCallback((updater: React.SetStateAction<GameState>) => {
+    if (typeof updater === 'function') {
+      // Zustandのset関数を使用して関数形式のupdaterに対応
+      setGameState(updater(gameState));
+    } else {
+      setGameState(updater);
+    }
+  }, [setGameState, gameState]);
+
+  const calculatePlacementAdapter = useCallback((prevState: GameState, piece: Tetromino, bonusPoints?: number): GameState => {
+    // ここでZustandのcalculatePiecePlacementStateを呼び出して結果を返す
+    calculatePiecePlacementState(piece, bonusPoints, playSound);
+    return gameState; // 更新後の状態を返す（暫定）
+  }, [calculatePiecePlacementState, playSound, gameState]);
+
+  const setDropTimeAdapter = useCallback((updater: React.SetStateAction<number>) => {
+    if (typeof updater === 'function') {
+      setDropTime(updater(dropTime));
+    } else {
+      setDropTime(updater);
+    }
+  }, [setDropTime, dropTime]);
 
   // ゲーム操作
   const {
@@ -72,14 +102,14 @@ export default function TetrisGame() {
     dropPiece,
     hardDrop
   } = useGameControls({
-    setGameState: setLegacyGameState,
-    calculatePiecePlacementState,
+    setGameState: setGameStateAdapter,
+    calculatePiecePlacementState: calculatePlacementAdapter,
     playSound
   });
 
   // ハイスコア管理
   useHighScoreManager({
-    gameState: legacyGameState,
+    gameState,
     playSound
   });
 
@@ -88,22 +118,22 @@ export default function TetrisGame() {
 
   // ゲームループとキーボード入力
   useGameLoop({
-    gameState: legacyGameState,
+    gameState,
     dropTime,
-    setDropTime,
+    setDropTime: setDropTimeAdapter,
     dropPiece,
     movePiece,
     rotatePieceClockwise,
     hardDrop,
-    togglePause: toggleLegacyPause,
-    resetGame: resetLegacyGame,
+    togglePause,
+    resetGame,
     INITIAL_DROP_TIME
   });
 
   // useCallbackでコールバック関数を最適化
   const handleParticleUpdate = useCallback((particles: Particle[]) => {
-    updateLegacyParticles(particles);
-  }, [updateLegacyParticles]);
+    updateParticles(particles);
+  }, [updateParticles]);
 
   const handleReset = useCallback(async () => {
     // モバイルでの音声アンロック
@@ -111,12 +141,12 @@ export default function TetrisGame() {
       await unlockAudio();
     }
     onGameStart(); // Track new game start
-    resetLegacyGame();
-  }, [onGameStart, resetLegacyGame, isMobile, unlockAudio]);
+    resetGame();
+  }, [onGameStart, resetGame, isMobile, unlockAudio]);
 
   const handleTogglePause = useCallback(() => {
-    toggleLegacyPause();
-  }, [toggleLegacyPause]);
+    togglePause();
+  }, [togglePause]);
 
   const handleVolumeChange = useCallback((newVolume: number) => {
     updateSettings({ volume: newVolume });
@@ -143,11 +173,11 @@ export default function TetrisGame() {
         <ErrorBoundary level="section">
           <div className="relative">
             <TetrisBoard 
-              board={legacyGameState.board}
-              currentPiece={legacyGameState.currentPiece}
-              gameOver={legacyGameState.gameOver}
-              isPaused={legacyGameState.isPaused}
-              lineEffect={legacyGameState.lineEffect}
+              board={gameState.board}
+              currentPiece={gameState.currentPiece}
+              gameOver={gameState.gameOver}
+              isPaused={gameState.isPaused}
+              lineEffect={gameState.lineEffect}
               onParticleUpdate={handleParticleUpdate}
             />
             
@@ -162,12 +192,12 @@ export default function TetrisGame() {
         <ErrorBoundary level="section">
           <div className="relative min-w-[280px] h-[600px]">
             <GameInfo 
-              score={legacyGameState.score}
-              level={legacyGameState.level}
-              lines={legacyGameState.lines}
-              nextPiece={legacyGameState.nextPiece}
-              gameOver={legacyGameState.gameOver}
-              isPaused={legacyGameState.isPaused}
+              score={gameState.score}
+              level={gameState.level}
+              lines={gameState.lines}
+              nextPiece={gameState.nextPiece}
+              gameOver={gameState.gameOver}
+              isPaused={gameState.isPaused}
               onReset={handleReset}
               onTogglePause={handleTogglePause}
               isMuted={isMuted}
@@ -197,11 +227,11 @@ export default function TetrisGame() {
           <ErrorBoundary level="section">
             <div className="relative mb-4">
               <TetrisBoard 
-                board={legacyGameState.board}
-                currentPiece={legacyGameState.currentPiece}
-                gameOver={legacyGameState.gameOver}
-                isPaused={legacyGameState.isPaused}
-                lineEffect={legacyGameState.lineEffect}
+                board={gameState.board}
+                currentPiece={gameState.currentPiece}
+                gameOver={gameState.gameOver}
+                isPaused={gameState.isPaused}
+                lineEffect={gameState.lineEffect}
                 onParticleUpdate={handleParticleUpdate}
               />
               
@@ -216,12 +246,12 @@ export default function TetrisGame() {
           <ErrorBoundary level="component">
             <div className="w-full max-w-sm h-32 overflow-hidden">
               <GameInfo 
-                score={legacyGameState.score}
-                level={legacyGameState.level}
-                lines={legacyGameState.lines}
-                nextPiece={legacyGameState.nextPiece}
-                gameOver={legacyGameState.gameOver}
-                isPaused={legacyGameState.isPaused}
+                score={gameState.score}
+                level={gameState.level}
+                lines={gameState.lines}
+                nextPiece={gameState.nextPiece}
+                gameOver={gameState.gameOver}
+                isPaused={gameState.isPaused}
                 onReset={handleReset}
                 onTogglePause={handleTogglePause}
                 isMuted={isMuted}
@@ -234,7 +264,7 @@ export default function TetrisGame() {
         </div>
 
         {/* 下部：仮想ボタンエリア - 固定高さ */}
-        {isMobile && settings.virtualControlsEnabled && !legacyGameState.gameOver && (
+        {isMobile && settings.virtualControlsEnabled && !gameState.gameOver && (
           <ErrorBoundary level="component">
             <div className="h-24 flex-shrink-0">
               <VirtualControls

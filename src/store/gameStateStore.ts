@@ -1,6 +1,13 @@
 import { create } from 'zustand';
-import { GameState, LineEffectState, Particle } from '../types/tetris';
+import { GameState, LineEffectState, Particle, Tetromino, INITIAL_DROP_TIME, SoundKey } from '../types/tetris';
 import { createEmptyBoard, getRandomTetromino } from '../utils/tetrisUtils';
+import {
+  calculateScoreIncrease,
+  processLineClear,
+  createLineEffects,
+  checkGameOver,
+  updateGameStateWithPiece
+} from '../utils/gameStateUtils';
 
 // 初期ゲーム状態
 const INITIAL_GAME_STATE: GameState = {
@@ -34,12 +41,15 @@ interface GameStateStore {
   // Line effect actions
   updateLineEffect: (lineEffect: Partial<LineEffectState>) => void;
   clearLineEffect: () => void;
+  
+  // Game logic action
+  calculatePiecePlacementState: (piece: Tetromino, bonusPoints?: number, playSound?: (soundType: SoundKey) => void) => void;
 }
 
 export const useGameStateStore = create<GameStateStore>()((set) => ({
   // Initial state
   gameState: INITIAL_GAME_STATE,
-  dropTime: 1000,
+  dropTime: INITIAL_DROP_TIME,
   
   // Actions
   setGameState: (newGameState) =>
@@ -75,7 +85,7 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
           particles: []
         }
       },
-      dropTime: 1000
+      dropTime: INITIAL_DROP_TIME
     })),
   
   togglePause: () =>
@@ -107,7 +117,52 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
           particles: state.gameState.lineEffect.particles // パーティクルは保持
         }
       }
-    }))
+    })),
+  
+  calculatePiecePlacementState: (piece, bonusPoints = 0, playSound) =>
+    set((state) => {
+      // 1. ライン消去処理
+      const lineClearResult = processLineClear(state.gameState.board, piece);
+      
+      // 2. スコア計算
+      const scoreResult = calculateScoreIncrease(
+        state.gameState.score,
+        state.gameState.lines,
+        lineClearResult.linesCleared,
+        bonusPoints
+      );
+      
+      // 3. ライン消去エフェクト作成
+      const lineEffect = createLineEffects(
+        lineClearResult.linesCleared,
+        lineClearResult.linesToClear,
+        lineClearResult.newBoard,
+        state.gameState.lineEffect,
+        playSound
+      );
+      
+      // 4. ゲームオーバー判定
+      const gameOverResult = checkGameOver(
+        lineClearResult.newBoard,
+        state.gameState.nextPiece!,
+        state.gameState,
+        playSound
+      );
+      
+      // 5. 最終的なゲーム状態更新
+      const newGameState = updateGameStateWithPiece(
+        state.gameState,
+        lineClearResult,
+        scoreResult,
+        lineEffect,
+        gameOverResult
+      );
+      
+      return {
+        gameState: newGameState,
+        dropTime: state.dropTime
+      };
+    })
 }));
 
 // Selector hooks for optimized access
@@ -120,5 +175,6 @@ export const useGameStateActions = () => useGameStateStore((state) => ({
   togglePause: state.togglePause,
   setDropTime: state.setDropTime,
   updateLineEffect: state.updateLineEffect,
-  clearLineEffect: state.clearLineEffect
+  clearLineEffect: state.clearLineEffect,
+  calculatePiecePlacementState: state.calculatePiecePlacementState
 }));

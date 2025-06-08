@@ -13,11 +13,17 @@ import AudioPanel from './AudioPanel';
 import GameButtonsPanel from './GameButtonsPanel';
 import ScoringPanel from './ScoringPanel';
 import { 
-  useHighScores, 
-  useStatistics, 
-  useGameStore,
-  useSettings
-} from '../store/gameStore';
+  useSettings,
+  useSettingsActions
+} from '../store/settingsStore';
+import {
+  useHighScores,
+  useStatistics
+} from '../store/statisticsStore';
+import {
+  useTheme,
+  useThemeActions
+} from '../store/themeStore';
 import { useThemeManager } from '../hooks/useThemeManager';
 import { calculateEnhancedStatistics } from '../utils/statisticsUtils';
 
@@ -50,19 +56,20 @@ const GameInfo = memo(function GameInfo({
   onToggleMute,
   onVolumeChange
 }: GameInfoProps) {
-  const { highScores } = useHighScores();
-  const { statistics } = useStatistics();
-  const { settings, updateSettings } = useSettings();
+  const highScores = useHighScores();
+  const statistics = useStatistics();
+  const settings = useSettings();
+  const { updateSettings } = useSettingsActions();
   
   // テーマ関連の状態とアクション
-  const themeState = useGameStore(state => state.theme);
+  const themeState = useTheme();
   const { 
     setTheme, 
     updateThemeState, 
     setCustomColors, 
     setAccessibilityOptions,
     resetThemeToDefault 
-  } = useGameStore();
+  } = useThemeActions();
 
   const themeManager = useThemeManager({
     themeState,

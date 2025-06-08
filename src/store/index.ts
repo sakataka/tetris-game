@@ -42,5 +42,4 @@ export {
   useErrorActions
 } from './sessionStore';
 
-// レガシーストア（段階的廃止予定）
-export { useGameStore } from './gameStore';
+// レガシーストア削除完了

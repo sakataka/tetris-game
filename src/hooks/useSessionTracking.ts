@@ -1,13 +1,11 @@
 import { useEffect, useCallback } from 'react';
-import { useGameStore } from '../store/gameStore';
+import { useSessionActions, useCurrentSession, usePlaySessions } from '../store/sessionStore';
 import { SESSION_TIMEOUT } from '../types/tetris';
 
 export function useSessionTracking() {
-  const currentSession = useGameStore((state) => state.currentSession);
-  const playSessions = useGameStore((state) => state.playSessions);
-  const startPlaySession = useGameStore((state) => state.startPlaySession);
-  const endPlaySession = useGameStore((state) => state.endPlaySession);
-  const incrementGameCount = useGameStore((state) => state.incrementGameCount);
+  const currentSession = useCurrentSession();
+  const playSessions = usePlaySessions();
+  const { startPlaySession, endPlaySession, incrementGameCount } = useSessionActions();
 
   // Start session when component mounts (user starts playing)
   useEffect(() => {

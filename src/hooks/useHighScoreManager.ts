@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { useGameStore } from '../store/gameStore';
+import { useStatisticsActions, useStatisticsStore } from '../store/statisticsStore';
 import { GameState, SoundKey } from '../types/tetris';
 import {
   isHighScore,
@@ -20,8 +20,7 @@ interface HighScoreResult {
 }
 
 export function useHighScoreManager({ gameState, playSound }: UseHighScoreManagerProps) {
-  const addHighScore = useGameStore((state) => state.addHighScore);
-  const updateStatistics = useGameStore((state) => state.updateStatistics);
+  const { addHighScore, updateStatistics } = useStatisticsActions();
   const previousGameOverRef = useRef(false);
   const gameEndProcessedRef = useRef(false);
 
@@ -35,7 +34,7 @@ export function useHighScoreManager({ gameState, playSound }: UseHighScoreManage
     gameEndProcessedRef.current = true;
 
     // ストアから現在の状態を取得
-    const currentState = useGameStore.getState();
+    const currentState = useStatisticsStore.getState();
     const { highScores, statistics } = currentState;
 
     // 統計を更新
@@ -102,22 +101,22 @@ export function useHighScoreManager({ gameState, playSound }: UseHighScoreManage
 
   // ハイスコア関連の便利関数
   const checkIsHighScore = useCallback((score: number) => {
-    const { highScores } = useGameStore.getState();
+    const { highScores } = useStatisticsStore.getState();
     return isHighScore(score, highScores);
   }, []);
 
   const getScoreRank = useCallback((score: number) => {
-    const { highScores } = useGameStore.getState();
+    const { highScores } = useStatisticsStore.getState();
     return getHighScoreRank(score, highScores);
   }, []);
 
   const getCurrentHighScore = useCallback(() => {
-    const { highScores } = useGameStore.getState();
+    const { highScores } = useStatisticsStore.getState();
     return highScores.length > 0 ? highScores[0].score : 0;
   }, []);
 
   const getLowestHighScore = useCallback(() => {
-    const { highScores } = useGameStore.getState();
+    const { highScores } = useStatisticsStore.getState();
     return highScores.length > 0 ? highScores[highScores.length - 1].score : 0;
   }, []);
 
@@ -139,8 +138,8 @@ export function useHighScoreManager({ gameState, playSound }: UseHighScoreManage
     manualSaveHighScore,
     
     // 現在のハイスコアと統計のゲッター
-    getHighScores: () => useGameStore.getState().highScores,
-    getStatistics: () => useGameStore.getState().statistics,
+    getHighScores: () => useStatisticsStore.getState().highScores,
+    getStatistics: () => useStatisticsStore.getState().statistics,
     
     // 処理状態
     isGameEndProcessed: gameEndProcessedRef.current
