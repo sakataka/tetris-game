@@ -60,10 +60,11 @@ npm test -- --run src/test/statisticsUtils.test.ts
    - ✅ localeStore.ts - 4言語対応の完全な言語管理システム
    - ✅ 全UIテキストの外部リソース化とi18n準備完了
 
-3. **エラーハンドリングの統一** - 一貫性のないエラー処理の改善
-   - グローバルエラーバウンダリの実装
-   - カスタムエラークラスの作成と型定義
-   - try-catchブロックの統一的な管理
+3. ✅ **エラーハンドリングの統一完了** - 包括的エラー処理システム実装
+   - ✅ カスタムエラークラス階層（BaseAppError継承）作成
+   - ✅ グローバルエラーバウンダリ（ページ/セクション/コンポーネントレベル）実装
+   - ✅ try-catchブロック統一化とuseSoundsでの適用
+   - ✅ エラー状態管理ストア（Zustand）追加とトースト通知システム
 
 ### ⚡ 高優先（High Priority）
 4. **カスタムフックの整理** - 相互依存の解消
@@ -148,9 +149,85 @@ npm test -- --run src/test/statisticsUtils.test.ts
 3. useTranslation フックの各コンポーネント適用
 4. 言語切替UIコンポーネントの実装
 
+## 🚨 エラーハンドリング統一システム
+
+### 実装完了（2025/06/08）
+
+包括的なエラー処理システムを実装し、一貫性のないエラー処理を統一化：
+
+#### カスタムエラークラス階層（src/types/errors.ts）
+```typescript
+export abstract class BaseAppError extends Error {
+  public readonly id: string;
+  public readonly level: ErrorLevel;
+  public readonly category: ErrorCategory;
+  public readonly context: ErrorContext;
+  public readonly recoverable: boolean;
+  public readonly retryable: boolean;
+}
+```
+- **継承階層**: GameError, AudioError, StorageError, NetworkError, UIError, ValidationError, SystemError
+- **型安全性**: TypeScript完全対応、エラーレベル・カテゴリ分類
+- **コンテキスト情報**: アクション、コンポーネント、追加データの自動収集
+
+#### グローバルエラーバウンダリ（src/components/ErrorBoundary.tsx）
+```typescript
+<ErrorBoundary level="page|section|component">
+  {children}
+</ErrorBoundary>
+```
+- **多層構造**: ページ→セクション→コンポーネントの段階的エラー処理
+- **フォールバックUI**: レベル別カスタマイズ可能な代替表示
+- **リトライ機能**: 自動復旧とユーザー手動リトライ対応
+
+#### 統一エラーハンドラー（src/utils/errorHandler.ts）
+```typescript
+class ErrorHandlerService {
+  public handleError(error: Error | BaseAppError): ErrorHandlingResult
+  public withErrorHandling<T>(fn: Function): Function
+  public handleAsyncError(asyncFn: Function): Promise<any>
+}
+```
+- **シングルトンパターン**: 全アプリケーション共通のエラー処理
+- **カテゴリ別ハンドラー**: ゲーム、音声、ストレージ、ネットワーク別処理
+- **グローバルキャッチ**: 未処理例外とPromise rejectionの自動捕捉
+
+#### エラー状態管理（src/store/errorStore.ts）
+```typescript
+export const useErrorStore = create<ErrorState>()(
+  persist((set, get) => ({
+    errors: ErrorInfo[],
+    stats: ErrorStats,
+    addError, removeError, clearErrors
+  }))
+);
+```
+- **Zustand統合**: 既存ストアアーキテクチャとの完全統合
+- **永続化制御**: エラー設定のみ永続化、エラーデータはセッション毎リセット
+- **統計機能**: エラー頻度、カテゴリ別分析、最近のエラー履歴
+
+#### エラー通知システム（src/components/ErrorNotification.tsx）
+```typescript
+<ErrorNotification position="top-right" maxNotifications={3} />
+```
+- **トースト形式**: レベル別色分け、自動消去、手動クローズ対応
+- **位置カスタマイズ**: 画面の8箇所配置指定可能
+- **通知制御**: 表示数制限、重複防止、優先度管理
+
+#### 実装適用箇所
+- **useSounds.ts**: 音声ロード・再生エラーをAudioErrorで統一処理
+- **TetrisGame.tsx**: セクション・コンポーネントレベルのエラーバウンダリ配置
+- **layout.tsx**: ページレベルエラーバウンダリとエラー通知システム統合
+
+### 技術仕様
+- **エラー分類**: 4レベル（info/warning/error/critical）× 8カテゴリ
+- **型安全性**: 完全TypeScript対応、エラー情報の型安全な収集
+- **パフォーマンス**: エラー履歴サイズ制限、メモリ効率的な管理
+- **開発者体験**: 詳細スタックトレース、コンテキスト情報の自動収集
+
 ## Architecture Overview
 
-This Tetris game uses a sophisticated modular architecture with **Zustand State Management**, **Modular Component System**, **Separated Utility Functions**, and **Performance Optimizations**. The architecture follows TDD principles with comprehensive test coverage.
+This Tetris game uses a sophisticated modular architecture with **Zustand State Management**, **Modular Component System**, **Separated Utility Functions**, **Performance Optimizations**, and **Unified Error Handling System**. The architecture follows TDD principles with comprehensive test coverage.
 
 ### Zustand State Management
 
