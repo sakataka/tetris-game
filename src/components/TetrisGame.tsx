@@ -13,7 +13,7 @@ import {
   useSettings
 } from '../store/gameStore';
 import { useHighScoreManager } from '../hooks/useHighScoreManager';
-// import { useSessionTracking } from '../hooks/useSessionTracking';
+import { useSessionTracking } from '../hooks/useSessionTracking';
 
 export default function TetrisGame() {
   // Zustand状態管理
@@ -75,8 +75,8 @@ export default function TetrisGame() {
     playSound
   });
 
-  // セッション管理 - 一時的に無効化
-  // const { onGameStart } = useSessionTracking();
+  // セッション管理
+  const { onGameStart } = useSessionTracking();
 
   // ゲームループとキーボード入力
   useGameLoop({
@@ -99,9 +99,9 @@ export default function TetrisGame() {
   }, [updateParticles]); // gameState意図的に除外（無限ループ防止）
 
   const handleReset = useCallback(() => {
-    // onGameStart(); // Track new game start - 一時的に無効化
+    onGameStart(); // Track new game start
     resetGame();
-  }, [resetGame]);
+  }, [onGameStart, resetGame]);
 
   const handleTogglePause = useCallback(() => {
     togglePause();
