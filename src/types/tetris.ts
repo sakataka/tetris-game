@@ -5,6 +5,7 @@ export type DifficultyLevel = 'easy' | 'normal' | 'hard' | 'extreme';
 export type ColorBlindnessType = 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia';
 export type ContrastLevel = 'low' | 'normal' | 'high';
 export type AnimationIntensity = 'none' | 'reduced' | 'normal' | 'enhanced';
+export type SoundKey = 'lineClear' | 'pieceLand' | 'pieceRotate' | 'tetris' | 'gameOver' | 'hardDrop';
 
 export interface Position {
   readonly x: number;
@@ -60,6 +61,11 @@ export interface ErrorState {
 
 export const BOARD_WIDTH = 10;
 export const BOARD_HEIGHT = 20;
+
+// Game timing constants
+export const INITIAL_DROP_TIME = 1000; // ms
+export const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes in ms
+export const MAX_HIGH_SCORES = 10;
 
 // Animation and effect constants
 export const EFFECT_RESET_DELAY = 300; // ms

@@ -1,8 +1,6 @@
 import { useCallback } from 'react';
-import { GameState, Tetromino, HARD_DROP_BONUS_MULTIPLIER } from '../types/tetris';
+import { GameState, Tetromino, HARD_DROP_BONUS_MULTIPLIER, SoundKey } from '../types/tetris';
 import { isValidPosition, rotatePiece } from '../utils/tetrisUtils';
-
-import type { SoundKey } from './useSounds';
 
 interface UseGameControlsProps {
   setGameState: React.Dispatch<React.SetStateAction<GameState>>;

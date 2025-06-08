@@ -1,5 +1,6 @@
 import { useEffect, useCallback } from 'react';
 import { useGameStore } from '../store/gameStore';
+import { SESSION_TIMEOUT } from '../types/tetris';
 
 export function useSessionTracking() {
   const currentSession = useGameStore((state) => state.currentSession);
@@ -35,7 +36,7 @@ export function useSessionTracking() {
 
     const inactivityTimeout = setTimeout(() => {
       endPlaySession();
-    }, 30 * 60 * 1000); // 30 minutes of inactivity
+    }, SESSION_TIMEOUT);
 
     return () => clearTimeout(inactivityTimeout);
   }, [currentSession?.isActive, endPlaySession]);

@@ -4,7 +4,9 @@ import {
   Tetromino,
   EFFECT_RESET_DELAY,
   BASE_LINE_POINTS,
-  TETRIS_BONUS_POINTS
+  TETRIS_BONUS_POINTS,
+  INITIAL_DROP_TIME,
+  SoundKey
 } from '../types/tetris';
 import { 
   createEmptyBoard,
@@ -14,10 +16,6 @@ import {
   createParticles,
   isValidPosition
 } from '../utils/tetrisUtils';
-
-const INITIAL_DROP_TIME = 1000;
-
-import type { SoundKey } from './useSounds';
 
 interface UseGameStateProps {
   playSound?: (soundType: SoundKey) => void;
@@ -44,7 +42,6 @@ export function useGameState(props: UseGameStateProps = {}) {
   const [dropTime, setDropTime] = useState(INITIAL_DROP_TIME);
   const effectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const updateParticles = useCallback((newParticles: typeof gameState.lineEffect.particles) => {
     setGameState(prevState => ({
       ...prevState,

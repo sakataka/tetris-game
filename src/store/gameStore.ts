@@ -16,7 +16,8 @@ import {
   ColorPalette,
   ColorBlindnessType,
   ContrastLevel,
-  AnimationIntensity
+  AnimationIntensity,
+  MAX_HIGH_SCORES
 } from '../types/tetris';
 import { createEmptyBoard, getRandomTetromino } from '../utils/tetrisUtils';
 import { getThemePreset } from '../utils/themePresets';
@@ -155,7 +156,7 @@ export const useGameStore = create<GameStore>()((set) => ({
     set((state) => {
       const newHighScores = [...state.highScores, score]
         .sort((a, b) => b.score - a.score)
-        .slice(0, 10);
+        .slice(0, MAX_HIGH_SCORES);
       
       const newStatistics = {
         ...state.statistics,

@@ -1,14 +1,12 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { useHighScores, useStatistics } from '../store/gameStore';
-import { GameState } from '../types/tetris';
+import { useGameStore } from '../store/gameStore';
+import { GameState, SoundKey } from '../types/tetris';
 import {
   isHighScore,
   getHighScoreRank,
   getHighScoreMessage,
   createHighScoreEntry
 } from '../utils/highScoreUtils';
-
-type SoundKey = 'lineClear' | 'pieceLand' | 'pieceRotate' | 'tetris' | 'gameOver' | 'hardDrop';
 
 interface UseHighScoreManagerProps {
   gameState: GameState;
@@ -22,8 +20,8 @@ interface HighScoreResult {
 }
 
 export function useHighScoreManager({ gameState, playSound }: UseHighScoreManagerProps) {
-  const { highScores, addHighScore } = useHighScores();
-  const { statistics, updateStatistics } = useStatistics();
+  const addHighScore = useGameStore((state) => state.addHighScore);
+  const updateStatistics = useGameStore((state) => state.updateStatistics);
   const previousGameOverRef = useRef(false);
   const gameEndProcessedRef = useRef(false);
 
@@ -35,6 +33,10 @@ export function useHighScoreManager({ gameState, playSound }: UseHighScoreManage
     }
 
     gameEndProcessedRef.current = true;
+
+    // ストアから現在の状態を取得
+    const currentState = useGameStore.getState();
+    const { highScores, statistics } = currentState;
 
     // 統計を更新
     const newStats = {
@@ -73,7 +75,7 @@ export function useHighScoreManager({ gameState, playSound }: UseHighScoreManage
     }
 
     return { isNewHighScore: false };
-  }, [highScores, statistics, addHighScore, updateStatistics, playSound]);
+  }, [addHighScore, updateStatistics, playSound]);
 
   // ゲームリセット時の処理
   const handleGameReset = useCallback(() => {
@@ -100,20 +102,24 @@ export function useHighScoreManager({ gameState, playSound }: UseHighScoreManage
 
   // ハイスコア関連の便利関数
   const checkIsHighScore = useCallback((score: number) => {
+    const { highScores } = useGameStore.getState();
     return isHighScore(score, highScores);
-  }, [highScores]);
+  }, []);
 
   const getScoreRank = useCallback((score: number) => {
+    const { highScores } = useGameStore.getState();
     return getHighScoreRank(score, highScores);
-  }, [highScores]);
+  }, []);
 
   const getCurrentHighScore = useCallback(() => {
+    const { highScores } = useGameStore.getState();
     return highScores.length > 0 ? highScores[0].score : 0;
-  }, [highScores]);
+  }, []);
 
   const getLowestHighScore = useCallback(() => {
+    const { highScores } = useGameStore.getState();
     return highScores.length > 0 ? highScores[highScores.length - 1].score : 0;
-  }, [highScores]);
+  }, []);
 
   // 手動でハイスコアを保存する関数（テスト用）
   const manualSaveHighScore = useCallback((score: number, level: number, lines: number, playerName?: string) => {
@@ -132,9 +138,9 @@ export function useHighScoreManager({ gameState, playSound }: UseHighScoreManage
     // 手動保存関数
     manualSaveHighScore,
     
-    // 現在のハイスコアと統計
-    highScores,
-    statistics,
+    // 現在のハイスコアと統計のゲッター
+    getHighScores: () => useGameStore.getState().highScores,
+    getStatistics: () => useGameStore.getState().statistics,
     
     // 処理状態
     isGameEndProcessed: gameEndProcessedRef.current

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import type { Particle } from '../types/tetris';
 import TetrisBoard from './TetrisBoard';
 import GameInfo from './GameInfo';
-import { useGameState as useGameStateOld } from '../hooks/useGameState';
+import { useGameState as useLegacyGameState } from '../hooks/useGameState';
 import { useGameControls } from '../hooks/useGameControls';
 import { useGameLoop } from '../hooks/useGameLoop';
 import { useSounds } from '../hooks/useSounds';
@@ -39,18 +39,18 @@ export default function TetrisGame() {
     initialMuted: settings.isMuted
   });
 
-  // 従来のhook（徐々に移行）
+  // レガシーhook（段階的移行中）
   const {
-    gameState: oldGameState,
-    setGameState: setGameStateOld,
+    gameState: legacyGameState,
+    setGameState: setLegacyGameState,
     dropTime,
     setDropTime,
     calculatePiecePlacementState,
-    resetGame: resetGameOld,
-    togglePause: togglePauseOld,
-    updateParticles: updateParticlesOld,
+    resetGame: resetLegacyGame,
+    togglePause: toggleLegacyPause,
+    updateParticles: updateLegacyParticles,
     INITIAL_DROP_TIME
-  } = useGameStateOld({ playSound });
+  } = useLegacyGameState({ playSound });
 
   // 音声初期化
   useEffect(() => {
@@ -64,14 +64,14 @@ export default function TetrisGame() {
     dropPiece,
     hardDrop
   } = useGameControls({
-    setGameState: setGameStateOld,
+    setGameState: setLegacyGameState,
     calculatePiecePlacementState,
     playSound
   });
 
   // ハイスコア管理
   useHighScoreManager({
-    gameState: oldGameState,
+    gameState: legacyGameState,
     playSound
   });
 
@@ -80,31 +80,31 @@ export default function TetrisGame() {
 
   // ゲームループとキーボード入力
   useGameLoop({
-    gameState: oldGameState,
+    gameState: legacyGameState,
     dropTime,
     setDropTime,
     dropPiece,
     movePiece,
     rotatePieceClockwise,
     hardDrop,
-    togglePause: togglePauseOld,
-    resetGame: resetGameOld,
+    togglePause: toggleLegacyPause,
+    resetGame: resetLegacyGame,
     INITIAL_DROP_TIME
   });
 
   // useCallbackでコールバック関数を最適化
   const handleParticleUpdate = useCallback((particles: Particle[]) => {
-    updateParticlesOld(particles);
-  }, [updateParticlesOld]);
+    updateLegacyParticles(particles);
+  }, [updateLegacyParticles]);
 
   const handleReset = useCallback(() => {
     onGameStart(); // Track new game start
-    resetGameOld();
-  }, [onGameStart, resetGameOld]);
+    resetLegacyGame();
+  }, [onGameStart, resetLegacyGame]);
 
   const handleTogglePause = useCallback(() => {
-    togglePauseOld();
-  }, [togglePauseOld]);
+    toggleLegacyPause();
+  }, [toggleLegacyPause]);
 
   const handleVolumeChange = useCallback((newVolume: number) => {
     updateSettings({ volume: newVolume });
@@ -132,11 +132,11 @@ export default function TetrisGame() {
       {/* ゲームボード */}
       <div className="relative">
         <TetrisBoard 
-          board={oldGameState.board}
-          currentPiece={oldGameState.currentPiece}
-          gameOver={oldGameState.gameOver}
-          isPaused={oldGameState.isPaused}
-          lineEffect={oldGameState.lineEffect}
+          board={legacyGameState.board}
+          currentPiece={legacyGameState.currentPiece}
+          gameOver={legacyGameState.gameOver}
+          isPaused={legacyGameState.isPaused}
+          lineEffect={legacyGameState.lineEffect}
           onParticleUpdate={handleParticleUpdate}
         />
         
@@ -149,12 +149,12 @@ export default function TetrisGame() {
       {/* ゲーム情報 */}
       <div className="relative">
         <GameInfo 
-          score={oldGameState.score}
-          level={oldGameState.level}
-          lines={oldGameState.lines}
-          nextPiece={oldGameState.nextPiece}
-          gameOver={oldGameState.gameOver}
-          isPaused={oldGameState.isPaused}
+          score={legacyGameState.score}
+          level={legacyGameState.level}
+          lines={legacyGameState.lines}
+          nextPiece={legacyGameState.nextPiece}
+          gameOver={legacyGameState.gameOver}
+          isPaused={legacyGameState.isPaused}
           onReset={handleReset}
           onTogglePause={handleTogglePause}
           isMuted={isMuted}

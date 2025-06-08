@@ -1,6 +1,5 @@
 import { useRef, useCallback, useState } from 'react';
-
-export type SoundKey = 'lineClear' | 'pieceLand' | 'pieceRotate' | 'tetris' | 'gameOver' | 'hardDrop';
+import type { SoundKey } from '../types/tetris';
 
 interface SoundFiles {
   lineClear: string;
