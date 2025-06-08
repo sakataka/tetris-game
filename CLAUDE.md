@@ -122,6 +122,12 @@ Legacy and specialized business logic hooks:
 - Still used for some legacy settings functionality
 - Gradually being migrated to Zustand store
 
+**`useMobileDetection`** (Mobile Device Detection):
+- Real-time device and screen size detection
+- Touch device capability detection
+- Responsive breakpoint monitoring (768px threshold)
+- Orientation change and resize event handling
+
 ### Cyberpunk Visual Design System
 
 **CSS Variable Architecture**:
@@ -210,6 +216,14 @@ Legacy and specialized business logic hooks:
 - **ColorPaletteEditor**: Real-time color customization with hex input and color picker
 - **AccessibilitySettings**: Comprehensive accessibility options (color blindness, contrast, animation intensity)
 
+**Mobile Controls Components**:
+- **VirtualControls**: Touch-optimized mobile game controls
+  - 5-button layout: 十字パッド（移動・回転・ソフトドロップ）+ ハードドロップ
+  - Cyberpunk-themed with color-coded buttons and neon effects
+  - Conditional rendering based on device detection and user settings
+  - Touch events with `onTouchStart` for immediate response
+  - Accessibility support with `aria-label` and proper semantics
+
 ### Game Features
 
 **Core Gameplay**:
@@ -251,6 +265,18 @@ Legacy and specialized business logic hooks:
 - **Reduced Motion**: Complete accessibility compliance with system preference detection
 - **Real-time Application**: Dynamic CSS variable updates without page reload
 - **Persistent Customization**: LocalStorage persistence with cross-tab synchronization
+
+**Mobile & Responsive Features**:
+- **Virtual Button Overlay**: 5つのタッチボタンでフルゲーム操作
+  - 十字方向パッド: 移動（←→）・回転（↻）・ソフトドロップ（↓）
+  - ハードドロップボタン: 大型の⚡DROPボタン
+  - Cyberpunkテーマ統一とネオンエフェクト
+- **Responsive Layout System**: 画面サイズ別最適化レイアウト
+  - デスクトップ（≥768px）: 横並び配置
+  - モバイル（<768px）: 縦並び配置（ゲームボード → GameInfo → Virtual Controls）
+  - フォントサイズとスペーシングの動的調整
+- **Mobile Detection**: リアルタイムデバイス・画面サイズ検出
+- **Touch Optimization**: タッチデバイス向け最適化（touch-manipulation, select-none）
 
 ### Technical Implementation Details
 
@@ -419,14 +445,23 @@ interface GlobalGameState extends GameState {
 - ✅ Complete accessibility features integrated into GameInfo theme tab
 - ✅ LocalStorage persistence and cross-tab synchronization
 
-**Remaining Phase 2 Items**:
+**Mobile & Responsive Enhancement** (🔄 PARTIALLY COMPLETED):
+- ✅ **Virtual Button Overlay**: 5つのタッチボタン（移動・回転・ハードドロップ）
+  - Cyberpunkテーマ統一のモバイル操作UI
+  - 十字パッド + ハードドロップボタン配置
+  - タッチ最適化とアクセシビリティ対応
+  - GameInfo設定パネルでON/OFF切り替え可能
+- ✅ **Screen Size-Specific Layout Optimization**: レスポンシブレイアウト完全対応
+  - デスクトップ: 横並び配置（従来通り）
+  - モバイル: 縦並び配置（ゲームボード → GameInfo → Virtual Controls）
+  - フォントサイズとスペーシングの画面サイズ別最適化
+  - Virtual Controls干渉回避とスペース確保
+- 🔄 **Swipe Gesture Support**: 直感的なスワイプ操作（実装予定）
+- 🔄 **Haptic Feedback Integration**: タッチ操作時の触覚フィードバック（実装予定）
 
-**Mobile & Responsive Enhancement** (PENDING):
-- Swipe gesture support (move, rotate, drop)
-- Optional virtual button overlay
-- Haptic feedback integration
-- Screen size-specific layout optimization
-- Device rotation support
+**Phase 2除外項目**:
+- ~~Device Rotation Support~~ (縦画面前提で除外)
+- ~~Tablet Optimization~~ (スマホ・デスクトップのみ対応)
 
 ### Phase 3: Advanced Features (1-2 months)
 **Target**: Platform-level capabilities and accessibility

@@ -133,9 +133,14 @@ export default function TetrisGame() {
   }
 
   return (
-    <div className="flex gap-12 items-start justify-center relative">
+    <div className={`
+      flex gap-12 items-start justify-center relative
+      md:flex-row md:gap-12
+      max-md:flex-col max-md:gap-6 max-md:items-center max-md:px-4
+      ${isMobile && settings.virtualControlsEnabled ? 'max-md:pb-32' : 'max-md:pb-8'}
+    `}>
       {/* ゲームボード */}
-      <div className="relative">
+      <div className="relative max-md:order-1">
         <TetrisBoard 
           board={legacyGameState.board}
           currentPiece={legacyGameState.currentPiece}
@@ -152,7 +157,7 @@ export default function TetrisGame() {
       </div>
       
       {/* ゲーム情報 */}
-      <div className="relative">
+      <div className="relative max-md:order-2 max-md:w-full max-md:max-w-md">
         <GameInfo 
           score={legacyGameState.score}
           level={legacyGameState.level}
@@ -174,8 +179,8 @@ export default function TetrisGame() {
         }}></div>
       </div>
       
-      {/* 接続線エフェクト */}
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-0.5 opacity-30 blur-sm pointer-events-none" style={{
+      {/* 接続線エフェクト - デスクトップのみ表示 */}
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-0.5 opacity-30 blur-sm pointer-events-none max-md:hidden" style={{
         background: 'linear-gradient(90deg, var(--cyber-cyan) 0%, var(--cyber-purple) 50%, var(--cyber-yellow) 100%)'
       }}></div>
 

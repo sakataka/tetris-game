@@ -135,27 +135,27 @@ const GameInfo = memo(function GameInfo({
       ) : (
         <>
           {/* スコア情報 */}
-      <div className="hologram-cyan neon-border p-6 rounded-lg relative overflow-hidden">
-        <h3 className="text-xl font-bold mb-4 text-cyan-400 relative">SCORE DATA</h3>
-        <div className="space-y-3 relative">
+      <div className="hologram-cyan neon-border p-4 md:p-6 rounded-lg relative overflow-hidden">
+        <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4 text-cyan-400 relative">SCORE DATA</h3>
+        <div className="space-y-2 md:space-y-3 relative">
           <div className="flex justify-between items-center">
-            <span className="text-gray-300">SCORE</span>
-            <span className="font-mono text-2xl text-yellow-400 font-bold tracking-wider">{score.toLocaleString()}</span>
+            <span className="text-gray-300 text-sm md:text-base">SCORE</span>
+            <span className="font-mono text-lg md:text-2xl text-yellow-400 font-bold tracking-wider">{score.toLocaleString()}</span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-gray-300">LEVEL</span>
-            <span className="font-mono text-xl text-green-400 font-bold">{level}</span>
+            <span className="text-gray-300 text-sm md:text-base">LEVEL</span>
+            <span className="font-mono text-base md:text-xl text-green-400 font-bold">{level}</span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-gray-300">LINES</span>
-            <span className="font-mono text-xl text-blue-400 font-bold">{lines}</span>
+            <span className="text-gray-300 text-sm md:text-base">LINES</span>
+            <span className="font-mono text-base md:text-xl text-blue-400 font-bold">{lines}</span>
           </div>
         </div>
       </div>
 
       {/* 次のピース */}
-      <div className="hologram-purple neon-border-purple p-6 rounded-lg relative overflow-hidden">
-        <h3 className="text-xl font-bold mb-4 text-purple-400 relative">NEXT PIECE</h3>
+      <div className="hologram-purple neon-border-purple p-4 md:p-6 rounded-lg relative overflow-hidden">
+        <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4 text-purple-400 relative">NEXT PIECE</h3>
         <div className="grid gap-0 w-fit mx-auto p-4 bg-black/30 rounded-lg border border-purple-400/30">
           {nextPiece ? (
             nextPiece.shape.map((row, y) => (
@@ -184,9 +184,9 @@ const GameInfo = memo(function GameInfo({
       </div>
 
       {/* コントロール */}
-      <div className="hologram neon-border p-6 rounded-lg relative overflow-hidden">
-        <h3 className="text-xl font-bold mb-4 text-green-400 relative">CONTROLS</h3>
-        <div className="space-y-3 text-sm relative">
+      <div className="hologram neon-border p-4 md:p-6 rounded-lg relative overflow-hidden">
+        <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4 text-green-400 relative">CONTROLS</h3>
+        <div className="space-y-2 md:space-y-3 text-xs md:text-sm relative">
           <div className="flex justify-between items-center">
             <span className="text-gray-300">移動</span>
             <span className="font-mono bg-cyan-400/20 px-2 py-1 rounded text-cyan-400">←→</span>
@@ -215,9 +215,9 @@ const GameInfo = memo(function GameInfo({
       </div>
 
       {/* 音設定 */}
-      <div className="hologram-cyan neon-border p-6 rounded-lg relative overflow-hidden">
-        <h3 className="text-xl font-bold mb-4 text-cyan-400 relative">AUDIO</h3>
-        <div className="space-y-4 relative">
+      <div className="hologram-cyan neon-border p-4 md:p-6 rounded-lg relative overflow-hidden">
+        <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4 text-cyan-400 relative">AUDIO</h3>
+        <div className="space-y-3 md:space-y-4 relative">
           <div className="flex justify-between items-center">
             <span className="text-gray-300">音量</span>
             <div className="flex items-center space-x-2">
@@ -271,13 +271,13 @@ const GameInfo = memo(function GameInfo({
           onClick={onTogglePause}
           disabled={gameOver}
           className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 
-                     disabled:from-gray-600 disabled:to-gray-700 text-white font-bold py-3 px-6 rounded-lg 
+                     disabled:from-gray-600 disabled:to-gray-700 text-white font-bold py-2 md:py-3 px-4 md:px-6 rounded-lg 
                      transition-all duration-300 transform hover:scale-105 disabled:scale-100 
                      shadow-[0_0_20px_rgba(0,255,255,0.3)] hover:shadow-[0_0_30px_rgba(0,255,255,0.5)]
                      border border-cyan-400/50 relative overflow-hidden"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-blue-400/20 blur-sm"></div>
-          <span className="relative font-mono text-lg">
+          <span className="relative font-mono text-base md:text-lg">
             {isPaused ? 'RESUME' : 'PAUSE'}
           </span>
         </button>
@@ -285,19 +285,19 @@ const GameInfo = memo(function GameInfo({
         <button
           onClick={onReset}
           className="w-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-400 hover:to-pink-400 
-                     text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform 
+                     text-white font-bold py-2 md:py-3 px-4 md:px-6 rounded-lg transition-all duration-300 transform 
                      hover:scale-105 shadow-[0_0_20px_rgba(255,0,0,0.3)] hover:shadow-[0_0_30px_rgba(255,0,0,0.5)]
                      border border-red-400/50 relative overflow-hidden"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-red-400/20 to-pink-400/20 blur-sm"></div>
-          <span className="relative font-mono text-lg">RESET</span>
+          <span className="relative font-mono text-base md:text-lg">RESET</span>
         </button>
       </div>
 
       {/* スコア目安 */}
-      <div className="hologram-yellow neon-border-yellow p-6 rounded-lg relative overflow-hidden">
-        <h3 className="text-xl font-bold mb-4 text-yellow-400 relative">SCORING</h3>
-        <div className="space-y-2 text-sm relative">
+      <div className="hologram-yellow neon-border-yellow p-4 md:p-6 rounded-lg relative overflow-hidden">
+        <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4 text-yellow-400 relative">SCORING</h3>
+        <div className="space-y-2 text-xs md:text-sm relative">
           <div className="flex justify-between items-center text-gray-300">
             <span>1 LINE</span>
             <span className="font-mono text-blue-400">100 × LV</span>
