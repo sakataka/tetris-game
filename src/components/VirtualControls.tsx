@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { memo, useCallback, useMemo } from 'react';
 import { BUTTONS, ARIA_LABELS } from '../constants/strings';
 
 interface VirtualControlsProps {
@@ -11,23 +11,31 @@ interface VirtualControlsProps {
   unlockAudio?: () => Promise<void>;
 }
 
-export default function VirtualControls({ 
+const VirtualControls = memo(function VirtualControls({ 
   onMove, 
   onRotate, 
   onHardDrop, 
   isVisible,
   unlockAudio
 }: VirtualControlsProps) {
-  if (!isVisible) return null;
-
-  const handleTouchStart = (action: () => void) => (e: React.TouchEvent) => {
+  // handleTouchStartをuseCallbackでメモ化
+  const handleTouchStart = useCallback((action: () => void) => (e: React.TouchEvent) => {
     e.preventDefault();
     // 初回タッチ時に音声をアンロック
     if (unlockAudio) {
       unlockAudio();
     }
     action();
-  };
+  }, [unlockAudio]);
+
+  // 移動ハンドラーをuseMemoでメモ化
+  const moveHandlers = useMemo(() => ({
+    left: () => onMove({ x: -1, y: 0 }),
+    right: () => onMove({ x: 1, y: 0 }),
+    down: () => onMove({ x: 0, y: 1 })
+  }), [onMove]);
+
+  if (!isVisible) return null;
 
   return (
     <div className="h-full w-full flex items-center justify-center bg-gradient-to-t from-black/80 to-transparent">
@@ -53,7 +61,7 @@ export default function VirtualControls({
           <div className="flex items-center gap-1">
             {/* 左移動 */}
             <button
-              onTouchStart={handleTouchStart(() => onMove({ x: -1, y: 0 }))}
+              onTouchStart={handleTouchStart(moveHandlers.left)}
               className="w-10 h-10 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500
                         hover:from-cyan-400 hover:to-blue-400 active:scale-95
                         border border-cyan-400/50 shadow-[0_0_15px_rgba(6,182,212,0.5)]
@@ -66,7 +74,7 @@ export default function VirtualControls({
 
             {/* ソフトドロップ (下) */}
             <button
-              onTouchStart={handleTouchStart(() => onMove({ x: 0, y: 1 }))}
+              onTouchStart={handleTouchStart(moveHandlers.down)}
               className="w-10 h-10 rounded-lg bg-gradient-to-r from-yellow-500 to-orange-500
                         hover:from-yellow-400 hover:to-orange-400 active:scale-95
                         border border-yellow-400/50 shadow-[0_0_15px_rgba(245,158,11,0.5)]
@@ -79,7 +87,7 @@ export default function VirtualControls({
 
             {/* 右移動 */}
             <button
-              onTouchStart={handleTouchStart(() => onMove({ x: 1, y: 0 }))}
+              onTouchStart={handleTouchStart(moveHandlers.right)}
               className="w-10 h-10 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500
                         hover:from-cyan-400 hover:to-blue-400 active:scale-95
                         border border-cyan-400/50 shadow-[0_0_15px_rgba(6,182,212,0.5)]
@@ -108,4 +116,6 @@ export default function VirtualControls({
       </div>
     </div>
   );
-}
+});
+
+export default VirtualControls;

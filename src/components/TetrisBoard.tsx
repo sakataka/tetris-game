@@ -66,33 +66,51 @@ const TetrisBoard = memo(function TetrisBoard({
     return newDisplayBoard;
   }, [board, currentPiece, gameOver, isPaused]);
 
-  const getCellStyle = (cell: string | null, rowIndex: number) => {
-    let baseStyle = '';
-    
-    if (!cell) {
-      baseStyle = 'bg-gray-900/50 border border-cyan-500/20 backdrop-blur-sm';
-    } else if (cell === 'ghost') {
-      baseStyle = 'border-2 border-cyan-400/60 bg-transparent border-dashed shadow-[0_0_10px_rgba(0,255,255,0.3)]';
-    } else {
-      baseStyle = 'border border-gray-800 shadow-[0_0_5px_rgba(0,0,0,0.5)] transition-all duration-200';
-    }
-    
-    // フラッシュエフェクト
-    if (lineEffect.flashingLines.includes(rowIndex)) {
-      baseStyle += ' animate-pulse bg-white border-white shadow-[0_0_20px_rgba(255,255,255,0.8)]';
-    }
-    
-    return baseStyle;
-  };
+  // フラッシュ行をSetに変換してO(1)検索を可能にする
+  const flashingLinesSet = useMemo(() => 
+    new Set(lineEffect.flashingLines), 
+    [lineEffect.flashingLines]
+  );
 
-  const getCellColor = (cell: string | null, rowIndex: number) => {
-    if (!cell || cell === 'ghost') return {};
-    // フラッシュエフェクト中は白色に変更
-    if (lineEffect.flashingLines.includes(rowIndex)) {
-      return { backgroundColor: '#ffffff' };
-    }
-    return { backgroundColor: cell };
-  };
+  // スタイル計算をメモ化
+  const getCellStyle = useMemo(() => {
+    const baseStyles = {
+      empty: 'bg-gray-900/50 border border-cyan-500/20 backdrop-blur-sm',
+      ghost: 'border-2 border-cyan-400/60 bg-transparent border-dashed shadow-[0_0_10px_rgba(0,255,255,0.3)]',
+      filled: 'border border-gray-800 shadow-[0_0_5px_rgba(0,0,0,0.5)] transition-all duration-200',
+      flashing: ' animate-pulse bg-white border-white shadow-[0_0_20px_rgba(255,255,255,0.8)]'
+    };
+
+    return (cell: string | null, rowIndex: number) => {
+      let style = '';
+      
+      if (!cell) {
+        style = baseStyles.empty;
+      } else if (cell === 'ghost') {
+        style = baseStyles.ghost;
+      } else {
+        style = baseStyles.filled;
+      }
+      
+      // O(1)でフラッシュ効果をチェック
+      if (flashingLinesSet.has(rowIndex)) {
+        style += baseStyles.flashing;
+      }
+      
+      return style;
+    };
+  }, [flashingLinesSet]);
+
+  const getCellColor = useMemo(() => {
+    return (cell: string | null, rowIndex: number) => {
+      if (!cell || cell === 'ghost') return {};
+      // フラッシュエフェクト中は白色に変更
+      if (flashingLinesSet.has(rowIndex)) {
+        return { backgroundColor: '#ffffff' };
+      }
+      return { backgroundColor: cell };
+    };
+  }, [flashingLinesSet]);
 
   return (
     <div className="relative">

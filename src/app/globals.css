@@ -216,3 +216,32 @@ body {
   --accent-secondary: #00ff80;
   --accent-tertiary: #8000ff;
 }
+
+/* パフォーマンス最適化されたパーティクルスタイル */
+.particle-optimized {
+  will-change: transform, opacity;
+  transform-origin: center;
+  background: radial-gradient(circle, var(--particle-color) 0%, transparent 70%);
+  box-shadow: 
+    0 0 calc(4px + var(--particle-scale) * 2px) var(--particle-color),
+    0 0 calc(8px + var(--particle-scale) * 4px) color-mix(in srgb, var(--particle-color) 25%, transparent),
+    0 0 calc(12px + var(--particle-scale) * 6px) color-mix(in srgb, var(--particle-color) 12%, transparent);
+  
+  /* GPU加速を有効化 */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  
+  /* アニメーションパフォーマンス最適化 */
+  animation: particle-float 1s ease-out infinite;
+}
+
+@keyframes particle-float {
+  0%, 100% { transform: scale(var(--particle-scale)) rotate(0deg) translateZ(0); }
+  50% { transform: scale(calc(var(--particle-scale) * 1.1)) rotate(180deg) translateZ(0); }
+}
+
+/* レガシーパーティクルクラス（後方互換性） */
+.particle-enhanced {
+  will-change: transform, opacity;
+}
