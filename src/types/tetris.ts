@@ -150,6 +150,7 @@ export interface GameSettings {
   readonly keyBindings: Record<string, string>;
   readonly difficulty: DifficultyLevel;
   readonly gameMode: GameMode;
+  readonly virtualControlsEnabled: boolean;
 }
 
 // カスタムカラーパレット設定

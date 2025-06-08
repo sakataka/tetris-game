@@ -4,10 +4,12 @@ import { useCallback, useEffect, useState } from 'react';
 import type { Particle } from '../types/tetris';
 import TetrisBoard from './TetrisBoard';
 import GameInfo from './GameInfo';
+import VirtualControls from './VirtualControls';
 import { useGameState as useLegacyGameState } from '../hooks/useGameState';
 import { useGameControls } from '../hooks/useGameControls';
 import { useGameLoop } from '../hooks/useGameLoop';
 import { useSounds } from '../hooks/useSounds';
+import { useMobileDetection } from '../hooks/useMobileDetection';
 import { 
   useSettings
 } from '../store/gameStore';
@@ -17,6 +19,9 @@ import { useSessionTracking } from '../hooks/useSessionTracking';
 export default function TetrisGame() {
   // Zustand状態管理
   const { settings, updateSettings } = useSettings();
+
+  // モバイルデバイス検出
+  const { isMobile } = useMobileDetection();
 
   // SSR hydration handling - 簡素化
   const [isHydrated, setIsHydrated] = useState(false);
@@ -173,6 +178,14 @@ export default function TetrisGame() {
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-0.5 opacity-30 blur-sm pointer-events-none" style={{
         background: 'linear-gradient(90deg, var(--cyber-cyan) 0%, var(--cyber-purple) 50%, var(--cyber-yellow) 100%)'
       }}></div>
+
+      {/* Virtual Controls for Mobile */}
+      <VirtualControls
+        onMove={movePiece}
+        onRotate={rotatePieceClockwise}
+        onHardDrop={hardDrop}
+        isVisible={isMobile && settings.virtualControlsEnabled && !legacyGameState.gameOver}
+      />
     </div>
   );
 }

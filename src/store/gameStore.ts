@@ -36,7 +36,8 @@ const DEFAULT_SETTINGS: GameSettings = {
     'pause': 'Escape'
   },
   difficulty: 'normal' as DifficultyLevel,
-  gameMode: 'single' as GameMode
+  gameMode: 'single' as GameMode,
+  virtualControlsEnabled: true
 };
 
 const DEFAULT_STATISTICS: GameStatistics = {

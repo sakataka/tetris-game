@@ -8,7 +8,8 @@ import { ThemeSettingsMemo } from './ThemeSettings';
 import { 
   useHighScores, 
   useStatistics, 
-  useGameStore 
+  useGameStore,
+  useSettings
 } from '../store/gameStore';
 import { useThemeManager } from '../hooks/useThemeManager';
 import { calculateEnhancedStatistics } from '../utils/statisticsUtils';
@@ -44,6 +45,7 @@ const GameInfo = memo(function GameInfo({
 }: GameInfoProps) {
   const { highScores } = useHighScores();
   const { statistics } = useStatistics();
+  const { settings, updateSettings } = useSettings();
   
   // テーマ関連の状態とアクション
   const themeState = useGameStore(state => state.theme);
@@ -245,6 +247,19 @@ const GameInfo = memo(function GameInfo({
               }`}
             >
               {isMuted ? 'OFF' : 'ON'}
+            </button>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-gray-300">Virtual Controls</span>
+            <button
+              onClick={() => updateSettings({ virtualControlsEnabled: !settings.virtualControlsEnabled })}
+              className={`px-3 py-1 rounded font-mono text-sm transition-all duration-300 ${
+                settings.virtualControlsEnabled 
+                  ? 'bg-green-500/20 text-green-400 border border-green-400/50' 
+                  : 'bg-gray-500/20 text-gray-400 border border-gray-400/50'
+              }`}
+            >
+              {settings.virtualControlsEnabled ? 'ON' : 'OFF'}
             </button>
           </div>
         </div>
