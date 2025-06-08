@@ -502,15 +502,23 @@ interface GlobalGameState extends GameState {
 - 型安全性向上（any型排除）
 - ビルドエラーなし、既存機能完全保持
 
-### 段階3: Zustandストア分割 (🔄 中期計画)
+### 段階3: Zustandストア分割 (🔄 進行中 - 2024/06/08)
 **目的**: 441行のgameStore.tsをドメイン別に分割
 
-**計画**:
-- gameStateStore.ts - ゲーム状態管理
-- settingsStore.ts - 設定管理
-- statisticsStore.ts - 統計・ハイスコア
-- themeStore.ts - テーマ管理
-- sessionStore.ts - セッション管理
+**完了済み**:
+- ✅ **フェーズ1: settingsStore.ts** - 設定管理 (40行)
+  - GameSettings型対応、デフォルト値設定
+  - 音量、テーマ、キーバインド、Virtual Controls管理
+  - 最適化されたセレクターフック
+- ✅ **フェーズ2: gameStateStore.ts** - ゲーム状態管理 (90行)
+  - ボード、ピース、スコア、レベル、ライン管理
+  - パーティクルエフェクト、ライン消去エフェクト
+  - ゲームリセット、ポーズ機能
+
+**進行中**:
+- 🔄 **フェーズ3: themeStore分離** (次予定)
+- 🔄 **フェーズ4: statisticsStore分離** (中期)
+- 🔄 **フェーズ5: sessionStore分離** (最終)
 
 ### 段階4: パフォーマンス最適化 (🔄 将来計画)
 - Web Workers導入
