@@ -62,20 +62,20 @@ export default function TetrisGame() {
     initialMuted: settings.isMuted
   });
 
-  // 게임 액션들 취득
+  // ゲームアクション取得
   const { 
     calculatePiecePlacementState, 
     movePieceToPosition, 
     rotatePieceTo 
   } = useGameStateActions();
-  const INITIAL_DROP_TIME = 1000; // 정수화
+  const INITIAL_DROP_TIME = 1000; // 定数化
 
-  // 음성 초기화
+  // 音声初期化
   useEffect(() => {
     initializeSounds();
   }, [initializeSounds]);
 
-  // useGameControls를 위한 액션 어댑터들
+  // useGameControls用のアクションアダプター
   const pieceControlActions = useMemo(() => ({
     onPieceMove: (state: GameState, newPosition: { x: number; y: number }) => {
       movePieceToPosition(newPosition);
@@ -83,7 +83,7 @@ export default function TetrisGame() {
     },
     onPieceLand: (state: GameState, piece: Tetromino, bonusPoints?: number) => {
       calculatePiecePlacementState(piece, bonusPoints, playSound);
-      // 상태는 calculatePiecePlacementState에서 자동으로 업데이트됨
+      // 状態はcalculatePiecePlacementStateで自動更新される
       return state;
     },
     onPieceRotate: (state: GameState, rotatedPiece: Tetromino) => {
@@ -93,11 +93,11 @@ export default function TetrisGame() {
   }), [movePieceToPosition, calculatePiecePlacementState, rotatePieceTo, playSound]);
 
   const onGameStateChange = useCallback((newState: GameState) => {
-    // 새로운 상태가 전달되면 Zustand 스토어를 업데이트
+    // 新しい状態が渡されたらZustandストアを更新
     setGameState(newState);
   }, [setGameState]);
 
-  // 게임 조작
+  // ゲーム操作
   const {
     movePiece,
     rotatePieceClockwise,
@@ -110,16 +110,16 @@ export default function TetrisGame() {
     onStateChange: onGameStateChange
   });
 
-  // 하이스코어 관리
+  // ハイスコア管理
   useHighScoreManager({
     gameState,
     playSound
   });
 
-  // 세션 관리
+  // セッション管理
   const { onGameStart } = useSessionTracking();
 
-  // 게임 액션들
+  // ゲームアクション
   const gameActions = useMemo(() => ({
     movePiece,
     rotatePieceClockwise,
@@ -129,7 +129,7 @@ export default function TetrisGame() {
     resetGame
   }), [movePiece, rotatePieceClockwise, hardDrop, dropPiece, togglePause, resetGame]);
 
-  // 게임 루프
+  // ゲームループ
   useGameLoop({
     isGameOver: gameState.gameOver,
     isPaused: gameState.isPaused,
