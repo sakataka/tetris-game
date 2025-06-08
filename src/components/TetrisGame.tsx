@@ -8,7 +8,6 @@ import { useGameControls } from '../hooks/useGameControls';
 import { useGameLoop } from '../hooks/useGameLoop';
 import { useSounds } from '../hooks/useSounds';
 import { 
-  useGameActions, 
   useSettings
 } from '../store/gameStore';
 import { useHighScoreManager } from '../hooks/useHighScoreManager';
@@ -16,7 +15,6 @@ import { useHighScoreManager } from '../hooks/useHighScoreManager';
 
 export default function TetrisGame() {
   // Zustand状態管理
-  const { resetGame, togglePause } = useGameActions();
   const { settings, updateSettings } = useSettings();
 
   // SSR hydration handling - 簡素化
@@ -48,6 +46,8 @@ export default function TetrisGame() {
     setDropTime,
     updateParticles,
     calculatePiecePlacementState,
+    resetGame: resetGameOld,
+    togglePause: togglePauseOld,
     INITIAL_DROP_TIME
   } = useGameStateOld({ playSound });
 
@@ -86,8 +86,8 @@ export default function TetrisGame() {
     movePiece,
     rotatePieceClockwise,
     hardDrop,
-    togglePause,
-    resetGame,
+    togglePause: togglePauseOld,
+    resetGame: resetGameOld,
     INITIAL_DROP_TIME
   });
 
@@ -99,12 +99,12 @@ export default function TetrisGame() {
 
   const handleReset = useCallback(() => {
     // onGameStart(); // Track new game start - 一時的に無効化
-    resetGame();
-  }, [resetGame]);
+    resetGameOld();
+  }, [resetGameOld]);
 
   const handleTogglePause = useCallback(() => {
-    togglePause();
-  }, [togglePause]);
+    togglePauseOld();
+  }, [togglePauseOld]);
 
   const handleVolumeChange = useCallback((newVolume: number) => {
     updateSettings({ volume: newVolume });
