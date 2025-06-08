@@ -1,7 +1,10 @@
 export type TetrominoType = 'I' | 'O' | 'T' | 'S' | 'Z' | 'J' | 'L';
-export type ThemeVariant = 'cyberpunk' | 'classic' | 'neon';
+export type ThemeVariant = 'cyberpunk' | 'classic' | 'retro' | 'minimal' | 'neon';
 export type GameMode = 'single' | 'versus' | 'cooperative';
 export type DifficultyLevel = 'easy' | 'normal' | 'hard' | 'extreme';
+export type ColorBlindnessType = 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia';
+export type ContrastLevel = 'low' | 'normal' | 'high';
+export type AnimationIntensity = 'none' | 'reduced' | 'normal' | 'enhanced';
 
 export interface Position {
   readonly x: number;
@@ -143,11 +146,46 @@ export interface GameSettings {
   readonly gameMode: GameMode;
 }
 
+// カスタムカラーパレット設定
+export interface ColorPalette {
+  readonly primary: string;
+  readonly secondary: string;
+  readonly tertiary: string;
+  readonly background: string;
+  readonly foreground: string;
+  readonly accent: string;
+}
+
+// テーマ詳細設定
+export interface ThemeConfig {
+  readonly name: string;
+  readonly colors: ColorPalette;
+  readonly effects: {
+    readonly blur: number;
+    readonly glow: number;
+    readonly saturation: number;
+    readonly brightness: number;
+  };
+  readonly accessibility: {
+    readonly colorBlindnessType: ColorBlindnessType;
+    readonly contrast: ContrastLevel;
+    readonly animationIntensity: AnimationIntensity;
+  };
+}
+
+// 拡張されたテーマ状態
 export interface ThemeState {
   readonly current: ThemeVariant;
   readonly customColors?: Record<string, string>;
   readonly effectIntensity: number;
   readonly animations: boolean;
+  readonly config: ThemeConfig;
+  readonly accessibility: {
+    readonly colorBlindnessType: ColorBlindnessType;
+    readonly contrast: ContrastLevel;
+    readonly animationIntensity: AnimationIntensity;
+    readonly reducedMotion: boolean;
+  };
 }
 
 // Global state interface for Zustand store
@@ -192,6 +230,9 @@ export interface GameStoreActions {
   // Theme actions
   setTheme: (theme: ThemeVariant) => void;
   updateThemeState: (themeState: Partial<ThemeState>) => void;
+  setCustomColors: (colors: Partial<ColorPalette>) => void;
+  setAccessibilityOptions: (accessibility: Partial<ThemeState['accessibility']>) => void;
+  resetThemeToDefault: () => void;
   
   // Error handling actions
   addError: (error: GameError) => void;

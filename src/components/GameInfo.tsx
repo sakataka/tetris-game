@@ -4,7 +4,13 @@ import { memo, useState } from 'react';
 import { Tetromino } from '../types/tetris';
 import HighScoreDisplay from './HighScoreDisplay';
 import StatisticsDashboard from './StatisticsDashboard';
-import { useHighScores, useStatistics } from '../store/gameStore';
+import { ThemeSettingsMemo } from './ThemeSettings';
+import { 
+  useHighScores, 
+  useStatistics, 
+  useGameStore 
+} from '../store/gameStore';
+import { useThemeManager } from '../hooks/useThemeManager';
 import { calculateEnhancedStatistics } from '../utils/statisticsUtils';
 
 interface GameInfoProps {
@@ -39,7 +45,24 @@ const GameInfo = memo(function GameInfo({
   const { highScores } = useHighScores();
   const { statistics } = useStatistics();
   
-  const [activeTab, setActiveTab] = useState<'game' | 'stats'>('game');
+  // テーマ関連の状態とアクション
+  const themeState = useGameStore(state => state.theme);
+  const { 
+    setTheme, 
+    updateThemeState, 
+    setCustomColors, 
+    setAccessibilityOptions,
+    resetThemeToDefault 
+  } = useGameStore();
+
+  const themeManager = useThemeManager({
+    themeState,
+    setTheme,
+    updateThemeState,
+    setAccessibilityOptions
+  });
+  
+  const [activeTab, setActiveTab] = useState<'game' | 'stats' | 'theme'>('game');
 
   // Calculate enhanced statistics
   const enhancedStats = calculateEnhancedStatistics(
@@ -72,6 +95,16 @@ const GameInfo = memo(function GameInfo({
         >
           Statistics
         </button>
+        <button
+          onClick={() => setActiveTab('theme')}
+          className={`px-4 py-2 rounded-t-lg font-semibold transition-colors ${
+            activeTab === 'theme'
+              ? 'bg-yellow-500/20 text-yellow-400 border-b-2 border-yellow-400'
+              : 'bg-gray-800/50 text-gray-400 hover:text-yellow-400'
+          }`}
+        >
+          Theme
+        </button>
       </div>
 
       {activeTab === 'stats' ? (
@@ -79,6 +112,23 @@ const GameInfo = memo(function GameInfo({
           statistics={enhancedStats}
           highScores={highScores}
           showDetailedView={true}
+        />
+      ) : activeTab === 'theme' ? (
+        <ThemeSettingsMemo
+          currentTheme={themeState.current}
+          colors={themeState.config.colors}
+          colorBlindnessType={themeState.accessibility.colorBlindnessType}
+          contrast={themeState.accessibility.contrast}
+          animationIntensity={themeState.accessibility.animationIntensity}
+          reducedMotion={themeState.accessibility.reducedMotion}
+          effectIntensity={themeState.effectIntensity}
+          animations={themeState.animations}
+          onThemeChange={themeManager.changeTheme}
+          onColorsChange={setCustomColors}
+          onAccessibilityChange={themeManager.updateAccessibility}
+          onEffectIntensityChange={themeManager.updateEffectIntensity}
+          onAnimationsToggle={themeManager.toggleAnimations}
+          onResetToDefault={resetThemeToDefault}
         />
       ) : (
         <>

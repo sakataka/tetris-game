@@ -12,9 +12,14 @@ import {
   DifficultyLevel,
   GameMode,
   PlaySession,
-  Particle
+  Particle,
+  ColorPalette,
+  ColorBlindnessType,
+  ContrastLevel,
+  AnimationIntensity
 } from '../types/tetris';
 import { createEmptyBoard, getRandomTetromino } from '../utils/tetrisUtils';
+import { getThemePreset } from '../utils/themePresets';
 
 // Default values
 const DEFAULT_SETTINGS: GameSettings = {
@@ -47,7 +52,14 @@ const DEFAULT_STATISTICS: GameStatistics = {
 const DEFAULT_THEME_STATE: ThemeState = {
   current: 'cyberpunk' as ThemeVariant,
   effectIntensity: 1.0,
-  animations: true
+  animations: true,
+  config: getThemePreset('cyberpunk'),
+  accessibility: {
+    colorBlindnessType: 'none' as ColorBlindnessType,
+    contrast: 'normal' as ContrastLevel,
+    animationIntensity: 'normal' as AnimationIntensity,
+    reducedMotion: false
+  }
 };
 
 const DEFAULT_GAME_STATE: GameState = {
@@ -192,7 +204,11 @@ export const useGameStore = create<GameStore>()((set) => ({
   setTheme: (theme: ThemeVariant) => {
     set((state) => ({
       ...state,
-      theme: { ...state.theme, current: theme },
+      theme: { 
+        ...state.theme, 
+        current: theme,
+        config: getThemePreset(theme)
+      },
       settings: { ...state.settings, theme }
     }));
   },
@@ -201,6 +217,41 @@ export const useGameStore = create<GameStore>()((set) => ({
     set((state) => ({
       ...state,
       theme: { ...state.theme, ...themeState }
+    }));
+  },
+
+  setCustomColors: (colors: Partial<ColorPalette>) => {
+    set((state) => ({
+      ...state,
+      theme: {
+        ...state.theme,
+        config: {
+          ...state.theme.config,
+          colors: { ...state.theme.config.colors, ...colors }
+        },
+        customColors: { ...state.theme.customColors, ...colors }
+      }
+    }));
+  },
+
+  setAccessibilityOptions: (accessibility: Partial<ThemeState['accessibility']>) => {
+    set((state) => ({
+      ...state,
+      theme: {
+        ...state.theme,
+        accessibility: { ...state.theme.accessibility, ...accessibility },
+        config: {
+          ...state.theme.config,
+          accessibility: { ...state.theme.config.accessibility, ...accessibility }
+        }
+      }
+    }));
+  },
+
+  resetThemeToDefault: () => {
+    set((state) => ({
+      ...state,
+      theme: DEFAULT_THEME_STATE
     }));
   },
 
