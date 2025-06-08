@@ -34,10 +34,16 @@ npm run test:run   # Run tests once
 npm run test:coverage  # Run tests with coverage report
 
 # Run specific test files
-npm test -- --run src/test/gameStore.test.ts
-npm test -- --run src/test/highScoreUtils.test.ts
+npm test -- --run src/test/useHighScoreManager.test.ts
 npm test -- --run src/test/statisticsUtils.test.ts
+npm test -- --run src/test/useSounds.test.ts
 ```
+
+### Test Status (Updated: 2025/06/08)
+- **Test Files**: 9 passed (9)
+- **Tests**: 125 passed (125)
+- **Duration**: 686ms
+- **Coverage**: Comprehensive TDD coverage across all core modules
 
 ### Development Notes
 - Build warnings about `useCallback` dependencies are expected and intentional for performance optimization
@@ -49,10 +55,11 @@ npm test -- --run src/test/statisticsUtils.test.ts
 ## リファクタリングToDoリスト
 
 ### 🔥 最優先（Critical Priority）
-1. **状態管理の統合と整理** - レガシーuseGameStateとZustandストア混在の解消
-   - gameStore.tsから分割済みストアへの完全移行
-   - useGameStoreの削除と分割ストア使用への統一
-   - 状態の重複と不整合の解消
+1. ✅ **状態管理の統合と整理完了** - レガシーuseGameStateとZustandストア混在の解消
+   - ✅ gameStore.tsから分割済みストアへの完全移行
+   - ✅ useGameStoreの削除と分割ストア使用への統一
+   - ✅ 状態の重複と不整合の解消
+   - ✅ テストケース修正完了（全125テスト成功）
 
 2. ✅ **多言語化準備完了** - コンポーネント責務分離とリソース基盤構築
    - ✅ GameOverMessage/PausedMessage/LoadingMessageコンポーネント分離
@@ -229,21 +236,39 @@ export const useErrorStore = create<ErrorState>()(
 
 This Tetris game uses a sophisticated modular architecture with **Zustand State Management**, **Modular Component System**, **Separated Utility Functions**, **Performance Optimizations**, and **Unified Error Handling System**. The architecture follows TDD principles with comprehensive test coverage.
 
-### Zustand State Management
+### Zustand State Management (Updated: 2025/06/08)
 
-**`useGameStore`** (Central Store - 442 lines):
-- Global state container with LocalStorage persistence
-- Handles game state, settings, high scores, statistics, theme, errors, and play sessions
-- Immutable state updates using spread operators and functional patterns
-- Individual selector functions prevent infinite render loops
-- Specialized hooks: `useGameState`, `useGameActions`, `useSettings`, `useHighScores`, `useStatistics`, `useTheme`
+**Modular Store Architecture** - **レガシー統合型ストアから分割ストアシステムへ完全移行**:
 
-**State Management Architecture**:
-- Game state (board, pieces) is ephemeral and reset on each game
-- User data persisted: settings, high scores, statistics, theme, play sessions
-- Cross-tab synchronization with storage events
-- Comprehensive error handling and validation
-- Session tracking with automatic inactivity detection
+**`gameStateStore.ts`** - ゲーム状態管理:
+- ゲームボード、ピース、スコア、エフェクト状態
+- `calculatePiecePlacementState`機能内蔵
+- エフェメラル状態（ゲーム毎リセット）
+
+**`settingsStore.ts`** - 設定管理:
+- 音量、キーバインド、難易度設定
+- LocalStorage永続化
+
+**`statisticsStore.ts`** - 統計・ハイスコア管理:
+- ハイスコアランキング（Top 10）
+- 拡張統計データ（効率性、一貫性など）
+- 自動計算メソッド内蔵
+
+**`themeStore.ts`** - テーマ管理:
+- 5つのプリセットテーマ
+- カスタムカラーパレット
+- アクセシビリティ設定
+
+**`sessionStore.ts`** - セッション・エラー管理:
+- プレイセッション追跡
+- エラー状態管理
+- 自動非アクティブ検出
+
+**State Management Benefits**:
+- **単一責任の原則**: 各ストアが明確な責務を持つ
+- **型安全性**: TypeScript完全対応、厳密な型定義
+- **メモリ効率**: 必要な状態のみの更新とレンダリング
+- **テスタビリティ**: 分離されたストアによる効率的なテスト
 
 ### Modular Component Architecture
 
@@ -269,18 +294,18 @@ This Tetris game uses a sophisticated modular architecture with **Zustand State 
 
 ### Hook-Based Business Logic
 
-**Core Game Hooks**:
-- **useGameState.ts** (184 lines) - Primary state management with `calculatePiecePlacementState`
-- **useGameControls.ts** (102 lines) - User input handling
+**Core Game Hooks** (Updated: 2025/06/08):
+- ✅ **分割ストアに統合済み** - レガシーuseGameState.ts削除
+- **useGameControls.ts** (102 lines) - User input handling with adapter pattern
 - **useGameLoop.ts** (101 lines) - Game timing and automatic piece dropping
-- **useSounds.ts** (126 lines) - 6-sound audio system with volume control
+- **useSounds.ts** (126 lines) - 6-sound audio system with comprehensive error handling
 
 **System Management Hooks**:
-- **useHighScoreManager.ts** - Automatic high score detection and saving
-- **useSessionTracking.ts** - Session management with play time tracking
-- **useThemeManager.ts** - Theme management with CSS variable updates
+- **useHighScoreManager.ts** - 新しいstatisticsStoreと統合、自動検出・保存
+- **useSessionTracking.ts** - sessionStoreと統合、プレイ時間追跡
+- **useThemeManager.ts** - themeStoreと統合、CSS変数更新
 - **useMobileDetection.ts** - Real-time device and screen size detection
-- **useSettings.ts** - Legacy settings (gradually being migrated)
+- ✅ **useSettings.ts削除** - settingsStoreに完全移行
 
 ### Utility Function Architecture
 
@@ -421,7 +446,7 @@ This Tetris game uses a sophisticated modular architecture with **Zustand State 
 - **Integration Testing**: Zustand store and hook interactions
 - **Mock Strategies**: Comprehensive mocking for isolated testing
 
-### Current Test Status
+### Current Test Status (Updated: 2025/06/08)
 - ✅ **gameStore.test.ts** (10 tests) - State management
 - ✅ **statisticsUtils.test.ts** (14 tests) - Statistics calculations
 - ✅ **highScoreUtils.test.ts** (29 tests) - High score logic
@@ -429,12 +454,12 @@ This Tetris game uses a sophisticated modular architecture with **Zustand State 
 - ✅ **useSettings.test.ts** (9 tests) - Settings management
 - ✅ **HighScoreDisplay.test.tsx** (15 tests) - UI components
 - ✅ **StatisticsDashboard.test.tsx** (17 tests) - Dashboard UI
-- ❌ **useHighScoreManager.test.ts** (12 failing) - Zustand mock issues
-- ❌ **useSounds.test.ts** (3 failing) - Audio API mock issues
+- ✅ **useHighScoreManager.test.ts** (12 tests) - 修正済み: statisticsStore統合
+- ✅ **useSounds.test.ts** (9 tests) - 修正済み: Audio constructor mocking
 
 ## Project Structure
 
-### File Organization (53 TypeScript files, 7,857 total lines)
+### File Organization (Updated: 2025/06/08)
 ```
 src/
 ├── app/                    # Next.js app router
@@ -445,18 +470,28 @@ src/
 │   ├── AudioPanel.tsx
 │   ├── GameButtonsPanel.tsx
 │   ├── ScoringPanel.tsx
-│   ├── TetrisGame.tsx          # Main orchestrator
+│   ├── TetrisGame.tsx          # 新しい分割ストア統合済み
 │   ├── TetrisBoard.tsx         # Game board
-│   ├── GameInfo.tsx            # Tabbed info panel
+│   ├── GameInfo.tsx            # 分割ストア対応完了
 │   └── [theme/mobile components]
-├── hooks/                 # Custom React hooks (9 files)
-│   ├── useGameState.ts         # Primary state management
-│   ├── useGameControls.ts      # Input handling
+├── hooks/                 # Custom React hooks (7 files) ⬅️ 整理済み
+│   ├── ❌ useGameState.ts      # 削除済み（gameStateStoreに統合）
+│   ├── useGameControls.ts      # アダプターパターンで分割ストア対応
 │   ├── useGameLoop.ts          # Game timing
-│   ├── useSounds.ts            # Audio system
+│   ├── useSounds.ts            # 包括的エラーハンドリング対応
+│   ├── useHighScoreManager.ts  # statisticsStore統合
+│   ├── useSessionTracking.ts   # sessionStore統合
 │   └── [system management hooks]
-├── store/                 # Zustand state management
-│   └── gameStore.ts            # Central store (442 lines)
+├── store/                 # 分割Zustandストア (9 files) ⬅️ 大幅改良
+│   ├── ❌ gameStore.ts         # 削除済み（分割ストアに移行）
+│   ├── gameStateStore.ts       # ゲーム状態専用
+│   ├── settingsStore.ts        # 設定専用
+│   ├── statisticsStore.ts      # 統計・ハイスコア専用
+│   ├── themeStore.ts          # テーマ専用
+│   ├── sessionStore.ts        # セッション・エラー専用
+│   ├── localeStore.ts         # 多言語化準備
+│   ├── errorStore.ts          # エラー処理専用
+│   └── index.ts               # 統合エクスポート
 ├── utils/                 # Utility functions (7 files)
 │   ├── gameStateUtils.ts       # Pure game logic functions
 │   ├── tetrisUtils.ts          # Core Tetris logic
@@ -464,7 +499,9 @@ src/
 │   └── [theme/visual utilities]
 ├── types/                 # TypeScript definitions
 │   └── tetris.ts              # Complete type system
-└── test/                  # Test files (10 files, 125 tests)
+└── test/                  # Test files (9 files, 125 tests) ⬅️ 全成功
+    ├── 新しいストア対応完了テスト群
+    └── 型安全性とmocking改善
 ```
 
 ### Styling System
