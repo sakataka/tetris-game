@@ -133,64 +133,109 @@ export default function TetrisGame() {
   }
 
   return (
-    <div className={`
-      flex gap-12 items-start justify-center relative
-      md:flex-row md:gap-12
-      max-md:flex-col max-md:gap-6 max-md:items-center max-md:px-4
-      ${isMobile && settings.virtualControlsEnabled ? 'max-md:pb-32' : 'max-md:pb-8'}
-    `}>
-      {/* ゲームボード */}
-      <div className="relative max-md:order-1">
-        <TetrisBoard 
-          board={legacyGameState.board}
-          currentPiece={legacyGameState.currentPiece}
-          gameOver={legacyGameState.gameOver}
-          isPaused={legacyGameState.isPaused}
-          lineEffect={legacyGameState.lineEffect}
-          onParticleUpdate={handleParticleUpdate}
-        />
+    <div className="h-screen overflow-hidden">
+      {/* デスクトップレイアウト */}
+      <div className={`
+        hidden md:flex gap-12 items-start justify-center relative h-full p-8
+      `}>
+        {/* ゲームボード */}
+        <div className="relative">
+          <TetrisBoard 
+            board={legacyGameState.board}
+            currentPiece={legacyGameState.currentPiece}
+            gameOver={legacyGameState.gameOver}
+            isPaused={legacyGameState.isPaused}
+            lineEffect={legacyGameState.lineEffect}
+            onParticleUpdate={handleParticleUpdate}
+          />
+          
+          {/* ゲームボード周りのエフェクト */}
+          <div className="absolute -inset-4 rounded-lg blur-lg pointer-events-none" style={{
+            background: 'linear-gradient(90deg, var(--cyber-cyan-10) 0%, var(--cyber-purple-10) 50%, var(--cyber-yellow-10) 100%)'
+          }}></div>
+        </div>
         
-        {/* ゲームボード周りのエフェクト */}
-        <div className="absolute -inset-4 rounded-lg blur-lg pointer-events-none" style={{
-          background: 'linear-gradient(90deg, var(--cyber-cyan-10) 0%, var(--cyber-purple-10) 50%, var(--cyber-yellow-10) 100%)'
+        {/* ゲーム情報 - 固定高さで安定化 */}
+        <div className="relative min-w-[280px] h-[600px]">
+          <GameInfo 
+            score={legacyGameState.score}
+            level={legacyGameState.level}
+            lines={legacyGameState.lines}
+            nextPiece={legacyGameState.nextPiece}
+            gameOver={legacyGameState.gameOver}
+            isPaused={legacyGameState.isPaused}
+            onReset={handleReset}
+            onTogglePause={handleTogglePause}
+            isMuted={isMuted}
+            volume={volume}
+            onToggleMute={handleToggleMute}
+            onVolumeChange={handleVolumeChange}
+          />
+          
+          {/* 情報パネル周りのエフェクト */}
+          <div className="absolute -inset-2 rounded-lg blur-md pointer-events-none" style={{
+            background: 'linear-gradient(270deg, var(--cyber-purple-10) 0%, var(--cyber-cyan-10) 50%, var(--cyber-yellow-10) 100%)'
+          }}></div>
+        </div>
+        
+        {/* 接続線エフェクト */}
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-0.5 opacity-30 blur-sm pointer-events-none" style={{
+          background: 'linear-gradient(90deg, var(--cyber-cyan) 0%, var(--cyber-purple) 50%, var(--cyber-yellow) 100%)'
         }}></div>
       </div>
-      
-      {/* ゲーム情報 */}
-      <div className="relative max-md:order-2 max-md:w-full max-md:max-w-md">
-        <GameInfo 
-          score={legacyGameState.score}
-          level={legacyGameState.level}
-          lines={legacyGameState.lines}
-          nextPiece={legacyGameState.nextPiece}
-          gameOver={legacyGameState.gameOver}
-          isPaused={legacyGameState.isPaused}
-          onReset={handleReset}
-          onTogglePause={handleTogglePause}
-          isMuted={isMuted}
-          volume={volume}
-          onToggleMute={handleToggleMute}
-          onVolumeChange={handleVolumeChange}
-        />
-        
-        {/* 情報パネル周りのエフェクト */}
-        <div className="absolute -inset-2 rounded-lg blur-md pointer-events-none" style={{
-          background: 'linear-gradient(270deg, var(--cyber-purple-10) 0%, var(--cyber-cyan-10) 50%, var(--cyber-yellow-10) 100%)'
-        }}></div>
-      </div>
-      
-      {/* 接続線エフェクト - デスクトップのみ表示 */}
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-0.5 opacity-30 blur-sm pointer-events-none max-md:hidden" style={{
-        background: 'linear-gradient(90deg, var(--cyber-cyan) 0%, var(--cyber-purple) 50%, var(--cyber-yellow) 100%)'
-      }}></div>
 
-      {/* Virtual Controls for Mobile */}
-      <VirtualControls
-        onMove={movePiece}
-        onRotate={rotatePieceClockwise}
-        onHardDrop={hardDrop}
-        isVisible={isMobile && settings.virtualControlsEnabled && !legacyGameState.gameOver}
-      />
+      {/* モバイルレイアウト - 完全一画面固定 */}
+      <div className="md:hidden h-full flex flex-col">
+        {/* 上部：ゲーム + 情報エリア */}
+        <div className="flex-1 overflow-hidden flex flex-col items-center justify-center px-4 pt-4">
+          {/* ゲームボード */}
+          <div className="relative mb-4">
+            <TetrisBoard 
+              board={legacyGameState.board}
+              currentPiece={legacyGameState.currentPiece}
+              gameOver={legacyGameState.gameOver}
+              isPaused={legacyGameState.isPaused}
+              lineEffect={legacyGameState.lineEffect}
+              onParticleUpdate={handleParticleUpdate}
+            />
+            
+            {/* ゲームボード周りのエフェクト */}
+            <div className="absolute -inset-2 rounded-lg blur-md pointer-events-none" style={{
+              background: 'linear-gradient(90deg, var(--cyber-cyan-10) 0%, var(--cyber-purple-10) 50%, var(--cyber-yellow-10) 100%)'
+            }}></div>
+          </div>
+          
+          {/* コンパクトゲーム情報 */}
+          <div className="w-full max-w-sm h-32 overflow-hidden">
+            <GameInfo 
+              score={legacyGameState.score}
+              level={legacyGameState.level}
+              lines={legacyGameState.lines}
+              nextPiece={legacyGameState.nextPiece}
+              gameOver={legacyGameState.gameOver}
+              isPaused={legacyGameState.isPaused}
+              onReset={handleReset}
+              onTogglePause={handleTogglePause}
+              isMuted={isMuted}
+              volume={volume}
+              onToggleMute={handleToggleMute}
+              onVolumeChange={handleVolumeChange}
+            />
+          </div>
+        </div>
+
+        {/* 下部：仮想ボタンエリア - 固定高さ */}
+        {isMobile && settings.virtualControlsEnabled && !legacyGameState.gameOver && (
+          <div className="h-24 flex-shrink-0">
+            <VirtualControls
+              onMove={movePiece}
+              onRotate={rotatePieceClockwise}
+              onHardDrop={hardDrop}
+              isVisible={true}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

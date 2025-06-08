@@ -80,9 +80,9 @@ const GameInfo = memo(function GameInfo({
   );
 
   return (
-    <div className="text-white space-y-6 min-w-[280px]">
-      {/* Tab Navigation */}
-      <div className="flex space-x-2">
+    <div className="text-white h-full flex flex-col min-w-[280px]">
+      {/* Tab Navigation - デスクトップのみ表示 */}
+      <div className="hidden md:flex space-x-2 mb-4 flex-shrink-0">
         <button
           onClick={() => setActiveTab('game')}
           className={`px-4 py-2 rounded-t-lg font-semibold transition-colors ${
@@ -115,75 +115,111 @@ const GameInfo = memo(function GameInfo({
         </button>
       </div>
 
-      {activeTab === 'stats' ? (
-        <StatisticsDashboard 
-          statistics={enhancedStats}
-          highScores={highScores}
-          showDetailedView={true}
-        />
-      ) : activeTab === 'theme' ? (
-        <ThemeSettingsMemo
-          currentTheme={themeState.current}
-          colors={themeState.config.colors}
-          colorBlindnessType={themeState.accessibility.colorBlindnessType}
-          contrast={themeState.accessibility.contrast}
-          animationIntensity={themeState.accessibility.animationIntensity}
-          reducedMotion={themeState.accessibility.reducedMotion}
-          effectIntensity={themeState.effectIntensity}
-          animations={themeState.animations}
-          onThemeChange={themeManager.changeTheme}
-          onColorsChange={setCustomColors}
-          onAccessibilityChange={themeManager.updateAccessibility}
-          onEffectIntensityChange={themeManager.updateEffectIntensity}
-          onAnimationsToggle={themeManager.toggleAnimations}
-          onResetToDefault={resetThemeToDefault}
-        />
-      ) : (
-        <>
+      {/* コンテンツエリア */}
+      <div className="flex-1 overflow-auto">
+        {/* デスクトップ: タブ切替表示 */}
+        <div className="hidden md:block">
+          {activeTab === 'stats' ? (
+            <StatisticsDashboard 
+              statistics={enhancedStats}
+              highScores={highScores}
+              showDetailedView={true}
+            />
+          ) : activeTab === 'theme' ? (
+            <ThemeSettingsMemo
+              currentTheme={themeState.current}
+              colors={themeState.config.colors}
+              colorBlindnessType={themeState.accessibility.colorBlindnessType}
+              contrast={themeState.accessibility.contrast}
+              animationIntensity={themeState.accessibility.animationIntensity}
+              reducedMotion={themeState.accessibility.reducedMotion}
+              effectIntensity={themeState.effectIntensity}
+              animations={themeState.animations}
+              onThemeChange={themeManager.changeTheme}
+              onColorsChange={setCustomColors}
+              onAccessibilityChange={themeManager.updateAccessibility}
+              onEffectIntensityChange={themeManager.updateEffectIntensity}
+              onAnimationsToggle={themeManager.toggleAnimations}
+              onResetToDefault={resetThemeToDefault}
+            />
+          ) : (
+            <div className="space-y-4">
+              {/* スコア情報 */}
+              <GameStatsPanel 
+                score={score}
+                level={level}
+                lines={lines}
+              />
+
+              {/* 次のピース */}
+              <NextPiecePanel 
+                nextPiece={nextPiece}
+              />
+
+              {/* コントロール */}
+              <ControlsPanel />
+
+              {/* 音設定 */}
+              <AudioPanel 
+                isMuted={isMuted}
+                volume={volume}
+                settings={settings}
+                onToggleMute={onToggleMute}
+                onVolumeChange={onVolumeChange}
+                onUpdateSettings={updateSettings}
+              />
+
+              {/* ボタン */}
+              <GameButtonsPanel 
+                gameOver={gameOver}
+                isPaused={isPaused}
+                onTogglePause={onTogglePause}
+                onReset={onReset}
+              />
+
+              {/* スコア目安 */}
+              <ScoringPanel />
+
+              {/* ハイスコア */}
+              <HighScoreDisplay 
+                highScores={highScores} 
+                maxDisplay={5}
+                className="text-sm"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* モバイル: コンパクト表示（ゲーム情報のみ） */}
+        <div className="md:hidden flex space-x-4 h-full overflow-hidden">
           {/* スコア情報 */}
-          <GameStatsPanel 
-            score={score}
-            level={level}
-            lines={lines}
-          />
+          <div className="flex-1 min-w-0">
+            <div className="hologram-cyan neon-border p-2 rounded-lg text-xs">
+              <div className="font-bold text-cyan-400 mb-1">SCORE</div>
+              <div className="text-lg font-mono">{score.toLocaleString()}</div>
+              <div className="text-gray-400 text-xs">L{level} • {lines} lines</div>
+            </div>
+          </div>
 
           {/* 次のピース */}
-          <NextPiecePanel 
-            nextPiece={nextPiece}
-          />
+          <div className="w-16 flex-shrink-0">
+            <div className="hologram-purple neon-border p-2 rounded-lg h-full">
+              <div className="font-bold text-purple-400 text-xs mb-1">NEXT</div>
+              <NextPiecePanel nextPiece={nextPiece} />
+            </div>
+          </div>
 
-          {/* コントロール */}
-          <ControlsPanel />
-
-          {/* 音設定 */}
-          <AudioPanel 
-            isMuted={isMuted}
-            volume={volume}
-            settings={settings}
-            onToggleMute={onToggleMute}
-            onVolumeChange={onVolumeChange}
-            onUpdateSettings={updateSettings}
-          />
-
-          {/* ボタン */}
-          <GameButtonsPanel 
-            gameOver={gameOver}
-            isPaused={isPaused}
-            onTogglePause={onTogglePause}
-            onReset={onReset}
-          />
-
-          {/* スコア目安 */}
-          <ScoringPanel />
-
-          {/* ハイスコア */}
-          <HighScoreDisplay 
-            highScores={highScores} 
-            maxDisplay={5}
-            className="text-sm"
-          />
-        </>
-      )}
+          {/* ゲームボタン */}
+          <div className="w-20 flex-shrink-0">
+            <GameButtonsPanel 
+              gameOver={gameOver}
+              isPaused={isPaused}
+              onTogglePause={onTogglePause}
+              onReset={onReset}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 });
