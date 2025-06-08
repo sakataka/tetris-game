@@ -483,19 +483,24 @@ interface GlobalGameState extends GameState {
 - テスト容易性の大幅改善
 - ビルドエラーなし、既存機能完全保持
 
-### 段階2: useGameState分割 (🔄 次予定)
+### 段階2: useGameState分割 (✅ 完了 - 2024/06/08)
 **目的**: 184行のuseGameStateを責務別に分割
 
-**計画**:
-- calculatePiecePlacementState (75行) → 5つの関数に分割
-  - calculateScoreIncrease()
-  - processLineClear()
-  - createLineEffects()
-  - checkGameOver()
-  - updateGameStateWithPiece()
-- useGameLogic: スコア計算、ライン消去処理
-- useGameEffects: エフェクトのタイミング管理
-- 個別テスト可能な純粋関数への変換
+**完了済み**:
+- ✅ gameStateUtils.ts新規作成 - 純粋関数群として分離
+- ✅ calculateScoreIncrease() - スコア計算ロジック (15行)
+- ✅ processLineClear() - ライン消去処理 (8行)
+- ✅ createLineEffects() - エフェクト作成 (18行)
+- ✅ checkGameOver() - ゲームオーバー判定 (15行)
+- ✅ updateGameStateWithPiece() - 状態更新 (25行)
+- ✅ useGameState.ts - 75行の巨大関数を6つのステップに分割
+
+**効果**:
+- calculatePiecePlacementState: 75行→58行に削減（明確な6ステップ）
+- 各責務が独立した純粋関数として分離
+- 個別テスト可能な関数群への変換完了
+- 型安全性向上（any型排除）
+- ビルドエラーなし、既存機能完全保持
 
 ### 段階3: Zustandストア分割 (🔄 中期計画)
 **目的**: 441行のgameStore.tsをドメイン別に分割

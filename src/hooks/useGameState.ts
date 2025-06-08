@@ -3,19 +3,20 @@ import {
   GameState,
   Tetromino,
   EFFECT_RESET_DELAY,
-  BASE_LINE_POINTS,
-  TETRIS_BONUS_POINTS,
   INITIAL_DROP_TIME,
   SoundKey
 } from '../types/tetris';
 import { 
   createEmptyBoard,
-  getRandomTetromino,
-  placePiece,
-  clearLines,
-  createParticles,
-  isValidPosition
+  getRandomTetromino
 } from '../utils/tetrisUtils';
+import {
+  calculateScoreIncrease,
+  processLineClear,
+  createLineEffects,
+  checkGameOver,
+  updateGameStateWithPiece
+} from '../utils/gameStateUtils';
 
 interface UseGameStateProps {
   playSound?: (soundType: SoundKey) => void;
@@ -53,36 +54,28 @@ export function useGameState(props: UseGameStateProps = {}) {
   }, []); // gameState意図的に除外（無限ループ防止）
 
   const calculatePiecePlacementState = useCallback((prevState: GameState, piece: Tetromino, bonusPoints: number = 0): GameState => {
-    const newBoard = placePiece(prevState.board, piece);
-    const { newBoard: clearedBoard, linesCleared, linesToClear } = clearLines(newBoard);
+    // 1. ライン消去処理
+    const lineClearResult = processLineClear(prevState.board, piece);
     
-    const newLines = prevState.lines + linesCleared;
-    const newLevel = Math.floor(newLines / 10) + 1;
-    const newScore = prevState.score + 
-      (linesCleared * BASE_LINE_POINTS * newLevel) + 
-      (linesCleared === 4 ? TETRIS_BONUS_POINTS * newLevel : 0) + // Tetris bonus
-      bonusPoints;
-
-    const nextPiece = getRandomTetromino();
+    // 2. スコア計算
+    const scoreResult = calculateScoreIncrease(
+      prevState.score,
+      prevState.lines,
+      lineClearResult.linesCleared,
+      bonusPoints
+    );
     
-    // ライン消去アニメーション効果
-    let newLineEffect = { ...prevState.lineEffect };
-    if (linesCleared > 0) {
-      // 音効果再生
-      if (playSound) {
-        if (linesCleared === 4) {
-          playSound('tetris');
-        } else {
-          playSound('lineClear');
-        }
-      }
-      
-      newLineEffect = {
-        flashingLines: linesToClear,
-        shaking: true,
-        particles: createParticles(linesToClear, newBoard)
-      };
-      
+    // 3. ライン消去エフェクト作成
+    const lineEffect = createLineEffects(
+      lineClearResult.linesCleared,
+      lineClearResult.linesToClear,
+      lineClearResult.newBoard,
+      prevState.lineEffect,
+      playSound
+    );
+    
+    // 4. エフェクトタイマー管理（副作用）
+    if (lineClearResult.linesCleared > 0) {
       // 既存のタイマーをクリア
       if (effectTimeoutRef.current) {
         clearTimeout(effectTimeoutRef.current);
@@ -102,32 +95,22 @@ export function useGameState(props: UseGameStateProps = {}) {
       }, EFFECT_RESET_DELAY);
     }
     
-    // Check if game is over
-    if (!isValidPosition(clearedBoard, prevState.nextPiece!, prevState.nextPiece!.position)) {
-      if (playSound) {
-        playSound('gameOver');
-      }
-      return {
-        ...prevState,
-        board: clearedBoard,
-        gameOver: true,
-        score: newScore,
-        level: newLevel,
-        lines: newLines,
-        lineEffect: newLineEffect
-      };
-    }
-
-    return {
-      ...prevState,
-      board: clearedBoard,
-      currentPiece: prevState.nextPiece,
-      nextPiece: nextPiece,
-      score: newScore,
-      level: newLevel,
-      lines: newLines,
-      lineEffect: newLineEffect
-    };
+    // 5. ゲームオーバー判定
+    const gameOverResult = checkGameOver(
+      lineClearResult.newBoard,
+      prevState.nextPiece!,
+      prevState,
+      playSound
+    );
+    
+    // 6. 最終的なゲーム状態更新
+    return updateGameStateWithPiece(
+      prevState,
+      lineClearResult,
+      scoreResult,
+      lineEffect,
+      gameOverResult
+    );
   }, [playSound]); // playSound依存関係追加
 
   const resetGame = useCallback(() => {
