@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { GameSettings } from '../types/tetris';
+import { GameSettings, ThemeVariant } from '../types/tetris';
 
 // デフォルト設定値
 const DEFAULT_SETTINGS: GameSettings = {
@@ -27,6 +27,7 @@ interface SettingsStore {
   // Actions
   updateSettings: (newSettings: Partial<GameSettings>) => void;
   resetSettings: () => void;
+  updateTheme: (theme: ThemeVariant) => void;
 }
 
 export const useSettingsStore = create<SettingsStore>()((set) => ({
@@ -42,6 +43,11 @@ export const useSettingsStore = create<SettingsStore>()((set) => ({
   resetSettings: () =>
     set(() => ({
       settings: DEFAULT_SETTINGS
+    })),
+  
+  updateTheme: (theme) =>
+    set((state) => ({
+      settings: { ...state.settings, theme }
     }))
 }));
 
@@ -49,5 +55,6 @@ export const useSettingsStore = create<SettingsStore>()((set) => ({
 export const useSettings = () => useSettingsStore((state) => state.settings);
 export const useSettingsActions = () => useSettingsStore((state) => ({
   updateSettings: state.updateSettings,
-  resetSettings: state.resetSettings
+  resetSettings: state.resetSettings,
+  updateTheme: state.updateTheme
 }));
