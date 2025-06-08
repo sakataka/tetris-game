@@ -6,9 +6,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Status
 
-This is a cyberpunk-themed Tetris game built with Next.js 15, TypeScript, and Tailwind CSS v4. The game features a sophisticated Zustand-based state management system, comprehensive TDD test coverage (125+ tests), and a unified cyberpunk visual design system with neon effects, holographic backgrounds, and enhanced particle animations.
+This is a cyberpunk-themed Tetris game built with Next.js 15, TypeScript, and Tailwind CSS v4. The game features a sophisticated Zustand-based state management system, comprehensive TDD test coverage (9 test files covering 29 source files), and a unified cyberpunk visual design system with neon effects, holographic backgrounds, and enhanced particle animations.
 
-**Phase 2 Complete**: Full high score and statistics system with automatic persistence, real-time ranking, comprehensive error handling, statistics dashboard with enhanced metrics, and session tracking.
+**Phase 2 Complete**: Full high score and statistics system with automatic persistence, real-time ranking, comprehensive error handling, statistics dashboard with enhanced metrics, session tracking, and **complete Customizable Theme System** with 5 preset themes, accessibility features, and interactive customization.
 
 ## Development Commands
 
@@ -53,18 +53,19 @@ npm test -- --run src/test/statisticsUtils.test.ts
 
 ## Architecture Overview
 
-This Tetris game uses a sophisticated four-layer architecture: **Zustand State Management** (centralized store with persistence), **Custom Hooks** (business logic), **Visual Design** (CSS variables + themed components), and **Performance** (object pooling + memoization). The architecture follows TDD principles with comprehensive test coverage and includes advanced statistics tracking with session management.
+This Tetris game uses a sophisticated four-layer architecture: **Zustand State Management** (centralized store with persistence), **Custom Hooks** (business logic), **Visual Design** (CSS variables + themed components), and **Performance** (object pooling + memoization). The architecture follows TDD principles with comprehensive test coverage and includes advanced statistics tracking, session management, and a complete customizable theme system with accessibility features.
 
 ### Zustand State Management (Primary)
-The game uses Zustand with Immer for type-safe, persistent state management:
+The game uses pure Zustand (Immer removed due to SSR hydration issues) for type-safe state management:
 
 **`useGameStore`** (Central Store):
 - Global state container with LocalStorage persistence
 - Handles high scores, statistics, settings, theme, errors, and play sessions
-- Immutable state updates with Immer middleware
+- Immutable state updates using spread operators and functional patterns
 - Automatic data migration and validation
 - Session tracking with automatic play time calculation
 - Selective hooks: `useHighScores`, `useStatistics`, `useSettings`, `useTheme`
+- Individual selector functions prevent infinite render loops by avoiding object recreation
 
 **State Persistence Strategy**:
 - Only user data persisted: settings, high scores, statistics, theme, play sessions
@@ -111,6 +112,13 @@ Legacy and specialized business logic hooks:
 - Inactivity timeout management (30 minutes)
 - Game count tracking per session
 - Integration with Zustand store for persistence
+
+**`useThemeManager`** (Theme System Management):
+- Complete theme management with real-time CSS variable updates
+- Color blindness filter application and contrast adjustments
+- Animation intensity control and reduced motion support
+- LocalStorage persistence and system preference monitoring
+- Integration with accessibility settings
 
 **`useSettings`** (Legacy Configuration):
 - Still used for some legacy settings functionality
@@ -166,9 +174,10 @@ Legacy and specialized business logic hooks:
 - Game over/pause overlays with themed styling
 
 **GameInfo** (Themed UI Panels with Tabs):
-- Tab-based interface switching between Game Info and Statistics Dashboard
+- Tab-based interface switching between Game Info, Statistics Dashboard, and Theme Settings
 - Game Info tab: Seven themed panels (Score Data, Next Piece, Controls, Audio, Buttons, Scoring, High Scores)
 - Statistics tab: Comprehensive dashboard with enhanced metrics and analytics
+- Theme tab: Complete customizable theme system with accessibility features
 - High score panel displays Top 5 with rank, score, level, lines, date, and player name
 - Audio panel includes volume slider and mute toggle with cyberpunk styling
 - Each panel uses unique hologram backgrounds and neon borders
@@ -196,6 +205,12 @@ Legacy and specialized business logic hooks:
 - Enhanced visual effects with multi-layer glow and sparkle animations
 - Physics simulation with configurable constants
 - Automatic particle lifecycle management with pool return
+
+**Theme System Components**:
+- **ThemeSettings**: Unified theme management with tabbed interface (Theme/Colors/Accessibility/Effects)
+- **ThemeSelector**: Interactive theme selection with live preview
+- **ColorPaletteEditor**: Real-time color customization with hex input and color picker
+- **AccessibilitySettings**: Comprehensive accessibility options (color blindness, contrast, animation intensity)
 
 ### Game Features
 
@@ -231,6 +246,14 @@ Legacy and specialized business logic hooks:
 - **Data Persistence**: LocalStorage with cross-tab synchronization
 - **Validation & Security**: Input sanitization and data integrity checks
 
+**Customizable Theme System**:
+- **5 Preset Themes**: Cyberpunk, Classic, Retro, Minimal, Neon with unique aesthetics
+- **Interactive Color Editor**: Real-time color palette customization with hex input and color picker
+- **Accessibility Features**: Color blindness support (3 types), contrast adjustment, animation intensity control
+- **Reduced Motion**: Complete accessibility compliance with system preference detection
+- **Real-time Application**: Dynamic CSS variable updates without page reload
+- **Persistent Customization**: LocalStorage persistence with cross-tab synchronization
+
 ### Technical Implementation Details
 
 **CSS Variable System**:
@@ -259,6 +282,13 @@ Legacy and specialized business logic hooks:
 - Individual selector functions to prevent object recreation and infinite loops
 - Type-safe actions with comprehensive error boundaries
 - Persistence functionality temporarily disabled (can be re-enabled when needed)
+
+**Theme System Architecture**:
+- `themePresets.ts`: 5 complete theme configurations with colors, effects, and accessibility settings
+- `themeUtils.ts`: Dynamic CSS variable manipulation, color blindness filters, contrast adjustments
+- `useThemeManager.ts`: Hook for theme state management, system preference monitoring, LocalStorage persistence
+- CSS Custom Properties system with automatic transparency variant generation
+- Reduced motion compliance with CSS media queries and JavaScript detection
 
 **Statistics & Analytics Architecture**:
 - `statisticsUtils.ts`: 14 pure utility functions for advanced statistics calculation
@@ -289,7 +319,7 @@ Legacy and specialized business logic hooks:
 - **Type Safety**: Comprehensive TypeScript coverage with readonly arrays and strict typing
 - **Performance**: Optimized rendering and memory management with object pooling
 - **Maintainability**: Unified styling system and consistent patterns
-- **Test Coverage**: 125+ tests with comprehensive TDD coverage for all features including statistics dashboard
+- **Test Coverage**: 9 test files with comprehensive TDD coverage for all features including statistics dashboard and theme system
 - **Error Resilience**: Robust error handling for audio, storage, and game state failures
 - **State Management**: Centralized Zustand store with persistence and validation
 
@@ -339,6 +369,14 @@ Legacy and specialized business logic hooks:
 - State changes are immutable through spread operators and functional patterns
 - Data persistence temporarily disabled (use localStorage directly if needed)
 
+**Theme System Integration**:
+- Use `useThemeManager` hook for complete theme management
+- Access theme state through Zustand: `useGameStore(state => state.theme)`
+- Theme actions: `setTheme`, `setCustomColors`, `setAccessibilityOptions`, `resetThemeToDefault`
+- Real-time CSS variable updates through `themeUtils.initializeTheme()`
+- Accessibility integration with system preferences and user settings
+- LocalStorage persistence for custom colors and accessibility options
+
 **Statistics Dashboard Integration**:
 - Use `StatisticsDashboard` component with `EnhancedStatistics` interface
 - `calculateEnhancedStatistics` for advanced metric calculation
@@ -387,14 +425,17 @@ interface GlobalGameState extends GameState {
 - ✅ Enhanced UI with tab-based navigation in GameInfo
 - ✅ Comprehensive TDD test coverage (31 additional tests)
 
-**Remaining Phase 2 Items**:
+**Customizable Theme System** (✅ COMPLETED):
+- ✅ Additional preset themes (classic, retro, minimal, neon)
+- ✅ Custom color palette editor with real-time preview
+- ✅ Color-blind friendly configurations (3 types)
+- ✅ Contrast adjustment controls (low, normal, high)
+- ✅ Animation intensity settings (none, reduced, normal, enhanced)
+- ✅ Reduced motion compliance and system preference detection
+- ✅ Complete accessibility features integrated into GameInfo theme tab
+- ✅ LocalStorage persistence and cross-tab synchronization
 
-**Customizable Theme System** (PENDING):
-- Additional preset themes (classic, retro, minimal, neon)
-- Custom color palette editor stored in Zustand
-- Color-blind friendly configurations
-- Contrast adjustment controls
-- Animation intensity settings
+**Remaining Phase 2 Items**:
 
 **Mobile & Responsive Enhancement** (PENDING):
 - Swipe gesture support (move, rotate, drop)
@@ -502,14 +543,15 @@ interface GamePlugin {
 - **Plugin Architecture**: Extensible system for community contributions
 
 ### Architecture Benefits
-- **Maintainable Theming**: CSS variable system supports easy design changes
-- **Performance Ready**: Optimized for production deployment with Zustand persistence
-- **Type Safe**: Comprehensive TypeScript with readonly arrays and strict typing
-- **Memory Efficient**: Object pooling and proper cleanup patterns
-- **Test-Driven Development**: 125+ tests ensure reliability and prevent regressions
-- **Error Resilient**: Graceful handling of failures maintains user experience
-- **Data Persistence**: Comprehensive LocalStorage with cross-tab synchronization
-- **Scalable Architecture**: Zustand foundation ready for advanced features and multiplayer
+- **Comprehensive Theming**: Complete customizable theme system with 5 presets, accessibility features, and real-time customization
+- **Performance Ready**: Optimized for production deployment with Zustand state management and object pooling
+- **Type Safe**: Comprehensive TypeScript with readonly arrays, strict typing, and theme type safety
+- **Memory Efficient**: Object pooling for particles and proper cleanup patterns throughout
+- **Accessibility Compliant**: Full WCAG compliance with color blindness support, contrast adjustment, and reduced motion
+- **Test-Driven Development**: 9 test files with comprehensive coverage ensure reliability and prevent regressions
+- **Error Resilient**: Graceful handling of failures maintains user experience across all features
+- **Data Persistence**: Comprehensive LocalStorage with cross-tab synchronization for all user preferences
+- **Scalable Architecture**: Zustand foundation ready for advanced features, multiplayer, and theme extensions
 
 ## TDD Development Guidelines
 
