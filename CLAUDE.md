@@ -592,10 +592,15 @@ interface GlobalGameState extends GameState {
   - ハイスコア管理（Top 10）、統計データ
   - ゲーム統計更新、効率計算
   - GameStatistics型準拠の完全実装
+- ✅ **フェーズ 5: sessionStore.ts** - セッション・エラー管理 (120 行)
+  - プレイセッション管理（開始・終了・ゲーム数追跡）
+  - エラーハンドリング（追加・削除・制限）
+  - セッション時間計算、統計連携
 
-**進行中**:
-
-- 🔄 **フェーズ 5: sessionStore 分離** (最終フェーズ)
+**完了**:
+- ✅ **統合エクスポート**: src/store/index.ts作成
+- ✅ **5つのドメイン別ストア**: 441行→430行（5ファイル分割）
+- ✅ **レガシーストア**: 段階的廃止準備完了
 
 ### Phase 3: Advanced Features (1-2 months)
 
