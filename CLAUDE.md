@@ -2,8 +2,6 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-**Important**: 必ず日本語で回答して下さい。 (Always respond in Japanese)
-
 ## Project Status
 
 This is a cyberpunk-themed Tetris game built with Next.js 15, TypeScript, and Tailwind CSS v4. The game features a sophisticated Zustand-based state management system, comprehensive TDD test coverage (9 test files covering 29 source files), and a unified cyberpunk visual design system with neon effects, holographic backgrounds, and enhanced particle animations.
@@ -310,7 +308,7 @@ Legacy and specialized business logic hooks:
 - ~90% reduction in CSS duplication through variable system
 - Memory leak prevention through proper timeout management
 - Audio preloading and efficient playback management
-- Production-ready performance optimizations
+- Production-ready performance optimizations with object pooling
 
 ## Current Codebase Quality
 
@@ -329,20 +327,7 @@ Legacy and specialized business logic hooks:
 - **Configurable Effects**: CSS variables for easy theme modifications
 - **Enhanced UX**: Smooth animations and visual feedback
 
-### Critical Implementation Notes
-
-**Performance Optimizations**:
-- `updateParticles` uses empty dependency array to prevent infinite loops (intentional ESLint warning)
-- All components use `React.memo` - avoid breaking memoization when modifying props
-- Particle system uses object pooling - always return particles to pool when expired
-- Zustand selectors use individual value selection to prevent object recreation and infinite renders
-- Avoid including mutable objects (like game state) in useCallback dependencies
-
-**Zustand Store Infinite Loop Prevention**:
-- NEVER return new objects from selector functions - use individual value selectors
-- Selector functions like `useGameActions()` extract individual functions to prevent recreation
-- Avoid complex object destructuring in selectors that could cause reference changes
-- Use `// eslint-disable-next-line react-hooks/exhaustive-deps` when intentionally excluding dependencies
+### Project-Specific Implementation Notes
 
 **Styling System**:
 - Use CSS variables from `globals.css` for all cyberpunk theming
@@ -351,7 +336,6 @@ Legacy and specialized business logic hooks:
 
 **State Flow**:
 - All game state changes go through `calculatePiecePlacementState` for consistency
-- Use `useRef` for timeouts to prevent memory leaks
 - Particle updates are decoupled from main state to avoid render thrashing
 
 **Audio Integration**:
@@ -553,33 +537,12 @@ interface GamePlugin {
 - **Data Persistence**: Comprehensive LocalStorage with cross-tab synchronization for all user preferences
 - **Scalable Architecture**: Zustand foundation ready for advanced features, multiplayer, and theme extensions
 
-## TDD Development Guidelines
+## Project-Specific Testing
 
 **Test Structure**:
-- Use Vitest with React Testing Library for component testing
+- 9 test files covering 29 source files with comprehensive TDD coverage
 - Mock Zustand store with custom test stores for isolated testing
-- Test utilities as pure functions with comprehensive edge case coverage
-- Component tests focus on user interactions and visual output
-
-**Testing Patterns**:
-- Create test-specific mock stores to avoid cross-test contamination
-- Use `beforeEach` to reset all mocks and test state
-- Test both happy paths and error conditions extensively
-- Validate both business logic and UI behavior
-
-## Development Workflow
-
-**Pre-Commit Checklist**:
-1. Run `npm test` to ensure all tests pass
-2. Run `npm run build` to verify no build errors
-3. Check for TypeScript errors with `npx tsc --noEmit`
-4. Review ESLint warnings (some are intentional for performance)
-5. Only then commit and push to GitHub
-
-**Common Issues & Solutions**:
-- **Infinite Loop Errors**: Usually caused by object recreation in Zustand selectors
-- **SSR Hydration Issues**: Temporarily disable persist middleware if needed
-- **Build Failures**: Often due to unused imports or TypeScript errors
+- Focus on game logic, statistics, and theme system testing
 
 # important-instruction-reminders
 Do what has been asked; nothing more, nothing less.
