@@ -463,6 +463,55 @@ interface GlobalGameState extends GameState {
 - ~~Device Rotation Support~~ (縦画面前提で除外)
 - ~~Tablet Optimization~~ (スマホ・デスクトップのみ対応)
 
+## 現在進行中のリファクタリング計画
+
+### 段階1: GameInfoコンポーネント分割 (✅ 完了 - 2024/06/08)
+**目的**: 338行の巨大なGameInfoコンポーネントを機能別に分割
+
+**完了済み**:
+- ✅ GameStatsPanel.tsx - スコア、レベル、ライン表示 (30行)
+- ✅ NextPiecePanel.tsx - 次のピース表示 (35行)
+- ✅ ControlsPanel.tsx - キーバインド表示 (25行)
+- ✅ AudioPanel.tsx - 音声設定パネル (45行)
+- ✅ GameButtonsPanel.tsx - ポーズ・リセットボタン (30行)
+- ✅ ScoringPanel.tsx - スコア計算表示 (25行)
+- ✅ GameInfo.tsx - 新しいコンポーネント統合完了
+
+**効果**:
+- 各パネル25-45行に分割（元338行から大幅削減）
+- 責務の明確化と再利用性向上
+- テスト容易性の大幅改善
+- ビルドエラーなし、既存機能完全保持
+
+### 段階2: useGameState分割 (🔄 次予定)
+**目的**: 184行のuseGameStateを責務別に分割
+
+**計画**:
+- calculatePiecePlacementState (75行) → 5つの関数に分割
+  - calculateScoreIncrease()
+  - processLineClear()
+  - createLineEffects()
+  - checkGameOver()
+  - updateGameStateWithPiece()
+- useGameLogic: スコア計算、ライン消去処理
+- useGameEffects: エフェクトのタイミング管理
+- 個別テスト可能な純粋関数への変換
+
+### 段階3: Zustandストア分割 (🔄 中期計画)
+**目的**: 441行のgameStore.tsをドメイン別に分割
+
+**計画**:
+- gameStateStore.ts - ゲーム状態管理
+- settingsStore.ts - 設定管理
+- statisticsStore.ts - 統計・ハイスコア
+- themeStore.ts - テーマ管理
+- sessionStore.ts - セッション管理
+
+### 段階4: パフォーマンス最適化 (🔄 将来計画)
+- Web Workers導入
+- Virtual scrolling
+- Service Worker実装
+
 ### Phase 3: Advanced Features (1-2 months)
 **Target**: Platform-level capabilities and accessibility
 
