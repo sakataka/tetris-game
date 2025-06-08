@@ -2,97 +2,88 @@ import { useCallback } from 'react';
 import { GameState, Tetromino, HARD_DROP_BONUS_MULTIPLIER, SoundKey } from '../types/tetris';
 import { isValidPosition, rotatePiece } from '../utils/tetrisUtils';
 
+interface PieceControlActions {
+  onPieceMove: (state: GameState, newPosition: { x: number; y: number }) => GameState;
+  onPieceLand: (state: GameState, piece: Tetromino, bonusPoints?: number) => GameState;
+  onPieceRotate: (state: GameState, rotatedPiece: Tetromino) => GameState;
+}
+
 interface UseGameControlsProps {
-  setGameState: React.Dispatch<React.SetStateAction<GameState>>;
-  calculatePiecePlacementState: (prevState: GameState, piece: Tetromino, bonusPoints?: number) => GameState;
+  gameState: GameState;
+  actions: PieceControlActions;
   playSound: (soundType: SoundKey) => void;
+  onStateChange: (newState: GameState) => void;
 }
 
 export function useGameControls({
-  setGameState,
-  calculatePiecePlacementState,
-  playSound
+  gameState,
+  actions,
+  playSound,
+  onStateChange
 }: UseGameControlsProps) {
   
   const movePiece = useCallback((dir: { x: number; y: number }) => {
-    setGameState(prevState => {
-      if (!prevState.currentPiece || prevState.gameOver || prevState.isPaused) {
-        return prevState;
-      }
+    if (!gameState.currentPiece || gameState.gameOver || gameState.isPaused) {
+      return;
+    }
 
-      const newPosition = {
-        x: prevState.currentPiece.position.x + dir.x,
-        y: prevState.currentPiece.position.y + dir.y
-      };
+    const newPosition = {
+      x: gameState.currentPiece.position.x + dir.x,
+      y: gameState.currentPiece.position.y + dir.y
+    };
 
-      if (isValidPosition(prevState.board, prevState.currentPiece, newPosition)) {
-        return {
-          ...prevState,
-          currentPiece: {
-            ...prevState.currentPiece,
-            position: newPosition
-          }
-        };
-      }
-
-      if (dir.y > 0) {
-        // Piece hit bottom, place it
-        playSound('pieceLand');
-        return calculatePiecePlacementState(prevState, prevState.currentPiece, 0);
-      }
-
-      return prevState;
-    });
-  }, [calculatePiecePlacementState, setGameState, playSound]);
+    if (isValidPosition(gameState.board, gameState.currentPiece, newPosition)) {
+      const newState = actions.onPieceMove(gameState, newPosition);
+      onStateChange(newState);
+    } else if (dir.y > 0) {
+      // Piece hit bottom, place it
+      playSound('pieceLand');
+      const newState = actions.onPieceLand(gameState, gameState.currentPiece, 0);
+      onStateChange(newState);
+    }
+  }, [gameState, actions, playSound, onStateChange]);
 
   const rotatePieceClockwise = useCallback(() => {
-    setGameState(prevState => {
-      if (!prevState.currentPiece || prevState.gameOver || prevState.isPaused) {
-        return prevState;
-      }
+    if (!gameState.currentPiece || gameState.gameOver || gameState.isPaused) {
+      return;
+    }
 
-      const rotatedPiece = rotatePiece(prevState.currentPiece);
-      
-      if (isValidPosition(prevState.board, rotatedPiece, rotatedPiece.position)) {
-        playSound('pieceRotate');
-        return {
-          ...prevState,
-          currentPiece: rotatedPiece
-        };
-      }
-
-      return prevState;
-    });
-  }, [setGameState, playSound]);
+    const rotatedPiece = rotatePiece(gameState.currentPiece);
+    
+    if (isValidPosition(gameState.board, rotatedPiece, rotatedPiece.position)) {
+      playSound('pieceRotate');
+      const newState = actions.onPieceRotate(gameState, rotatedPiece);
+      onStateChange(newState);
+    }
+  }, [gameState, actions, playSound, onStateChange]);
 
   const dropPiece = useCallback(() => {
     movePiece({ x: 0, y: 1 });
   }, [movePiece]);
 
   const hardDrop = useCallback(() => {
-    setGameState(prevState => {
-      if (!prevState.currentPiece || prevState.gameOver || prevState.isPaused) {
-        return prevState;
-      }
+    if (!gameState.currentPiece || gameState.gameOver || gameState.isPaused) {
+      return;
+    }
 
-      let dropY = prevState.currentPiece.position.y;
-      while (isValidPosition(prevState.board, prevState.currentPiece, { 
-        x: prevState.currentPiece.position.x, 
-        y: dropY + 1 
-      })) {
-        dropY++;
-      }
+    let dropY = gameState.currentPiece.position.y;
+    while (isValidPosition(gameState.board, gameState.currentPiece, { 
+      x: gameState.currentPiece.position.x, 
+      y: dropY + 1 
+    })) {
+      dropY++;
+    }
 
-      const droppedPiece = {
-        ...prevState.currentPiece,
-        position: { x: prevState.currentPiece.position.x, y: dropY }
-      };
+    const droppedPiece = {
+      ...gameState.currentPiece,
+      position: { x: gameState.currentPiece.position.x, y: dropY }
+    };
 
-      const hardDropBonus = (dropY - prevState.currentPiece.position.y) * HARD_DROP_BONUS_MULTIPLIER;
-      playSound('hardDrop');
-      return calculatePiecePlacementState(prevState, droppedPiece, hardDropBonus);
-    });
-  }, [calculatePiecePlacementState, setGameState, playSound]);
+    const hardDropBonus = (dropY - gameState.currentPiece.position.y) * HARD_DROP_BONUS_MULTIPLIER;
+    playSound('hardDrop');
+    const newState = actions.onPieceLand(gameState, droppedPiece, hardDropBonus);
+    onStateChange(newState);
+  }, [gameState, actions, playSound, onStateChange]);
 
   return {
     movePiece,

@@ -1,102 +1,67 @@
-import { useEffect } from 'react';
-import { GameState } from '../types/tetris';
+import { useCallback } from 'react';
+import { useKeyboardInput } from './useKeyboardInput';
+import { useGameTimer } from './useGameTimer';
+import { useDropTimeCalculator } from './useDropTimeCalculator';
 
-interface UseGameLoopProps {
-  gameState: GameState;
-  dropTime: number;
-  setDropTime: React.Dispatch<React.SetStateAction<number>>;
-  dropPiece: () => void;
+interface GameActions {
   movePiece: (dir: { x: number; y: number }) => void;
   rotatePieceClockwise: () => void;
   hardDrop: () => void;
+  dropPiece: () => void;
   togglePause: () => void;
   resetGame: () => void;
-  INITIAL_DROP_TIME: number;
+}
+
+interface UseGameLoopProps {
+  isGameOver: boolean;
+  isPaused: boolean;
+  level: number;
+  dropTime: number;
+  initialDropTime: number;
+  actions: GameActions;
+  onDropTimeChange: (newDropTime: number) => void;
 }
 
 export function useGameLoop({
-  gameState,
+  isGameOver,
+  isPaused,
+  level,
   dropTime,
-  setDropTime,
-  dropPiece,
-  movePiece,
-  rotatePieceClockwise,
-  hardDrop,
-  togglePause,
-  resetGame,
-  INITIAL_DROP_TIME
+  initialDropTime,
+  actions,
+  onDropTimeChange
 }: UseGameLoopProps) {
   
-  // Handle keyboard input
-  useEffect(() => {
-    const handleKeyPress = (event: KeyboardEvent) => {
-      if (gameState.gameOver) {
-        if (event.key === 'Enter' || event.key === ' ') {
-          resetGame();
-        }
-        return;
-      }
+  // 키보드 입력 처리를 위한 콜백들
+  const onMoveLeft = useCallback(() => actions.movePiece({ x: -1, y: 0 }), [actions]);
+  const onMoveRight = useCallback(() => actions.movePiece({ x: 1, y: 0 }), [actions]);
+  const onMoveDown = useCallback(() => actions.movePiece({ x: 0, y: 1 }), [actions]);
+  const onConfirm = useCallback(() => actions.resetGame(), [actions]);
 
-      switch (event.key) {
-        case 'ArrowLeft':
-        case 'a':
-        case 'A':
-          event.preventDefault();
-          movePiece({ x: -1, y: 0 });
-          break;
-        case 'ArrowRight':
-        case 'd':
-        case 'D':
-          event.preventDefault();
-          movePiece({ x: 1, y: 0 });
-          break;
-        case 'ArrowDown':
-        case 's':
-        case 'S':
-          event.preventDefault();
-          movePiece({ x: 0, y: 1 });
-          break;
-        case 'ArrowUp':
-        case 'w':
-        case 'W':
-          event.preventDefault();
-          rotatePieceClockwise();
-          break;
-        case ' ':
-          event.preventDefault();
-          hardDrop();
-          break;
-        case 'p':
-        case 'P':
-          event.preventDefault();
-          togglePause();
-          break;
-        case 'r':
-        case 'R':
-          event.preventDefault();
-          resetGame();
-          break;
-      }
-    };
+  // 키보드 입력 처리
+  useKeyboardInput({
+    isGameOver,
+    onMoveLeft,
+    onMoveRight,
+    onMoveDown,
+    onRotate: actions.rotatePieceClockwise,
+    onHardDrop: actions.hardDrop,
+    onPause: actions.togglePause,
+    onReset: actions.resetGame,
+    onConfirm
+  });
 
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [gameState.gameOver, movePiece, rotatePieceClockwise, hardDrop, togglePause, resetGame]);
+  // 게임 타이머
+  useGameTimer({
+    isActive: !isGameOver && !isPaused,
+    interval: dropTime,
+    onTick: actions.dropPiece
+  });
 
-  // Game loop
-  useEffect(() => {
-    if (gameState.gameOver || gameState.isPaused) return;
-
-    const gameLoop = setInterval(() => {
-      dropPiece();
-    }, dropTime);
-
-    return () => clearInterval(gameLoop);
-  }, [dropPiece, dropTime, gameState.gameOver, gameState.isPaused]);
-
-  // Update drop time based on level
-  useEffect(() => {
-    const newDropTime = Math.max(50, INITIAL_DROP_TIME - (gameState.level - 1) * 100);
-    setDropTime(newDropTime);
-  }, [gameState.level, setDropTime, INITIAL_DROP_TIME]);
+  // 드롭 타임 계산
+  useDropTimeCalculator({
+    level,
+    initialDropTime,
+    onDropTimeChange
+  });
 }

@@ -5,7 +5,7 @@ import { GameState } from '../types/tetris';
 
 // Mock store state
 const mockStoreState = {
-  highScores: [],
+  highScores: [] as {id: string; score: number; level: number; lines: number; date: number}[],
   statistics: {
     totalGames: 0,
     totalLines: 0,

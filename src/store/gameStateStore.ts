@@ -44,6 +44,10 @@ interface GameStateStore {
   
   // Game logic action
   calculatePiecePlacementState: (piece: Tetromino, bonusPoints?: number, playSound?: (soundType: SoundKey) => void) => void;
+  
+  // Piece control adapters for useGameControls
+  movePieceToPosition: (newPosition: { x: number; y: number }) => void;
+  rotatePieceTo: (rotatedPiece: Tetromino) => void;
 }
 
 export const useGameStateStore = create<GameStateStore>()((set) => ({
@@ -162,7 +166,26 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
         gameState: newGameState,
         dropTime: state.dropTime
       };
-    })
+    }),
+  
+  // Piece control adapters for useGameControls
+  movePieceToPosition: (newPosition) =>
+    set((state) => ({
+      gameState: {
+        ...state.gameState,
+        currentPiece: state.gameState.currentPiece
+          ? { ...state.gameState.currentPiece, position: newPosition }
+          : null
+      }
+    })),
+  
+  rotatePieceTo: (rotatedPiece) =>
+    set((state) => ({
+      gameState: {
+        ...state.gameState,
+        currentPiece: rotatedPiece
+      }
+    }))
 }));
 
 // Selector hooks for optimized access
@@ -176,5 +199,7 @@ export const useGameStateActions = () => useGameStateStore((state) => ({
   setDropTime: state.setDropTime,
   updateLineEffect: state.updateLineEffect,
   clearLineEffect: state.clearLineEffect,
-  calculatePiecePlacementState: state.calculatePiecePlacementState
+  calculatePiecePlacementState: state.calculatePiecePlacementState,
+  movePieceToPosition: state.movePieceToPosition,
+  rotatePieceTo: state.rotatePieceTo
 }));

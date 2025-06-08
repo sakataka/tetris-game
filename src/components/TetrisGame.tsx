@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useMemo } from 'react';
 import type { Particle, Tetromino, GameState } from '../types/tetris';
 import TetrisBoard from './TetrisBoard';
 import GameInfo from './GameInfo';
@@ -62,72 +62,82 @@ export default function TetrisGame() {
     initialMuted: settings.isMuted
   });
 
-  // 新しいZustandストアからCalculatePiecePlacementState取得
-  const { calculatePiecePlacementState } = useGameStateActions();
-  const INITIAL_DROP_TIME = 1000; // 定数化
+  // 게임 액션들 취득
+  const { 
+    calculatePiecePlacementState, 
+    movePieceToPosition, 
+    rotatePieceTo 
+  } = useGameStateActions();
+  const INITIAL_DROP_TIME = 1000; // 정수화
 
-  // 音声初期化
+  // 음성 초기화
   useEffect(() => {
     initializeSounds();
   }, [initializeSounds]);
 
-  // useGameControlsにsetStateアダプターを提供
-  const setGameStateAdapter = useCallback((updater: React.SetStateAction<GameState>) => {
-    if (typeof updater === 'function') {
-      // Zustandのset関数を使用して関数形式のupdaterに対応
-      setGameState(updater(gameState));
-    } else {
-      setGameState(updater);
+  // useGameControls를 위한 액션 어댑터들
+  const pieceControlActions = useMemo(() => ({
+    onPieceMove: (state: GameState, newPosition: { x: number; y: number }) => {
+      movePieceToPosition(newPosition);
+      return { ...state, currentPiece: state.currentPiece ? { ...state.currentPiece, position: newPosition } : null };
+    },
+    onPieceLand: (state: GameState, piece: Tetromino, bonusPoints?: number) => {
+      calculatePiecePlacementState(piece, bonusPoints, playSound);
+      // 상태는 calculatePiecePlacementState에서 자동으로 업데이트됨
+      return state;
+    },
+    onPieceRotate: (state: GameState, rotatedPiece: Tetromino) => {
+      rotatePieceTo(rotatedPiece);
+      return { ...state, currentPiece: rotatedPiece };
     }
-  }, [setGameState, gameState]);
+  }), [movePieceToPosition, calculatePiecePlacementState, rotatePieceTo, playSound]);
 
-  const calculatePlacementAdapter = useCallback((prevState: GameState, piece: Tetromino, bonusPoints?: number): GameState => {
-    // ここでZustandのcalculatePiecePlacementStateを呼び出して結果を返す
-    calculatePiecePlacementState(piece, bonusPoints, playSound);
-    return gameState; // 更新後の状態を返す（暫定）
-  }, [calculatePiecePlacementState, playSound, gameState]);
+  const onGameStateChange = useCallback((newState: GameState) => {
+    // 새로운 상태가 전달되면 Zustand 스토어를 업데이트
+    setGameState(newState);
+  }, [setGameState]);
 
-  const setDropTimeAdapter = useCallback((updater: React.SetStateAction<number>) => {
-    if (typeof updater === 'function') {
-      setDropTime(updater(dropTime));
-    } else {
-      setDropTime(updater);
-    }
-  }, [setDropTime, dropTime]);
-
-  // ゲーム操作
+  // 게임 조작
   const {
     movePiece,
     rotatePieceClockwise,
     dropPiece,
     hardDrop
   } = useGameControls({
-    setGameState: setGameStateAdapter,
-    calculatePiecePlacementState: calculatePlacementAdapter,
-    playSound
+    gameState,
+    actions: pieceControlActions,
+    playSound,
+    onStateChange: onGameStateChange
   });
 
-  // ハイスコア管理
+  // 하이스코어 관리
   useHighScoreManager({
     gameState,
     playSound
   });
 
-  // セッション管理
+  // 세션 관리
   const { onGameStart } = useSessionTracking();
 
-  // ゲームループとキーボード入力
-  useGameLoop({
-    gameState,
-    dropTime,
-    setDropTime: setDropTimeAdapter,
-    dropPiece,
+  // 게임 액션들
+  const gameActions = useMemo(() => ({
     movePiece,
     rotatePieceClockwise,
     hardDrop,
+    dropPiece,
     togglePause,
-    resetGame,
-    INITIAL_DROP_TIME
+    resetGame
+  }), [movePiece, rotatePieceClockwise, hardDrop, dropPiece, togglePause, resetGame]);
+
+  // 게임 루프
+  useGameLoop({
+    isGameOver: gameState.gameOver,
+    isPaused: gameState.isPaused,
+    level: gameState.level,
+    dropTime,
+    initialDropTime: INITIAL_DROP_TIME,
+    actions: gameActions,
+    onDropTimeChange: setDropTime
   });
 
   // useCallbackでコールバック関数を最適化

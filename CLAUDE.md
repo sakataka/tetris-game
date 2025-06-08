@@ -73,11 +73,13 @@ npm test -- --run src/test/useSounds.test.ts
    - ✅ try-catchブロック統一化とuseSoundsでの適用
    - ✅ エラー状態管理ストア（Zustand）追加とトースト通知システム
 
+4. ✅ **カスタムフックの整理完了** - 相互依存の解消と単一責任化
+   - ✅ useGameControls再設計 - アダプターパターン導入で直接依存解消
+   - ✅ useGameLoop分割 - useKeyboardInput/useGameTimer/useDropTimeCalculator独立化
+   - ✅ 副作用の分離 - タイマー管理、キーボード入力、ドロップ時間計算の責務分離
+   - ✅ 全125テスト成功、ビルド・ESLint・TypeScript検証完了
+
 ### ⚡ 高優先（High Priority）
-4. **カスタムフックの整理** - 相互依存の解消
-   - useGameControls、useGameLoop、useGameStateの再設計
-   - 単一責任の原則に基づいた分割
-   - 副作用の分離（エフェクトタイマー管理など）
 
 5. **パフォーマンス最適化** - レンダリング効率の改善
    - ParticleEffectコンポーネントの最適化
@@ -292,13 +294,21 @@ This Tetris game uses a sophisticated modular architecture with **Zustand State 
 - **VirtualControls.tsx** - Mobile touch controls
 - **ParticleEffect.tsx** - Enhanced animation system with object pooling
 
-### Hook-Based Business Logic
+### Hook-Based Business Logic (Updated: 2025/06/09)
 
-**Core Game Hooks** (Updated: 2025/06/08):
-- ✅ **分割ストアに統合済み** - レガシーuseGameState.ts削除
-- **useGameControls.ts** (102 lines) - User input handling with adapter pattern
-- **useGameLoop.ts** (101 lines) - Game timing and automatic piece dropping
-- **useSounds.ts** (126 lines) - 6-sound audio system with comprehensive error handling
+**Core Game Hooks** - **カスタムフック整理完了（相互依存解消と単一責任化）**:
+- ✅ **useGameControls.ts** - アダプターパターン導入で直接依存解消
+  - 状態変更アクション（onPieceMove, onPieceLand, onPieceRotate）のインジェクション
+  - gameStateStoreとの疎結合化によるテスタビリティ向上
+- ✅ **useGameLoop.ts** - 責務分離による可読性とメンテナンス性向上
+  - useKeyboardInput、useGameTimer、useDropTimeCalculatorに分割
+  - 各副作用（キーボード、タイマー、計算）の独立管理
+- **useSounds.ts** (126 lines) - 包括的エラーハンドリング対応済み
+
+**新しい副作用分離フック**:
+- **useKeyboardInput.ts** - キーボード入力とキーバインド管理の独立化
+- **useGameTimer.ts** - ゲームタイマー処理の抽象化
+- **useDropTimeCalculator.ts** - レベル別ドロップ時間計算の分離
 
 **System Management Hooks**:
 - **useHighScoreManager.ts** - 新しいstatisticsStoreと統合、自動検出・保存
