@@ -56,7 +56,11 @@ export default function TetrisGame() {
     setVolumeLevel,
     toggleMute,
     initializeSounds,
-    unlockAudio
+    unlockAudio,
+    isWebAudioEnabled,
+    getDetailedAudioState,
+    getPreloadProgress,
+    getFallbackStatus
   } = useSounds({
     initialVolume: settings.volume,
     initialMuted: settings.isMuted
@@ -168,6 +172,28 @@ export default function TetrisGame() {
     toggleMute();
   }, [updateSettings, settings.isMuted, toggleMute]);
 
+  // 音声システム状態の取得
+  const audioSystemStatus = useMemo(() => {
+    const fallbackStatus = getFallbackStatus();
+    const detailedState = getDetailedAudioState();
+    
+    return {
+      isWebAudioEnabled,
+      preloadProgress: getPreloadProgress(),
+      fallbackStatus: fallbackStatus ? {
+        currentLevel: fallbackStatus.currentLevel,
+        availableLevels: fallbackStatus.availableLevels,
+        silentMode: fallbackStatus.silentMode
+      } : undefined,
+      detailedState: detailedState ? {
+        initialized: detailedState.initialized,
+        suspended: detailedState.suspended,
+        loadedSounds: detailedState.loadedSounds,
+        activeSounds: detailedState.activeSounds
+      } : undefined
+    };
+  }, [isWebAudioEnabled, getPreloadProgress, getFallbackStatus, getDetailedAudioState]);
+
   // Show loading until hydration is complete
   if (!isHydrated) {
     return <LoadingMessage />;
@@ -214,6 +240,7 @@ export default function TetrisGame() {
               volume={volume}
               onToggleMute={handleToggleMute}
               onVolumeChange={handleVolumeChange}
+              audioSystemStatus={audioSystemStatus}
             />
             
             {/* 情報パネル周りのエフェクト */}
