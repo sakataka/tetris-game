@@ -5,6 +5,7 @@ import type { Particle } from '../types/tetris';
 import TetrisBoard from './TetrisBoard';
 import GameInfo from './GameInfo';
 import VirtualControls from './VirtualControls';
+import LoadingMessage from './LoadingMessage';
 import { useGameState as useLegacyGameState } from '../hooks/useGameState';
 import { useGameControls } from '../hooks/useGameControls';
 import { useGameLoop } from '../hooks/useGameLoop';
@@ -128,13 +129,7 @@ export default function TetrisGame() {
 
   // Show loading until hydration is complete
   if (!isHydrated) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-cyber-cyan text-2xl font-bold animate-pulse">
-          Loading Game...
-        </div>
-      </div>
-    );
+    return <LoadingMessage />;
   }
 
   return (

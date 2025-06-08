@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { BUTTONS, ARIA_LABELS } from '../constants/strings';
 
 interface VirtualControlsProps {
   onMove: (direction: { x: number; y: number }) => void;
@@ -43,7 +44,7 @@ export default function VirtualControls({
                       border border-purple-400/50 shadow-[0_0_15px_rgba(147,51,234,0.5)]
                       flex items-center justify-center text-white font-bold text-sm
                       touch-manipulation select-none"
-            aria-label="回転"
+            aria-label={ARIA_LABELS.ROTATE}
           >
             ↻
           </button>
@@ -58,7 +59,7 @@ export default function VirtualControls({
                         border border-cyan-400/50 shadow-[0_0_15px_rgba(6,182,212,0.5)]
                         flex items-center justify-center text-white font-bold text-sm
                         touch-manipulation select-none"
-              aria-label="左移動"
+              aria-label={ARIA_LABELS.MOVE_LEFT}
             >
               ←
             </button>
@@ -71,7 +72,7 @@ export default function VirtualControls({
                         border border-yellow-400/50 shadow-[0_0_15px_rgba(245,158,11,0.5)]
                         flex items-center justify-center text-white font-bold text-sm
                         touch-manipulation select-none"
-              aria-label="ソフトドロップ"
+              aria-label={ARIA_LABELS.SOFT_DROP}
             >
               ↓
             </button>
@@ -84,7 +85,7 @@ export default function VirtualControls({
                         border border-cyan-400/50 shadow-[0_0_15px_rgba(6,182,212,0.5)]
                         flex items-center justify-center text-white font-bold text-sm
                         touch-manipulation select-none"
-              aria-label="右移動"
+              aria-label={ARIA_LABELS.MOVE_RIGHT}
             >
               →
             </button>
@@ -99,10 +100,10 @@ export default function VirtualControls({
                     border border-red-400/50 shadow-[0_0_20px_rgba(239,68,68,0.6)]
                     flex flex-col items-center justify-center text-white font-bold
                     touch-manipulation select-none"
-          aria-label="ハードドロップ"
+          aria-label={ARIA_LABELS.HARD_DROP}
         >
           <div className="text-sm">⚡</div>
-          <div className="text-xs">DROP</div>
+          <div className="text-xs">{BUTTONS.DROP}</div>
         </button>
       </div>
     </div>

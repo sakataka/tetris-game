@@ -46,6 +46,93 @@ npm test -- --run src/test/statisticsUtils.test.ts
 - **Always run `npm run build` before committing** to ensure no build errors
 - ESLint warnings about missing dependencies in useCallback are intentional for infinite loop prevention
 
+## リファクタリングToDoリスト
+
+### 🔥 最優先（Critical Priority）
+1. **状態管理の統合と整理** - レガシーuseGameStateとZustandストア混在の解消
+   - gameStore.tsから分割済みストアへの完全移行
+   - useGameStoreの削除と分割ストア使用への統一
+   - 状態の重複と不整合の解消
+
+2. **コンポーネントの責務分離** - TetrisGame.tsx肥大化の解消
+   - ゲームロジックをuseGameLogicフックに抽出
+   - モバイル/デスクトップレイアウトの別コンポーネント化
+   - UIとビジネスロジックの完全分離
+
+3. **エラーハンドリングの統一** - 一貫性のないエラー処理の改善
+   - グローバルエラーバウンダリの実装
+   - カスタムエラークラスの作成と型定義
+   - try-catchブロックの統一的な管理
+
+### ⚡ 高優先（High Priority）
+4. **カスタムフックの整理** - 相互依存の解消
+   - useGameControls、useGameLoop、useGameStateの再設計
+   - 単一責任の原則に基づいた分割
+   - 副作用の分離（エフェクトタイマー管理など）
+
+5. **パフォーマンス最適化** - レンダリング効率の改善
+   - ParticleEffectコンポーネントの最適化
+   - Canvas APIまたはWeb Workerの検討
+   - React.memoの適用拡大
+
+6. **型安全性の向上** - any型排除と厳密な型定義
+   - mockPlaySoundなどのany型使用箇所の修正
+   - SoundKeyなどのユニオン型拡張
+   - Readonly型の徹底活用
+
+### 🔧 中優先（Medium Priority）
+7. **音声システムの改善** - 非効率な音声ファイル管理の改善
+   - Web Audio APIの導入検討
+   - 音声プリロードの最適化
+   - エラーハンドリングの強化
+
+8. **コンポーネント構造の見直し** - GameInfoコンポーネントの分割
+   - タブシステムの独立したコンポーネント化
+   - 統計情報、テーマ設定、ゲーム情報の分離
+   - 機能別コンポーネントの最適化
+
+9. **セッション管理の簡素化** - PlaySession追跡ロジックの改善
+   - セッション管理専用サービスクラスの作成
+   - ローカルストレージ同期処理の改善
+   - セッションデータ構造の最適化
+
+### 📈 低優先（Low Priority）
+10. **テーマシステムの簡素化** - CSS変数生成ロジックの改善
+    - テーマプリセットのJSON化
+    - CSS-in-JSライブラリの検討
+    - アクセシビリティ設定の独立コンテキスト化
+
+11. **定数とユーティリティの整理** - ファイル構造の最適化
+    - constants.ts専用ファイルの作成
+    - ユーティリティ関数の機能別分類
+    - tetris.tsの責務分離
+
+12. **テスト構造の改善** - テストコードの品質向上
+    - モック重複定義の解消
+    - テスト用ファクトリ関数とフィクスチャの作成
+    - 統合テストの追加
+
+13. **レスポンシブデザインの改善** - メディアクエリの統一
+    - Tailwindブレークポイントの統一的使用
+    - インラインスタイルの削減
+    - モバイル専用コンポーネントの作成
+
+14. **アニメーションシステムの最適化** - アニメーション管理の統一
+    - CSS/JavaScriptアニメーションの整理
+    - Framer Motionなどライブラリの導入検討
+    - requestAnimationFrameの統一管理
+
+15. **ビルドとバンドルの最適化** - パフォーマンス向上
+    - 未使用インポートとデッドコードの削除
+    - 動的インポートによるコード分割
+    - アセット最適化（画像・音声）
+
+### 実装ガイドライン
+- **段階的実装**: 最優先から順次実装、1つずつ完了してから次へ
+- **テスト駆動**: 各リファクタリング前後でテスト実行
+- **ビルド検証**: 修正後は必ず`npm run build`で検証
+- **Git管理**: 各機能単位でコミット、詳細なコミットメッセージ
+
 ## Architecture Overview
 
 This Tetris game uses a sophisticated modular architecture with **Zustand State Management**, **Modular Component System**, **Separated Utility Functions**, and **Performance Optimizations**. The architecture follows TDD principles with comprehensive test coverage.

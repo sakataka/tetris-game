@@ -5,6 +5,7 @@ import { Tetromino } from '../types/tetris';
 import HighScoreDisplay from './HighScoreDisplay';
 import StatisticsDashboard from './StatisticsDashboard';
 import { ThemeSettingsMemo } from './ThemeSettings';
+import { NAVIGATION, LABELS } from '../constants/strings';
 import GameStatsPanel from './GameStatsPanel';
 import NextPiecePanel from './NextPiecePanel';
 import ControlsPanel from './ControlsPanel';
@@ -91,7 +92,7 @@ const GameInfo = memo(function GameInfo({
               : 'bg-gray-800/50 text-gray-400 hover:text-cyan-400'
           }`}
         >
-          Game Info
+          {NAVIGATION.GAME_INFO}
         </button>
         <button
           onClick={() => setActiveTab('stats')}
@@ -101,7 +102,7 @@ const GameInfo = memo(function GameInfo({
               : 'bg-gray-800/50 text-gray-400 hover:text-purple-400'
           }`}
         >
-          Statistics
+          {NAVIGATION.STATISTICS}
         </button>
         <button
           onClick={() => setActiveTab('theme')}
@@ -111,7 +112,7 @@ const GameInfo = memo(function GameInfo({
               : 'bg-gray-800/50 text-gray-400 hover:text-yellow-400'
           }`}
         >
-          Theme
+          {NAVIGATION.THEME}
         </button>
       </div>
 
@@ -195,7 +196,7 @@ const GameInfo = memo(function GameInfo({
           {/* スコア情報 */}
           <div className="flex-1 min-w-0">
             <div className="hologram-cyan neon-border p-2 rounded-lg text-xs">
-              <div className="font-bold text-cyan-400 mb-1">SCORE</div>
+              <div className="font-bold text-cyan-400 mb-1">{LABELS.SCORE}</div>
               <div className="text-lg font-mono">{score.toLocaleString()}</div>
               <div className="text-gray-400 text-xs">L{level} • {lines} lines</div>
             </div>
@@ -204,7 +205,7 @@ const GameInfo = memo(function GameInfo({
           {/* 次のピース */}
           <div className="w-16 flex-shrink-0">
             <div className="hologram-purple neon-border p-2 rounded-lg h-full">
-              <div className="font-bold text-purple-400 text-xs mb-1">NEXT</div>
+              <div className="font-bold text-purple-400 text-xs mb-1">{LABELS.NEXT}</div>
               <NextPiecePanel nextPiece={nextPiece} />
             </div>
           </div>
