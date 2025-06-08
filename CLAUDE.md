@@ -302,6 +302,9 @@ The current architecture is designed to support advanced features:
 - **Advanced Game Modes**: Extensible game logic with pure functions
 - **Performance Scaling**: Object pooling and optimization patterns established
 
+# Development Memories
+- 大きな修正をしてコミットするタイミングには GitHubにも同期してください。
+
 # important-instruction-reminders
 Do what has been asked; nothing more, nothing less.
 NEVER create files unless they're absolutely necessary for achieving your goal.

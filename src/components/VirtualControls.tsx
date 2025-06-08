@@ -7,18 +7,24 @@ interface VirtualControlsProps {
   onRotate: () => void;
   onHardDrop: () => void;
   isVisible: boolean;
+  unlockAudio?: () => Promise<void>;
 }
 
 export default function VirtualControls({ 
   onMove, 
   onRotate, 
   onHardDrop, 
-  isVisible 
+  isVisible,
+  unlockAudio
 }: VirtualControlsProps) {
   if (!isVisible) return null;
 
   const handleTouchStart = (action: () => void) => (e: React.TouchEvent) => {
     e.preventDefault();
+    // 初回タッチ時に音声をアンロック
+    if (unlockAudio) {
+      unlockAudio();
+    }
     action();
   };
 

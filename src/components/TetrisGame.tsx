@@ -38,7 +38,8 @@ export default function TetrisGame() {
     volume,
     setVolumeLevel,
     toggleMute,
-    initializeSounds
+    initializeSounds,
+    unlockAudio
   } = useSounds({
     initialVolume: settings.volume,
     initialMuted: settings.isMuted
@@ -102,10 +103,14 @@ export default function TetrisGame() {
     updateLegacyParticles(particles);
   }, [updateLegacyParticles]);
 
-  const handleReset = useCallback(() => {
+  const handleReset = useCallback(async () => {
+    // モバイルでの音声アンロック
+    if (isMobile) {
+      await unlockAudio();
+    }
     onGameStart(); // Track new game start
     resetLegacyGame();
-  }, [onGameStart, resetLegacyGame]);
+  }, [onGameStart, resetLegacyGame, isMobile, unlockAudio]);
 
   const handleTogglePause = useCallback(() => {
     toggleLegacyPause();
@@ -232,6 +237,7 @@ export default function TetrisGame() {
               onRotate={rotatePieceClockwise}
               onHardDrop={hardDrop}
               isVisible={true}
+              unlockAudio={unlockAudio}
             />
           </div>
         )}

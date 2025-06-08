@@ -94,9 +94,9 @@ const TetrisBoard = memo(function TetrisBoard({
 
   return (
     <div className="relative">
-      <div className={`grid grid-cols-10 gap-0 neon-border hologram p-3 transition-transform relative overflow-hidden ${
+      <div className={`grid grid-cols-10 gap-0 neon-border hologram transition-transform relative overflow-hidden ${
         lineEffect.shaking ? 'animate-bounce' : ''
-      }`} style={{
+      } md:p-3 p-1`} style={{
         background: 'linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(10,10,15,0.9) 50%, rgba(5,5,10,0.8) 100%)',
         backdropFilter: 'blur(10px)'
       }}>
@@ -107,7 +107,7 @@ const TetrisBoard = memo(function TetrisBoard({
           row.map((cell, x) => (
             <div
               key={`${y}-${x}`}
-              className={`w-7 h-7 relative ${getCellStyle(cell, y)}`}
+              className={`md:w-7 md:h-7 w-4 h-4 relative ${getCellStyle(cell, y)}`}
               style={getCellColor(cell, y)}
             >
               {/* ピースが存在する場合のネオン効果 */}
@@ -129,11 +129,11 @@ const TetrisBoard = memo(function TetrisBoard({
           background: 'rgba(0,0,0,0.9)',
           backdropFilter: 'blur(10px)'
         }}>
-          <div className="text-center text-white p-8 neon-border rounded-lg">
-            <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-red-400 to-red-600 bg-clip-text text-transparent">
+          <div className="text-center text-white md:p-8 p-4 neon-border rounded-lg">
+            <h2 className="md:text-4xl text-2xl font-bold mb-2 md:mb-4 bg-gradient-to-r from-red-400 to-red-600 bg-clip-text text-transparent">
               GAME OVER
             </h2>
-            <p className="mb-4 text-cyan-400 font-mono">Enterキーまたはスペースキーで再開</p>
+            <p className="mb-2 md:mb-4 text-cyan-400 font-mono md:text-base text-sm">Enterキーまたはスペースキーで再開</p>
             <div className="animate-pulse text-red-400">◆ ◆ ◆</div>
           </div>
         </div>
@@ -144,11 +144,11 @@ const TetrisBoard = memo(function TetrisBoard({
           background: 'rgba(0,0,0,0.9)',
           backdropFilter: 'blur(10px)'
         }}>
-          <div className="text-center text-white p-8 neon-border rounded-lg">
-            <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
+          <div className="text-center text-white md:p-8 p-4 neon-border rounded-lg">
+            <h2 className="md:text-4xl text-2xl font-bold mb-2 md:mb-4 bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
               PAUSED
             </h2>
-            <p className="mb-4 text-cyan-400 font-mono">Pキーで再開</p>
+            <p className="mb-2 md:mb-4 text-cyan-400 font-mono md:text-base text-sm">Pキーで再開</p>
             <div className="animate-pulse text-yellow-400">◆ ◆ ◆</div>
           </div>
         </div>

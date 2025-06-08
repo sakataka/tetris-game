@@ -40,6 +40,25 @@ export function useSounds({ initialVolume = 0.5, initialMuted = false }: UseSoun
     hardDrop: '/sounds/hard-drop.mp3'
   };
 
+  // ユーザーインタラクション後の音声アンロック
+  const unlockAudio = useCallback(async () => {
+    if (typeof window === 'undefined') return;
+    
+    const promises = Object.values(audioRefs.current).map(async (audio) => {
+      if (audio) {
+        try {
+          await audio.play();
+          audio.pause();
+          audio.currentTime = 0;
+        } catch {
+          // ユーザーインタラクション不要の場合は無視
+        }
+      }
+    });
+    
+    await Promise.allSettled(promises);
+  }, []);
+
   // 音声ファイルを初期化
   const initializeSounds = useCallback(() => {
     if (typeof window === 'undefined') return;
@@ -88,14 +107,25 @@ export function useSounds({ initialVolume = 0.5, initialMuted = false }: UseSoun
     if (audio && audioState.loaded.has(soundType)) {
       audio.volume = volume;
       audio.currentTime = 0; // リセットして重複再生を可能にする
-      audio.play().catch(error => {
-        console.warn(`Could not play sound: ${soundType}`, error);
-        // 再生失敗時は該当音声を失敗として記録
-        setAudioState(prev => ({
-          ...prev,
-          failed: new Set([...prev.failed, soundType])
-        }));
-      });
+      
+      // モバイル端末での音声再生対応
+      const playPromise = audio.play();
+      
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          // ユーザーインタラクションが必要な場合は警告のみ
+          if (error.name === 'NotAllowedError') {
+            console.warn(`Audio play requires user interaction: ${soundType}`);
+          } else {
+            console.warn(`Could not play sound: ${soundType}`, error);
+            // その他のエラーの場合は失敗として記録
+            setAudioState(prev => ({
+              ...prev,
+              failed: new Set([...prev.failed, soundType])
+            }));
+          }
+        });
+      }
     }
   }, [isMuted, volume, audioState.loaded, audioState.failed]);
 
@@ -122,6 +152,7 @@ export function useSounds({ initialVolume = 0.5, initialMuted = false }: UseSoun
     setVolumeLevel,
     toggleMute,
     initializeSounds,
+    unlockAudio,
     audioState
   };
 }
