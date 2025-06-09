@@ -1,4 +1,4 @@
-import { Particle } from '../types/tetris';
+import { Particle } from '../../types/tetris';
 
 class ParticlePool {
   private pool: Particle[] = [];

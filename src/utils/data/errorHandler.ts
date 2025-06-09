@@ -16,7 +16,7 @@ import {
   NetworkError,
   SystemError,
   ValidationError
-} from '../types/errors';
+} from '../../types/errors';
 
 // エラーハンドラーのシングルトンクラス
 class ErrorHandlerService {
@@ -360,4 +360,4 @@ export {
   UIError,
   ValidationError,
   SystemError
-} from '../types/errors';
+} from '../../types/errors';

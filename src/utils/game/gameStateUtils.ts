@@ -1,5 +1,5 @@
-import { GameState, Tetromino, SoundKey, LineEffectState } from '../types/tetris';
-import { SCORES } from '../constants';
+import { GameState, Tetromino, SoundKey, LineEffectState } from '../../types/tetris';
+import { SCORES } from '../../constants';
 import { placePiece, clearLines, createParticles, isValidPosition, getRandomTetromino } from './tetrisUtils';
 
 interface ScoreCalculationResult {

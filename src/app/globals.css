@@ -245,3 +245,79 @@ body {
 .particle-enhanced {
   will-change: transform, opacity;
 }
+
+/* =========================================
+   レスポンシブデザインシステム強化
+   ========================================= */
+
+/* ゲームエフェクト用グラデーション */
+.game-board-glow {
+  background: linear-gradient(90deg, var(--cyber-cyan-10) 0%, var(--cyber-purple-10) 50%, var(--cyber-yellow-10) 100%);
+}
+
+.info-panel-glow {
+  background: linear-gradient(270deg, var(--cyber-purple-10) 0%, var(--cyber-cyan-10) 50%, var(--cyber-yellow-10) 100%);
+}
+
+.connection-line-glow {
+  background: linear-gradient(90deg, var(--cyber-cyan) 0%, var(--cyber-purple) 50%, var(--cyber-yellow) 100%);
+}
+
+/* レスポンシブタイポグラフィユーティリティ */
+.responsive-text-xs { @apply text-xs sm:text-sm; }
+.responsive-text-sm { @apply text-sm md:text-base; }
+.responsive-text-base { @apply text-sm md:text-base lg:text-lg; }
+.responsive-text-lg { @apply text-base md:text-lg lg:text-xl; }
+.responsive-text-xl { @apply text-lg md:text-xl lg:text-2xl; }
+
+/* モバイル最適化スペーシング */
+.responsive-spacing-xs { @apply p-1 sm:p-2; }
+.responsive-spacing-sm { @apply p-2 md:p-3; }
+.responsive-spacing-md { @apply p-3 md:p-4 lg:p-6; }
+.responsive-spacing-lg { @apply p-4 md:p-6 lg:p-8; }
+
+/* レスポンシブグリッドシステム */
+.responsive-grid-stats {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4;
+}
+
+.responsive-grid-dashboard {
+  @apply grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-4 lg:gap-6;
+}
+
+/* タッチターゲット最適化 */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+}
+
+/* レスポンシブエフェクトブラー */
+.responsive-blur-effect {
+  @apply blur-sm md:blur-md lg:blur-lg;
+}
+
+/* モバイル固有の最適化 */
+@media (max-width: 767px) {
+  .mobile-optimized {
+    font-size: clamp(0.75rem, 2.5vw, 0.875rem);
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+  }
+  
+  .mobile-touch-zone {
+    padding: 12px;
+    margin: 4px;
+  }
+}
+
+/* タブレット向け調整 */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .tablet-optimized {
+    font-size: clamp(0.875rem, 1.8vw, 1rem);
+    line-height: 1.4;
+  }
+}

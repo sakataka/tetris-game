@@ -2,7 +2,7 @@
 
 import React, { useCallback } from 'react';
 import { ThemeVariant } from '../types/tetris';
-import { THEME_PRESETS } from '../utils/themePresets';
+import { THEME_PRESETS } from '../utils/ui';
 
 interface ThemeSelectorProps {
   currentTheme: ThemeVariant;

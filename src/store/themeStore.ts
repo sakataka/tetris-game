@@ -6,7 +6,7 @@ import {
   ColorBlindnessType, 
   ContrastLevel 
 } from '../types/tetris';
-import { getThemePreset } from '../utils/themePresets';
+import { getThemePreset } from '../utils/ui/themePresets';
 
 // デフォルトテーマ状態
 const DEFAULT_THEME_STATE: ThemeState = {

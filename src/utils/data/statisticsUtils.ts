@@ -1,4 +1,4 @@
-import { HighScore, GameStatistics } from '../types/tetris';
+import { HighScore, GameStatistics } from '../../types/tetris';
 
 // 拡張統計型定義
 export interface EnhancedStatistics extends GameStatistics {

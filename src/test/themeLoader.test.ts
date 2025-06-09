@@ -4,7 +4,7 @@
  * JSON読み込み、型安全性検証、キャッシュ機能、パフォーマンスのテスト
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { themeCache, getThemePresetAsync, getAllThemePresetsAsync, getThemePresetSync } from '../utils/themeLoader';
 import type { ThemeVariant, ThemeConfig } from '../types/tetris';
 

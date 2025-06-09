@@ -10,7 +10,7 @@ import {
   getHighScoreRank,
   getHighScoreMessage,
   createHighScoreEntry
-} from '../utils/highScoreUtils';
+} from '../utils/game';
 
 interface UseHighScoreManagerProps {
   gameState: GameState;

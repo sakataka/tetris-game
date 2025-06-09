@@ -4,7 +4,7 @@ import {
   ThemeVariant, 
   ColorBlindnessType, 
   ContrastLevel 
-} from '../types/tetris';
+} from '../../types/tetris';
 
 // プリセットカラーパレット
 export const COLOR_PALETTES: Record<ThemeVariant, ColorPalette> = {

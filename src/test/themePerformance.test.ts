@@ -4,7 +4,7 @@
  * 既存TypeScript実装 vs JSON実装のパフォーマンス・メモリ使用量を比較
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { getThemePreset as getLegacyTheme } from '../utils/themePresets';
 import { getThemePresetAsync as getJsonTheme, themeCache } from '../utils/themeLoader';
 import type { ThemeVariant } from '../types/tetris';

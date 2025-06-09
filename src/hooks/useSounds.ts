@@ -1,8 +1,6 @@
 import { useRef, useCallback, useState, useEffect } from 'react';
 import type { SoundKey } from '../types/tetris';
-import { audioManager } from '../utils/audioManager';
-import { preloadAudioSmart, getAudioPreloadProgress } from '../utils/audioPreloader';
-import { playWithFallback, getFallbackStatus } from '../utils/audioFallback';
+import { audioManager, preloadAudioSmart, getAudioPreloadProgress, playWithFallback, getFallbackStatus } from '../utils/audio';
 
 interface AudioState {
   loaded: Set<SoundKey>;

@@ -159,5 +159,5 @@ export type StringResourceKey =
   | AccessibilityKey 
   | AriaLabelsKey 
   | MessagesKey 
-  | EffectsKey 
+  | UIEffectsKey 
   | StatusKey;

@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from 'react';
 import { ThemeVariant, ThemeState } from '../types/tetris';
-import { initializeTheme, applyColorBlindnessFilter, adjustColorsForContrast } from '../utils/themeUtils';
+import { initializeTheme, applyColorBlindnessFilter, adjustColorsForContrast } from '../utils/ui';
 
 interface UseThemeManagerProps {
   themeState: ThemeState;

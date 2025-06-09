@@ -4,7 +4,7 @@
  * CSS変数適用、システム設定検出、WCAG準拠チェック
  */
 
-import { AccessibilityState, AnimationIntensity, FontSizeLevel } from '../store/accessibilityStore';
+import { AccessibilityState, AnimationIntensity, FontSizeLevel, VisualAssistance } from '../../store/accessibilityStore';
 
 /**
  * アクセシビリティ設定をCSS変数に適用
@@ -126,9 +126,9 @@ export function detectSystemAccessibilitySettings(): Partial<AccessibilityState>
     if (window.matchMedia('(prefers-contrast: high)').matches) {
       settings.contrast = 'high';
       settings.visual = { 
-        ...settings.visual,
+        ...(settings.visual || {}),
         highContrast: true 
-      };
+      } as VisualAssistance;
     }
     
     // Dark mode preference (contrast adjustment)
@@ -311,17 +311,17 @@ export function generateAccessibilityReport(accessibility: AccessibilityState): 
         {
           name: 'Contrast Level',
           value: accessibility.contrast,
-          status: accessibility.contrast === 'high' ? 'optimal' : accessibility.contrast === 'normal' ? 'acceptable' : 'needs-improvement'
+          status: (accessibility.contrast === 'high' ? 'optimal' : accessibility.contrast === 'normal' ? 'acceptable' : 'needs-improvement') as 'optimal' | 'acceptable' | 'needs-improvement'
         },
         {
           name: 'Font Size',
           value: accessibility.fontSize,
-          status: accessibility.fontSize === 'large' || accessibility.fontSize === 'extra-large' ? 'optimal' : 'acceptable'
+          status: (accessibility.fontSize === 'large' || accessibility.fontSize === 'extra-large' ? 'optimal' : 'acceptable') as 'optimal' | 'acceptable' | 'needs-improvement'
         },
         {
           name: 'High Contrast',
           value: accessibility.visual.highContrast ? 'Enabled' : 'Disabled',
-          status: accessibility.visual.highContrast ? 'optimal' : 'acceptable'
+          status: (accessibility.visual.highContrast ? 'optimal' : 'acceptable') as 'optimal' | 'acceptable' | 'needs-improvement'
         }
       ]
     },
@@ -331,12 +331,12 @@ export function generateAccessibilityReport(accessibility: AccessibilityState): 
         {
           name: 'Animation Intensity',
           value: accessibility.animationIntensity,
-          status: accessibility.animationIntensity === 'reduced' || accessibility.animationIntensity === 'none' ? 'optimal' : 'acceptable'
+          status: (accessibility.animationIntensity === 'reduced' || accessibility.animationIntensity === 'none' ? 'optimal' : 'acceptable') as 'optimal' | 'acceptable' | 'needs-improvement'
         },
         {
           name: 'Reduced Motion',
           value: accessibility.reducedMotion ? 'Enabled' : 'Disabled',
-          status: accessibility.reducedMotion ? 'optimal' : 'acceptable'
+          status: (accessibility.reducedMotion ? 'optimal' : 'acceptable') as 'optimal' | 'acceptable' | 'needs-improvement'
         }
       ]
     },
@@ -346,16 +346,16 @@ export function generateAccessibilityReport(accessibility: AccessibilityState): 
         {
           name: 'Keyboard Navigation',
           value: accessibility.keyboard.enabled ? 'Enabled' : 'Disabled',
-          status: accessibility.keyboard.enabled ? 'optimal' : 'needs-improvement'
+          status: (accessibility.keyboard.enabled ? 'optimal' : 'needs-improvement') as 'optimal' | 'acceptable' | 'needs-improvement'
         },
         {
           name: 'Focus Outlines',
           value: accessibility.keyboard.focusOutline ? 'Enabled' : 'Disabled',
-          status: accessibility.keyboard.focusOutline ? 'optimal' : 'needs-improvement'
+          status: (accessibility.keyboard.focusOutline ? 'optimal' : 'needs-improvement') as 'optimal' | 'acceptable' | 'needs-improvement'
         }
       ]
     }
-  ] as const;
+  ];
   
   const summary = `WCAG ${compliance.level} compliance (${compliance.score}/100 score). ` +
     `${compliance.issues.length} critical issues, ${compliance.recommendations.length} recommendations.`;

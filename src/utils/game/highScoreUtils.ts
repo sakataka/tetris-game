@@ -1,4 +1,4 @@
-import { HighScore } from '../types/tetris';
+import { HighScore } from '../../types/tetris';
 
 /**
  * 指定されたスコアがハイスコアリストに入るかどうかを判定する

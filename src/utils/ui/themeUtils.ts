@@ -1,4 +1,4 @@
-import { ThemeConfig, ColorPalette, ThemeVariant, ColorBlindnessType, ContrastLevel } from '../types/tetris';
+import { ThemeConfig, ColorPalette, ThemeVariant, ColorBlindnessType, ContrastLevel } from '../../types/tetris';
 import { COLOR_BLIND_PALETTES, getThemePreset } from './themePresets';
 
 /**

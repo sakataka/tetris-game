@@ -3,9 +3,9 @@
  * プリロード戦略、プライオリティ管理、メモリ効率化
  */
 
-import { SoundKey } from '../types/tetris';
+import { SoundKey } from '../../types/tetris';
 import { audioManager } from './audioManager';
-import { AudioError, handleError } from './errorHandler';
+import { AudioError, handleError } from '../data/errorHandler';
 
 interface PreloadStrategy {
   priority: 'immediate' | 'high' | 'normal' | 'lazy';

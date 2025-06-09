@@ -2,7 +2,7 @@
 
 import React, { Component, ReactNode, ErrorInfo } from 'react';
 import { UIError } from '../types/errors';
-import { errorHandler } from '../utils/errorHandler';
+import { errorHandler } from '../utils/data';
 
 interface ErrorBoundaryProps {
   children: ReactNode;

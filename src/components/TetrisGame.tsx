@@ -250,9 +250,7 @@ export default function TetrisGame() {
             />
             
             {/* ゲームボード周りのエフェクト */}
-            <div className="absolute -inset-4 rounded-lg blur-lg pointer-events-none" style={{
-              background: 'linear-gradient(90deg, var(--cyber-cyan-10) 0%, var(--cyber-purple-10) 50%, var(--cyber-yellow-10) 100%)'
-            }}></div>
+            <div className="absolute -inset-4 rounded-lg blur-lg pointer-events-none game-board-glow"></div>
           </div>
         </ErrorBoundary>
         
@@ -276,16 +274,12 @@ export default function TetrisGame() {
             />
             
             {/* 情報パネル周りのエフェクト */}
-            <div className="absolute -inset-2 rounded-lg blur-md pointer-events-none" style={{
-              background: 'linear-gradient(270deg, var(--cyber-purple-10) 0%, var(--cyber-cyan-10) 50%, var(--cyber-yellow-10) 100%)'
-            }}></div>
+            <div className="absolute -inset-2 rounded-lg blur-md pointer-events-none info-panel-glow"></div>
           </div>
         </ErrorBoundary>
         
         {/* 接続線エフェクト */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-0.5 opacity-30 blur-sm pointer-events-none" style={{
-          background: 'linear-gradient(90deg, var(--cyber-cyan) 0%, var(--cyber-purple) 50%, var(--cyber-yellow) 100%)'
-        }}></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-0.5 opacity-30 blur-sm pointer-events-none connection-line-glow"></div>
       </div>
 
       {/* モバイルレイアウト - 完全一画面固定 */}
@@ -305,9 +299,7 @@ export default function TetrisGame() {
               />
               
               {/* ゲームボード周りのエフェクト */}
-              <div className="absolute -inset-2 rounded-lg blur-md pointer-events-none" style={{
-                background: 'linear-gradient(90deg, var(--cyber-cyan-10) 0%, var(--cyber-purple-10) 50%, var(--cyber-yellow-10) 100%)'
-              }}></div>
+              <div className="absolute -inset-2 rounded-lg blur-md pointer-events-none game-board-glow"></div>
             </div>
           </ErrorBoundary>
           

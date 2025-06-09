@@ -5,40 +5,41 @@
  * 型安全性を保証しながらランタイム検証を行う
  */
 
-import { ThemeConfig, ThemeVariant, ColorBlindnessType } from '../types/tetris';
+import { ThemeConfig, ThemeVariant, ColorBlindnessType } from '../../types/tetris';
 
 // JSONスキーマ検証用の型定義
-interface ThemePresetsJSON {
-  [key: string]: {
-    name: string;
-    colors: {
-      primary: string;
-      secondary: string;
-      tertiary: string;
-      background: string;
-      foreground: string;
-      accent: string;
-    };
-    effects: {
-      blur: number;
-      glow: number;
-      saturation: number;
-      brightness: number;
-    };
-    accessibility: {
-      colorBlindnessType: string;
-      contrast: string;
-      animationIntensity: string;
-    };
+interface ThemeConfigData {
+  name: string;
+  colors: {
+    primary: string;
+    secondary: string;
+    tertiary: string;
+    background: string;
+    foreground: string;
+    accent: string;
   };
+  effects: {
+    blur: number;
+    glow: number;
+    saturation: number;
+    brightness: number;
+  };
+  accessibility: {
+    colorBlindnessType: string;
+    contrast: string;
+    animationIntensity: string;
+  };
+}
+
+interface ThemePresetsJSON extends Record<string, unknown> {
   _metadata?: {
     version: string;
     description: string;
     lastUpdated: string;
     totalThemes: number;
   };
-  colorBlindness?: Record<string, any>;
-  animations?: Record<string, any>;
+  colorBlindness?: Record<string, unknown>;
+  animations?: Record<string, unknown>;
 }
 
 /**
@@ -47,7 +48,7 @@ interface ThemePresetsJSON {
 async function loadThemePresetsJSON(): Promise<ThemePresetsJSON> {
   try {
     // 動的インポートでJSONを読み込み
-    const response = await import('../data/themePresets.json');
+    const response = await import('../../data/themePresets.json');
     return response.default || response;
   } catch (error) {
     console.error('Failed to load theme presets JSON:', error);
@@ -58,7 +59,7 @@ async function loadThemePresetsJSON(): Promise<ThemePresetsJSON> {
 /**
  * JSONデータの型安全性検証
  */
-function validateThemeConfig(data: any, themeName: string): ThemeConfig {
+function validateThemeConfig(data: ThemeConfigData, themeName: string): ThemeConfig {
   // 必須フィールドの存在確認
   if (!data.name || typeof data.name !== 'string') {
     throw new Error(`Invalid theme config: missing or invalid name for ${themeName}`);
@@ -77,39 +78,42 @@ function validateThemeConfig(data: any, themeName: string): ThemeConfig {
   }
 
   // カラーパレットの検証
+  const colors = data.colors;
   const requiredColorKeys = ['primary', 'secondary', 'tertiary', 'background', 'foreground', 'accent'];
   for (const key of requiredColorKeys) {
-    if (!data.colors[key] || typeof data.colors[key] !== 'string') {
+    if (!colors[key as keyof typeof colors] || typeof colors[key as keyof typeof colors] !== 'string') {
       throw new Error(`Invalid theme config: missing or invalid color.${key} for ${themeName}`);
     }
     // Hexカラーコード形式の簡易検証
-    if (!/^#[0-9a-fA-F]{6}$/.test(data.colors[key])) {
+    if (!/^#[0-9a-fA-F]{6}$/.test(colors[key as keyof typeof colors])) {
       throw new Error(`Invalid theme config: invalid hex color format for ${themeName}.colors.${key}`);
     }
   }
 
   // エフェクトの検証
+  const effects = data.effects;
   const requiredEffectKeys = ['blur', 'glow', 'saturation', 'brightness'];
   for (const key of requiredEffectKeys) {
-    if (typeof data.effects[key] !== 'number') {
+    if (typeof effects[key as keyof typeof effects] !== 'number') {
       throw new Error(`Invalid theme config: missing or invalid effects.${key} for ${themeName}`);
     }
   }
 
   // アクセシビリティ設定の検証
+  const accessibility = data.accessibility;
   const validColorBlindnessTypes = ['none', 'protanopia', 'deuteranopia', 'tritanopia'];
   const validContrastLevels = ['low', 'normal', 'high'];
   const validAnimationIntensities = ['none', 'reduced', 'normal', 'enhanced'];
 
-  if (!validColorBlindnessTypes.includes(data.accessibility.colorBlindnessType)) {
+  if (!validColorBlindnessTypes.includes(accessibility.colorBlindnessType)) {
     throw new Error(`Invalid theme config: invalid colorBlindnessType for ${themeName}`);
   }
 
-  if (!validContrastLevels.includes(data.accessibility.contrast)) {
+  if (!validContrastLevels.includes(accessibility.contrast)) {
     throw new Error(`Invalid theme config: invalid contrast for ${themeName}`);
   }
 
-  if (!validAnimationIntensities.includes(data.accessibility.animationIntensity)) {
+  if (!validAnimationIntensities.includes(accessibility.animationIntensity)) {
     throw new Error(`Invalid theme config: invalid animationIntensity for ${themeName}`);
   }
 
@@ -117,23 +121,23 @@ function validateThemeConfig(data: any, themeName: string): ThemeConfig {
   return {
     name: data.name,
     colors: {
-      primary: data.colors.primary,
-      secondary: data.colors.secondary,
-      tertiary: data.colors.tertiary,
-      background: data.colors.background,
-      foreground: data.colors.foreground,
-      accent: data.colors.accent
+      primary: colors.primary,
+      secondary: colors.secondary,
+      tertiary: colors.tertiary,
+      background: colors.background,
+      foreground: colors.foreground,
+      accent: colors.accent
     },
     effects: {
-      blur: data.effects.blur,
-      glow: data.effects.glow,
-      saturation: data.effects.saturation,
-      brightness: data.effects.brightness
+      blur: effects.blur,
+      glow: effects.glow,
+      saturation: effects.saturation,
+      brightness: effects.brightness
     },
     accessibility: {
-      colorBlindnessType: data.accessibility.colorBlindnessType as ColorBlindnessType,
-      contrast: data.accessibility.contrast as 'low' | 'normal' | 'high',
-      animationIntensity: data.accessibility.animationIntensity as 'none' | 'reduced' | 'normal' | 'enhanced'
+      colorBlindnessType: accessibility.colorBlindnessType as ColorBlindnessType,
+      contrast: accessibility.contrast as 'low' | 'normal' | 'high',
+      animationIntensity: accessibility.animationIntensity as 'none' | 'reduced' | 'normal' | 'enhanced'
     }
   };
 }
@@ -173,7 +177,7 @@ class ThemeCache {
       throw new Error(`Theme '${themeName}' not found in presets`);
     }
 
-    const themeConfig = validateThemeConfig(presetsData[themeName], themeName);
+    const themeConfig = validateThemeConfig(presetsData[themeName] as ThemeConfigData, themeName);
     
     // キャッシュに保存
     this.cache.set(themeName, themeConfig);
@@ -182,7 +186,6 @@ class ThemeCache {
   }
 
   public async getAllThemes(): Promise<Record<ThemeVariant, ThemeConfig>> {
-    const presetsData = await this.getPresetsData();
     const themes: Partial<Record<ThemeVariant, ThemeConfig>> = {};
 
     const themeNames: ThemeVariant[] = ['cyberpunk', 'classic', 'retro', 'minimal', 'neon'];

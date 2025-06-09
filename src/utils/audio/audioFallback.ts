@@ -3,8 +3,8 @@
  * 段階的フォールバック、エラー回復、代替手段
  */
 
-import { SoundKey } from '../types/tetris';
-import { AudioError, handleError } from './errorHandler';
+import { SoundKey } from '../../types/tetris';
+import { AudioError, handleError } from '../data/errorHandler';
 
 interface FallbackLevel {
   name: string;

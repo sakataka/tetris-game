@@ -5,7 +5,7 @@
  * 一元化したシンプルなアーキテクチャ
  */
 
-import { PlaySession } from '../types/tetris';
+import { PlaySession } from '../../types/tetris';
 
 const SESSION_STORAGE_KEY = 'tetris-play-sessions';
 const CURRENT_SESSION_KEY = 'tetris-current-session';

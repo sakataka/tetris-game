@@ -7,7 +7,7 @@
 
 import { create } from 'zustand';
 import { PlaySession } from '../types/tetris';
-import { sessionManager, SessionStats } from '../utils/sessionManager';
+import { sessionManager, SessionStats } from '../utils/data/sessionManager';
 
 interface SessionStoreV2 {
   // State (SessionManagerから取得)

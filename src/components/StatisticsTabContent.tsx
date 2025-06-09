@@ -3,7 +3,7 @@
 import { memo } from 'react';
 import StatisticsDashboard from './StatisticsDashboard';
 import { useHighScores, useStatistics } from '../store/statisticsStore';
-import { calculateEnhancedStatistics } from '../utils/statisticsUtils';
+import { calculateEnhancedStatistics } from '../utils/data';
 
 interface StatisticsTabContentProps {
   className?: string;

@@ -145,27 +145,27 @@ export const ACCESSIBILITY_PRESETS: Record<AccessibilityLevel, Partial<Accessibi
     level: 'minimal',
     visual: { highContrast: false, largeText: false, boldText: false, underlineLinks: false, cursorSize: 'normal' },
     animationIntensity: 'normal',
-    keyboard: { enabled: true, focusOutline: false },
-    feedback: { soundEffects: true, voiceAnnouncements: false },
-    cognitive: { simplifiedUI: false, confirmActions: false }
+    keyboard: { enabled: true, focusOutline: false, skipLinks: false, tabOrder: 'default' },
+    feedback: { soundEffects: true, voiceAnnouncements: false, hapticFeedback: false, screenReader: false },
+    cognitive: { simplifiedUI: false, confirmActions: false, timeoutWarnings: false, autoSave: false, pauseOnFocusLoss: false }
   },
   
   standard: {
     level: 'standard',
     visual: { highContrast: false, largeText: false, boldText: false, underlineLinks: false, cursorSize: 'normal' },
     animationIntensity: 'normal',
-    keyboard: { enabled: true, focusOutline: true },
-    feedback: { soundEffects: true, voiceAnnouncements: false },
-    cognitive: { simplifiedUI: false, confirmActions: false, timeoutWarnings: true }
+    keyboard: { enabled: true, focusOutline: true, skipLinks: false, tabOrder: 'default' },
+    feedback: { soundEffects: true, voiceAnnouncements: false, hapticFeedback: false, screenReader: false },
+    cognitive: { simplifiedUI: false, confirmActions: false, timeoutWarnings: true, autoSave: false, pauseOnFocusLoss: false }
   },
   
   enhanced: {
     level: 'enhanced',
-    visual: { highContrast: true, largeText: true, boldText: true },
+    visual: { highContrast: true, largeText: true, boldText: true, underlineLinks: false, cursorSize: 'normal' },
     animationIntensity: 'reduced',
-    keyboard: { enabled: true, focusOutline: true, skipLinks: true },
-    feedback: { soundEffects: true, voiceAnnouncements: true },
-    cognitive: { simplifiedUI: true, confirmActions: true, timeoutWarnings: true }
+    keyboard: { enabled: true, focusOutline: true, skipLinks: true, tabOrder: 'optimized' },
+    feedback: { soundEffects: true, voiceAnnouncements: true, hapticFeedback: false, screenReader: false },
+    cognitive: { simplifiedUI: true, confirmActions: true, timeoutWarnings: true, autoSave: false, pauseOnFocusLoss: false }
   },
   
   maximum: {
@@ -464,7 +464,7 @@ export const useAccessibilityStore = create<AccessibilityStore>()(
     }),
     {
       name: 'tetris-accessibility-settings',
-      partialize: (state) => ({ accessibility: state.accessibility }),
+      partialize: (state) => ({ accessibility: state.accessibility }) as Partial<AccessibilityStore>,
       onRehydrateStorage: () => (state) => {
         // 復元後にシステム設定を検出
         if (state?.accessibility.respectSystemPreferences) {

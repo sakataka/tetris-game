@@ -3,8 +3,8 @@
  * HTMLAudioElementの代替として、オブジェクトプールと並列再生対応
  */
 
-import { SoundKey } from '../types/tetris';
-import { AudioError, handleError } from './errorHandler';
+import { SoundKey } from '../../types/tetris';
+import { AudioError, handleError } from '../data/errorHandler';
 
 type AudioBufferCache = {
   [K in SoundKey]?: AudioBuffer;

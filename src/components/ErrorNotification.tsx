@@ -2,7 +2,7 @@
 
 import { memo, useEffect, useState } from 'react';
 import { ErrorLevel, ErrorInfo } from '../types/errors';
-import { errorHandler } from '../utils/errorHandler';
+import { errorHandler } from '../utils/data';
 
 interface ErrorNotificationProps {
   position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top-center';

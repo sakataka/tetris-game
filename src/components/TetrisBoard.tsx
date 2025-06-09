@@ -2,7 +2,7 @@
 
 import { memo, useMemo } from 'react';
 import { Tetromino, LineEffectState } from '../types/tetris';
-import { getDropPosition } from '../utils/tetrisUtils';
+import { getDropPosition } from '../utils/game';
 import ParticleEffect from './ParticleEffect';
 import GameOverMessage from './GameOverMessage';
 import PausedMessage from './PausedMessage';

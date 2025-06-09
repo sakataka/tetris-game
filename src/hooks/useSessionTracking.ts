@@ -6,7 +6,7 @@ import {
   useEndPlaySession,
   useIncrementGameCount 
 } from '../store/sessionStore';
-import { SESSION_TIMEOUT } from '../types/tetris';
+import { SESSION_TIMEOUT } from '../constants';
 
 export function useSessionTracking() {
   const currentSession = useCurrentSession();

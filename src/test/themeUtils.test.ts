@@ -4,7 +4,7 @@
  * CSS変数自動生成とキャッシュ機能の動作確認
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { applyThemeToCSS, createCustomTheme, applyAnimationSettings } from '../utils/themeUtils';
 import { getThemePreset } from '../utils/themePresets';
 import type { ThemeConfig } from '../types/tetris';

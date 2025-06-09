@@ -1,6 +1,6 @@
 import React from 'react';
 import { HighScore } from '../types/tetris';
-import { EnhancedStatistics, STATISTICS_PERIODS } from '../utils/statisticsUtils';
+import { EnhancedStatistics, STATISTICS_PERIODS } from '../utils/data';
 
 interface StatisticsDashboardProps {
   statistics: EnhancedStatistics;
@@ -20,7 +20,7 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
   return (
     <div data-testid="statistics-dashboard" className="hologram-purple p-6 space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-cyber-purple">📊 Statistics Dashboard</h2>
+        <h2 className="responsive-text-xl font-bold text-cyber-purple">📊 Statistics Dashboard</h2>
         <select 
           value={selectedPeriod}
           onChange={(e) => onPeriodChange(e.target.value)}
@@ -36,7 +36,7 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
       </div>
 
       {/* 主要統計 */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4" data-testid="main-stats">
+      <div className="responsive-grid-stats" data-testid="main-stats">
         <div className="hologram-cyan p-4 rounded neon-border-cyan">
           <div className="text-sm text-gray-400">Total Games</div>
           <div className="text-2xl font-bold text-cyan-400">{statistics.totalGames}</div>
@@ -61,8 +61,8 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
         <>
           {/* 効率指標 */}
           <div className="hologram-yellow neon-border-yellow p-4 rounded" data-testid="efficiency-stats">
-            <h3 className="text-lg font-bold text-yellow-400 mb-3">🎯 Performance Metrics</h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
+            <h3 className="responsive-text-lg font-bold text-yellow-400 mb-3">🎯 Performance Metrics</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
               <div>
                 <span className="text-gray-400">Efficiency: </span>
                 <span className="text-cyan-400 font-semibold">{statistics.efficiency.toFixed(1)} LPM</span>
@@ -94,8 +94,8 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
 
           {/* プレイ履歴概要 */}
           <div className="hologram-cyan neon-border-cyan p-4 rounded" data-testid="play-history">
-            <h3 className="text-lg font-bold text-cyan-400 mb-3">📅 Play History</h3>
-            <div className="grid grid-cols-2 gap-3 text-sm">
+            <h3 className="responsive-text-lg font-bold text-cyan-400 mb-3">📅 Play History</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
               <div>
                 <span className="text-gray-400">Sessions: </span>
                 <span className="text-cyan-400 font-semibold">{statistics.sessionCount}</span>

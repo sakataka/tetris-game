@@ -235,7 +235,7 @@ export const useErrorSelectors = () => useErrorStore(state => ({
 export const initializeErrorStoreIntegration = () => {
   // エラーハンドラーからエラーストアにエラーを追加
   if (typeof window !== 'undefined') {
-    import('../utils/errorHandler').then(({ errorHandler }) => {
+    import('../utils/data/errorHandler').then(({ errorHandler }) => {
       errorHandler.onError((errorInfo: ErrorInfo) => {
         useErrorStore.getState().addError(errorInfo);
       });
