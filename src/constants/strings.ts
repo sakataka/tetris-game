@@ -32,7 +32,7 @@ export const NAVIGATION = {
   THEME_SELECTION: 'テーマ選択',
   COLOR_SETTINGS: 'カラー設定',
   ACCESSIBILITY: 'アクセシビリティ',
-  EFFECTS: 'エフェクト',
+  VISUAL_EFFECTS: 'エフェクト',
 } as const;
 
 // パネルタイトル
@@ -120,7 +120,7 @@ export const MESSAGES = {
 } as const;
 
 // エフェクト名
-export const EFFECTS = {
+export const UI_EFFECTS = {
   NEON_EFFECT: 'ネオンエフェクト',
   HOLOGRAM_BLUR: 'ホログラム + ブラー',
 } as const;
@@ -143,7 +143,7 @@ export type StatisticsKey = keyof typeof STATISTICS;
 export type AccessibilityKey = keyof typeof ACCESSIBILITY;
 export type AriaLabelsKey = keyof typeof ARIA_LABELS;
 export type MessagesKey = keyof typeof MESSAGES;
-export type EffectsKey = keyof typeof EFFECTS;
+export type UIEffectsKey = keyof typeof UI_EFFECTS;
 export type StatusKey = keyof typeof STATUS;
 
 // 全文字列リソースの統合型

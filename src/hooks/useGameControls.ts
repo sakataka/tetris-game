@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
-import { GameState, Tetromino, HARD_DROP_BONUS_MULTIPLIER, SoundKey } from '../types/tetris';
-import { isValidPosition, rotatePiece } from '../utils/tetrisUtils';
+import { GameState, Tetromino, SoundKey } from '../types/tetris';
+import { SCORES } from '../constants';
+import { isValidPosition, rotatePiece } from '../utils/game';
 
 interface PieceControlActions {
   onPieceMove: (state: GameState, newPosition: { x: number; y: number }) => GameState;
@@ -82,7 +83,7 @@ export function useGameControls({
       position: { x: gameState.currentPiece.position.x, y: dropY }
     };
 
-    const hardDropBonus = (dropY - gameState.currentPiece.position.y) * HARD_DROP_BONUS_MULTIPLIER;
+    const hardDropBonus = (dropY - gameState.currentPiece.position.y) * SCORES.HARD_DROP_BONUS;
     // 音声はcalculatePiecePlacementState内で再生されるため、ここでは再生しない
     actions.onPieceLand(gameState, droppedPiece, hardDropBonus);
     // onStateChangeは呼ばない（calculatePiecePlacementStateがZustandストアを直接更新）

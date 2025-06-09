@@ -1,13 +1,15 @@
 import { create } from 'zustand';
-import { GameState, LineEffectState, Particle, Tetromino, INITIAL_DROP_TIME, SoundKey } from '../types/tetris';
-import { createEmptyBoard, getRandomTetromino } from '../utils/tetrisUtils';
-import {
+import { GameState, LineEffectState, Particle, Tetromino, SoundKey } from '../types/tetris';
+import { INITIAL_DROP_TIME } from '../constants';
+import { 
+  createEmptyBoard, 
+  getRandomTetromino,
   calculateScoreIncrease,
   processLineClear,
   createLineEffects,
   checkGameOver,
   updateGameStateWithPiece
-} from '../utils/gameStateUtils';
+} from '../utils/game';
 
 // 初期ゲーム状態
 const INITIAL_GAME_STATE: GameState = {

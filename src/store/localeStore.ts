@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { I18N_CONFIG, type SupportedLocale } from '../constants/gameConstants';
+import { I18N_CONFIG, type SupportedLocale } from '../constants';
 
 // 言語設定の型定義
 export interface LocaleState {

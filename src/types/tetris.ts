@@ -88,68 +88,8 @@ export interface ErrorState {
   readonly hasErrors: boolean;
 }
 
-export const BOARD_WIDTH = 10;
-export const BOARD_HEIGHT = 20;
-
-// Game timing constants
-export const INITIAL_DROP_TIME = 1000; // ms
-export const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes in ms
-export const MAX_HIGH_SCORES = 10;
-
-// Animation and effect constants
-export const EFFECT_RESET_DELAY = 300; // ms
-export const PARTICLE_LIFE_DURATION = 60; // frames
-export const PARTICLES_PER_CELL = 3;
-export const HARD_DROP_BONUS_MULTIPLIER = 2;
-export const TETRIS_BONUS_POINTS = 300;
-export const BASE_LINE_POINTS = 100;
-
-// Particle physics constants
-export const PARTICLE_GRAVITY = 0.2;
-export const PARTICLE_MAX_Y = 500;
-export const PARTICLE_SCALE_BASE = 0.5;
-export const PARTICLE_SCALE_MULTIPLIER = 1.5;
-export const PARTICLE_OPACITY_MULTIPLIER = 0.9;
-
-export const TETROMINO_SHAPES: Record<TetrominoType, number[][]> = {
-  I: [
-    [1, 1, 1, 1]
-  ],
-  O: [
-    [1, 1],
-    [1, 1]
-  ],
-  T: [
-    [0, 1, 0],
-    [1, 1, 1]
-  ],
-  S: [
-    [0, 1, 1],
-    [1, 1, 0]
-  ],
-  Z: [
-    [1, 1, 0],
-    [0, 1, 1]
-  ],
-  J: [
-    [1, 0, 0],
-    [1, 1, 1]
-  ],
-  L: [
-    [0, 0, 1],
-    [1, 1, 1]
-  ]
-};
-
-export const TETROMINO_COLORS: Record<TetrominoType, string> = {
-  I: '#00f0f0',  // Cyan
-  O: '#f0f000',  // Yellow
-  T: '#a000f0',  // Purple
-  S: '#00f000',  // Green
-  Z: '#f00000',  // Red
-  J: '#0000f0',  // Blue
-  L: '#f0a000'   // Orange
-};
+// 定数は constants/index.ts に移動済み
+// このファイルは型定義のみを含む
 
 // Phase 2: Enhanced state management types
 export interface HighScore {

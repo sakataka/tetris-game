@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { createEmptyBoard, getRandomTetromino, isValidPosition, rotatePiece } from '../utils/tetrisUtils';
-import { BOARD_WIDTH, BOARD_HEIGHT } from '../types/tetris';
+import { BOARD_WIDTH, BOARD_HEIGHT } from '../constants';
 
 describe('tetrisUtils', () => {
   describe('createEmptyBoard', () => {

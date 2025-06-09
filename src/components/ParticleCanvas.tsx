@@ -1,16 +1,16 @@
 'use client';
 
 import { useEffect, useRef, memo, useCallback } from 'react';
-import { 
-  LineEffectState, 
-  PARTICLE_GRAVITY, 
-  PARTICLE_MAX_Y, 
+import { LineEffectState } from '../types/tetris';
+import {
+  PARTICLE_GRAVITY,
+  PARTICLE_MAX_Y,
   PARTICLE_LIFE_DURATION,
   PARTICLE_SCALE_BASE,
   PARTICLE_SCALE_MULTIPLIER,
   PARTICLE_OPACITY_MULTIPLIER
-} from '../types/tetris';
-import { particlePool } from '../utils/particlePool';
+} from '../constants';
+import { particlePool } from '../utils/performance';
 
 interface ParticleCanvasProps {
   lineEffect: LineEffectState;

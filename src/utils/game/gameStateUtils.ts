@@ -1,4 +1,5 @@
-import { GameState, Tetromino, BASE_LINE_POINTS, TETRIS_BONUS_POINTS, SoundKey, LineEffectState } from '../types/tetris';
+import { GameState, Tetromino, SoundKey, LineEffectState } from '../types/tetris';
+import { SCORES } from '../constants';
 import { placePiece, clearLines, createParticles, isValidPosition, getRandomTetromino } from './tetrisUtils';
 
 interface ScoreCalculationResult {
@@ -36,8 +37,10 @@ export function calculateScoreIncrease(
   const newLines = currentLines + linesCleared;
   const newLevel = Math.floor(newLines / 10) + 1;
   const newScore = currentScore + 
-    (linesCleared * BASE_LINE_POINTS * newLevel) + 
-    (linesCleared === 4 ? TETRIS_BONUS_POINTS * newLevel : 0) + // Tetris bonus
+    (linesCleared === 1 ? SCORES.SINGLE : 
+     linesCleared === 2 ? SCORES.DOUBLE :
+     linesCleared === 3 ? SCORES.TRIPLE :
+     linesCleared === 4 ? SCORES.TETRIS : 0) * newLevel +
     bonusPoints;
 
   return {

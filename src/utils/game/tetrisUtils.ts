@@ -1,14 +1,16 @@
 import { 
   Tetromino, 
   TetrominoType, 
-  Particle,
-  TETROMINO_SHAPES, 
-  TETROMINO_COLORS, 
-  BOARD_WIDTH, 
+  Particle
+} from '../types/tetris';
+import {
+  TETROMINO_SHAPES,
+  TETROMINO_COLORS,
+  BOARD_WIDTH,
   BOARD_HEIGHT,
   PARTICLES_PER_CELL,
   PARTICLE_LIFE_DURATION
-} from '../types/tetris';
+} from '../constants';
 import { particlePool } from './particlePool';
 
 export function createEmptyBoard(): (string | null)[][] {
