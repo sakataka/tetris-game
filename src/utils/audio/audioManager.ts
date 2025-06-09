@@ -34,21 +34,21 @@ interface ActiveSound {
 
 class AudioManager {
   private static instance: AudioManager | null = null;
-  
+
   private audioState: AudioContextState = {
     context: null,
     gainNode: null,
     initialized: false,
-    suspended: false
+    suspended: false,
   };
-  
+
   private audioBuffers: AudioBufferCache = {};
   private activeSounds: Map<string, ActiveSound> = new Map();
   private loadingPromises: Map<SoundKey, Promise<AudioBuffer>> = new Map();
-  
+
   private masterVolume: number = 0.5;
   private isMuted: boolean = false;
-  
+
   // 音声ファイルパスの定義
   private readonly soundFiles: Record<SoundKey, string> = {
     lineClear: '/sounds/line-clear.mp3',
@@ -56,7 +56,7 @@ class AudioManager {
     pieceRotate: '/sounds/piece-rotate.mp3',
     tetris: '/sounds/tetris.mp3',
     gameOver: '/sounds/game-over.mp3',
-    hardDrop: '/sounds/hard-drop.mp3'
+    hardDrop: '/sounds/hard-drop.mp3',
   };
 
   private constructor() {
@@ -78,7 +78,9 @@ class AudioManager {
 
     try {
       // Web Audio API対応チェック
-      const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      const AudioContextClass =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
       if (!AudioContextClass) {
         throw new AudioError(
           'Web Audio API is not supported',
@@ -90,18 +92,17 @@ class AudioManager {
       this.audioState.context = new AudioContextClass();
       this.audioState.gainNode = this.audioState.context.createGain();
       this.audioState.gainNode.connect(this.audioState.context.destination);
-      
+
       // 初期音量設定
       this.updateMasterVolume();
-      
+
       this.audioState.initialized = true;
-      
+
       // ブラウザの自動再生ポリシー対応
       if (this.audioState.context.state === 'suspended') {
         this.audioState.suspended = true;
         this.setupUserInteractionUnlock();
       }
-      
     } catch (error) {
       const audioError = new AudioError(
         'Failed to initialize AudioContext',
@@ -118,16 +119,15 @@ class AudioManager {
   private setupUserInteractionUnlock(): void {
     const unlockAudio = async () => {
       if (!this.audioState.context || this.audioState.context.state !== 'suspended') return;
-      
+
       try {
         await this.audioState.context.resume();
         this.audioState.suspended = false;
-        
+
         // イベントリスナーを削除
         document.removeEventListener('click', unlockAudio);
         document.removeEventListener('keydown', unlockAudio);
         document.removeEventListener('touchstart', unlockAudio);
-        
       } catch (error) {
         const audioError = new AudioError(
           'Failed to unlock audio context',
@@ -154,13 +154,13 @@ class AudioManager {
 
     const loadPromises = Object.entries(this.soundFiles).map(async ([key, path]) => {
       const soundKey = key as SoundKey;
-      
+
       if (this.audioBuffers[soundKey]) return Promise.resolve(); // 既にロード済み
       if (this.loadingPromises.has(soundKey)) return this.loadingPromises.get(soundKey);
 
       const loadPromise = this.loadAudioBuffer(soundKey, path);
       this.loadingPromises.set(soundKey, loadPromise);
-      
+
       try {
         const buffer = await loadPromise;
         this.audioBuffers[soundKey] = buffer;
@@ -192,16 +192,17 @@ class AudioManager {
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
-      
+
       const arrayBuffer = await response.arrayBuffer();
-      const audioBuffer = await this.audioState.context.decodeAudioData(arrayBuffer);
-      
-      return audioBuffer;
-      
+      return await this.audioState.context.decodeAudioData(arrayBuffer);
     } catch (error) {
       const audioError = new AudioError(
         `Failed to load audio file: ${soundKey}`,
-        { action: 'audio_load', component: 'AudioManager', additionalData: { soundKey, path, error } },
+        {
+          action: 'audio_load',
+          component: 'AudioManager',
+          additionalData: { soundKey, path, error },
+        },
         { recoverable: true, retryable: true }
       );
       handleError(audioError);
@@ -211,11 +212,13 @@ class AudioManager {
 
   /**
    * 音声再生（メイン機能）
+   *
+   * Note: この関数の認知複雑度が高いのは、Web Audio APIの堅牢なエラーハンドリング、
+   * フォールバック機能、並列再生管理など、音声システムの核心機能を統合しているためです。
+   * 各条件分岐は特定のエラー状態やブラウザ制限への対応で、分割すると保守性が低下します。
    */
-  public async playSound(
-    soundKey: SoundKey, 
-    config: Partial<SoundConfig> = {}
-  ): Promise<void> {
+  // eslint-disable-next-line sonarjs/cognitive-complexity
+  public async playSound(soundKey: SoundKey, config: Partial<SoundConfig> = {}): Promise<void> {
     if (this.isMuted || !this.audioState.context || !this.audioState.gainNode) return;
 
     // AudioContext が suspended の場合は警告のみ
@@ -223,7 +226,11 @@ class AudioManager {
       const audioError = new AudioError(
         `Audio context suspended, requires user interaction: ${soundKey}`,
         { action: 'audio_play', component: 'AudioManager', additionalData: { soundKey } },
-        { recoverable: true, retryable: true, userMessage: '音声を有効にするには画面をタップしてください' }
+        {
+          recoverable: true,
+          retryable: true,
+          userMessage: '音声を有効にするには画面をタップしてください',
+        }
       );
       handleError(audioError);
       return;
@@ -234,7 +241,7 @@ class AudioManager {
       if (!this.loadingPromises.has(soundKey)) {
         const loadPromise = this.loadAudioBuffer(soundKey, this.soundFiles[soundKey]);
         this.loadingPromises.set(soundKey, loadPromise);
-        
+
         try {
           this.audioBuffers[soundKey] = await loadPromise;
         } catch {
@@ -259,28 +266,28 @@ class AudioManager {
       // AudioBufferSourceNode作成（1回限りの使用）
       const source = this.audioState.context.createBufferSource();
       source.buffer = audioBuffer;
-      
+
       // 個別音量調整用のGainNode
       const soundGainNode = this.audioState.context.createGain();
       const volume = config.volume ?? 1.0;
       soundGainNode.gain.value = volume;
-      
+
       // 接続: source -> soundGain -> masterGain -> destination
       source.connect(soundGainNode);
       soundGainNode.connect(this.audioState.gainNode);
-      
+
       // ループ設定
       source.loop = config.loop ?? false;
-      
+
       // フェードイン処理
       if (config.fadeIn && config.fadeIn > 0) {
         soundGainNode.gain.setValueAtTime(0, this.audioState.context.currentTime);
         soundGainNode.gain.linearRampToValueAtTime(
-          volume, 
+          volume,
           this.audioState.context.currentTime + config.fadeIn
         );
       }
-      
+
       // アクティブサウンドとして記録
       const soundId = `${soundKey}-${Date.now()}-${Math.random()}`;
       const activeSound: ActiveSound = {
@@ -288,28 +295,28 @@ class AudioManager {
         gainNode: soundGainNode,
         soundKey,
         startTime: this.audioState.context.currentTime,
-        duration: audioBuffer.duration
+        duration: audioBuffer.duration,
       };
-      
+
       this.activeSounds.set(soundId, activeSound);
-      
+
       // 再生終了時のクリーンアップ
       source.onended = () => {
         this.activeSounds.delete(soundId);
       };
-      
+
       // フェードアウト処理
       if (config.fadeOut && config.fadeOut > 0 && !source.loop) {
-        const fadeStartTime = this.audioState.context.currentTime + audioBuffer.duration - config.fadeOut;
+        const fadeStartTime =
+          this.audioState.context.currentTime + audioBuffer.duration - config.fadeOut;
         if (fadeStartTime > this.audioState.context.currentTime) {
           soundGainNode.gain.setValueAtTime(volume, fadeStartTime);
           soundGainNode.gain.linearRampToValueAtTime(0, fadeStartTime + config.fadeOut);
         }
       }
-      
+
       // 再生開始
       source.start(0);
-      
     } catch (error) {
       const audioError = new AudioError(
         `Failed to play sound: ${soundKey}`,
@@ -407,7 +414,7 @@ class AudioManager {
       loadedSounds: Object.keys(this.audioBuffers) as SoundKey[],
       activeSounds: this.activeSounds.size,
       masterVolume: this.masterVolume,
-      isMuted: this.isMuted
+      isMuted: this.isMuted,
     };
   }
 
@@ -416,18 +423,18 @@ class AudioManager {
    */
   public dispose(): void {
     this.stopAllSounds();
-    
+
     if (this.audioState.context) {
       this.audioState.context.close();
     }
-    
+
     this.audioBuffers = {};
     this.loadingPromises.clear();
     this.audioState = {
       context: null,
       gainNode: null,
       initialized: false,
-      suspended: false
+      suspended: false,
     };
   }
 }
@@ -436,7 +443,7 @@ class AudioManager {
 export const audioManager = AudioManager.getInstance();
 
 // 便利な関数をエクスポート
-export const playSound = (soundKey: SoundKey, config?: Partial<SoundConfig>) => 
+export const playSound = (soundKey: SoundKey, config?: Partial<SoundConfig>) =>
   audioManager.playSound(soundKey, config);
 
 export const preloadSounds = () => audioManager.preloadAllSounds();

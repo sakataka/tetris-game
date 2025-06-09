@@ -9,7 +9,7 @@ const fixtures = createTestFixtures();
 const mockActions = {
   addHighScore: vi.fn(),
   updateStatistics: vi.fn(),
-  clearStatistics: vi.fn()
+  clearStatistics: vi.fn(),
 };
 
 // Mock the new statisticsStore
@@ -22,9 +22,9 @@ vi.mock('../store/statisticsStore', () => ({
   useStatisticsStore: {
     getState: () => ({
       highScores: fixtures.highScores,
-      statistics: fixtures.statistics
-    })
-  }
+      statistics: fixtures.statistics,
+    }),
+  },
 }));
 
 const createMockGameState = (overrides: Partial<GameState> = {}): GameState => ({
@@ -39,9 +39,9 @@ const createMockGameState = (overrides: Partial<GameState> = {}): GameState => (
   lineEffect: {
     flashingLines: [],
     shaking: false,
-    particles: []
+    particles: [],
   },
-  ...overrides
+  ...overrides,
 });
 
 describe('useHighScoreManager', () => {
@@ -50,16 +50,21 @@ describe('useHighScoreManager', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockPlaySound = vi.fn().mockResolvedValue(undefined);
-    
+
     // Reset mock store state via fixtures
     fixtures.highScores.length = 0;
-    fixtures.statistics.gamesPlayed = 0;
-    fixtures.statistics.totalScore = 0;
-    fixtures.statistics.totalLines = 0;
-    fixtures.statistics.playTime = 0;
-    fixtures.statistics.bestStreak = 0;
-    fixtures.statistics.tetrisCount = 0;
-    
+    // Statistics are read-only, so we create a new object
+    Object.assign(fixtures.statistics, {
+      totalGames: 0,
+      totalScore: 0,
+      totalLines: 0,
+      playTime: 0,
+      bestStreak: 0,
+      tetrisCount: 0,
+      bestScore: 0,
+      averageScore: 0,
+    });
+
     // Reset mock actions
     mockActions.addHighScore.mockClear();
     mockActions.updateStatistics.mockClear();
@@ -69,7 +74,7 @@ describe('useHighScoreManager', () => {
   describe('ハイスコア判定機能', () => {
     it('空のハイスコアリストに対して、任意のスコアがハイスコアと判定される', () => {
       const gameState = createMockGameState();
-      const { result } = renderHook(() => 
+      const { result } = renderHook(() =>
         useHighScoreManager({ gameState, playSound: mockPlaySound })
       );
 
@@ -78,12 +83,10 @@ describe('useHighScoreManager', () => {
     });
 
     it('既存のハイスコアより高いスコアがハイスコアと判定される', () => {
-      fixtures.highScores.push(
-        { id: '1', score: 10000, level: 5, lines: 25, date: Date.now() }
-      );
+      fixtures.highScores.push({ id: '1', score: 10000, level: 5, lines: 25, date: Date.now() });
 
       const gameState = createMockGameState();
-      const { result } = renderHook(() => 
+      const { result } = renderHook(() =>
         useHighScoreManager({ gameState, playSound: mockPlaySound })
       );
 
@@ -98,7 +101,7 @@ describe('useHighScoreManager', () => {
       );
 
       const gameState = createMockGameState();
-      const { result } = renderHook(() => 
+      const { result } = renderHook(() =>
         useHighScoreManager({ gameState, playSound: mockPlaySound })
       );
 
@@ -107,7 +110,7 @@ describe('useHighScoreManager', () => {
 
     it('ハイスコアが空の場合、現在のハイスコアは0', () => {
       const gameState = createMockGameState();
-      const { result } = renderHook(() => 
+      const { result } = renderHook(() =>
         useHighScoreManager({ gameState, playSound: mockPlaySound })
       );
 
@@ -126,7 +129,7 @@ describe('useHighScoreManager', () => {
 
     it('1位になるスコアの順位を正しく取得できる', () => {
       const gameState = createMockGameState();
-      const { result } = renderHook(() => 
+      const { result } = renderHook(() =>
         useHighScoreManager({ gameState, playSound: mockPlaySound })
       );
 
@@ -135,7 +138,7 @@ describe('useHighScoreManager', () => {
 
     it('2位になるスコアの順位を正しく取得できる', () => {
       const gameState = createMockGameState();
-      const { result } = renderHook(() => 
+      const { result } = renderHook(() =>
         useHighScoreManager({ gameState, playSound: mockPlaySound })
       );
 
@@ -144,16 +147,18 @@ describe('useHighScoreManager', () => {
 
     it('ランクインしないスコアではnullを返す', () => {
       // 10個のハイスコアで満杯にする
-      fixtures.highScores.push(...Array.from({ length: 10 }, (_, i) => ({
-        id: `${i}`,
-        score: (10 - i) * 1000, // 10000, 9000, ..., 1000
-        level: 5,
-        lines: 25,
-        date: Date.now()
-      })));
+      fixtures.highScores.push(
+        ...Array.from({ length: 10 }, (_, i) => ({
+          id: `${i}`,
+          score: (10 - i) * 1000, // 10000, 9000, ..., 1000
+          level: 5,
+          lines: 25,
+          date: Date.now(),
+        }))
+      );
 
       const gameState = createMockGameState();
-      const { result } = renderHook(() => 
+      const { result } = renderHook(() =>
         useHighScoreManager({ gameState, playSound: mockPlaySound })
       );
 
@@ -163,24 +168,23 @@ describe('useHighScoreManager', () => {
 
   describe('ゲーム終了時の自動保存', () => {
     it('ゲーム終了時に統計が更新される', () => {
-      const gameState = createMockGameState({ 
-        gameOver: false, 
-        score: 15000, 
-        level: 5, 
-        lines: 25 
+      const gameState = createMockGameState({
+        gameOver: false,
+        score: 15000,
+        level: 5,
+        lines: 25,
       });
 
-      const { rerender } = renderHook((props) => 
-        useHighScoreManager(props), 
-        { initialProps: { gameState, playSound: mockPlaySound } }
-      );
+      const { rerender } = renderHook((props) => useHighScoreManager(props), {
+        initialProps: { gameState, playSound: mockPlaySound },
+      });
 
       // ゲーム終了状態に変更
-      const gameOverState = createMockGameState({ 
-        gameOver: true, 
-        score: 15000, 
-        level: 5, 
-        lines: 25 
+      const gameOverState = createMockGameState({
+        gameOver: true,
+        score: 15000,
+        level: 5,
+        lines: 25,
       });
 
       act(() => {
@@ -190,30 +194,29 @@ describe('useHighScoreManager', () => {
       expect(mockActions.updateStatistics).toHaveBeenCalledWith(
         expect.objectContaining({
           totalScore: 15000,
-          totalLines: 25
+          totalLines: 25,
         })
       );
     });
 
     it('ハイスコア達成時にハイスコアが保存される', () => {
-      const gameState = createMockGameState({ 
-        gameOver: false, 
-        score: 25000, 
-        level: 7, 
-        lines: 35 
+      const gameState = createMockGameState({
+        gameOver: false,
+        score: 25000,
+        level: 7,
+        lines: 35,
       });
 
-      const { rerender } = renderHook((props) => 
-        useHighScoreManager(props), 
-        { initialProps: { gameState, playSound: mockPlaySound } }
-      );
+      const { rerender } = renderHook((props) => useHighScoreManager(props), {
+        initialProps: { gameState, playSound: mockPlaySound },
+      });
 
       // ゲーム終了状態に変更
-      const gameOverState = createMockGameState({ 
-        gameOver: true, 
-        score: 25000, 
-        level: 7, 
-        lines: 35 
+      const gameOverState = createMockGameState({
+        gameOver: true,
+        score: 25000,
+        level: 7,
+        lines: 35,
       });
 
       act(() => {
@@ -224,30 +227,29 @@ describe('useHighScoreManager', () => {
         expect.objectContaining({
           score: 25000,
           level: 7,
-          lines: 35
+          lines: 35,
         })
       );
     });
 
     it('1位達成時に特別な音効果が再生される', () => {
-      const gameState = createMockGameState({ 
-        gameOver: false, 
-        score: 50000, 
-        level: 10, 
-        lines: 80 
+      const gameState = createMockGameState({
+        gameOver: false,
+        score: 50000,
+        level: 10,
+        lines: 80,
       });
 
-      const { rerender } = renderHook((props) => 
-        useHighScoreManager(props), 
-        { initialProps: { gameState, playSound: mockPlaySound } }
-      );
+      const { rerender } = renderHook((props) => useHighScoreManager(props), {
+        initialProps: { gameState, playSound: mockPlaySound },
+      });
 
       // ゲーム終了状態に変更
-      const gameOverState = createMockGameState({ 
-        gameOver: true, 
-        score: 50000, 
-        level: 10, 
-        lines: 80 
+      const gameOverState = createMockGameState({
+        gameOver: true,
+        score: 50000,
+        level: 10,
+        lines: 80,
       });
 
       act(() => {
@@ -258,17 +260,16 @@ describe('useHighScoreManager', () => {
     });
 
     it('同じゲーム終了が複数回処理されない', () => {
-      const gameOverState = createMockGameState({ 
-        gameOver: true, 
-        score: 15000, 
-        level: 5, 
-        lines: 25 
+      const gameOverState = createMockGameState({
+        gameOver: true,
+        score: 15000,
+        level: 5,
+        lines: 25,
       });
 
-      const { rerender } = renderHook((props) => 
-        useHighScoreManager(props), 
-        { initialProps: { gameState: gameOverState, playSound: mockPlaySound } }
-      );
+      const { rerender } = renderHook((props) => useHighScoreManager(props), {
+        initialProps: { gameState: gameOverState, playSound: mockPlaySound },
+      });
 
       // 同じ状態で再レンダー
       act(() => {
@@ -283,7 +284,7 @@ describe('useHighScoreManager', () => {
   describe('手動ハイスコア保存', () => {
     it('手動でハイスコアを保存できる', () => {
       const gameState = createMockGameState();
-      const { result } = renderHook(() => 
+      const { result } = renderHook(() =>
         useHighScoreManager({ gameState, playSound: mockPlaySound })
       );
 

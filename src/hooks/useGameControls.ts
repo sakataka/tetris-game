@@ -20,30 +20,31 @@ export function useGameControls({
   gameState,
   actions,
   playSound,
-  onStateChange
+  onStateChange,
 }: UseGameControlsProps) {
-  
-  
-  const movePiece = useCallback((dir: { x: number; y: number }) => {
-    if (!gameState.currentPiece || gameState.gameOver || gameState.isPaused) {
-      return;
-    }
+  const movePiece = useCallback(
+    (dir: { x: number; y: number }) => {
+      if (!gameState.currentPiece || gameState.gameOver || gameState.isPaused) {
+        return;
+      }
 
-    const newPosition = {
-      x: gameState.currentPiece.position.x + dir.x,
-      y: gameState.currentPiece.position.y + dir.y
-    };
+      const newPosition = {
+        x: gameState.currentPiece.position.x + dir.x,
+        y: gameState.currentPiece.position.y + dir.y,
+      };
 
-    if (isValidPosition(gameState.board, gameState.currentPiece, newPosition)) {
-      const newState = actions.onPieceMove(gameState, newPosition);
-      onStateChange(newState);
-    } else if (dir.y > 0) {
-      // Piece hit bottom, place it
-      // 音声はcalculatePiecePlacementState内で再生されるため、ここでは再生しない
-      actions.onPieceLand(gameState, gameState.currentPiece, 0);
-      // onStateChangeは呼ばない（calculatePiecePlacementStateがZustandストアを直接更新）
-    }
-  }, [gameState, actions, onStateChange]);
+      if (isValidPosition(gameState.board, gameState.currentPiece, newPosition)) {
+        const newState = actions.onPieceMove(gameState, newPosition);
+        onStateChange(newState);
+      } else if (dir.y > 0) {
+        // Piece hit bottom, place it
+        // 音声はcalculatePiecePlacementState内で再生されるため、ここでは再生しない
+        actions.onPieceLand(gameState, gameState.currentPiece, 0);
+        // onStateChangeは呼ばない（calculatePiecePlacementStateがZustandストアを直接更新）
+      }
+    },
+    [gameState, actions, onStateChange]
+  );
 
   const rotatePieceClockwise = useCallback(() => {
     if (!gameState.currentPiece || gameState.gameOver || gameState.isPaused) {
@@ -51,7 +52,7 @@ export function useGameControls({
     }
 
     const rotatedPiece = rotatePiece(gameState.currentPiece);
-    
+
     if (isValidPosition(gameState.board, rotatedPiece, rotatedPiece.position)) {
       playSound('pieceRotate');
       const newState = actions.onPieceRotate(gameState, rotatedPiece);
@@ -69,28 +70,30 @@ export function useGameControls({
     }
 
     let dropY = gameState.currentPiece.position.y;
-    while (isValidPosition(gameState.board, gameState.currentPiece, { 
-      x: gameState.currentPiece.position.x, 
-      y: dropY + 1 
-    })) {
+    while (
+      isValidPosition(gameState.board, gameState.currentPiece, {
+        x: gameState.currentPiece.position.x,
+        y: dropY + 1,
+      })
+    ) {
       dropY++;
     }
 
     const droppedPiece = {
       ...gameState.currentPiece,
-      position: { x: gameState.currentPiece.position.x, y: dropY }
+      position: { x: gameState.currentPiece.position.x, y: dropY },
     };
 
     const hardDropBonus = (dropY - gameState.currentPiece.position.y) * SCORES.HARD_DROP_BONUS;
     // 音声はcalculatePiecePlacementState内で再生されるため、ここでは再生しない
     actions.onPieceLand(gameState, droppedPiece, hardDropBonus);
     // onStateChangeは呼ばない（calculatePiecePlacementStateがZustandストアを直接更新）
-  }, [gameState, actions, onStateChange]);
+  }, [gameState, actions]); // onStateChange除去 - 実際には使用されていない
 
   return {
     movePiece,
     rotatePieceClockwise,
     dropPiece,
-    hardDrop
+    hardDrop,
   };
 }

@@ -36,7 +36,7 @@ export const STATISTICS_PERIODS: StatisticsPeriod[] = [
   { label: 'Today', days: 1 },
   { label: 'This Week', days: 7 },
   { label: 'This Month', days: 30 },
-  { label: 'All Time', days: 0 }
+  { label: 'All Time', days: 0 },
 ];
 
 /**
@@ -48,10 +48,10 @@ export function calculateEnhancedStatistics(
   highScores: readonly HighScore[] = []
 ): EnhancedStatistics {
   const efficiency = calculateEfficiency(baseStats.totalLines, baseStats.playTime);
-  const consistency = calculateConsistency(highScores.map(hs => hs.score));
+  const consistency = calculateConsistency(highScores.map((hs) => hs.score));
   const sessionStats = calculateSessionStatistics(sessions);
   const favoriteLevel = findFavoriteLevel(sessions);
-  
+
   return {
     ...baseStats,
     efficiency,
@@ -61,7 +61,7 @@ export function calculateEnhancedStatistics(
     linesClearingRate: baseStats.totalGames > 0 ? baseStats.totalLines / baseStats.totalGames : 0,
     scorePerLine: baseStats.totalLines > 0 ? baseStats.totalScore / baseStats.totalLines : 0,
     sessionCount: sessionStats.sessionCount,
-    lastPlayDate: Math.max(...highScores.map(hs => hs.date), 0)
+    lastPlayDate: Math.max(...highScores.map((hs) => hs.date), 0),
   };
 }
 
@@ -79,13 +79,14 @@ export function calculateEfficiency(totalLines: number, playTimeSeconds: number)
  */
 export function calculateConsistency(scores: number[]): number {
   if (scores.length === 0) return 0;
-  
+
   const average = scores.reduce((sum, score) => sum + score, 0) / scores.length;
-  const variance = scores.reduce((sum, score) => sum + Math.pow(score - average, 2), 0) / scores.length;
+  const variance =
+    scores.reduce((sum, score) => sum + Math.pow(score - average, 2), 0) / scores.length;
   const standardDeviation = Math.sqrt(variance);
-  
+
   if (average === 0) return 0;
-  
+
   const consistency = Math.max(0, 100 - (standardDeviation / average) * 100);
   return Math.round(consistency * 10) / 10; // 小数点第1位で四捨五入
 }
@@ -95,18 +96,20 @@ export function calculateConsistency(scores: number[]): number {
  */
 export function findFavoriteLevel(sessions: GameSession[]): number {
   if (sessions.length === 0) return 1;
-  
-  const games = sessions.flatMap(session => session.games);
+
+  const games = sessions.flatMap((session) => session.games);
   if (games.length === 0) return 1;
-  
-  const levelCounts = games.reduce((counts, game) => {
-    counts[game.level] = (counts[game.level] || 0) + 1;
-    return counts;
-  }, {} as Record<number, number>);
-  
-  const mostCommonLevel = Object.entries(levelCounts)
-    .sort(([, a], [, b]) => b - a)[0];
-  
+
+  const levelCounts = games.reduce(
+    (counts, game) => {
+      counts[game.level] = (counts[game.level] || 0) + 1;
+      return counts;
+    },
+    {} as Record<number, number>
+  );
+
+  const mostCommonLevel = Object.entries(levelCounts).sort(([, a], [, b]) => b - a)[0];
+
   return mostCommonLevel ? parseInt(mostCommonLevel[0]) : 1;
 }
 
@@ -126,41 +129,38 @@ export function calculateSessionStatistics(sessions: GameSession[]): {
       longestSession: 0,
       averageSessionTime: 0,
       totalGames: 0,
-      gamesPerSession: 0
+      gamesPerSession: 0,
     };
   }
-  
-  const sessionDurations = sessions.map(session => session.endTime - session.startTime);
+
+  const sessionDurations = sessions.map((session) => session.endTime - session.startTime);
   const totalPlayTime = sessionDurations.reduce((sum, duration) => sum + duration, 0);
   const longestSession = Math.max(...sessionDurations);
   const totalGames = sessions.reduce((total, session) => total + session.games.length, 0);
-  
+
   return {
     sessionCount: sessions.length,
     longestSession,
     averageSessionTime: totalPlayTime / sessions.length,
     totalGames,
-    gamesPerSession: totalGames / sessions.length
+    gamesPerSession: totalGames / sessions.length,
   };
 }
 
 /**
  * 指定期間の統計をフィルタリングする
  */
-export function filterStatisticsByPeriod(
-  sessions: GameSession[],
-  days: number
-): GameSession[] {
+export function filterStatisticsByPeriod(sessions: GameSession[], days: number): GameSession[] {
   if (days === 0) return sessions; // All time
-  
-  const cutoffTime = Date.now() - (days * 24 * 60 * 60 * 1000);
-  
+
+  const cutoffTime = Date.now() - days * 24 * 60 * 60 * 1000;
+
   return sessions
-    .map(session => ({
+    .map((session) => ({
       ...session,
-      games: session.games.filter(game => game.timestamp > cutoffTime)
+      games: session.games.filter((game) => game.timestamp > cutoffTime),
     }))
-    .filter(session => session.games.length > 0);
+    .filter((session) => session.games.length > 0);
 }
 
 /**
@@ -175,18 +175,18 @@ export function calculatePlayTimeStatistics(sessions: GameSession[]): {
     return {
       totalPlayTime: 0,
       averageSessionTime: 0,
-      longestSession: 0
+      longestSession: 0,
     };
   }
-  
-  const sessionDurations = sessions.map(session => session.endTime - session.startTime);
+
+  const sessionDurations = sessions.map((session) => session.endTime - session.startTime);
   const totalPlayTime = sessionDurations.reduce((sum, duration) => sum + duration, 0);
   const longestSession = Math.max(...sessionDurations);
-  
+
   return {
     totalPlayTime,
     averageSessionTime: totalPlayTime / sessions.length,
-    longestSession
+    longestSession,
   };
 }
 
@@ -198,23 +198,23 @@ export function calculateTetrisStatistics(sessions: GameSession[]): {
   tetrisRate: number;
   tetrisPerGame: number;
 } {
-  const allGames = sessions.flatMap(session => session.games);
-  
+  const allGames = sessions.flatMap((session) => session.games);
+
   if (allGames.length === 0) {
     return {
       totalTetris: 0,
       tetrisRate: 0,
-      tetrisPerGame: 0
+      tetrisPerGame: 0,
     };
   }
-  
+
   const totalTetris = allGames.reduce((sum, game) => sum + game.tetrisCount, 0);
   const tetrisRate = (totalTetris / allGames.length) * 100;
-  
+
   return {
     totalTetris,
     tetrisRate,
-    tetrisPerGame: totalTetris / allGames.length
+    tetrisPerGame: totalTetris / allGames.length,
   };
 }
 
@@ -222,22 +222,15 @@ export function calculateTetrisStatistics(sessions: GameSession[]): {
  * 統計データの妥当性を検証する
  */
 export function validateStatisticsData(stats: Partial<EnhancedStatistics>): boolean {
-  const {
-    totalGames,
-    totalScore,
-    efficiency,
-    consistency
-  } = stats;
-  
-  // 負の値チェック
-  if (totalGames !== undefined && totalGames < 0) return false;
-  if (totalScore !== undefined && totalScore < 0) return false;
-  if (efficiency !== undefined && efficiency < 0) return false;
-  
-  // 一貫性は0-100%の範囲内
-  if (consistency !== undefined && (consistency < 0 || consistency > 100)) return false;
-  
-  return true;
+  const { totalGames, totalScore, efficiency, consistency } = stats;
+
+  // 負の値チェックと一貫性範囲チェックを単一return文で実行
+  return !(
+    (totalGames !== undefined && totalGames < 0) ||
+    (totalScore !== undefined && totalScore < 0) ||
+    (efficiency !== undefined && efficiency < 0) ||
+    (consistency !== undefined && (consistency < 0 || consistency > 100))
+  );
 }
 
 /**
@@ -252,13 +245,13 @@ export function formatStatisticsForDisplay(stats: Partial<EnhancedStatistics>): 
 } {
   const playTimeHours = Math.floor((stats.playTime || 0) / 3600);
   const playTimeMinutes = Math.floor(((stats.playTime || 0) % 3600) / 60);
-  
+
   return {
     playTime: `${playTimeHours}h ${playTimeMinutes}m`,
     efficiency: `${(stats.efficiency || 0).toFixed(1)} LPM`,
     consistency: `${(stats.consistency || 0).toFixed(1)}%`,
     scorePerLine: (stats.scorePerLine || 0).toFixed(1),
-    tetrisRate: `${((stats.tetrisCount || 0) / (stats.totalGames || 1) * 100).toFixed(1)}%`
+    tetrisRate: `${(((stats.tetrisCount || 0) / (stats.totalGames || 1)) * 100).toFixed(1)}%`,
   };
 }
 
@@ -276,28 +269,26 @@ export function generateStatisticsSummary(
 } {
   let improvement = '+0%';
   let status: 'improving' | 'stable' | 'declining' = 'stable';
-  
+
   if (previousStats) {
     const scoreDiff = currentStats.bestScore - previousStats.bestScore;
-    const scoreImprovement = previousStats.bestScore > 0 
-      ? (scoreDiff / previousStats.bestScore) * 100 
-      : 0;
-    
-    improvement = scoreImprovement > 0 
-      ? `+${scoreImprovement.toFixed(1)}%` 
-      : `${scoreImprovement.toFixed(1)}%`;
-      
+    const scoreImprovement =
+      previousStats.bestScore > 0 ? (scoreDiff / previousStats.bestScore) * 100 : 0;
+
+    improvement =
+      scoreImprovement > 0 ? `+${scoreImprovement.toFixed(1)}%` : `${scoreImprovement.toFixed(1)}%`;
+
     if (scoreImprovement > 5) {
       status = 'improving';
     } else if (scoreImprovement < -5) {
       status = 'declining';
     }
   }
-  
+
   return {
     totalGames: currentStats.totalGames,
     bestScore: currentStats.bestScore,
     improvement,
-    status
+    status,
   };
 }
