@@ -83,10 +83,10 @@ export function useGameControls({
     };
 
     const hardDropBonus = (dropY - gameState.currentPiece.position.y) * HARD_DROP_BONUS_MULTIPLIER;
-    playSound('hardDrop');
-    const newState = actions.onPieceLand(gameState, droppedPiece, hardDropBonus);
-    onStateChange(newState);
-  }, [gameState, actions, playSound, onStateChange]);
+    // 音声はcalculatePiecePlacementState内で再生されるため、ここでは再生しない
+    actions.onPieceLand(gameState, droppedPiece, hardDropBonus);
+    // onStateChangeは呼ばない（calculatePiecePlacementStateがZustandストアを直接更新）
+  }, [gameState, actions, onStateChange]);
 
   return {
     movePiece,

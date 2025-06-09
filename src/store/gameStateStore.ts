@@ -127,7 +127,13 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
     set((state) => {
       // 0. ピース着地音を再生（ライン消去音より前に）
       if (playSound) {
-        playSound('pieceLand');
+        if (bonusPoints > 0) {
+          // ボーナスポイントがある場合はハードドロップ音
+          playSound('hardDrop');
+        } else {
+          // 通常のピース着地音
+          playSound('pieceLand');
+        }
       }
       
       // 1. ライン消去処理
