@@ -2,47 +2,14 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useSounds } from '../hooks/useSounds';
 
-// Web Audio API モック
-const mockAudioContext = {
-  createGain: vi.fn(),
-  createBufferSource: vi.fn(),
-  decodeAudioData: vi.fn(),
-  close: vi.fn(),
-  resume: vi.fn(),
-  destination: {},
-  currentTime: 0,
-  sampleRate: 44100,
-  state: 'running'
-};
-
-const mockGainNode = {
-  connect: vi.fn(),
-  gain: {
-    value: 0.5,
-    setValueAtTime: vi.fn(),
-    linearRampToValueAtTime: vi.fn()
-  }
-};
-
-const mockBufferSourceNode = {
-  connect: vi.fn(),
-  start: vi.fn(),
-  stop: vi.fn(),
-  buffer: null,
-  loop: false,
-  onended: null
-};
-
-const mockAudioBuffer = {
-  duration: 2.5,
-  numberOfChannels: 2,
-  sampleRate: 44100
-};
-
-// モジュールモック
-vi.mock('../utils/audioManager', () => ({
+// モジュールモック（直接定義）
+vi.mock('../utils/audio/audioManager', () => ({
   audioManager: {
+    isInitialized: vi.fn().mockReturnValue(true),
+    initialize: vi.fn().mockResolvedValue(undefined),
+    loadSound: vi.fn().mockResolvedValue(true),
     playSound: vi.fn().mockResolvedValue(undefined),
+    setVolume: vi.fn(),
     setMasterVolume: vi.fn(),
     setMuted: vi.fn(),
     getMasterVolume: vi.fn().mockReturnValue(0.5),
@@ -58,11 +25,12 @@ vi.mock('../utils/audioManager', () => ({
     preloadAllSounds: vi.fn().mockResolvedValue(undefined),
     stopSound: vi.fn(),
     stopAllSounds: vi.fn(),
+    unlockAudio: vi.fn().mockResolvedValue(true),
     dispose: vi.fn()
   }
 }));
 
-vi.mock('../utils/audioPreloader', () => ({
+vi.mock('../utils/audio/audioPreloader', () => ({
   preloadAudioSmart: vi.fn().mockResolvedValue({
     total: 6,
     loaded: 6,
@@ -79,7 +47,7 @@ vi.mock('../utils/audioPreloader', () => ({
   })
 }));
 
-vi.mock('../utils/audioFallback', () => ({
+vi.mock('../utils/audio/audioFallback', () => ({
   playWithFallback: vi.fn().mockResolvedValue(undefined),
   getFallbackStatus: vi.fn().mockReturnValue({
     currentLevel: 0,
@@ -97,9 +65,9 @@ vi.mock('../utils/audioFallback', () => ({
 }));
 
 // モック関数への参照を取得
-import { audioManager } from '../utils/audioManager';
-import { preloadAudioSmart, getAudioPreloadProgress } from '../utils/audioPreloader';
-import { playWithFallback, getFallbackStatus } from '../utils/audioFallback';
+import { audioManager } from '../utils/audio/audioManager';
+import { preloadAudioSmart, getAudioPreloadProgress } from '../utils/audio/audioPreloader';
+import { playWithFallback, getFallbackStatus } from '../utils/audio/audioFallback';
 
 // vi.mocked()を使用してモック関数への型安全なアクセスを提供
 const mockAudioManager = vi.mocked(audioManager);
@@ -108,10 +76,15 @@ const mockGetAudioPreloadProgress = vi.mocked(getAudioPreloadProgress);
 const mockPlayWithFallback = vi.mocked(playWithFallback);
 const mockGetFallbackStatus = vi.mocked(getFallbackStatus);
 
-// HTMLAudioElement モック（フォールバック用）
-const mockPlay = vi.fn().mockResolvedValue(undefined);
+// Fetch API モック（音声ファイル取得用）
+global.fetch = vi.fn().mockResolvedValue({
+  ok: true,
+  arrayBuffer: vi.fn().mockResolvedValue(new ArrayBuffer(1024))
+});
+
+// HTML Audio Element モック
 const mockAudio = {
-  play: mockPlay,
+  play: vi.fn().mockResolvedValue(undefined),
   pause: vi.fn(),
   addEventListener: vi.fn(),
   removeEventListener: vi.fn(),
@@ -122,26 +95,9 @@ const mockAudio = {
 };
 
 // グローバルモック設定
-Object.defineProperty(window, 'AudioContext', {
-  writable: true,
-  value: vi.fn(() => mockAudioContext)
-});
-
 Object.defineProperty(window, 'Audio', {
   writable: true,
   value: vi.fn(() => mockAudio)
-});
-
-// Web Audio API関連のモック
-mockAudioContext.createGain.mockReturnValue(mockGainNode);
-mockAudioContext.createBufferSource.mockReturnValue(mockBufferSourceNode);
-mockAudioContext.decodeAudioData.mockResolvedValue(mockAudioBuffer);
-
-
-// Fetch API モック（音声ファイル取得用）
-global.fetch = vi.fn().mockResolvedValue({
-  ok: true,
-  arrayBuffer: vi.fn().mockResolvedValue(new ArrayBuffer(1024))
 });
 
 beforeEach(() => {
@@ -149,9 +105,6 @@ beforeEach(() => {
   mockAudio.volume = 0.5;
   
   // モック関数のリセット
-  mockAudioManager.playSound.mockResolvedValue(undefined);
-  mockAudioManager.getMasterVolume.mockReturnValue(0.5);
-  mockAudioManager.isMutedState.mockReturnValue(false);
   mockPreloadAudioSmart.mockResolvedValue({
     total: 6,
     loaded: 6,
@@ -163,20 +116,28 @@ beforeEach(() => {
 });
 
 describe('useSounds - Web Audio API対応', () => {
-  it('should initialize with default values', () => {
+  it('should initialize with default values', async () => {
     const { result } = renderHook(() => useSounds());
+    
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
     
     expect(result.current.isMuted).toBe(false);
     expect(result.current.volume).toBe(0.5);
     expect(result.current.isWebAudioEnabled).toBe(true);
   });
 
-  it('should initialize with custom values', () => {
+  it('should initialize with custom values', async () => {
     const { result } = renderHook(() => useSounds({
       initialVolume: 0.8,
       initialMuted: true,
       useWebAudio: true
     }));
+    
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
     
     expect(result.current.isMuted).toBe(true);
     expect(result.current.volume).toBe(0.8);
@@ -280,8 +241,12 @@ describe('useSounds - Web Audio API対応', () => {
     expect(result.current.audioState.failed.has('lineClear')).toBe(true);
   });
 
-  it('should provide detailed audio state', () => {
+  it('should provide detailed audio state', async () => {
     const { result } = renderHook(() => useSounds());
+    
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
     
     const detailedState = result.current.getDetailedAudioState();
     expect(mockAudioManager.getAudioState).toHaveBeenCalled();
@@ -295,8 +260,12 @@ describe('useSounds - Web Audio API対応', () => {
     });
   });
 
-  it('should provide preload progress', () => {
+  it('should provide preload progress', async () => {
     const { result } = renderHook(() => useSounds());
+    
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
     
     const progress = result.current.getPreloadProgress();
     expect(mockGetAudioPreloadProgress).toHaveBeenCalled();
@@ -309,8 +278,12 @@ describe('useSounds - Web Audio API対応', () => {
     });
   });
 
-  it('should provide fallback status', () => {
+  it('should provide fallback status', async () => {
     const { result } = renderHook(() => useSounds());
+    
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
     
     const fallbackStatus = result.current.getFallbackStatus();
     expect(mockGetFallbackStatus).toHaveBeenCalled();
@@ -344,7 +317,7 @@ describe('useSounds - Web Audio API対応', () => {
     });
     
     // HTMLAudioElementのアンロック処理が実行されることを確認
-    expect(mockPlay).toHaveBeenCalled();
+    expect(mockAudio.play).toHaveBeenCalled();
   });
 
   it('should track audio loading states correctly', async () => {

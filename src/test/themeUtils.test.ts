@@ -5,8 +5,8 @@
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { applyThemeToCSS, createCustomTheme, applyAnimationSettings } from '../utils/themeUtils';
-import { getThemePreset } from '../utils/themePresets';
+import { applyThemeToCSS, createCustomTheme, applyAnimationSettings } from '../utils/ui/themeUtils';
+import { getThemePreset } from '../utils/ui/themePresets';
 import type { ThemeConfig } from '../types/tetris';
 
 // DOM環境のモック

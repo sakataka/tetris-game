@@ -6,7 +6,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { SessionManager } from '../utils/sessionManager';
+import { SessionManager } from '../utils/data/sessionManager';
 
 // LocalStorageのモック
 const localStorageMock = (() => {

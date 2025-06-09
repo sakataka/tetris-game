@@ -5,7 +5,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { themeCache, getThemePresetAsync, getAllThemePresetsAsync, getThemePresetSync } from '../utils/themeLoader';
+import { themeCache, getThemePresetAsync, getAllThemePresetsAsync, getThemePresetSync } from '../utils/ui/themeLoader';
 import type { ThemeVariant, ThemeConfig } from '../types/tetris';
 
 describe('ThemeLoader - JSONベーステーマシステム', () => {

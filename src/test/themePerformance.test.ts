@@ -5,8 +5,8 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { getThemePreset as getLegacyTheme } from '../utils/themePresets';
-import { getThemePresetAsync as getJsonTheme, themeCache } from '../utils/themeLoader';
+import { getThemePreset as getLegacyTheme } from '../utils/ui/themePresets';
+import { getThemePresetAsync as getJsonTheme, themeCache } from '../utils/ui/themeLoader';
 import type { ThemeVariant } from '../types/tetris';
 
 describe('テーマシステムパフォーマンス比較', () => {
@@ -115,13 +115,13 @@ describe('テーマシステムパフォーマンス比較', () => {
     it('should compare module loading time', async () => {
       // Legacy実装のモジュール読み込み時間（実際にはバンドル時に解決済み）
       const legacyStartTime = performance.now();
-      const legacyModule = await import('../utils/themePresets');
+      const legacyModule = await import('../utils/ui/themePresets');
       const legacyEndTime = performance.now();
       const legacyModuleTime = legacyEndTime - legacyStartTime;
 
       // JSON実装のモジュール読み込み時間
       const jsonStartTime = performance.now();
-      const jsonModule = await import('../utils/themeLoader');
+      const jsonModule = await import('../utils/ui/themeLoader');
       const jsonEndTime = performance.now();
       const jsonModuleTime = jsonEndTime - jsonStartTime;
 

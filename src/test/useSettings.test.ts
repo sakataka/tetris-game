@@ -1,11 +1,16 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useSettings } from '../hooks/useSettings';
+import { createMockDOMEnvironment, clearTestStorage } from './fixtures';
+
+// DOM環境モックをセットアップ
+const domMocks = createMockDOMEnvironment();
 
 describe('useSettings', () => {
   beforeEach(() => {
     // Clear localStorage before each test
-    window.localStorage.clear();
+    clearTestStorage();
+    domMocks.localStorageMock.clear();
   });
 
   it('should initialize with default settings', () => {

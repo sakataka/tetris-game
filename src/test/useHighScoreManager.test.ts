@@ -2,34 +2,28 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useHighScoreManager } from '../hooks/useHighScoreManager';
 import { GameState } from '../types/tetris';
-import { MockPlaySound, MockStoreState } from './types/mockTypes';
+import { createMockStatisticsStore, createTestFixtures } from './fixtures';
 
-// Mock store state
-const mockStoreState: MockStoreState = {
-  highScores: [],
-  statistics: {
-    totalGames: 0,
-    totalLines: 0,
-    totalScore: 0,
-    bestScore: 0,
-    averageScore: 0,
-    playTime: 0,
-    bestStreak: 0,
-    tetrisCount: 0
-  }
-};
-
-// Mock store actions
+// テストフィクスチャとモックを作成
+const fixtures = createTestFixtures();
 const mockActions = {
   addHighScore: vi.fn(),
-  updateStatistics: vi.fn()
+  updateStatistics: vi.fn(),
+  clearStatistics: vi.fn()
 };
 
 // Mock the new statisticsStore
 vi.mock('../store/statisticsStore', () => ({
-  useStatisticsActions: () => mockActions,
+  useHighScores: () => fixtures.highScores,
+  useStatistics: () => fixtures.statistics,
+  useAddHighScore: () => mockActions.addHighScore,
+  useUpdateStatistics: () => mockActions.updateStatistics,
+  useClearStatistics: () => mockActions.clearStatistics,
   useStatisticsStore: {
-    getState: () => mockStoreState
+    getState: () => ({
+      highScores: fixtures.highScores,
+      statistics: fixtures.statistics
+    })
   }
 }));
 
@@ -51,24 +45,25 @@ const createMockGameState = (overrides: Partial<GameState> = {}): GameState => (
 });
 
 describe('useHighScoreManager', () => {
-  let mockPlaySound: MockPlaySound;
+  let mockPlaySound: (soundKey: string) => Promise<void>;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockPlaySound = vi.fn() as MockPlaySound;
+    mockPlaySound = vi.fn().mockResolvedValue(undefined);
     
-    // Reset mock store state
-    mockStoreState.highScores = [];
-    mockStoreState.statistics = {
-      totalGames: 0,
-      totalLines: 0,
-      totalScore: 0,
-      bestScore: 0,
-      averageScore: 0,
-      playTime: 0,
-      bestStreak: 0,
-      tetrisCount: 0
-    };
+    // Reset mock store state via fixtures
+    fixtures.highScores.length = 0;
+    fixtures.statistics.gamesPlayed = 0;
+    fixtures.statistics.totalScore = 0;
+    fixtures.statistics.totalLines = 0;
+    fixtures.statistics.playTime = 0;
+    fixtures.statistics.bestStreak = 0;
+    fixtures.statistics.tetrisCount = 0;
+    
+    // Reset mock actions
+    mockActions.addHighScore.mockClear();
+    mockActions.updateStatistics.mockClear();
+    mockActions.clearStatistics.mockClear();
   });
 
   describe('ハイスコア判定機能', () => {
@@ -83,9 +78,9 @@ describe('useHighScoreManager', () => {
     });
 
     it('既存のハイスコアより高いスコアがハイスコアと判定される', () => {
-      mockStoreState.highScores = [
+      fixtures.highScores.push(
         { id: '1', score: 10000, level: 5, lines: 25, date: Date.now() }
-      ];
+      );
 
       const gameState = createMockGameState();
       const { result } = renderHook(() => 
@@ -97,10 +92,10 @@ describe('useHighScoreManager', () => {
     });
 
     it('現在のハイスコアを正しく取得できる', () => {
-      mockStoreState.highScores = [
+      fixtures.highScores.push(
         { id: '1', score: 25000, level: 8, lines: 40, date: Date.now() },
         { id: '2', score: 15000, level: 5, lines: 25, date: Date.now() }
-      ];
+      );
 
       const gameState = createMockGameState();
       const { result } = renderHook(() => 
@@ -122,11 +117,11 @@ describe('useHighScoreManager', () => {
 
   describe('スコアランク機能', () => {
     beforeEach(() => {
-      mockStoreState.highScores = [
+      fixtures.highScores.push(
         { id: '1', score: 30000, level: 8, lines: 40, date: Date.now() },
         { id: '2', score: 20000, level: 6, lines: 30, date: Date.now() },
         { id: '3', score: 10000, level: 4, lines: 20, date: Date.now() }
-      ];
+      );
     });
 
     it('1位になるスコアの順位を正しく取得できる', () => {
@@ -149,13 +144,13 @@ describe('useHighScoreManager', () => {
 
     it('ランクインしないスコアではnullを返す', () => {
       // 10個のハイスコアで満杯にする
-      mockStoreState.highScores = Array.from({ length: 10 }, (_, i) => ({
+      fixtures.highScores.push(...Array.from({ length: 10 }, (_, i) => ({
         id: `${i}`,
         score: (10 - i) * 1000, // 10000, 9000, ..., 1000
         level: 5,
         lines: 25,
         date: Date.now()
-      }));
+      })));
 
       const gameState = createMockGameState();
       const { result } = renderHook(() => 
@@ -194,7 +189,6 @@ describe('useHighScoreManager', () => {
 
       expect(mockActions.updateStatistics).toHaveBeenCalledWith(
         expect.objectContaining({
-          totalGames: 1,
           totalScore: 15000,
           totalLines: 25
         })

@@ -9,7 +9,7 @@ import {
   sortHighScores,
   validatePlayerName,
   calculateHighScoreStats
-} from '../utils/highScoreUtils';
+} from '../utils/game/highScoreUtils';
 import { HighScore } from '../types/tetris';
 
 const mockHighScores: HighScore[] = [
