@@ -151,7 +151,7 @@ export default function TetrisGame() {
   // 🔍 DEBUG: gameActions作成をトレース
   console.log(`🔍 Creating gameActions`);
   
-  // ゲームアクション（関数参照固定）
+  // ゲームアクション（適切な依存配列で更新）
   const gameActions = useMemo(() => {
     console.log(`🔍 gameActions useMemo executed`);
     return {
@@ -162,7 +162,7 @@ export default function TetrisGame() {
       togglePause,
       resetGame
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [movePiece, rotatePieceClockwise, hardDrop, dropPiece, togglePause, resetGame]);
 
   // ゲームループ
   useGameLoop({
