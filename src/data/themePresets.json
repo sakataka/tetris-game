@@ -1,0 +1,173 @@
+{
+  "cyberpunk": {
+    "name": "Cyberpunk",
+    "colors": {
+      "primary": "#00ffff",
+      "secondary": "#ff00ff",
+      "tertiary": "#ffff00",
+      "background": "#0a0a0f",
+      "foreground": "#ffffff",
+      "accent": "#00ff00"
+    },
+    "effects": {
+      "blur": 10,
+      "glow": 16,
+      "saturation": 1.8,
+      "brightness": 1.2
+    },
+    "accessibility": {
+      "colorBlindnessType": "none",
+      "contrast": "normal",
+      "animationIntensity": "enhanced"
+    }
+  },
+  "classic": {
+    "name": "Classic",
+    "colors": {
+      "primary": "#0066cc",
+      "secondary": "#cc6600",
+      "tertiary": "#006600",
+      "background": "#f5f5f5",
+      "foreground": "#333333",
+      "accent": "#cc0000"
+    },
+    "effects": {
+      "blur": 0,
+      "glow": 0,
+      "saturation": 0.8,
+      "brightness": 0.9
+    },
+    "accessibility": {
+      "colorBlindnessType": "none",
+      "contrast": "high",
+      "animationIntensity": "reduced"
+    }
+  },
+  "retro": {
+    "name": "Retro",
+    "colors": {
+      "primary": "#ff6b35",
+      "secondary": "#f7931e",
+      "tertiary": "#ffd23f",
+      "background": "#2d1b69",
+      "foreground": "#ffffff",
+      "accent": "#ee4266"
+    },
+    "effects": {
+      "blur": 6,
+      "glow": 8,
+      "saturation": 1.5,
+      "brightness": 1.1
+    },
+    "accessibility": {
+      "colorBlindnessType": "none",
+      "contrast": "normal",
+      "animationIntensity": "normal"
+    }
+  },
+  "minimal": {
+    "name": "Minimal",
+    "colors": {
+      "primary": "#2c3e50",
+      "secondary": "#34495e",
+      "tertiary": "#7f8c8d",
+      "background": "#ecf0f1",
+      "foreground": "#2c3e50",
+      "accent": "#3498db"
+    },
+    "effects": {
+      "blur": 2,
+      "glow": 4,
+      "saturation": 0.6,
+      "brightness": 0.95
+    },
+    "accessibility": {
+      "colorBlindnessType": "none",
+      "contrast": "high",
+      "animationIntensity": "reduced"
+    }
+  },
+  "neon": {
+    "name": "Neon",
+    "colors": {
+      "primary": "#ff0080",
+      "secondary": "#00ff80",
+      "tertiary": "#8000ff",
+      "background": "#000000",
+      "foreground": "#ffffff",
+      "accent": "#ffff00"
+    },
+    "effects": {
+      "blur": 12,
+      "glow": 20,
+      "saturation": 2.0,
+      "brightness": 1.3
+    },
+    "accessibility": {
+      "colorBlindnessType": "none",
+      "contrast": "normal",
+      "animationIntensity": "enhanced"
+    }
+  },
+  "_metadata": {
+    "version": "1.0.0",
+    "description": "Tetris Game Theme Presets - Unified JSON Configuration",
+    "lastUpdated": "2025-06-09",
+    "totalThemes": 5,
+    "supportedFeatures": [
+      "colorBlindnessSupport",
+      "contrastAdjustment", 
+      "animationIntensity",
+      "dynamicEffects"
+    ],
+    "defaultEffects": {
+      "blur": 8,
+      "glow": 12,
+      "saturation": 1.0,
+      "brightness": 1.0
+    }
+  },
+  "colorBlindness": {
+    "protanopia": {
+      "primary": "#0080ff",
+      "secondary": "#ffaa00",
+      "tertiary": "#8000ff"
+    },
+    "deuteranopia": {
+      "primary": "#0066cc",
+      "secondary": "#ff6600",
+      "tertiary": "#cc00cc"
+    },
+    "tritanopia": {
+      "primary": "#ff0066",
+      "secondary": "#66ff00",
+      "tertiary": "#6600ff"
+    }
+  },
+  "animations": {
+    "none": {
+      "duration": 0,
+      "enabled": false,
+      "particles": false,
+      "effects": false
+    },
+    "reduced": {
+      "duration": 0.3,
+      "enabled": true,
+      "particles": false,
+      "effects": false
+    },
+    "normal": {
+      "duration": 0.6,
+      "enabled": true,
+      "particles": true,
+      "effects": true
+    },
+    "enhanced": {
+      "duration": 1.0,
+      "enabled": true,
+      "particles": true,
+      "effects": true
+    }
+  }
+}
