@@ -1,7 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useState, useMemo } from 'react';
-import type { Particle, Tetromino, GameState } from '../types/tetris';
+import { useCallback, useEffect, useState, useMemo, useRef } from 'react';
+import type { Particle, Tetromino, GameState, SoundKey } from '../types/tetris';
 import TetrisBoard from './TetrisBoard';
 import GameInfo from './GameInfo';
 import VirtualControls from './VirtualControls';
@@ -66,6 +66,13 @@ export default function TetrisGame() {
     initialMuted: settings.isMuted
   });
 
+  // playSound関数の安定化のため、refに保存
+  const playSoundRef = useRef(playSound);
+  
+  useEffect(() => {
+    playSoundRef.current = playSound;
+  }, [playSound]);
+
   // ゲームアクション取得
   const { 
     calculatePiecePlacementState, 
@@ -79,14 +86,15 @@ export default function TetrisGame() {
     initializeSounds();
   }, [initializeSounds]);
 
-  // useGameControls用のアクションアダプター
+  // useGameControls用のアクションアダプター（playSound依存除去）
   const pieceControlActions = useMemo(() => ({
     onPieceMove: (state: GameState, newPosition: { x: number; y: number }) => {
       movePieceToPosition(newPosition);
       return { ...state, currentPiece: state.currentPiece ? { ...state.currentPiece, position: newPosition } : null };
     },
     onPieceLand: (state: GameState, piece: Tetromino, bonusPoints?: number) => {
-      calculatePiecePlacementState(piece, bonusPoints, playSound);
+      // playSoundRefから安定化されたplaySound関数を取得
+      calculatePiecePlacementState(piece, bonusPoints, playSoundRef.current);
       // 状態はcalculatePiecePlacementStateで自動更新される
       return state;
     },
@@ -94,14 +102,18 @@ export default function TetrisGame() {
       rotatePieceTo(rotatedPiece);
       return { ...state, currentPiece: rotatedPiece };
     }
-  }), [movePieceToPosition, calculatePiecePlacementState, rotatePieceTo, playSound]);
+  }), [movePieceToPosition, calculatePiecePlacementState, rotatePieceTo]); // playSound依存除去
 
   const onGameStateChange = useCallback((newState: GameState) => {
     // 新しい状態が渡されたらZustandストアを更新
     setGameState(newState);
   }, [setGameState]);
 
-  // ゲーム操作
+  // ゲーム操作（playSound安定化版を使用）
+  const stablePlaySound = useCallback((soundType: SoundKey) => {
+    playSoundRef.current(soundType);
+  }, []);
+
   const {
     movePiece,
     rotatePieceClockwise,
@@ -110,7 +122,7 @@ export default function TetrisGame() {
   } = useGameControls({
     gameState,
     actions: pieceControlActions,
-    playSound,
+    playSound: stablePlaySound,
     onStateChange: onGameStateChange
   });
 
@@ -123,7 +135,7 @@ export default function TetrisGame() {
   // セッション管理
   const { onGameStart } = useSessionTracking();
 
-  // ゲームアクション
+  // ゲームアクション（安定化）
   const gameActions = useMemo(() => ({
     movePiece,
     rotatePieceClockwise,
