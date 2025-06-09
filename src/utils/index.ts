@@ -16,5 +16,8 @@ export * from './ui';
 // パフォーマンス最適化
 export * from './performance';
 
+// アニメーション統一管理
+export * from './animation';
+
 // データ管理
 export * from './data';

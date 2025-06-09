@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useTimerAnimation, ANIMATION_PRESETS } from '../utils/animation';
 
 interface UseGameTimerProps {
   isActive: boolean;
@@ -6,16 +6,29 @@ interface UseGameTimerProps {
   onTick: () => void;
 }
 
+/**
+ * ゲームタイマーフック
+ * 
+ * 従来のsetIntervalから統一アニメーション管理システムに移行し、
+ * パフォーマンスとタブ非アクティブ時の動作を改善
+ */
 export function useGameTimer({
   isActive,
   interval,
   onTick
 }: UseGameTimerProps) {
   
-  useEffect(() => {
-    if (!isActive) return;
-
-    const timer = setInterval(onTick, interval);
-    return () => clearInterval(timer);
-  }, [isActive, interval, onTick]);
+  // 統一アニメーション管理システムを使用
+  useTimerAnimation(
+    onTick,
+    interval,
+    [onTick, interval],
+    {
+      ...ANIMATION_PRESETS.GAME_LOOP,
+      enabled: isActive,
+      autoStop: {
+        condition: () => document.hidden // タブが非アクティブ時は自動停止
+      }
+    }
+  );
 }

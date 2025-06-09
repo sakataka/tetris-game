@@ -3,6 +3,7 @@
 import { memo, useEffect, useState } from 'react';
 import { ErrorLevel, ErrorInfo } from '../types/errors';
 import { errorHandler } from '../utils/data';
+import { useTimerAnimation, ANIMATION_PRESETS } from '../utils/animation';
 
 interface ErrorNotificationProps {
   position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top-center';
@@ -45,21 +46,27 @@ const ErrorNotification = memo(function ErrorNotification({
     return unsubscribe;
   }, [maxNotifications]);
 
-  useEffect(() => {
-    if (!autoClose) return;
+  // 統一アニメーション管理システムを使用した自動削除タイマー
+  const cleanupNotifications = () => {
+    const now = Date.now();
+    setNotifications(prev => 
+      prev.filter(notification => {
+        const age = now - notification.timestamp;
+        return age < (notification.duration || 5000);
+      })
+    );
+  };
 
-    const interval = setInterval(() => {
-      const now = Date.now();
-      setNotifications(prev => 
-        prev.filter(notification => {
-          const age = now - notification.timestamp;
-          return age < (notification.duration || 5000);
-        })
-      );
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [autoClose]);
+  useTimerAnimation(
+    cleanupNotifications,
+    1000, // 1秒間隔
+    [cleanupNotifications],
+    {
+      ...ANIMATION_PRESETS.UI_ANIMATION,
+      enabled: autoClose && notifications.length > 0,
+      priority: 'low' // 低優先度（パフォーマンス重視時は停止）
+    }
+  );
 
   const dismissNotification = (id: string) => {
     setNotifications(prev => prev.filter(n => n.id !== id));

@@ -11,6 +11,7 @@ import {
   PARTICLE_OPACITY_MULTIPLIER
 } from '../constants';
 import { particlePool, performanceMonitor } from '../utils/performance';
+import { useConditionalAnimation, ANIMATION_PRESETS } from '../utils/animation';
 import ParticleCanvas from './ParticleCanvas';
 
 interface ParticleEffectProps {
@@ -61,27 +62,17 @@ const ParticleEffect = memo(function ParticleEffect({
   forceRenderer = 'auto',
   enablePerformanceMonitoring = false
 }: ParticleEffectProps) {
-  const animationRef = useRef<number | undefined>(undefined);
-  const lastUpdateTimeRef = useRef<number>(0);
   const [currentRenderer, setCurrentRenderer] = useState<'dom' | 'canvas'>('dom');
   const performanceCheckCountRef = useRef(0);
 
-  // アニメーション関数をuseCallbackでメモ化
-  const animate = useCallback(() => {
+  // アニメーション統一管理システムの活用
+  const hasParticles = lineEffect.particles.length > 0;
+  
+  // パーティクル更新ロジック
+  const updateParticles = useCallback(() => {
     if (enablePerformanceMonitoring) {
       performanceMonitor.startFrame();
     }
-
-    const now = performance.now();
-    const deltaTime = now - lastUpdateTimeRef.current;
-    
-    // フレームレート制限（60FPS = 16.67ms）
-    if (deltaTime < 16.67) {
-      animationRef.current = requestAnimationFrame(animate);
-      return;
-    }
-    
-    lastUpdateTimeRef.current = now;
     
     const updatedParticles: LineEffectState['particles'] = [];
     const expiredParticles: LineEffectState['particles'] = [];
@@ -128,38 +119,20 @@ const ParticleEffect = memo(function ParticleEffect({
         }
       }
     }
-
-    // パーティクルが残っている場合のみ次のフレームを要求
-    if (updatedParticles.length > 0) {
-      animationRef.current = requestAnimationFrame(animate);
-    } else {
-      animationRef.current = undefined;
-    }
   }, [lineEffect.particles, onParticleUpdate, enablePerformanceMonitoring, forceRenderer, currentRenderer]);
 
-  useEffect(() => {
-    if (lineEffect.particles.length === 0) {
-      // パーティクルがない場合はアニメーションを停止
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-        animationRef.current = undefined;
+  // 統一アニメーション管理システムを使用
+  useConditionalAnimation(
+    updateParticles,
+    hasParticles,
+    [updateParticles],
+    {
+      ...ANIMATION_PRESETS.PARTICLE_EFFECT,
+      autoStop: {
+        condition: () => lineEffect.particles.length === 0
       }
-      return;
     }
-
-    // アニメーションが既に実行中でない場合のみ開始
-    if (!animationRef.current) {
-      lastUpdateTimeRef.current = performance.now();
-      animationRef.current = requestAnimationFrame(animate);
-    }
-
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-        animationRef.current = undefined;
-      }
-    };
-  }, [lineEffect.particles.length, animate]);
+  );
 
   // レンダラー選択ロジック
   const selectedRenderer = useMemo(() => {
