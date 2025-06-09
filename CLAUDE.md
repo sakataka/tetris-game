@@ -144,11 +144,15 @@ npm test -- --run src/test/useSounds.test.ts
 
 ### 🔧 中優先（Medium Priority）
 
-8. **コンポーネント構造の見直し** - GameInfo コンポーネントの分割
+8. ✅ **コンポーネント構造の見直し完了** - GameInfo コンポーネントの分割
 
-   - タブシステムの独立したコンポーネント化
-   - 統計情報、テーマ設定、ゲーム情報の分離
-   - 機能別コンポーネントの最適化
+   - ✅ TabNavigation.tsx - タブシステムの独立化と型安全性強化（30行）
+   - ✅ GameTabContent.tsx - ゲーム情報表示の責務分離（85行）
+   - ✅ StatisticsTabContent.tsx - 統計情報管理の独立化（25行）
+   - ✅ ThemeTabContent.tsx - テーマ設定機能の分離（45行）
+   - ✅ MobileGameInfo.tsx - モバイル専用レスポンシブUI（35行）
+   - ✅ GameInfo.tsx リファクタリング - 220行→70行への大幅簡素化
+   - ✅ 単一責任原則の徹底実装、再利用性・メンテナンス性向上
 
 9. **セッション管理の簡素化** - PlaySession 追跡ロジックの改善
    - セッション管理専用サービスクラスの作成
@@ -347,13 +351,21 @@ This Tetris game uses a sophisticated modular architecture with **Zustand State 
 - **メモリ効率**: 必要な状態のみの更新とレンダリング
 - **テスタビリティ**: 分離されたストアによる効率的なテスト
 
-### Modular Component Architecture
+### Modular Component Architecture (Updated: 2025/06/09)
 
 **Main Components**:
 
 - **TetrisGame.tsx** (195 lines) - Main orchestrator composing multiple hooks
 - **TetrisBoard.tsx** - Game board display with cyberpunk theming
-- **GameInfo.tsx** - Tabbed interface (Game Info / Statistics / Theme Settings)
+- **GameInfo.tsx** (70 lines) - ✅ 大幅リファクタリング完了: 統合管理と責務分離
+
+**✅ 新規分離コンポーネント（GameInfo分割成果）**:
+
+- **TabNavigation.tsx** (30 lines) - タブシステム独立化、型安全なTabType定義
+- **GameTabContent.tsx** (85 lines) - ゲーム情報表示の責務分離、全パネル統合
+- **StatisticsTabContent.tsx** (25 lines) - 統計情報管理、ハイスコア統合
+- **ThemeTabContent.tsx** (45 lines) - テーマ設定機能、useThemeManager統合
+- **MobileGameInfo.tsx** (35 lines) - モバイル専用レスポンシブUI
 
 **Optimized Panel Components** (25-45 lines each):
 
@@ -371,6 +383,12 @@ This Tetris game uses a sophisticated modular architecture with **Zustand State 
 - **ThemeSettings.tsx** - Complete theme customization system
 - **VirtualControls.tsx** - Mobile touch controls
 - **ParticleEffect.tsx** - Enhanced animation system with object pooling
+
+**🎯 分割アーキテクチャの成果**:
+- **単一責任原則**: 各コンポーネントが明確な責務を持つ
+- **再利用性向上**: TabNavigationの他画面転用可能
+- **メンテナンス性**: 機能別の独立ファイル構造
+- **型安全性強化**: TabType, GameSettingsの厳密使用
 
 ### Hook-Based Business Logic (Updated: 2025/06/09)
 
@@ -590,12 +608,12 @@ This Tetris game uses a sophisticated modular architecture with **Zustand State 
 
 ## Project Structure
 
-### File Organization (Updated: 2025/06/08)
+### File Organization (Updated: 2025/06/09)
 
 ```
 src/
 ├── app/                    # Next.js app router
-├── components/            # React components (17 files)
+├── components/            # React components (22 files) ⬅️ コンポーネント分割完了
 │   ├── GameStatsPanel.tsx      # Modular panels (25-45 lines each)
 │   ├── NextPiecePanel.tsx
 │   ├── ControlsPanel.tsx
@@ -604,7 +622,12 @@ src/
 │   ├── ScoringPanel.tsx
 │   ├── TetrisGame.tsx          # 新しい分割ストア統合済み
 │   ├── TetrisBoard.tsx         # Game board
-│   ├── GameInfo.tsx            # 分割ストア対応完了
+│   ├── GameInfo.tsx            # ✅ 220行→70行へ大幅リファクタリング完了
+│   ├── TabNavigation.tsx       # ✅ 新規: タブシステム独立化（30行）
+│   ├── GameTabContent.tsx      # ✅ 新規: ゲーム情報専用（85行）
+│   ├── StatisticsTabContent.tsx # ✅ 新規: 統計表示専用（25行）
+│   ├── ThemeTabContent.tsx     # ✅ 新規: テーマ設定専用（45行）
+│   ├── MobileGameInfo.tsx      # ✅ 新規: モバイル専用UI（35行）
 │   └── [theme/mobile components]
 ├── hooks/                 # Custom React hooks (7 files) ⬅️ 整理済み
 │   ├── ❌ useGameState.ts      # 削除済み（gameStateStoreに統合）
