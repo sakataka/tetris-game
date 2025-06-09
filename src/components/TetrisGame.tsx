@@ -28,7 +28,7 @@ import {
   useRotatePieceTo
 } from '../store/gameStateStore';
 import { useHighScoreManager } from '../hooks/useHighScoreManager';
-import { useSessionTracking } from '../hooks/useSessionTracking';
+import { useSessionTrackingV2 } from '../hooks/useSessionTrackingV2';
 
 export default function TetrisGame() {
   // 🔍 DEBUG: レンダリング回数をトレース
@@ -146,8 +146,8 @@ export default function TetrisGame() {
     playSound: stablePlaySound
   });
 
-  // セッション管理
-  const { onGameStart } = useSessionTracking();
+  // セッション管理（V2 - 簡素化版）
+  const { onGameStart } = useSessionTrackingV2();
 
   // 🔍 DEBUG: gameActions作成をトレース
   console.log(`🔍 Creating gameActions`);
