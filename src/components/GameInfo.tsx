@@ -14,7 +14,7 @@ import GameButtonsPanel from './GameButtonsPanel';
 import ScoringPanel from './ScoringPanel';
 import { 
   useSettings,
-  useSettingsActions
+  useUpdateSettings
 } from '../store/settingsStore';
 import {
   useHighScores,
@@ -22,7 +22,11 @@ import {
 } from '../store/statisticsStore';
 import {
   useTheme,
-  useThemeActions
+  useSetTheme,
+  useSetCustomColors,
+  useSetAccessibilityOptions,
+  useUpdateThemeState,
+  useResetThemeToDefault
 } from '../store/themeStore';
 import { useThemeManager } from '../hooks/useThemeManager';
 import { calculateEnhancedStatistics } from '../utils/statisticsUtils';
@@ -81,17 +85,15 @@ const GameInfo = memo(function GameInfo({
   const highScores = useHighScores();
   const statistics = useStatistics();
   const settings = useSettings();
-  const { updateSettings } = useSettingsActions();
+  const updateSettings = useUpdateSettings();
   
   // テーマ関連の状態とアクション
   const themeState = useTheme();
-  const { 
-    setTheme, 
-    updateThemeState, 
-    setCustomColors, 
-    setAccessibilityOptions,
-    resetThemeToDefault 
-  } = useThemeActions();
+  const setTheme = useSetTheme();
+  const setCustomColors = useSetCustomColors();
+  const setAccessibilityOptions = useSetAccessibilityOptions();
+  const updateThemeState = useUpdateThemeState();
+  const resetThemeToDefault = useResetThemeToDefault();
 
   const themeManager = useThemeManager({
     themeState,

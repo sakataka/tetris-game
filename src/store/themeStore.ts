@@ -107,12 +107,12 @@ export const useThemeStore = create<ThemeStore>()((set) => ({
 export const useTheme = () => useThemeStore((state) => state.theme);
 export const useThemeConfig = () => useThemeStore((state) => state.theme.config);
 export const useThemeAccessibility = () => useThemeStore((state) => state.theme.accessibility);
-export const useThemeActions = () => useThemeStore((state) => ({
-  setTheme: state.setTheme,
-  updateThemeState: state.updateThemeState,
-  setCustomColors: state.setCustomColors,
-  setAccessibilityOptions: state.setAccessibilityOptions,
-  resetThemeToDefault: state.resetThemeToDefault,
-  setEffectIntensity: state.setEffectIntensity,
-  toggleAnimations: state.toggleAnimations
-}));
+
+// 個別アクションフック（関数参照安定化）
+export const useSetTheme = () => useThemeStore((state) => state.setTheme);
+export const useUpdateThemeState = () => useThemeStore((state) => state.updateThemeState);
+export const useSetCustomColors = () => useThemeStore((state) => state.setCustomColors);
+export const useSetAccessibilityOptions = () => useThemeStore((state) => state.setAccessibilityOptions);
+export const useResetThemeToDefault = () => useThemeStore((state) => state.resetThemeToDefault);
+export const useSetEffectIntensity = () => useThemeStore((state) => state.setEffectIntensity);
+export const useToggleAnimations = () => useThemeStore((state) => state.toggleAnimations);

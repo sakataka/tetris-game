@@ -53,8 +53,8 @@ export const useSettingsStore = create<SettingsStore>()((set) => ({
 
 // Selector hooks for optimized access
 export const useSettings = () => useSettingsStore((state) => state.settings);
-export const useSettingsActions = () => useSettingsStore((state) => ({
-  updateSettings: state.updateSettings,
-  resetSettings: state.resetSettings,
-  updateTheme: state.updateTheme
-}));
+
+// 個別アクションフック（関数参照安定化）
+export const useUpdateSettings = () => useSettingsStore((state) => state.updateSettings);
+export const useResetSettings = () => useSettingsStore((state) => state.resetSettings);
+export const useUpdateTheme = () => useSettingsStore((state) => state.updateTheme);

@@ -22,6 +22,9 @@ export function useGameControls({
   onStateChange
 }: UseGameControlsProps) {
   
+  // 🔍 DEBUG: useGameControls実行をトレース
+  console.log(`🔍 useGameControls executed`);
+  
   const movePiece = useCallback((dir: { x: number; y: number }) => {
     if (!gameState.currentPiece || gameState.gameOver || gameState.isPaused) {
       return;

@@ -160,18 +160,18 @@ export const useStatisticsStore = create<StatisticsStore>()((set, get) => ({
 // Selector hooks for optimized access
 export const useHighScores = () => useStatisticsStore((state) => state.highScores);
 export const useStatistics = () => useStatisticsStore((state) => state.statistics);
-export const useStatisticsActions = () => useStatisticsStore((state) => ({
-  addHighScore: state.addHighScore,
-  clearHighScores: state.clearHighScores,
-  updateStatistics: state.updateStatistics,
-  resetStatistics: state.resetStatistics,
-  incrementTotalGames: state.incrementTotalGames,
-  updateBestScore: state.updateBestScore,
-  addScore: state.addScore,
-  addLines: state.addLines,
-  addTetris: state.addTetris,
-  addPlayTime: state.addPlayTime,
-  updateBestStreak: state.updateBestStreak,
-  getAverageScore: state.getAverageScore,
-  getEfficiency: state.getEfficiency
-}));
+
+// 個別アクションフック（関数参照安定化）
+export const useAddHighScore = () => useStatisticsStore((state) => state.addHighScore);
+export const useClearHighScores = () => useStatisticsStore((state) => state.clearHighScores);
+export const useUpdateStatistics = () => useStatisticsStore((state) => state.updateStatistics);
+export const useResetStatistics = () => useStatisticsStore((state) => state.resetStatistics);
+export const useIncrementTotalGames = () => useStatisticsStore((state) => state.incrementTotalGames);
+export const useUpdateBestScore = () => useStatisticsStore((state) => state.updateBestScore);
+export const useAddScore = () => useStatisticsStore((state) => state.addScore);
+export const useAddLines = () => useStatisticsStore((state) => state.addLines);
+export const useAddTetris = () => useStatisticsStore((state) => state.addTetris);
+export const useAddPlayTime = () => useStatisticsStore((state) => state.addPlayTime);
+export const useUpdateBestStreak = () => useStatisticsStore((state) => state.updateBestStreak);
+export const useGetAverageScore = () => useStatisticsStore((state) => state.getAverageScore);
+export const useGetEfficiency = () => useStatisticsStore((state) => state.getEfficiency);

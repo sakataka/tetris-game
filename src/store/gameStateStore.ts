@@ -191,15 +191,15 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
 // Selector hooks for optimized access
 export const useGameState = () => useGameStateStore((state) => state.gameState);
 export const useDropTime = () => useGameStateStore((state) => state.dropTime);
-export const useGameStateActions = () => useGameStateStore((state) => ({
-  setGameState: state.setGameState,
-  updateParticles: state.updateParticles,
-  resetGame: state.resetGame,
-  togglePause: state.togglePause,
-  setDropTime: state.setDropTime,
-  updateLineEffect: state.updateLineEffect,
-  clearLineEffect: state.clearLineEffect,
-  calculatePiecePlacementState: state.calculatePiecePlacementState,
-  movePieceToPosition: state.movePieceToPosition,
-  rotatePieceTo: state.rotatePieceTo
-}));
+
+// 個別アクションフック（関数参照安定化）
+export const useSetGameState = () => useGameStateStore((state) => state.setGameState);
+export const useUpdateParticles = () => useGameStateStore((state) => state.updateParticles);
+export const useResetGame = () => useGameStateStore((state) => state.resetGame);
+export const useTogglePause = () => useGameStateStore((state) => state.togglePause);
+export const useSetDropTime = () => useGameStateStore((state) => state.setDropTime);
+export const useUpdateLineEffect = () => useGameStateStore((state) => state.updateLineEffect);
+export const useClearLineEffect = () => useGameStateStore((state) => state.clearLineEffect);
+export const useCalculatePiecePlacementState = () => useGameStateStore((state) => state.calculatePiecePlacementState);
+export const useMovePieceToPosition = () => useGameStateStore((state) => state.movePieceToPosition);
+export const useRotatePieceTo = () => useGameStateStore((state) => state.rotatePieceTo);

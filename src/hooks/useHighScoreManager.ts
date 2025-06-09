@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { useStatisticsActions, useStatisticsStore } from '../store/statisticsStore';
+import { 
+  useStatisticsStore,
+  useAddHighScore,
+  useUpdateStatistics 
+} from '../store/statisticsStore';
 import { GameState, SoundKey } from '../types/tetris';
 import {
   isHighScore,
@@ -20,7 +24,8 @@ interface HighScoreResult {
 }
 
 export function useHighScoreManager({ gameState, playSound }: UseHighScoreManagerProps) {
-  const { addHighScore, updateStatistics } = useStatisticsActions();
+  const addHighScore = useAddHighScore();
+  const updateStatistics = useUpdateStatistics();
   const previousGameOverRef = useRef(false);
   const gameEndProcessedRef = useRef(false);
 

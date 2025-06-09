@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState, useMemo } from 'react';
+import { useCallback, useEffect, useState, useMemo, useRef } from 'react';
 import type { Particle, Tetromino, GameState, SoundKey } from '../types/tetris';
 import TetrisBoard from './TetrisBoard';
 import GameInfo from './GameInfo';
@@ -13,29 +13,39 @@ import { useSounds } from '../hooks/useSounds';
 import { useMobileDetection } from '../hooks/useMobileDetection';
 import { 
   useSettings,
-  useSettingsActions
+  useUpdateSettings
 } from '../store/settingsStore';
 import { 
   useGameState,
   useDropTime,
-  useGameStateActions
+  useSetGameState,
+  useUpdateParticles,
+  useResetGame,
+  useTogglePause,
+  useSetDropTime,
+  useCalculatePiecePlacementState,
+  useMovePieceToPosition,
+  useRotatePieceTo
 } from '../store/gameStateStore';
 import { useHighScoreManager } from '../hooks/useHighScoreManager';
 import { useSessionTracking } from '../hooks/useSessionTracking';
 
 export default function TetrisGame() {
+  // 🔍 DEBUG: レンダリング回数をトレース
+  const renderCount = useRef(0);
+  renderCount.current++;
+  console.log(`🔍 TetrisGame render #${renderCount.current}`);
+
   // 新しい分割Zustandストア
   const settings = useSettings();
-  const { updateSettings } = useSettingsActions();
+  const updateSettings = useUpdateSettings();
   const gameState = useGameState();
   const dropTime = useDropTime();
-  const { 
-    setGameState, 
-    updateParticles, 
-    resetGame, 
-    togglePause, 
-    setDropTime 
-  } = useGameStateActions();
+  const setGameState = useSetGameState();
+  const updateParticles = useUpdateParticles();
+  const resetGame = useResetGame();
+  const togglePause = useTogglePause();
+  const setDropTime = useSetDropTime();
 
   // モバイルデバイス検出
   const { isMobile } = useMobileDetection();
@@ -66,17 +76,19 @@ export default function TetrisGame() {
     initialMuted: settings.isMuted
   });
 
+  // 🔍 DEBUG: playSound関数の作成をトレース
+  console.log(`🔍 playSound created/updated, isMuted: ${isMuted}, volume: ${volume}`);
+  
   // playSound関数の安定化（シンプルなuseCallback使用）
   const stablePlaySound = useCallback((soundType: SoundKey) => {
+    console.log(`🔍 stablePlaySound called: ${soundType}`);
     playSound(soundType);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ゲームアクション取得
-  const { 
-    calculatePiecePlacementState, 
-    movePieceToPosition, 
-    rotatePieceTo 
-  } = useGameStateActions();
+  const calculatePiecePlacementState = useCalculatePiecePlacementState();
+  const movePieceToPosition = useMovePieceToPosition();
+  const rotatePieceTo = useRotatePieceTo();
   const INITIAL_DROP_TIME = 1000; // 定数化
 
   // 音声初期化
@@ -84,25 +96,32 @@ export default function TetrisGame() {
     initializeSounds();
   }, [initializeSounds]);
 
+  // 🔍 DEBUG: pieceControlActions作成をトレース
+  console.log(`🔍 Creating pieceControlActions`);
+  
   // useGameControls用のアクションアダプター（playSound依存除去）
-  const pieceControlActions = useMemo(() => ({
-    onPieceMove: (state: GameState, newPosition: { x: number; y: number }) => {
-      movePieceToPosition(newPosition);
-      return { ...state, currentPiece: state.currentPiece ? { ...state.currentPiece, position: newPosition } : null };
-    },
-    onPieceLand: (state: GameState, piece: Tetromino, bonusPoints?: number) => {
-      // 安定化されたplaySound関数を使用
-      calculatePiecePlacementState(piece, bonusPoints, stablePlaySound);
-      // 状態はcalculatePiecePlacementStateで自動更新される
-      return state;
-    },
-    onPieceRotate: (state: GameState, rotatedPiece: Tetromino) => {
-      rotatePieceTo(rotatedPiece);
-      return { ...state, currentPiece: rotatedPiece };
-    }
-  }), [movePieceToPosition, calculatePiecePlacementState, rotatePieceTo, stablePlaySound]); // stablePlaySound追加
+  const pieceControlActions = useMemo(() => {
+    console.log(`🔍 pieceControlActions useMemo executed`);
+    return {
+      onPieceMove: (state: GameState, newPosition: { x: number; y: number }) => {
+        movePieceToPosition(newPosition);
+        return { ...state, currentPiece: state.currentPiece ? { ...state.currentPiece, position: newPosition } : null };
+      },
+      onPieceLand: (state: GameState, piece: Tetromino, bonusPoints?: number) => {
+        // 安定化されたplaySound関数を使用
+        calculatePiecePlacementState(piece, bonusPoints, stablePlaySound);
+        // 状態はcalculatePiecePlacementStateで自動更新される
+        return state;
+      },
+      onPieceRotate: (state: GameState, rotatedPiece: Tetromino) => {
+        rotatePieceTo(rotatedPiece);
+        return { ...state, currentPiece: rotatedPiece };
+      }
+    };
+  }, [movePieceToPosition, calculatePiecePlacementState, rotatePieceTo, stablePlaySound]); // stablePlaySound追加
 
   const onGameStateChange = useCallback((newState: GameState) => {
+    console.log(`🔍 onGameStateChange called`);
     // 新しい状態が渡されたらZustandストアを更新
     setGameState(newState);
   }, [setGameState]);
@@ -129,15 +148,21 @@ export default function TetrisGame() {
   // セッション管理
   const { onGameStart } = useSessionTracking();
 
+  // 🔍 DEBUG: gameActions作成をトレース
+  console.log(`🔍 Creating gameActions`);
+  
   // ゲームアクション（関数参照固定）
-  const gameActions = useMemo(() => ({
-    movePiece,
-    rotatePieceClockwise,
-    hardDrop,
-    dropPiece,
-    togglePause,
-    resetGame
-  }), []); // eslint-disable-line react-hooks/exhaustive-deps
+  const gameActions = useMemo(() => {
+    console.log(`🔍 gameActions useMemo executed`);
+    return {
+      movePiece,
+      rotatePieceClockwise,
+      hardDrop,
+      dropPiece,
+      togglePause,
+      resetGame
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ゲームループ
   useGameLoop({

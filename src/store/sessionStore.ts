@@ -170,16 +170,16 @@ export const useSessionStore = create<SessionStore>()((set, get) => ({
 export const useCurrentSession = () => useSessionStore((state) => state.currentSession);
 export const usePlaySessions = () => useSessionStore((state) => state.playSessions);
 export const useErrors = () => useSessionStore((state) => state.errors);
-export const useSessionActions = () => useSessionStore((state) => ({
-  startPlaySession: state.startPlaySession,
-  endPlaySession: state.endPlaySession,
-  incrementGameCount: state.incrementGameCount,
-  getActiveSession: state.getActiveSession,
-  getSessionDuration: state.getSessionDuration,
-  getTotalPlayTime: state.getTotalPlayTime
-}));
-export const useErrorActions = () => useSessionStore((state) => ({
-  addError: state.addError,
-  clearErrors: state.clearErrors,
-  clearError: state.clearError
-}));
+
+// 個別アクションフック（関数参照安定化）
+export const useStartPlaySession = () => useSessionStore((state) => state.startPlaySession);
+export const useEndPlaySession = () => useSessionStore((state) => state.endPlaySession);
+export const useIncrementGameCount = () => useSessionStore((state) => state.incrementGameCount);
+export const useGetActiveSession = () => useSessionStore((state) => state.getActiveSession);
+export const useGetSessionDuration = () => useSessionStore((state) => state.getSessionDuration);
+export const useGetTotalPlayTime = () => useSessionStore((state) => state.getTotalPlayTime);
+
+// エラー関連個別アクションフック
+export const useAddError = () => useSessionStore((state) => state.addError);
+export const useClearErrors = () => useSessionStore((state) => state.clearErrors);
+export const useClearError = () => useSessionStore((state) => state.clearError);

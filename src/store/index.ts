@@ -4,7 +4,9 @@
 export {
   useSettingsStore,
   useSettings,
-  useSettingsActions
+  useUpdateSettings,
+  useResetSettings,
+  useUpdateTheme
 } from './settingsStore';
 
 // Game State Store
@@ -12,7 +14,16 @@ export {
   useGameStateStore,
   useGameState as useNewGameState,
   useDropTime,
-  useGameStateActions
+  useSetGameState,
+  useUpdateParticles,
+  useResetGame,
+  useTogglePause,
+  useSetDropTime,
+  useUpdateLineEffect,
+  useClearLineEffect,
+  useCalculatePiecePlacementState,
+  useMovePieceToPosition,
+  useRotatePieceTo
 } from './gameStateStore';
 
 // Theme Store
@@ -21,7 +32,13 @@ export {
   useTheme as useNewTheme,
   useThemeConfig,
   useThemeAccessibility,
-  useThemeActions
+  useSetTheme,
+  useUpdateThemeState,
+  useSetCustomColors,
+  useSetAccessibilityOptions,
+  useResetThemeToDefault,
+  useSetEffectIntensity,
+  useToggleAnimations
 } from './themeStore';
 
 // Statistics Store
@@ -29,7 +46,19 @@ export {
   useStatisticsStore,
   useHighScores as useNewHighScores,
   useStatistics as useNewStatistics,
-  useStatisticsActions
+  useAddHighScore,
+  useClearHighScores,
+  useUpdateStatistics,
+  useResetStatistics,
+  useIncrementTotalGames,
+  useUpdateBestScore,
+  useAddScore,
+  useAddLines,
+  useAddTetris,
+  useAddPlayTime,
+  useUpdateBestStreak,
+  useGetAverageScore,
+  useGetEfficiency
 } from './statisticsStore';
 
 // Session Store
@@ -38,8 +67,15 @@ export {
   useCurrentSession,
   usePlaySessions,
   useErrors as useNewErrors,
-  useSessionActions,
-  useErrorActions
+  useStartPlaySession,
+  useEndPlaySession,
+  useIncrementGameCount,
+  useGetActiveSession,
+  useGetSessionDuration,
+  useGetTotalPlayTime,
+  useAddError,
+  useClearErrors,
+  useClearError
 } from './sessionStore';
 
 // レガシーストア削除完了
