@@ -166,7 +166,7 @@ export function useSounds({
 
   // 音を再生（堅牢なフォールバックシステム）
   const playSound = useCallback(async (soundType: SoundKey) => {
-    // 現在の状態をリアルタイムで参照（依存配列から除外）
+    // 現在の状態をリアルタイムで参照（依存配列を空にして関数参照を固定）
     if (isMuted) return;
 
     try {
@@ -179,7 +179,7 @@ export function useSounds({
         failed: new Set([...prev.failed, soundType])
       }));
     }
-  }, [isMuted, volume]); // audioState.failedを依存配列から除去
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // 音量を設定
   const setVolumeLevel = useCallback((newVolume: number) => {

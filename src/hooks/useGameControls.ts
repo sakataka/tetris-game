@@ -41,7 +41,7 @@ export function useGameControls({
       const newState = actions.onPieceLand(gameState, gameState.currentPiece, 0);
       onStateChange(newState);
     }
-  }, [gameState, actions, onStateChange]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [gameState, actions, playSound, onStateChange]);
 
   const rotatePieceClockwise = useCallback(() => {
     if (!gameState.currentPiece || gameState.gameOver || gameState.isPaused) {
@@ -55,7 +55,7 @@ export function useGameControls({
       const newState = actions.onPieceRotate(gameState, rotatedPiece);
       onStateChange(newState);
     }
-  }, [gameState, actions, onStateChange]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [gameState, actions, playSound, onStateChange]);
 
   const dropPiece = useCallback(() => {
     movePiece({ x: 0, y: 1 });
@@ -83,7 +83,7 @@ export function useGameControls({
     playSound('hardDrop');
     const newState = actions.onPieceLand(gameState, droppedPiece, hardDropBonus);
     onStateChange(newState);
-  }, [gameState, actions, onStateChange]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [gameState, actions, playSound, onStateChange]);
 
   return {
     movePiece,

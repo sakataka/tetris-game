@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useState, useMemo } from 'react';
 import type { Particle, Tetromino, GameState, SoundKey } from '../types/tetris';
 import TetrisBoard from './TetrisBoard';
 import GameInfo from './GameInfo';
@@ -66,12 +66,10 @@ export default function TetrisGame() {
     initialMuted: settings.isMuted
   });
 
-  // playSound関数の安定化のため、refに保存
-  const playSoundRef = useRef(playSound);
-  
-  useEffect(() => {
-    playSoundRef.current = playSound;
-  }, [playSound]);
+  // playSound関数の安定化（シンプルなuseCallback使用）
+  const stablePlaySound = useCallback((soundType: SoundKey) => {
+    playSound(soundType);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ゲームアクション取得
   const { 
@@ -93,8 +91,8 @@ export default function TetrisGame() {
       return { ...state, currentPiece: state.currentPiece ? { ...state.currentPiece, position: newPosition } : null };
     },
     onPieceLand: (state: GameState, piece: Tetromino, bonusPoints?: number) => {
-      // playSoundRefから安定化されたplaySound関数を取得
-      calculatePiecePlacementState(piece, bonusPoints, playSoundRef.current);
+      // 安定化されたplaySound関数を使用
+      calculatePiecePlacementState(piece, bonusPoints, stablePlaySound);
       // 状態はcalculatePiecePlacementStateで自動更新される
       return state;
     },
@@ -102,17 +100,13 @@ export default function TetrisGame() {
       rotatePieceTo(rotatedPiece);
       return { ...state, currentPiece: rotatedPiece };
     }
-  }), [movePieceToPosition, calculatePiecePlacementState, rotatePieceTo]); // playSound依存除去
+  }), [movePieceToPosition, calculatePiecePlacementState, rotatePieceTo, stablePlaySound]); // stablePlaySound追加
 
   const onGameStateChange = useCallback((newState: GameState) => {
     // 新しい状態が渡されたらZustandストアを更新
     setGameState(newState);
   }, [setGameState]);
 
-  // ゲーム操作（playSound安定化版を使用）
-  const stablePlaySound = useCallback((soundType: SoundKey) => {
-    playSoundRef.current(soundType);
-  }, []);
 
   const {
     movePiece,
@@ -129,13 +123,13 @@ export default function TetrisGame() {
   // ハイスコア管理
   useHighScoreManager({
     gameState,
-    playSound
+    playSound: stablePlaySound
   });
 
   // セッション管理
   const { onGameStart } = useSessionTracking();
 
-  // ゲームアクション（安定化）
+  // ゲームアクション（関数参照固定）
   const gameActions = useMemo(() => ({
     movePiece,
     rotatePieceClockwise,
@@ -143,7 +137,7 @@ export default function TetrisGame() {
     dropPiece,
     togglePause,
     resetGame
-  }), [movePiece, rotatePieceClockwise, hardDrop, dropPiece, togglePause, resetGame]);
+  }), []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ゲームループ
   useGameLoop({
