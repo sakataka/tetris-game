@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { useRef, useEffect } from 'react';
 import { I18N_CONFIG, type SupportedLocale } from '../constants';
 
 // 言語設定の型定義
@@ -140,9 +141,9 @@ export type LanguageChangeCallback = (newLanguage: SupportedLocale, oldLanguage:
 // 言語変更の監視用カスタムフック
 export const useLanguageChange = (callback: LanguageChangeCallback) => {
   const currentLanguage = useCurrentLanguage();
-  const prevLanguageRef = React.useRef(currentLanguage);
+  const prevLanguageRef = useRef(currentLanguage);
   
-  React.useEffect(() => {
+  useEffect(() => {
     if (prevLanguageRef.current !== currentLanguage) {
       callback(currentLanguage, prevLanguageRef.current);
       prevLanguageRef.current = currentLanguage;
@@ -150,5 +151,3 @@ export const useLanguageChange = (callback: LanguageChangeCallback) => {
   }, [currentLanguage, callback]);
 };
 
-// React import (上記のカスタムフックで使用)
-import React from 'react';

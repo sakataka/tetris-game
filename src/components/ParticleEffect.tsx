@@ -111,10 +111,8 @@ const ParticleEffect = memo(function ParticleEffect({
         performanceCheckCountRef.current = 0;
         
         if (metrics.fps < 45 && currentRenderer === 'dom' && updatedParticles.length > 20) {
-          console.log('🚀 Switching to Canvas renderer for better performance');
           setCurrentRenderer('canvas');
         } else if (metrics.fps > 55 && currentRenderer === 'canvas' && updatedParticles.length < 10) {
-          console.log('🎨 Switching to DOM renderer for better visual quality');
           setCurrentRenderer('dom');
         }
       }

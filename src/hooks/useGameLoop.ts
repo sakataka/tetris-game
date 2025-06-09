@@ -32,8 +32,6 @@ export function useGameLoop({
   onDropTimeChange
 }: UseGameLoopProps) {
   
-  // 🔍 DEBUG: useGameLoop実行をトレース
-  console.log(`🔍 useGameLoop executed, actions reference:`, actions);
   
   // キーボード入力処理用のコールバック
   const onMoveLeft = useCallback(() => actions.movePiece({ x: -1, y: 0 }), [actions]);

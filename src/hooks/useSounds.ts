@@ -19,8 +19,6 @@ export function useSounds({
   initialMuted = false,
   useWebAudio = true // デフォルトでWeb Audio APIを使用
 }: UseSoundsProps = {}) {
-  // 🔍 DEBUG: useSounds実行をトレース
-  console.log(`🔍 useSounds executed, initialVolume: ${initialVolume}, initialMuted: ${initialMuted}`);
   
   const [isMuted, setIsMuted] = useState(initialMuted);
   const [volume, setVolume] = useState(initialVolume);
@@ -167,7 +165,6 @@ export function useSounds({
 
   // 音を再生（堅牢なフォールバックシステム）
   const playSound = useCallback(async (soundType: SoundKey) => {
-    console.log(`🔍 playSound useCallback created/executed, soundType: ${soundType}`);
     // 現在の状態をリアルタイムで参照（依存配列を空にして関数参照を固定）
     if (isMuted) return;
 

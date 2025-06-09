@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useState, useMemo } from 'react';
 import type { Particle, Tetromino, GameState, SoundKey } from '../types/tetris';
 import TetrisBoard from './TetrisBoard';
 import GameInfo from './GameInfo';
@@ -31,10 +31,6 @@ import { useHighScoreManager } from '../hooks/useHighScoreManager';
 import { useSessionTrackingV2 } from '../hooks/useSessionTrackingV2';
 
 export default function TetrisGame() {
-  // 🔍 DEBUG: レンダリング回数をトレース
-  const renderCount = useRef(0);
-  renderCount.current++;
-  console.log(`🔍 TetrisGame render #${renderCount.current}`);
 
   // 新しい分割Zustandストア
   const settings = useSettings();
@@ -76,12 +72,9 @@ export default function TetrisGame() {
     initialMuted: settings.isMuted
   });
 
-  // 🔍 DEBUG: playSound関数の作成をトレース
-  console.log(`🔍 playSound created/updated, isMuted: ${isMuted}, volume: ${volume}`);
   
   // playSound関数の安定化（シンプルなuseCallback使用）
   const stablePlaySound = useCallback((soundType: SoundKey) => {
-    console.log(`🔍 stablePlaySound called: ${soundType}`);
     playSound(soundType);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -96,12 +89,9 @@ export default function TetrisGame() {
     initializeSounds();
   }, [initializeSounds]);
 
-  // 🔍 DEBUG: pieceControlActions作成をトレース
-  console.log(`🔍 Creating pieceControlActions`);
   
   // useGameControls用のアクションアダプター（playSound依存除去）
   const pieceControlActions = useMemo(() => {
-    console.log(`🔍 pieceControlActions useMemo executed`);
     return {
       onPieceMove: (state: GameState, newPosition: { x: number; y: number }) => {
         movePieceToPosition(newPosition);
@@ -122,7 +112,6 @@ export default function TetrisGame() {
   }, [movePieceToPosition, calculatePiecePlacementState, rotatePieceTo, stablePlaySound]); // stablePlaySound追加
 
   const onGameStateChange = useCallback((newState: GameState) => {
-    console.log(`🔍 onGameStateChange called`);
     // 新しい状態が渡されたらZustandストアを更新
     setGameState(newState);
   }, [setGameState]);
@@ -149,12 +138,9 @@ export default function TetrisGame() {
   // セッション管理（V2 - 簡素化版）
   const { onGameStart } = useSessionTrackingV2();
 
-  // 🔍 DEBUG: gameActions作成をトレース
-  console.log(`🔍 Creating gameActions`);
   
   // ゲームアクション（適切な依存配列で更新）
   const gameActions = useMemo(() => {
-    console.log(`🔍 gameActions useMemo executed`);
     return {
       movePiece,
       rotatePieceClockwise,

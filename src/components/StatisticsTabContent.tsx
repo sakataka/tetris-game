@@ -1,7 +1,9 @@
 'use client';
 
-import { memo } from 'react';
-import StatisticsDashboard from './StatisticsDashboard';
+import { memo, lazy, Suspense } from 'react';
+
+// 統計ダッシュボードを動的インポート
+const StatisticsDashboard = lazy(() => import('./StatisticsDashboard'));
 import { useHighScores, useStatistics } from '../store/statisticsStore';
 import { calculateEnhancedStatistics } from '../utils/data';
 
@@ -24,11 +26,17 @@ const StatisticsTabContent = memo(function StatisticsTabContent({
 
   return (
     <div className={className}>
-      <StatisticsDashboard 
-        statistics={enhancedStats}
-        highScores={highScores}
-        showDetailedView={true}
-      />
+      <Suspense fallback={
+        <div className="flex items-center justify-center p-8">
+          <div className="text-cyan-300 text-sm">統計データを読み込み中...</div>
+        </div>
+      }>
+        <StatisticsDashboard 
+          statistics={enhancedStats}
+          highScores={highScores}
+          showDetailedView={true}
+        />
+      </Suspense>
     </div>
   );
 });

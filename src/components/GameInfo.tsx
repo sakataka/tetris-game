@@ -1,12 +1,14 @@
 'use client';
 
-import { memo, useState } from 'react';
+import { memo, useState, lazy, Suspense } from 'react';
 import { Tetromino } from '../types/tetris';
 import TabNavigation, { TabType } from './TabNavigation';
 import GameTabContent from './GameTabContent';
 import StatisticsTabContent from './StatisticsTabContent';
-import ThemeTabContent from './ThemeTabContent';
 import MobileGameInfo from './MobileGameInfo';
+
+// 重いコンポーネントの動的インポート
+const ThemeTabContent = lazy(() => import('./ThemeTabContent'));
 import { 
   useSettings,
   useUpdateSettings
@@ -73,7 +75,15 @@ const GameInfo = memo(function GameInfo({
       case 'stats':
         return <StatisticsTabContent />;
       case 'theme':
-        return <ThemeTabContent />;
+        return (
+          <Suspense fallback={
+            <div className="flex items-center justify-center p-4">
+              <div className="text-cyan-300 text-sm">テーマ設定を読み込み中...</div>
+            </div>
+          }>
+            <ThemeTabContent />
+          </Suspense>
+        );
       default:
         return (
           <GameTabContent
