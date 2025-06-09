@@ -29,7 +29,7 @@ import { AnimationManager } from '../utils/animation/animationManager';
 import { createMockDOMEnvironment } from './fixtures';
 
 // DOM環境をセットアップ
-const domMocks = createMockDOMEnvironment();
+createMockDOMEnvironment();
 
 // requestAnimationFrameとcancelAnimationFrameのモック
 const mockRequestAnimationFrame = vi.fn();
@@ -103,7 +103,9 @@ describe('AnimationManager', () => {
 
   describe('シングルトンパターン', () => {
     it('animationManagerは常に同じインスタンスである', () => {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { animationManager: manager1 } = require('../utils/animation/animationManager');
+      // eslint-disable-next-line @typescript-eslint/no-require-imports  
       const { animationManager: manager2 } = require('../utils/animation/animationManager');
       
       expect(manager1).toBe(manager2);
@@ -244,6 +246,7 @@ describe('AnimationManager', () => {
 
   describe('エラーハンドリング', () => {
     it('コールバック内のエラーをキャッチして処理を継続する', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { handleError } = require('../utils/data/errorHandler');
       
       const errorCallback = vi.fn(() => {

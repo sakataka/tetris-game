@@ -5,7 +5,7 @@
  */
 
 import { expect } from 'vitest';
-import type { HighScore, GameStatistics, ThemeConfig } from '../../types/tetris';
+import type { HighScore, GameStatistics } from '../../types/tetris';
 
 // ===== アサーションヘルパー =====
 
@@ -33,19 +33,23 @@ export const expectValidHighScore = (highScore: unknown) => {
  */
 export const expectValidStatistics = (statistics: unknown) => {
   expect(statistics).toMatchObject({
-    gamesPlayed: expect.any(Number),
+    totalGames: expect.any(Number),
     totalScore: expect.any(Number),
     totalLines: expect.any(Number),
     playTime: expect.any(Number),
+    bestScore: expect.any(Number),
+    averageScore: expect.any(Number),
     bestStreak: expect.any(Number),
     tetrisCount: expect.any(Number)
   });
   
   const stats = statistics as GameStatistics;
-  expect(stats.gamesPlayed).toBeGreaterThanOrEqual(0);
+  expect(stats.totalGames).toBeGreaterThanOrEqual(0);
   expect(stats.totalScore).toBeGreaterThanOrEqual(0);
   expect(stats.totalLines).toBeGreaterThanOrEqual(0);
   expect(stats.playTime).toBeGreaterThanOrEqual(0);
+  expect(stats.bestScore).toBeGreaterThanOrEqual(0);
+  expect(stats.averageScore).toBeGreaterThanOrEqual(0);
   expect(stats.bestStreak).toBeGreaterThanOrEqual(0);
   expect(stats.tetrisCount).toBeGreaterThanOrEqual(0);
 };

@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useHighScoreManager } from '../hooks/useHighScoreManager';
 import { GameState } from '../types/tetris';
-import { createMockStatisticsStore, createTestFixtures } from './fixtures';
+import { createTestFixtures } from './fixtures';
 
 // テストフィクスチャとモックを作成
 const fixtures = createTestFixtures();

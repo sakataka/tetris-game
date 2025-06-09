@@ -21,6 +21,3 @@ export {
 
 // 共通テストユーティリティ
 export * from './testUtils';
-
-// 型定義
-export type * from './types';

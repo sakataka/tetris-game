@@ -31,6 +31,23 @@ const mockSessionState = {
 };
 
 vi.mock('../store/sessionStoreV2', () => ({
+  useSessionStoreV2: () => ({
+    ...mockSessionState,
+    ...mockSessionActions,
+    isSessionActive: false
+  }),
+  useCurrentSession: () => mockSessionState.currentSession,
+  useIsSessionActive: () => false,
+  useSessionStats: () => ({
+    totalSessions: mockSessionState.totalSessions,
+    totalPlayTime: mockSessionState.totalPlayTime,
+    totalGamesPlayed: mockSessionState.totalGamesPlayed,
+    averageSessionLength: mockSessionState.averageSessionLength,
+    lastSessionDate: mockSessionState.lastSessionDate
+  }),
+  useStartSession: () => mockSessionActions.startNewSession,
+  useEndSession: () => mockSessionActions.endCurrentSession,
+  useOnGameStart: () => mockSessionActions.incrementGamesPlayed,
   useSessionState: () => mockSessionState,
   useSessionActions: () => mockSessionActions
 }));

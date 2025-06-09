@@ -5,8 +5,8 @@
  * モック生成ユーティリティを提供
  */
 
-import { vi } from 'vitest';
-import type { SoundKey, GameState, HighScore, GameStatistics, ThemeConfig } from '../../types/tetris';
+import { vi, expect } from 'vitest';
+import type { GameState, HighScore, GameStatistics, ThemeConfig } from '../../types/tetris';
 
 // ===== 音声システムモック =====
 
@@ -68,7 +68,7 @@ export const createMockAudioSystem = () => {
   return {
     mockAudioContext,
     mockAudio,
-    mockPlaySound: vi.fn<[SoundKey], Promise<void>>().mockResolvedValue(undefined),
+    mockPlaySound: vi.fn().mockResolvedValue(undefined),
     mockAudioManager: {
       isInitialized: vi.fn().mockReturnValue(true),
       initialize: vi.fn().mockResolvedValue(undefined),
@@ -162,13 +162,6 @@ export const createMockDOMEnvironment = () => {
     }
   };
 
-  // MediaQueryListモック
-  const mockMediaQuery = {
-    matches: false,
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn()
-  };
-
   // グローバル設定
   Object.defineProperty(window, 'localStorage', {
     value: localStorageMock,
@@ -222,10 +215,12 @@ export const createMockStatisticsStore = () => {
   ];
 
   const mockStatistics: GameStatistics = {
-    gamesPlayed: 15,
+    totalGames: 15,
     totalScore: 125000,
     totalLines: 185,
     playTime: 4500,
+    bestScore: 45000,
+    averageScore: 8333,
     bestStreak: 3,
     tetrisCount: 15
   };
@@ -280,31 +275,35 @@ export const createTestFixtures = () => ({
 
   // 統計データ
   statistics: {
-    gamesPlayed: 15,
+    totalGames: 15,
     totalScore: 125000,
     totalLines: 185,
     playTime: 4500,
+    bestScore: 45000,
+    averageScore: 8333,
     bestStreak: 3,
     tetrisCount: 15
   } as GameStatistics,
 
   // テーマ設定
   themeConfig: {
-    variant: 'cyberpunk' as const,
+    name: 'cyberpunk',
     colors: {
       primary: '#00ffff',
       secondary: '#ff00ff',
       accent: '#ffff00',
       background: '#000011'
     },
-    animations: {
-      enabled: true,
-      intensity: 'normal' as const
+    effects: {
+      blur: 0.5,
+      glow: 1.0,
+      saturation: 1.2,
+      brightness: 1.0
     },
     accessibility: {
-      colorBlindness: 'none' as const,
+      colorBlindnessType: 'none' as const,
       contrast: 'normal' as const,
-      reducedMotion: false
+      animationIntensity: 'normal' as const
     }
   } as ThemeConfig,
 

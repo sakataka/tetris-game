@@ -11,6 +11,12 @@ describe('useSettings', () => {
     // Clear localStorage before each test
     clearTestStorage();
     domMocks.localStorageMock.clear();
+    
+    // Reset localStorage mock to return null (no data)
+    vi.clearAllMocks();
+    vi.spyOn(window.localStorage, 'getItem').mockReturnValue(null);
+    vi.spyOn(window.localStorage, 'setItem').mockImplementation(() => {});
+    vi.spyOn(window.localStorage, 'removeItem').mockImplementation(() => {});
   });
 
   it('should initialize with default settings', () => {
