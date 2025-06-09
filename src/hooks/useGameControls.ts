@@ -40,11 +40,11 @@ export function useGameControls({
       onStateChange(newState);
     } else if (dir.y > 0) {
       // Piece hit bottom, place it
-      playSound('pieceLand');
-      const newState = actions.onPieceLand(gameState, gameState.currentPiece, 0);
-      onStateChange(newState);
+      // 音声はcalculatePiecePlacementState内で再生されるため、ここでは再生しない
+      actions.onPieceLand(gameState, gameState.currentPiece, 0);
+      // onStateChangeは呼ばない（calculatePiecePlacementStateがZustandストアを直接更新）
     }
-  }, [gameState, actions, playSound, onStateChange]);
+  }, [gameState, actions, onStateChange]);
 
   const rotatePieceClockwise = useCallback(() => {
     if (!gameState.currentPiece || gameState.gameOver || gameState.isPaused) {

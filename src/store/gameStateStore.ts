@@ -125,6 +125,11 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
   
   calculatePiecePlacementState: (piece, bonusPoints = 0, playSound) =>
     set((state) => {
+      // 0. ピース着地音を再生（ライン消去音より前に）
+      if (playSound) {
+        playSound('pieceLand');
+      }
+      
       // 1. ライン消去処理
       const lineClearResult = processLineClear(state.gameState.board, piece);
       

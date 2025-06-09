@@ -108,9 +108,10 @@ export default function TetrisGame() {
         return { ...state, currentPiece: state.currentPiece ? { ...state.currentPiece, position: newPosition } : null };
       },
       onPieceLand: (state: GameState, piece: Tetromino, bonusPoints?: number) => {
-        // 安定化されたplaySound関数を使用
+        // 安定化されたplaySound関数を使用してピース着地処理を実行
         calculatePiecePlacementState(piece, bonusPoints, stablePlaySound);
-        // 状態はcalculatePiecePlacementStateで自動更新される
+        // calculatePiecePlacementStateがZustandストアを直接更新するため、
+        // onStateChangeは呼ばれないが、Reactの再レンダリングで状態は反映される
         return state;
       },
       onPieceRotate: (state: GameState, rotatedPiece: Tetromino) => {
