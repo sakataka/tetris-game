@@ -20,28 +20,11 @@ export function applyThemeToCSS(config: ThemeConfig): void {
   root.style.setProperty('--cyber-yellow', config.colors.tertiary);
   root.style.setProperty('--cyber-green', config.colors.accent);
   
-  // 透明度バリエーション生成
-  const primaryRGB = hexToRgb(config.colors.primary);
-  const secondaryRGB = hexToRgb(config.colors.secondary);
-  const tertiaryRGB = hexToRgb(config.colors.tertiary);
-  
-  if (primaryRGB) {
-    root.style.setProperty('--cyber-cyan-10', `rgba(${primaryRGB.r}, ${primaryRGB.g}, ${primaryRGB.b}, 0.1)`);
-    root.style.setProperty('--cyber-cyan-20', `rgba(${primaryRGB.r}, ${primaryRGB.g}, ${primaryRGB.b}, 0.2)`);
-    root.style.setProperty('--cyber-cyan-30', `rgba(${primaryRGB.r}, ${primaryRGB.g}, ${primaryRGB.b}, 0.3)`);
-    root.style.setProperty('--cyber-cyan-60', `rgba(${primaryRGB.r}, ${primaryRGB.g}, ${primaryRGB.b}, 0.6)`);
-  }
-  
-  if (secondaryRGB) {
-    root.style.setProperty('--cyber-purple-10', `rgba(${secondaryRGB.r}, ${secondaryRGB.g}, ${secondaryRGB.b}, 0.1)`);
-    root.style.setProperty('--cyber-purple-20', `rgba(${secondaryRGB.r}, ${secondaryRGB.g}, ${secondaryRGB.b}, 0.2)`);
-    root.style.setProperty('--cyber-purple-30', `rgba(${secondaryRGB.r}, ${secondaryRGB.g}, ${secondaryRGB.b}, 0.3)`);
-  }
-  
-  if (tertiaryRGB) {
-    root.style.setProperty('--cyber-yellow-10', `rgba(${tertiaryRGB.r}, ${tertiaryRGB.g}, ${tertiaryRGB.b}, 0.1)`);
-    root.style.setProperty('--cyber-yellow-20', `rgba(${tertiaryRGB.r}, ${tertiaryRGB.g}, ${tertiaryRGB.b}, 0.2)`);
-  }
+  // 透明度バリエーション自動生成
+  const transparencyVariables = generateTransparencyVariables(config.colors);
+  Object.entries(transparencyVariables).forEach(([varName, value]) => {
+    root.style.setProperty(varName, value);
+  });
   
   // エフェクト設定
   root.style.setProperty('--neon-blur-sm', `${config.effects.blur * 0.5}px`);
@@ -56,15 +39,64 @@ export function applyThemeToCSS(config: ThemeConfig): void {
 }
 
 /**
- * Hexカラーコードを RGB に変換
+ * 透明度バリエーション定数
  */
+const TRANSPARENCY_LEVELS = [10, 20, 30, 40, 50, 60, 70, 80, 90] as const;
+
+/**
+ * カラー名マッピング（後方互換性保持）
+ */
+const COLOR_NAME_MAPPING = {
+  primary: 'cyan',
+  secondary: 'purple', 
+  tertiary: 'yellow',
+  accent: 'green'
+} as const;
+
+/**
+ * 透明度バリエーションを自動生成
+ */
+function generateTransparencyVariables(colors: ColorPalette): Record<string, string> {
+  const variables: Record<string, string> = {};
+  
+  Object.entries(COLOR_NAME_MAPPING).forEach(([colorKey, cssName]) => {
+    const hexColor = colors[colorKey as keyof ColorPalette];
+    const rgb = hexToRgb(hexColor);
+    
+    if (rgb) {
+      TRANSPARENCY_LEVELS.forEach(level => {
+        const varName = `--cyber-${cssName}-${level}`;
+        const opacity = level / 100;
+        variables[varName] = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`;
+      });
+    }
+  });
+  
+  return variables;
+}
+
+/**
+ * Hexカラーコードを RGB に変換（キャッシュ機能付き）
+ */
+const hexToRgbCache = new Map<string, { r: number; g: number; b: number } | null>();
+
 function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
+  // キャッシュから取得
+  if (hexToRgbCache.has(hex)) {
+    return hexToRgbCache.get(hex)!;
+  }
+  
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ? {
+  const rgbResult = result ? {
     r: parseInt(result[1], 16),
     g: parseInt(result[2], 16),
     b: parseInt(result[3], 16)
   } : null;
+  
+  // キャッシュに保存
+  hexToRgbCache.set(hex, rgbResult);
+  
+  return rgbResult;
 }
 
 /**
