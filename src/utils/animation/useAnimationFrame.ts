@@ -71,6 +71,9 @@ export function useAnimationFrame(
 
   // 依存配列の変更時にアニメーション再開
   useEffect(() => {
+    // 依存配列変更時は前の状態をリセット
+    previousTimeRef.current = undefined;
+    
     const currentOptions = optionsRef.current;
     if (currentOptions.enabled ?? true) {
       startAnimation();
@@ -155,13 +158,24 @@ export function useTimerAnimation(
   deps: React.DependencyList,
   options: UseAnimationOptions = {}
 ) {
-  const lastExecutionRef = useRef<number>(0);
+  const accumulatedTimeRef = useRef<number>(0);
+
+  // useEffectで依存配列変更時に累積時間をリセット
+  useEffect(() => {
+    accumulatedTimeRef.current = 0;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps);
 
   return useAnimationFrame(
-    (currentTime) => {
-      if (currentTime - lastExecutionRef.current >= interval) {
+    (deltaTime) => {
+      // deltaTimeを累積
+      accumulatedTimeRef.current += deltaTime;
+      
+      // インターバル時間が経過したら実行
+      if (accumulatedTimeRef.current >= interval) {
         callback();
-        lastExecutionRef.current = currentTime;
+        // 次回のために余った時間を保持（精度向上）
+        accumulatedTimeRef.current = accumulatedTimeRef.current % interval;
       }
     },
     deps,

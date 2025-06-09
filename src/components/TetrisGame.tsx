@@ -25,10 +25,12 @@ import {
   useSetDropTime,
   useCalculatePiecePlacementState,
   useMovePieceToPosition,
-  useRotatePieceTo
+  useRotatePieceTo,
+  useClearLineEffect
 } from '../store/gameStateStore';
 import { useHighScoreManager } from '../hooks/useHighScoreManager';
 import { useSessionTrackingV2 } from '../hooks/useSessionTrackingV2';
+import { EFFECTS } from '../constants/layout';
 
 export default function TetrisGame() {
 
@@ -42,6 +44,7 @@ export default function TetrisGame() {
   const resetGame = useResetGame();
   const togglePause = useTogglePause();
   const setDropTime = useSetDropTime();
+  const clearLineEffect = useClearLineEffect();
 
   // モバイルデバイス検出
   const { isMobile } = useMobileDetection();
@@ -88,6 +91,21 @@ export default function TetrisGame() {
   useEffect(() => {
     initializeSounds();
   }, [initializeSounds]);
+
+  // ライン消去エフェクトの自動クリア
+  useEffect(() => {
+    const hasActiveEffects = gameState.lineEffect.flashingLines.length > 0 || gameState.lineEffect.shaking;
+    
+    if (hasActiveEffects) {
+      const timer = setTimeout(() => {
+        clearLineEffect();
+      }, EFFECTS.RESET_DELAY);
+
+      return () => clearTimeout(timer);
+    }
+    
+    return undefined;
+  }, [gameState.lineEffect.flashingLines.length, gameState.lineEffect.shaking, clearLineEffect]);
 
   
   // useGameControls用のアクションアダプター（playSound依存除去）

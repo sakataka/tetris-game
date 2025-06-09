@@ -25,10 +25,8 @@ export function useGameTimer({
     [onTick, interval],
     {
       ...ANIMATION_PRESETS.GAME_LOOP,
-      enabled: isActive,
-      autoStop: {
-        condition: () => document.hidden // タブが非アクティブ時は自動停止
-      }
+      enabled: isActive
+      // タブ非アクティブ時の自動停止を削除（ゲーム進行を維持）
     }
   );
 }
