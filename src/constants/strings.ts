@@ -1,9 +1,9 @@
 /**
- * アプリケーション内で使用する文字列定数
- * 多言語化対応の準備として、ハードコードされた文字列をここに集約
+ * String constants used within the application
+ * Consolidate hardcoded strings here in preparation for internationalization support
  */
 
-// ゲーム状態表示
+// Game state display
 export const GAME_STATES = {
   GAME_OVER: 'GAME OVER',
   PAUSED: 'PAUSED',
@@ -12,7 +12,7 @@ export const GAME_STATES = {
   PAUSE_INSTRUCTION: 'Pキーで再開',
 } as const;
 
-// ボタンテキスト
+// Button text
 export const BUTTONS = {
   RESUME: 'RESUME',
   PAUSE: 'PAUSE',
@@ -24,7 +24,7 @@ export const BUTTONS = {
   ADVANCED_SETTINGS: '詳細設定',
 } as const;
 
-// タブ・ナビゲーション
+// Tab navigation
 export const NAVIGATION = {
   GAME_INFO: 'Game Info',
   STATISTICS: 'Statistics',
@@ -35,7 +35,7 @@ export const NAVIGATION = {
   VISUAL_EFFECTS: 'エフェクト',
 } as const;
 
-// パネルタイトル
+// Panel titles
 export const PANELS = {
   AUDIO: 'AUDIO',
   CONTROLS: 'CONTROLS',
@@ -49,7 +49,7 @@ export const PANELS = {
   RECENT_ACHIEVEMENTS: '🏆 Recent Achievements',
 } as const;
 
-// ラベル
+// Labels
 export const LABELS = {
   SCORE: 'SCORE',
   LEVEL: 'LEVEL',
@@ -66,7 +66,7 @@ export const LABELS = {
   ANIMATION_ENABLED: 'アニメーション有効',
 } as const;
 
-// コントロール説明
+// Control descriptions
 export const CONTROLS = {
   MOVE: '移動',
   DOWN_MOVE: '下移動',
@@ -76,7 +76,7 @@ export const CONTROLS = {
   RESET_ACTION: 'リセット',
 } as const;
 
-// スコアリング表示
+// Scoring display
 export const SCORING = {
   ONE_LINE: '1 LINE',
   TWO_LINES: '2 LINES',
@@ -86,7 +86,7 @@ export const SCORING = {
   HARD_DROP_LABEL: 'HARD DROP',
 } as const;
 
-// 統計ラベル（英語）
+// Statistics labels (English)
 export const STATISTICS = {
   TOTAL_GAMES: 'Total Games',
   BEST_SCORE: 'Best Score',
@@ -94,7 +94,7 @@ export const STATISTICS = {
   PLAY_TIME: 'Play Time',
 } as const;
 
-// アクセシビリティ設定
+// Accessibility settings
 export const ACCESSIBILITY = {
   COLOR_VISION_SUPPORT: '色覚対応',
   CONTRAST: 'コントラスト',
@@ -102,7 +102,7 @@ export const ACCESSIBILITY = {
   REDUCED_MOTION: 'モーション感度軽減',
 } as const;
 
-// アクセシビリティ用aria-label
+// Accessibility aria-labels
 export const ARIA_LABELS = {
   ROTATE: '回転',
   MOVE_LEFT: '左移動',
@@ -111,7 +111,7 @@ export const ARIA_LABELS = {
   HARD_DROP: 'ハードドロップ',
 } as const;
 
-// エラー・通知メッセージ
+// Error and notification messages
 export const MESSAGES = {
   NO_HIGH_SCORES: 'まだハイスコアがありません',
   FAILED_TO_LOAD_SOUND: 'Failed to load sound',
@@ -119,19 +119,19 @@ export const MESSAGES = {
   COULD_NOT_PLAY_SOUND: 'Could not play sound',
 } as const;
 
-// エフェクト名
+// Effect names
 export const UI_EFFECTS = {
   NEON_EFFECT: 'ネオンエフェクト',
   HOLOGRAM_BLUR: 'ホログラム + ブラー',
 } as const;
 
-// 状態表示
+// Status display
 export const STATUS = {
   ON: 'ON',
   OFF: 'OFF',
 } as const;
 
-// 多言語化キー用の型定義
+// Type definitions for internationalization keys
 export type GameStatesKey = keyof typeof GAME_STATES;
 export type ButtonsKey = keyof typeof BUTTONS;
 export type NavigationKey = keyof typeof NAVIGATION;
@@ -146,7 +146,7 @@ export type MessagesKey = keyof typeof MESSAGES;
 export type UIEffectsKey = keyof typeof UI_EFFECTS;
 export type StatusKey = keyof typeof STATUS;
 
-// 全文字列リソースの統合型
+// Unified type for all string resources
 export type StringResourceKey =
   | GameStatesKey
   | ButtonsKey

@@ -7,16 +7,16 @@ interface UseGameTimerProps {
 }
 
 /**
- * ゲームタイマーフック
+ * Game timer hook
  *
- * 従来のsetIntervalから統一アニメーション管理システムに移行し、
- * パフォーマンスとタブ非アクティブ時の動作を改善
+ * Migrated from traditional setInterval to unified animation management system,
+ * improving performance and behavior when tab is inactive
  */
 export function useGameTimer({ isActive, interval, onTick }: UseGameTimerProps) {
-  // 統一アニメーション管理システムを使用
+  // Use unified animation management system
   useTimerAnimation(onTick, interval, [onTick, interval], {
     ...ANIMATION_PRESETS.GAME_LOOP,
     enabled: isActive,
-    // タブ非アクティブ時の自動停止を削除（ゲーム進行を維持）
+    // Remove auto-stop when tab is inactive (maintain game progress)
   });
 }

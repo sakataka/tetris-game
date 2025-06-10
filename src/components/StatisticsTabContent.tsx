@@ -2,7 +2,7 @@
 
 import { memo, lazy, Suspense } from 'react';
 
-// 統計ダッシュボードを動的インポート
+// Dynamically import statistics dashboard
 const StatisticsDashboard = lazy(() => import('./StatisticsDashboard'));
 import { useHighScores, useStatistics } from '../store/statisticsStore';
 import { calculateEnhancedStatistics } from '../utils/data';

@@ -31,13 +31,13 @@ export function useGameLoop({
   actions,
   onDropTimeChange,
 }: UseGameLoopProps) {
-  // キーボード入力処理用のコールバック
+  // Callback for keyboard input processing
   const onMoveLeft = useCallback(() => actions.movePiece({ x: -1, y: 0 }), [actions]);
   const onMoveRight = useCallback(() => actions.movePiece({ x: 1, y: 0 }), [actions]);
   const onMoveDown = useCallback(() => actions.movePiece({ x: 0, y: 1 }), [actions]);
   const onConfirm = useCallback(() => actions.resetGame(), [actions]);
 
-  // キーボード入力処理
+  // Keyboard input processing
   useKeyboardInput({
     isGameOver,
     onMoveLeft,
@@ -50,14 +50,14 @@ export function useGameLoop({
     onConfirm,
   });
 
-  // ゲームタイマー
+  // Game timer
   useGameTimer({
     isActive: !isGameOver && !isPaused,
     interval: dropTime,
     onTick: actions.dropPiece,
   });
 
-  // ドロップタイム計算
+  // Drop time calculation
   useDropTimeCalculator({
     level,
     initialDropTime,

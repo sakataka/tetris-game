@@ -1,8 +1,8 @@
 /**
- * 簡素化されたセッション追跡フック (v2)
+ * Simplified session tracking hook (v2)
  *
- * SessionManagerサービスクラスを使用した
- * シンプルで効率的なフック実装
+ * Simple and efficient hook implementation
+ * using SessionManager service class
  */
 
 import { useEffect } from 'react';
@@ -23,7 +23,7 @@ export function useSessionTrackingV2() {
   const endSession = useEndSession();
   const onGameStart = useOnGameStart();
 
-  // コンポーネントマウント時にセッション開始
+  // Start session on component mount
   useEffect(() => {
     if (!currentSession) {
       startSession();

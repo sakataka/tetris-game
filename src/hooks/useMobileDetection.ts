@@ -30,10 +30,10 @@ export function useMobileDetection(): MobileDetectionResult {
       });
     };
 
-    // 初期設定
+    // Initial setup
     updateDetection();
 
-    // リサイズイベントリスナー
+    // Resize event listener
     window.addEventListener('resize', updateDetection);
     window.addEventListener('orientationchange', updateDetection);
 
