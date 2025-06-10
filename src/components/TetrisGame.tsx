@@ -27,7 +27,9 @@ import {
 } from '../store/gameStateStore';
 import { useHighScoreManager } from '../hooks/useHighScoreManager';
 import { useSessionTrackingV2 } from '../hooks/useSessionTrackingV2';
+import { useLanguageActions } from '../store/languageStore';
 import { EFFECTS } from '../constants/layout';
+import '../i18n'; // Initialize i18n
 
 export default function TetrisGame() {
   // 新しい分割Zustandストア
@@ -42,6 +44,9 @@ export default function TetrisGame() {
   const setDropTime = useSetDropTime();
   const clearLineEffect = useClearLineEffect();
 
+  // Language initialization
+  const { initializeLanguage } = useLanguageActions();
+
   // モバイルデバイス検出
   const { isMobile } = useMobileDetection();
 
@@ -51,7 +56,9 @@ export default function TetrisGame() {
   useEffect(() => {
     // Simple hydration check
     setIsHydrated(true);
-  }, []);
+    // Initialize language
+    initializeLanguage();
+  }, [initializeLanguage]);
 
   // 音効果システム
   const {

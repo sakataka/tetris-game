@@ -24,27 +24,41 @@ export const languageNames: Record<SupportedLanguage, string> = {
   ja: '日本語',
 };
 
-i18n
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
+// Only initialize on client side to avoid SSR issues
+if (typeof window !== 'undefined') {
+  i18n
+    .use(LanguageDetector)
+    .use(initReactI18next)
+    .init({
+      resources,
+      lng: defaultLanguage,
+      fallbackLng: defaultLanguage,
+
+      // Language detection options
+      detection: {
+        order: ['localStorage', 'navigator', 'htmlTag'],
+        caches: ['localStorage'],
+        lookupLocalStorage: 'tetris-language',
+      },
+
+      interpolation: {
+        escapeValue: false, // React already does escaping
+      },
+
+      // Development options
+      debug: process.env.NODE_ENV === 'development',
+    });
+} else {
+  // Server-side initialization without detection
+  i18n.use(initReactI18next).init({
     resources,
     lng: defaultLanguage,
     fallbackLng: defaultLanguage,
-
-    // Language detection options
-    detection: {
-      order: ['localStorage', 'navigator', 'htmlTag'],
-      caches: ['localStorage'],
-      lookupLocalStorage: 'tetris-language',
-    },
-
     interpolation: {
-      escapeValue: false, // React already does escaping
+      escapeValue: false,
     },
-
-    // Development options
-    debug: process.env.NODE_ENV === 'development',
+    debug: false,
   });
+}
 
 export default i18n;
