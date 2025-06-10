@@ -2,7 +2,7 @@
 
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useCurrentLanguage, useLanguageActions } from '../store/languageStore';
+import { useCurrentLanguage, useSetLanguage } from '../store/languageStore';
 import { supportedLanguages, languageNames, type SupportedLanguage } from '../i18n';
 
 interface LanguageSelectorProps {
@@ -16,7 +16,7 @@ const LanguageSelector = memo(function LanguageSelector({
 }: LanguageSelectorProps) {
   const { t } = useTranslation();
   const currentLanguage = useCurrentLanguage();
-  const { setLanguage } = useLanguageActions();
+  const setLanguage = useSetLanguage();
 
   const handleLanguageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newLanguage = event.target.value as SupportedLanguage;

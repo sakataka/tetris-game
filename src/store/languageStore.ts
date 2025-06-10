@@ -47,8 +47,5 @@ export const useLanguageStore = create<LanguageState & LanguageActions>()(
 
 // Selector hooks for optimized re-renders
 export const useCurrentLanguage = () => useLanguageStore((state) => state.currentLanguage);
-export const useLanguageActions = () =>
-  useLanguageStore((state) => ({
-    setLanguage: state.setLanguage,
-    initializeLanguage: state.initializeLanguage,
-  }));
+export const useSetLanguage = () => useLanguageStore((state) => state.setLanguage);
+export const useInitializeLanguage = () => useLanguageStore((state) => state.initializeLanguage);

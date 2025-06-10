@@ -27,7 +27,7 @@ import {
 } from '../store/gameStateStore';
 import { useHighScoreManager } from '../hooks/useHighScoreManager';
 import { useSessionTrackingV2 } from '../hooks/useSessionTrackingV2';
-import { useLanguageActions } from '../store/languageStore';
+import { useInitializeLanguage } from '../store/languageStore';
 import { EFFECTS } from '../constants/layout';
 import '../i18n'; // Initialize i18n
 
@@ -45,7 +45,7 @@ export default function TetrisGame() {
   const clearLineEffect = useClearLineEffect();
 
   // Language initialization
-  const { initializeLanguage } = useLanguageActions();
+  const initializeLanguage = useInitializeLanguage();
 
   // モバイルデバイス検出
   const { isMobile } = useMobileDetection();
@@ -56,9 +56,10 @@ export default function TetrisGame() {
   useEffect(() => {
     // Simple hydration check
     setIsHydrated(true);
-    // Initialize language
+    // Initialize language once on mount
     initializeLanguage();
-  }, [initializeLanguage]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Intentionally empty to run only once on mount
 
   // 音効果システム
   const {
