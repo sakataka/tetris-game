@@ -8,6 +8,14 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     globals: true,
+    reporters: ['default'],
+    outputFile: {
+      junit: './test-results.xml',
+    },
+    coverage: {
+      reporter: ['text', 'json', 'html', 'cobertura'],
+      reportsDirectory: './coverage',
+    },
   },
   resolve: {
     alias: {
