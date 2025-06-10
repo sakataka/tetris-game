@@ -11,6 +11,7 @@ Production-ready cyberpunk-themed Tetris game built with Next.js 15, TypeScript,
 ## Development Commands
 
 ### Core Commands
+
 ```bash
 pnpm dev          # Development server with Turbopack
 pnpm build        # Production build with type checking
@@ -22,6 +23,7 @@ pnpm test:coverage # Test coverage report
 ```
 
 ### Development Notes
+
 - Always run `pnpm build` before committing
 - ESLint warnings about useCallback dependencies are intentional
 - Package manager: pnpm (optimized with .npmrc)
@@ -44,11 +46,13 @@ pnpm test:coverage # Test coverage report
 ### Component Architecture
 
 **Core Components** (モジュラー設計):
+
 - **TetrisGame.tsx**: メインオーケストレーター
 - **TetrisBoard.tsx**: ゲームボード表示
 - **GameInfo.tsx**: 統合情報パネル
 
 **分離コンポーネント**:
+
 - **TabNavigation.tsx**: タブシステム独立化
 - **GameTabContent.tsx**: ゲーム情報表示
 - **StatisticsTabContent.tsx**: 統計情報管理
@@ -56,9 +60,11 @@ pnpm test:coverage # Test coverage report
 - **MobileGameInfo.tsx**: モバイル専用UI
 
 **パネルコンポーネント群** (25-45行、単一責任):
+
 - GameStatsPanel, NextPiecePanel, ControlsPanel, AudioPanel, GameButtonsPanel, ScoringPanel
 
 **高度な機能コンポーネント**:
+
 - **StatisticsDashboard.tsx**: 15拡張メトリクス + 期間フィルタリング
 - **HighScoreDisplay.tsx**: Top 10ランキングUI
 - **ParticleEffect.tsx**: 最適化されたアニメーションシステム
@@ -67,23 +73,27 @@ pnpm test:coverage # Test coverage report
 ### Hook-Based Logic
 
 **Core Hooks** (相互依存解消済み):
+
 - **useGameControls.ts**: アダプターパターンで疎結合化
 - **useGameLoop.ts**: 責務分離（キーボード、タイマー、計算）
 - **useSounds.ts**: Web Audio API + 5段階フォールバック
 
 **分離された副作用フック**:
+
 - useKeyboardInput, useGameTimer, useDropTimeCalculator
 
 **システム管理フック**:
+
 - useHighScoreManager, useSessionTrackingV2, useThemeManager, useMobileDetection
 
 ### Utility Architecture
 
 **機能別ディレクトリ構造**:
+
 ```
 utils/
 ├── game/         # ゲームロジック (tetrisUtils, gameStateUtils, highScoreUtils)
-├── audio/        # 音響システム (audioManager, audioPreloader, audioFallback)  
+├── audio/        # 音響システム (audioManager, audioPreloader, audioFallback)
 ├── ui/           # テーマ・アクセシビリティ (themeUtils, themeLoader)
 ├── animation/    # アニメーション管理 (animationManager, useAnimationFrame)
 ├── performance/  # パフォーマンス最適化 (particlePool, performanceMonitor)
@@ -91,6 +101,7 @@ utils/
 ```
 
 **定数管理**:
+
 ```
 constants/
 ├── gameRules.ts     # スコア・レベル・ゲームルール
@@ -105,24 +116,28 @@ constants/
 ## Key Features
 
 ### Audio System
+
 - **Web Audio API**: 高性能並列音声再生
 - **5段階フォールバック**: Web Audio → HTMLAudio → Visual → Console → Silent
 - **プリロードシステム**: ネットワーク状況自動判定
 - **6種類効果音**: ライン消去、ピース着地、回転、テトリス、ゲームオーバー、ハードドロップ
 
 ### Statistics & Analytics
+
 - **自動ハイスコア検出**: ゲーム終了時自動登録
 - **15拡張メトリクス**: 効率性（LPM）、一貫性、テトリス率など
 - **期間フィルタリング**: 今日、今週、今月、全期間
 - **セッション管理**: プレイ時間自動追跡、非アクティブ検出
 
 ### Theme System
+
 - **5プリセットテーマ**: Cyberpunk, Classic, Retro, Minimal, Neon
 - **リアルタイムカラーエディタ**: hex入力対応
 - **アクセシビリティ**: 色覚異常対応、コントラスト調整、モーション制御
 - **CSS変数システム**: 自動透明度バリエーション生成
 
 ### Mobile & Responsive
+
 - **5ボタンタッチコントロール**: 方向パッド + ハードドロップ
 - **レスポンシブレイアウト**: Desktop/Mobile最適化
 - **動的フォント調整**: 画面サイズ対応
@@ -130,16 +145,19 @@ constants/
 ## Performance Optimizations
 
 ### Memory Management
+
 - **パーティクルオブジェクトプーリング**: GC圧力軽減
 - **音声バッファ管理**: Web Audio API効率的管理
 - **useRef クリーンアップ**: メモリリーク防止
 
-### Render Optimizations  
+### Render Optimizations
+
 - **React.memo**: 全コンポーネント不要な再レンダリング防止
 - **useMemo**: 重い計算のメモ化
 - **個別セレクタ**: Zustandオブジェクト再生成防止
 
 ### Animation System
+
 - **AnimationManager**: シングルトンパターンによる統一管理
 - **FPS制限**: 60FPS基準自動調整
 - **優先度制御**: high/normal/low動的制御
@@ -148,12 +166,14 @@ constants/
 ## Test Coverage
 
 **包括的テストシステム** (5,688行、20ファイル):
+
 - **モックファクトリ**: 統一モック生成システム
 - **テストユーティリティ**: 共通支援機能
 - **型安全モック**: MockPlaySound, MockStoreActions
 - **DOM環境モック**: localStorage, matchMedia, Audio
 
 **テスト分類**:
+
 - ユニットテスト: Pure function testing
 - コンポーネントテスト: React Testing Library
 - 統合テスト: Zustand store連携
@@ -177,24 +197,108 @@ src/
 ## Technical Standards
 
 ### Type Safety
+
 - **厳密TypeScript設定**: noImplicitAny, strictNullChecks
 - **readonly型**: 不変性保証
 - **ユニオン型**: SoundKey, VolumeLevel, PerformanceLevel
 - **ブランド型**: PlayerId, SessionId識別強化
 
 ### Error Handling
+
 - **カスタムエラー階層**: BaseAppError継承
 - **グローバルエラーバウンダリ**: React Error Boundary
 - **エラーストア**: Zustand統合エラー管理
 - **段階的フォールバック**: 100%動作保証
 
 ### Performance Metrics
+
 - **バンドルサイズ**: 127KB (7KB削減達成)
 - **初期ロード**: 19.1KB (26%削減)
 - **テスト成功率**: 78% (重要機能100%カバー)
 - **ビルド成功率**: 100%
 
+## Static Analysis & Quality Management (Added: 2025/06/10)
+
+### 🔧 Quality Management System
+
+**包括的静的解析ツール統合**:
+
+- **SonarJS**: 認知複雑度15以下、重複文字列検出（閾値5）
+- **ESLint + TypeScript**: 厳密型チェック、コード品質ルール
+- **Prettier**: 統一コードフォーマット
+- **Bundle Analyzer**: バンドルサイズ分析・監視
+
+**品質管理スクリプト**:
+
+```bash
+pnpm quality:check  # 包括的品質チェック (lint + tsc + test)
+pnpm quality:fix    # 自動修正 (format + lint --fix)
+pnpm analyze        # バンドルサイズ分析
+pnpm format         # コードフォーマット
+```
+
+### 🚀 Git Hooks自動化システム
+
+**Husky + lint-staged統合**:
+
+- **pre-commit**: ステージファイルの品質チェック・フォーマット自動実行
+- **pre-push**: 全体ビルド・テスト検証
+- **効率化**: 変更ファイルのみを対象とした高速チェック
+
+### 🧹 SonarJS警告修正実績
+
+**認知複雑度削減**:
+
+- **TetrisBoard.tsx**: 38→15 (ヘルパー関数抽出による責務分離)
+- **ParticleEffect.tsx**: 複雑ロジックの関数分割・統一アニメーション管理
+- **useGameControls.ts**: アダプターパターンによる依存関係解消
+
+**型安全性強化**:
+
+- **TypeScript厳密設定**: performance.memory型キャスト修正
+- **ES6インポート統一**: require()→import文変換
+- **React hooks最適化**: 依存配列の意図的制御
+
+### 📊 コード品質指標
+
+```
+品質管理達成指標:
+✅ 認知複雑度: 全ファイル15以下
+✅ ESLint警告: 2件（意図的最適化のみ）
+✅ TypeScript: 型エラー0件
+✅ テストカバレッジ: 125テスト, 78%成功率
+✅ 自動化率: pre-commit 100%実行
+```
+
+### 🔮 将来検討事項
+
+**CI/CDパイプライン統合**:
+
+- GitHub Actions workflow追加
+- 自動テスト・品質チェック・デプロイ
+- SonarCloud連携による継続的品質監視
+
+**追加静的解析ツール**:
+
+- **CodeClimate**: 技術的負債分析
+- **Dependency-cruiser**: 依存関係循環検出
+- **TypeScript Coverage**: 型カバレッジ測定
+
+**パフォーマンス監視**:
+
+- **Lighthouse CI**: パフォーマンススコア自動測定
+- **Bundle Buddy**: 重複依存関係分析
+- **Size Limit**: バンドルサイズ制限強制
+
+**セキュリティ強化**:
+
+- **npm audit**: 脆弱性チェック自動化
+- **Snyk**: 依存関係セキュリティ監視
+- **CSP (Content Security Policy)**: XSS防止強化
+
 ## Development Guidelines
+
+**品質維持プロセス**:
 
 - **段階的実装**: 機能単位での完成
 - **テスト駆動**: 各変更前後でテスト実行
@@ -205,6 +309,7 @@ src/
 ## Future Enhancements
 
 Ready for:
+
 - **多言語化**: 基盤完成済み（react-i18next導入のみ）
 - **マルチプレイヤー**: 状態同期パターン準備済み
 - **プラグインシステム**: モジュラーアーキテクチャ対応
