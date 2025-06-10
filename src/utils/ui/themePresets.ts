@@ -5,8 +5,9 @@ import {
   ColorBlindnessType,
   ContrastLevel,
 } from '../../types/tetris';
+import { ColorConverter } from './colorConverter';
 
-// プリセットカラーパレット
+// Preset color palettes
 export const COLOR_PALETTES: Record<ThemeVariant, ColorPalette> = {
   cyberpunk: {
     primary: '#00ffff',
@@ -50,7 +51,7 @@ export const COLOR_PALETTES: Record<ThemeVariant, ColorPalette> = {
   },
 };
 
-// デフォルトエフェクト設定
+// Default effect settings
 export const DEFAULT_EFFECTS = {
   blur: 8,
   glow: 12,
@@ -58,7 +59,7 @@ export const DEFAULT_EFFECTS = {
   brightness: 1.0,
 };
 
-// テーマ固有のエフェクト設定
+// Theme-specific effect settings
 export const THEME_EFFECTS: Record<ThemeVariant, typeof DEFAULT_EFFECTS> = {
   cyberpunk: {
     blur: 10,
@@ -92,7 +93,7 @@ export const THEME_EFFECTS: Record<ThemeVariant, typeof DEFAULT_EFFECTS> = {
   },
 };
 
-// プリセットテーマ設定
+// Preset theme configurations
 export const THEME_PRESETS: Record<ThemeVariant, ThemeConfig> = {
   cyberpunk: {
     name: 'Cyberpunk',
@@ -146,7 +147,7 @@ export const THEME_PRESETS: Record<ThemeVariant, ThemeConfig> = {
   },
 };
 
-// 色覚異常対応カラーパレット
+// Color blindness adaptation palettes
 export const COLOR_BLIND_PALETTES: Record<
   Exclude<ColorBlindnessType, 'none'>,
   Partial<ColorPalette>
@@ -168,7 +169,7 @@ export const COLOR_BLIND_PALETTES: Record<
   },
 };
 
-// コントラスト調整関数
+// Contrast adjustment function
 export function adjustColorContrast(color: string, level: ContrastLevel): string {
   const adjustments = {
     low: 0.7,
@@ -177,21 +178,19 @@ export function adjustColorContrast(color: string, level: ContrastLevel): string
   };
 
   const adjustment = adjustments[level];
-  // 色のコントラストを調整するロジック（簡単な実装）
   if (adjustment === 1.0) return color;
 
-  // より複雑なコントラスト調整は後で実装
-  return color;
+  return ColorConverter.adjustContrast(color, adjustment);
 }
 
 /**
- * テーマプリセットを取得する関数
+ * Get theme preset configuration
  */
 export function getThemePreset(theme: ThemeVariant): ThemeConfig {
   return THEME_PRESETS[theme];
 }
 
-// アニメーション強度の設定
+// Animation intensity settings
 export const ANIMATION_SETTINGS = {
   none: {
     duration: 0,

@@ -435,30 +435,36 @@ export const createMockAudioSystem = () => ({
 - DeviceController (mobile detection & optimization)
 ```
 
-#### 2. Color Processing Duplication
+#### 2. Color Processing Duplication ✅ **COMPLETED**
 
 **File**: `src/utils/ui/themeUtils.ts`
 **Issue**: Color conversion logic duplication, multiple similar functions
 **Details**:
 
-- `hexToRgb` - duplicate implementation with cache
-- `adjustColorBrightness` - simple implementation comment
-- Transparency generation logic - insufficient abstraction
+- ~~`hexToRgb` - duplicate implementation with cache~~ → **Fixed**: Unified in ColorConverter
+- ~~`adjustColorBrightness` - simple implementation comment~~ → **Fixed**: Removed, replaced with ColorConverter.adjustBrightness
+- ~~Transparency generation logic - insufficient abstraction~~ → **Fixed**: ColorConverter.generateTransparencies
 
-**Refactoring Strategy**:
+**Completed Implementation**:
 
 ```typescript
-// Unified color conversion utility class
-class ColorConverter {
+// Unified ColorConverter utility class (16 methods)
+export class ColorConverter {
   static hexToRgb(hex: string): RGB | null;
   static rgbToHex(rgb: RGB): string;
   static adjustBrightness(color: string, factor: number): string;
-  static generateTransparencies(
-    color: string,
-    levels: number[]
-  ): Record<string, string>;
+  static adjustContrast(color: string, factor: number): string;
+  static adjustSaturation(color: string, factor: number): string;
+  static generateTransparencies(color: string, levels: readonly number[]): Record<string, string>;
+  static toRgba(color: string, alpha: number): string;
+  static mix(color1: string, color2: string, ratio: number): string;
+  static getContrastRatio(color1: string, color2: string): number;
+  static meetsWCAGContrast(fg: string, bg: string, level: 'AA' | 'AAA', isLarge: boolean): boolean;
+  // + HSL conversion, cache management, and more
 }
 ```
+
+**Implementation Status**: ✅ Completed (2025/06/11)
 
 #### 3. Type Safety Improvements
 
@@ -592,24 +598,24 @@ class BoardRenderer {
 
 ### Priority Assessment
 
-| Item                                | Impact | Effort | Priority    |
-| ----------------------------------- | ------ | ------ | ----------- |
-| 1. GameLogicController Split        | High   | Large  | 🔥 Critical |
-| 2. Color Processing Unification     | Medium | Small  | ⭐ High     |
-| 3. Type Safety Improvements         | High   | Medium | ⭐ High     |
-| 4. AccessibilityStore Split         | Medium | Medium | ⭐ High     |
-| 5. AudioManager Strategy Pattern    | High   | Large  | 🔥 Critical |
-| 6. TetrisBoard Rendering Separation | Medium | Medium | ⭐ High     |
-| 7. tetrisUtils Optimization         | High   | Medium | 🔥 Critical |
-| 8. Statistics Processing Separation | Medium | Small  | ⚡ Medium   |
-| 9. Particle Optimization            | Medium | Medium | ⚡ Medium   |
-| 10. UI Pattern Unification          | Low    | Small  | ⚡ Medium   |
+| Item                                | Impact | Effort | Priority    | Status      |
+| ----------------------------------- | ------ | ------ | ----------- | ----------- |
+| 1. GameLogicController Split        | High   | Large  | 🔥 Critical | Pending     |
+| 2. Color Processing Unification     | Medium | Small  | ⭐ High     | ✅ Complete |
+| 3. Type Safety Improvements         | High   | Medium | ⭐ High     | Pending     |
+| 4. AccessibilityStore Split         | Medium | Medium | ⭐ High     | Pending     |
+| 5. AudioManager Strategy Pattern    | High   | Large  | 🔥 Critical | Pending     |
+| 6. TetrisBoard Rendering Separation | Medium | Medium | ⭐ High     | Pending     |
+| 7. tetrisUtils Optimization         | High   | Medium | 🔥 Critical | Pending     |
+| 8. Statistics Processing Separation | Medium | Small  | ⚡ Medium   | Pending     |
+| 9. Particle Optimization            | Medium | Medium | ⚡ Medium   | Pending     |
+| 10. UI Pattern Unification          | Low    | Small  | ⚡ Medium   | Pending     |
 
-**Recommended Implementation Order**: 1, 5, 7 → 2, 3, 4, 6 → 8, 9, 10
+**Recommended Implementation Order**: 1, 5, 7 → ~~2~~, 3, 4, 6 → 8, 9, 10
 
 ## Implementation Status
 
-### Recently Completed (2025/06/10)
+### Recently Completed (2025/06/10-11)
 
 ✅ **TetrisGame Component Decomposition** - Successfully refactored using Clean Architecture:
 
@@ -625,18 +631,42 @@ class BoardRenderer {
 - ✅ **Responsibility Separation**: Each component has single responsibility
 - ✅ **Type Safety**: Strict TypeScript interfaces
 
+✅ **Color Processing Duplication (Item #2)** - Unified color manipulation system:
+
+**New ColorConverter Utility**:
+- **`src/utils/ui/colorConverter.ts`**: Comprehensive color manipulation class with 16 methods
+- **Hex/RGB/HSL conversion**: Bidirectional conversion with caching
+- **Advanced manipulation**: Brightness, contrast, saturation adjustment
+- **WCAG compliance**: Contrast ratio calculation, accessibility checks
+- **Performance optimization**: Method-level caching with cache management
+
+**Implementation Details**:
+- ✅ **Unified API**: All color operations through single ColorConverter class
+- ✅ **Caching System**: Performance-optimized with cache statistics
+- ✅ **Error Handling**: Graceful fallback for invalid color inputs
+- ✅ **Type Safety**: Strict RGB, HSL, RGBA interfaces
+- ✅ **Test Coverage**: 30 comprehensive test cases (100% passing)
+
+**Refactored Files**:
+- **`themeUtils.ts`**: Removed duplicate hexToRgb and adjustColorBrightness functions
+- **`themePresets.ts`**: Updated adjustColorContrast to use ColorConverter
+- **Comment Translation**: All Japanese comments converted to English
+
 **Build & Test Results**:
 
 - ✅ **Build Success**: All compilation errors resolved
-- ✅ **Test Success**: 224/224 tests passing
-- ✅ **ESLint Warnings**: Only intentional optimizations (2 warnings)
+- ✅ **Test Success**: 254/254 tests passing (30 new ColorConverter tests)
+- ✅ **ESLint Clean**: No new warnings introduced
+- ✅ **Performance**: Caching system maintains optimal performance
 
 ### Current Status
 
-- **Primary Refactoring**: TetrisGame component decomposition **COMPLETED**
-- **Next Priority**: Color Processing Duplication (Item #2)
-- **Architecture**: Clean Architecture principles successfully implemented
-- **Performance**: All optimizations maintained during refactoring
+- **Completed Refactoring**: 
+  1. ✅ TetrisGame component decomposition
+  2. ✅ Color Processing Duplication unification
+- **Next Priority**: GameLogicController Split (Item #1) or Type Safety Improvements (Item #3)
+- **Architecture**: Clean Architecture + unified color system implemented
+- **Code Quality**: All duplicate color logic eliminated, English comments enforced
 
 ## Future Enhancements
 

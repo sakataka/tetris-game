@@ -6,51 +6,52 @@ import {
   ContrastLevel,
 } from '../../types/tetris';
 import { COLOR_BLIND_PALETTES, getThemePreset } from './themePresets';
+import { ColorConverter } from './colorConverter';
 
 /**
- * CSS変数を動的に設定する関数
+ * Apply theme configuration to CSS variables
  */
 export function applyThemeToCSS(config: ThemeConfig): void {
   const root = document.documentElement;
 
-  // 基本カラー設定
+  // Basic color configuration
   root.style.setProperty('--background', config.colors.background);
   root.style.setProperty('--foreground', config.colors.foreground);
   root.style.setProperty('--accent-primary', config.colors.primary);
   root.style.setProperty('--accent-secondary', config.colors.secondary);
   root.style.setProperty('--accent-tertiary', config.colors.tertiary);
 
-  // サイバーパンクカラーパレット（後方互換性）
+  // Cyberpunk color palette (backward compatibility)
   root.style.setProperty('--cyber-cyan', config.colors.primary);
   root.style.setProperty('--cyber-purple', config.colors.secondary);
   root.style.setProperty('--cyber-yellow', config.colors.tertiary);
   root.style.setProperty('--cyber-green', config.colors.accent);
 
-  // 透明度バリエーション自動生成
+  // Auto-generate transparency variations
   const transparencyVariables = generateTransparencyVariables(config.colors);
   Object.entries(transparencyVariables).forEach(([varName, value]) => {
     root.style.setProperty(varName, value);
   });
 
-  // エフェクト設定
+  // Effect configuration
   root.style.setProperty('--neon-blur-sm', `${config.effects.blur * 0.5}px`);
   root.style.setProperty('--neon-blur-md', `${config.effects.blur}px`);
   root.style.setProperty('--neon-blur-lg', `${config.effects.blur * 1.5}px`);
   root.style.setProperty('--neon-blur-xl', `${config.effects.blur * 2}px`);
 
-  // ホログラム背景を動的生成
+  // Dynamically generate hologram background
   const hologramBg = `linear-gradient(45deg, var(--cyber-cyan-10) 0%, var(--cyber-purple-10) 50%, var(--cyber-yellow-10) 100%)`;
   root.style.setProperty('--hologram-bg', hologramBg);
   root.style.setProperty('--hologram-border', `1px solid var(--cyber-cyan-30)`);
 }
 
 /**
- * 透明度バリエーション定数
+ * Transparency variation levels
  */
 const TRANSPARENCY_LEVELS = [10, 20, 30, 40, 50, 60, 70, 80, 90] as const;
 
 /**
- * カラー名マッピング（後方互換性保持）
+ * Color name mapping (backward compatibility)
  */
 const COLOR_NAME_MAPPING = {
   primary: 'cyan',
@@ -60,55 +61,28 @@ const COLOR_NAME_MAPPING = {
 } as const;
 
 /**
- * 透明度バリエーションを自動生成
+ * Generate transparency variations using ColorConverter
  */
 function generateTransparencyVariables(colors: ColorPalette): Record<string, string> {
   const variables: Record<string, string> = {};
 
   Object.entries(COLOR_NAME_MAPPING).forEach(([colorKey, cssName]) => {
     const hexColor = colors[colorKey as keyof ColorPalette];
-    const rgb = hexToRgb(hexColor);
+    const transparencies = ColorConverter.generateTransparencies(hexColor, TRANSPARENCY_LEVELS);
 
-    if (rgb) {
-      TRANSPARENCY_LEVELS.forEach((level) => {
-        const varName = `--cyber-${cssName}-${level}`;
-        const opacity = level / 100;
-        variables[varName] = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`;
-      });
-    }
+    Object.entries(transparencies).forEach(([level, rgba]) => {
+      const varName = `--cyber-${cssName}-${level}`;
+      variables[varName] = rgba;
+    });
   });
 
   return variables;
 }
 
-/**
- * Hexカラーコードを RGB に変換（キャッシュ機能付き）
- */
-const hexToRgbCache = new Map<string, { r: number; g: number; b: number } | null>();
-
-function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
-  // キャッシュから取得
-  if (hexToRgbCache.has(hex)) {
-    return hexToRgbCache.get(hex)!;
-  }
-
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  const rgbResult = result
-    ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16),
-      }
-    : null;
-
-  // キャッシュに保存
-  hexToRgbCache.set(hex, rgbResult);
-
-  return rgbResult;
-}
+// Removed: hexToRgb function replaced by ColorConverter.hexToRgb
 
 /**
- * 色覚異常に対応したカラーパレットを生成
+ * Generate color palette adapted for color blindness
  */
 export function applyColorBlindnessFilter(
   originalColors: ColorPalette,
@@ -126,7 +100,7 @@ export function applyColorBlindnessFilter(
 }
 
 /**
- * コントラストレベルに応じて色を調整
+ * Adjust colors based on contrast level
  */
 export function adjustColorsForContrast(
   colors: ColorPalette,
@@ -140,34 +114,18 @@ export function adjustColorsForContrast(
 
   return {
     ...colors,
-    // 実際のコントラスト調整ロジックは後で詳細実装
-    primary: adjustColorBrightness(colors.primary, adjustmentFactor),
-    secondary: adjustColorBrightness(colors.secondary, adjustmentFactor),
-    tertiary: adjustColorBrightness(colors.tertiary, adjustmentFactor),
+    primary: ColorConverter.adjustContrast(colors.primary, adjustmentFactor),
+    secondary: ColorConverter.adjustContrast(colors.secondary, adjustmentFactor),
+    tertiary: ColorConverter.adjustContrast(colors.tertiary, adjustmentFactor),
   };
 }
 
-/**
- * 色の明度を調整
- */
-function adjustColorBrightness(color: string, factor: number): string {
-  // 簡単な実装（後で改善予定）
-  const rgb = hexToRgb(color);
-  if (!rgb) return color;
+// Removed: adjustColorBrightness function replaced by ColorConverter methods
 
-  const adjust = (value: number) => Math.min(255, Math.max(0, Math.round(value * factor)));
-
-  const newR = adjust(rgb.r);
-  const newG = adjust(rgb.g);
-  const newB = adjust(rgb.b);
-
-  return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
-}
-
-// getThemePresetは./themePresetsからインポート済み
+// getThemePreset is imported from ./themePresets
 
 /**
- * カスタムテーマを作成
+ * Create custom theme configuration
  */
 export function createCustomTheme(
   baseTheme: ThemeVariant,
@@ -191,7 +149,7 @@ export function createCustomTheme(
 }
 
 /**
- * アニメーション設定をCSSに適用
+ * Apply animation settings to CSS
  */
 export function applyAnimationSettings(intensity: string): void {
   const root = document.documentElement;
@@ -217,13 +175,13 @@ export function applyAnimationSettings(intensity: string): void {
 }
 
 /**
- * テーマの初期化
+ * Initialize theme configuration
  */
 export function initializeTheme(config: ThemeConfig): void {
   applyThemeToCSS(config);
   applyAnimationSettings(config.accessibility.animationIntensity);
 
-  // Reduced motionの設定
+  // Configure reduced motion preferences
   if (
     config.accessibility.animationIntensity === 'none' ||
     config.accessibility.animationIntensity === 'reduced'

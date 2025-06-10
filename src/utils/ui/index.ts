@@ -1,10 +1,11 @@
 /**
- * UI・テーマ関連ユーティリティ
+ * UI & Theme Related Utilities
  *
- * テーマ管理、アクセシビリティ、CSS変数操作
+ * Theme management, accessibility, CSS variable manipulation
  */
 
 export * from './themeUtils';
 export * from './themeLoader';
 export * from './themePresets';
 export * from './accessibilityUtils';
+export * from './colorConverter';
