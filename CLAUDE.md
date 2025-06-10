@@ -37,24 +37,24 @@ pnpm test:coverage # Test coverage report
 - **Framework**: Next.js 15.3.3 + React 19 + TypeScript 5
 - **State Management**: Zustand 5.0.5 (modular store architecture)
 - **Styling**: Tailwind CSS v4 (utility-first design)
-- **Testing**: Vitest + React Testing Library (5,359 lines)
+- **Testing**: Vitest + React Testing Library
 - **Internationalization**: i18next + react-i18next
 - **Build Tool**: Turbopack (Next.js 15)
 
 ### Project Scale
 
-- **Components**: 34 files (3,759 lines)
-- **Stores**: 11 files (~1,500 lines)
-- **Hooks**: 12 files (1,160 lines)
-- **Utilities**: 26 files (4,735 lines)
-- **Constants**: 8 files (~800 lines)
-- **Tests**: 20 active files + 7 disabled (5,359 lines)
+- **Components**: 34 files
+- **Stores**: 11 files
+- **Hooks**: 12 files
+- **Utilities**: 26 files
+- **Constants**: 8 files
+- **Tests**: 20 active files + 7 disabled
 
 ## Component Architecture (Clean Architecture)
 
 ### Layer 1: Entry Point
 
-**`TetrisGame.tsx`** (29 lines): Main orchestrator using 3-layer structure
+**`TetrisGame.tsx`**: Main orchestrator using 3-layer structure
 
 ```typescript
 <ErrorBoundary>
@@ -72,10 +72,10 @@ pnpm test:coverage # Test coverage report
 
 - SSR hydration processing, language system initialization, loading state management
 
-**`GameLogicController.tsx`** (292 lines): Business logic integration layer
+**`GameLogicController.tsx`**: Business logic integration layer
 
 - Zustand store integration, audio system management, game control aggregation
-- **GameControllerAPI** (75 lines) - unified API for child components
+- **GameControllerAPI** - unified API for child components
 - Render Props Pattern: `children(api)` for flexible composition
 
 **`GameLayoutManager.tsx`**: UI layout & responsive control
@@ -94,7 +94,7 @@ pnpm test:coverage # Test coverage report
 - **`ThemeTabContent.tsx`**: Theme settings (lazy loading)
 - **`SettingsTabContent.tsx`**: Settings management (lazy loading)
 
-**Panel Components** (25-45 lines, single responsibility):
+**Panel Components** (single responsibility):
 
 - GameStatsPanel, NextPiecePanel, ControlsPanel, AudioPanel
 - GameButtonsPanel, ScoringPanel, HighScoreDisplay
@@ -175,18 +175,18 @@ export const useUpdateSettings = () =>
 
 ### Core Hooks (Responsibility separation):
 
-**`useGameControls.ts`** (100 lines):
+**`useGameControls.ts`**:
 
 - Adapter pattern for loose coupling
 - PieceControlActions interface abstraction
 - Direct Zustand integration (onStateChange omitted)
 
-**`useGameLoop.ts`** (67 lines):
+**`useGameLoop.ts`**:
 
 - Responsibility separation: keyboard + timer + calculation logic
 - Combines useKeyboardInput, useGameTimer, useDropTimeCalculator
 
-**`useSounds.ts`** (Advanced audio system, 150+ lines):
+**`useSounds.ts`** (Advanced audio system):
 
 - **5-level fallback**: Web Audio API → HTMLAudio → Visual → Console → Silent
 - **Preload system**: Smart auto-detection
@@ -207,11 +207,11 @@ export const useUpdateSettings = () =>
 
 ## Utility Structure (Function-based Directory Design)
 
-**Total**: 26 files, 4,735 lines
+**Total**: 26 files organized by function
 
 ### `utils/audio/` (High-performance audio system):
 
-- **`audioManager.ts`**: Web Audio API singleton (140+ lines)
+- **`audioManager.ts`**: Web Audio API singleton
   - AudioContext management, object pooling, parallel playback
 - **`audioPreloader.ts`**: Smart preload system
 - **`audioFallback.ts`**: HTMLAudioElement fallback system
@@ -287,7 +287,7 @@ export * from './layout';
 
 ## Test System (Comprehensive Coverage)
 
-**Active Tests**: 20 files, 5,359 lines
+**Active Tests**: 20 files
 **Disabled Tests**: 7 files (.disabled)
 
 ### Test Infrastructure:
@@ -417,13 +417,13 @@ export const createMockAudioSystem = () => ({
 
 #### 1. GameLogicController Decomposition
 
-**File**: `src/components/GameLogicController.tsx` (292 lines)
+**File**: `src/components/GameLogicController.tsx`
 **Issue**: Single Responsibility Principle violation, multiple concerns in one component
 **Details**:
 
 - Game state management, audio system, mobile detection, event handling mixed
 - 15 Zustand hooks, 3 custom hooks, 7 event handlers
-- Complex API object construction (lines 270-292)
+- Complex API object construction
 
 **Refactoring Strategy**:
 
@@ -437,13 +437,13 @@ export const createMockAudioSystem = () => ({
 
 #### 2. Color Processing Duplication
 
-**File**: `src/utils/ui/themeUtils.ts` (236 lines)
+**File**: `src/utils/ui/themeUtils.ts`
 **Issue**: Color conversion logic duplication, multiple similar functions
 **Details**:
 
-- `hexToRgb` (lines 89-108) - duplicate implementation with cache
-- `adjustColorBrightness` (lines 153-165) - simple implementation comment
-- Transparency generation logic (lines 65-82) - insufficient abstraction
+- `hexToRgb` - duplicate implementation with cache
+- `adjustColorBrightness` - simple implementation comment
+- Transparency generation logic - insufficient abstraction
 
 **Refactoring Strategy**:
 
@@ -480,7 +480,7 @@ class ColorConverter {
 
 #### 4. AccessibilityStore Over-complexity
 
-**File**: `src/store/accessibilityStore.ts` (562 lines)
+**File**: `src/store/accessibilityStore.ts`
 **Issue**: Single file with excessive responsibilities, insufficient setting categorization
 **Details**:
 
@@ -500,7 +500,7 @@ class ColorConverter {
 
 #### 5. AudioManager High Cognitive Complexity
 
-**File**: `src/utils/audio/audioManager.ts` (457 lines)
+**File**: `src/utils/audio/audioManager.ts`
 **Issue**: playSound function high cognitive complexity (ESLint disable required)
 **Details**:
 
@@ -528,11 +528,11 @@ class SilentStrategy extends AudioStrategy {
 
 #### 6. TetrisBoard Rendering Logic Complexity
 
-**File**: `src/components/TetrisBoard.tsx` (201 lines)
+**File**: `src/components/TetrisBoard.tsx`
 **Issue**: Rendering calculation, boundary checking, piece placement mixed
 **Details**:
 
-- Nested loops for rendering calculation (lines 39-42, 58-61)
+- Nested loops for rendering calculation
 - Still complex despite 3 helper functions
 - Ghost piece, current piece, board rendering responsibilities mixed
 
@@ -556,9 +556,9 @@ class BoardRenderer {
 **Issue**: Heavy loop processing insufficient optimization
 **Details**:
 
-- `isValidPosition` function double loop (lines 44-60)
-- `placePiece` array copy processing (lines 64-81)
-- Line clearing linear search (lines 88-94)
+- `isValidPosition` function double loop
+- `placePiece` array copy processing
+- Line clearing linear search
 
 #### 8. Distributed Statistics Processing Logic
 
@@ -611,12 +611,12 @@ class BoardRenderer {
 
 ### Recently Completed (2025/06/10)
 
-✅ **TetrisGame Component Decomposition** - Successfully refactored from 364 lines to 29 lines:
+✅ **TetrisGame Component Decomposition** - Successfully refactored using Clean Architecture:
 
-- **GameOrchestrator**: SSR hydration and lifecycle management (50 lines)
-- **GameLogicController**: Zustand integration, audio system, business logic (292 lines)
-- **GameLayoutManager**: Responsive layouts, UI composition (146 lines)
-- **TetrisGame**: Simple component integration (29 lines)
+- **GameOrchestrator**: SSR hydration and lifecycle management
+- **GameLogicController**: Zustand integration, audio system, business logic
+- **GameLayoutManager**: Responsive layouts, UI composition
+- **TetrisGame**: Simple component integration
 
 **Architecture Improvements**:
 
