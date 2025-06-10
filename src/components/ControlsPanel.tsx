@@ -1,14 +1,12 @@
 'use client';
 
 import { memo } from 'react';
+import PanelBase from './ui/PanelBase';
 
 const ControlsPanel = memo(function ControlsPanel() {
   return (
-    <div className='hologram neon-border p-4 md:p-6 rounded-lg relative overflow-hidden'>
-      <h3 className='text-lg md:text-xl font-bold mb-3 md:mb-4 text-green-400 relative'>
-        CONTROLS
-      </h3>
-      <div className='space-y-2 md:space-y-3 text-xs md:text-sm relative'>
+    <PanelBase title='CONTROLS' theme='green'>
+      <div className='space-y-2 md:space-y-3 text-xs md:text-sm'>
         <div className='flex justify-between items-center'>
           <span className='text-gray-300'>移動</span>
           <span className='font-mono bg-cyan-400/20 px-2 py-1 rounded text-cyan-400'>←→</span>
@@ -36,7 +34,7 @@ const ControlsPanel = memo(function ControlsPanel() {
           <span className='font-mono bg-red-400/20 px-2 py-1 rounded text-red-400'>R</span>
         </div>
       </div>
-    </div>
+    </PanelBase>
   );
 });
 

@@ -2,16 +2,14 @@
 
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
+import PanelBase from './ui/PanelBase';
 
 const ScoringPanel = memo(function ScoringPanel() {
   const { t } = useTranslation();
 
   return (
-    <div className='hologram-yellow neon-border-yellow p-4 md:p-6 rounded-lg relative overflow-hidden'>
-      <h3 className='text-lg md:text-xl font-bold mb-3 md:mb-4 text-yellow-400 relative'>
-        SCORING
-      </h3>
-      <div className='space-y-2 text-xs md:text-sm relative'>
+    <PanelBase title='SCORING' theme='yellow'>
+      <div className='space-y-2 text-xs md:text-sm'>
         <div className='flex justify-between items-center text-gray-300'>
           <span>1 LINE</span>
           <span className='font-mono text-blue-400'>100 × LV</span>
@@ -34,7 +32,7 @@ const ScoringPanel = memo(function ScoringPanel() {
           <span className='font-mono text-purple-400'>DIST × 2</span>
         </div>
       </div>
-    </div>
+    </PanelBase>
   );
 });
 

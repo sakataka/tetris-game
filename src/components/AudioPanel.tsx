@@ -3,6 +3,7 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GameSettings } from '../types/tetris';
+import PanelBase from './ui/PanelBase';
 
 interface AudioSystemStatus {
   isWebAudioEnabled: boolean;
@@ -47,11 +48,8 @@ const AudioPanel = memo(function AudioPanel({
   const { t } = useTranslation();
 
   return (
-    <div className='hologram-cyan neon-border p-4 md:p-6 rounded-lg relative overflow-hidden'>
-      <h3 className='text-lg md:text-xl font-bold mb-3 md:mb-4 text-cyan-400 relative'>
-        {t('settings.audio').toUpperCase()}
-      </h3>
-      <div className='space-y-3 md:space-y-4 relative'>
+    <PanelBase title={t('settings.audio').toUpperCase()} theme='cyan'>
+      <div className='space-y-3 md:space-y-4'>
         <div className='flex justify-between items-center'>
           <span className='text-gray-300'>{t('settings.volume')}</span>
           <div className='flex items-center space-x-2'>
@@ -206,7 +204,7 @@ const AudioPanel = memo(function AudioPanel({
           </div>
         )}
       </div>
-    </div>
+    </PanelBase>
   );
 });
 

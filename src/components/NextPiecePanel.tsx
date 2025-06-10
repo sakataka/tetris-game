@@ -2,6 +2,7 @@
 
 import { memo } from 'react';
 import { Tetromino } from '../types/tetris';
+import PanelBase from './ui/PanelBase';
 
 interface NextPiecePanelProps {
   nextPiece: Tetromino | null;
@@ -9,10 +10,7 @@ interface NextPiecePanelProps {
 
 const NextPiecePanel = memo(function NextPiecePanel({ nextPiece }: NextPiecePanelProps) {
   return (
-    <div className='hologram-purple neon-border-purple p-4 md:p-6 rounded-lg relative overflow-hidden'>
-      <h3 className='text-lg md:text-xl font-bold mb-3 md:mb-4 text-purple-400 relative'>
-        NEXT PIECE
-      </h3>
+    <PanelBase title='NEXT PIECE' theme='purple'>
       <div className='grid gap-0 w-fit mx-auto p-4 bg-black/30 rounded-lg border border-purple-400/30'>
         {nextPiece ? (
           nextPiece.shape.map((row, y) => (
@@ -38,7 +36,7 @@ const NextPiecePanel = memo(function NextPiecePanel({ nextPiece }: NextPiecePane
           <div className='w-20 h-20 bg-gray-700/50 rounded border border-gray-500'></div>
         )}
       </div>
-    </div>
+    </PanelBase>
   );
 });
 

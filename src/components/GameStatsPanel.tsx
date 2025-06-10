@@ -2,6 +2,7 @@
 
 import { memo } from 'react';
 import { PANELS, LABELS } from '../constants/strings';
+import PanelBase from './ui/PanelBase';
 
 interface GameStatsPanelProps {
   score: number;
@@ -11,11 +12,8 @@ interface GameStatsPanelProps {
 
 const GameStatsPanel = memo(function GameStatsPanel({ score, level, lines }: GameStatsPanelProps) {
   return (
-    <div className='hologram-cyan neon-border p-4 md:p-6 rounded-lg relative overflow-hidden'>
-      <h3 className='text-lg md:text-xl font-bold mb-3 md:mb-4 text-cyan-400 relative'>
-        {PANELS.SCORE_DATA}
-      </h3>
-      <div className='space-y-2 md:space-y-3 relative'>
+    <PanelBase title={PANELS.SCORE_DATA} theme='cyan'>
+      <div className='space-y-2 md:space-y-3'>
         <div className='flex justify-between items-center'>
           <span className='text-gray-300 text-sm md:text-base'>{LABELS.SCORE}</span>
           <span className='font-mono text-lg md:text-2xl text-yellow-400 font-bold tracking-wider'>
@@ -31,7 +29,7 @@ const GameStatsPanel = memo(function GameStatsPanel({ score, level, lines }: Gam
           <span className='font-mono text-base md:text-xl text-blue-400 font-bold'>{lines}</span>
         </div>
       </div>
-    </div>
+    </PanelBase>
   );
 });
 
