@@ -42,7 +42,16 @@
     "accessibility": "Accessibility",
     "reducedMotion": "Reduced Motion",
     "highContrast": "High Contrast",
-    "colorBlindFriendly": "Color Blind Friendly"
+    "colorBlindFriendly": "Color Blind Friendly",
+    "virtualControls": "Virtual Controls",
+    "systemStatus": "System Status",
+    "engine": "Engine",
+    "preload": "Preload",
+    "status": "Status",
+    "loaded": "Loaded",
+    "playing": "Playing",
+    "fallback": "Fallback",
+    "silentModeActive": "Silent Mode Active"
   },
   "themes": {
     "cyberpunk": "Cyberpunk",
@@ -72,6 +81,9 @@
     "efficiency": "Efficiency",
     "consistency": "Consistency",
     "tetrisRate": "Tetris Rate",
+    "totalGames": "Total Games",
+    "noHighScores": "No high scores yet",
+    "noStatistics": "No statistics available",
     "period": {
       "all": "All Time",
       "today": "Today",
@@ -123,7 +135,39 @@
     "triple": "Triple",
     "tetris": "Tetris",
     "combo": "Combo",
-    "bonus": "Bonus"
+    "bonus": "Bonus",
+    "hardDrop": "Hard Drop"
+  },
+  "colorPalette": {
+    "title": "Color Palette Settings",
+    "primaryColor": "Primary Color",
+    "secondaryColor": "Secondary Color",
+    "tertiaryColor": "Tertiary Color",
+    "backgroundColor": "Background Color",
+    "textColor": "Text Color",
+    "accentColor": "Accent Color",
+    "advancedSettings": "Advanced Settings",
+    "collapse": "Collapse",
+    "preview": "Preview"
+  },
+  "accessibility": {
+    "colorVisionSupport": "Color Vision Support",
+    "none": "None (Standard)",
+    "protanopia": "Protanopia (Red-blind)",
+    "deuteranopia": "Deuteranopia (Green-blind)",
+    "tritanopia": "Tritanopia (Blue-blind)",
+    "contrast": "Contrast",
+    "lowContrast": "Low Contrast",
+    "standard": "Standard",
+    "highContrast": "High Contrast",
+    "motion": "Motion",
+    "fullAnimation": "Full Animation",
+    "reducedAnimation": "Reduced Animation",
+    "noAnimation": "No Animation"
+  },
+  "notifications": {
+    "close": "Close notification",
+    "clearAll": "Clear All"
   },
   "aria": {
     "gameBoard": "Tetris game board",
@@ -136,6 +180,7 @@
     "muteAudio": "Mute audio",
     "unmuteAudio": "Unmute audio",
     "changeTheme": "Change theme",
-    "changeLanguage": "Change language"
+    "changeLanguage": "Change language",
+    "closeNotification": "Close notification"
   }
 }

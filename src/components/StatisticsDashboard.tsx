@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { HighScore } from '../types/tetris';
 import { EnhancedStatistics, STATISTICS_PERIODS } from '../utils/data';
 
@@ -17,6 +18,7 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
   onPeriodChange = () => {},
   showDetailedView = true,
 }) => {
+  const { t } = useTranslation();
   return (
     <div data-testid='statistics-dashboard' className='hologram-purple p-6 space-y-6'>
       <div className='flex justify-between items-center'>
@@ -38,23 +40,23 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
       {/* 主要統計 */}
       <div className='responsive-grid-stats' data-testid='main-stats'>
         <div className='hologram-cyan p-4 rounded neon-border-cyan'>
-          <div className='text-sm text-gray-400'>Total Games</div>
+          <div className='text-sm text-gray-400'>{t('statistics.totalGames')}</div>
           <div className='text-2xl font-bold text-cyan-400'>{statistics.totalGames}</div>
         </div>
         <div className='hologram-cyan p-4 rounded neon-border-cyan'>
-          <div className='text-sm text-gray-400'>Best Score</div>
+          <div className='text-sm text-gray-400'>{t('statistics.bestScore')}</div>
           <div className='text-2xl font-bold text-yellow-400'>
             {statistics.bestScore.toLocaleString()}
           </div>
         </div>
         <div className='hologram-cyan p-4 rounded neon-border-cyan'>
-          <div className='text-sm text-gray-400'>Total Lines</div>
+          <div className='text-sm text-gray-400'>{t('statistics.totalLines')}</div>
           <div className='text-2xl font-bold text-green-400'>
             {statistics.totalLines.toLocaleString()}
           </div>
         </div>
         <div className='hologram-cyan p-4 rounded neon-border-cyan'>
-          <div className='text-sm text-gray-400'>Play Time</div>
+          <div className='text-sm text-gray-400'>{t('statistics.playTime')}</div>
           <div className='text-2xl font-bold text-purple-400'>
             {Math.floor(statistics.playTime / 3600)}h{' '}
             {Math.floor((statistics.playTime % 3600) / 60)}m
@@ -162,7 +164,7 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
                 </div>
               ))}
               {highScores.length === 0 && (
-                <div className='text-gray-500 text-center py-2'>No high scores yet</div>
+                <div className='text-gray-500 text-center py-2'>{t('statistics.noHighScores')}</div>
               )}
             </div>
           </div>
@@ -172,7 +174,7 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
       {/* 空の状態 */}
       {statistics.totalGames === 0 && (
         <div className='text-center py-8' data-testid='empty-state'>
-          <div className='text-gray-500 text-lg'>No statistics available</div>
+          <div className='text-gray-500 text-lg'>{t('statistics.noStatistics')}</div>
           <div className='text-gray-600 text-sm mt-2'>Play some games to see your stats!</div>
         </div>
       )}

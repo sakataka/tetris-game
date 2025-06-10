@@ -1,6 +1,7 @@
 'use client';
 
 import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { GameSettings } from '../types/tetris';
 
 interface AudioSystemStatus {
@@ -43,12 +44,16 @@ const AudioPanel = memo(function AudioPanel({
   onVolumeChange,
   onUpdateSettings,
 }: AudioPanelProps) {
+  const { t } = useTranslation();
+
   return (
     <div className='hologram-cyan neon-border p-4 md:p-6 rounded-lg relative overflow-hidden'>
-      <h3 className='text-lg md:text-xl font-bold mb-3 md:mb-4 text-cyan-400 relative'>AUDIO</h3>
+      <h3 className='text-lg md:text-xl font-bold mb-3 md:mb-4 text-cyan-400 relative'>
+        {t('settings.audio').toUpperCase()}
+      </h3>
       <div className='space-y-3 md:space-y-4 relative'>
         <div className='flex justify-between items-center'>
-          <span className='text-gray-300'>音量</span>
+          <span className='text-gray-300'>{t('settings.volume')}</span>
           <div className='flex items-center space-x-2'>
             <input
               type='range'
@@ -79,7 +84,7 @@ const AudioPanel = memo(function AudioPanel({
           </button>
         </div>
         <div className='flex justify-between items-center'>
-          <span className='text-gray-300'>Virtual Controls</span>
+          <span className='text-gray-300'>{t('settings.virtualControls')}</span>
           <button
             onClick={() =>
               onUpdateSettings({ virtualControlsEnabled: !settings.virtualControlsEnabled })
@@ -97,11 +102,13 @@ const AudioPanel = memo(function AudioPanel({
         {/* Audio System Status Section */}
         {audioStatus && (
           <div className='border-t border-cyan-400/30 pt-3 md:pt-4 space-y-2 md:space-y-3'>
-            <h4 className='text-sm font-semibold text-cyan-300 mb-2'>SYSTEM STATUS</h4>
+            <h4 className='text-sm font-semibold text-cyan-300 mb-2'>
+              {t('settings.systemStatus').toUpperCase()}
+            </h4>
 
             {/* Audio Engine Type */}
             <div className='flex justify-between items-center'>
-              <span className='text-gray-300 text-xs md:text-sm'>Engine</span>
+              <span className='text-gray-300 text-xs md:text-sm'>{t('settings.engine')}</span>
               <span
                 className={`font-mono text-xs px-2 py-1 rounded ${
                   audioStatus.isWebAudioEnabled
@@ -117,7 +124,7 @@ const AudioPanel = memo(function AudioPanel({
             {audioStatus.preloadProgress && (
               <div className='space-y-1'>
                 <div className='flex justify-between items-center'>
-                  <span className='text-gray-300 text-xs md:text-sm'>Preload</span>
+                  <span className='text-gray-300 text-xs md:text-sm'>{t('settings.preload')}</span>
                   <span className='font-mono text-xs text-cyan-400'>
                     {audioStatus.preloadProgress.loaded}/{audioStatus.preloadProgress.total}
                   </span>
@@ -140,7 +147,7 @@ const AudioPanel = memo(function AudioPanel({
             {audioStatus.detailedState && (
               <div className='space-y-1'>
                 <div className='flex justify-between items-center'>
-                  <span className='text-gray-300 text-xs md:text-sm'>Status</span>
+                  <span className='text-gray-300 text-xs md:text-sm'>{t('settings.status')}</span>
                   <span
                     className={`font-mono text-xs px-2 py-1 rounded ${
                       audioStatus.detailedState.initialized
@@ -152,14 +159,16 @@ const AudioPanel = memo(function AudioPanel({
                   </span>
                 </div>
                 <div className='flex justify-between items-center'>
-                  <span className='text-gray-300 text-xs md:text-sm'>Loaded</span>
+                  <span className='text-gray-300 text-xs md:text-sm'>{t('settings.loaded')}</span>
                   <span className='font-mono text-xs text-cyan-400'>
                     {audioStatus.detailedState.loadedSounds.length}/6
                   </span>
                 </div>
                 {audioStatus.detailedState.activeSounds > 0 && (
                   <div className='flex justify-between items-center'>
-                    <span className='text-gray-300 text-xs md:text-sm'>Playing</span>
+                    <span className='text-gray-300 text-xs md:text-sm'>
+                      {t('settings.playing')}
+                    </span>
                     <span className='font-mono text-xs text-yellow-400'>
                       {audioStatus.detailedState.activeSounds}
                     </span>
@@ -177,7 +186,7 @@ const AudioPanel = memo(function AudioPanel({
             {audioStatus.fallbackStatus && (
               <div className='space-y-1'>
                 <div className='flex justify-between items-center'>
-                  <span className='text-gray-300 text-xs md:text-sm'>Fallback</span>
+                  <span className='text-gray-300 text-xs md:text-sm'>{t('settings.fallback')}</span>
                   <span className='font-mono text-xs text-cyan-400'>
                     Level {audioStatus.fallbackStatus.currentLevel + 1}
                   </span>
@@ -188,7 +197,9 @@ const AudioPanel = memo(function AudioPanel({
                   ] || 'Unknown'}
                 </div>
                 {audioStatus.fallbackStatus.silentMode && (
-                  <div className='text-xs text-red-400 text-center'>Silent Mode Active</div>
+                  <div className='text-xs text-red-400 text-center'>
+                    {t('settings.silentModeActive')}
+                  </div>
                 )}
               </div>
             )}

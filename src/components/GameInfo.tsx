@@ -99,6 +99,9 @@ const GameInfo = memo(function GameInfo({
               volume={volume}
               onToggleMute={onToggleMute}
               onVolumeChange={onVolumeChange}
+              settings={settings}
+              updateSettings={updateSettings}
+              audioSystemStatus={audioSystemStatus}
             />
           </Suspense>
         );
@@ -113,13 +116,6 @@ const GameInfo = memo(function GameInfo({
             isPaused={isPaused}
             onReset={onReset}
             onTogglePause={onTogglePause}
-            isMuted={isMuted}
-            volume={volume}
-            onToggleMute={onToggleMute}
-            onVolumeChange={onVolumeChange}
-            settings={settings}
-            updateSettings={updateSettings}
-            audioSystemStatus={audioSystemStatus}
           />
         );
     }

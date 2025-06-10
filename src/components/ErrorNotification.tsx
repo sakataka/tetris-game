@@ -1,6 +1,7 @@
 'use client';
 
 import { memo, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ErrorLevel, ErrorInfo } from '../types/errors';
 import { errorHandler } from '../utils/data';
 import { useTimerAnimation, ANIMATION_PRESETS } from '../utils/animation';
@@ -24,6 +25,7 @@ const ErrorNotification = memo(function ErrorNotification({
   maxNotifications = 5,
   autoClose = true,
 }: ErrorNotificationProps) {
+  const { t } = useTranslation();
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
 
   useEffect(() => {
@@ -165,7 +167,7 @@ const ErrorNotification = memo(function ErrorNotification({
               <button
                 onClick={() => dismissNotification(notification.id)}
                 className='flex-shrink-0 text-current opacity-50 hover:opacity-100 transition-opacity p-1 rounded hover:bg-current/10'
-                aria-label='通知を閉じる'
+                aria-label={t('notifications.close')}
               >
                 <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                   <path
@@ -195,7 +197,7 @@ const ErrorNotification = memo(function ErrorNotification({
           }}
           className='mt-2 w-full text-xs text-gray-400 hover:text-gray-200 py-1 px-2 rounded border border-gray-600/30 hover:border-gray-400/30 transition-colors'
         >
-          すべてクリア ({notifications.length})
+          {t('notifications.clearAll')} ({notifications.length})
         </button>
       )}
     </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ColorPalette } from '../types/tetris';
 
 interface ColorPaletteEditorProps {
@@ -74,6 +75,7 @@ export default function ColorPaletteEditor({
   onColorsChange,
   className = '',
 }: ColorPaletteEditorProps) {
+  const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handleColorChange = useCallback(
@@ -90,32 +92,32 @@ export default function ColorPaletteEditor({
   }> = [
     {
       key: 'primary',
-      label: 'プライマリカラー',
+      label: t('colorPalette.primaryColor'),
       description: 'メインアクセントカラー（ネオンエフェクト等）',
     },
     {
       key: 'secondary',
-      label: 'セカンダリカラー',
+      label: t('colorPalette.secondaryColor'),
       description: '二番目のアクセントカラー',
     },
     {
       key: 'tertiary',
-      label: 'ターシャリカラー',
+      label: t('colorPalette.tertiaryColor'),
       description: '三番目のアクセントカラー',
     },
     {
       key: 'background',
-      label: '背景色',
+      label: t('colorPalette.backgroundColor'),
       description: 'メイン背景色',
     },
     {
       key: 'foreground',
-      label: 'テキスト色',
+      label: t('colorPalette.textColor'),
       description: '主要テキストの色',
     },
     {
       key: 'accent',
-      label: 'アクセント色',
+      label: t('colorPalette.accentColor'),
       description: '強調色（特別な要素用）',
     },
   ];
@@ -135,19 +137,19 @@ export default function ColorPaletteEditor({
   return (
     <div className={`color-palette-editor ${className}`}>
       <div className='flex items-center justify-between mb-3'>
-        <h3 className='text-lg font-bold text-cyber-cyan'>カラーパレット設定</h3>
+        <h3 className='text-lg font-bold text-cyber-cyan'>{t('colorPalette.title')}</h3>
         <button
           onClick={() => setIsExpanded(!isExpanded)}
           className='px-3 py-1 rounded bg-cyber-purple-20 border border-cyber-purple-30
                      text-cyber-purple hover:bg-cyber-purple-30 transition-colors text-sm'
         >
-          {isExpanded ? '折りたたむ' : '詳細設定'}
+          {isExpanded ? t('colorPalette.collapse') : t('colorPalette.advancedSettings')}
         </button>
       </div>
 
       {/* カラープレビュー（常に表示） */}
       <div className='mb-4 p-3 rounded-lg hologram'>
-        <div className='text-sm font-medium mb-2 text-cyber-cyan'>プレビュー</div>
+        <div className='text-sm font-medium mb-2 text-cyber-cyan'>{t('colorPalette.preview')}</div>
         <div className='grid grid-cols-6 gap-2'>
           {colorFields.map(({ key, label }) => (
             <div key={key} className='text-center'>

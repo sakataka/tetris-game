@@ -42,7 +42,16 @@
     "accessibility": "アクセシビリティ",
     "reducedMotion": "モーション軽減",
     "highContrast": "ハイコントラスト",
-    "colorBlindFriendly": "色覚異常対応"
+    "colorBlindFriendly": "色覚異常対応",
+    "virtualControls": "バーチャルコントロール",
+    "systemStatus": "システム状態",
+    "engine": "エンジン",
+    "preload": "プリロード",
+    "status": "状態",
+    "loaded": "読み込み済み",
+    "playing": "再生中",
+    "fallback": "フォールバック",
+    "silentModeActive": "サイレントモード有効"
   },
   "themes": {
     "cyberpunk": "サイバーパンク",
@@ -72,6 +81,9 @@
     "efficiency": "効率性",
     "consistency": "一貫性",
     "tetrisRate": "テトリス率",
+    "totalGames": "総ゲーム数",
+    "noHighScores": "ハイスコアはまだありません",
+    "noStatistics": "統計データがありません",
     "period": {
       "all": "全期間",
       "today": "今日",
@@ -123,7 +135,39 @@
     "triple": "トリプル",
     "tetris": "テトリス",
     "combo": "コンボ",
-    "bonus": "ボーナス"
+    "bonus": "ボーナス",
+    "hardDrop": "ハードドロップ"
+  },
+  "colorPalette": {
+    "title": "カラーパレット設定",
+    "primaryColor": "プライマリカラー",
+    "secondaryColor": "セカンダリカラー",
+    "tertiaryColor": "ターシャリカラー",
+    "backgroundColor": "背景色",
+    "textColor": "テキスト色",
+    "accentColor": "アクセント色",
+    "advancedSettings": "詳細設定",
+    "collapse": "折りたたむ",
+    "preview": "プレビュー"
+  },
+  "accessibility": {
+    "colorVisionSupport": "色覚対応",
+    "none": "なし（標準）",
+    "protanopia": "1型色覚（赤色盲）",
+    "deuteranopia": "2型色覚（緑色盲）",
+    "tritanopia": "3型色覚（青色盲）",
+    "contrast": "コントラスト",
+    "lowContrast": "低コントラスト",
+    "standard": "標準",
+    "highContrast": "高コントラスト",
+    "motion": "モーション",
+    "fullAnimation": "フルアニメーション",
+    "reducedAnimation": "軽減アニメーション",
+    "noAnimation": "アニメーションなし"
+  },
+  "notifications": {
+    "close": "通知を閉じる",
+    "clearAll": "すべてクリア"
   },
   "aria": {
     "gameBoard": "テトリスゲームボード",
@@ -136,6 +180,7 @@
     "muteAudio": "音声をミュート",
     "unmuteAudio": "音声のミュートを解除",
     "changeTheme": "テーマを変更",
-    "changeLanguage": "言語を変更"
+    "changeLanguage": "言語を変更",
+    "closeNotification": "通知を閉じる"
   }
 }

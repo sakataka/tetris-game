@@ -1,8 +1,11 @@
 'use client';
 
 import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const ScoringPanel = memo(function ScoringPanel() {
+  const { t } = useTranslation();
+
   return (
     <div className='hologram-yellow neon-border-yellow p-4 md:p-6 rounded-lg relative overflow-hidden'>
       <h3 className='text-lg md:text-xl font-bold mb-3 md:mb-4 text-yellow-400 relative'>
@@ -27,7 +30,7 @@ const ScoringPanel = memo(function ScoringPanel() {
         </div>
         <div className='text-center text-red-400 text-xs animate-pulse mt-2'>★ TETRIS BONUS! ★</div>
         <div className='flex justify-between items-center text-gray-300 border-t border-gray-600 pt-2'>
-          <span>HARD DROP</span>
+          <span>{t('scoring.hardDrop').toUpperCase()}</span>
           <span className='font-mono text-purple-400'>DIST × 2</span>
         </div>
       </div>
