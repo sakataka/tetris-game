@@ -9,22 +9,22 @@ import {
   DEFAULT_ERROR_CONFIG,
 } from '../types/errors';
 
-// エラーストアの状態型定義
+// Error store state type definitions
 export interface ErrorState {
-  // エラー一覧
+  // Error collection
   errors: ErrorInfo[];
 
-  // エラー統計
+  // Error statistics
   stats: ErrorStats;
 
-  // 設定
+  // Configuration
   config: ErrorReportConfig;
 
-  // UI状態
+  // UI state
   showErrorPanel: boolean;
   selectedErrorId?: string;
 
-  // アクション
+  // Actions
   addError: (error: ErrorInfo) => void;
   removeError: (errorId: string) => void;
   clearErrors: () => void;
@@ -34,7 +34,7 @@ export interface ErrorState {
   setShowErrorPanel: (show: boolean) => void;
   setSelectedError: (errorId?: string) => void;
 
-  // セレクター
+  // Selectors
   getErrorsByLevel: (level: ErrorLevel) => ErrorInfo[];
   getErrorsByCategory: (category: ErrorCategory) => ErrorInfo[];
   getRecentErrors: (count?: number) => ErrorInfo[];
@@ -42,7 +42,7 @@ export interface ErrorState {
   getUnresolvedErrors: () => ErrorInfo[];
 }
 
-// 初期統計データ
+// Initial statistics data structure
 const INITIAL_STATS: ErrorStats = {
   totalErrors: 0,
   errorsByCategory: {
@@ -65,7 +65,7 @@ const INITIAL_STATS: ErrorStats = {
   lastErrorTime: undefined,
 };
 
-// 統計の更新関数
+// Statistics update function with category and level aggregation
 const updateStats = (errors: ErrorInfo[]): ErrorStats => {
   const stats: ErrorStats = {
     totalErrors: errors.length,
@@ -83,7 +83,7 @@ const updateStats = (errors: ErrorInfo[]): ErrorStats => {
   return stats;
 };
 
-// Zustandストア
+// Zustand store with persistence for configuration only
 export const useErrorStore = create<ErrorState>()(
   persist(
     (set, get) => ({
@@ -97,7 +97,7 @@ export const useErrorStore = create<ErrorState>()(
         set((state) => {
           const newErrors = [...state.errors, error];
 
-          // 最大保存数の制限
+          // Enforce maximum stored error limit
           if (newErrors.length > state.config.maxStoredErrors) {
             newErrors.shift();
           }
@@ -139,7 +139,7 @@ export const useErrorStore = create<ErrorState>()(
       },
 
       markErrorAsResolved: (errorId: string) => {
-        // エラーを削除することで解決とする
+        // Mark as resolved by removing the error
         get().removeError(errorId);
       },
 
@@ -157,7 +157,7 @@ export const useErrorStore = create<ErrorState>()(
         set({ selectedErrorId: errorId });
       },
 
-      // セレクター関数
+      // Selector functions for efficient state access
       getErrorsByLevel: (level: ErrorLevel) => {
         return get().errors.filter((error) => error.level === level);
       },
@@ -175,7 +175,7 @@ export const useErrorStore = create<ErrorState>()(
       },
 
       getUnresolvedErrors: () => {
-        // すべてのエラーが未解決として扱われる（削除されるまで）
+        // All errors are considered unresolved until deleted
         return get().errors;
       },
     }),
@@ -183,16 +183,16 @@ export const useErrorStore = create<ErrorState>()(
       name: 'tetris-error-store',
       version: 1,
 
-      // ストレージに保存する値をフィルタリング（エラーは永続化しない）
+      // Filter persisted values (errors are not persisted for privacy)
       partialize: (state) => ({
         config: state.config,
-        // エラーデータは永続化しない（セッション毎にリセット）
+        // Error data not persisted (reset per session for privacy)
       }),
 
-      // 復元時の処理
+      // Rehydration handling - clear error data on startup
       onRehydrateStorage: () => (state) => {
         if (state) {
-          // 復元時はエラーデータをクリアして統計を初期化
+          // Clear error data and reset statistics on rehydration
           state.errors = [];
           state.stats = INITIAL_STATS;
           state.showErrorPanel = false;
@@ -203,14 +203,14 @@ export const useErrorStore = create<ErrorState>()(
   )
 );
 
-// セレクター関数（パフォーマンス最適化）
+// Optimized selector functions to prevent unnecessary re-renders
 export const useErrors = () => useErrorStore((state) => state.errors);
 export const useErrorStats = () => useErrorStore((state) => state.stats);
 export const useErrorConfig = () => useErrorStore((state) => state.config);
 export const useShowErrorPanel = () => useErrorStore((state) => state.showErrorPanel);
 export const useSelectedErrorId = () => useErrorStore((state) => state.selectedErrorId);
 
-// アクション関数
+// Action functions for error management
 export const useErrorActions = () =>
   useErrorStore((state) => ({
     addError: state.addError,
@@ -223,7 +223,7 @@ export const useErrorActions = () =>
     setSelectedError: state.setSelectedError,
   }));
 
-// セレクター関数
+// Selector functions for data filtering
 export const useErrorSelectors = () =>
   useErrorStore((state) => ({
     getErrorsByLevel: state.getErrorsByLevel,
@@ -233,9 +233,9 @@ export const useErrorSelectors = () =>
     getUnresolvedErrors: state.getUnresolvedErrors,
   }));
 
-// エラーストアとエラーハンドラーの連携
+// Error store and error handler integration
 export const initializeErrorStoreIntegration = () => {
-  // エラーハンドラーからエラーストアにエラーを追加
+  // Connect error handler to error store for centralized error management
   if (typeof window !== 'undefined') {
     import('../utils/data/errorHandler').then(({ errorHandler }) => {
       errorHandler.onError((errorInfo: ErrorInfo) => {
@@ -245,7 +245,7 @@ export const initializeErrorStoreIntegration = () => {
   }
 };
 
-// カスタムフック：エラー統計の簡易表示
+// Custom hook: simplified error statistics for UI components
 export const useErrorSummary = () => {
   const stats = useErrorStats();
 
@@ -260,12 +260,12 @@ export const useErrorSummary = () => {
   };
 };
 
-// カスタムフック：エラーレベル別フィルタリング
+// Custom hook: error filtering by severity level
 export const useErrorsByLevel = (level: ErrorLevel) => {
   return useErrorStore((state) => state.getErrorsByLevel(level));
 };
 
-// カスタムフック：エラーカテゴリ別フィルタリング
+// Custom hook: error filtering by category type
 export const useErrorsByCategory = (category: ErrorCategory) => {
   return useErrorStore((state) => state.getErrorsByCategory(category));
 };

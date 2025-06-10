@@ -1,6 +1,6 @@
 /**
- * 高度な音声プリロードシステム
- * プリロード戦略、プライオリティ管理、メモリ効率化
+ * Advanced audio preloading system with intelligent resource management
+ * Features priority-based loading, network-aware strategies, and memory optimization
  */
 
 import { SoundKey } from '../../types/tetris';
@@ -9,9 +9,9 @@ import { AudioError, handleError } from '../data/errorHandler';
 
 interface PreloadStrategy {
   priority: 'immediate' | 'high' | 'normal' | 'lazy';
-  timeout: number; // プリロードタイムアウト（ミリ秒）
-  retryCount: number; // リトライ回数
-  memoryLimit: number; // メモリ制限（MB）
+  timeout: number; // Preload timeout in milliseconds
+  retryCount: number; // Number of retry attempts
+  memoryLimit: number; // Memory limit in MB
 }
 
 interface PreloadProgress {
@@ -19,13 +19,13 @@ interface PreloadProgress {
   loaded: number;
   failed: number;
   inProgress: number;
-  progress: number; // 0-1
+  progress: number; // Progress ratio 0-1
 }
 
 interface SoundPriority {
   soundKey: SoundKey;
-  priority: number; // 1-10, 10が最高優先度
-  size?: number; // 推定ファイルサイズ（バイト）
+  priority: number; // Priority 1-10, 10 is highest
+  size?: number; // Estimated file size in bytes
 }
 
 class AudioPreloader {
@@ -36,35 +36,35 @@ class AudioPreloader {
   private retryCounters: Map<SoundKey, number> = new Map();
   private memoryUsage: number = 0;
 
-  // 音声ファイルのプライオリティ定義
+  // Audio file priority definitions based on gameplay frequency
   private readonly soundPriorities: SoundPriority[] = [
-    { soundKey: 'pieceLand', priority: 10 }, // 最も頻繁に使用
+    { soundKey: 'pieceLand', priority: 10 }, // Most frequently used during gameplay
     { soundKey: 'pieceRotate', priority: 9 },
     { soundKey: 'lineClear', priority: 8 },
     { soundKey: 'hardDrop', priority: 7 },
     { soundKey: 'tetris', priority: 6 },
-    { soundKey: 'gameOver', priority: 5 }, // 使用頻度は低いが重要
+    { soundKey: 'gameOver', priority: 5 }, // Low frequency but critical for UX
   ];
 
-  // デフォルトプリロード戦略
+  // Default preloading strategies for different network conditions
   private readonly strategies: Record<string, PreloadStrategy> = {
     immediate: {
       priority: 'immediate',
       timeout: 5000,
       retryCount: 3,
-      memoryLimit: 50, // 50MB
+      memoryLimit: 50, // 50MB for high-speed connections
     },
     normal: {
       priority: 'normal',
       timeout: 10000,
       retryCount: 2,
-      memoryLimit: 30, // 30MB
+      memoryLimit: 30, // 30MB for normal connections
     },
     lazy: {
       priority: 'lazy',
       timeout: 15000,
       retryCount: 1,
-      memoryLimit: 20, // 20MB
+      memoryLimit: 20, // 20MB for slow connections
     },
   };
 
@@ -78,28 +78,28 @@ class AudioPreloader {
   }
 
   /**
-   * プライオリティベースの音声プリロード
+   * Priority-based audio preloading with staggered start times
    */
   public async preloadWithStrategy(
     strategy: keyof typeof this.strategies = 'normal'
   ): Promise<PreloadProgress> {
     const config = this.strategies[strategy];
 
-    // プライオリティ順にソート
+    // Sort by priority (highest first)
     const sortedSounds = [...this.soundPriorities].sort((a, b) => b.priority - a.priority);
 
-    // 進捗初期化
+    // Initialize progress tracking
     sortedSounds.forEach(({ soundKey }) => {
       if (!this.preloadProgress.has(soundKey)) {
         this.preloadProgress.set(soundKey, 'pending');
       }
     });
 
-    // const progress = this.getProgress(); // 未使用のため削除
+    // Progress tracking - removed unused variable
 
-    // 並列プリロード（高優先度から順次開始）
+    // Parallel preloading with staggered start for load balancing
     const loadPromises = sortedSounds.map(
-      (soundPriority, index) => this.preloadSingleSound(soundPriority, config, index * 100) // 100ms間隔で開始
+      (soundPriority, index) => this.preloadSingleSound(soundPriority, config, index * 100) // 100ms intervals to distribute network load
     );
 
     await Promise.allSettled(loadPromises);
@@ -108,7 +108,7 @@ class AudioPreloader {
   }
 
   /**
-   * 個別音声のプリロード
+   * Individual audio preloading with retry logic and timeout handling
    */
   private async preloadSingleSound(
     soundPriority: SoundPriority,
@@ -117,12 +117,12 @@ class AudioPreloader {
   ): Promise<void> {
     const { soundKey } = soundPriority;
 
-    // 遅延開始（ネットワーク負荷分散）
+    // Delayed start for network load distribution
     if (delay > 0) {
       await new Promise((resolve) => setTimeout(resolve, delay));
     }
 
-    // メモリ制限チェック
+    // Memory limit enforcement
     if (this.memoryUsage > config.memoryLimit * 1024 * 1024) {
       this.preloadProgress.set(soundKey, 'failed');
       const error = new AudioError(
@@ -174,7 +174,7 @@ class AudioPreloader {
           return;
         }
 
-        // 指数バックオフでリトライ
+        // Exponential backoff retry strategy
         const backoffDelay = Math.pow(2, currentRetry - 1) * 1000;
         await new Promise((resolve) => setTimeout(resolve, backoffDelay));
       }
@@ -182,29 +182,29 @@ class AudioPreloader {
   }
 
   /**
-   * AudioManagerを使用した実際のロード処理
+   * Actual loading process using AudioManager's internal preloading
    */
   private async loadWithAudioManager(soundKey: SoundKey): Promise<void> {
     // AudioManagerの内部プリロード機能を利用
     const audioState = audioManager.getAudioState();
 
     if (!audioState.loadedSounds.includes(soundKey)) {
-      // AudioManagerのpreloadAllSounds()を個別音声用に拡張
+      // Leverage AudioManager's preloadAllSounds() for individual sounds
       await audioManager.preloadAllSounds();
 
-      // ロード完了を確認
+      // Verify successful loading
       const updatedState = audioManager.getAudioState();
       if (!updatedState.loadedSounds.includes(soundKey)) {
         throw new Error(`Failed to load ${soundKey} via AudioManager`);
       }
 
-      // メモリ使用量の推定更新（大雑把な見積もり）
+      // Update memory usage estimation (rough approximation)
       this.estimateMemoryUsage(soundKey);
     }
   }
 
   /**
-   * タイムアウトPromiseの作成
+   * Create timeout promise for preload operations
    */
   private createTimeoutPromise(timeout: number, soundKey: SoundKey): Promise<never> {
     return new Promise((_, reject) => {
@@ -215,10 +215,10 @@ class AudioPreloader {
   }
 
   /**
-   * メモリ使用量の推定
+   * Estimate memory usage based on typical audio file sizes
    */
   private estimateMemoryUsage(soundKey: SoundKey): void {
-    // 音声ファイルのメモリ使用量を推定（実際の値は取得困難）
+    // Estimate audio file memory usage (actual values are difficult to obtain from Web Audio API)
     const estimatedSizes: Record<SoundKey, number> = {
       pieceLand: 50 * 1024, // 50KB
       pieceRotate: 30 * 1024, // 30KB
@@ -232,7 +232,7 @@ class AudioPreloader {
   }
 
   /**
-   * プリロード進捗の取得
+   * Get current preload progress statistics
    */
   public getProgress(): PreloadProgress {
     const statuses = Array.from(this.preloadProgress.values());
@@ -248,14 +248,14 @@ class AudioPreloader {
   }
 
   /**
-   * 特定音声のプリロード状態取得
+   * Get preload status for specific sound
    */
   public getSoundStatus(soundKey: SoundKey): string {
     return this.preloadProgress.get(soundKey) || 'not-started';
   }
 
   /**
-   * プリロード時間の統計取得
+   * Get loading time statistics for performance monitoring
    */
   public getLoadingStats(): Record<SoundKey, { loadTime: number; status: string }> {
     const stats: Record<string, { loadTime: number; status: string }> = {};
@@ -271,17 +271,17 @@ class AudioPreloader {
   }
 
   /**
-   * メモリ使用量の取得
+   * Get estimated memory usage information
    */
   public getMemoryUsage(): { estimated: number; limit: number } {
     return {
       estimated: this.memoryUsage,
-      limit: 50 * 1024 * 1024, // デフォルト50MB
+      limit: 50 * 1024 * 1024, // Default 50MB limit
     };
   }
 
   /**
-   * プリロードのリセット
+   * Reset preloader state for fresh start
    */
   public reset(): void {
     this.preloadProgress.clear();
@@ -291,10 +291,10 @@ class AudioPreloader {
   }
 
   /**
-   * 条件付きプリロード（ネットワーク状況考慮）
+   * Intelligent preloading based on network conditions using Network Information API
    */
   public async preloadBasedOnNetwork(): Promise<PreloadProgress> {
-    // Network Information API対応チェック
+    // Network Information API support check with vendor prefixes
     const connection =
       (
         navigator as unknown as {
@@ -311,11 +311,11 @@ class AudioPreloader {
     if (connection) {
       const { effectiveType, downlink } = connection as { effectiveType: string; downlink: number };
 
-      // ネットワーク状況に基づく戦略選択
+      // Network-aware strategy selection for optimal performance
       if (effectiveType === '4g' && downlink > 5) {
-        strategy = 'immediate'; // 高速回線
+        strategy = 'immediate'; // High-speed connection - aggressive preloading
       } else if (effectiveType === '3g' || downlink < 2) {
-        strategy = 'lazy'; // 低速回線
+        strategy = 'lazy'; // Slow connection - conservative preloading
       }
     }
 
@@ -323,10 +323,10 @@ class AudioPreloader {
   }
 }
 
-// シングルトンインスタンスをエクスポート
+// Export singleton instance
 export const audioPreloader = AudioPreloader.getInstance();
 
-// 便利な関数をエクスポート
+// Export convenience functions
 export const preloadAudioWithStrategy = (strategy?: 'immediate' | 'normal' | 'lazy') =>
   audioPreloader.preloadWithStrategy(strategy);
 

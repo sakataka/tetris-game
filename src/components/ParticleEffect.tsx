@@ -21,7 +21,7 @@ interface ParticleEffectProps {
   enablePerformanceMonitoring?: boolean;
 }
 
-// 個別パーティクルコンポーネント（重い計算を分離）
+// Individual particle component with isolated heavy calculations for performance
 const Particle = memo(function Particle({
   particle,
 }: {
@@ -41,7 +41,7 @@ const Particle = memo(function Particle({
       opacity: lifeRatio * PARTICLE_OPACITY_MULTIPLIER,
       transform: `scale(${scale}) rotate(${rotation}deg)`,
       filter: `blur(${blur}px)`,
-      // CSS変数を使用してパフォーマンス改善
+      // CSS custom properties for performance optimization
       '--particle-color': particle.color,
       '--particle-scale': scale,
       '--life-ratio': lifeRatio,
@@ -60,10 +60,10 @@ const ParticleEffect = memo(function ParticleEffect({
   const [currentRenderer, setCurrentRenderer] = useState<'dom' | 'canvas'>('dom');
   const performanceCheckCountRef = useRef(0);
 
-  // アニメーション統一管理システムの活用
+  // Leverage unified animation management system
   const hasParticles = lineEffect.particles.length > 0;
 
-  // パーティクル物理更新のヘルパー関数（認知複雑度削減）
+  // Particle physics helper function (cognitive complexity reduction)
   const processParticlePhysics = useCallback((particles: LineEffectState['particles']) => {
     const updated: LineEffectState['particles'] = [];
     const expired: LineEffectState['particles'] = [];
@@ -88,7 +88,7 @@ const ParticleEffect = memo(function ParticleEffect({
     return { updated, expired };
   }, []);
 
-  // レンダラー自動切り替えのヘルパー関数（認知複雑度削減）
+  // Renderer auto-switching helper function (cognitive complexity reduction)
   const checkRendererPerformance = useCallback(
     (metrics: { fps: number }, particleCount: number) => {
       if (forceRenderer !== 'auto') return;
@@ -106,7 +106,7 @@ const ParticleEffect = memo(function ParticleEffect({
     [forceRenderer, currentRenderer]
   );
 
-  // パーティクル更新ロジック（メイン関数、認知複雑度削減済み）
+  // Main particle update logic (cognitive complexity reduced via helper functions)
   const updateParticles = useCallback(() => {
     if (enablePerformanceMonitoring) {
       performanceMonitor.startFrame();
@@ -114,14 +114,14 @@ const ParticleEffect = memo(function ParticleEffect({
 
     const { updated, expired } = processParticlePhysics(lineEffect.particles);
 
-    // 期限切れのパーティクルをプールに戻す
+    // Return expired particles to object pool for memory efficiency
     if (expired.length > 0) {
       particlePool.releaseParticles(expired);
     }
 
     onParticleUpdate(updated);
 
-    // パフォーマンス監視とレンダラー自動切り替え
+    // Performance monitoring and automatic renderer switching
     if (enablePerformanceMonitoring) {
       const metrics = performanceMonitor.endFrame(updated.length);
       checkRendererPerformance(metrics, updated.length);
@@ -134,7 +134,7 @@ const ParticleEffect = memo(function ParticleEffect({
     checkRendererPerformance,
   ]);
 
-  // 統一アニメーション管理システムを使用
+  // Use unified animation management system with conditional execution
   useConditionalAnimation(updateParticles, hasParticles, [updateParticles], {
     ...ANIMATION_PRESETS.PARTICLE_EFFECT,
     autoStop: {
@@ -142,13 +142,13 @@ const ParticleEffect = memo(function ParticleEffect({
     },
   });
 
-  // レンダラー選択ロジック
+  // Renderer selection logic based on performance requirements
   const selectedRenderer = useMemo(() => {
     if (forceRenderer !== 'auto') return forceRenderer;
     return currentRenderer;
   }, [forceRenderer, currentRenderer]);
 
-  // パーティクルリストをuseMemoでメモ化（DOM レンダラー用）
+  // Memoize particle list for DOM renderer performance optimization
   const particleElements = useMemo(() => {
     if (selectedRenderer === 'canvas') return null;
 
@@ -157,7 +157,7 @@ const ParticleEffect = memo(function ParticleEffect({
     ));
   }, [lineEffect.particles, selectedRenderer]);
 
-  // パフォーマンス最適化情報を開発環境でログ出力
+  // Development-only performance optimization logging
   useEffect(() => {
     if (process.env.NODE_ENV === 'development' && enablePerformanceMonitoring) {
       console.log(
