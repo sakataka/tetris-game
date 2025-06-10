@@ -36,23 +36,17 @@ export function rotatePiece(piece: Tetromino): Tetromino {
   };
 }
 
-export function isValidPosition(
-  board: (string | null)[][],
-  piece: Tetromino,
-  newPosition: { x: number; y: number }
-): boolean {
+function isWithinBounds(x: number, y: number): boolean {
+  return x >= 0 && x < BOARD_WIDTH && y < BOARD_HEIGHT;
+}
+
+function checkPieceBounds(piece: Tetromino, newPosition: { x: number; y: number }): boolean {
   for (let y = 0; y < piece.shape.length; y++) {
     for (let x = 0; x < piece.shape[y].length; x++) {
       if (piece.shape[y][x]) {
-        const newX = newPosition.x + x;
-        const newY = newPosition.y + y;
-
-        if (
-          newX < 0 ||
-          newX >= BOARD_WIDTH ||
-          newY >= BOARD_HEIGHT ||
-          (newY >= 0 && board[newY][newX])
-        ) {
+        const boardX = newPosition.x + x;
+        const boardY = newPosition.y + y;
+        if (!isWithinBounds(boardX, boardY)) {
           return false;
         }
       }
@@ -61,21 +55,85 @@ export function isValidPosition(
   return true;
 }
 
-export function placePiece(board: (string | null)[][], piece: Tetromino): (string | null)[][] {
-  const newBoard = board.map((row) => [...row]);
-
+function checkBoardCollisions(
+  board: (string | null)[][],
+  piece: Tetromino,
+  newPosition: { x: number; y: number }
+): boolean {
   for (let y = 0; y < piece.shape.length; y++) {
+    const boardY = newPosition.y + y;
+    if (boardY < 0) continue;
+
     for (let x = 0; x < piece.shape[y].length; x++) {
       if (piece.shape[y][x]) {
-        const boardX = piece.position.x + x;
-        const boardY = piece.position.y + y;
-
-        if (boardY >= 0) {
-          newBoard[boardY][boardX] = piece.color;
+        const boardX = newPosition.x + x;
+        if (board[boardY][boardX]) {
+          return false;
         }
       }
     }
   }
+  return true;
+}
+
+export function isValidPosition(
+  board: (string | null)[][],
+  piece: Tetromino,
+  newPosition: { x: number; y: number }
+): boolean {
+  return checkPieceBounds(piece, newPosition) && checkBoardCollisions(board, piece, newPosition);
+}
+
+function createOptimizedBoard(
+  board: (string | null)[][],
+  startY: number,
+  endY: number
+): (string | null)[][] {
+  const newBoard: (string | null)[][] = new Array(BOARD_HEIGHT);
+
+  // Copy unmodified rows directly (shallow copy)
+  for (let y = 0; y < startY; y++) {
+    newBoard[y] = board[y];
+  }
+  for (let y = endY + 1; y < BOARD_HEIGHT; y++) {
+    newBoard[y] = board[y];
+  }
+
+  // Only deep copy affected rows
+  for (let y = startY; y <= endY; y++) {
+    newBoard[y] = [...board[y]];
+  }
+
+  return newBoard;
+}
+
+function placePieceRow(newBoard: (string | null)[][], piece: Tetromino, pieceY: number): void {
+  const boardY = piece.position.y + pieceY;
+  if (boardY < 0 || boardY >= BOARD_HEIGHT) return;
+
+  for (let x = 0; x < piece.shape[pieceY].length; x++) {
+    if (piece.shape[pieceY][x]) {
+      const boardX = piece.position.x + x;
+      if (boardX >= 0 && boardX < BOARD_WIDTH) {
+        newBoard[boardY][boardX] = piece.color;
+      }
+    }
+  }
+}
+
+function placePieceCells(newBoard: (string | null)[][], piece: Tetromino): void {
+  for (let y = 0; y < piece.shape.length; y++) {
+    placePieceRow(newBoard, piece, y);
+  }
+}
+
+export function placePiece(board: (string | null)[][], piece: Tetromino): (string | null)[][] {
+  const pieceHeight = piece.shape.length;
+  const startY = Math.max(0, piece.position.y);
+  const endY = Math.min(BOARD_HEIGHT - 1, piece.position.y + pieceHeight - 1);
+
+  const newBoard = createOptimizedBoard(board, startY, endY);
+  placePieceCells(newBoard, piece);
 
   return newBoard;
 }
@@ -87,6 +145,7 @@ export function clearLines(board: (string | null)[][]): {
 } {
   const linesToClear: number[] = [];
 
+  // Identify complete lines
   for (let y = 0; y < BOARD_HEIGHT; y++) {
     if (board[y].every((cell) => cell !== null)) {
       linesToClear.push(y);
@@ -97,9 +156,20 @@ export function clearLines(board: (string | null)[][]): {
     return { newBoard: board, linesCleared: 0, linesToClear: [] };
   }
 
-  const newBoard = board.filter((_, index) => !linesToClear.includes(index));
+  // Use Set for O(1) lookup instead of O(n) includes
+  const linesToClearSet = new Set(linesToClear);
+  const newBoard: (string | null)[][] = [];
 
-  while (newBoard.length < BOARD_HEIGHT) {
+  // Build new board by copying non-cleared lines
+  for (let y = 0; y < BOARD_HEIGHT; y++) {
+    if (!linesToClearSet.has(y)) {
+      newBoard.push(board[y]);
+    }
+  }
+
+  // Add empty lines at the top
+  const emptyLinesNeeded = linesToClear.length;
+  for (let i = 0; i < emptyLinesNeeded; i++) {
     newBoard.unshift(Array(BOARD_WIDTH).fill(null));
   }
 
