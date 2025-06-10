@@ -54,7 +54,7 @@ describe('Particle Pool Optimization', () => {
 
     it('should provide detailed pool statistics', () => {
       // Create some particles to generate statistics
-      const particles = particlePool.getParticles(
+      particlePool.getParticles(
         3,
         0,
         0,
@@ -105,17 +105,11 @@ describe('Particle Pool Optimization', () => {
 });
 
 describe('Canvas Renderer Optimization', () => {
-  let mockCanvas: HTMLCanvasElement;
   let mockContext: CanvasRenderingContext2D;
   let renderer: CanvasRenderer;
 
   beforeEach(() => {
-    // Create mock canvas and context
-    mockCanvas = {
-      getContext: vi.fn(),
-      width: 400,
-      height: 600,
-    } as unknown as HTMLCanvasElement;
+    // Create mock context
 
     mockContext = {
       clearRect: vi.fn(),
@@ -203,8 +197,6 @@ describe('Canvas Renderer Optimization', () => {
     });
 
     it('should update configuration dynamically', () => {
-      const initialStats = renderer.getStats();
-      
       renderer.updateConfig({
         enableGradients: false,
         maxParticlesPerFrame: 50,
@@ -231,9 +223,9 @@ describe('FPS Controller', () => {
 
   describe('Frame Rate Management', () => {
     it('should control frame rate based on target FPS', () => {
-      const timestamp1 = 100;  // First frame
-      const timestamp2 = 108;  // 8ms later, too soon for 60fps (16.67ms expected)  
-      const timestamp3 = 120;  // 20ms later, enough time passed
+      const timestamp1 = 100; // First frame
+      const timestamp2 = 108; // 8ms later, too soon for 60fps (16.67ms expected)
+      const timestamp3 = 120; // 20ms later, enough time passed
 
       const frame1 = fpsController.shouldRenderFrame(timestamp1);
       const frame2 = fpsController.shouldRenderFrame(timestamp2);
@@ -258,7 +250,7 @@ describe('FPS Controller', () => {
 
     it('should adapt frame rate based on performance', () => {
       const initialInfo = fpsController.getFpsInfo();
-      
+
       fpsController.updateConfig({ targetFps: 30 });
       const updatedInfo = fpsController.getFpsInfo();
 
@@ -268,7 +260,7 @@ describe('FPS Controller', () => {
 
     it('should provide performance recommendations', () => {
       const recommendations = fpsController.getPerformanceRecommendations();
-      
+
       expect(Array.isArray(recommendations)).toBe(true);
       // Should provide some recommendations based on performance
     });
@@ -293,9 +285,9 @@ describe('FPS Controller', () => {
       // Simulate some frames
       fpsController.shouldRenderFrame(0);
       fpsController.shouldRenderFrame(20);
-      
+
       fpsController.reset();
-      
+
       const fpsInfo = fpsController.getFpsInfo();
       expect(fpsInfo.currentFps).toBe(0);
       expect(fpsInfo.isThrottling).toBe(false);
