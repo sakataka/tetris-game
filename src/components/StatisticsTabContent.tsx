@@ -5,7 +5,7 @@ import { memo, lazy, Suspense } from 'react';
 // Dynamically import statistics dashboard
 const StatisticsDashboard = lazy(() => import('./StatisticsDashboard'));
 import { useHighScores, useStatistics } from '../store/statisticsStore';
-import { calculateEnhancedStatistics } from '../utils/data';
+import { GameSession } from '../utils/data/statisticsUtils';
 
 interface StatisticsTabContentProps {
   className?: string;
@@ -17,12 +17,8 @@ const StatisticsTabContent = memo(function StatisticsTabContent({
   const highScores = useHighScores();
   const statistics = useStatistics();
 
-  // Calculate enhanced statistics
-  const enhancedStats = calculateEnhancedStatistics(
-    statistics,
-    [], // We'll use playSessions later for more detailed tracking
-    highScores
-  );
+  // Use empty sessions array for now - can be extended later
+  const sessions: GameSession[] = [];
 
   return (
     <div className={className}>
@@ -34,7 +30,8 @@ const StatisticsTabContent = memo(function StatisticsTabContent({
         }
       >
         <StatisticsDashboard
-          statistics={enhancedStats}
+          baseStatistics={statistics}
+          sessions={sessions}
           highScores={highScores}
           showDetailedView={true}
         />

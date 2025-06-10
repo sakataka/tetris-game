@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { HighScore } from '../types/tetris';
-import { EnhancedStatistics, STATISTICS_PERIODS } from '../utils/data';
+import { HighScore, GameStatistics } from '../types/tetris';
+import { StatisticsService, STATISTICS_PERIODS } from '../utils/data/StatisticsService';
+import { EnhancedStatistics, GameSession } from '../utils/data/statisticsUtils';
 
 interface StatisticsDashboardProps {
-  statistics: EnhancedStatistics;
+  baseStatistics: GameStatistics;
+  sessions?: GameSession[];
   highScores: readonly HighScore[];
   selectedPeriod?: string;
   onPeriodChange?: (period: string) => void;
@@ -12,13 +14,32 @@ interface StatisticsDashboardProps {
 }
 
 const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
-  statistics,
+  baseStatistics,
+  sessions = [],
   highScores,
   selectedPeriod = 'All Time',
   onPeriodChange = () => {},
   showDetailedView = true,
 }) => {
   const { t } = useTranslation();
+
+  // Calculate enhanced statistics using StatisticsService
+  const statistics = useMemo((): EnhancedStatistics => {
+    const period = StatisticsService.validatePeriod(selectedPeriod);
+    return StatisticsService.calculatePeriodStatistics(
+      baseStatistics,
+      sessions,
+      highScores,
+      period
+    );
+  }, [baseStatistics, sessions, highScores, selectedPeriod]);
+
+  // Calculate advanced metrics for detailed view
+  const advancedMetrics = useMemo(() => {
+    if (!showDetailedView) return null;
+    const period = StatisticsService.validatePeriod(selectedPeriod);
+    return StatisticsService.calculateAdvancedMetrics(sessions, period);
+  }, [sessions, selectedPeriod, showDetailedView]);
   return (
     <div data-testid='statistics-dashboard' className='hologram-purple p-6 space-y-6'>
       <div className='flex justify-between items-center'>
@@ -96,8 +117,7 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
               <div>
                 <span className='text-gray-400'>Tetris Rate: </span>
                 <span className='text-red-400 font-semibold'>
-                  {((statistics.tetrisCount / Math.max(statistics.totalGames, 1)) * 100).toFixed(1)}
-                  %
+                  {advancedMetrics?.tetrisRate.toFixed(1) || '0.0'}%
                 </span>
               </div>
               <div>
@@ -105,8 +125,12 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
                 <span className='text-yellow-400 font-semibold'>{statistics.favoriteLevel}</span>
               </div>
               <div>
-                <span className='text-gray-400'>Best Streak: </span>
-                <span className='text-pink-400 font-semibold'>{statistics.bestStreak}</span>
+                <span className='text-gray-400'>Avg Game Duration: </span>
+                <span className='text-pink-400 font-semibold'>
+                  {advancedMetrics
+                    ? `${Math.floor(advancedMetrics.averageGameDuration / 60)}m`
+                    : '0m'}
+                </span>
               </div>
             </div>
           </div>
@@ -128,9 +152,17 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
               <div>
                 <span className='text-gray-400'>Games/Session: </span>
                 <span className='text-green-400 font-semibold'>
-                  {statistics.sessionCount > 0
-                    ? (statistics.totalGames / statistics.sessionCount).toFixed(1)
-                    : '0.0'}
+                  {advancedMetrics?.gamesPerSession.toFixed(1) || '0.0'}
+                </span>
+              </div>
+              <div>
+                <span className='text-gray-400'>Improvement Trend: </span>
+                <span className='text-cyan-400 font-semibold'>
+                  {advancedMetrics
+                    ? (advancedMetrics.improvementTrend > 0 ? '+' : '') +
+                      advancedMetrics.improvementTrend.toFixed(1) +
+                      '%'
+                    : '0.0%'}
                 </span>
               </div>
               <div>
