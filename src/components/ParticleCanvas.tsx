@@ -1,22 +1,20 @@
 'use client';
 
-import { useEffect, useRef, memo, useCallback } from 'react';
+import { useEffect, useRef, memo, useCallback, useState } from 'react';
 import { LineEffectState } from '../types/tetris';
 import {
   PARTICLE_GRAVITY,
   PARTICLE_MAX_Y,
-  PARTICLE_LIFE_DURATION,
-  PARTICLE_SCALE_BASE,
-  PARTICLE_SCALE_MULTIPLIER,
-  PARTICLE_OPACITY_MULTIPLIER,
 } from '../constants';
-import { particlePool } from '../utils/performance';
+import { particlePool, CanvasRenderer, FpsController, performanceMonitor } from '../utils/performance';
 
 interface ParticleCanvasProps {
   lineEffect: LineEffectState;
   onParticleUpdate: (particles: LineEffectState['particles']) => void;
   width?: number;
   height?: number;
+  enablePerformanceMode?: boolean;
+  maxParticles?: number;
 }
 
 const ParticleCanvas = memo(function ParticleCanvas({
@@ -24,13 +22,16 @@ const ParticleCanvas = memo(function ParticleCanvas({
   onParticleUpdate,
   width = 400,
   height = 600,
+  enablePerformanceMode = true,
+  maxParticles = 100,
 }: ParticleCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
+  const rendererRef = useRef<CanvasRenderer | null>(null);
+  const fpsControllerRef = useRef<FpsController | null>(null);
   const animationRef = useRef<number | undefined>(undefined);
-  const lastUpdateTimeRef = useRef<number>(0);
+  const [renderStats, setRenderStats] = useState({ fps: 0, particleCount: 0 });
 
-  // Canvas初期化
+  // Canvas and renderer initialization
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -38,7 +39,7 @@ const ParticleCanvas = memo(function ParticleCanvas({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // High DPI対応
+    // High DPI support
     const ratio = window.devicePixelRatio || 1;
     canvas.width = width * ratio;
     canvas.height = height * ratio;
@@ -46,88 +47,35 @@ const ParticleCanvas = memo(function ParticleCanvas({
     canvas.style.height = `${height}px`;
     ctx.scale(ratio, ratio);
 
-    // パフォーマンス最適化設定
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = 'high';
+    // Initialize optimized renderer
+    rendererRef.current = new CanvasRenderer(ctx, {
+      enableShadows: !enablePerformanceMode,
+      enableGradients: !enablePerformanceMode,
+      maxParticlesPerFrame: maxParticles,
+      clearStrategy: enablePerformanceMode ? 'selective' : 'full',
+    });
 
-    ctxRef.current = ctx;
-  }, [width, height]);
+    // Initialize FPS controller
+    fpsControllerRef.current = new FpsController({
+      targetFps: enablePerformanceMode ? 45 : 60,
+      minFps: 30,
+      adaptiveMode: true,
+    });
 
-  // パーティクル描画関数
-  const drawParticle = useCallback(
-    (ctx: CanvasRenderingContext2D, particle: LineEffectState['particles'][0]) => {
-      const lifeRatio = particle.life / PARTICLE_LIFE_DURATION;
-      const scale = PARTICLE_SCALE_BASE + lifeRatio * PARTICLE_SCALE_MULTIPLIER;
-      const opacity = lifeRatio * PARTICLE_OPACITY_MULTIPLIER;
-      const size = 2 + scale;
+    return () => {
+      rendererRef.current?.dispose();
+    };
+  }, [width, height, enablePerformanceMode, maxParticles]);
 
-      ctx.save();
-
-      // パーティクル位置に移動
-      ctx.translate(particle.x, particle.y);
-      ctx.rotate((particle.life * 5 * Math.PI) / 180);
-
-      // グラデーション作成
-      const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, size);
-      gradient.addColorStop(0, particle.color);
-      gradient.addColorStop(0.3, particle.color + 'CC');
-      gradient.addColorStop(0.7, particle.color + '44');
-      gradient.addColorStop(1, 'transparent');
-
-      ctx.fillStyle = gradient;
-      ctx.globalAlpha = opacity;
-
-      // 外側のグロー効果
-      ctx.shadowColor = particle.color;
-      ctx.shadowBlur = 4 + scale * 2;
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 0;
-
-      // パーティクル描画
-      ctx.beginPath();
-      ctx.arc(0, 0, size, 0, Math.PI * 2);
-      ctx.fill();
-
-      // 内側のコア
-      ctx.shadowBlur = 0;
-      ctx.fillStyle = '#ffffff';
-      ctx.globalAlpha = opacity * 0.6;
-      ctx.beginPath();
-      ctx.arc(0, 0, size * 0.3, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.restore();
-    },
-    []
-  );
-
-  // アニメーション関数をuseCallbackでメモ化
-  const animate = useCallback(() => {
-    const ctx = ctxRef.current;
-    if (!ctx) return;
-
-    const now = performance.now();
-    const deltaTime = now - lastUpdateTimeRef.current;
-
-    // フレームレート制限（60FPS = 16.67ms）
-    if (deltaTime < 16.67) {
-      animationRef.current = requestAnimationFrame(animate);
-      return;
-    }
-
-    lastUpdateTimeRef.current = now;
-
-    // Canvas清拭
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
+  // Optimized particle physics update
+  const updateParticlePhysics = useCallback((particles: LineEffectState['particles']) => {
     const updatedParticles: LineEffectState['particles'] = [];
     const expiredParticles: LineEffectState['particles'] = [];
 
-    // パーティクル更新と描画
-    for (let i = 0; i < lineEffect.particles.length; i++) {
-      const particle = lineEffect.particles[i];
+    for (let i = 0; i < particles.length; i++) {
+      const particle = particles[i];
 
-      // パーティクル状態更新
+      // Update particle physics
       const updatedParticle = {
         ...particle,
         x: particle.x + particle.vx,
@@ -138,47 +86,86 @@ const ParticleCanvas = memo(function ParticleCanvas({
 
       if (updatedParticle.life > 0 && updatedParticle.y < PARTICLE_MAX_Y) {
         updatedParticles.push(updatedParticle);
-        drawParticle(ctx, updatedParticle);
       } else {
         expiredParticles.push(particle);
       }
     }
 
-    // 期限切れのパーティクルをプールに戻す
+    // Return expired particles to pool
     if (expiredParticles.length > 0) {
       particlePool.releaseParticles(expiredParticles);
     }
 
-    onParticleUpdate(updatedParticles);
+    return updatedParticles;
+  }, []);
 
-    // パーティクルが残っている場合のみ次のフレームを要求
-    if (updatedParticles.length > 0) {
-      animationRef.current = requestAnimationFrame(animate);
-    } else {
-      animationRef.current = undefined;
-    }
-  }, [lineEffect.particles, onParticleUpdate, drawParticle]);
+  // Optimized animation loop with FPS control
+  const animate = useCallback(() => {
+    const renderer = rendererRef.current;
+    const fpsController = fpsControllerRef.current;
+    
+    if (!renderer || !fpsController) return;
+
+    const frameCallback = (frameInfo: { shouldRender: boolean; actualFps: number; timestamp: number }) => {
+      if (!frameInfo.shouldRender) {
+        // Skip this frame but continue animation
+        if (lineEffect.particles.length > 0) {
+          animationRef.current = requestAnimationFrame(fpsController.createFrameLimiter(frameCallback));
+        }
+        return;
+      }
+
+      // Start performance monitoring
+      if (enablePerformanceMode) {
+        performanceMonitor.startFrame();
+      }
+
+      // Update particle physics
+      const updatedParticles = updateParticlePhysics(lineEffect.particles);
+
+      // Clear and render
+      renderer.clearCanvas(width, height);
+      renderer.renderParticles(updatedParticles);
+
+      // Update parent component
+      onParticleUpdate(updatedParticles);
+
+      // End performance monitoring
+      if (enablePerformanceMode) {
+        performanceMonitor.endFrame(updatedParticles.length);
+        setRenderStats({ fps: frameInfo.actualFps, particleCount: updatedParticles.length });
+      }
+
+      // Continue animation if particles remain
+      if (updatedParticles.length > 0) {
+        animationRef.current = requestAnimationFrame(fpsController.createFrameLimiter(frameCallback));
+      } else {
+        animationRef.current = undefined;
+      }
+    };
+
+    animationRef.current = requestAnimationFrame(fpsController.createFrameLimiter(frameCallback));
+  }, [lineEffect.particles, onParticleUpdate, updateParticlePhysics, width, height, enablePerformanceMode]);
 
   useEffect(() => {
     if (lineEffect.particles.length === 0) {
-      // パーティクルがない場合はアニメーションを停止
+      // Stop animation when no particles
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
         animationRef.current = undefined;
       }
 
-      // Canvas清拭
-      const ctx = ctxRef.current;
-      if (ctx) {
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      // Clear canvas
+      const renderer = rendererRef.current;
+      if (renderer) {
+        renderer.clearCanvas(width, height);
       }
       return;
     }
 
-    // アニメーションが既に実行中でない場合のみ開始
+    // Start animation if not already running
     if (!animationRef.current) {
-      lastUpdateTimeRef.current = performance.now();
-      animationRef.current = requestAnimationFrame(animate);
+      animate();
     }
 
     return () => {
@@ -187,14 +174,33 @@ const ParticleCanvas = memo(function ParticleCanvas({
         animationRef.current = undefined;
       }
     };
-  }, [lineEffect.particles.length, animate]);
+  }, [lineEffect.particles.length, animate, width, height]);
+
+  // Performance monitoring display (development only)
+  const shouldShowStats = process.env.NODE_ENV === 'development' && enablePerformanceMode;
+
+  useEffect(() => {
+    if (shouldShowStats && renderStats.particleCount > 0) {
+      console.log(
+        `🎨 Canvas Renderer - FPS: ${renderStats.fps}, Particles: ${renderStats.particleCount}`,
+        rendererRef.current?.getStats()
+      );
+    }
+  }, [renderStats, shouldShowStats]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className='absolute inset-0 pointer-events-none'
-      style={{ width, height }}
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        className='absolute inset-0 pointer-events-none'
+        style={{ width, height }}
+      />
+      {shouldShowStats && (
+        <div className='absolute top-2 right-2 text-xs text-green-400 bg-black/50 p-1 rounded font-mono'>
+          FPS: {renderStats.fps} | Particles: {renderStats.particleCount}
+        </div>
+      )}
+    </>
   );
 });
 

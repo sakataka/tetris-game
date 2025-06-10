@@ -10,7 +10,7 @@ import {
   PARTICLE_SCALE_MULTIPLIER,
   PARTICLE_OPACITY_MULTIPLIER,
 } from '../constants';
-import { particlePool, performanceMonitor } from '../utils/performance';
+import { particlePool, performanceMonitor, globalFpsController } from '../utils/performance';
 import { useConditionalAnimation, ANIMATION_PRESETS } from '../utils/animation';
 import ParticleCanvas from './ParticleCanvas';
 
@@ -19,6 +19,8 @@ interface ParticleEffectProps {
   onParticleUpdate: (particles: LineEffectState['particles']) => void;
   forceRenderer?: 'dom' | 'canvas' | 'auto';
   enablePerformanceMonitoring?: boolean;
+  maxParticles?: number;
+  performanceMode?: boolean;
 }
 
 // Individual particle component with isolated heavy calculations for performance
@@ -56,6 +58,8 @@ const ParticleEffect = memo(function ParticleEffect({
   onParticleUpdate,
   forceRenderer = 'auto',
   enablePerformanceMonitoring = false,
+  maxParticles = 100,
+  performanceMode = false,
 }: ParticleEffectProps) {
   const [currentRenderer, setCurrentRenderer] = useState<'dom' | 'canvas'>('dom');
   const performanceCheckCountRef = useRef(0);
@@ -88,33 +92,47 @@ const ParticleEffect = memo(function ParticleEffect({
     return { updated, expired };
   }, []);
 
-  // Renderer auto-switching helper function (cognitive complexity reduction)
+  // Enhanced renderer auto-switching with global FPS controller
   const checkRendererPerformance = useCallback(
-    (metrics: { fps: number }, particleCount: number) => {
+    (particleCount: number) => {
       if (forceRenderer !== 'auto') return;
 
       if (++performanceCheckCountRef.current >= 30) {
         performanceCheckCountRef.current = 0;
 
-        if (metrics.fps < 45 && currentRenderer === 'dom' && particleCount > 20) {
+        const fpsInfo = globalFpsController.getFpsInfo();
+        
+        // Switch to canvas for better performance
+        if (fpsInfo.performanceLevel === 'poor' && currentRenderer === 'dom' && particleCount > 15) {
           setCurrentRenderer('canvas');
-        } else if (metrics.fps > 55 && currentRenderer === 'canvas' && particleCount < 10) {
+        }
+        // Switch back to DOM when performance is good and particle count is low
+        else if (fpsInfo.performanceLevel === 'excellent' && currentRenderer === 'canvas' && particleCount < 8) {
           setCurrentRenderer('dom');
+        }
+        // Force canvas when too many particles
+        else if (particleCount > maxParticles * 0.8 && currentRenderer === 'dom') {
+          setCurrentRenderer('canvas');
         }
       }
     },
-    [forceRenderer, currentRenderer]
+    [forceRenderer, currentRenderer, maxParticles]
   );
 
-  // Main particle update logic (cognitive complexity reduced via helper functions)
+  // Optimized particle update with performance constraints
   const updateParticles = useCallback(() => {
+    // Limit particle count for performance
+    const particlesToProcess = performanceMode ? 
+      lineEffect.particles.slice(0, maxParticles) : 
+      lineEffect.particles;
+
     if (enablePerformanceMonitoring) {
       performanceMonitor.startFrame();
     }
 
-    const { updated, expired } = processParticlePhysics(lineEffect.particles);
+    const { updated, expired } = processParticlePhysics(particlesToProcess);
 
-    // Return expired particles to object pool for memory efficiency
+    // Batch release expired particles for better performance
     if (expired.length > 0) {
       particlePool.releaseParticles(expired);
     }
@@ -123,8 +141,11 @@ const ParticleEffect = memo(function ParticleEffect({
 
     // Performance monitoring and automatic renderer switching
     if (enablePerformanceMonitoring) {
-      const metrics = performanceMonitor.endFrame(updated.length);
-      checkRendererPerformance(metrics, updated.length);
+      performanceMonitor.endFrame(updated.length);
+      checkRendererPerformance(updated.length);
+    } else {
+      // Basic performance check without detailed monitoring
+      checkRendererPerformance(updated.length);
     }
   }, [
     lineEffect.particles,
@@ -132,6 +153,8 @@ const ParticleEffect = memo(function ParticleEffect({
     enablePerformanceMonitoring,
     processParticlePhysics,
     checkRendererPerformance,
+    maxParticles,
+    performanceMode,
   ]);
 
   // Use unified animation management system with conditional execution
@@ -157,11 +180,17 @@ const ParticleEffect = memo(function ParticleEffect({
     ));
   }, [lineEffect.particles, selectedRenderer]);
 
-  // Development-only performance optimization logging
+  // Development-only performance optimization logging with enhanced metrics
   useEffect(() => {
     if (process.env.NODE_ENV === 'development' && enablePerformanceMonitoring) {
+      const fpsInfo = globalFpsController.getFpsInfo();
+      const poolStats = particlePool.getPoolStatistics();
+      
       console.log(
-        `🎮 Particle Renderer: ${selectedRenderer.toUpperCase()}, Particles: ${lineEffect.particles.length}`
+        `🎮 Particle System - Renderer: ${selectedRenderer.toUpperCase()}, ` +
+        `Particles: ${lineEffect.particles.length}, ` +
+        `FPS: ${fpsInfo.currentFps} (${fpsInfo.performanceLevel}), ` +
+        `Pool Reuse: ${(poolStats.reuseRatio * 100).toFixed(1)}%`
       );
     }
   }, [selectedRenderer, lineEffect.particles.length, enablePerformanceMonitoring]);
@@ -174,6 +203,8 @@ const ParticleEffect = memo(function ParticleEffect({
           onParticleUpdate={onParticleUpdate}
           width={400}
           height={600}
+          enablePerformanceMode={performanceMode}
+          maxParticles={maxParticles}
         />
       ) : (
         particleElements
