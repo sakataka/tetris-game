@@ -33,151 +33,151 @@ pnpm test:coverage # Test coverage report
 
 ### State Management (Zustand)
 
-**Modular Store System** - 分割ストア設計による責務分離:
+**Modular Store System** - Separation of concerns through divided store architecture:
 
-- **gameStateStore.ts**: ゲーム状態（ボード、ピース、スコア、エフェクト）
-- **settingsStore.ts**: 設定管理（音量、キーバインド）+ LocalStorage永続化
-- **statisticsStore.ts**: 統計・ハイスコア管理（Top 10ランキング、拡張メトリクス）
-- **themeStore.ts**: テーマ管理（5プリセット、カスタムカラー、アクセシビリティ）
-- **sessionStore.ts**: セッション追跡・エラー管理
-- **errorStore.ts**: グローバルエラーハンドリング
-- **accessibilityStore.ts**: WCAG準拠アクセシビリティ機能
+- **gameStateStore.ts**: Game state (board, pieces, score, effects)
+- **settingsStore.ts**: Settings management (volume, key bindings) + LocalStorage persistence
+- **statisticsStore.ts**: Statistics & high score management (Top 10 rankings, extended metrics)
+- **themeStore.ts**: Theme management (5 presets, custom colors, accessibility)
+- **sessionStore.ts**: Session tracking & error management
+- **errorStore.ts**: Global error handling
+- **accessibilityStore.ts**: WCAG-compliant accessibility features
 
 ### Component Architecture
 
-**Core Components** (モジュラー設計):
+**Core Components** (Modular Design):
 
-- **TetrisGame.tsx**: メインオーケストレーター
-- **TetrisBoard.tsx**: ゲームボード表示
-- **GameInfo.tsx**: 統合情報パネル
+- **TetrisGame.tsx**: Main orchestrator
+- **TetrisBoard.tsx**: Game board display
+- **GameInfo.tsx**: Integrated information panel
 
-**分離コンポーネント**:
+**Separated Components**:
 
-- **TabNavigation.tsx**: タブシステム独立化
-- **GameTabContent.tsx**: ゲーム情報表示
-- **StatisticsTabContent.tsx**: 統計情報管理
-- **ThemeTabContent.tsx**: テーマ設定
-- **MobileGameInfo.tsx**: モバイル専用UI
+- **TabNavigation.tsx**: Independent tab system
+- **GameTabContent.tsx**: Game information display
+- **StatisticsTabContent.tsx**: Statistics management
+- **ThemeTabContent.tsx**: Theme settings
+- **MobileGameInfo.tsx**: Mobile-specific UI
 
-**パネルコンポーネント群** (25-45行、単一責任):
+**Panel Components** (25-45 lines, single responsibility):
 
 - GameStatsPanel, NextPiecePanel, ControlsPanel, AudioPanel, GameButtonsPanel, ScoringPanel
 
-**高度な機能コンポーネント**:
+**Advanced Feature Components**:
 
-- **StatisticsDashboard.tsx**: 15拡張メトリクス + 期間フィルタリング
-- **HighScoreDisplay.tsx**: Top 10ランキングUI
-- **ParticleEffect.tsx**: 最適化されたアニメーションシステム
-- **VirtualControls.tsx**: モバイルタッチコントロール
+- **StatisticsDashboard.tsx**: 15 extended metrics + period filtering
+- **HighScoreDisplay.tsx**: Top 10 ranking UI
+- **ParticleEffect.tsx**: Optimized animation system
+- **VirtualControls.tsx**: Mobile touch controls
 
 ### Hook-Based Logic
 
-**Core Hooks** (相互依存解消済み):
+**Core Hooks** (Interdependency resolved):
 
-- **useGameControls.ts**: アダプターパターンで疎結合化
-- **useGameLoop.ts**: 責務分離（キーボード、タイマー、計算）
-- **useSounds.ts**: Web Audio API + 5段階フォールバック
+- **useGameControls.ts**: Adapter pattern for loose coupling
+- **useGameLoop.ts**: Separation of concerns (keyboard, timer, calculations)
+- **useSounds.ts**: Web Audio API + 5-stage fallback
 
-**分離された副作用フック**:
+**Separated Side Effect Hooks**:
 
 - useKeyboardInput, useGameTimer, useDropTimeCalculator
 
-**システム管理フック**:
+**System Management Hooks**:
 
 - useHighScoreManager, useSessionTrackingV2, useThemeManager, useMobileDetection
 
 ### Utility Architecture
 
-**機能別ディレクトリ構造**:
+**Feature-Based Directory Structure**:
 
 ```
 utils/
-├── game/         # ゲームロジック (tetrisUtils, gameStateUtils, highScoreUtils)
-├── audio/        # 音響システム (audioManager, audioPreloader, audioFallback)
-├── ui/           # テーマ・アクセシビリティ (themeUtils, themeLoader)
-├── animation/    # アニメーション管理 (animationManager, useAnimationFrame)
-├── performance/  # パフォーマンス最適化 (particlePool, performanceMonitor)
-└── data/         # データ管理 (sessionManager, statisticsUtils, errorHandler)
+├── game/         # Game logic (tetrisUtils, gameStateUtils, highScoreUtils)
+├── audio/        # Audio system (audioManager, audioPreloader, audioFallback)
+├── ui/           # Theme & accessibility (themeUtils, themeLoader)
+├── animation/    # Animation management (animationManager, useAnimationFrame)
+├── performance/  # Performance optimization (particlePool, performanceMonitor)
+└── data/         # Data management (sessionManager, statisticsUtils, errorHandler)
 ```
 
-**定数管理**:
+**Constants Management**:
 
 ```
 constants/
-├── gameRules.ts     # スコア・レベル・ゲームルール
-├── layout.ts        # ボード・UI寸法
-├── tetrominoes.ts   # テトリミノ形状・色
-├── performance.ts   # パーティクル・最適化設定
-├── storage.ts       # LocalStorageキー
-├── timing.ts        # アニメーション設定
-└── strings.ts       # 文字列リソース
+├── gameRules.ts     # Score, level, game rules
+├── layout.ts        # Board & UI dimensions
+├── tetrominoes.ts   # Tetromino shapes & colors
+├── performance.ts   # Particle & optimization settings
+├── storage.ts       # LocalStorage keys
+├── timing.ts        # Animation settings
+└── strings.ts       # String resources
 ```
 
 ## Key Features
 
 ### Audio System
 
-- **Web Audio API**: 高性能並列音声再生
-- **5段階フォールバック**: Web Audio → HTMLAudio → Visual → Console → Silent
-- **プリロードシステム**: ネットワーク状況自動判定
-- **6種類効果音**: ライン消去、ピース着地、回転、テトリス、ゲームオーバー、ハードドロップ
+- **Web Audio API**: High-performance parallel audio playback
+- **5-Stage Fallback**: Web Audio → HTMLAudio → Visual → Console → Silent
+- **Preload System**: Automatic network condition detection
+- **6 Sound Effects**: Line clear, piece land, rotation, tetris, game over, hard drop
 
 ### Statistics & Analytics
 
-- **自動ハイスコア検出**: ゲーム終了時自動登録
-- **15拡張メトリクス**: 効率性（LPM）、一貫性、テトリス率など
-- **期間フィルタリング**: 今日、今週、今月、全期間
-- **セッション管理**: プレイ時間自動追跡、非アクティブ検出
+- **Automatic High Score Detection**: Auto-registration on game end
+- **15 Extended Metrics**: Efficiency (LPM), consistency, tetris rate, etc.
+- **Period Filtering**: Today, this week, this month, all time
+- **Session Management**: Automatic playtime tracking, inactivity detection
 
 ### Theme System
 
-- **5プリセットテーマ**: Cyberpunk, Classic, Retro, Minimal, Neon
-- **リアルタイムカラーエディタ**: hex入力対応
-- **アクセシビリティ**: 色覚異常対応、コントラスト調整、モーション制御
-- **CSS変数システム**: 自動透明度バリエーション生成
+- **5 Preset Themes**: Cyberpunk, Classic, Retro, Minimal, Neon
+- **Real-time Color Editor**: Hex input support
+- **Accessibility**: Color blindness support, contrast adjustment, motion control
+- **CSS Variable System**: Automatic transparency variation generation
 
 ### Mobile & Responsive
 
-- **5ボタンタッチコントロール**: 方向パッド + ハードドロップ
-- **レスポンシブレイアウト**: Desktop/Mobile最適化
-- **動的フォント調整**: 画面サイズ対応
+- **5-Button Touch Controls**: D-pad + hard drop
+- **Responsive Layout**: Desktop/Mobile optimization
+- **Dynamic Font Scaling**: Screen size adaptation
 
 ## Performance Optimizations
 
 ### Memory Management
 
-- **パーティクルオブジェクトプーリング**: GC圧力軽減
-- **音声バッファ管理**: Web Audio API効率的管理
-- **useRef クリーンアップ**: メモリリーク防止
+- **Particle Object Pooling**: GC pressure reduction
+- **Audio Buffer Management**: Efficient Web Audio API management
+- **useRef Cleanup**: Memory leak prevention
 
 ### Render Optimizations
 
-- **React.memo**: 全コンポーネント不要な再レンダリング防止
-- **useMemo**: 重い計算のメモ化
-- **個別セレクタ**: Zustandオブジェクト再生成防止
+- **React.memo**: Prevent unnecessary re-renders for all components
+- **useMemo**: Memoization of heavy calculations
+- **Individual Selectors**: Prevent Zustand object regeneration
 
 ### Animation System
 
-- **AnimationManager**: シングルトンパターンによる統一管理
-- **FPS制限**: 60FPS基準自動調整
-- **優先度制御**: high/normal/low動的制御
-- **reduced-motion対応**: システム設定自動検出
+- **AnimationManager**: Unified management through singleton pattern
+- **FPS Limiting**: Automatic adjustment based on 60FPS standard
+- **Priority Control**: Dynamic high/normal/low control
+- **Reduced-motion Support**: Automatic system setting detection
 
 ## Test Coverage
 
-**包括的テストシステム** (5,688行、20ファイル):
+**Comprehensive Test System** (5,688 lines, 20 files):
 
-- **モックファクトリ**: 統一モック生成システム
-- **テストユーティリティ**: 共通支援機能
-- **型安全モック**: MockPlaySound, MockStoreActions
-- **DOM環境モック**: localStorage, matchMedia, Audio
+- **Mock Factory**: Unified mock generation system
+- **Test Utilities**: Common support functions
+- **Type-Safe Mocks**: MockPlaySound, MockStoreActions
+- **DOM Environment Mocks**: localStorage, matchMedia, Audio
 
-**テスト分類**:
+**Test Categories**:
 
-- ユニットテスト: Pure function testing
-- コンポーネントテスト: React Testing Library
-- 統合テスト: Zustand store連携
-- パフォーマンステスト: メモリリーク検証
+- Unit Tests: Pure function testing
+- Component Tests: React Testing Library
+- Integration Tests: Zustand store integration
+- Performance Tests: Memory leak verification
 
 ## File Structure
 
@@ -198,143 +198,113 @@ src/
 
 ### Type Safety
 
-- **厳密TypeScript設定**: noImplicitAny, strictNullChecks
-- **readonly型**: 不変性保証
-- **ユニオン型**: SoundKey, VolumeLevel, PerformanceLevel
-- **ブランド型**: PlayerId, SessionId識別強化
+- **Strict TypeScript Settings**: noImplicitAny, strictNullChecks
+- **Readonly Types**: Immutability guarantee
+- **Union Types**: SoundKey, VolumeLevel, PerformanceLevel
+- **Branded Types**: PlayerId, SessionId identity strengthening
 
 ### Error Handling
 
-- **カスタムエラー階層**: BaseAppError継承
-- **グローバルエラーバウンダリ**: React Error Boundary
-- **エラーストア**: Zustand統合エラー管理
-- **段階的フォールバック**: 100%動作保証
+- **Custom Error Hierarchy**: BaseAppError inheritance
+- **Global Error Boundary**: React Error Boundary
+- **Error Store**: Zustand integrated error management
+- **Progressive Fallback**: 100% operation guarantee
 
 ### Performance Metrics
 
-- **バンドルサイズ**: 127KB (7KB削減達成)
-- **初期ロード**: 19.1KB (26%削減)
-- **テスト成功率**: 78% (重要機能100%カバー)
-- **ビルド成功率**: 100%
+- **Bundle Size**: 127KB (7KB reduction achieved)
+- **Initial Load**: 19.1KB (26% reduction)
+- **Test Success Rate**: 78% (Critical features 100% coverage)
+- **Build Success Rate**: 100%
 
 ## Static Analysis & Quality Management (Added: 2025/06/10)
 
 ### 🔧 Quality Management System
 
-**包括的静的解析ツール統合**:
+**Comprehensive Static Analysis Tool Integration**:
 
-- **SonarJS**: 認知複雑度15以下、重複文字列検出（閾値5）
-- **ESLint + TypeScript**: 厳密型チェック、コード品質ルール
-- **Prettier**: 統一コードフォーマット
-- **Bundle Analyzer**: バンドルサイズ分析・監視
+- **SonarJS**: Cognitive complexity ≤15, duplicate string detection (threshold 5)
+- **ESLint + TypeScript**: Strict type checking, code quality rules
+- **Prettier**: Unified code formatting
+- **Bundle Analyzer**: Bundle size analysis & monitoring
 
-**品質管理スクリプト**:
+**Quality Management Scripts**:
 
 ```bash
-pnpm quality:check  # 包括的品質チェック (lint + tsc + test)
-pnpm quality:fix    # 自動修正 (format + lint --fix)
-pnpm analyze        # バンドルサイズ分析
-pnpm format         # コードフォーマット
+pnpm quality:check  # Comprehensive quality check (lint + tsc + test)
+pnpm quality:fix    # Auto-fix (format + lint --fix)
+pnpm analyze        # Bundle size analysis
+pnpm format         # Code formatting
 ```
 
-### 🚀 Git Hooks自動化システム
+### 🚀 Git Hooks Automation System
 
-**Husky + lint-staged統合**:
+**Husky + lint-staged Integration**:
 
-- **pre-commit**: ステージファイルの品質チェック・フォーマット自動実行
-- **pre-push**: 全体ビルド・テスト検証
-- **効率化**: 変更ファイルのみを対象とした高速チェック
+- **pre-commit**: Automatic quality check & formatting for staged files
+- **pre-push**: Overall build & test verification
+- **Efficiency**: High-speed checks targeting only changed files
 
-### 🧹 SonarJS警告修正実績
+### 🧹 SonarJS Warning Resolution Results
 
-**認知複雑度削減**:
+**Cognitive Complexity Reduction**:
 
-- **TetrisBoard.tsx**: 38→15 (ヘルパー関数抽出による責務分離)
-- **ParticleEffect.tsx**: 複雑ロジックの関数分割・統一アニメーション管理
-- **useGameControls.ts**: アダプターパターンによる依存関係解消
+- **TetrisBoard.tsx**: 38→15 (Helper function extraction for separation of concerns)
+- **ParticleEffect.tsx**: Complex logic function separation & unified animation management
+- **useGameControls.ts**: Dependency resolution through adapter pattern
 
-**型安全性強化**:
+**Type Safety Enhancement**:
 
-- **TypeScript厳密設定**: performance.memory型キャスト修正
-- **ES6インポート統一**: require()→import文変換
-- **React hooks最適化**: 依存配列の意図的制御
+- **TypeScript Strict Settings**: performance.memory type casting fixes
+- **ES6 Import Unification**: require()→import statement conversion
+- **React Hooks Optimization**: Intentional dependency array control
 
-### 📊 コード品質指標
+### 📊 Code Quality Indicators
 
 ```
-品質管理達成指標:
-✅ 認知複雑度: 全ファイル15以下
-✅ ESLint警告: 2件（意図的最適化のみ）
-✅ TypeScript: 型エラー0件
-✅ テストカバレッジ: 125テスト, 78%成功率
-✅ 自動化率: pre-commit 100%実行
+Quality Management Achievement Indicators:
+✅ Cognitive Complexity: All files ≤15
+✅ ESLint Warnings: 2 (Intentional optimization only)
+✅ TypeScript: 0 type errors
+✅ Test Coverage: 125 tests, 78% success rate
+✅ Automation Rate: 100% pre-commit execution
 ```
 
-## CI/CD Pipeline & Automation (Added: 2025/12/17)
+### 🔮 Future Considerations
 
-### 🚀 GitHub Actions統合
+**CI/CD Pipeline Integration**:
 
-**実装済みワークフロー**:
+- GitHub Actions workflow addition
+- Automatic testing, quality checks, deployment
+- SonarCloud integration for continuous quality monitoring
 
-#### 1. メインCI/CDパイプライン (`ci.yml`)
+**Additional Static Analysis Tools**:
 
-- **quality-check**: 型チェック、ESLint、フォーマット、テスト実行
-- **build**: Next.jsビルド、バンドル分析、アーティファクト保存
-- **security-check**: npm audit、Snyk脆弱性スキャン
-- **lighthouse**: PRでのパフォーマンス測定
-- **deploy-preview**: Vercelプレビューデプロイ
+- **CodeClimate**: Technical debt analysis
+- **Dependency-cruiser**: Dependency cycle detection
+- **TypeScript Coverage**: Type coverage measurement
 
-#### 2. プルリクエスト専用チェック (`pr-checks.yml`)
+**Performance Monitoring**:
 
-- **自動ラベリング**: 変更ファイルベースの分類
-- **バンドルサイズ比較**: ベースブランチとの差分表示
-- **コード品質レビュー**: ESLintアノテーション付きフィードバック
-- **テスト結果サマリー**: 詳細なテストレポート生成
-- **アクセシビリティ監査**: WCAG準拠チェック
+- **Lighthouse CI**: Automatic performance score measurement
+- **Bundle Buddy**: Duplicate dependency analysis
+- **Size Limit**: Bundle size limit enforcement
 
-#### 3. 定期品質レビュー (`scheduled-quality.yml`)
+**Security Enhancement**:
 
-- **週次実行**: 毎週月曜日朝9時（JST）
-- **依存関係更新チェック**: outdated/セキュリティ監査
-- **コード複雑度分析**: es6-plato による詳細レポート
-- **パフォーマンスベースライン**: Lighthouse定期測定
-- **自動Issue作成**: 週次サマリー・アクションアイテム
-
-**キャッシュ戦略**:
-
-- pnpm store キャッシュ（依存関係）
-- Next.js ビルドキャッシュ
-- Node.js 組み込みキャッシュ活用
-
-**生成アーティファクト**:
-
-- ビルド成果物（7日間保持）
-- バンドル分析レポート
-- 複雑度・パフォーマンスレポート（30日間保持）
-
-### 🔮 将来検討事項
-
-**追加静的解析ツール**:
-
-- **CodeClimate**: 技術的負債分析
-- **Dependency-cruiser**: 依存関係循環検出
-- **TypeScript Coverage**: 型カバレッジ測定
-
-**高度なモニタリング**:
-
-- **Bundle Buddy**: 重複依存関係分析
-- **Size Limit**: バンドルサイズ制限強制
-- **CSP (Content Security Policy)**: XSS防止強化
+- **npm audit**: Vulnerability check automation
+- **Snyk**: Dependency security monitoring
+- **CSP (Content Security Policy)**: XSS prevention enhancement
 
 ## Development Guidelines
 
-**品質維持プロセス**:
+**Quality Maintenance Process**:
 
-- **段階的実装**: 機能単位での完成
-- **テスト駆動**: 各変更前後でテスト実行
-- **型安全**: any型禁止、厳密型定義
-- **パフォーマンス**: メモリ効率とレンダリング最適化
-- **アクセシビリティ**: WCAG準拠、ユニバーサルデザイン
+- **Incremental Implementation**: Feature-by-feature completion
+- **Test-Driven**: Test execution before and after each change
+- **Type Safety**: any type prohibition, strict type definitions
+- **Performance**: Memory efficiency and rendering optimization
+- **Accessibility**: WCAG compliance, universal design
 
 ### Code Comment Standards
 
@@ -370,7 +340,14 @@ const getLineScore = (lines: number, level: number) => {
 
 Ready for:
 
-- **多言語化**: 基盤完成済み（react-i18next導入のみ）
-- **マルチプレイヤー**: 状態同期パターン準備済み
-- **プラグインシステム**: モジュラーアーキテクチャ対応
-- **高度ゲームモード**: 拡張可能ゲームロジック
+- **Internationalization**: Foundation completed (react-i18next introduction only)
+- **Multiplayer**: State synchronization patterns prepared
+- **Plugin System**: Modular architecture support
+- **Advanced Game Modes**: Extensible game logic
+
+# Important Instruction Reminders
+
+Do what has been asked; nothing more, nothing less.
+NEVER create files unless they're absolutely necessary for achieving your goal.
+ALWAYS prefer editing an existing file to creating a new one.
+NEVER proactively create documentation files (\*.md) or README files. Only create documentation files if explicitly requested by the User.
