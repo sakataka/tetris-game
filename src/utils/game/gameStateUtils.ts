@@ -32,7 +32,8 @@ interface GameOverCheckResult {
 }
 
 /**
- * スコア増加計算の純粋関数
+ * Pure function for calculating score increase based on Tetris scoring rules
+ * Scoring: 40×level for single, 100×level for double, 300×level for triple, 1200×level for tetris
  */
 export function calculateScoreIncrease(
   currentScore: number,
@@ -64,7 +65,7 @@ export function calculateScoreIncrease(
 }
 
 /**
- * ライン消去処理の純粋関数
+ * Pure function for processing line clearing logic
  */
 export function processLineClear(board: (string | null)[][], piece: Tetromino): LineClearResult {
   const newBoard = placePiece(board, piece);
@@ -78,7 +79,7 @@ export function processLineClear(board: (string | null)[][], piece: Tetromino): 
 }
 
 /**
- * ライン消去エフェクト作成の純粋関数
+ * Pure function for creating line clear visual effects
  */
 export function createLineEffects(
   linesCleared: number,
@@ -91,7 +92,7 @@ export function createLineEffects(
     return prevLineEffect;
   }
 
-  // 音効果再生
+  // Play appropriate sound effect
   if (playSound) {
     if (linesCleared === 4) {
       playSound('tetris');
@@ -108,7 +109,7 @@ export function createLineEffects(
 }
 
 /**
- * ゲームオーバー判定の純粋関数
+ * Pure function for game over condition checking
  */
 export function checkGameOver(
   board: (string | null)[][],

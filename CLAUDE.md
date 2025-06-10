@@ -336,6 +336,36 @@ pnpm format         # コードフォーマット
 - **パフォーマンス**: メモリ効率とレンダリング最適化
 - **アクセシビリティ**: WCAG準拠、ユニバーサルデザイン
 
+### Code Comment Standards
+
+**Comment Language**: All source code comments must be written in English for international collaboration and maintainability.
+
+**Comment Guidelines**:
+
+- **Minimal and Meaningful**: Only comment when necessary - avoid obvious comments
+- **Special Intent**: Document complex algorithms, performance optimizations, or non-obvious decisions
+- **Business Logic**: Explain domain-specific rules or calculations
+- **Workarounds**: Document temporary fixes or browser-specific hacks
+- **Complex Types**: Explain intricate TypeScript types or generic constraints
+
+**Examples**:
+
+```typescript
+// ✅ Good - Explains non-obvious intent
+// Intentionally exclude 'board' dependency to prevent infinite re-renders
+const handleClick = useCallback(() => {}, [piece, position]);
+
+// ❌ Bad - States the obvious
+// Set the state to true
+setState(true);
+
+// ✅ Good - Documents complex business logic
+// Tetris scoring: 40×level for single, 100×level for double, 300×level for triple, 1200×level for tetris
+const getLineScore = (lines: number, level: number) => {
+  return SCORE_MULTIPLIERS[lines] * level;
+};
+```
+
 ## Future Enhancements
 
 Ready for:

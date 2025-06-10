@@ -38,9 +38,9 @@ export function useGameControls({
         onStateChange(newState);
       } else if (dir.y > 0) {
         // Piece hit bottom, place it
-        // 音声はcalculatePiecePlacementState内で再生されるため、ここでは再生しない
+        // Sound playback is handled within calculatePiecePlacementState, not here
         actions.onPieceLand(gameState, gameState.currentPiece, 0);
-        // onStateChangeは呼ばない（calculatePiecePlacementStateがZustandストアを直接更新）
+        // onStateChange is omitted as calculatePiecePlacementState directly updates Zustand store
       }
     },
     [gameState, actions, onStateChange]
@@ -85,10 +85,10 @@ export function useGameControls({
     };
 
     const hardDropBonus = (dropY - gameState.currentPiece.position.y) * SCORES.HARD_DROP_BONUS;
-    // 音声はcalculatePiecePlacementState内で再生されるため、ここでは再生しない
+    // Sound playback is handled within calculatePiecePlacementState, not here
     actions.onPieceLand(gameState, droppedPiece, hardDropBonus);
-    // onStateChangeは呼ばない（calculatePiecePlacementStateがZustandストアを直接更新）
-  }, [gameState, actions]); // onStateChange除去 - 実際には使用されていない
+    // onStateChange is omitted as calculatePiecePlacementState directly updates Zustand store
+  }, [gameState, actions]); // onStateChange excluded - not actually used
 
   return {
     movePiece,

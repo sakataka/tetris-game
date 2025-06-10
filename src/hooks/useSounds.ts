@@ -17,13 +17,13 @@ interface AudioState {
 interface UseSoundsProps {
   initialVolume?: number;
   initialMuted?: boolean;
-  useWebAudio?: boolean; // Web Audio API使用フラグ
+  useWebAudio?: boolean; // Flag to enable Web Audio API
 }
 
 export function useSounds({
   initialVolume = 0.5,
   initialMuted = false,
-  useWebAudio = true, // デフォルトでWeb Audio APIを使用
+  useWebAudio = true, // Use Web Audio API by default
 }: UseSoundsProps = {}) {
   const [isMuted, setIsMuted] = useState(initialMuted);
   const [volume, setVolume] = useState(initialVolume);
@@ -33,11 +33,11 @@ export function useSounds({
     loading: new Set(),
   });
 
-  // HTMLAudioElementのフォールバック用
+  // Fallback HTMLAudioElement references
   const audioRefs = useRef<{ [key in SoundKey]?: HTMLAudioElement }>({});
   const isWebAudioSupported = useRef<boolean>(useWebAudio);
 
-  // HTMLAudioElementフォールバック初期化（volume依存除去）
+  // HTMLAudioElement fallback initialization (volume dependency removed)
   const initializeFallbackAudio = useCallback(() => {
     const soundFiles = {
       lineClear: '/sounds/line-clear.mp3',

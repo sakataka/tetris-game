@@ -24,7 +24,7 @@ const TetrisBoard = memo(function TetrisBoard({
   lineEffect,
   onParticleUpdate,
 }: TetrisBoardProps) {
-  // 座標境界チェックのヘルパー関数（認知複雑度削減）
+  // Helper function for coordinate boundary checking (reduces cognitive complexity)
   const isValidBoardPosition = useCallback(
     (x: number, y: number) => {
       return y >= 0 && y < board.length && x >= 0 && x < board[0].length;
@@ -32,7 +32,7 @@ const TetrisBoard = memo(function TetrisBoard({
     [board]
   );
 
-  // ゴーストピース追加のヘルパー関数（認知複雑度削減）
+  // Helper function for adding ghost piece (reduces cognitive complexity)
   const addGhostPiece = useCallback(
     (displayBoard: (number | string | null)[][], piece: Tetromino, ghostY: number) => {
       for (let y = 0; y < piece.shape.length; y++) {
@@ -49,9 +49,9 @@ const TetrisBoard = memo(function TetrisBoard({
       }
     },
     [board, isValidBoardPosition]
-  ); // board依存は境界チェック用途で必要
+  ); // board dependency required for boundary checking
 
-  // 現在のピース追加のヘルパー関数（認知複雑度削減）
+  // Helper function for adding current piece (reduces cognitive complexity)
   const addCurrentPiece = useCallback(
     (displayBoard: (number | string | null)[][], piece: Tetromino) => {
       for (let y = 0; y < piece.shape.length; y++) {
@@ -68,9 +68,9 @@ const TetrisBoard = memo(function TetrisBoard({
       }
     },
     [board, isValidBoardPosition]
-  ); // board依存は境界チェック用途で必要
+  ); // board dependency required for boundary checking
 
-  // Create display board with current piece and ghost piece (useMemoで最適化)
+  // Create display board with current piece and ghost piece (optimized with useMemo)
   const displayBoard = useMemo(() => {
     const newDisplayBoard = board.map((row) => [...row]);
 
