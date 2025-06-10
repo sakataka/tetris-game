@@ -8,7 +8,7 @@ import {
   useSetCustomColors,
   useSetAccessibilityOptions,
   useUpdateThemeState,
-  useResetThemeToDefault
+  useResetThemeToDefault,
 } from '../store/themeStore';
 import { useThemeManager } from '../hooks/useThemeManager';
 
@@ -16,9 +16,7 @@ interface ThemeTabContentProps {
   className?: string;
 }
 
-const ThemeTabContent = memo(function ThemeTabContent({
-  className = ''
-}: ThemeTabContentProps) {
+const ThemeTabContent = memo(function ThemeTabContent({ className = '' }: ThemeTabContentProps) {
   // テーマ関連の状態とアクション
   const themeState = useTheme();
   const setTheme = useSetTheme();
@@ -31,7 +29,7 @@ const ThemeTabContent = memo(function ThemeTabContent({
     themeState,
     setTheme,
     updateThemeState,
-    setAccessibilityOptions
+    setAccessibilityOptions,
   });
 
   return (

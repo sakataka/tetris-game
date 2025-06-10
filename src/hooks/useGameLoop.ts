@@ -29,10 +29,8 @@ export function useGameLoop({
   dropTime,
   initialDropTime,
   actions,
-  onDropTimeChange
+  onDropTimeChange,
 }: UseGameLoopProps) {
-  
-  
   // キーボード入力処理用のコールバック
   const onMoveLeft = useCallback(() => actions.movePiece({ x: -1, y: 0 }), [actions]);
   const onMoveRight = useCallback(() => actions.movePiece({ x: 1, y: 0 }), [actions]);
@@ -49,20 +47,20 @@ export function useGameLoop({
     onHardDrop: actions.hardDrop,
     onPause: actions.togglePause,
     onReset: actions.resetGame,
-    onConfirm
+    onConfirm,
   });
 
   // ゲームタイマー
   useGameTimer({
     isActive: !isGameOver && !isPaused,
     interval: dropTime,
-    onTick: actions.dropPiece
+    onTick: actions.dropPiece,
   });
 
   // ドロップタイム計算
   useDropTimeCalculator({
     level,
     initialDropTime,
-    onDropTimeChange
+    onDropTimeChange,
   });
 }

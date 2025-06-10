@@ -1,6 +1,6 @@
 /**
  * シンプルなタイマーデバッグテスト
- * 
+ *
  * useTimerAnimationが実際に動作するかを確認
  */
 
@@ -20,7 +20,7 @@ describe('タイマー動作デバッグ', () => {
     for (let i = 0; i < 60; i++) {
       const deltaTime = 16.67;
       accumulatedTime += deltaTime;
-      
+
       if (accumulatedTime >= interval) {
         callback();
         accumulatedTime = accumulatedTime % interval;
@@ -43,7 +43,7 @@ describe('タイマー動作デバッグ', () => {
     for (let i = 0; i < 60; i++) {
       const deltaTime = 16.67;
       accumulatedTime += deltaTime;
-      
+
       if (accumulatedTime >= interval) {
         callback();
         accumulatedTime = accumulatedTime % interval;
@@ -65,7 +65,7 @@ describe('タイマー動作デバッグ', () => {
     for (let i = 0; i < 18; i++) {
       const deltaTime = 16.67;
       accumulatedTime += deltaTime;
-      
+
       if (accumulatedTime >= interval) {
         callback();
         accumulatedTime = accumulatedTime % interval;
@@ -81,7 +81,7 @@ describe('タイマー動作デバッグ', () => {
     for (let i = 0; i < 12; i++) {
       const deltaTime = 16.67;
       accumulatedTime += deltaTime;
-      
+
       if (accumulatedTime >= interval) {
         callback();
         accumulatedTime = accumulatedTime % interval;
@@ -103,7 +103,7 @@ describe('タイマー動作デバッグ', () => {
     for (let i = 0; i < 10; i++) {
       const deltaTime = 16.67;
       accumulatedTime += deltaTime;
-      
+
       while (accumulatedTime >= interval) {
         callback();
         accumulatedTime -= interval; // より精密な計算

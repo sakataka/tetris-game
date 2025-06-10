@@ -1,6 +1,12 @@
 import { useRef, useCallback, useState, useEffect } from 'react';
 import type { SoundKey } from '../types/tetris';
-import { audioManager, preloadAudioSmart, getAudioPreloadProgress, playWithFallback, getFallbackStatus } from '../utils/audio';
+import {
+  audioManager,
+  preloadAudioSmart,
+  getAudioPreloadProgress,
+  playWithFallback,
+  getFallbackStatus,
+} from '../utils/audio';
 
 interface AudioState {
   loaded: Set<SoundKey>;
@@ -14,20 +20,19 @@ interface UseSoundsProps {
   useWebAudio?: boolean; // Web Audio API使用フラグ
 }
 
-export function useSounds({ 
-  initialVolume = 0.5, 
+export function useSounds({
+  initialVolume = 0.5,
   initialMuted = false,
-  useWebAudio = true // デフォルトでWeb Audio APIを使用
+  useWebAudio = true, // デフォルトでWeb Audio APIを使用
 }: UseSoundsProps = {}) {
-  
   const [isMuted, setIsMuted] = useState(initialMuted);
   const [volume, setVolume] = useState(initialVolume);
   const [audioState, setAudioState] = useState<AudioState>({
     loaded: new Set(),
     failed: new Set(),
-    loading: new Set()
+    loading: new Set(),
   });
-  
+
   // HTMLAudioElementのフォールバック用
   const audioRefs = useRef<{ [key in SoundKey]?: HTMLAudioElement }>({});
   const isWebAudioSupported = useRef<boolean>(useWebAudio);
@@ -40,35 +45,35 @@ export function useSounds({
       pieceRotate: '/sounds/piece-rotate.mp3',
       tetris: '/sounds/tetris.mp3',
       gameOver: '/sounds/game-over.mp3',
-      hardDrop: '/sounds/hard-drop.mp3'
+      hardDrop: '/sounds/hard-drop.mp3',
     };
-    
+
     Object.entries(soundFiles).forEach(([key, src]) => {
       const soundKey = key as SoundKey;
-      
+
       if (!audioRefs.current[soundKey]) {
-        setAudioState(prev => ({
+        setAudioState((prev) => ({
           ...prev,
-          loading: new Set([...prev.loading, soundKey])
+          loading: new Set([...prev.loading, soundKey]),
         }));
 
         const audio = new Audio();
         audio.preload = 'auto';
         audio.volume = volume; // 現在のvolumeを使用（循環依存回避）
-        
+
         audio.addEventListener('canplaythrough', () => {
-          setAudioState(prev => ({
+          setAudioState((prev) => ({
             loaded: new Set([...prev.loaded, soundKey]),
             failed: prev.failed,
-            loading: new Set([...prev.loading].filter(k => k !== soundKey))
+            loading: new Set([...prev.loading].filter((k) => k !== soundKey)),
           }));
         });
 
         audio.addEventListener('error', () => {
-          setAudioState(prev => ({
+          setAudioState((prev) => ({
             loaded: prev.loaded,
             failed: new Set([...prev.failed, soundKey]),
-            loading: new Set([...prev.loading].filter(k => k !== soundKey))
+            loading: new Set([...prev.loading].filter((k) => k !== soundKey)),
           }));
         });
 
@@ -82,22 +87,21 @@ export function useSounds({
   useEffect(() => {
     const initializeAudioSystem = async () => {
       if (typeof window === 'undefined') return;
-      
+
       if (isWebAudioSupported.current) {
         try {
           // 高度なプリロードシステムを使用
           await preloadAudioSmart();
           audioManager.setMasterVolume(volume);
           audioManager.setMuted(isMuted);
-          
+
           // プリロード結果を状態に反映
           const webAudioState = audioManager.getAudioState();
           setAudioState({
             loaded: new Set(webAudioState.loadedSounds),
             failed: new Set(),
-            loading: new Set()
+            loading: new Set(),
           });
-          
         } catch {
           // Web Audio API失敗時はHTMLAudioElementにフォールバック
           isWebAudioSupported.current = false;
@@ -107,32 +111,32 @@ export function useSounds({
         initializeFallbackAudio();
       }
     };
-    
+
     initializeAudioSystem();
   }, [initializeFallbackAudio]); // eslint-disable-line react-hooks/exhaustive-deps
-  
+
   // Web Audio APIの音量・ミュート設定の同期
   useEffect(() => {
     if (isWebAudioSupported.current) {
       audioManager.setMasterVolume(volume);
     } else {
       // HTMLAudioElementの音量更新
-      Object.values(audioRefs.current).forEach(audio => {
+      Object.values(audioRefs.current).forEach((audio) => {
         if (audio) audio.volume = volume;
       });
     }
   }, [volume]);
-  
+
   useEffect(() => {
     if (isWebAudioSupported.current) {
       audioManager.setMuted(isMuted);
     }
   }, [isMuted]);
-  
+
   // ユーザーインタラクション後の音声アンロック（フォールバック用）
   const unlockAudio = useCallback(async () => {
     if (typeof window === 'undefined') return;
-    
+
     if (!isWebAudioSupported.current) {
       // HTMLAudioElementのアンロック
       const promises = Object.values(audioRefs.current).map(async (audio) => {
@@ -146,7 +150,7 @@ export function useSounds({
           }
         }
       });
-      
+
       await Promise.allSettled(promises);
     }
     // Web Audio APIの場合はaudioManager内で自動処理
@@ -158,7 +162,7 @@ export function useSounds({
       // Web Audio APIの場合は既に初期化済み
       return;
     }
-    
+
     // HTMLAudioElementフォールバック
     initializeFallbackAudio();
   }, [initializeFallbackAudio]);
@@ -173,9 +177,9 @@ export function useSounds({
       await playWithFallback(soundType, { volume });
     } catch {
       // 最終的なフォールバック失敗時
-      setAudioState(prev => ({
+      setAudioState((prev) => ({
         ...prev,
-        failed: new Set([...prev.failed, soundType])
+        failed: new Set([...prev.failed, soundType]),
       }));
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -184,12 +188,12 @@ export function useSounds({
   const setVolumeLevel = useCallback((newVolume: number) => {
     const clampedVolume = Math.max(0, Math.min(1, newVolume));
     setVolume(clampedVolume);
-    
+
     if (isWebAudioSupported.current) {
       audioManager.setMasterVolume(clampedVolume);
     } else {
       // HTMLAudioElementの音量更新
-      Object.values(audioRefs.current).forEach(audio => {
+      Object.values(audioRefs.current).forEach((audio) => {
         if (audio) audio.volume = clampedVolume;
       });
     }
@@ -199,7 +203,7 @@ export function useSounds({
   const toggleMute = useCallback(() => {
     const newMutedState = !isMuted;
     setIsMuted(newMutedState);
-    
+
     if (isWebAudioSupported.current) {
       audioManager.setMuted(newMutedState);
     }
@@ -216,8 +220,9 @@ export function useSounds({
     audioState,
     // 新機能
     isWebAudioEnabled: isWebAudioSupported.current,
-    getDetailedAudioState: () => isWebAudioSupported.current ? audioManager.getAudioState() : null,
+    getDetailedAudioState: () =>
+      isWebAudioSupported.current ? audioManager.getAudioState() : null,
     getPreloadProgress: getAudioPreloadProgress,
-    getFallbackStatus
+    getFallbackStatus,
   };
 }

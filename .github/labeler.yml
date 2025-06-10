@@ -3,80 +3,80 @@
 # コンポーネント関連
 component:
   - changed-files:
-    - any-glob-to-any-file: 'src/components/**'
+      - any-glob-to-any-file: 'src/components/**'
 
 # フック関連
 hooks:
   - changed-files:
-    - any-glob-to-any-file: 'src/hooks/**'
+      - any-glob-to-any-file: 'src/hooks/**'
 
 # ストア関連
 state-management:
   - changed-files:
-    - any-glob-to-any-file: 'src/store/**'
+      - any-glob-to-any-file: 'src/store/**'
 
 # テスト関連
 test:
   - changed-files:
-    - any-glob-to-any-file: 
-      - 'src/test/**'
-      - '**/*.test.ts'
-      - '**/*.test.tsx'
+      - any-glob-to-any-file:
+          - 'src/test/**'
+          - '**/*.test.ts'
+          - '**/*.test.tsx'
 
 # ドキュメント関連
 documentation:
   - changed-files:
-    - any-glob-to-any-file:
-      - '**/*.md'
-      - 'docs/**'
+      - any-glob-to-any-file:
+          - '**/*.md'
+          - 'docs/**'
 
 # 設定関連
 configuration:
   - changed-files:
-    - any-glob-to-any-file:
-      - '*.json'
-      - '*.config.*'
-      - '.github/**'
+      - any-glob-to-any-file:
+          - '*.json'
+          - '*.config.*'
+          - '.github/**'
 
 # スタイル関連
 styling:
   - changed-files:
-    - any-glob-to-any-file:
-      - '**/*.css'
-      - 'src/app/globals.css'
-      - 'tailwind.config.ts'
+      - any-glob-to-any-file:
+          - '**/*.css'
+          - 'src/app/globals.css'
+          - 'tailwind.config.ts'
 
 # 依存関係
 dependencies:
   - changed-files:
-    - any-glob-to-any-file:
-      - 'package.json'
-      - 'pnpm-lock.yaml'
+      - any-glob-to-any-file:
+          - 'package.json'
+          - 'pnpm-lock.yaml'
 
 # ユーティリティ
 utilities:
   - changed-files:
-    - any-glob-to-any-file: 'src/utils/**'
+      - any-glob-to-any-file: 'src/utils/**'
 
 # 型定義
 types:
   - changed-files:
-    - any-glob-to-any-file: 'src/types/**'
+      - any-glob-to-any-file: 'src/types/**'
 
 # パフォーマンス
 performance:
   - changed-files:
-    - any-glob-to-any-file: 'src/utils/performance/**'
+      - any-glob-to-any-file: 'src/utils/performance/**'
 
 # オーディオ
 audio:
   - changed-files:
-    - any-glob-to-any-file: 'src/utils/audio/**'
+      - any-glob-to-any-file: 'src/utils/audio/**'
 
 # アニメーション
 animation:
   - changed-files:
-    - any-glob-to-any-file: 
-      - 'src/utils/animation/**'
-      - 'src/components/ParticleEffect.tsx'
-      - 'src/components/ParticleCanvas.tsx'
+      - any-glob-to-any-file:
+          - 'src/utils/animation/**'
+          - 'src/components/ParticleEffect.tsx'
+          - 'src/components/ParticleCanvas.tsx'

@@ -1,6 +1,6 @@
 /**
  * useAnimationFrame カスタムフック
- * 
+ *
  * AnimationManagerを活用した統一されたアニメーション管理フック
  * 従来の分散したrequestAnimationFrame使用を置き換える
  */
@@ -20,7 +20,7 @@ export interface UseAnimationOptions extends AnimationOptions {
 
 /**
  * requestAnimationFrameの統一管理フック
- * 
+ *
  * @param callback アニメーションコールバック関数
  * @param deps 依存配列
  * @param options アニメーションオプション
@@ -73,7 +73,7 @@ export function useAnimationFrame(
   useEffect(() => {
     // 依存配列変更時は前の状態をリセット
     previousTimeRef.current = undefined;
-    
+
     const currentOptions = optionsRef.current;
     if (currentOptions.enabled ?? true) {
       startAnimation();
@@ -100,13 +100,13 @@ export function useAnimationFrame(
   return {
     start: startAnimation,
     stop: stopAnimation,
-    isRunning: !!animationIdRef.current
+    isRunning: !!animationIdRef.current,
   };
 }
 
 /**
  * deltaTime ベースの更新が不要なシンプルなアニメーションフック
- * 
+ *
  * @param callback フレーム毎のコールバック
  * @param deps 依存配列
  * @param options アニメーションオプション
@@ -116,16 +116,12 @@ export function useSimpleAnimation(
   deps: React.DependencyList,
   options: UseAnimationOptions = {}
 ) {
-  return useAnimationFrame(
-    () => callback(),
-    deps,
-    options
-  );
+  return useAnimationFrame(() => callback(), deps, options);
 }
 
 /**
  * 条件付きアニメーションフック
- * 
+ *
  * @param callback アニメーションコールバック
  * @param condition アニメーション実行条件
  * @param deps 依存配列
@@ -137,16 +133,12 @@ export function useConditionalAnimation(
   deps: React.DependencyList,
   options: Omit<UseAnimationOptions, 'enabled'> = {}
 ) {
-  return useAnimationFrame(
-    callback,
-    [condition, ...deps],
-    { ...options, enabled: condition }
-  );
+  return useAnimationFrame(callback, [condition, ...deps], { ...options, enabled: condition });
 }
 
 /**
  * タイマーベースのアニメーションフック（setIntervalの代替）
- * 
+ *
  * @param callback 実行するコールバック
  * @param interval 実行間隔（ミリ秒）
  * @param deps 依存配列
@@ -170,7 +162,7 @@ export function useTimerAnimation(
     (deltaTime) => {
       // deltaTimeを累積
       accumulatedTimeRef.current += deltaTime;
-      
+
       // インターバル時間が経過したら実行
       if (accumulatedTimeRef.current >= interval) {
         callback();
@@ -185,7 +177,7 @@ export function useTimerAnimation(
 
 /**
  * パフォーマンス監視付きアニメーションフック
- * 
+ *
  * @param callback アニメーションコールバック
  * @param deps 依存配列
  * @param options アニメーションオプション
@@ -199,29 +191,34 @@ export function usePerformanceAnimation(
   const frameCountRef = useRef(0);
   const averageFrameTimeRef = useRef(0);
 
-  const performanceCallback = useCallback((deltaTime: number) => {
-    const startTime = performance.now();
-    callback(deltaTime);
-    const endTime = performance.now();
-    
-    const frameTime = endTime - startTime;
-    frameCountRef.current++;
-    
-    // 移動平均でフレーム時間を計算
-    averageFrameTimeRef.current = 
-      (averageFrameTimeRef.current * 0.9) + (frameTime * 0.1);
-  }, [callback]);
+  const performanceCallback = useCallback(
+    (deltaTime: number) => {
+      const startTime = performance.now();
+      callback(deltaTime);
+      const endTime = performance.now();
+
+      const frameTime = endTime - startTime;
+      frameCountRef.current++;
+
+      // 移動平均でフレーム時間を計算
+      averageFrameTimeRef.current = averageFrameTimeRef.current * 0.9 + frameTime * 0.1;
+    },
+    [callback]
+  );
 
   const controls = useAnimationFrame(performanceCallback, deps, options);
 
-  const getPerformanceStats = useCallback(() => ({
-    frameCount: frameCountRef.current,
-    averageFrameTime: averageFrameTimeRef.current,
-    estimatedFPS: averageFrameTimeRef.current > 0 ? 1000 / averageFrameTimeRef.current : 0
-  }), []);
+  const getPerformanceStats = useCallback(
+    () => ({
+      frameCount: frameCountRef.current,
+      averageFrameTime: averageFrameTimeRef.current,
+      estimatedFPS: averageFrameTimeRef.current > 0 ? 1000 / averageFrameTimeRef.current : 0,
+    }),
+    []
+  );
 
   return {
     ...controls,
-    getPerformanceStats
+    getPerformanceStats,
   };
 }

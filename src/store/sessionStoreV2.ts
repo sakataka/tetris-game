@@ -1,6 +1,6 @@
 /**
  * 簡素化されたセッションストア (v2)
- * 
+ *
  * SessionManagerサービスクラスをベースにした
  * 軽量なZustandストア実装
  */
@@ -14,14 +14,14 @@ interface SessionStoreV2 {
   currentSession: PlaySession | null;
   sessions: PlaySession[];
   stats: SessionStats;
-  
+
   // Actions (SessionManagerのラッパー)
   startSession: () => void;
   endSession: () => void;
   onGameStart: () => void;
   refreshData: () => void;
   clearAllSessions: () => void;
-  
+
   // Utilities
   isSessionActive: boolean;
 }
@@ -33,7 +33,7 @@ export const useSessionStoreV2 = create<SessionStoreV2>()((set) => {
       currentSession: sessionManager.getCurrentSession(),
       sessions: sessionManager.getAllSessions(),
       stats: sessionManager.getSessionStats(),
-      isSessionActive: sessionManager.getCurrentSession()?.isActive ?? false
+      isSessionActive: sessionManager.getCurrentSession()?.isActive ?? false,
     });
   };
 
@@ -71,7 +71,7 @@ export const useSessionStoreV2 = create<SessionStoreV2>()((set) => {
 
     clearAllSessions: () => {
       sessionManager.clearAllSessions();
-    }
+    },
   };
 });
 

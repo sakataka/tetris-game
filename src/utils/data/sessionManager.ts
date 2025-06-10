@@ -1,6 +1,6 @@
 /**
  * セッション管理専用サービスクラス
- * 
+ *
  * PlaySessionの追跡、localStorage同期、タイムアウト管理を
  * 一元化したシンプルなアーキテクチャ
  */
@@ -49,10 +49,10 @@ export class SessionManager {
    */
   public getAllSessions(): PlaySession[] {
     if (typeof window === 'undefined') return []; // SSR対応
-    
+
     const stored = localStorage.getItem(SESSION_STORAGE_KEY);
     if (!stored) return [];
-    
+
     try {
       return JSON.parse(stored);
     } catch {
@@ -74,7 +74,7 @@ export class SessionManager {
       id: this.generateSessionId(),
       startTime: Date.now(),
       gameCount: 0,
-      isActive: true
+      isActive: true,
     };
 
     this.saveCurrentSession();
@@ -93,12 +93,12 @@ export class SessionManager {
     const completedSession: PlaySession = {
       ...this.currentSession,
       endTime: Date.now(),
-      isActive: false
+      isActive: false,
     };
 
     // セッション履歴に保存
     this.saveSessionToHistory(completedSession);
-    
+
     // 現在のセッションをクリア
     this.currentSession = null;
     this.clearCurrentSession();
@@ -119,7 +119,7 @@ export class SessionManager {
     if (this.currentSession) {
       this.currentSession = {
         ...this.currentSession,
-        gameCount: this.currentSession.gameCount + 1
+        gameCount: this.currentSession.gameCount + 1,
       };
       this.saveCurrentSession();
       this.resetTimeout();
@@ -133,23 +133,24 @@ export class SessionManager {
   public getSessionStats(): SessionStats {
     const sessions = this.getAllSessions();
     const totalSessions = sessions.length;
-    
+
     if (totalSessions === 0) {
       return {
         totalSessions: 0,
         totalPlayTime: 0,
         totalGames: 0,
         averageSessionTime: 0,
-        averageGamesPerSession: 0
+        averageGamesPerSession: 0,
       };
     }
 
-    const totalPlayTime = sessions.reduce((total, session) => {
-      if (session.endTime) {
-        return total + (session.endTime - session.startTime);
-      }
-      return total;
-    }, 0) / 1000; // Convert to seconds
+    const totalPlayTime =
+      sessions.reduce((total, session) => {
+        if (session.endTime) {
+          return total + (session.endTime - session.startTime);
+        }
+        return total;
+      }, 0) / 1000; // Convert to seconds
 
     const totalGames = sessions.reduce((total, session) => {
       return total + session.gameCount;
@@ -160,7 +161,7 @@ export class SessionManager {
       totalPlayTime,
       totalGames,
       averageSessionTime: totalPlayTime / totalSessions,
-      averageGamesPerSession: totalGames / totalSessions
+      averageGamesPerSession: totalGames / totalSessions,
     };
   }
 
@@ -188,23 +189,23 @@ export class SessionManager {
 
   private loadFromStorage(): void {
     if (typeof window === 'undefined') return; // SSR対応
-    
+
     const stored = localStorage.getItem(CURRENT_SESSION_KEY);
     if (!stored) return;
 
     try {
       const session = JSON.parse(stored);
-      
+
       // セッションが期限切れかチェック
       const now = Date.now();
       const timeSinceStart = now - session.startTime;
-      
+
       if (timeSinceStart > SESSION_TIMEOUT) {
         // 期限切れセッションを履歴に移動
         this.saveSessionToHistory({
           ...session,
           endTime: session.startTime + SESSION_TIMEOUT,
-          isActive: false
+          isActive: false,
         });
         this.clearCurrentSession();
       } else {
@@ -219,7 +220,7 @@ export class SessionManager {
 
   private saveCurrentSession(): void {
     if (typeof window === 'undefined') return; // SSR対応
-    
+
     if (this.currentSession) {
       localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(this.currentSession));
     }
@@ -227,21 +228,21 @@ export class SessionManager {
 
   private clearCurrentSession(): void {
     if (typeof window === 'undefined') return; // SSR対応
-    
+
     localStorage.removeItem(CURRENT_SESSION_KEY);
   }
 
   private saveSessionToHistory(session: PlaySession): void {
     if (typeof window === 'undefined') return; // SSR対応
-    
+
     const sessions = this.getAllSessions();
     sessions.push(session);
-    
+
     // 最新100セッションのみ保持
     if (sessions.length > 100) {
       sessions.splice(0, sessions.length - 100);
     }
-    
+
     localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(sessions));
   }
 
@@ -261,7 +262,7 @@ export class SessionManager {
 
   private setupWindowListeners(): void {
     if (typeof window === 'undefined') return; // SSR対応
-    
+
     // ページアンロード時の処理
     const handleBeforeUnload = () => {
       this.endCurrentSession();
@@ -278,7 +279,7 @@ export class SessionManager {
   }
 
   private notifyListeners(): void {
-    this.changeListeners.forEach(listener => listener());
+    this.changeListeners.forEach((listener) => listener());
   }
 }
 

@@ -31,7 +31,7 @@ interface AudioCapabilities {
 
 class AudioFallbackManager {
   private static instance: AudioFallbackManager | null = null;
-  
+
   private fallbackLevels: FallbackLevel[] = [];
   private currentLevel: number = 0;
   private capabilities: AudioCapabilities | null = null;
@@ -39,9 +39,9 @@ class AudioFallbackManager {
     enableFallback: true,
     maxRetries: 3,
     fallbackDelay: 500,
-    silentMode: false
+    silentMode: false,
   };
-  
+
   // 各フォールバックレベルでの音声インスタンス
   private audioInstances: Map<string, Map<SoundKey, HTMLAudioElement | AudioBuffer>> = new Map();
   private fallbackCallbacks: Map<string, (soundKey: SoundKey) => Promise<void>> = new Map();
@@ -62,40 +62,40 @@ class AudioFallbackManager {
    */
   private async initializeFallbackLevels(): Promise<void> {
     this.capabilities = await this.detectAudioCapabilities();
-    
+
     this.fallbackLevels = [
       {
         name: 'web-audio-api',
         available: this.capabilities.webAudio && this.capabilities.audioContextSupport,
-        priority: 5
+        priority: 5,
       },
       {
         name: 'html-audio-element',
         available: this.capabilities.htmlAudio && this.capabilities.mp3Support,
-        priority: 4
+        priority: 4,
       },
       {
         name: 'html-audio-fallback',
         available: this.capabilities.htmlAudio,
-        priority: 3
+        priority: 3,
       },
       {
         name: 'visual-feedback',
         available: true, // 常に利用可能
-        priority: 2
+        priority: 2,
       },
       {
         name: 'silent-mode',
         available: true, // 最終フォールバック
-        priority: 1
-      }
+        priority: 1,
+      },
     ];
-    
+
     // 利用可能なレベルのみを残してソート
     this.fallbackLevels = this.fallbackLevels
-      .filter(level => level.available)
+      .filter((level) => level.available)
       .sort((a, b) => b.priority - a.priority);
-      
+
     // 各レベルの実際の動作テスト
     await this.testFallbackLevels();
   }
@@ -110,17 +110,19 @@ class AudioFallbackManager {
       audioContextSupport: false,
       mp3Support: false,
       codecs: [],
-      autoplayPolicy: 'blocked'
+      autoplayPolicy: 'blocked',
     };
 
     if (typeof window === 'undefined') return capabilities;
 
     // Web Audio API対応チェック
     try {
-      const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      const AudioContextClass =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
       if (AudioContextClass) {
         capabilities.webAudio = true;
-        
+
         // AudioContext作成テスト
         const testContext = new AudioContextClass();
         capabilities.audioContextSupport = true;
@@ -134,12 +136,11 @@ class AudioFallbackManager {
     try {
       const audio = new Audio();
       capabilities.htmlAudio = true;
-      
+
       // コーデック対応チェック
       const testCodecs = ['audio/mpeg', 'audio/mp4', 'audio/ogg', 'audio/wav'];
-      capabilities.codecs = testCodecs.filter(codec => audio.canPlayType(codec) !== '');
+      capabilities.codecs = testCodecs.filter((codec) => audio.canPlayType(codec) !== '');
       capabilities.mp3Support = capabilities.codecs.includes('audio/mpeg');
-      
     } catch {
       capabilities.htmlAudio = false;
     }
@@ -160,7 +161,7 @@ class AudioFallbackManager {
       const audio = new Audio();
       audio.muted = true;
       audio.volume = 0;
-      
+
       const playPromise = audio.play();
       if (playPromise) {
         await playPromise;
@@ -188,9 +189,9 @@ class AudioFallbackManager {
         level.available = false;
       }
     }
-    
+
     // テスト結果でフィルタリング
-    this.fallbackLevels = this.fallbackLevels.filter(level => level.testResult);
+    this.fallbackLevels = this.fallbackLevels.filter((level) => level.testResult);
   }
 
   /**
@@ -216,16 +217,18 @@ class AudioFallbackManager {
    */
   private async testWebAudioAPI(): Promise<boolean> {
     try {
-      const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      const AudioContextClass =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
       const context = new AudioContextClass();
-      
+
       // 無音のAudioBufferを作成してテスト
       const buffer = context.createBuffer(1, 1, context.sampleRate);
       const source = context.createBufferSource();
       source.buffer = buffer;
       source.connect(context.destination);
       source.start();
-      
+
       await context.close();
       return true;
     } catch {
@@ -241,11 +244,12 @@ class AudioFallbackManager {
       const audio = new Audio();
       audio.muted = true;
       audio.volume = 0;
-      
+
       // data URLを使用してテスト
-      audio.src = 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUY7Tv5Z9NEAxPpuPwtmMcBjiS1/LNeSsFJHfJ8N6QQAoUYrPv5Z9NEAxPpuPwtmMcBjiS1/LNeSsFJHfI8N6QQAoUYrPu5Z9NEAxPpuPwtmQcBjiS1/LNeSsFJHfI8N6QQAoUYrPu5Z9NEAxQpuPwtmQcBjiS1/LNeSsFJHfI8N6QQAoUYrPu5Z9NEAxQpuPxtmQcBjiS1/LNeSsFJHfI8N6QQAoUYrPu5Z9NEAxQpuPxtmQcBjiS1/LNeSsFJHfJ8N6QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N6QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N6QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N6QQAoUYrPv5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N6QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N6QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEA=';
-      
-      return new Promise(resolve => {
+      audio.src =
+        'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUY7Tv5Z9NEAxPpuPwtmMcBjiS1/LNeSsFJHfJ8N6QQAoUYrPv5Z9NEAxPpuPwtmMcBjiS1/LNeSsFJHfI8N6QQAoUYrPu5Z9NEAxPpuPwtmQcBjiS1/LNeSsFJHfI8N6QQAoUYrPu5Z9NEAxQpuPwtmQcBjiS1/LNeSsFJHfI8N6QQAoUYrPu5Z9NEAxQpuPxtmQcBjiS1/LNeSsFJHfI8N6QQAoUYrPu5Z9NEAxQpuPxtmQcBjiS1/LNeSsFJHfJ8N6QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N6QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N6QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N6QQAoUYrPv5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N6QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N6QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEA=';
+
+      return new Promise((resolve) => {
         audio.oncanplaythrough = () => resolve(true);
         audio.onerror = () => resolve(false);
         setTimeout(() => resolve(false), 1000); // 1秒でタイムアウト
@@ -258,48 +262,58 @@ class AudioFallbackManager {
   /**
    * 音声再生のフォールバック実行
    */
-  public async playWithFallback(soundKey: SoundKey, options: { volume?: number } = {}): Promise<void> {
+  public async playWithFallback(
+    soundKey: SoundKey,
+    options: { volume?: number } = {}
+  ): Promise<void> {
     if (this.config.silentMode) return;
-    
+
     let lastError: Error | null = null;
-    
+
     for (let i = this.currentLevel; i < this.fallbackLevels.length; i++) {
       const level = this.fallbackLevels[i];
-      
+
       try {
         await this.executePlayback(level.name, soundKey, options);
         return; // 成功した場合は終了
-        
       } catch (error) {
         lastError = error as Error;
-        
+
         // エラーをログに記録
         const audioError = new AudioError(
           `Fallback level '${level.name}' failed for ${soundKey}`,
-          { action: 'audio_fallback', component: 'AudioFallbackManager', additionalData: { level: level.name, soundKey, error } },
+          {
+            action: 'audio_fallback',
+            component: 'AudioFallbackManager',
+            additionalData: { level: level.name, soundKey, error },
+          },
           { recoverable: true, retryable: true }
         );
         handleError(audioError);
-        
+
         // 次のレベルに自動フォールバック
         this.currentLevel = i + 1;
-        
+
         if (this.config.fallbackDelay > 0) {
-          await new Promise(resolve => setTimeout(resolve, this.config.fallbackDelay));
+          await new Promise((resolve) => setTimeout(resolve, this.config.fallbackDelay));
         }
       }
     }
-    
+
     // 全フォールバックが失敗した場合
     if (lastError) {
       const finalError = new AudioError(
         `All fallback levels failed for ${soundKey}`,
-        { action: 'audio_fallback_final', component: 'AudioFallbackManager', additionalData: { soundKey, lastError } },
+        {
+          action: 'audio_fallback_final',
+          component: 'AudioFallbackManager',
+          additionalData: { soundKey, lastError },
+        },
         { recoverable: false, retryable: false }
       );
       handleError(finalError);
     }
-    
+
     // 最終手段：サイレントモード
     this.config.silentMode = true;
   }
@@ -307,7 +321,11 @@ class AudioFallbackManager {
   /**
    * 特定レベルでの再生実行
    */
-  private async executePlayback(levelName: string, soundKey: SoundKey, options: { volume?: number }): Promise<void> {
+  private async executePlayback(
+    levelName: string,
+    soundKey: SoundKey,
+    options: { volume?: number }
+  ): Promise<void> {
     switch (levelName) {
       case 'web-audio-api':
         return this.playWithWebAudio(soundKey, options);
@@ -337,24 +355,24 @@ class AudioFallbackManager {
    */
   private async playWithHTMLAudio(soundKey: SoundKey, options: { volume?: number }): Promise<void> {
     const levelKey = 'html-audio';
-    
+
     if (!this.audioInstances.has(levelKey)) {
       this.audioInstances.set(levelKey, new Map());
     }
-    
+
     const instances = this.audioInstances.get(levelKey)!;
     let audio = instances.get(soundKey) as HTMLAudioElement | undefined;
-    
+
     if (!audio) {
       audio = new Audio();
       audio.src = `/sounds/${soundKey.replace(/([A-Z])/g, '-$1').toLowerCase()}.mp3`;
       audio.preload = 'auto';
       instances.set(soundKey, audio);
     }
-    
+
     audio.volume = options.volume ?? 0.5;
     audio.currentTime = 0;
-    
+
     await audio.play();
   }
 
@@ -367,7 +385,7 @@ class AudioFallbackManager {
       new Notification(`音声: ${soundKey}`, {
         icon: '/icon-192x192.png',
         tag: 'tetris-audio',
-        silent: true
+        silent: true,
       });
     } else {
       console.log(`♪ Audio: ${soundKey}`);
@@ -385,9 +403,9 @@ class AudioFallbackManager {
   } {
     return {
       currentLevel: this.currentLevel,
-      availableLevels: this.fallbackLevels.map(level => level.name),
+      availableLevels: this.fallbackLevels.map((level) => level.name),
       capabilities: this.capabilities,
-      silentMode: this.config.silentMode
+      silentMode: this.config.silentMode,
     };
   }
 
@@ -427,7 +445,7 @@ class AudioFallbackManager {
 export const audioFallbackManager = AudioFallbackManager.getInstance();
 
 // 便利な関数をエクスポート
-export const playWithFallback = (soundKey: SoundKey, options?: { volume?: number }) => 
+export const playWithFallback = (soundKey: SoundKey, options?: { volume?: number }) =>
   audioFallbackManager.playWithFallback(soundKey, options);
 
 export const getFallbackStatus = () => audioFallbackManager.getFallbackStatus();

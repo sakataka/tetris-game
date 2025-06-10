@@ -13,7 +13,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    
+
     // 厳密な型チェック設定（実用的なレベル）
     "noImplicitAny": true,
     "noImplicitReturns": true,

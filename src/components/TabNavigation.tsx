@@ -14,33 +14,33 @@ interface TabNavigationProps {
 const TabNavigation = memo(function TabNavigation({
   activeTab,
   onTabChange,
-  className = ''
+  className = '',
 }: TabNavigationProps) {
   const tabs: { key: TabType; label: string; color: string }[] = [
     {
       key: 'game',
       label: NAVIGATION.GAME_INFO,
-      color: 'cyan'
+      color: 'cyan',
     },
     {
-      key: 'stats', 
+      key: 'stats',
       label: NAVIGATION.STATISTICS,
-      color: 'purple'
+      color: 'purple',
     },
     {
       key: 'theme',
       label: NAVIGATION.THEME,
-      color: 'yellow'
-    }
+      color: 'yellow',
+    },
   ];
 
-  const getTabStyles = (tab: typeof tabs[0], isActive: boolean) => {
+  const getTabStyles = (tab: (typeof tabs)[0], isActive: boolean) => {
     const baseClasses = 'px-4 py-2 rounded-t-lg font-semibold transition-colors';
-    
+
     if (isActive) {
       return `${baseClasses} bg-${tab.color}-500/20 text-${tab.color}-400 border-b-2 border-${tab.color}-400`;
     }
-    
+
     return `${baseClasses} bg-gray-800/50 text-gray-400 hover:text-${tab.color}-400`;
   };
 

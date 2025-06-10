@@ -14,28 +14,28 @@ jobs:
   quality-check:
     name: Code Quality & Tests
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
-        
+
       - name: 📦 Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 9
-          
+
       - name: 🔧 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
-          
+
       - name: 📋 Get pnpm store directory
         id: pnpm-cache
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-          
+
       - name: 💾 Setup pnpm cache
         uses: actions/cache@v4
         with:
@@ -43,25 +43,25 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
-            
+
       - name: 📚 Install dependencies
         run: pnpm install --frozen-lockfile
-        
+
       - name: 🔍 Run type checking
         run: pnpm tsc --noEmit
-        
+
       - name: 🧹 Run ESLint
         run: pnpm lint
-        
+
       - name: 💅 Check code formatting
         run: pnpm format:check
-        
+
       - name: 🧪 Run tests
         run: pnpm test:run
-        
+
       - name: 📊 Generate test coverage
         run: pnpm test:coverage
-        
+
       - name: 📈 Upload coverage reports
         uses: codecov/codecov-action@v4
         if: always()
@@ -75,22 +75,22 @@ jobs:
     name: Build Application
     runs-on: ubuntu-latest
     needs: quality-check
-    
+
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
-        
+
       - name: 📦 Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 9
-          
+
       - name: 🔧 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
-          
+
       - name: 💾 Cache Next.js build
         uses: actions/cache@v4
         with:
@@ -100,17 +100,17 @@ jobs:
           key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
-            
+
       - name: 📚 Install dependencies
         run: pnpm install --frozen-lockfile
-        
+
       - name: 🏗️ Build application
         run: pnpm build
-        
+
       - name: 📊 Analyze bundle size
         run: pnpm analyze
         continue-on-error: true
-        
+
       - name: 📤 Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -119,7 +119,7 @@ jobs:
             .next/
             out/
           retention-days: 7
-          
+
       - name: 📤 Upload bundle analysis
         uses: actions/upload-artifact@v4
         with:
@@ -130,26 +130,26 @@ jobs:
   security-check:
     name: Security Audit
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
-        
+
       - name: 📦 Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 9
-          
+
       - name: 🔧 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
-          
+
       - name: 🔒 Run security audit
         run: pnpm audit --audit-level=moderate
         continue-on-error: true
-        
+
       - name: 🛡️ Run Snyk security test
         uses: snyk/actions/node@master
         continue-on-error: true
@@ -161,33 +161,33 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     if: github.event_name == 'pull_request'
-    
+
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
-        
+
       - name: 📦 Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 9
-          
+
       - name: 🔧 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
-          
+
       - name: 📚 Install dependencies
         run: pnpm install --frozen-lockfile
-        
+
       - name: 🏗️ Build application
         run: pnpm build
-        
+
       - name: 🚀 Start production server
         run: |
           pnpm start &
           sleep 10
-          
+
       - name: 🔍 Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@v11
         with:
@@ -201,11 +201,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     if: github.event_name == 'pull_request'
-    
+
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
-        
+
       - name: 🚀 Deploy to Vercel Preview
         uses: amondnet/vercel-action@v25
         with:

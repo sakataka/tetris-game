@@ -11,13 +11,9 @@ export type MockPlaySound = Mock<(soundKey: SoundKey) => void>;
 // ストア状態更新用の型安全なモック
 export interface MockStoreActions {
   setState: <T extends Record<string, unknown>>(newState: Partial<T>) => void;
-  addHighScore: Mock<(score: {
-    id: string;
-    score: number;
-    level: number;
-    lines: number;
-    date: number;
-  }) => void>;
+  addHighScore: Mock<
+    (score: { id: string; score: number; level: number; lines: number; date: number }) => void
+  >;
   updateStatistics: Mock<(stats: Record<string, unknown>) => void>;
 }
 

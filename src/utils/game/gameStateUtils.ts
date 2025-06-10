@@ -1,6 +1,12 @@
 import { GameState, Tetromino, SoundKey, LineEffectState } from '../../types/tetris';
 import { SCORES } from '../../constants';
-import { placePiece, clearLines, createParticles, isValidPosition, getRandomTetromino } from './tetrisUtils';
+import {
+  placePiece,
+  clearLines,
+  createParticles,
+  isValidPosition,
+  getRandomTetromino,
+} from './tetrisUtils';
 
 interface ScoreCalculationResult {
   newScore: number;
@@ -36,17 +42,24 @@ export function calculateScoreIncrease(
 ): ScoreCalculationResult {
   const newLines = currentLines + linesCleared;
   const newLevel = Math.floor(newLines / 10) + 1;
-  const newScore = currentScore + 
-    (linesCleared === 1 ? SCORES.SINGLE : 
-     linesCleared === 2 ? SCORES.DOUBLE :
-     linesCleared === 3 ? SCORES.TRIPLE :
-     linesCleared === 4 ? SCORES.TETRIS : 0) * newLevel +
+  const newScore =
+    currentScore +
+    (linesCleared === 1
+      ? SCORES.SINGLE
+      : linesCleared === 2
+        ? SCORES.DOUBLE
+        : linesCleared === 3
+          ? SCORES.TRIPLE
+          : linesCleared === 4
+            ? SCORES.TETRIS
+            : 0) *
+      newLevel +
     bonusPoints;
 
   return {
     newScore,
     newLevel,
-    newLines
+    newLines,
   };
 }
 
@@ -56,11 +69,11 @@ export function calculateScoreIncrease(
 export function processLineClear(board: (string | null)[][], piece: Tetromino): LineClearResult {
   const newBoard = placePiece(board, piece);
   const { newBoard: clearedBoard, linesCleared, linesToClear } = clearLines(newBoard);
-  
+
   return {
     newBoard: clearedBoard,
     linesCleared,
-    linesToClear
+    linesToClear,
   };
 }
 
@@ -86,11 +99,11 @@ export function createLineEffects(
       playSound('lineClear');
     }
   }
-  
+
   return {
     flashingLines: linesToClear,
     shaking: true,
-    particles: createParticles(linesToClear, board)
+    particles: createParticles(linesToClear, board),
   };
 }
 
@@ -107,17 +120,17 @@ export function checkGameOver(
     if (playSound) {
       playSound('gameOver');
     }
-    
+
     return {
       isGameOver: true,
       gameOverState: {
-        gameOver: true
-      }
+        gameOver: true,
+      },
     };
   }
 
   return {
-    isGameOver: false
+    isGameOver: false,
   };
 }
 
@@ -132,7 +145,7 @@ export function updateGameStateWithPiece(
   gameOverResult: GameOverCheckResult
 ): GameState {
   const nextPiece = getRandomTetromino();
-  
+
   // ゲームオーバーの場合
   if (gameOverResult.isGameOver) {
     return {
@@ -142,7 +155,7 @@ export function updateGameStateWithPiece(
       score: scoreResult.newScore,
       level: scoreResult.newLevel,
       lines: scoreResult.newLines,
-      lineEffect: lineEffect
+      lineEffect: lineEffect,
     };
   }
 
@@ -155,6 +168,6 @@ export function updateGameStateWithPiece(
     score: scoreResult.newScore,
     level: scoreResult.newLevel,
     lines: scoreResult.newLines,
-    lineEffect: lineEffect
+    lineEffect: lineEffect,
   };
 }

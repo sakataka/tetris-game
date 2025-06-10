@@ -27,14 +27,14 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
       hasError: false,
       error: null,
       errorId: null,
-      retryCount: 0
+      retryCount: 0,
     };
   }
 
   static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
     return {
       hasError: true,
-      error
+      error,
     };
   }
 
@@ -47,23 +47,23 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         action: 'component_render',
         additionalData: {
           componentStack: errorInfo.componentStack,
-          errorBoundaryLevel: this.props.level
-        }
+          errorBoundaryLevel: this.props.level,
+        },
       },
       {
         recoverable: this.state.retryCount < this.maxRetries,
         retryable: true,
         userMessage: 'コンポーネントの表示でエラーが発生しました',
-        cause: error
+        cause: error,
       }
     );
 
     // エラーハンドラーで処理
     errorHandler.handleError(appError);
-    
+
     // 状態を更新
     this.setState({
-      errorId: appError.id
+      errorId: appError.id,
     });
 
     // 外部のエラーコールバックを実行
@@ -83,11 +83,11 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   private handleRetry = () => {
     if (this.state.retryCount < this.maxRetries) {
-      this.setState(prevState => ({
+      this.setState((prevState) => ({
         hasError: false,
         error: null,
         errorId: null,
-        retryCount: prevState.retryCount + 1
+        retryCount: prevState.retryCount + 1,
       }));
     }
   };
@@ -97,7 +97,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
       hasError: false,
       error: null,
       errorId: null,
-      retryCount: 0
+      retryCount: 0,
     });
   };
 
@@ -121,48 +121,46 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   private renderPageError() {
     const { retryCount } = this.state;
-    
+
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-purple-900 to-violet-900">
-        <div className="text-center text-white p-8 max-w-md mx-auto">
-          <div className="mb-6">
-            <div className="text-6xl mb-4">💥</div>
-            <h1 className="text-3xl font-bold mb-2 text-red-400">システムエラー</h1>
-            <p className="text-gray-300 mb-4">
+      <div className='min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-purple-900 to-violet-900'>
+        <div className='text-center text-white p-8 max-w-md mx-auto'>
+          <div className='mb-6'>
+            <div className='text-6xl mb-4'>💥</div>
+            <h1 className='text-3xl font-bold mb-2 text-red-400'>システムエラー</h1>
+            <p className='text-gray-300 mb-4'>
               申し訳ございません。予期しないエラーが発生しました。
             </p>
           </div>
 
-          <div className="space-y-4">
+          <div className='space-y-4'>
             {retryCount < this.maxRetries ? (
               <button
                 onClick={this.handleRetry}
-                className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-400 hover:to-purple-400 
-                          text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105"
+                className='w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-400 hover:to-purple-400 
+                          text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105'
               >
                 再試行 ({this.maxRetries - retryCount}回まで)
               </button>
             ) : (
               <button
                 onClick={() => window.location.reload()}
-                className="w-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-400 hover:to-pink-400 
-                          text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105"
+                className='w-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-400 hover:to-pink-400 
+                          text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105'
               >
                 ページを再読み込み
               </button>
             )}
 
             <button
-              onClick={() => window.location.href = '/'}
-              className="w-full bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-lg transition-colors"
+              onClick={() => (window.location.href = '/')}
+              className='w-full bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-lg transition-colors'
             >
               ホームに戻る
             </button>
           </div>
 
-          <div className="mt-6 text-xs text-gray-400">
-            エラーID: {this.state.errorId}
-          </div>
+          <div className='mt-6 text-xs text-gray-400'>エラーID: {this.state.errorId}</div>
         </div>
       </div>
     );
@@ -172,18 +170,16 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     const { retryCount } = this.state;
 
     return (
-      <div className="hologram neon-border p-6 rounded-lg text-center">
-        <div className="text-yellow-400 text-4xl mb-4">⚠️</div>
-        <h3 className="text-lg font-bold text-yellow-400 mb-2">セクションエラー</h3>
-        <p className="text-gray-300 text-sm mb-4">
-          この部分の表示中にエラーが発生しました
-        </p>
-        
+      <div className='hologram neon-border p-6 rounded-lg text-center'>
+        <div className='text-yellow-400 text-4xl mb-4'>⚠️</div>
+        <h3 className='text-lg font-bold text-yellow-400 mb-2'>セクションエラー</h3>
+        <p className='text-gray-300 text-sm mb-4'>この部分の表示中にエラーが発生しました</p>
+
         {retryCount < this.maxRetries && (
           <button
             onClick={this.handleRetry}
-            className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 
-                      text-white font-bold py-2 px-4 rounded transition-all duration-300"
+            className='bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 
+                      text-white font-bold py-2 px-4 rounded transition-all duration-300'
           >
             再試行
           </button>
@@ -194,13 +190,13 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   private renderComponentError() {
     return (
-      <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-center">
-        <div className="text-red-400 text-2xl mb-2">🔧</div>
-        <p className="text-red-300 text-sm mb-2">コンポーネントエラー</p>
+      <div className='bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-center'>
+        <div className='text-red-400 text-2xl mb-2'>🔧</div>
+        <p className='text-red-300 text-sm mb-2'>コンポーネントエラー</p>
         {this.state.retryCount < this.maxRetries && (
           <button
             onClick={this.handleRetry}
-            className="bg-red-500 hover:bg-red-400 text-white text-xs py-1 px-3 rounded transition-colors"
+            className='bg-red-500 hover:bg-red-400 text-white text-xs py-1 px-3 rounded transition-colors'
           >
             再試行
           </button>

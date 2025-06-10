@@ -4,7 +4,13 @@ import React, { useState, useCallback } from 'react';
 import { ThemeSelectorMemo } from './ThemeSelector';
 import { ColorPaletteEditorMemo } from './ColorPaletteEditor';
 import { AccessibilitySettingsMemo } from './AccessibilitySettings';
-import { ThemeVariant, ColorPalette, ColorBlindnessType, ContrastLevel, AnimationIntensity } from '../types/tetris';
+import {
+  ThemeVariant,
+  ColorPalette,
+  ColorBlindnessType,
+  ContrastLevel,
+  AnimationIntensity,
+} from '../types/tetris';
 
 interface ThemeSettingsProps {
   currentTheme: ThemeVariant;
@@ -44,56 +50,58 @@ export default function ThemeSettings({
   onEffectIntensityChange,
   onAnimationsToggle,
   onResetToDefault,
-  className = ''
+  className = '',
 }: ThemeSettingsProps) {
+  const [activeTab, setActiveTab] = useState<'theme' | 'colors' | 'accessibility' | 'effects'>(
+    'theme'
+  );
 
-  const [activeTab, setActiveTab] = useState<'theme' | 'colors' | 'accessibility' | 'effects'>('theme');
-
-  const handleEffectIntensityChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    onEffectIntensityChange(parseFloat(event.target.value));
-  }, [onEffectIntensityChange]);
+  const handleEffectIntensityChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      onEffectIntensityChange(parseFloat(event.target.value));
+    },
+    [onEffectIntensityChange]
+  );
 
   const tabs = [
     { id: 'theme', label: 'テーマ選択', icon: '🎨' },
     { id: 'colors', label: 'カラー設定', icon: '🌈' },
     { id: 'accessibility', label: 'アクセシビリティ', icon: '♿' },
-    { id: 'effects', label: 'エフェクト', icon: '✨' }
+    { id: 'effects', label: 'エフェクト', icon: '✨' },
   ] as const;
 
   return (
     <div className={`theme-settings ${className}`}>
       {/* タブナビゲーション */}
-      <div className="flex flex-wrap gap-1 mb-4 p-1 rounded-lg bg-cyber-cyan-10">
-        {tabs.map(tab => (
+      <div className='flex flex-wrap gap-1 mb-4 p-1 rounded-lg bg-cyber-cyan-10'>
+        {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`flex-1 min-w-0 px-3 py-2 rounded-md text-sm font-medium transition-colors
-              ${activeTab === tab.id 
-                ? 'bg-cyber-cyan text-background' 
-                : 'text-cyber-cyan hover:bg-cyber-cyan-20'
+              ${
+                activeTab === tab.id
+                  ? 'bg-cyber-cyan text-background'
+                  : 'text-cyber-cyan hover:bg-cyber-cyan-20'
               }`}
           >
-            <span className="hidden sm:inline">{tab.icon} </span>
-            <span className="truncate">{tab.label}</span>
+            <span className='hidden sm:inline'>{tab.icon} </span>
+            <span className='truncate'>{tab.label}</span>
           </button>
         ))}
       </div>
 
       {/* タブコンテンツ */}
-      <div className="min-h-[400px]">
+      <div className='min-h-[400px]'>
         {activeTab === 'theme' && (
-          <div className="space-y-4">
-            <ThemeSelectorMemo
-              currentTheme={currentTheme}
-              onThemeChange={onThemeChange}
-            />
-            
-            <div className="flex gap-2">
+          <div className='space-y-4'>
+            <ThemeSelectorMemo currentTheme={currentTheme} onThemeChange={onThemeChange} />
+
+            <div className='flex gap-2'>
               <button
                 onClick={onResetToDefault}
-                className="px-4 py-2 rounded bg-cyber-red-20 border border-cyber-red-30
-                           text-cyber-red hover:bg-cyber-red-30 transition-colors text-sm"
+                className='px-4 py-2 rounded bg-cyber-red-20 border border-cyber-red-30
+                           text-cyber-red hover:bg-cyber-red-30 transition-colors text-sm'
               >
                 すべてリセット
               </button>
@@ -102,10 +110,7 @@ export default function ThemeSettings({
         )}
 
         {activeTab === 'colors' && (
-          <ColorPaletteEditorMemo
-            colors={colors}
-            onColorsChange={onColorsChange}
-          />
+          <ColorPaletteEditorMemo colors={colors} onColorsChange={onColorsChange} />
         )}
 
         {activeTab === 'accessibility' && (
@@ -119,49 +124,47 @@ export default function ThemeSettings({
         )}
 
         {activeTab === 'effects' && (
-          <div className="space-y-6">
+          <div className='space-y-6'>
             {/* エフェクト強度 */}
             <div>
-              <label className="block text-sm font-medium mb-2 text-cyber-cyan">
+              <label className='block text-sm font-medium mb-2 text-cyber-cyan'>
                 エフェクト強度: {(effectIntensity * 100).toFixed(0)}%
               </label>
               <input
-                type="range"
-                min="0"
-                max="2"
-                step="0.1"
+                type='range'
+                min='0'
+                max='2'
+                step='0.1'
                 value={effectIntensity}
                 onChange={handleEffectIntensityChange}
-                className="w-full h-2 rounded-lg appearance-none cursor-pointer
-                           bg-cyber-cyan-20 slider-thumb"
+                className='w-full h-2 rounded-lg appearance-none cursor-pointer
+                           bg-cyber-cyan-20 slider-thumb'
                 style={{
-                  background: `linear-gradient(to right, var(--cyber-cyan) 0%, var(--cyber-cyan) ${effectIntensity * 50}%, var(--cyber-cyan-20) ${effectIntensity * 50}%, var(--cyber-cyan-20) 100%)`
+                  background: `linear-gradient(to right, var(--cyber-cyan) 0%, var(--cyber-cyan) ${effectIntensity * 50}%, var(--cyber-cyan-20) ${effectIntensity * 50}%, var(--cyber-cyan-20) 100%)`,
                 }}
               />
-              <div className="flex justify-between text-xs text-cyber-purple mt-1">
+              <div className='flex justify-between text-xs text-cyber-purple mt-1'>
                 <span>弱</span>
                 <span>標準</span>
                 <span>強</span>
               </div>
-              <p className="text-xs text-cyber-purple mt-2">
+              <p className='text-xs text-cyber-purple mt-2'>
                 ネオンエフェクト、ブラー、グローの強度を調整します
               </p>
             </div>
 
             {/* アニメーション有効/無効 */}
             <div>
-              <label className="flex items-center space-x-3 cursor-pointer">
+              <label className='flex items-center space-x-3 cursor-pointer'>
                 <input
-                  type="checkbox"
+                  type='checkbox'
                   checked={animations}
                   onChange={onAnimationsToggle}
-                  className="w-4 h-4 accent-cyber-cyan rounded focus:ring-2 focus:ring-cyber-cyan"
+                  className='w-4 h-4 accent-cyber-cyan rounded focus:ring-2 focus:ring-cyber-cyan'
                 />
                 <div>
-                  <span className="text-sm font-medium text-cyber-cyan">
-                    アニメーション有効
-                  </span>
-                  <p className="text-xs text-cyber-purple">
+                  <span className='text-sm font-medium text-cyber-cyan'>アニメーション有効</span>
+                  <p className='text-xs text-cyber-purple'>
                     浮遊アニメーション、パルス効果等を有効にします
                   </p>
                 </div>
@@ -169,23 +172,23 @@ export default function ThemeSettings({
             </div>
 
             {/* エフェクトプレビュー */}
-            <div className="p-4 rounded-lg hologram">
-              <div className="text-sm font-medium mb-3 text-cyber-cyan">エフェクトプレビュー</div>
-              <div className="space-y-3">
-                <div 
-                  className="p-3 rounded neon-border text-center"
+            <div className='p-4 rounded-lg hologram'>
+              <div className='text-sm font-medium mb-3 text-cyber-cyan'>エフェクトプレビュー</div>
+              <div className='space-y-3'>
+                <div
+                  className='p-3 rounded neon-border text-center'
                   style={{
                     filter: `brightness(${0.8 + effectIntensity * 0.4}) saturate(${0.8 + effectIntensity * 0.4})`,
-                    animation: animations ? 'pulse 2s infinite' : 'none'
+                    animation: animations ? 'pulse 2s infinite' : 'none',
                   }}
                 >
                   ネオンエフェクト
                 </div>
-                <div 
-                  className="p-3 rounded hologram-purple text-center"
+                <div
+                  className='p-3 rounded hologram-purple text-center'
                   style={{
                     backdropFilter: `blur(${5 + effectIntensity * 10}px)`,
-                    animation: animations ? 'float 3s ease-in-out infinite' : 'none'
+                    animation: animations ? 'float 3s ease-in-out infinite' : 'none',
                   }}
                 >
                   ホログラム + ブラー

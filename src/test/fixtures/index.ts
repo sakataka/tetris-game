@@ -1,6 +1,6 @@
 /**
  * テストフィクスチャ統合エクスポート
- * 
+ *
  * 全てのモックファクトリとテストユーティリティを
  * 統一インターフェースで提供
  */
@@ -16,7 +16,7 @@ export {
   createTestFixtures,
   setupAsyncTest,
   expectToThrow,
-  measurePerformance
+  measurePerformance,
 } from './mockFactory';
 
 // 共通テストユーティリティ

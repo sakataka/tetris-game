@@ -13,13 +13,12 @@ export function useThemeManager({
   themeState,
   setTheme,
   updateThemeState,
-  setAccessibilityOptions
+  setAccessibilityOptions,
 }: UseThemeManagerProps) {
-
   // テーマの初期化と適用
   useEffect(() => {
     let config = { ...themeState.config };
-    
+
     // 色覚異常フィルターを適用
     if (themeState.accessibility.colorBlindnessType !== 'none') {
       config.colors = applyColorBlindnessFilter(
@@ -27,27 +26,24 @@ export function useThemeManager({
         themeState.accessibility.colorBlindnessType
       );
     }
-    
+
     // コントラスト調整を適用
     if (themeState.accessibility.contrast !== 'normal') {
-      config.colors = adjustColorsForContrast(
-        config.colors,
-        themeState.accessibility.contrast
-      );
+      config.colors = adjustColorsForContrast(config.colors, themeState.accessibility.contrast);
     }
-    
+
     // アニメーション設定を更新
     config = {
       ...config,
       accessibility: {
         ...config.accessibility,
-        animationIntensity: themeState.accessibility.animationIntensity
-      }
+        animationIntensity: themeState.accessibility.animationIntensity,
+      },
     };
-    
+
     // テーマを適用
     initializeTheme(config);
-    
+
     // ローカルストレージに保存
     try {
       localStorage.setItem('tetris-theme-state', JSON.stringify(themeState));
@@ -59,7 +55,7 @@ export function useThemeManager({
   // システムの配色設定変更を監視
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    
+
     const handleSystemThemeChange = (e: MediaQueryListEvent) => {
       // システム配色が変更された時の処理（必要に応じて）
       console.log('System color scheme changed:', e.matches ? 'dark' : 'light');
@@ -72,12 +68,12 @@ export function useThemeManager({
   // アクセシビリティ設定の変更を監視
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    
+
     const handleReducedMotionChange = (e: MediaQueryListEvent) => {
       if (e.matches && themeState.accessibility.animationIntensity === 'enhanced') {
         setAccessibilityOptions({
           animationIntensity: 'reduced',
-          reducedMotion: true
+          reducedMotion: true,
         });
       }
     };
@@ -87,19 +83,28 @@ export function useThemeManager({
   }, [themeState.accessibility.animationIntensity, setAccessibilityOptions]);
 
   // テーマ変更関数
-  const changeTheme = useCallback((newTheme: ThemeVariant) => {
-    setTheme(newTheme);
-  }, [setTheme]);
+  const changeTheme = useCallback(
+    (newTheme: ThemeVariant) => {
+      setTheme(newTheme);
+    },
+    [setTheme]
+  );
 
   // アクセシビリティ設定変更関数
-  const updateAccessibility = useCallback((accessibility: Partial<ThemeState['accessibility']>) => {
-    setAccessibilityOptions(accessibility);
-  }, [setAccessibilityOptions]);
+  const updateAccessibility = useCallback(
+    (accessibility: Partial<ThemeState['accessibility']>) => {
+      setAccessibilityOptions(accessibility);
+    },
+    [setAccessibilityOptions]
+  );
 
   // エフェクト強度変更関数
-  const updateEffectIntensity = useCallback((intensity: number) => {
-    updateThemeState({ effectIntensity: intensity });
-  }, [updateThemeState]);
+  const updateEffectIntensity = useCallback(
+    (intensity: number) => {
+      updateThemeState({ effectIntensity: intensity });
+    },
+    [updateThemeState]
+  );
 
   // アニメーション有効/無効切り替え
   const toggleAnimations = useCallback(() => {
@@ -131,6 +136,6 @@ export function useThemeManager({
     updateAccessibility,
     updateEffectIntensity,
     toggleAnimations,
-    loadThemeFromStorage
+    loadThemeFromStorage,
   };
 }

@@ -6,17 +6,17 @@ interface SessionStore {
   currentSession: PlaySession | null;
   playSessions: readonly PlaySession[];
   errors: readonly GameError[];
-  
+
   // Session Actions
   startPlaySession: () => void;
   endPlaySession: () => void;
   incrementGameCount: () => void;
-  
+
   // Error Actions
   addError: (error: GameError) => void;
   clearErrors: () => void;
   clearError: (errorId: string) => void;
-  
+
   // Utilities
   getActiveSession: () => PlaySession | null;
   getSessionDuration: (sessionId?: string) => number;
@@ -28,18 +28,18 @@ export const useSessionStore = create<SessionStore>()((set, get) => ({
   currentSession: null,
   playSessions: [],
   errors: [],
-  
+
   // Session Actions
   startPlaySession: () =>
     set((state) => {
       const newPlaySessions = [...state.playSessions];
-      
+
       // End current session if exists
       if (state.currentSession?.isActive) {
         const completedSession: PlaySession = {
           ...state.currentSession,
           endTime: Date.now(),
-          isActive: false
+          isActive: false,
         };
         newPlaySessions.push(completedSession);
       }
@@ -49,60 +49,60 @@ export const useSessionStore = create<SessionStore>()((set, get) => ({
         id: `session_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
         startTime: Date.now(),
         gameCount: 0,
-        isActive: true
+        isActive: true,
       };
-      
+
       return {
         ...state,
         currentSession: newSession,
-        playSessions: newPlaySessions
+        playSessions: newPlaySessions,
       };
     }),
-  
+
   endPlaySession: () =>
     set((state) => {
       if (!state.currentSession?.isActive) {
         return state;
       }
-      
+
       const completedSession: PlaySession = {
         ...state.currentSession,
         endTime: Date.now(),
-        isActive: false
+        isActive: false,
       };
-      
+
       // Only add if not already in the list (prevent duplicates)
-      const existingSession = state.playSessions.find(s => s.id === completedSession.id);
+      const existingSession = state.playSessions.find((s) => s.id === completedSession.id);
       const newPlaySessions = [...state.playSessions];
-      
+
       if (!existingSession) {
         newPlaySessions.push(completedSession);
       }
-      
+
       return {
         ...state,
         currentSession: null,
-        playSessions: newPlaySessions
+        playSessions: newPlaySessions,
       };
     }),
-  
+
   incrementGameCount: () =>
     set((state) => {
       if (!state.currentSession?.isActive) {
         return state;
       }
-      
+
       const newCurrentSession = {
         ...state.currentSession,
-        gameCount: state.currentSession.gameCount + 1
+        gameCount: state.currentSession.gameCount + 1,
       };
-      
+
       return {
         ...state,
-        currentSession: newCurrentSession
+        currentSession: newCurrentSession,
       };
     }),
-  
+
   // Error Actions
   addError: (error) =>
     set((state) => {
@@ -113,48 +113,46 @@ export const useSessionStore = create<SessionStore>()((set, get) => ({
       }
       return {
         ...state,
-        errors: newErrors
+        errors: newErrors,
       };
     }),
-  
+
   clearErrors: () =>
     set((state) => ({
       ...state,
-      errors: []
+      errors: [],
     })),
-  
+
   clearError: (errorId) =>
     set((state) => ({
       ...state,
-      errors: state.errors.filter(error => 
-        error.timestamp.toString() !== errorId
-      )
+      errors: state.errors.filter((error) => error.timestamp.toString() !== errorId),
     })),
-  
+
   // Utilities
   getActiveSession: () => {
     const { currentSession } = get();
     return currentSession?.isActive ? currentSession : null;
   },
-  
+
   getSessionDuration: (sessionId) => {
     const { currentSession, playSessions } = get();
-    
+
     if (sessionId) {
-      const session = playSessions.find(s => s.id === sessionId);
+      const session = playSessions.find((s) => s.id === sessionId);
       if (session && session.endTime) {
         return (session.endTime - session.startTime) / 1000; // seconds
       }
     }
-    
+
     // Get current session duration
     if (currentSession?.isActive) {
       return (Date.now() - currentSession.startTime) / 1000; // seconds
     }
-    
+
     return 0;
   },
-  
+
   getTotalPlayTime: () => {
     const { playSessions } = get();
     return playSessions.reduce((total, session) => {
@@ -163,7 +161,7 @@ export const useSessionStore = create<SessionStore>()((set, get) => ({
       }
       return total;
     }, 0);
-  }
+  },
 }));
 
 // Selector hooks for optimized access

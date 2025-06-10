@@ -1,6 +1,6 @@
 /**
  * 共通テストユーティリティ関数
- * 
+ *
  * テスト間で再利用可能なヘルパー関数とアサーション
  */
 
@@ -18,9 +18,9 @@ export const expectValidHighScore = (highScore: unknown) => {
     score: expect.any(Number),
     level: expect.any(Number),
     lines: expect.any(Number),
-    date: expect.any(Number)
+    date: expect.any(Number),
   });
-  
+
   const score = highScore as HighScore;
   expect(score.score).toBeGreaterThanOrEqual(0);
   expect(score.level).toBeGreaterThanOrEqual(1);
@@ -40,9 +40,9 @@ export const expectValidStatistics = (statistics: unknown) => {
     bestScore: expect.any(Number),
     averageScore: expect.any(Number),
     bestStreak: expect.any(Number),
-    tetrisCount: expect.any(Number)
+    tetrisCount: expect.any(Number),
   });
-  
+
   const stats = statistics as GameStatistics;
   expect(stats.totalGames).toBeGreaterThanOrEqual(0);
   expect(stats.totalScore).toBeGreaterThanOrEqual(0);
@@ -64,17 +64,17 @@ export const expectValidThemeConfig = (theme: unknown) => {
       primary: expect.any(String),
       secondary: expect.any(String),
       accent: expect.any(String),
-      background: expect.any(String)
+      background: expect.any(String),
     }),
     animations: expect.objectContaining({
       enabled: expect.any(Boolean),
-      intensity: expect.stringMatching(/^(none|reduced|normal|enhanced)$/)
+      intensity: expect.stringMatching(/^(none|reduced|normal|enhanced)$/),
     }),
     accessibility: expect.objectContaining({
       colorBlindness: expect.stringMatching(/^(none|protanopia|deuteranopia|tritanopia)$/),
       contrast: expect.stringMatching(/^(low|normal|high)$/),
-      reducedMotion: expect.any(Boolean)
-    })
+      reducedMotion: expect.any(Boolean),
+    }),
   });
 };
 
@@ -97,11 +97,7 @@ export const expectArraySorted = <T>(
  * ハイスコア配列の正しいソート検証
  */
 export const expectHighScoresSorted = (highScores: HighScore[]) => {
-  expectArraySorted(
-    highScores,
-    (a, b) => b.score - a.score,
-    'desc'
-  );
+  expectArraySorted(highScores, (a, b) => b.score - a.score, 'desc');
 };
 
 // ===== 数値検証ヘルパー =====
@@ -109,12 +105,7 @@ export const expectHighScoresSorted = (highScores: HighScore[]) => {
 /**
  * 数値が指定範囲内にあることを検証
  */
-export const expectNumberInRange = (
-  value: number,
-  min: number,
-  max: number,
-  message?: string
-) => {
+export const expectNumberInRange = (value: number, min: number, max: number, message?: string) => {
   expect(value, message).toBeGreaterThanOrEqual(min);
   expect(value, message).toBeLessThanOrEqual(max);
 };
@@ -146,10 +137,12 @@ export const expectExecutionTime = async <T>(
   const start = performance.now();
   const result = await fn();
   const duration = performance.now() - start;
-  
-  expect(duration, `${label || 'Execution'} took ${duration}ms, expected < ${maxTimeMs}ms`)
-    .toBeLessThan(maxTimeMs);
-  
+
+  expect(
+    duration,
+    `${label || 'Execution'} took ${duration}ms, expected < ${maxTimeMs}ms`
+  ).toBeLessThan(maxTimeMs);
+
   return result;
 };
 
@@ -157,14 +150,14 @@ export const expectExecutionTime = async <T>(
  * 非同期操作の完了待機
  */
 export const waitForNextTick = (): Promise<void> => {
-  return new Promise(resolve => setTimeout(resolve, 0));
+  return new Promise((resolve) => setTimeout(resolve, 0));
 };
 
 /**
  * 指定時間の待機
  */
 export const waitFor = (ms: number): Promise<void> => {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
 // ===== モックリセットヘルパー =====
@@ -173,7 +166,7 @@ export const waitFor = (ms: number): Promise<void> => {
  * 複数のモック関数を一括リセット
  */
 export const resetMocks = (...mocks: Array<{ mockReset?: () => void; mockClear?: () => void }>) => {
-  mocks.forEach(mock => {
+  mocks.forEach((mock) => {
     if (mock.mockReset) {
       mock.mockReset();
     } else if (mock.mockClear) {
@@ -201,14 +194,14 @@ export const expectAsyncToThrow = async (
   expectedError?: string | RegExp | Error
 ): Promise<Error> => {
   let thrownError: Error | null = null;
-  
+
   try {
     await asyncFn();
     expect.fail('Expected function to throw an error, but it did not');
   } catch (error) {
     thrownError = error as Error;
   }
-  
+
   if (expectedError) {
     if (typeof expectedError === 'string') {
       expect(thrownError.message).toContain(expectedError);
@@ -219,7 +212,7 @@ export const expectAsyncToThrow = async (
       expect(thrownError.message).toBe(expectedError.message);
     }
   }
-  
+
   return thrownError;
 };
 

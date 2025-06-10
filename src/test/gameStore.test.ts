@@ -19,8 +19,8 @@ const createTestStore = () => {
       averageScore: 0,
       playTime: 0,
       bestStreak: 0,
-      tetrisCount: 0
-    }
+      tetrisCount: 0,
+    },
   };
 
   return {
@@ -32,16 +32,16 @@ const createTestStore = () => {
       const newHighScores = [...state.highScores, score]
         .sort((a, b) => b.score - a.score)
         .slice(0, 10);
-      
+
       const bestScore = Math.max(state.statistics.bestScore, score.score);
-      
+
       state = {
         ...state,
         highScores: newHighScores,
         statistics: {
           ...state.statistics,
-          bestScore
-        }
+          bestScore,
+        },
       };
     },
     clearHighScores: () => {
@@ -65,10 +65,10 @@ const createTestStore = () => {
           averageScore: 0,
           playTime: 0,
           bestStreak: 0,
-          tetrisCount: 0
-        }
+          tetrisCount: 0,
+        },
       };
-    }
+    },
   };
 };
 
@@ -89,7 +89,7 @@ describe('GameStore - ハイスコア機能', () => {
         level: 5,
         lines: 25,
         date: Date.now(),
-        playerName: 'テストプレイヤー'
+        playerName: 'テストプレイヤー',
       };
 
       testStore.addHighScore(newScore);
@@ -105,25 +105,25 @@ describe('GameStore - ハイスコア機能', () => {
           score: 10000,
           level: 3,
           lines: 15,
-          date: Date.now()
+          date: Date.now(),
         },
         {
           id: 'test-2',
           score: 25000,
           level: 7,
           lines: 40,
-          date: Date.now()
+          date: Date.now(),
         },
         {
           id: 'test-3',
           score: 15000,
           level: 5,
           lines: 25,
-          date: Date.now()
-        }
+          date: Date.now(),
+        },
       ];
 
-      scores.forEach(score => testStore.addHighScore(score));
+      scores.forEach((score) => testStore.addHighScore(score));
 
       expect(testStore.getState().highScores).toHaveLength(3);
       expect(testStore.getState().highScores[0].score).toBe(25000);
@@ -138,10 +138,10 @@ describe('GameStore - ハイスコア機能', () => {
         score: (i + 1) * 1000,
         level: i + 1,
         lines: (i + 1) * 2,
-        date: Date.now()
+        date: Date.now(),
       }));
 
-      scores.forEach(score => testStore.addHighScore(score));
+      scores.forEach((score) => testStore.addHighScore(score));
 
       expect(testStore.getState().highScores).toHaveLength(10);
       // 最高スコアが15000、最低が6000であることを確認
@@ -155,7 +155,7 @@ describe('GameStore - ハイスコア機能', () => {
         score: 15000,
         level: 5,
         lines: 25,
-        date: Date.now()
+        date: Date.now(),
       };
 
       testStore.addHighScore(newScore);
@@ -172,7 +172,7 @@ describe('GameStore - ハイスコア機能', () => {
         totalGames: 5,
         totalLines: 50,
         totalScore: 75000,
-        tetrisCount: 3
+        tetrisCount: 3,
       };
 
       testStore.updateStatistics(newStats);
@@ -193,7 +193,7 @@ describe('GameStore - ハイスコア機能', () => {
         score: 25000,
         level: 7,
         lines: 40,
-        date: Date.now()
+        date: Date.now(),
       };
 
       testStore.addHighScore(newScore);
@@ -206,7 +206,7 @@ describe('GameStore - ハイスコア機能', () => {
       testStore.updateStatistics({
         totalGames: 10,
         totalScore: 100000,
-        bestScore: 50000
+        bestScore: 50000,
       });
 
       expect(testStore.getState().statistics.totalGames).toBe(10);

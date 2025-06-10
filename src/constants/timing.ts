@@ -1,6 +1,6 @@
 /**
  * タイミング・アニメーション関連の定数
- * 
+ *
  * フレームレート、アニメーション持続時間、タイマー設定
  */
 
@@ -34,4 +34,4 @@ export const ANIMATIONS = {
 } as const;
 
 // 型エクスポート
-export type SupportedLocale = typeof I18N_CONFIG.SUPPORTED_LOCALES[number];
+export type SupportedLocale = (typeof I18N_CONFIG.SUPPORTED_LOCALES)[number];

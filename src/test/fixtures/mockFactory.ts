@@ -1,6 +1,6 @@
 /**
  * テスト用モックファクトリ
- * 
+ *
  * 重複するモック定義を統一し、型安全で再利用可能な
  * モック生成ユーティリティを提供
  */
@@ -19,14 +19,14 @@ export const createMockAudioSystem = () => {
     createGain: vi.fn(() => ({
       connect: vi.fn(),
       disconnect: vi.fn(),
-      gain: { value: 1 }
+      gain: { value: 1 },
     })),
     createBufferSource: vi.fn(() => ({
       connect: vi.fn(),
       disconnect: vi.fn(),
       start: vi.fn(),
       stop: vi.fn(),
-      buffer: null
+      buffer: null,
     })),
     decodeAudioData: vi.fn().mockResolvedValue(new ArrayBuffer(1024)),
     close: vi.fn().mockResolvedValue(undefined),
@@ -34,7 +34,7 @@ export const createMockAudioSystem = () => {
     destination: {},
     currentTime: 0,
     sampleRate: 44100,
-    state: 'running' as AudioContextState
+    state: 'running' as AudioContextState,
   };
 
   // HTMLAudioElementモック
@@ -51,18 +51,18 @@ export const createMockAudioSystem = () => {
     src: '',
     addEventListener: vi.fn(),
     removeEventListener: vi.fn(),
-    canPlayType: vi.fn().mockReturnValue('probably')
+    canPlayType: vi.fn().mockReturnValue('probably'),
   };
 
   // グローバルモック設定
   Object.defineProperty(window, 'AudioContext', {
     writable: true,
-    value: vi.fn(() => mockAudioContext)
+    value: vi.fn(() => mockAudioContext),
   });
 
   Object.defineProperty(window, 'Audio', {
     writable: true,
-    value: vi.fn(() => mockAudio)
+    value: vi.fn(() => mockAudio),
   });
 
   return {
@@ -85,14 +85,14 @@ export const createMockAudioSystem = () => {
         loadedSounds: ['lineClear', 'pieceLand', 'pieceRotate', 'tetris', 'gameOver', 'hardDrop'],
         activeSounds: 0,
         masterVolume: 0.5,
-        isMuted: false
+        isMuted: false,
       }),
       preloadAllSounds: vi.fn().mockResolvedValue(undefined),
       stopSound: vi.fn(),
       stopAllSounds: vi.fn(),
       unlockAudio: vi.fn().mockResolvedValue(true),
-      dispose: vi.fn()
-    }
+      dispose: vi.fn(),
+    },
   };
 };
 
@@ -107,7 +107,7 @@ export const createMockAudioManager = () => ({
   setVolume: vi.fn(),
   setMasterVolume: vi.fn(),
   unlockAudio: vi.fn().mockResolvedValue(true),
-  getStats: vi.fn().mockReturnValue({ loadedSounds: 6, failedSounds: 0 })
+  getStats: vi.fn().mockReturnValue({ loadedSounds: 6, failedSounds: 0 }),
 });
 
 // ===== DOM環境モック =====
@@ -130,8 +130,10 @@ export const createMockDOMEnvironment = () => {
       clear: vi.fn(() => {
         store = {};
       }),
-      get length() { return Object.keys(store).length; },
-      key: vi.fn((index: number) => Object.keys(store)[index] || null)
+      get length() {
+        return Object.keys(store).length;
+      },
+      key: vi.fn((index: number) => Object.keys(store)[index] || null),
     };
   })();
 
@@ -152,36 +154,36 @@ export const createMockDOMEnvironment = () => {
     style: {
       setProperty: vi.fn(),
       removeProperty: vi.fn(),
-      getPropertyValue: vi.fn().mockReturnValue('')
+      getPropertyValue: vi.fn().mockReturnValue(''),
     },
     classList: {
       add: vi.fn(),
       remove: vi.fn(),
       contains: vi.fn().mockReturnValue(false),
-      toggle: vi.fn()
-    }
+      toggle: vi.fn(),
+    },
   };
 
   // グローバル設定
   Object.defineProperty(window, 'localStorage', {
     value: localStorageMock,
-    writable: true
+    writable: true,
   });
 
   Object.defineProperty(document, 'documentElement', {
     value: mockDocumentElement,
-    writable: true
+    writable: true,
   });
 
   Object.defineProperty(window, 'matchMedia', {
     value: matchMediaMock,
-    writable: true
+    writable: true,
   });
 
   return {
     localStorageMock,
     mockDocumentElement,
-    matchMediaMock
+    matchMediaMock,
   };
 };
 
@@ -195,7 +197,7 @@ export const createMockStore = <T extends Record<string, unknown>>(
   actions: Record<string, ReturnType<typeof vi.fn>> = {}
 ) => {
   const state = { ...initialState, ...actions };
-  
+
   return vi.fn((selector?: (state: T) => unknown) => {
     if (selector) {
       return selector(state as T);
@@ -211,7 +213,7 @@ export const createMockStatisticsStore = () => {
   const mockHighScores: HighScore[] = [
     { id: '1', score: 50000, level: 10, lines: 80, date: Date.now() },
     { id: '2', score: 40000, level: 8, lines: 60, date: Date.now() },
-    { id: '3', score: 30000, level: 6, lines: 40, date: Date.now() }
+    { id: '3', score: 30000, level: 6, lines: 40, date: Date.now() },
   ];
 
   const mockStatistics: GameStatistics = {
@@ -222,7 +224,7 @@ export const createMockStatisticsStore = () => {
     bestScore: 45000,
     averageScore: 8333,
     bestStreak: 3,
-    tetrisCount: 15
+    tetrisCount: 15,
   };
 
   return {
@@ -230,7 +232,7 @@ export const createMockStatisticsStore = () => {
     useStatistics: vi.fn(() => mockStatistics),
     useAddHighScore: vi.fn(),
     useUpdateStatistics: vi.fn(),
-    useClearStatistics: vi.fn()
+    useClearStatistics: vi.fn(),
   };
 };
 
@@ -239,14 +241,16 @@ export const createMockStatisticsStore = () => {
  */
 export const createMockGameStateStore = () => {
   const mockGameState: Partial<GameState> = {
-    board: Array(20).fill(null).map(() => Array(10).fill(0)),
+    board: Array(20)
+      .fill(null)
+      .map(() => Array(10).fill(0)),
     currentPiece: null,
     nextPiece: null,
     score: 0,
     level: 1,
     lines: 0,
     gameOver: false,
-    isPaused: false
+    isPaused: false,
   };
 
   return {
@@ -254,7 +258,7 @@ export const createMockGameStateStore = () => {
     useSetGameState: vi.fn(),
     useResetGame: vi.fn(),
     useTogglePause: vi.fn(),
-    useUpdateParticles: vi.fn()
+    useUpdateParticles: vi.fn(),
   };
 };
 
@@ -270,7 +274,7 @@ export const createTestFixtures = () => ({
     { id: '2', score: 40000, level: 8, lines: 60, date: Date.now() },
     { id: '3', score: 30000, level: 6, lines: 40, date: Date.now() },
     { id: '4', score: 20000, level: 4, lines: 20, date: Date.now() },
-    { id: '5', score: 10000, level: 2, lines: 10, date: Date.now() }
+    { id: '5', score: 10000, level: 2, lines: 10, date: Date.now() },
   ] as HighScore[],
 
   // 統計データ
@@ -282,7 +286,7 @@ export const createTestFixtures = () => ({
     bestScore: 45000,
     averageScore: 8333,
     bestStreak: 3,
-    tetrisCount: 15
+    tetrisCount: 15,
   } as GameStatistics,
 
   // テーマ設定
@@ -292,24 +296,26 @@ export const createTestFixtures = () => ({
       primary: '#00ffff',
       secondary: '#ff00ff',
       accent: '#ffff00',
-      background: '#000011'
+      background: '#000011',
     },
     effects: {
       blur: 0.5,
       glow: 1.0,
       saturation: 1.2,
-      brightness: 1.0
+      brightness: 1.0,
     },
     accessibility: {
       colorBlindnessType: 'none' as const,
       contrast: 'normal' as const,
-      animationIntensity: 'normal' as const
-    }
+      animationIntensity: 'normal' as const,
+    },
   } as ThemeConfig,
 
   // ゲーム状態
   gameState: {
-    board: Array(20).fill(null).map(() => Array(10).fill(0)),
+    board: Array(20)
+      .fill(null)
+      .map(() => Array(10).fill(0)),
     currentPiece: null,
     nextPiece: null,
     score: 0,
@@ -317,8 +323,8 @@ export const createTestFixtures = () => ({
     lines: 0,
     gameOver: false,
     isPaused: false,
-    particles: []
-  } as Partial<GameState>
+    particles: [],
+  } as Partial<GameState>,
 });
 
 // ===== ユーティリティ関数 =====
@@ -340,15 +346,15 @@ export const expectToThrow = async (
   expectedError?: string | RegExp
 ) => {
   let thrownError: Error | null = null;
-  
+
   try {
     await asyncFn();
   } catch (error) {
     thrownError = error as Error;
   }
-  
+
   expect(thrownError).not.toBeNull();
-  
+
   if (expectedError) {
     if (typeof expectedError === 'string') {
       expect(thrownError?.message).toContain(expectedError);
@@ -356,7 +362,7 @@ export const expectToThrow = async (
       expect(thrownError?.message).toMatch(expectedError);
     }
   }
-  
+
   return thrownError;
 };
 
@@ -370,8 +376,8 @@ export const measurePerformance = async <T>(
   const start = performance.now();
   const result = await fn();
   const duration = performance.now() - start;
-  
+
   console.log(`📊 ${label}: ${duration.toFixed(2)}ms`);
-  
+
   return { result, duration };
 };

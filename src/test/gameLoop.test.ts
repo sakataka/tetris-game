@@ -1,6 +1,6 @@
 /**
  * ゲームループ統合テスト
- * 
+ *
  * ゲーム核心機能の統合動作を検証し、
  * ピース操作・自動落下・ライン消去の基本フローを保証する
  */
@@ -11,15 +11,15 @@ import { useGameLoop } from '../hooks/useGameLoop';
 
 // 依存モジュールのモック
 vi.mock('../hooks/useKeyboardInput', () => ({
-  useKeyboardInput: vi.fn()
+  useKeyboardInput: vi.fn(),
 }));
 
 vi.mock('../hooks/useGameTimer', () => ({
-  useGameTimer: vi.fn()
+  useGameTimer: vi.fn(),
 }));
 
 vi.mock('../hooks/useDropTimeCalculator', () => ({
-  useDropTimeCalculator: vi.fn()
+  useDropTimeCalculator: vi.fn(),
 }));
 
 describe('useGameLoop - ゲーム統合テスト', () => {
@@ -47,7 +47,7 @@ describe('useGameLoop - ゲーム統合テスト', () => {
       hardDrop: vi.fn(),
       dropPiece: vi.fn(),
       togglePause: vi.fn(),
-      resetGame: vi.fn()
+      resetGame: vi.fn(),
     };
 
     mockOnDropTimeChange = vi.fn();
@@ -55,7 +55,9 @@ describe('useGameLoop - ゲーム統合テスト', () => {
     // 依存フックのモック
     mockUseGameTimer = vi.mocked((await import('../hooks/useGameTimer')).useGameTimer);
     mockUseKeyboardInput = vi.mocked((await import('../hooks/useKeyboardInput')).useKeyboardInput);
-    mockUseDropTimeCalculator = vi.mocked((await import('../hooks/useDropTimeCalculator')).useDropTimeCalculator);
+    mockUseDropTimeCalculator = vi.mocked(
+      (await import('../hooks/useDropTimeCalculator')).useDropTimeCalculator
+    );
   });
 
   afterEach(() => {
@@ -71,7 +73,7 @@ describe('useGameLoop - ゲーム統合テスト', () => {
         dropTime: 1000,
         initialDropTime: 1000,
         actions: mockActions,
-        onDropTimeChange: mockOnDropTimeChange
+        onDropTimeChange: mockOnDropTimeChange,
       };
 
       renderHook(() => useGameLoop(gameState));
@@ -80,7 +82,7 @@ describe('useGameLoop - ゲーム統合テスト', () => {
       expect(mockUseGameTimer).toHaveBeenCalledWith({
         isActive: true, // !isGameOver && !isPaused
         interval: 1000,
-        onTick: mockActions.dropPiece
+        onTick: mockActions.dropPiece,
       });
 
       expect(mockUseKeyboardInput).toHaveBeenCalledWith({
@@ -92,13 +94,13 @@ describe('useGameLoop - ゲーム統合テスト', () => {
         onHardDrop: mockActions.hardDrop,
         onPause: mockActions.togglePause,
         onReset: mockActions.resetGame,
-        onConfirm: expect.any(Function)
+        onConfirm: expect.any(Function),
       });
 
       expect(mockUseDropTimeCalculator).toHaveBeenCalledWith({
         level: 1,
         initialDropTime: 1000,
-        onDropTimeChange: mockOnDropTimeChange
+        onDropTimeChange: mockOnDropTimeChange,
       });
     });
 
@@ -110,7 +112,7 @@ describe('useGameLoop - ゲーム統合テスト', () => {
         dropTime: 500,
         initialDropTime: 1000,
         actions: mockActions,
-        onDropTimeChange: mockOnDropTimeChange
+        onDropTimeChange: mockOnDropTimeChange,
       };
 
       renderHook(() => useGameLoop(gameState));
@@ -119,13 +121,13 @@ describe('useGameLoop - ゲーム統合テスト', () => {
       expect(mockUseGameTimer).toHaveBeenCalledWith({
         isActive: false, // isGameOver = true
         interval: 500,
-        onTick: mockActions.dropPiece
+        onTick: mockActions.dropPiece,
       });
 
       // キーボード入力にはゲームオーバー状態が渡される
       expect(mockUseKeyboardInput).toHaveBeenCalledWith(
         expect.objectContaining({
-          isGameOver: true
+          isGameOver: true,
         })
       );
     });
@@ -138,7 +140,7 @@ describe('useGameLoop - ゲーム統合テスト', () => {
         dropTime: 700,
         initialDropTime: 1000,
         actions: mockActions,
-        onDropTimeChange: mockOnDropTimeChange
+        onDropTimeChange: mockOnDropTimeChange,
       };
 
       renderHook(() => useGameLoop(gameState));
@@ -147,22 +149,24 @@ describe('useGameLoop - ゲーム統合テスト', () => {
       expect(mockUseGameTimer).toHaveBeenCalledWith({
         isActive: false, // isPaused = true
         interval: 700,
-        onTick: mockActions.dropPiece
+        onTick: mockActions.dropPiece,
       });
     });
   });
 
   describe('キーボード入力統合', () => {
     it('移動コールバックが正しく設定される', () => {
-      renderHook(() => useGameLoop({
-        isGameOver: false,
-        isPaused: false,
-        level: 1,
-        dropTime: 1000,
-        initialDropTime: 1000,
-        actions: mockActions,
-        onDropTimeChange: mockOnDropTimeChange
-      }));
+      renderHook(() =>
+        useGameLoop({
+          isGameOver: false,
+          isPaused: false,
+          level: 1,
+          dropTime: 1000,
+          initialDropTime: 1000,
+          actions: mockActions,
+          onDropTimeChange: mockOnDropTimeChange,
+        })
+      );
 
       // キーボード入力の設定を取得
       const keyboardInputCall = mockUseKeyboardInput.mock.calls[0][0];
@@ -193,15 +197,17 @@ describe('useGameLoop - ゲーム統合テスト', () => {
     });
 
     it('ゲームアクションが直接連携される', () => {
-      renderHook(() => useGameLoop({
-        isGameOver: false,
-        isPaused: false,
-        level: 1,
-        dropTime: 1000,
-        initialDropTime: 1000,
-        actions: mockActions,
-        onDropTimeChange: mockOnDropTimeChange
-      }));
+      renderHook(() =>
+        useGameLoop({
+          isGameOver: false,
+          isPaused: false,
+          level: 1,
+          dropTime: 1000,
+          initialDropTime: 1000,
+          actions: mockActions,
+          onDropTimeChange: mockOnDropTimeChange,
+        })
+      );
 
       const keyboardInputCall = mockUseKeyboardInput.mock.calls[0][0];
 
@@ -234,17 +240,18 @@ describe('useGameLoop - ゲーム統合テスト', () => {
   describe('レベル・速度統合', () => {
     it('レベル変化時の適切な更新', () => {
       const { rerender } = renderHook(
-        ({ level, dropTime }) => useGameLoop({
-          isGameOver: false,
-          isPaused: false,
-          level,
-          dropTime,
-          initialDropTime: 1000,
-          actions: mockActions,
-          onDropTimeChange: mockOnDropTimeChange
-        }),
-        { 
-          initialProps: { level: 1, dropTime: 1000 }
+        ({ level, dropTime }) =>
+          useGameLoop({
+            isGameOver: false,
+            isPaused: false,
+            level,
+            dropTime,
+            initialDropTime: 1000,
+            actions: mockActions,
+            onDropTimeChange: mockOnDropTimeChange,
+          }),
+        {
+          initialProps: { level: 1, dropTime: 1000 },
         }
       );
 
@@ -255,14 +262,14 @@ describe('useGameLoop - ゲーム統合テスト', () => {
       expect(mockUseGameTimer).toHaveBeenLastCalledWith({
         isActive: true,
         interval: 400, // 高速化された間隔
-        onTick: mockActions.dropPiece
+        onTick: mockActions.dropPiece,
       });
 
       // ドロップタイム計算器にも新しいレベルが渡される
       expect(mockUseDropTimeCalculator).toHaveBeenLastCalledWith({
         level: 5,
         initialDropTime: 1000,
-        onDropTimeChange: mockOnDropTimeChange
+        onDropTimeChange: mockOnDropTimeChange,
       });
     });
 
@@ -270,24 +277,26 @@ describe('useGameLoop - ゲーム統合テスト', () => {
       const extremeCases = [
         { level: 0, dropTime: 2000 },
         { level: 99, dropTime: 50 },
-        { level: -1, dropTime: 1000 }
+        { level: -1, dropTime: 1000 },
       ];
 
       extremeCases.forEach(({ level, dropTime }) => {
-        const { unmount } = renderHook(() => useGameLoop({
-          isGameOver: false,
-          isPaused: false,
-          level,
-          dropTime,
-          initialDropTime: 1000,
-          actions: mockActions,
-          onDropTimeChange: mockOnDropTimeChange
-        }));
+        const { unmount } = renderHook(() =>
+          useGameLoop({
+            isGameOver: false,
+            isPaused: false,
+            level,
+            dropTime,
+            initialDropTime: 1000,
+            actions: mockActions,
+            onDropTimeChange: mockOnDropTimeChange,
+          })
+        );
 
         // クラッシュしないことを確認
         expect(mockUseGameTimer).toHaveBeenCalledWith(
           expect.objectContaining({
-            interval: dropTime
+            interval: dropTime,
           })
         );
 
@@ -299,15 +308,16 @@ describe('useGameLoop - ゲーム統合テスト', () => {
   describe('状態変化シナリオ', () => {
     it('ゲーム進行中→一時停止→再開の流れ', () => {
       const { rerender } = renderHook(
-        ({ isPaused }) => useGameLoop({
-          isGameOver: false,
-          isPaused,
-          level: 2,
-          dropTime: 800,
-          initialDropTime: 1000,
-          actions: mockActions,
-          onDropTimeChange: mockOnDropTimeChange
-        }),
+        ({ isPaused }) =>
+          useGameLoop({
+            isGameOver: false,
+            isPaused,
+            level: 2,
+            dropTime: 800,
+            initialDropTime: 1000,
+            actions: mockActions,
+            onDropTimeChange: mockOnDropTimeChange,
+          }),
         { initialProps: { isPaused: false } }
       );
 
@@ -331,15 +341,16 @@ describe('useGameLoop - ゲーム統合テスト', () => {
 
     it('ゲーム進行中→ゲームオーバー→リセットの流れ', () => {
       const { rerender } = renderHook(
-        ({ isGameOver, level }) => useGameLoop({
-          isGameOver,
-          isPaused: false,
-          level,
-          dropTime: 1000,
-          initialDropTime: 1000,
-          actions: mockActions,
-          onDropTimeChange: mockOnDropTimeChange
-        }),
+        ({ isGameOver, level }) =>
+          useGameLoop({
+            isGameOver,
+            isPaused: false,
+            level,
+            dropTime: 1000,
+            initialDropTime: 1000,
+            actions: mockActions,
+            onDropTimeChange: mockOnDropTimeChange,
+          }),
         { initialProps: { isGameOver: false, level: 1 } }
       );
 

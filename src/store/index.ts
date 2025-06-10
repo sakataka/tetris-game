@@ -6,7 +6,7 @@ export {
   useSettings,
   useUpdateSettings,
   useResetSettings,
-  useUpdateTheme
+  useUpdateTheme,
 } from './settingsStore';
 
 // Game State Store
@@ -23,7 +23,7 @@ export {
   useClearLineEffect,
   useCalculatePiecePlacementState,
   useMovePieceToPosition,
-  useRotatePieceTo
+  useRotatePieceTo,
 } from './gameStateStore';
 
 // Theme Store
@@ -38,7 +38,7 @@ export {
   useSetAccessibilityOptions,
   useResetThemeToDefault,
   useSetEffectIntensity,
-  useToggleAnimations
+  useToggleAnimations,
 } from './themeStore';
 
 // Statistics Store
@@ -58,7 +58,7 @@ export {
   useAddPlayTime,
   useUpdateBestStreak,
   useGetAverageScore,
-  useGetEfficiency
+  useGetEfficiency,
 } from './statisticsStore';
 
 // Session Store
@@ -75,7 +75,7 @@ export {
   useGetTotalPlayTime,
   useAddError,
   useClearErrors,
-  useClearError
+  useClearError,
 } from './sessionStore';
 
 // レガシーストア削除完了

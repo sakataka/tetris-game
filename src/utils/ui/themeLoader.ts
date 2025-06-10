@@ -1,6 +1,6 @@
 /**
  * JSONベーステーマプリセットローダー
- * 
+ *
  * 統合JSONファイルからテーマプリセットを動的に読み込み、
  * 型安全性を保証しながらランタイム検証を行う
  */
@@ -79,14 +79,26 @@ function validateThemeConfig(data: ThemeConfigData, themeName: string): ThemeCon
 
   // カラーパレットの検証
   const colors = data.colors;
-  const requiredColorKeys = ['primary', 'secondary', 'tertiary', 'background', 'foreground', 'accent'];
+  const requiredColorKeys = [
+    'primary',
+    'secondary',
+    'tertiary',
+    'background',
+    'foreground',
+    'accent',
+  ];
   for (const key of requiredColorKeys) {
-    if (!colors[key as keyof typeof colors] || typeof colors[key as keyof typeof colors] !== 'string') {
+    if (
+      !colors[key as keyof typeof colors] ||
+      typeof colors[key as keyof typeof colors] !== 'string'
+    ) {
       throw new Error(`Invalid theme config: missing or invalid color.${key} for ${themeName}`);
     }
     // Hexカラーコード形式の簡易検証
     if (!/^#[0-9a-fA-F]{6}$/.test(colors[key as keyof typeof colors])) {
-      throw new Error(`Invalid theme config: invalid hex color format for ${themeName}.colors.${key}`);
+      throw new Error(
+        `Invalid theme config: invalid hex color format for ${themeName}.colors.${key}`
+      );
     }
   }
 
@@ -126,19 +138,23 @@ function validateThemeConfig(data: ThemeConfigData, themeName: string): ThemeCon
       tertiary: colors.tertiary,
       background: colors.background,
       foreground: colors.foreground,
-      accent: colors.accent
+      accent: colors.accent,
     },
     effects: {
       blur: effects.blur,
       glow: effects.glow,
       saturation: effects.saturation,
-      brightness: effects.brightness
+      brightness: effects.brightness,
     },
     accessibility: {
       colorBlindnessType: accessibility.colorBlindnessType as ColorBlindnessType,
       contrast: accessibility.contrast as 'low' | 'normal' | 'high',
-      animationIntensity: accessibility.animationIntensity as 'none' | 'reduced' | 'normal' | 'enhanced'
-    }
+      animationIntensity: accessibility.animationIntensity as
+        | 'none'
+        | 'reduced'
+        | 'normal'
+        | 'enhanced',
+    },
   };
 }
 
@@ -172,16 +188,16 @@ class ThemeCache {
 
     // JSONから読み込み・検証
     const presetsData = await this.getPresetsData();
-    
+
     if (!presetsData[themeName]) {
       throw new Error(`Theme '${themeName}' not found in presets`);
     }
 
     const themeConfig = validateThemeConfig(presetsData[themeName] as ThemeConfigData, themeName);
-    
+
     // キャッシュに保存
     this.cache.set(themeName, themeConfig);
-    
+
     return themeConfig;
   }
 
@@ -189,7 +205,7 @@ class ThemeCache {
     const themes: Partial<Record<ThemeVariant, ThemeConfig>> = {};
 
     const themeNames: ThemeVariant[] = ['cyberpunk', 'classic', 'retro', 'minimal', 'neon'];
-    
+
     for (const themeName of themeNames) {
       themes[themeName] = await this.getTheme(themeName);
     }
@@ -205,7 +221,7 @@ class ThemeCache {
   public getCacheStats(): { size: number; keys: string[] } {
     return {
       size: this.cache.size,
-      keys: Array.from(this.cache.keys())
+      keys: Array.from(this.cache.keys()),
     };
   }
 }
@@ -245,18 +261,18 @@ export function getThemePresetSync(theme: ThemeVariant): ThemeConfig {
       tertiary: '#ffff00',
       background: '#0a0a0f',
       foreground: '#ffffff',
-      accent: '#00ff00'
+      accent: '#00ff00',
     },
     effects: {
       blur: 8,
       glow: 12,
       saturation: 1.0,
-      brightness: 1.0
+      brightness: 1.0,
     },
     accessibility: {
       colorBlindnessType: 'none',
       contrast: 'normal',
-      animationIntensity: 'normal'
-    }
+      animationIntensity: 'normal',
+    },
   };
 }

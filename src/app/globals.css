@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --background: #0a0a0f;
@@ -6,7 +6,7 @@
   --accent-primary: #00ffff;
   --accent-secondary: #ff00ff;
   --accent-tertiary: #ffff00;
-  
+
   /* サイバーパンクカラーパレット */
   --cyber-cyan: #00ffff;
   --cyber-purple: #ff00ff;
@@ -14,7 +14,7 @@
   --cyber-green: #00ff00;
   --cyber-red: #ff0040;
   --cyber-blue: #0080ff;
-  
+
   /* 透明度バリエーション */
   --cyber-cyan-10: rgba(0, 255, 255, 0.1);
   --cyber-cyan-20: rgba(0, 255, 255, 0.2);
@@ -25,20 +25,25 @@
   --cyber-purple-30: rgba(255, 0, 255, 0.3);
   --cyber-yellow-10: rgba(255, 255, 0, 0.1);
   --cyber-yellow-20: rgba(255, 255, 0, 0.2);
-  
+
   /* エフェクト値 */
   --neon-blur-sm: 4px;
   --neon-blur-md: 8px;
   --neon-blur-lg: 12px;
   --neon-blur-xl: 16px;
-  
+
   /* パーティクル設定 */
   --particle-gravity: 0.2;
   --particle-max-y: 500;
   --particle-life-max: 60;
-  
+
   /* ホログラム背景 */
-  --hologram-bg: linear-gradient(45deg, var(--cyber-cyan-10) 0%, var(--cyber-purple-10) 50%, var(--cyber-yellow-10) 100%);
+  --hologram-bg: linear-gradient(
+    45deg,
+    var(--cyber-cyan-10) 0%,
+    var(--cyber-purple-10) 50%,
+    var(--cyber-yellow-10) 100%
+  );
   --hologram-border: 1px solid var(--cyber-cyan-30);
 }
 
@@ -59,19 +64,29 @@ body {
 
 /* ネオングロー効果 */
 @keyframes neonGlow {
-  0%, 100% { filter: drop-shadow(0 0 8px var(--accent-primary)) drop-shadow(0 0 16px var(--accent-primary)); }
-  50% { filter: drop-shadow(0 0 12px var(--accent-primary)) drop-shadow(0 0 24px var(--accent-primary)); }
+  0%,
+  100% {
+    filter: drop-shadow(0 0 8px var(--accent-primary)) drop-shadow(0 0 16px var(--accent-primary));
+  }
+  50% {
+    filter: drop-shadow(0 0 12px var(--accent-primary)) drop-shadow(0 0 24px var(--accent-primary));
+  }
 }
 
 /* パルス効果 */
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 
 /* グリッド背景 */
 .grid-background {
-  background-image: 
+  background-image:
     linear-gradient(var(--cyber-cyan-10) 1px, transparent 1px),
     linear-gradient(90deg, var(--cyber-cyan-10) 1px, transparent 1px);
   background-size: 50px 50px;
@@ -87,7 +102,7 @@ body {
 /* ネオンボーダー */
 .neon-border {
   border: 2px solid var(--cyber-cyan);
-  box-shadow: 
+  box-shadow:
     0 0 var(--neon-blur-md) var(--cyber-cyan),
     inset 0 0 var(--neon-blur-md) var(--cyber-cyan-10);
 }
@@ -95,14 +110,14 @@ body {
 /* ネオンボーダーのバリエーション */
 .neon-border-purple {
   border: 2px solid var(--cyber-purple);
-  box-shadow: 
+  box-shadow:
     0 0 var(--neon-blur-md) var(--cyber-purple),
     inset 0 0 var(--neon-blur-md) var(--cyber-purple-10);
 }
 
 .neon-border-yellow {
   border: 2px solid var(--cyber-yellow);
-  box-shadow: 
+  box-shadow:
     0 0 var(--neon-blur-md) var(--cyber-yellow),
     inset 0 0 var(--neon-blur-md) var(--cyber-yellow-10);
 }
@@ -128,27 +143,31 @@ body {
 
 /* 浮遊アニメーション */
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .float-animation {
   animation: float 3s ease-in-out infinite;
 }
 
-
 /* パーティクルアニメーション */
 @keyframes particle-sparkle {
-  0% { 
-    filter: brightness(1) saturate(1) hue-rotate(0deg); 
+  0% {
+    filter: brightness(1) saturate(1) hue-rotate(0deg);
     transform: scale(1) rotate(0deg);
   }
-  50% { 
-    filter: brightness(1.8) saturate(1.8) hue-rotate(180deg); 
+  50% {
+    filter: brightness(1.8) saturate(1.8) hue-rotate(180deg);
     transform: scale(1.2) rotate(180deg);
   }
-  100% { 
-    filter: brightness(1.5) saturate(1.5) hue-rotate(360deg); 
+  100% {
+    filter: brightness(1.5) saturate(1.5) hue-rotate(360deg);
     transform: scale(1) rotate(360deg);
   }
 }
@@ -222,23 +241,28 @@ body {
   will-change: transform, opacity;
   transform-origin: center;
   background: radial-gradient(circle, var(--particle-color) 0%, transparent 70%);
-  box-shadow: 
+  box-shadow:
     0 0 calc(4px + var(--particle-scale) * 2px) var(--particle-color),
     0 0 calc(8px + var(--particle-scale) * 4px) color-mix(in srgb, var(--particle-color) 25%, transparent),
     0 0 calc(12px + var(--particle-scale) * 6px) color-mix(in srgb, var(--particle-color) 12%, transparent);
-  
+
   /* GPU加速を有効化 */
   transform: translateZ(0);
   backface-visibility: hidden;
   perspective: 1000px;
-  
+
   /* アニメーションパフォーマンス最適化 */
   animation: particle-float 1s ease-out infinite;
 }
 
 @keyframes particle-float {
-  0%, 100% { transform: scale(var(--particle-scale)) rotate(0deg) translateZ(0); }
-  50% { transform: scale(calc(var(--particle-scale) * 1.1)) rotate(180deg) translateZ(0); }
+  0%,
+  100% {
+    transform: scale(var(--particle-scale)) rotate(0deg) translateZ(0);
+  }
+  50% {
+    transform: scale(calc(var(--particle-scale) * 1.1)) rotate(180deg) translateZ(0);
+  }
 }
 
 /* レガシーパーティクルクラス（後方互換性） */
@@ -264,17 +288,35 @@ body {
 }
 
 /* レスポンシブタイポグラフィユーティリティ */
-.responsive-text-xs { @apply text-xs sm:text-sm; }
-.responsive-text-sm { @apply text-sm md:text-base; }
-.responsive-text-base { @apply text-sm md:text-base lg:text-lg; }
-.responsive-text-lg { @apply text-base md:text-lg lg:text-xl; }
-.responsive-text-xl { @apply text-lg md:text-xl lg:text-2xl; }
+.responsive-text-xs {
+  @apply text-xs sm:text-sm;
+}
+.responsive-text-sm {
+  @apply text-sm md:text-base;
+}
+.responsive-text-base {
+  @apply text-sm md:text-base lg:text-lg;
+}
+.responsive-text-lg {
+  @apply text-base md:text-lg lg:text-xl;
+}
+.responsive-text-xl {
+  @apply text-lg md:text-xl lg:text-2xl;
+}
 
 /* モバイル最適化スペーシング */
-.responsive-spacing-xs { @apply p-1 sm:p-2; }
-.responsive-spacing-sm { @apply p-2 md:p-3; }
-.responsive-spacing-md { @apply p-3 md:p-4 lg:p-6; }
-.responsive-spacing-lg { @apply p-4 md:p-6 lg:p-8; }
+.responsive-spacing-xs {
+  @apply p-1 sm:p-2;
+}
+.responsive-spacing-sm {
+  @apply p-2 md:p-3;
+}
+.responsive-spacing-md {
+  @apply p-3 md:p-4 lg:p-6;
+}
+.responsive-spacing-lg {
+  @apply p-4 md:p-6 lg:p-8;
+}
 
 /* レスポンシブグリッドシステム */
 .responsive-grid-stats {
@@ -307,7 +349,7 @@ body {
     line-height: 1.3;
     letter-spacing: 0.01em;
   }
-  
+
   .mobile-touch-zone {
     padding: 12px;
     margin: 4px;

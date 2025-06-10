@@ -1,15 +1,11 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { 
-  useStatisticsStore,
-  useAddHighScore,
-  useUpdateStatistics 
-} from '../store/statisticsStore';
+import { useStatisticsStore, useAddHighScore, useUpdateStatistics } from '../store/statisticsStore';
 import { GameState, SoundKey } from '../types/tetris';
 import {
   isHighScore,
   getHighScoreRank,
   getHighScoreMessage,
-  createHighScoreEntry
+  createHighScoreEntry,
 } from '../utils/game';
 
 interface UseHighScoreManagerProps {
@@ -30,56 +26,59 @@ export function useHighScoreManager({ gameState, playSound }: UseHighScoreManage
   const gameEndProcessedRef = useRef(false);
 
   // ゲーム終了を検知してハイスコア処理を実行
-  const processGameEnd = useCallback((finalScore: number, level: number, lines: number): HighScoreResult => {
-    // すでに処理済みの場合はスキップ
-    if (gameEndProcessedRef.current) {
-      return { isNewHighScore: false };
-    }
-
-    gameEndProcessedRef.current = true;
-
-    // ストアから現在の状態を取得
-    const currentState = useStatisticsStore.getState();
-    const { highScores, statistics } = currentState;
-
-    // 統計を更新
-    const newStats = {
-      totalGames: statistics.totalGames + 1,
-      totalScore: statistics.totalScore + finalScore,
-      totalLines: statistics.totalLines + lines,
-      playTime: statistics.playTime + Date.now() // 簡易的な時間計算（実際の実装では開始時間を記録）
-    };
-
-    // Tetrisボーナスのカウント（4ライン同時消去の検出は別途実装が必要）
-    updateStatistics(newStats);
-
-    // ハイスコア判定
-    if (isHighScore(finalScore, highScores)) {
-      const rank = getHighScoreRank(finalScore, highScores);
-      const message = rank ? getHighScoreMessage(rank) : '';
-      
-      // ハイスコアエントリを作成して保存
-      const highScoreEntry = createHighScoreEntry(finalScore, level, lines);
-      addHighScore(highScoreEntry);
-      
-      // 音効果の再生
-      if (playSound) {
-        if (rank === 1) {
-          playSound('tetris'); // 1位の場合は特別な音
-        } else {
-          playSound('lineClear'); // その他のハイスコアの場合
-        }
+  const processGameEnd = useCallback(
+    (finalScore: number, level: number, lines: number): HighScoreResult => {
+      // すでに処理済みの場合はスキップ
+      if (gameEndProcessedRef.current) {
+        return { isNewHighScore: false };
       }
 
-      return {
-        isNewHighScore: true,
-        rank: rank || undefined,
-        message
-      };
-    }
+      gameEndProcessedRef.current = true;
 
-    return { isNewHighScore: false };
-  }, [addHighScore, updateStatistics, playSound]);
+      // ストアから現在の状態を取得
+      const currentState = useStatisticsStore.getState();
+      const { highScores, statistics } = currentState;
+
+      // 統計を更新
+      const newStats = {
+        totalGames: statistics.totalGames + 1,
+        totalScore: statistics.totalScore + finalScore,
+        totalLines: statistics.totalLines + lines,
+        playTime: statistics.playTime + Date.now(), // 簡易的な時間計算（実際の実装では開始時間を記録）
+      };
+
+      // Tetrisボーナスのカウント（4ライン同時消去の検出は別途実装が必要）
+      updateStatistics(newStats);
+
+      // ハイスコア判定
+      if (isHighScore(finalScore, highScores)) {
+        const rank = getHighScoreRank(finalScore, highScores);
+        const message = rank ? getHighScoreMessage(rank) : '';
+
+        // ハイスコアエントリを作成して保存
+        const highScoreEntry = createHighScoreEntry(finalScore, level, lines);
+        addHighScore(highScoreEntry);
+
+        // 音効果の再生
+        if (playSound) {
+          if (rank === 1) {
+            playSound('tetris'); // 1位の場合は特別な音
+          } else {
+            playSound('lineClear'); // その他のハイスコアの場合
+          }
+        }
+
+        return {
+          isNewHighScore: true,
+          rank: rank || undefined,
+          message,
+        };
+      }
+
+      return { isNewHighScore: false };
+    },
+    [addHighScore, updateStatistics, playSound]
+  );
 
   // ゲームリセット時の処理
   const handleGameReset = useCallback(() => {
@@ -102,7 +101,14 @@ export function useHighScoreManager({ gameState, playSound }: UseHighScoreManage
     }
 
     previousGameOverRef.current = isGameOver;
-  }, [gameState.gameOver, gameState.score, gameState.level, gameState.lines, processGameEnd, handleGameReset]);
+  }, [
+    gameState.gameOver,
+    gameState.score,
+    gameState.level,
+    gameState.lines,
+    processGameEnd,
+    handleGameReset,
+  ]);
 
   // ハイスコア関連の便利関数
   const checkIsHighScore = useCallback((score: number) => {
@@ -126,11 +132,14 @@ export function useHighScoreManager({ gameState, playSound }: UseHighScoreManage
   }, []);
 
   // 手動でハイスコアを保存する関数（テスト用）
-  const manualSaveHighScore = useCallback((score: number, level: number, lines: number, playerName?: string) => {
-    const highScoreEntry = createHighScoreEntry(score, level, lines, playerName);
-    addHighScore(highScoreEntry);
-    return highScoreEntry;
-  }, [addHighScore]);
+  const manualSaveHighScore = useCallback(
+    (score: number, level: number, lines: number, playerName?: string) => {
+      const highScoreEntry = createHighScoreEntry(score, level, lines, playerName);
+      addHighScore(highScoreEntry);
+      return highScoreEntry;
+    },
+    [addHighScore]
+  );
 
   return {
     // ハイスコア判定関数
@@ -138,15 +147,15 @@ export function useHighScoreManager({ gameState, playSound }: UseHighScoreManage
     getScoreRank,
     getCurrentHighScore,
     getLowestHighScore,
-    
+
     // 手動保存関数
     manualSaveHighScore,
-    
+
     // 現在のハイスコアと統計のゲッター
     getHighScores: () => useStatisticsStore.getState().highScores,
     getStatistics: () => useStatisticsStore.getState().statistics,
-    
+
     // 処理状態
-    isGameEndProcessed: gameEndProcessedRef.current
+    isGameEndProcessed: gameEndProcessedRef.current,
   };
 }

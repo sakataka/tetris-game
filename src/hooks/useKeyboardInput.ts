@@ -32,7 +32,7 @@ const DEFAULT_KEY_BINDINGS: KeyBindings = {
   hardDrop: [' '],
   pause: ['p', 'P'],
   reset: ['r', 'R'],
-  confirm: ['Enter', ' ']
+  confirm: ['Enter', ' '],
 };
 
 export function useKeyboardInput({
@@ -45,12 +45,11 @@ export function useKeyboardInput({
   onPause,
   onReset,
   onConfirm,
-  keyBindings = {}
+  keyBindings = {},
 }: UseKeyboardInputProps) {
-  
   useEffect(() => {
     const bindings = { ...DEFAULT_KEY_BINDINGS, ...keyBindings };
-    
+
     const handleKeyPress = (event: KeyboardEvent) => {
       if (isGameOver) {
         if (bindings.confirm.includes(event.key)) {
@@ -96,6 +95,6 @@ export function useKeyboardInput({
     onPause,
     onReset,
     onConfirm,
-    keyBindings
+    keyBindings,
   ]);
 }

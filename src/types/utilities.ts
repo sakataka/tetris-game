@@ -46,27 +46,25 @@ export type RequiredKeys<T, K extends keyof T> = T & Required<Pick<T, K>>;
 export type OptionalKeys<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
 // 関数の型安全性を向上させるユーティリティ
-export type SafeFunction<TArgs extends readonly unknown[], TReturn> = (
-  ...args: TArgs
-) => TReturn;
+export type SafeFunction<TArgs extends readonly unknown[], TReturn> = (...args: TArgs) => TReturn;
 
 export type AsyncSafeFunction<TArgs extends readonly unknown[], TReturn> = (
   ...args: TArgs
 ) => Promise<TReturn>;
 
 // エラーハンドリングのための型安全なResult型
-export type Result<T, E = Error> = 
+export type Result<T, E = Error> =
   | { readonly success: true; readonly data: T }
   | { readonly success: false; readonly error: E };
 
 export const createSuccess = <T>(data: T): Result<T, never> => ({
   success: true,
-  data
+  data,
 });
 
 export const createError = <E>(error: E): Result<never, E> => ({
   success: false,
-  error
+  error,
 });
 
 // 型安全なイベントハンドラー
@@ -88,32 +86,23 @@ export const createEnum = <T extends Record<string, string | number>>(
   const values = Object.values(obj) as T[keyof T][];
   return Object.freeze({
     ...obj,
-    values: Object.freeze(values)
+    values: Object.freeze(values),
   });
 };
 
 // 型ガード用のユーティリティ
 export type TypeGuard<T> = (value: unknown) => value is T;
 
-export const createTypeGuard = <T>(
-  predicate: (value: unknown) => boolean
-): TypeGuard<T> => {
+export const createTypeGuard = <T>(predicate: (value: unknown) => boolean): TypeGuard<T> => {
   return (value: unknown): value is T => predicate(value);
 };
 
 // 配列の型安全な操作ユーティリティ
-export const safeArrayAccess = <T>(
-  array: readonly T[], 
-  index: number
-): T | undefined => {
+export const safeArrayAccess = <T>(array: readonly T[], index: number): T | undefined => {
   return index >= 0 && index < array.length ? array[index] : undefined;
 };
 
-export const safeArrayUpdate = <T>(
-  array: readonly T[], 
-  index: number, 
-  value: T
-): readonly T[] => {
+export const safeArrayUpdate = <T>(array: readonly T[], index: number, value: T): readonly T[] => {
   if (index < 0 || index >= array.length) {
     throw new Error(`Index ${index} is out of bounds for array of length ${array.length}`);
   }

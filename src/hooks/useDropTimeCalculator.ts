@@ -9,9 +9,8 @@ interface UseDropTimeCalculatorProps {
 export function useDropTimeCalculator({
   level,
   initialDropTime,
-  onDropTimeChange
+  onDropTimeChange,
 }: UseDropTimeCalculatorProps) {
-  
   useEffect(() => {
     const newDropTime = Math.max(50, initialDropTime - (level - 1) * 100);
     onDropTimeChange(newDropTime);

@@ -10,13 +10,11 @@ interface LoadingMessageProps {
 
 const LoadingMessage = memo(function LoadingMessage({
   loadingText = GAME_STATES.LOADING,
-  className = ''
+  className = '',
 }: LoadingMessageProps) {
   return (
     <div className={`flex items-center justify-center min-h-screen ${className}`}>
-      <div className="text-cyber-cyan text-2xl font-bold animate-pulse">
-        {loadingText}
-      </div>
+      <div className='text-cyber-cyan text-2xl font-bold animate-pulse'>{loadingText}</div>
     </div>
   );
 });

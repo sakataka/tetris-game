@@ -5,9 +5,17 @@ class ParticlePool {
   private maxPoolSize = 100; // プールの最大サイズ
 
   // パーティクルを取得（再利用または新規作成）
-  getParticle(id: string, x: number, y: number, color: string, vx: number, vy: number, life: number): Particle {
+  getParticle(
+    id: string,
+    x: number,
+    y: number,
+    color: string,
+    vx: number,
+    vy: number,
+    life: number
+  ): Particle {
     let particle = this.pool.pop();
-    
+
     if (particle) {
       // 既存のパーティクルを再利用
       particle.id = id;
@@ -21,7 +29,7 @@ class ParticlePool {
       // 新しいパーティクルを作成
       particle = { id, x, y, color, vx, vy, life };
     }
-    
+
     return particle;
   }
 
@@ -34,7 +42,7 @@ class ParticlePool {
 
   // 複数のパーティクルをプールに戻す
   releaseParticles(particles: Particle[]) {
-    particles.forEach(particle => this.releaseParticle(particle));
+    particles.forEach((particle) => this.releaseParticle(particle));
   }
 
   // プールのサイズを取得（デバッグ用）

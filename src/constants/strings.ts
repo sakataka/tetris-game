@@ -147,17 +147,17 @@ export type UIEffectsKey = keyof typeof UI_EFFECTS;
 export type StatusKey = keyof typeof STATUS;
 
 // 全文字列リソースの統合型
-export type StringResourceKey = 
-  | GameStatesKey 
-  | ButtonsKey 
-  | NavigationKey 
-  | PanelsKey 
-  | LabelsKey 
-  | ControlsKey 
-  | ScoringKey 
-  | StatisticsKey 
-  | AccessibilityKey 
-  | AriaLabelsKey 
-  | MessagesKey 
-  | UIEffectsKey 
+export type StringResourceKey =
+  | GameStatesKey
+  | ButtonsKey
+  | NavigationKey
+  | PanelsKey
+  | LabelsKey
+  | ControlsKey
+  | ScoringKey
+  | StatisticsKey
+  | AccessibilityKey
+  | AriaLabelsKey
+  | MessagesKey
+  | UIEffectsKey
   | StatusKey;

@@ -1,9 +1,9 @@
-import { 
-  ThemeConfig, 
-  ColorPalette, 
-  ThemeVariant, 
-  ColorBlindnessType, 
-  ContrastLevel 
+import {
+  ThemeConfig,
+  ColorPalette,
+  ThemeVariant,
+  ColorBlindnessType,
+  ContrastLevel,
 } from '../../types/tetris';
 
 // プリセットカラーパレット
@@ -14,7 +14,7 @@ export const COLOR_PALETTES: Record<ThemeVariant, ColorPalette> = {
     tertiary: '#ffff00',
     background: '#0a0a0f',
     foreground: '#ffffff',
-    accent: '#00ff00'
+    accent: '#00ff00',
   },
   classic: {
     primary: '#0066cc',
@@ -22,7 +22,7 @@ export const COLOR_PALETTES: Record<ThemeVariant, ColorPalette> = {
     tertiary: '#006600',
     background: '#f5f5f5',
     foreground: '#333333',
-    accent: '#cc0000'
+    accent: '#cc0000',
   },
   retro: {
     primary: '#ff6b35',
@@ -30,7 +30,7 @@ export const COLOR_PALETTES: Record<ThemeVariant, ColorPalette> = {
     tertiary: '#ffd23f',
     background: '#2d1b69',
     foreground: '#ffffff',
-    accent: '#ee4266'
+    accent: '#ee4266',
   },
   minimal: {
     primary: '#2c3e50',
@@ -38,7 +38,7 @@ export const COLOR_PALETTES: Record<ThemeVariant, ColorPalette> = {
     tertiary: '#7f8c8d',
     background: '#ecf0f1',
     foreground: '#2c3e50',
-    accent: '#3498db'
+    accent: '#3498db',
   },
   neon: {
     primary: '#ff0080',
@@ -46,8 +46,8 @@ export const COLOR_PALETTES: Record<ThemeVariant, ColorPalette> = {
     tertiary: '#8000ff',
     background: '#000000',
     foreground: '#ffffff',
-    accent: '#ffff00'
-  }
+    accent: '#ffff00',
+  },
 };
 
 // デフォルトエフェクト設定
@@ -55,7 +55,7 @@ export const DEFAULT_EFFECTS = {
   blur: 8,
   glow: 12,
   saturation: 1.0,
-  brightness: 1.0
+  brightness: 1.0,
 };
 
 // テーマ固有のエフェクト設定
@@ -64,32 +64,32 @@ export const THEME_EFFECTS: Record<ThemeVariant, typeof DEFAULT_EFFECTS> = {
     blur: 10,
     glow: 16,
     saturation: 1.8,
-    brightness: 1.2
+    brightness: 1.2,
   },
   classic: {
     blur: 0,
     glow: 0,
     saturation: 0.8,
-    brightness: 0.9
+    brightness: 0.9,
   },
   retro: {
     blur: 6,
     glow: 8,
     saturation: 1.5,
-    brightness: 1.1
+    brightness: 1.1,
   },
   minimal: {
     blur: 2,
     glow: 4,
     saturation: 0.6,
-    brightness: 0.95
+    brightness: 0.95,
   },
   neon: {
     blur: 12,
     glow: 20,
     saturation: 2.0,
-    brightness: 1.3
-  }
+    brightness: 1.3,
+  },
 };
 
 // プリセットテーマ設定
@@ -101,8 +101,8 @@ export const THEME_PRESETS: Record<ThemeVariant, ThemeConfig> = {
     accessibility: {
       colorBlindnessType: 'none',
       contrast: 'normal',
-      animationIntensity: 'enhanced'
-    }
+      animationIntensity: 'enhanced',
+    },
   },
   classic: {
     name: 'Classic',
@@ -111,8 +111,8 @@ export const THEME_PRESETS: Record<ThemeVariant, ThemeConfig> = {
     accessibility: {
       colorBlindnessType: 'none',
       contrast: 'high',
-      animationIntensity: 'reduced'
-    }
+      animationIntensity: 'reduced',
+    },
   },
   retro: {
     name: 'Retro',
@@ -121,8 +121,8 @@ export const THEME_PRESETS: Record<ThemeVariant, ThemeConfig> = {
     accessibility: {
       colorBlindnessType: 'none',
       contrast: 'normal',
-      animationIntensity: 'normal'
-    }
+      animationIntensity: 'normal',
+    },
   },
   minimal: {
     name: 'Minimal',
@@ -131,8 +131,8 @@ export const THEME_PRESETS: Record<ThemeVariant, ThemeConfig> = {
     accessibility: {
       colorBlindnessType: 'none',
       contrast: 'high',
-      animationIntensity: 'reduced'
-    }
+      animationIntensity: 'reduced',
+    },
   },
   neon: {
     name: 'Neon',
@@ -141,28 +141,31 @@ export const THEME_PRESETS: Record<ThemeVariant, ThemeConfig> = {
     accessibility: {
       colorBlindnessType: 'none',
       contrast: 'normal',
-      animationIntensity: 'enhanced'
-    }
-  }
+      animationIntensity: 'enhanced',
+    },
+  },
 };
 
 // 色覚異常対応カラーパレット
-export const COLOR_BLIND_PALETTES: Record<Exclude<ColorBlindnessType, 'none'>, Partial<ColorPalette>> = {
+export const COLOR_BLIND_PALETTES: Record<
+  Exclude<ColorBlindnessType, 'none'>,
+  Partial<ColorPalette>
+> = {
   protanopia: {
     primary: '#0080ff',
     secondary: '#ffaa00',
-    tertiary: '#8000ff'
+    tertiary: '#8000ff',
   },
   deuteranopia: {
     primary: '#0066cc',
     secondary: '#ff6600',
-    tertiary: '#cc00cc'
+    tertiary: '#cc00cc',
   },
   tritanopia: {
     primary: '#ff0066',
     secondary: '#66ff00',
-    tertiary: '#6600ff'
-  }
+    tertiary: '#6600ff',
+  },
 };
 
 // コントラスト調整関数
@@ -170,13 +173,13 @@ export function adjustColorContrast(color: string, level: ContrastLevel): string
   const adjustments = {
     low: 0.7,
     normal: 1.0,
-    high: 1.3
+    high: 1.3,
   };
-  
+
   const adjustment = adjustments[level];
   // 色のコントラストを調整するロジック（簡単な実装）
   if (adjustment === 1.0) return color;
-  
+
   // より複雑なコントラスト調整は後で実装
   return color;
 }
@@ -194,24 +197,24 @@ export const ANIMATION_SETTINGS = {
     duration: 0,
     enabled: false,
     particles: false,
-    effects: false
+    effects: false,
   },
   reduced: {
     duration: 0.3,
     enabled: true,
     particles: false,
-    effects: false
+    effects: false,
   },
   normal: {
     duration: 0.6,
     enabled: true,
     particles: true,
-    effects: true
+    effects: true,
   },
   enhanced: {
     duration: 1.0,
     enabled: true,
     particles: true,
-    effects: true
-  }
+    effects: true,
+  },
 };

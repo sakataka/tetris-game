@@ -10,7 +10,13 @@ export type ContrastLevel = 'low' | 'normal' | 'high';
 export type AnimationIntensity = 'none' | 'reduced' | 'normal' | 'enhanced';
 
 // 音響システムの厳密な型定義
-export type SoundKey = 'lineClear' | 'pieceLand' | 'pieceRotate' | 'tetris' | 'gameOver' | 'hardDrop';
+export type SoundKey =
+  | 'lineClear'
+  | 'pieceLand'
+  | 'pieceRotate'
+  | 'tetris'
+  | 'gameOver'
+  | 'hardDrop';
 export type SoundCategory = 'effect' | 'music' | 'ui' | 'ambient';
 export type VolumeLevel = 0 | 0.1 | 0.2 | 0.3 | 0.4 | 0.5 | 0.6 | 0.7 | 0.8 | 0.9 | 1.0;
 
@@ -191,30 +197,30 @@ export interface GameStoreActions {
   updateParticles: (particles: Particle[]) => void;
   resetGame: () => void;
   togglePause: () => void;
-  
+
   // Settings actions
   updateSettings: (settings: Partial<GameSettings>) => void;
-  
+
   // High scores actions
   addHighScore: (score: HighScore) => void;
   clearHighScores: () => void;
-  
+
   // Statistics actions
   updateStatistics: (stats: Partial<GameStatistics>) => void;
   resetStatistics: () => void;
-  
+
   // Theme actions
   setTheme: (theme: ThemeVariant) => void;
   updateThemeState: (themeState: Partial<ThemeState>) => void;
   setCustomColors: (colors: Partial<ColorPalette>) => void;
   setAccessibilityOptions: (accessibility: Partial<ThemeState['accessibility']>) => void;
   resetThemeToDefault: () => void;
-  
+
   // Error handling actions
   addError: (error: GameError) => void;
   clearErrors: () => void;
   clearError: (errorId: string) => void;
-  
+
   // Session tracking actions
   startPlaySession: () => void;
   endPlaySession: () => void;

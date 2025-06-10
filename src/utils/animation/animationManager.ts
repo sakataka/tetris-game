@@ -1,6 +1,6 @@
 /**
  * アニメーション統一管理システム
- * 
+ *
  * 分散していたrequestAnimationFrame管理を統合し、
  * パフォーマンスと保守性を向上させる中央集権型アニメーションマネージャー
  */
@@ -34,7 +34,7 @@ interface ActiveAnimation {
 
 /**
  * シングルトンアニメーションマネージャー
- * 
+ *
  * 機能:
  * - requestAnimationFrame の統一管理
  * - FPS制限と優先度ベースの実行制御
@@ -48,13 +48,13 @@ export class AnimationManager {
   private isReducedMotion = false;
   private globalFPSLimit = 60;
   private performanceThreshold = 16.67; // 60FPS基準
-  
+
   // パフォーマンス統計
   private stats = {
     totalFrames: 0,
     droppedFrames: 0,
     averageFrameTime: 0,
-    lastPerformanceCheck: 0
+    lastPerformanceCheck: 0,
   };
 
   private constructor() {
@@ -89,8 +89,8 @@ export class AnimationManager {
         priority: options.priority ?? 'normal',
         autoStop: {
           maxDuration: options.autoStop?.maxDuration ?? Infinity,
-          condition: options.autoStop?.condition ?? (() => false)
-        }
+          condition: options.autoStop?.condition ?? (() => false),
+        },
       };
 
       // reduced-motion設定時は低優先度アニメーションをスキップ
@@ -105,7 +105,7 @@ export class AnimationManager {
         requestId: 0,
         startTime: performance.now(),
         lastFrameTime: 0,
-        frameCount: 0
+        frameCount: 0,
       };
 
       // アニメーション実行ループ
@@ -122,8 +122,7 @@ export class AnimationManager {
           // 自動停止条件チェック
           const elapsed = currentTime - animation.startTime;
           const maxDuration = fullOptions.autoStop.maxDuration ?? Infinity;
-          if (elapsed >= maxDuration || 
-              fullOptions.autoStop.condition?.()) {
+          if (elapsed >= maxDuration || fullOptions.autoStop.condition?.()) {
             this.unregisterAnimation(id);
             return;
           }
@@ -132,19 +131,18 @@ export class AnimationManager {
             callback(currentTime);
             animation.frameCount++;
             animation.lastFrameTime = currentTime;
-            
+
             // パフォーマンス統計更新
             this.updatePerformanceStats(deltaTime);
           } catch (error) {
-            handleError(new SystemError(
-              `Animation callback error: ${id}`,
-              { 
+            handleError(
+              new SystemError(`Animation callback error: ${id}`, {
                 component: 'AnimationManager',
                 action: 'animate',
                 timestamp: Date.now(),
-                additionalData: { animationId: id, error }
-              }
-            ));
+                additionalData: { animationId: id, error },
+              })
+            );
             this.unregisterAnimation(id);
             return;
           }
@@ -155,17 +153,15 @@ export class AnimationManager {
 
       animation.requestId = requestAnimationFrame(animate);
       this.activeAnimations.set(id, animation);
-
     } catch (error) {
-      handleError(new SystemError(
-        `Failed to register animation: ${id}`,
-        { 
+      handleError(
+        new SystemError(`Failed to register animation: ${id}`, {
           component: 'AnimationManager',
           action: 'registerAnimation',
           timestamp: Date.now(),
-          additionalData: { animationId: id, error }
-        }
-      ));
+          additionalData: { animationId: id, error },
+        })
+      );
     }
   }
 
@@ -185,7 +181,7 @@ export class AnimationManager {
    */
   public pauseAll(): void {
     this.isPaused = true;
-    this.activeAnimations.forEach(animation => {
+    this.activeAnimations.forEach((animation) => {
       cancelAnimationFrame(animation.requestId);
     });
   }
@@ -195,7 +191,7 @@ export class AnimationManager {
    */
   public resumeAll(): void {
     if (!this.isPaused) return;
-    
+
     this.isPaused = false;
     this.activeAnimations.forEach((animation, id) => {
       // 再開時は新しいrequestAnimationFrameを開始
@@ -218,7 +214,7 @@ export class AnimationManager {
    * 全アニメーションの強制停止
    */
   public stopAll(): void {
-    this.activeAnimations.forEach(animation => {
+    this.activeAnimations.forEach((animation) => {
       cancelAnimationFrame(animation.requestId);
     });
     this.activeAnimations.clear();
@@ -250,7 +246,7 @@ export class AnimationManager {
       activeAnimations: this.activeAnimations.size,
       isPaused: this.isPaused,
       isReducedMotion: this.isReducedMotion,
-      globalFPSLimit: this.globalFPSLimit
+      globalFPSLimit: this.globalFPSLimit,
     };
   }
 
@@ -262,7 +258,7 @@ export class AnimationManager {
     if (typeof window !== 'undefined') {
       const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
       this.isReducedMotion = mediaQuery.matches;
-      
+
       // 設定変更の監視
       mediaQuery.addEventListener('change', (e) => {
         this.setReducedMotion(e.matches);
@@ -285,14 +281,13 @@ export class AnimationManager {
    */
   private updatePerformanceStats(frameTime: number): void {
     this.stats.totalFrames++;
-    
+
     if (frameTime > this.performanceThreshold * 2) {
       this.stats.droppedFrames++;
     }
-    
+
     // 移動平均でフレーム時間を計算
-    this.stats.averageFrameTime = 
-      (this.stats.averageFrameTime * 0.9) + (frameTime * 0.1);
+    this.stats.averageFrameTime = this.stats.averageFrameTime * 0.9 + frameTime * 0.1;
   }
 
   /**
@@ -303,12 +298,14 @@ export class AnimationManager {
     if (now - this.stats.lastPerformanceCheck < 5000) return;
 
     const dropRate = this.stats.droppedFrames / this.stats.totalFrames;
-    
+
     // フレームドロップ率が20%を超える場合、自動最適化
     if (dropRate > 0.2) {
-      console.warn(`AnimationManager: High frame drop rate (${(dropRate * 100).toFixed(1)}%). Optimizing...`);
+      console.warn(
+        `AnimationManager: High frame drop rate (${(dropRate * 100).toFixed(1)}%). Optimizing...`
+      );
       this.pauseLowPriorityAnimations();
-      
+
       // グローバルFPS制限を下げる
       if (this.globalFPSLimit > 30) {
         this.setGlobalFPSLimit(this.globalFPSLimit - 10);

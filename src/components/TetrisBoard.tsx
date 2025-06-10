@@ -47,7 +47,6 @@ const TetrisBoard = memo(function TetrisBoard({
           }
         }
       }
-       
     },
     [board, isValidBoardPosition]
   ); // board依存は境界チェック用途で必要
@@ -67,7 +66,6 @@ const TetrisBoard = memo(function TetrisBoard({
           }
         }
       }
-       
     },
     [board, isValidBoardPosition]
   ); // board依存は境界チェック用途で必要

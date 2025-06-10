@@ -1,14 +1,14 @@
 import { create } from 'zustand';
 import { GameState, LineEffectState, Particle, Tetromino, SoundKey } from '../types/tetris';
 import { INITIAL_DROP_TIME } from '../constants';
-import { 
-  createEmptyBoard, 
+import {
+  createEmptyBoard,
   getRandomTetromino,
   calculateScoreIncrease,
   processLineClear,
   createLineEffects,
   checkGameOver,
-  updateGameStateWithPiece
+  updateGameStateWithPiece,
 } from '../utils/game';
 
 // 初期ゲーム状態
@@ -24,29 +24,33 @@ const INITIAL_GAME_STATE: GameState = {
   lineEffect: {
     flashingLines: [],
     shaking: false,
-    particles: []
-  }
+    particles: [],
+  },
 };
 
 interface GameStateStore {
   // State
   gameState: GameState;
   dropTime: number;
-  
+
   // Actions
   setGameState: (gameState: Partial<GameState>) => void;
   updateParticles: (particles: Particle[]) => void;
   resetGame: () => void;
   togglePause: () => void;
   setDropTime: (dropTime: number) => void;
-  
+
   // Line effect actions
   updateLineEffect: (lineEffect: Partial<LineEffectState>) => void;
   clearLineEffect: () => void;
-  
+
   // Game logic action
-  calculatePiecePlacementState: (piece: Tetromino, bonusPoints?: number, playSound?: (soundType: SoundKey) => void) => void;
-  
+  calculatePiecePlacementState: (
+    piece: Tetromino,
+    bonusPoints?: number,
+    playSound?: (soundType: SoundKey) => void
+  ) => void;
+
   // Piece control adapters for useGameControls
   movePieceToPosition: (newPosition: { x: number; y: number }) => void;
   rotatePieceTo: (rotatedPiece: Tetromino) => void;
@@ -56,24 +60,24 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
   // Initial state
   gameState: INITIAL_GAME_STATE,
   dropTime: INITIAL_DROP_TIME,
-  
+
   // Actions
   setGameState: (newGameState) =>
     set((state) => ({
-      gameState: { ...state.gameState, ...newGameState }
+      gameState: { ...state.gameState, ...newGameState },
     })),
-  
+
   updateParticles: (particles) =>
     set((state) => ({
       gameState: {
         ...state.gameState,
         lineEffect: {
           ...state.gameState.lineEffect,
-          particles
-        }
-      }
+          particles,
+        },
+      },
     })),
-  
+
   resetGame: () =>
     set(() => ({
       gameState: {
@@ -88,31 +92,30 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
         lineEffect: {
           flashingLines: [],
           shaking: false,
-          particles: []
-        }
+          particles: [],
+        },
       },
-      dropTime: INITIAL_DROP_TIME
+      dropTime: INITIAL_DROP_TIME,
     })),
-  
+
   togglePause: () =>
     set((state) => ({
       gameState: {
         ...state.gameState,
-        isPaused: !state.gameState.isPaused
-      }
+        isPaused: !state.gameState.isPaused,
+      },
     })),
-  
-  setDropTime: (dropTime) =>
-    set(() => ({ dropTime })),
-  
+
+  setDropTime: (dropTime) => set(() => ({ dropTime })),
+
   updateLineEffect: (lineEffect) =>
     set((state) => ({
       gameState: {
         ...state.gameState,
-        lineEffect: { ...state.gameState.lineEffect, ...lineEffect }
-      }
+        lineEffect: { ...state.gameState.lineEffect, ...lineEffect },
+      },
     })),
-  
+
   clearLineEffect: () =>
     set((state) => ({
       gameState: {
@@ -120,11 +123,11 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
         lineEffect: {
           flashingLines: [],
           shaking: false,
-          particles: state.gameState.lineEffect.particles // パーティクルは保持
-        }
-      }
+          particles: state.gameState.lineEffect.particles, // パーティクルは保持
+        },
+      },
     })),
-  
+
   calculatePiecePlacementState: (piece, bonusPoints = 0, playSound) =>
     set((state) => {
       // 0. ピース着地音を再生（ライン消去音より前に）
@@ -137,10 +140,10 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
           playSound('pieceLand');
         }
       }
-      
+
       // 1. ライン消去処理
       const lineClearResult = processLineClear(state.gameState.board, piece);
-      
+
       // 2. スコア計算
       const scoreResult = calculateScoreIncrease(
         state.gameState.score,
@@ -148,7 +151,7 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
         lineClearResult.linesCleared,
         bonusPoints
       );
-      
+
       // 3. ライン消去エフェクト作成
       const lineEffect = createLineEffects(
         lineClearResult.linesCleared,
@@ -157,7 +160,7 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
         state.gameState.lineEffect,
         playSound
       );
-      
+
       // 4. ゲームオーバー判定
       const gameOverResult = checkGameOver(
         lineClearResult.newBoard,
@@ -165,7 +168,7 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
         state.gameState,
         playSound
       );
-      
+
       // 5. 最終的なゲーム状態更新
       const newGameState = updateGameStateWithPiece(
         state.gameState,
@@ -174,13 +177,13 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
         lineEffect,
         gameOverResult
       );
-      
+
       return {
         gameState: newGameState,
-        dropTime: state.dropTime
+        dropTime: state.dropTime,
       };
     }),
-  
+
   // Piece control adapters for useGameControls
   movePieceToPosition: (newPosition) =>
     set((state) => ({
@@ -188,17 +191,17 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
         ...state.gameState,
         currentPiece: state.gameState.currentPiece
           ? { ...state.gameState.currentPiece, position: newPosition }
-          : null
-      }
+          : null,
+      },
     })),
-  
+
   rotatePieceTo: (rotatedPiece) =>
     set((state) => ({
       gameState: {
         ...state.gameState,
-        currentPiece: rotatedPiece
-      }
-    }))
+        currentPiece: rotatedPiece,
+      },
+    })),
 }));
 
 // Selector hooks for optimized access
@@ -213,6 +216,7 @@ export const useTogglePause = () => useGameStateStore((state) => state.togglePau
 export const useSetDropTime = () => useGameStateStore((state) => state.setDropTime);
 export const useUpdateLineEffect = () => useGameStateStore((state) => state.updateLineEffect);
 export const useClearLineEffect = () => useGameStateStore((state) => state.clearLineEffect);
-export const useCalculatePiecePlacementState = () => useGameStateStore((state) => state.calculatePiecePlacementState);
+export const useCalculatePiecePlacementState = () =>
+  useGameStateStore((state) => state.calculatePiecePlacementState);
 export const useMovePieceToPosition = () => useGameStateStore((state) => state.movePieceToPosition);
 export const useRotatePieceTo = () => useGameStateStore((state) => state.rotatePieceTo);

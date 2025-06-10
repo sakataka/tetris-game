@@ -3,19 +3,19 @@
  * 統一されたエラー処理とロギング機能を提供
  */
 
-import { 
-  BaseAppError, 
-  ErrorInfo, 
-  ErrorHandler, 
-  ErrorHandlingResult, 
-  ErrorLevel, 
+import {
+  BaseAppError,
+  ErrorInfo,
+  ErrorHandler,
+  ErrorHandlingResult,
+  ErrorLevel,
   ErrorCategory,
   DEFAULT_ERROR_CONFIG,
   ErrorReportConfig,
   GameError,
   NetworkError,
   SystemError,
-  ValidationError
+  ValidationError,
 } from '../../types/errors';
 
 // エラーハンドラーのシングルトンクラス
@@ -43,7 +43,7 @@ class ErrorHandlerService {
   // エラー発生時のコールバック登録
   public onError(callback: (error: ErrorInfo) => void): () => void {
     this.onErrorCallbacks.add(callback);
-    
+
     // アンサブスクライブ関数を返す
     return () => {
       this.onErrorCallbacks.delete(callback);
@@ -70,11 +70,13 @@ class ErrorHandlerService {
     const handler = this.errorHandlers.get(errorInfo.category);
     let result: ErrorHandlingResult = {
       handled: false,
-      userNotification: this.config.enableUserNotifications ? {
-        message: appError.userMessage || errorInfo.message,
-        level: errorInfo.level,
-        duration: this.getNotificationDuration(errorInfo.level)
-      } : undefined
+      userNotification: this.config.enableUserNotifications
+        ? {
+            message: appError.userMessage || errorInfo.message,
+            level: errorInfo.level,
+            duration: this.getNotificationDuration(errorInfo.level),
+          }
+        : undefined,
     };
 
     if (handler) {
@@ -104,11 +106,11 @@ class ErrorHandlerService {
       const errorInstance = error instanceof Error ? error : new Error(String(error));
       const appError = this.normalizeError(errorInstance, context);
       this.handleError(appError);
-      
+
       if (!appError.recoverable) {
         throw appError;
       }
-      
+
       return null;
     }
   }
@@ -125,7 +127,7 @@ class ErrorHandlerService {
         const errorInstance = error instanceof Error ? error : new Error(String(error));
         const appError = this.normalizeError(errorInstance, context);
         const result = this.handleError(appError);
-        
+
         if (result.fallback) {
           try {
             return result.fallback() as R;
@@ -133,11 +135,11 @@ class ErrorHandlerService {
             console.error('Error in fallback function:', fallbackError);
           }
         }
-        
+
         if (!appError.recoverable) {
           throw appError;
         }
-        
+
         return null;
       }
     };
@@ -150,12 +152,14 @@ class ErrorHandlerService {
       errorsByCategory: {} as Record<ErrorCategory, number>,
       errorsByLevel: {} as Record<ErrorLevel, number>,
       recentErrors: this.errorHistory.slice(-10),
-      lastErrorTime: this.errorHistory.length > 0 ? 
-        this.errorHistory[this.errorHistory.length - 1].context.timestamp : undefined
+      lastErrorTime:
+        this.errorHistory.length > 0
+          ? this.errorHistory[this.errorHistory.length - 1].context.timestamp
+          : undefined,
     };
 
     // カテゴリ別とレベル別の集計
-    this.errorHistory.forEach(error => {
+    this.errorHistory.forEach((error) => {
       stats.errorsByCategory[error.category] = (stats.errorsByCategory[error.category] || 0) + 1;
       stats.errorsByLevel[error.level] = (stats.errorsByLevel[error.level] || 0) + 1;
     });
@@ -170,7 +174,7 @@ class ErrorHandlerService {
 
   // 特定エラーの解決マーク
   public resolveError(errorId: string): boolean {
-    const index = this.errorHistory.findIndex(error => error.id === errorId);
+    const index = this.errorHistory.findIndex((error) => error.id === errorId);
     if (index !== -1) {
       this.errorHistory.splice(index, 1);
       return true;
@@ -181,7 +185,7 @@ class ErrorHandlerService {
   // プライベートメソッド群
 
   private normalizeError(
-    error: Error | BaseAppError, 
+    error: Error | BaseAppError,
     context: Partial<{ component: string; action: string }> = {}
   ): BaseAppError {
     if (error instanceof BaseAppError) {
@@ -192,11 +196,11 @@ class ErrorHandlerService {
     if (error.name === 'TypeError') {
       return new ValidationError(error.message, context, { cause: error });
     }
-    
+
     if (error.name === 'ReferenceError') {
       return new SystemError(error.message, context, { cause: error });
     }
-    
+
     if (error.name === 'NetworkError' || error.message.includes('fetch')) {
       return new NetworkError(error.message, context, { cause: error });
     }
@@ -207,7 +211,7 @@ class ErrorHandlerService {
 
   private addToHistory(errorInfo: ErrorInfo): void {
     this.errorHistory.push(errorInfo);
-    
+
     // 履歴サイズの制限
     if (this.errorHistory.length > this.config.maxStoredErrors) {
       this.errorHistory.shift();
@@ -217,35 +221,44 @@ class ErrorHandlerService {
   private logToConsole(errorInfo: ErrorInfo): void {
     const logLevel = this.getConsoleLogLevel(errorInfo.level);
     const logMessage = `[${errorInfo.level.toUpperCase()}] ${errorInfo.category}/${errorInfo.id}: ${errorInfo.message}`;
-    
+
     console[logLevel](logMessage, {
       context: errorInfo.context,
-      stack: this.config.enableStackTrace ? errorInfo.stack : undefined
+      stack: this.config.enableStackTrace ? errorInfo.stack : undefined,
     });
   }
 
   private getConsoleLogLevel(level: ErrorLevel): 'log' | 'warn' | 'error' {
     switch (level) {
-      case 'info': return 'log';
-      case 'warning': return 'warn';
+      case 'info':
+        return 'log';
+      case 'warning':
+        return 'warn';
       case 'error':
-      case 'critical': return 'error';
-      default: return 'log';
+      case 'critical':
+        return 'error';
+      default:
+        return 'log';
     }
   }
 
   private getNotificationDuration(level: ErrorLevel): number {
     switch (level) {
-      case 'info': return 3000;
-      case 'warning': return 5000;
-      case 'error': return 7000;
-      case 'critical': return 10000;
-      default: return 5000;
+      case 'info':
+        return 3000;
+      case 'warning':
+        return 5000;
+      case 'error':
+        return 7000;
+      case 'critical':
+        return 10000;
+      default:
+        return 5000;
     }
   }
 
   private notifyCallbacks(errorInfo: ErrorInfo): void {
-    this.onErrorCallbacks.forEach(callback => {
+    this.onErrorCallbacks.forEach((callback) => {
       try {
         callback(errorInfo);
       } catch (callbackError) {
@@ -261,79 +274,87 @@ class ErrorHandlerService {
       message: errorInfo.message,
       context: errorInfo.context,
       stack: errorInfo.stack,
-      timestamp: new Date(errorInfo.context.timestamp).toISOString()
+      timestamp: new Date(errorInfo.context.timestamp).toISOString(),
     });
   }
 
   private initializeDefaultHandlers(): void {
     // ゲームエラーハンドラー
-    this.registerHandler('game', (error: BaseAppError): ErrorHandlingResult => ({
-      handled: true,
-      retry: error.retryable,
-      fallback: () => {
-        // ゲーム状態のリセットなど
-        console.log('Game error fallback executed');
-      }
-    }));
+    this.registerHandler(
+      'game',
+      (error: BaseAppError): ErrorHandlingResult => ({
+        handled: true,
+        retry: error.retryable,
+        fallback: () => {
+          // ゲーム状態のリセットなど
+          console.log('Game error fallback executed');
+        },
+      })
+    );
 
     // 音声エラーハンドラー
-    this.registerHandler('audio', (): ErrorHandlingResult => ({
-      handled: true,
-      retry: true, // 音声は通常リトライ可能
-      userNotification: {
-        message: '音声の再生に失敗しました。しばらく後にお試しください。',
-        level: 'warning',
-        duration: 3000
-      }
-    }));
+    this.registerHandler(
+      'audio',
+      (): ErrorHandlingResult => ({
+        handled: true,
+        retry: true, // 音声は通常リトライ可能
+        userNotification: {
+          message: '音声の再生に失敗しました。しばらく後にお試しください。',
+          level: 'warning',
+          duration: 3000,
+        },
+      })
+    );
 
     // ストレージエラーハンドラー
-    this.registerHandler('storage', (): ErrorHandlingResult => ({
-      handled: true,
-      retry: false,
-      userNotification: {
-        message: 'データの保存に失敗しました。ブラウザの設定をご確認ください。',
-        level: 'warning',
-        duration: 5000
-      }
-    }));
+    this.registerHandler(
+      'storage',
+      (): ErrorHandlingResult => ({
+        handled: true,
+        retry: false,
+        userNotification: {
+          message: 'データの保存に失敗しました。ブラウザの設定をご確認ください。',
+          level: 'warning',
+          duration: 5000,
+        },
+      })
+    );
 
     // ネットワークエラーハンドラー
-    this.registerHandler('network', (): ErrorHandlingResult => ({
-      handled: true,
-      retry: true,
-      userNotification: {
-        message: 'ネットワークエラーが発生しました。接続を確認してください。',
-        level: 'error',
-        duration: 5000
-      }
-    }));
+    this.registerHandler(
+      'network',
+      (): ErrorHandlingResult => ({
+        handled: true,
+        retry: true,
+        userNotification: {
+          message: 'ネットワークエラーが発生しました。接続を確認してください。',
+          level: 'error',
+          duration: 5000,
+        },
+      })
+    );
   }
 
   private setupGlobalErrorHandling(): void {
     // グローバルなunhandled promise rejectionをキャッチ
     if (typeof window !== 'undefined') {
       window.addEventListener('unhandledrejection', (event) => {
-        const error = new SystemError(
-          `Unhandled Promise Rejection: ${event.reason}`,
-          { action: 'unhandledrejection' }
-        );
+        const error = new SystemError(`Unhandled Promise Rejection: ${event.reason}`, {
+          action: 'unhandledrejection',
+        });
         this.handleError(error);
       });
 
       // グローバルエラーをキャッチ
       window.addEventListener('error', (event) => {
-        const error = new SystemError(
-          event.message,
-          { 
-            action: 'global_error',
-            additionalData: {
-              filename: event.filename,
-              lineno: event.lineno,
-              colno: event.colno
-            }
-          }
-        );
+        const error = new SystemError(event.message, {
+          action: 'global_error',
+          additionalData: {
+            filename: event.filename,
+            lineno: event.lineno,
+            colno: event.colno,
+          },
+        });
         this.handleError(error);
       });
     }
@@ -359,5 +380,5 @@ export {
   NetworkError,
   UIError,
   ValidationError,
-  SystemError
+  SystemError,
 } from '../../types/errors';

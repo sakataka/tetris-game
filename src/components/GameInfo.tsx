@@ -9,10 +9,7 @@ import MobileGameInfo from './MobileGameInfo';
 
 // 重いコンポーネントの動的インポート
 const ThemeTabContent = lazy(() => import('./ThemeTabContent'));
-import { 
-  useSettings,
-  useUpdateSettings
-} from '../store/settingsStore';
+import { useSettings, useUpdateSettings } from '../store/settingsStore';
 
 interface GameInfoProps {
   score: number;
@@ -63,11 +60,11 @@ const GameInfo = memo(function GameInfo({
   volume,
   onToggleMute,
   onVolumeChange,
-  audioSystemStatus
+  audioSystemStatus,
 }: GameInfoProps) {
   const settings = useSettings();
   const updateSettings = useUpdateSettings();
-  
+
   const [activeTab, setActiveTab] = useState<TabType>('game');
 
   const renderTabContent = () => {
@@ -76,11 +73,13 @@ const GameInfo = memo(function GameInfo({
         return <StatisticsTabContent />;
       case 'theme':
         return (
-          <Suspense fallback={
-            <div className="flex items-center justify-center p-4">
-              <div className="text-cyan-300 text-sm">テーマ設定を読み込み中...</div>
-            </div>
-          }>
+          <Suspense
+            fallback={
+              <div className='flex items-center justify-center p-4'>
+                <div className='text-cyan-300 text-sm'>テーマ設定を読み込み中...</div>
+              </div>
+            }
+          >
             <ThemeTabContent />
           </Suspense>
         );
@@ -108,23 +107,17 @@ const GameInfo = memo(function GameInfo({
   };
 
   return (
-    <div className="text-white h-full flex flex-col min-w-[280px]">
+    <div className='text-white h-full flex flex-col min-w-[280px]'>
       {/* Tab Navigation - デスクトップのみ表示 */}
-      <TabNavigation
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        className="hidden md:flex"
-      />
+      <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} className='hidden md:flex' />
 
       {/* コンテンツエリア */}
-      <div className="flex-1 overflow-auto">
+      <div className='flex-1 overflow-auto'>
         {/* デスクトップ: タブ切替表示 */}
-        <div className="hidden md:block">
-          {renderTabContent()}
-        </div>
+        <div className='hidden md:block'>{renderTabContent()}</div>
 
         {/* モバイル: コンパクト表示（ゲーム情報のみ） */}
-        <div className="md:hidden">
+        <div className='md:hidden'>
           <MobileGameInfo
             score={score}
             level={level}

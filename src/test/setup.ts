@@ -36,7 +36,7 @@ class MockAudio {
   volume = 1;
   currentTime = 0;
   preload = 'auto';
-  
+
   addEventListener = vi.fn();
   removeEventListener = vi.fn();
   play = vi.fn().mockResolvedValue(undefined);

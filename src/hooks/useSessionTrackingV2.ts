@@ -1,18 +1,18 @@
 /**
  * 簡素化されたセッション追跡フック (v2)
- * 
+ *
  * SessionManagerサービスクラスを使用した
  * シンプルで効率的なフック実装
  */
 
 import { useEffect } from 'react';
-import { 
+import {
   useCurrentSession,
   useIsSessionActive,
   useSessionStats,
   useStartSession,
   useEndSession,
-  useOnGameStart
+  useOnGameStart,
 } from '../store/sessionStoreV2';
 
 export function useSessionTrackingV2() {
@@ -35,16 +35,16 @@ export function useSessionTrackingV2() {
     currentSession,
     isSessionActive,
     sessionStats,
-    
+
     // Session actions
     onGameStart,
     endSession,
-    
+
     // Computed values
-    currentSessionDuration: currentSession 
+    currentSessionDuration: currentSession
       ? Math.floor((Date.now() - currentSession.startTime) / 1000)
       : 0,
-    
-    gameCountInCurrentSession: currentSession?.gameCount ?? 0
+
+    gameCountInCurrentSession: currentSession?.gameCount ?? 0,
   };
 }

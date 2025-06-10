@@ -13,17 +13,17 @@ const DEFAULT_SETTINGS: GameSettings = {
     rotate: 'ArrowUp',
     hardDrop: ' ',
     pause: 'p',
-    reset: 'r'
+    reset: 'r',
   },
   difficulty: 'normal' as const,
   gameMode: 'single' as const,
-  virtualControlsEnabled: false
+  virtualControlsEnabled: false,
 };
 
 interface SettingsStore {
   // State
   settings: GameSettings;
-  
+
   // Actions
   updateSettings: (newSettings: Partial<GameSettings>) => void;
   resetSettings: () => void;
@@ -33,22 +33,22 @@ interface SettingsStore {
 export const useSettingsStore = create<SettingsStore>()((set) => ({
   // Initial state
   settings: DEFAULT_SETTINGS,
-  
+
   // Actions
   updateSettings: (newSettings) =>
     set((state) => ({
-      settings: { ...state.settings, ...newSettings }
+      settings: { ...state.settings, ...newSettings },
     })),
-  
+
   resetSettings: () =>
     set(() => ({
-      settings: DEFAULT_SETTINGS
+      settings: DEFAULT_SETTINGS,
     })),
-  
+
   updateTheme: (theme) =>
     set((state) => ({
-      settings: { ...state.settings, theme }
-    }))
+      settings: { ...state.settings, theme },
+    })),
 }));
 
 // Selector hooks for optimized access

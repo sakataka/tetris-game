@@ -1,6 +1,6 @@
 /**
  * SessionManager統合テスト
- * 
+ *
  * SessionManagerの主要機能と
  * localStorage同期の動作確認
  */
@@ -24,13 +24,13 @@ const localStorageMock = (() => {
     },
     clear: () => {
       store = {};
-    }
+    },
   };
 })();
 
 // グローバルlocalStorageを置き換え
 Object.defineProperty(window, 'localStorage', {
-  value: localStorageMock
+  value: localStorageMock,
 });
 
 // SessionManagerのインスタンスをリセットする関数
@@ -46,13 +46,13 @@ describe('SessionManager', () => {
   beforeEach(() => {
     // localStorage をクリア
     localStorage.clear();
-    
+
     // SessionManagerインスタンスをリセット
     resetSessionManager();
-    
+
     // タイマーをモック
     vi.useFakeTimers();
-    
+
     // 新しいインスタンスを取得
     sessionManager = SessionManager.getInstance();
   });
@@ -66,7 +66,7 @@ describe('SessionManager', () => {
   describe('セッション基本機能', () => {
     it('should create a new session', () => {
       const session = sessionManager.startSession();
-      
+
       expect(session).toBeDefined();
       expect(session.isActive).toBe(true);
       expect(session.gameCount).toBe(0);
@@ -76,24 +76,24 @@ describe('SessionManager', () => {
     it('should return current session', () => {
       const session = sessionManager.startSession();
       const currentSession = sessionManager.getCurrentSession();
-      
+
       expect(currentSession).toEqual(session);
     });
 
     it('should end current session', () => {
       sessionManager.startSession();
       sessionManager.endCurrentSession();
-      
+
       const currentSession = sessionManager.getCurrentSession();
       expect(currentSession).toBeNull();
     });
 
     it('should track game count', () => {
       sessionManager.startSession();
-      
+
       sessionManager.onGameStart();
       expect(sessionManager.getCurrentSession()?.gameCount).toBe(1);
-      
+
       sessionManager.onGameStart();
       expect(sessionManager.getCurrentSession()?.gameCount).toBe(2);
     });
@@ -103,7 +103,7 @@ describe('SessionManager', () => {
     it('should save completed sessions to history', () => {
       sessionManager.startSession();
       sessionManager.endCurrentSession();
-      
+
       const sessions = sessionManager.getAllSessions();
       expect(sessions).toHaveLength(1);
       expect(sessions[0].isActive).toBe(false);
@@ -117,12 +117,12 @@ describe('SessionManager', () => {
         sessionManager.onGameStart(); // ゲーム数を追加
         sessionManager.endCurrentSession();
       }
-      
+
       const sessions = sessionManager.getAllSessions();
       expect(sessions).toHaveLength(3);
-      
+
       // 全て非アクティブ
-      sessions.forEach(session => {
+      sessions.forEach((session) => {
         expect(session.isActive).toBe(false);
         expect(session.gameCount).toBe(1);
       });
@@ -132,11 +132,11 @@ describe('SessionManager', () => {
   describe('localStorage同期', () => {
     it('should persist current session to localStorage', () => {
       const session = sessionManager.startSession();
-      
+
       // localStorageに保存されているか確認
       const stored = localStorage.getItem('tetris-current-session');
       expect(stored).toBeTruthy();
-      
+
       const parsedSession = JSON.parse(stored!);
       expect(parsedSession.id).toBe(session.id);
       expect(parsedSession.isActive).toBe(true);
@@ -145,11 +145,11 @@ describe('SessionManager', () => {
     it('should persist session history to localStorage', () => {
       sessionManager.startSession();
       sessionManager.endCurrentSession();
-      
+
       // セッション履歴がlocalStorageに保存されているか確認
       const stored = localStorage.getItem('tetris-play-sessions');
       expect(stored).toBeTruthy();
-      
+
       const sessions = JSON.parse(stored!);
       expect(sessions).toHaveLength(1);
       expect(sessions[0].isActive).toBe(false);
@@ -161,15 +161,15 @@ describe('SessionManager', () => {
         id: 'test-session',
         startTime: Date.now() - 5000, // 5秒前
         gameCount: 2,
-        isActive: true
+        isActive: true,
       };
-      
+
       localStorage.setItem('tetris-current-session', JSON.stringify(testSession));
-      
+
       // 新しいSessionManagerインスタンス作成（localStorage読み込み）
       resetSessionManager();
       const newManager = SessionManager.getInstance();
-      
+
       const currentSession = newManager.getCurrentSession();
       expect(currentSession?.id).toBe('test-session');
       expect(currentSession?.gameCount).toBe(2);
@@ -184,16 +184,16 @@ describe('SessionManager', () => {
       expect(stats.totalSessions).toBe(0);
       expect(stats.totalPlayTime).toBe(0);
       expect(stats.totalGames).toBe(0);
-      
+
       // セッション作成・終了
       sessionManager.startSession();
-      
+
       // 時間経過をシミュレート
       vi.advanceTimersByTime(60000); // 1分
-      
+
       sessionManager.onGameStart(); // ゲーム1回
       sessionManager.endCurrentSession();
-      
+
       stats = sessionManager.getSessionStats();
       expect(stats.totalSessions).toBe(1);
       expect(stats.totalPlayTime).toBe(60); // 60秒
@@ -207,11 +207,11 @@ describe('SessionManager', () => {
     it('should handle corrupted localStorage data', () => {
       // 破損したデータをlocalStorageに設定
       localStorage.setItem('tetris-current-session', 'invalid-json');
-      
+
       // SessionManagerが正常に動作するか確認
       resetSessionManager();
       const newManager = SessionManager.getInstance();
-      
+
       expect(newManager.getCurrentSession()).toBeNull();
     });
 
@@ -219,19 +219,19 @@ describe('SessionManager', () => {
       // 30分以上前のセッション
       const expiredSession = {
         id: 'expired-session',
-        startTime: Date.now() - (31 * 60 * 1000), // 31分前
+        startTime: Date.now() - 31 * 60 * 1000, // 31分前
         gameCount: 1,
-        isActive: true
+        isActive: true,
       };
-      
+
       localStorage.setItem('tetris-current-session', JSON.stringify(expiredSession));
-      
+
       // 期限切れセッションが正しく処理されるか確認
       resetSessionManager();
       const newManager = SessionManager.getInstance();
-      
+
       expect(newManager.getCurrentSession()).toBeNull();
-      
+
       // 履歴に移動されているか確認
       const sessions = newManager.getAllSessions();
       expect(sessions).toHaveLength(1);
@@ -247,7 +247,7 @@ describe('SessionManager', () => {
         sessionManager.startSession();
         sessionManager.endCurrentSession();
       }
-      
+
       const sessions = sessionManager.getAllSessions();
       expect(sessions).toHaveLength(100); // 最新100個のみ保持
     });

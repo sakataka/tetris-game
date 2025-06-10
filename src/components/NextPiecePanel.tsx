@@ -7,16 +7,16 @@ interface NextPiecePanelProps {
   nextPiece: Tetromino | null;
 }
 
-const NextPiecePanel = memo(function NextPiecePanel({
-  nextPiece
-}: NextPiecePanelProps) {
+const NextPiecePanel = memo(function NextPiecePanel({ nextPiece }: NextPiecePanelProps) {
   return (
-    <div className="hologram-purple neon-border-purple p-4 md:p-6 rounded-lg relative overflow-hidden">
-      <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4 text-purple-400 relative">NEXT PIECE</h3>
-      <div className="grid gap-0 w-fit mx-auto p-4 bg-black/30 rounded-lg border border-purple-400/30">
+    <div className='hologram-purple neon-border-purple p-4 md:p-6 rounded-lg relative overflow-hidden'>
+      <h3 className='text-lg md:text-xl font-bold mb-3 md:mb-4 text-purple-400 relative'>
+        NEXT PIECE
+      </h3>
+      <div className='grid gap-0 w-fit mx-auto p-4 bg-black/30 rounded-lg border border-purple-400/30'>
         {nextPiece ? (
           nextPiece.shape.map((row, y) => (
-            <div key={y} className="flex">
+            <div key={y} className='flex'>
               {row.map((cell, x) => (
                 <div
                   key={`${y}-${x}`}
@@ -24,18 +24,18 @@ const NextPiecePanel = memo(function NextPiecePanel({
                     cell ? 'shadow-[0_0_10px_rgba(255,255,255,0.3)]' : 'bg-transparent'
                   }`}
                   style={{
-                    backgroundColor: cell ? nextPiece.color : 'transparent'
+                    backgroundColor: cell ? nextPiece.color : 'transparent',
                   }}
                 >
                   {cell === 1 && (
-                    <div className="absolute inset-0 bg-current opacity-20 blur-sm"></div>
+                    <div className='absolute inset-0 bg-current opacity-20 blur-sm'></div>
                   )}
                 </div>
               ))}
             </div>
           ))
         ) : (
-          <div className="w-20 h-20 bg-gray-700/50 rounded border border-gray-500"></div>
+          <div className='w-20 h-20 bg-gray-700/50 rounded border border-gray-500'></div>
         )}
       </div>
     </div>

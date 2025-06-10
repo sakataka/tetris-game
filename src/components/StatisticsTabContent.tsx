@@ -12,7 +12,7 @@ interface StatisticsTabContentProps {
 }
 
 const StatisticsTabContent = memo(function StatisticsTabContent({
-  className = ''
+  className = '',
 }: StatisticsTabContentProps) {
   const highScores = useHighScores();
   const statistics = useStatistics();
@@ -26,12 +26,14 @@ const StatisticsTabContent = memo(function StatisticsTabContent({
 
   return (
     <div className={className}>
-      <Suspense fallback={
-        <div className="flex items-center justify-center p-8">
-          <div className="text-cyan-300 text-sm">統計データを読み込み中...</div>
-        </div>
-      }>
-        <StatisticsDashboard 
+      <Suspense
+        fallback={
+          <div className='flex items-center justify-center p-8'>
+            <div className='text-cyan-300 text-sm'>統計データを読み込み中...</div>
+          </div>
+        }
+      >
+        <StatisticsDashboard
           statistics={enhancedStats}
           highScores={highScores}
           showDetailedView={true}

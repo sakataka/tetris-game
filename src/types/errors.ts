@@ -6,14 +6,14 @@
 export type ErrorLevel = 'info' | 'warning' | 'error' | 'critical';
 
 // エラーカテゴリの定義
-export type ErrorCategory = 
-  | 'game' 
-  | 'audio' 
-  | 'storage' 
-  | 'network' 
-  | 'ui' 
-  | 'validation' 
-  | 'system' 
+export type ErrorCategory =
+  | 'game'
+  | 'audio'
+  | 'storage'
+  | 'network'
+  | 'ui'
+  | 'validation'
+  | 'system'
   | 'unknown';
 
 // エラーコンテキスト情報
@@ -64,7 +64,7 @@ export abstract class BaseAppError extends Error {
     } = {}
   ) {
     super(message, { cause: options.cause });
-    
+
     this.name = this.constructor.name;
     this.id = this.generateErrorId();
     this.level = level;
@@ -73,7 +73,7 @@ export abstract class BaseAppError extends Error {
       timestamp: Date.now(),
       url: typeof window !== 'undefined' ? window.location.href : undefined,
       userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : undefined,
-      ...context
+      ...context,
     };
     this.recoverable = options.recoverable ?? true;
     this.retryable = options.retryable ?? false;
@@ -99,7 +99,7 @@ export abstract class BaseAppError extends Error {
       stack: this.stack,
       recoverable: this.recoverable,
       retryable: this.retryable,
-      userMessage: this.userMessage
+      userMessage: this.userMessage,
     };
   }
 
@@ -113,12 +113,17 @@ export class GameError extends BaseAppError {
   constructor(
     message: string,
     context: Partial<ErrorContext> = {},
-    options: { recoverable?: boolean; retryable?: boolean; userMessage?: string; cause?: Error } = {}
+    options: {
+      recoverable?: boolean;
+      retryable?: boolean;
+      userMessage?: string;
+      cause?: Error;
+    } = {}
   ) {
     super(message, 'error', 'game', context, {
       recoverable: true,
       userMessage: 'ゲーム処理でエラーが発生しました',
-      ...options
+      ...options,
     });
   }
 }
@@ -128,13 +133,18 @@ export class AudioError extends BaseAppError {
   constructor(
     message: string,
     context: Partial<ErrorContext> = {},
-    options: { recoverable?: boolean; retryable?: boolean; userMessage?: string; cause?: Error } = {}
+    options: {
+      recoverable?: boolean;
+      retryable?: boolean;
+      userMessage?: string;
+      cause?: Error;
+    } = {}
   ) {
     super(message, 'warning', 'audio', context, {
       recoverable: true,
       retryable: true,
       userMessage: '音声の再生に失敗しました',
-      ...options
+      ...options,
     });
   }
 }
@@ -144,13 +154,18 @@ export class StorageError extends BaseAppError {
   constructor(
     message: string,
     context: Partial<ErrorContext> = {},
-    options: { recoverable?: boolean; retryable?: boolean; userMessage?: string; cause?: Error } = {}
+    options: {
+      recoverable?: boolean;
+      retryable?: boolean;
+      userMessage?: string;
+      cause?: Error;
+    } = {}
   ) {
     super(message, 'warning', 'storage', context, {
       recoverable: true,
       retryable: false,
       userMessage: 'データの保存に失敗しました',
-      ...options
+      ...options,
     });
   }
 }
@@ -160,13 +175,18 @@ export class NetworkError extends BaseAppError {
   constructor(
     message: string,
     context: Partial<ErrorContext> = {},
-    options: { recoverable?: boolean; retryable?: boolean; userMessage?: string; cause?: Error } = {}
+    options: {
+      recoverable?: boolean;
+      retryable?: boolean;
+      userMessage?: string;
+      cause?: Error;
+    } = {}
   ) {
     super(message, 'error', 'network', context, {
       recoverable: true,
       retryable: true,
       userMessage: 'ネットワークエラーが発生しました',
-      ...options
+      ...options,
     });
   }
 }
@@ -176,13 +196,18 @@ export class UIError extends BaseAppError {
   constructor(
     message: string,
     context: Partial<ErrorContext> = {},
-    options: { recoverable?: boolean; retryable?: boolean; userMessage?: string; cause?: Error } = {}
+    options: {
+      recoverable?: boolean;
+      retryable?: boolean;
+      userMessage?: string;
+      cause?: Error;
+    } = {}
   ) {
     super(message, 'warning', 'ui', context, {
       recoverable: true,
       retryable: false,
       userMessage: '画面表示でエラーが発生しました',
-      ...options
+      ...options,
     });
   }
 }
@@ -192,13 +217,18 @@ export class ValidationError extends BaseAppError {
   constructor(
     message: string,
     context: Partial<ErrorContext> = {},
-    options: { recoverable?: boolean; retryable?: boolean; userMessage?: string; cause?: Error } = {}
+    options: {
+      recoverable?: boolean;
+      retryable?: boolean;
+      userMessage?: string;
+      cause?: Error;
+    } = {}
   ) {
     super(message, 'warning', 'validation', context, {
       recoverable: true,
       retryable: false,
       userMessage: '入力データが正しくありません',
-      ...options
+      ...options,
     });
   }
 }
@@ -208,13 +238,18 @@ export class SystemError extends BaseAppError {
   constructor(
     message: string,
     context: Partial<ErrorContext> = {},
-    options: { recoverable?: boolean; retryable?: boolean; userMessage?: string; cause?: Error } = {}
+    options: {
+      recoverable?: boolean;
+      retryable?: boolean;
+      userMessage?: string;
+      cause?: Error;
+    } = {}
   ) {
     super(message, 'critical', 'system', context, {
       recoverable: false,
       retryable: false,
       userMessage: 'システムエラーが発生しました。ページを再読み込みしてください',
-      ...options
+      ...options,
     });
   }
 }
@@ -296,30 +331,30 @@ export const COMMON_ERROR_MESSAGES: LocalizedErrorMessages = {
     ja: 'ネットワークがタイムアウトしました',
     en: 'Network timeout occurred',
     zh: '网络超时',
-    ko: '네트워크 타임아웃이 발생했습니다'
+    ko: '네트워크 타임아웃이 발생했습니다',
   },
   INVALID_INPUT: {
     ja: '入力が正しくありません',
     en: 'Invalid input provided',
     zh: '输入无效',
-    ko: '잘못된 입력입니다'
+    ko: '잘못된 입력입니다',
   },
   PERMISSION_DENIED: {
     ja: '権限がありません',
     en: 'Permission denied',
     zh: '权限被拒绝',
-    ko: '권한이 거부되었습니다'
+    ko: '권한이 거부되었습니다',
   },
   RESOURCE_NOT_FOUND: {
     ja: 'リソースが見つかりません',
     en: 'Resource not found',
     zh: '资源未找到',
-    ko: '리소스를 찾을 수 없습니다'
+    ko: '리소스를 찾을 수 없습니다',
   },
   UNEXPECTED_ERROR: {
     ja: '予期しないエラーが発生しました',
     en: 'An unexpected error occurred',
     zh: '发生了意外错误',
-    ko: '예상치 못한 오류가 발생했습니다'
-  }
+    ko: '예상치 못한 오류가 발생했습니다',
+  },
 } as const;

@@ -114,12 +114,7 @@
     "description": "Tetris Game Theme Presets - Unified JSON Configuration",
     "lastUpdated": "2025-06-09",
     "totalThemes": 5,
-    "supportedFeatures": [
-      "colorBlindnessSupport",
-      "contrastAdjustment", 
-      "animationIntensity",
-      "dynamicEffects"
-    ],
+    "supportedFeatures": ["colorBlindnessSupport", "contrastAdjustment", "animationIntensity", "dynamicEffects"],
     "defaultEffects": {
       "blur": 8,
       "glow": 12,

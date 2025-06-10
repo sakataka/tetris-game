@@ -1,6 +1,6 @@
 /**
  * タイマー動作のデバッグテスト
- * 
+ *
  * useTimerAnimationがなぜ動作しないかを調べる
  */
 
@@ -28,7 +28,7 @@ describe('タイマー動作デバッグ', () => {
 
     console.log('Starting timer test...');
 
-    const { result } = renderHook(() => 
+    const { result } = renderHook(() =>
       useTimerAnimation(debugCallback, 100, [debugCallback], { enabled: true })
     );
 
@@ -51,7 +51,7 @@ describe('タイマー動作デバッグ', () => {
     let accumulatedTime = 0;
     const interval = 100;
     let callCount = 0;
-    
+
     const mockCallback = () => {
       callCount++;
       console.log(`Manual timer fired! Call count: ${callCount}`);
@@ -60,8 +60,10 @@ describe('タイマー動作デバッグ', () => {
     // 手動でuseTimerAnimationのロジックを再現
     const simulateTimer = (deltaTime: number) => {
       accumulatedTime += deltaTime;
-      console.log(`Accumulated time: ${accumulatedTime}, Delta: ${deltaTime}, Interval: ${interval}`);
-      
+      console.log(
+        `Accumulated time: ${accumulatedTime}, Delta: ${deltaTime}, Interval: ${interval}`
+      );
+
       if (accumulatedTime >= interval) {
         console.log('Interval reached, firing callback');
         mockCallback();

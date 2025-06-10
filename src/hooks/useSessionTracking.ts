@@ -1,10 +1,10 @@
 import { useEffect, useCallback } from 'react';
-import { 
-  useCurrentSession, 
+import {
+  useCurrentSession,
   usePlaySessions,
   useStartPlaySession,
   useEndPlaySession,
-  useIncrementGameCount 
+  useIncrementGameCount,
 } from '../store/sessionStore';
 import { SESSION_TIMEOUT } from '../constants';
 
@@ -30,7 +30,7 @@ export function useSessionTracking() {
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
-    
+
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
@@ -69,6 +69,6 @@ export function useSessionTracking() {
     onGameStart,
     onGameEnd,
     forceEndSession,
-    isSessionActive: currentSession?.isActive ?? false
+    isSessionActive: currentSession?.isActive ?? false,
   };
 }

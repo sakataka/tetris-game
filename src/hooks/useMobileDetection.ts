@@ -12,7 +12,7 @@ export function useMobileDetection(): MobileDetectionResult {
     isMobile: false,
     isTouchDevice: false,
     screenWidth: 0,
-    screenHeight: 0
+    screenHeight: 0,
   });
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export function useMobileDetection(): MobileDetectionResult {
         isMobile,
         isTouchDevice,
         screenWidth,
-        screenHeight
+        screenHeight,
       });
     };
 

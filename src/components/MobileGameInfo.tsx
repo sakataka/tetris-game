@@ -27,30 +27,32 @@ const MobileGameInfo = memo(function MobileGameInfo({
   isPaused,
   onReset,
   onTogglePause,
-  className = ''
+  className = '',
 }: MobileGameInfoProps) {
   return (
     <div className={`flex space-x-4 h-full overflow-hidden ${className}`}>
       {/* スコア情報 */}
-      <div className="flex-1 min-w-0">
-        <div className="hologram-cyan neon-border p-2 rounded-lg text-xs">
-          <div className="font-bold text-cyan-400 mb-1">{LABELS.SCORE}</div>
-          <div className="text-lg font-mono">{score.toLocaleString()}</div>
-          <div className="text-gray-400 text-xs">L{level} • {lines} lines</div>
+      <div className='flex-1 min-w-0'>
+        <div className='hologram-cyan neon-border p-2 rounded-lg text-xs'>
+          <div className='font-bold text-cyan-400 mb-1'>{LABELS.SCORE}</div>
+          <div className='text-lg font-mono'>{score.toLocaleString()}</div>
+          <div className='text-gray-400 text-xs'>
+            L{level} • {lines} lines
+          </div>
         </div>
       </div>
 
       {/* 次のピース */}
-      <div className="w-16 flex-shrink-0">
-        <div className="hologram-purple neon-border p-2 rounded-lg h-full">
-          <div className="font-bold text-purple-400 text-xs mb-1">{LABELS.NEXT}</div>
+      <div className='w-16 flex-shrink-0'>
+        <div className='hologram-purple neon-border p-2 rounded-lg h-full'>
+          <div className='font-bold text-purple-400 text-xs mb-1'>{LABELS.NEXT}</div>
           <NextPiecePanel nextPiece={nextPiece} />
         </div>
       </div>
 
       {/* ゲームボタン */}
-      <div className="w-20 flex-shrink-0">
-        <GameButtonsPanel 
+      <div className='w-20 flex-shrink-0'>
+        <GameButtonsPanel
           gameOver={gameOver}
           isPaused={isPaused}
           onTogglePause={onTogglePause}

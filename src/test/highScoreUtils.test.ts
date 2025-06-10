@@ -8,7 +8,7 @@ import {
   validateHighScore,
   sortHighScores,
   validatePlayerName,
-  calculateHighScoreStats
+  calculateHighScoreStats,
 } from '../utils/game/highScoreUtils';
 import { HighScore } from '../types/tetris';
 
@@ -17,7 +17,7 @@ const mockHighScores: HighScore[] = [
   { id: '2', score: 40000, level: 8, lines: 60, date: Date.now() },
   { id: '3', score: 30000, level: 6, lines: 40, date: Date.now() },
   { id: '4', score: 20000, level: 4, lines: 20, date: Date.now() },
-  { id: '5', score: 10000, level: 2, lines: 10, date: Date.now() }
+  { id: '5', score: 10000, level: 2, lines: 10, date: Date.now() },
 ];
 
 describe('highScoreUtils', () => {
@@ -85,7 +85,7 @@ describe('highScoreUtils', () => {
     it('ユニークなIDを生成する', () => {
       const id1 = generateHighScoreId();
       const id2 = generateHighScoreId();
-      
+
       expect(id1).not.toBe(id2);
       expect(id1).toMatch(/^score_\d+_[a-z0-9]+$/);
       expect(id2).toMatch(/^score_\d+_[a-z0-9]+$/);
@@ -95,7 +95,7 @@ describe('highScoreUtils', () => {
   describe('createHighScoreEntry', () => {
     it('プレイヤー名ありで正しいハイスコアエントリを作成する', () => {
       const entry = createHighScoreEntry(25000, 5, 30, 'TestPlayer');
-      
+
       expect(entry.score).toBe(25000);
       expect(entry.level).toBe(5);
       expect(entry.lines).toBe(30);
@@ -106,7 +106,7 @@ describe('highScoreUtils', () => {
 
     it('プレイヤー名なしで正しいハイスコアエントリを作成する', () => {
       const entry = createHighScoreEntry(25000, 5, 30);
-      
+
       expect(entry.score).toBe(25000);
       expect(entry.level).toBe(5);
       expect(entry.lines).toBe(30);
@@ -122,9 +122,9 @@ describe('highScoreUtils', () => {
         level: 5,
         lines: 30,
         date: Date.now(),
-        playerName: 'TestPlayer'
+        playerName: 'TestPlayer',
       };
-      
+
       expect(validateHighScore(validScore)).toBe(true);
     });
 
@@ -134,9 +134,9 @@ describe('highScoreUtils', () => {
         score: 25000,
         level: 5,
         lines: 30,
-        date: Date.now()
+        date: Date.now(),
       };
-      
+
       expect(validateHighScore(validScore)).toBe(true);
     });
 
@@ -146,9 +146,9 @@ describe('highScoreUtils', () => {
         score: -1000,
         level: 5,
         lines: 30,
-        date: Date.now()
+        date: Date.now(),
       } as HighScore;
-      
+
       expect(validateHighScore(invalidScore)).toBe(false);
     });
 
@@ -158,9 +158,9 @@ describe('highScoreUtils', () => {
         score: 25000,
         level: 0,
         lines: 30,
-        date: Date.now()
+        date: Date.now(),
       } as HighScore;
-      
+
       expect(validateHighScore(invalidScore)).toBe(false);
     });
   });
@@ -170,11 +170,11 @@ describe('highScoreUtils', () => {
       const unsorted: HighScore[] = [
         { id: '1', score: 30000, level: 6, lines: 40, date: 1000 },
         { id: '2', score: 50000, level: 10, lines: 80, date: 2000 },
-        { id: '3', score: 40000, level: 8, lines: 60, date: 1500 }
+        { id: '3', score: 40000, level: 8, lines: 60, date: 1500 },
       ];
-      
+
       const sorted = sortHighScores(unsorted);
-      
+
       expect(sorted[0].score).toBe(50000);
       expect(sorted[1].score).toBe(40000);
       expect(sorted[2].score).toBe(30000);
@@ -184,11 +184,11 @@ describe('highScoreUtils', () => {
       const unsorted: HighScore[] = [
         { id: '1', score: 30000, level: 6, lines: 40, date: 1000 },
         { id: '2', score: 30000, level: 6, lines: 40, date: 2000 },
-        { id: '3', score: 30000, level: 6, lines: 40, date: 1500 }
+        { id: '3', score: 30000, level: 6, lines: 40, date: 1500 },
       ];
-      
+
       const sorted = sortHighScores(unsorted);
-      
+
       expect(sorted[0].date).toBe(2000);
       expect(sorted[1].date).toBe(1500);
       expect(sorted[2].date).toBe(1000);
@@ -224,7 +224,7 @@ describe('highScoreUtils', () => {
   describe('calculateHighScoreStats', () => {
     it('空のリストで正しい統計を返す', () => {
       const stats = calculateHighScoreStats([]);
-      
+
       expect(stats.totalScores).toBe(0);
       expect(stats.averageScore).toBe(0);
       expect(stats.highestScore).toBe(0);
@@ -233,7 +233,7 @@ describe('highScoreUtils', () => {
 
     it('複数のスコアで正しい統計を計算する', () => {
       const stats = calculateHighScoreStats(mockHighScores);
-      
+
       expect(stats.totalScores).toBe(5);
       expect(stats.averageScore).toBe(30000); // (50000+40000+30000+20000+10000)/5
       expect(stats.highestScore).toBe(50000);

@@ -40,7 +40,7 @@ class PerformanceMonitor {
   endFrame(particleCount: number = 0): PerformanceMetrics {
     const now = performance.now();
     const renderTime = now - this.renderStartTime;
-    
+
     if (this.lastTime === 0) {
       this.lastTime = now;
       return this.getMetrics(particleCount);
@@ -73,13 +73,15 @@ class PerformanceMonitor {
   }
 
   private getMetrics(particleCount: number): PerformanceMetrics {
-    const avgFrameTime = this.frameTimes.length > 0 
-      ? this.frameTimes.reduce((sum, time) => sum + time, 0) / this.frameTimes.length 
-      : 0;
-    
-    const avgRenderTime = this.renderTimes.length > 0
-      ? this.renderTimes.reduce((sum, time) => sum + time, 0) / this.renderTimes.length
-      : 0;
+    const avgFrameTime =
+      this.frameTimes.length > 0
+        ? this.frameTimes.reduce((sum, time) => sum + time, 0) / this.frameTimes.length
+        : 0;
+
+    const avgRenderTime =
+      this.renderTimes.length > 0
+        ? this.renderTimes.reduce((sum, time) => sum + time, 0) / this.renderTimes.length
+        : 0;
 
     const fps = avgFrameTime > 0 ? 1000 / avgFrameTime : 0;
 
@@ -87,14 +89,14 @@ class PerformanceMonitor {
       fps: Math.round(fps * 10) / 10,
       frameTime: Math.round(avgFrameTime * 100) / 100,
       renderTime: Math.round(avgRenderTime * 100) / 100,
-      particleCount
+      particleCount,
     };
 
     // メモリ使用量の監視（対応ブラウザのみ）
     if (this.enableMemoryMonitoring && 'memory' in performance) {
       const memory = (performance as Performance & { memory?: { usedJSHeapSize: number } }).memory;
       if (memory?.usedJSHeapSize) {
-        metrics.memoryUsage = Math.round(memory.usedJSHeapSize / 1024 / 1024 * 100) / 100; // MB
+        metrics.memoryUsage = Math.round((memory.usedJSHeapSize / 1024 / 1024) * 100) / 100; // MB
       }
     }
 
@@ -106,7 +108,7 @@ class PerformanceMonitor {
       FPS: metrics.fps,
       'Frame Time': `${metrics.frameTime}ms`,
       'Render Time': `${metrics.renderTime}ms`,
-      'Particles': metrics.particleCount
+      Particles: metrics.particleCount,
     };
 
     if (metrics.memoryUsage !== undefined) {
@@ -144,7 +146,9 @@ class PerformanceMonitor {
     const recommendations: string[] = [];
 
     if (metrics.fps < 30) {
-      recommendations.push('フレームレートが低下しています。パーティクル数を減らすことを検討してください。');
+      recommendations.push(
+        'フレームレートが低下しています。パーティクル数を減らすことを検討してください。'
+      );
     }
 
     if (metrics.renderTime > 16) {
@@ -152,7 +156,9 @@ class PerformanceMonitor {
     }
 
     if (metrics.particleCount > 100) {
-      recommendations.push('パーティクル数が多すぎます。オブジェクトプールの最適化を検討してください。');
+      recommendations.push(
+        'パーティクル数が多すぎます。オブジェクトプールの最適化を検討してください。'
+      );
     }
 
     if (metrics.memoryUsage && metrics.memoryUsage > 50) {
@@ -167,7 +173,7 @@ class PerformanceMonitor {
 export const performanceMonitor = new PerformanceMonitor({
   sampleSize: 60,
   enableMemoryMonitoring: true,
-  logInterval: 5000
+  logInterval: 5000,
 });
 
 export default PerformanceMonitor;

@@ -66,29 +66,23 @@ const GameTabContent = memo(function GameTabContent({
   settings,
   updateSettings,
   audioSystemStatus,
-  className = ''
+  className = '',
 }: GameTabContentProps) {
   const highScores = useHighScores();
 
   return (
     <div className={`space-y-4 ${className}`}>
       {/* スコア情報 */}
-      <GameStatsPanel 
-        score={score}
-        level={level}
-        lines={lines}
-      />
+      <GameStatsPanel score={score} level={level} lines={lines} />
 
       {/* 次のピース */}
-      <NextPiecePanel 
-        nextPiece={nextPiece}
-      />
+      <NextPiecePanel nextPiece={nextPiece} />
 
       {/* コントロール */}
       <ControlsPanel />
 
       {/* 音設定 */}
-      <AudioPanel 
+      <AudioPanel
         isMuted={isMuted}
         volume={volume}
         settings={settings}
@@ -99,7 +93,7 @@ const GameTabContent = memo(function GameTabContent({
       />
 
       {/* ボタン */}
-      <GameButtonsPanel 
+      <GameButtonsPanel
         gameOver={gameOver}
         isPaused={isPaused}
         onTogglePause={onTogglePause}
@@ -110,11 +104,7 @@ const GameTabContent = memo(function GameTabContent({
       <ScoringPanel />
 
       {/* ハイスコア */}
-      <HighScoreDisplay 
-        highScores={highScores} 
-        maxDisplay={5}
-        className="text-sm"
-      />
+      <HighScoreDisplay highScores={highScores} maxDisplay={5} className='text-sm' />
     </div>
   );
 });

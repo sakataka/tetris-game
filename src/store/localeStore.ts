@@ -9,7 +9,7 @@ export interface LocaleState {
   supportedLanguages: readonly SupportedLocale[];
   dateFormat: string;
   isRTL: boolean;
-  
+
   // アクション
   setLanguage: (language: SupportedLocale) => void;
   getDateFormat: () => string;
@@ -18,7 +18,10 @@ export interface LocaleState {
 }
 
 // 初期状態
-const DEFAULT_LOCALE_STATE: Pick<LocaleState, 'currentLanguage' | 'supportedLanguages' | 'dateFormat' | 'isRTL'> = {
+const DEFAULT_LOCALE_STATE: Pick<
+  LocaleState,
+  'currentLanguage' | 'supportedLanguages' | 'dateFormat' | 'isRTL'
+> = {
   currentLanguage: I18N_CONFIG.DEFAULT_LOCALE,
   supportedLanguages: I18N_CONFIG.SUPPORTED_LOCALES,
   dateFormat: I18N_CONFIG.DATE_FORMAT[I18N_CONFIG.DEFAULT_LOCALE],
@@ -45,18 +48,18 @@ const detectBrowserLanguage = (): SupportedLocale => {
   }
 
   const browserLang = navigator.language;
-  
+
   // 完全一致をチェック
   if (I18N_CONFIG.SUPPORTED_LOCALES.includes(browserLang as SupportedLocale)) {
     return browserLang as SupportedLocale;
   }
-  
+
   // 言語コードのみでの一致をチェック（例: en-US → en）
   const langCode = browserLang.split('-')[0] as SupportedLocale;
   if (I18N_CONFIG.SUPPORTED_LOCALES.includes(langCode)) {
     return langCode;
   }
-  
+
   // フォールバック
   return I18N_CONFIG.DEFAULT_LOCALE;
 };
@@ -66,49 +69,51 @@ export const useLocaleStore = create<LocaleState>()(
   persist(
     (set, get) => ({
       ...DEFAULT_LOCALE_STATE,
-      
+
       setLanguage: (language: SupportedLocale) => {
         if (!get().isLanguageSupported(language)) {
-          console.warn(`Unsupported language: ${language}. Falling back to ${I18N_CONFIG.DEFAULT_LOCALE}`);
+          console.warn(
+            `Unsupported language: ${language}. Falling back to ${I18N_CONFIG.DEFAULT_LOCALE}`
+          );
           language = I18N_CONFIG.DEFAULT_LOCALE;
         }
-        
+
         set({
           currentLanguage: language,
           dateFormat: getDateFormatForLanguage(language),
-          isRTL: isRTLLanguage(language)
+          isRTL: isRTLLanguage(language),
         });
-        
+
         // HTML lang属性を更新
         if (typeof document !== 'undefined') {
           document.documentElement.lang = language;
           document.documentElement.dir = isRTLLanguage(language) ? 'rtl' : 'ltr';
         }
       },
-      
+
       getDateFormat: () => {
         const { currentLanguage } = get();
         return getDateFormatForLanguage(currentLanguage);
       },
-      
+
       isLanguageSupported: (language: string): boolean => {
         return I18N_CONFIG.SUPPORTED_LOCALES.includes(language as SupportedLocale);
       },
-      
+
       reset: () => {
         const detectedLanguage = detectBrowserLanguage();
         set({
           ...DEFAULT_LOCALE_STATE,
           currentLanguage: detectedLanguage,
           dateFormat: getDateFormatForLanguage(detectedLanguage),
-          isRTL: isRTLLanguage(detectedLanguage)
+          isRTL: isRTLLanguage(detectedLanguage),
         });
-      }
+      },
     }),
     {
       name: 'tetris-locale',
       version: 1,
-      
+
       // ストレージからの復元時の処理
       onRehydrateStorage: () => (state) => {
         if (state) {
@@ -119,7 +124,7 @@ export const useLocaleStore = create<LocaleState>()(
           }
         }
       },
-      
+
       // ストレージに保存する値をフィルタリング
       partialize: (state) => ({
         currentLanguage: state.currentLanguage,
@@ -129,20 +134,23 @@ export const useLocaleStore = create<LocaleState>()(
 );
 
 // セレクター関数（パフォーマンス最適化）
-export const useCurrentLanguage = () => useLocaleStore(state => state.currentLanguage);
-export const useSupportedLanguages = () => useLocaleStore(state => state.supportedLanguages);
-export const useIsRTL = () => useLocaleStore(state => state.isRTL);
-export const useDateFormat = () => useLocaleStore(state => state.dateFormat);
-export const useSetLanguage = () => useLocaleStore(state => state.setLanguage);
+export const useCurrentLanguage = () => useLocaleStore((state) => state.currentLanguage);
+export const useSupportedLanguages = () => useLocaleStore((state) => state.supportedLanguages);
+export const useIsRTL = () => useLocaleStore((state) => state.isRTL);
+export const useDateFormat = () => useLocaleStore((state) => state.dateFormat);
+export const useSetLanguage = () => useLocaleStore((state) => state.setLanguage);
 
 // 言語変更時のコールバック型
-export type LanguageChangeCallback = (newLanguage: SupportedLocale, oldLanguage: SupportedLocale) => void;
+export type LanguageChangeCallback = (
+  newLanguage: SupportedLocale,
+  oldLanguage: SupportedLocale
+) => void;
 
 // 言語変更の監視用カスタムフック
 export const useLanguageChange = (callback: LanguageChangeCallback) => {
   const currentLanguage = useCurrentLanguage();
   const prevLanguageRef = useRef(currentLanguage);
-  
+
   useEffect(() => {
     if (prevLanguageRef.current !== currentLanguage) {
       callback(currentLanguage, prevLanguageRef.current);
@@ -150,4 +158,3 @@ export const useLanguageChange = (callback: LanguageChangeCallback) => {
     }
   }, [currentLanguage, callback]);
 };
-
