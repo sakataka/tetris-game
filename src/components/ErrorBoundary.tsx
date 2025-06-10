@@ -39,7 +39,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // カスタムエラーオブジェクトを作成
+    // Create custom error object
     const appError = new UIError(
       error.message,
       {
@@ -58,20 +58,20 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
       }
     );
 
-    // エラーハンドラーで処理
+    // Process with error handler
     errorHandler.handleError(appError);
 
-    // 状態を更新
+    // Update state
     this.setState({
       errorId: appError.id,
     });
 
-    // 外部のエラーコールバックを実行
+    // Execute external error callback
     if (this.props.onError) {
       this.props.onError(error, errorInfo);
     }
 
-    // クリティカルレベルのエラーの場合はページ全体を再読み込み
+    // Reload entire page for critical level errors
     if (this.props.level === 'page' && this.state.retryCount >= this.maxRetries) {
       setTimeout(() => {
         if (typeof window !== 'undefined') {
@@ -104,12 +104,12 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   private renderErrorFallback() {
     const { fallback, level } = this.props;
 
-    // カスタムフォールバックが提供されている場合
+    // When custom fallback is provided
     if (fallback) {
       return fallback;
     }
 
-    // エラーレベルに応じた表示
+    // Display based on error level
     if (level === 'page') {
       return this.renderPageError();
     } else if (level === 'section') {
@@ -214,7 +214,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 }
 
-// 関数型コンポーネント用の高階コンポーネント
+// Higher-order component for functional components
 export function withErrorBoundary<P extends object>(
   Component: React.ComponentType<P>,
   errorBoundaryProps?: Omit<ErrorBoundaryProps, 'children'>
@@ -229,7 +229,7 @@ export function withErrorBoundary<P extends object>(
   return WrappedComponent;
 }
 
-// フック用のエラーバウンダリ
+// Error boundary for hooks
 export function useErrorBoundary() {
   const [error, setError] = React.useState<Error | null>(null);
 
@@ -241,7 +241,7 @@ export function useErrorBoundary() {
     setError(error);
   }, []);
 
-  // エラーが設定された場合はthrowしてError Boundaryにキャッチさせる
+  // Throw error when set to be caught by Error Boundary
   React.useEffect(() => {
     if (error) {
       throw error;
