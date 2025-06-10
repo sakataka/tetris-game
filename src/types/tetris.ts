@@ -20,6 +20,22 @@ export type SoundKey =
 export type SoundCategory = 'effect' | 'music' | 'ui' | 'ambient';
 export type VolumeLevel = 0 | 0.1 | 0.2 | 0.3 | 0.4 | 0.5 | 0.6 | 0.7 | 0.8 | 0.9 | 1.0;
 
+// Virtual control types for mobile
+export type VirtualControl = 'left' | 'right' | 'down' | 'rotate' | 'hardDrop' | 'pause';
+
+// Key binding types for controls
+export interface KeyBinding {
+  left: string;
+  right: string;
+  down: string;
+  rotate: string;
+  hardDrop: string;
+  pause: string;
+}
+
+// Board type definition
+export type Board = (string | null)[][];
+
 // ゲーム状態の厳密な型定義
 export type GameStatus = 'idle' | 'playing' | 'paused' | 'gameOver' | 'loading';
 export type InputSource = 'keyboard' | 'touch' | 'gamepad' | 'mouse';

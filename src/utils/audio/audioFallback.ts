@@ -119,7 +119,7 @@ class AudioFallbackManager {
     try {
       const AudioContextClass =
         window.AudioContext ||
-        (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+        (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
       if (AudioContextClass) {
         capabilities.webAudio = true;
 
@@ -219,7 +219,7 @@ class AudioFallbackManager {
     try {
       const AudioContextClass =
         window.AudioContext ||
-        (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+        (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
       const context = new AudioContextClass();
 
       // 無音のAudioBufferを作成してテスト

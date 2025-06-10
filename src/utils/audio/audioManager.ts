@@ -80,7 +80,7 @@ class AudioManager {
       // Web Audio API compatibility check
       const AudioContextClass =
         window.AudioContext ||
-        (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+        (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
       if (!AudioContextClass) {
         throw new AudioError(
           'Web Audio API is not supported',
