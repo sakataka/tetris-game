@@ -1,9 +1,10 @@
 /**
- * 音響システム関連ユーティリティ
+ * Audio system utilities
  *
- * Web Audio API、音声プリロード、フォールバック
+ * Strategy Pattern based audio management with automatic fallback
  */
 
 export * from './audioManager';
 export * from './audioPreloader';
 export * from './audioFallback';
+export * from './strategies';

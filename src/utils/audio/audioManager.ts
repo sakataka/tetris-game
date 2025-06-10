@@ -1,457 +1,339 @@
 /**
- * High-performance audio management system based on Web Audio API
- * Alternative to HTMLAudioElement with object pooling and concurrent playback support
+ * Strategy Pattern based Audio Manager
+ * Provides fallback chain: Web Audio API → HTML Audio → Silent
  */
 
-import { SoundKey } from '../../types/tetris';
+import type { SoundKey } from '../../types/tetris';
 import { AudioError, handleError } from '../data/errorHandler';
+import {
+  AudioStrategy,
+  WebAudioStrategy,
+  HTMLAudioStrategy,
+  SilentStrategy,
+  type SoundConfig,
+  type AudioState,
+} from './strategies';
 
-type AudioBufferCache = {
-  [K in SoundKey]?: AudioBuffer;
-};
-
-interface AudioContextState {
-  context: AudioContext | null;
-  gainNode: GainNode | null;
-  initialized: boolean;
-  suspended: boolean;
-}
-
-interface SoundConfig {
-  volume: number;
-  loop: boolean;
-  fadeIn?: number;
-  fadeOut?: number;
-}
-
-interface ActiveSound {
-  source: AudioBufferSourceNode;
-  gainNode: GainNode;
-  soundKey: SoundKey;
-  startTime: number;
-  duration: number;
-}
-
-class AudioManager {
-  private static instance: AudioManager | null = null;
-
-  private audioState: AudioContextState = {
-    context: null,
-    gainNode: null,
-    initialized: false,
-    suspended: false,
-  };
-
-  private audioBuffers: AudioBufferCache = {};
-  private activeSounds: Map<string, ActiveSound> = new Map();
-  private loadingPromises: Map<SoundKey, Promise<AudioBuffer>> = new Map();
-
-  private masterVolume: number = 0.5;
-  private isMuted: boolean = false;
-
-  // Audio file path definitions
-  private readonly soundFiles: Record<SoundKey, string> = {
-    lineClear: '/sounds/line-clear.mp3',
-    pieceLand: '/sounds/piece-land.mp3',
-    pieceRotate: '/sounds/piece-rotate.mp3',
-    tetris: '/sounds/tetris.mp3',
-    gameOver: '/sounds/game-over.mp3',
-    hardDrop: '/sounds/hard-drop.mp3',
-  };
+export class AudioManagerV2 {
+  private static instance: AudioManagerV2 | null = null;
+  private currentStrategy: AudioStrategy;
+  private strategies: AudioStrategy[] = [];
+  private strategyIndex: number = 0;
+  private initialized: boolean = false;
 
   private constructor() {
-    this.initializeAudioContext();
+    this.initializeStrategies();
+    this.currentStrategy = this.strategies[0];
   }
 
-  public static getInstance(): AudioManager {
-    if (!AudioManager.instance) {
-      AudioManager.instance = new AudioManager();
+  public static getInstance(): AudioManagerV2 {
+    if (!AudioManagerV2.instance) {
+      AudioManagerV2.instance = new AudioManagerV2();
     }
-    return AudioManager.instance;
+    return AudioManagerV2.instance;
+  }
+
+  private initializeStrategies(): void {
+    this.strategies = [new WebAudioStrategy(), new HTMLAudioStrategy(), new SilentStrategy()];
   }
 
   /**
-   * AudioContext initialization with fallback support
+   * Initialize audio system with fallback chain
    */
-  private async initializeAudioContext(): Promise<void> {
-    if (typeof window === 'undefined') return;
+  public async initialize(): Promise<void> {
+    if (this.initialized) return;
 
-    try {
-      // Web Audio API compatibility check
-      const AudioContextClass =
-        window.AudioContext ||
-        (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-      if (!AudioContextClass) {
-        throw new AudioError(
-          'Web Audio API is not supported',
-          { action: 'audio_context_init', component: 'AudioManager' },
-          { recoverable: false, retryable: false }
-        );
+    for (let i = 0; i < this.strategies.length; i++) {
+      const strategy = this.strategies[i];
+
+      if (!strategy.canPlayAudio()) {
+        continue;
       }
-
-      this.audioState.context = new AudioContextClass();
-      this.audioState.gainNode = this.audioState.context.createGain();
-      this.audioState.gainNode.connect(this.audioState.context.destination);
-
-      // Initial volume configuration
-      this.updateMasterVolume();
-
-      this.audioState.initialized = true;
-
-      // Browser autoplay policy compliance
-      if (this.audioState.context.state === 'suspended') {
-        this.audioState.suspended = true;
-        this.setupUserInteractionUnlock();
-      }
-    } catch (error) {
-      const audioError = new AudioError(
-        'Failed to initialize AudioContext',
-        { action: 'audio_context_init', component: 'AudioManager', additionalData: { error } },
-        { recoverable: false, retryable: false }
-      );
-      handleError(audioError);
-    }
-  }
-
-  /**
-   * Audio unlock via user interaction to comply with browser autoplay policies
-   */
-  private setupUserInteractionUnlock(): void {
-    const unlockAudio = async () => {
-      if (!this.audioState.context || this.audioState.context.state !== 'suspended') return;
 
       try {
-        await this.audioState.context.resume();
-        this.audioState.suspended = false;
+        await strategy.initialize();
+        this.currentStrategy = strategy;
+        this.strategyIndex = i;
+        this.initialized = true;
 
-        // Remove event listeners after successful unlock
-        document.removeEventListener('click', unlockAudio);
-        document.removeEventListener('keydown', unlockAudio);
-        document.removeEventListener('touchstart', unlockAudio);
+        // Log successful strategy selection
+        console.info(`Audio system initialized with ${strategy.constructor.name}`);
+        return;
       } catch (error) {
         const audioError = new AudioError(
-          'Failed to unlock audio context',
-          { action: 'audio_unlock', component: 'AudioManager', additionalData: { error } },
-          { recoverable: true, retryable: true }
+          `Failed to initialize ${strategy.constructor.name}`,
+          {
+            action: 'audio_strategy_init',
+            component: 'AudioManagerV2',
+            additionalData: { strategy: strategy.constructor.name, error },
+          },
+          { recoverable: true, retryable: false }
         );
         handleError(audioError);
+
+        // Continue to next strategy
+        continue;
       }
-    };
-
-    // Attempt audio unlock on multiple user interaction events
-    document.addEventListener('click', unlockAudio, { once: true });
-    document.addEventListener('keydown', unlockAudio, { once: true });
-    document.addEventListener('touchstart', unlockAudio, { once: true });
-  }
-
-  /**
-   * Parallel preloading of audio files with error handling
-   */
-  public async preloadAllSounds(): Promise<void> {
-    if (!this.audioState.context) {
-      await this.initializeAudioContext();
     }
 
-    const loadPromises = Object.entries(this.soundFiles).map(async ([key, path]) => {
-      const soundKey = key as SoundKey;
+    // If all strategies failed, use silent as final fallback
+    const silentStrategy = new SilentStrategy();
+    await silentStrategy.initialize();
+    this.currentStrategy = silentStrategy;
+    this.strategyIndex = this.strategies.length - 1;
+    this.initialized = true;
 
-      if (this.audioBuffers[soundKey]) return Promise.resolve(); // Already loaded
-      if (this.loadingPromises.has(soundKey)) return this.loadingPromises.get(soundKey);
-
-      const loadPromise = this.loadAudioBuffer(soundKey, path);
-      this.loadingPromises.set(soundKey, loadPromise);
-
-      try {
-        const buffer = await loadPromise;
-        this.audioBuffers[soundKey] = buffer;
-      } catch {
-        // Individual errors are handled inside loadAudioBuffer
-      } finally {
-        this.loadingPromises.delete(soundKey);
-      }
-      return Promise.resolve();
-    });
-
-    await Promise.allSettled(loadPromises);
+    console.warn('All audio strategies failed, using silent fallback');
   }
 
   /**
-   * Individual audio file loading with HTTP error handling
+   * Play sound with automatic fallback on failure
    */
-  private async loadAudioBuffer(soundKey: SoundKey, path: string): Promise<AudioBuffer> {
-    if (!this.audioState.context) {
-      throw new AudioError(
-        'AudioContext not initialized',
-        { action: 'audio_load', component: 'AudioManager', additionalData: { soundKey } },
-        { recoverable: true, retryable: true }
-      );
+  public async playSound(soundKey: SoundKey, config?: Partial<SoundConfig>): Promise<void> {
+    if (!this.initialized) {
+      await this.initialize();
     }
 
     try {
-      const response = await fetch(path);
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      const arrayBuffer = await response.arrayBuffer();
-      return await this.audioState.context.decodeAudioData(arrayBuffer);
+      await this.currentStrategy.playSound(soundKey, config);
     } catch (error) {
-      const audioError = new AudioError(
-        `Failed to load audio file: ${soundKey}`,
-        {
-          action: 'audio_load',
-          component: 'AudioManager',
-          additionalData: { soundKey, path, error },
-        },
-        { recoverable: true, retryable: true }
-      );
-      handleError(audioError);
-      throw audioError;
+      // Attempt fallback to next strategy
+      await this.fallbackToNextStrategy(error);
+
+      // Retry with new strategy
+      if (this.currentStrategy) {
+        try {
+          await this.currentStrategy.playSound(soundKey, config);
+        } catch (fallbackError) {
+          const audioError = new AudioError(
+            `Failed to play sound after fallback: ${soundKey}`,
+            {
+              action: 'audio_play_fallback',
+              component: 'AudioManagerV2',
+              additionalData: { soundKey, originalError: error, fallbackError },
+            },
+            { recoverable: false, retryable: false }
+          );
+          handleError(audioError);
+        }
+      }
     }
   }
 
   /**
-   * Main audio playback function with comprehensive error handling
-   *
-   * Note: High cognitive complexity is intentional as this function integrates
-   * core audio system features: robust error handling, fallback mechanisms,
-   * concurrent playback management. Each conditional branch handles specific
-   * error states or browser limitations - splitting would reduce maintainability.
+   * Fallback to next available strategy
    */
-  // eslint-disable-next-line sonarjs/cognitive-complexity
-  public async playSound(soundKey: SoundKey, config: Partial<SoundConfig> = {}): Promise<void> {
-    if (this.isMuted || !this.audioState.context || !this.audioState.gainNode) return;
+  private async fallbackToNextStrategy(error: unknown): Promise<void> {
+    const nextIndex = this.strategyIndex + 1;
 
-    // Warning only when AudioContext is suspended - user interaction required
-    if (this.audioState.suspended) {
-      const audioError = new AudioError(
-        `Audio context suspended, requires user interaction: ${soundKey}`,
-        { action: 'audio_play', component: 'AudioManager', additionalData: { soundKey } },
-        {
-          recoverable: true,
-          retryable: true,
-          userMessage: '音声を有効にするには画面をタップしてください',
-        }
-      );
-      handleError(audioError);
+    if (nextIndex >= this.strategies.length) {
+      // No more strategies available
       return;
     }
 
-    // Auto-load audio buffer if not already loaded
-    if (!this.audioBuffers[soundKey]) {
-      if (!this.loadingPromises.has(soundKey)) {
-        const loadPromise = this.loadAudioBuffer(soundKey, this.soundFiles[soundKey]);
-        this.loadingPromises.set(soundKey, loadPromise);
-
-        try {
-          this.audioBuffers[soundKey] = await loadPromise;
-        } catch {
-          return; // Error already handled in loadAudioBuffer
-        } finally {
-          this.loadingPromises.delete(soundKey);
-        }
-      } else {
-        // Wait if already loading
-        try {
-          this.audioBuffers[soundKey] = await this.loadingPromises.get(soundKey)!;
-        } catch {
-          return;
-        }
-      }
-    }
-
-    const audioBuffer = this.audioBuffers[soundKey];
-    if (!audioBuffer) return;
+    const nextStrategy = this.strategies[nextIndex];
 
     try {
-      // Create AudioBufferSourceNode (single-use limitation of Web Audio API)
-      const source = this.audioState.context.createBufferSource();
-      source.buffer = audioBuffer;
+      await nextStrategy.initialize();
 
-      // Individual volume control GainNode
-      const soundGainNode = this.audioState.context.createGain();
-      const volume = config.volume ?? 1.0;
-      soundGainNode.gain.value = volume;
+      // Dispose current strategy
+      this.currentStrategy.dispose();
 
-      // Audio graph connection: source -> soundGain -> masterGain -> destination
-      source.connect(soundGainNode);
-      soundGainNode.connect(this.audioState.gainNode);
+      // Switch to new strategy
+      this.currentStrategy = nextStrategy;
+      this.strategyIndex = nextIndex;
 
-      // Loop configuration
-      source.loop = config.loop ?? false;
-
-      // Fade-in processing using AudioParam automation
-      if (config.fadeIn && config.fadeIn > 0) {
-        soundGainNode.gain.setValueAtTime(0, this.audioState.context.currentTime);
-        soundGainNode.gain.linearRampToValueAtTime(
-          volume,
-          this.audioState.context.currentTime + config.fadeIn
-        );
-      }
-
-      // Register as active sound for resource management
-      const soundId = `${soundKey}-${Date.now()}-${Math.random()}`;
-      const activeSound: ActiveSound = {
-        source,
-        gainNode: soundGainNode,
-        soundKey,
-        startTime: this.audioState.context.currentTime,
-        duration: audioBuffer.duration,
-      };
-
-      this.activeSounds.set(soundId, activeSound);
-
-      // Cleanup on playback completion
-      source.onended = () => {
-        this.activeSounds.delete(soundId);
-      };
-
-      // Fade-out processing using AudioParam automation
-      if (config.fadeOut && config.fadeOut > 0 && !source.loop) {
-        const fadeStartTime =
-          this.audioState.context.currentTime + audioBuffer.duration - config.fadeOut;
-        if (fadeStartTime > this.audioState.context.currentTime) {
-          soundGainNode.gain.setValueAtTime(volume, fadeStartTime);
-          soundGainNode.gain.linearRampToValueAtTime(0, fadeStartTime + config.fadeOut);
-        }
-      }
-
-      // Start playback
-      source.start(0);
-    } catch (error) {
+      console.warn(`Audio strategy fallback: ${nextStrategy.constructor.name}`);
+    } catch (initError) {
       const audioError = new AudioError(
-        `Failed to play sound: ${soundKey}`,
-        { action: 'audio_play', component: 'AudioManager', additionalData: { soundKey, error } },
+        `Failed to fallback to ${nextStrategy.constructor.name}`,
+        {
+          action: 'audio_strategy_fallback',
+          component: 'AudioManagerV2',
+          additionalData: { originalError: error, fallbackError: initError },
+        },
         { recoverable: true, retryable: false }
       );
       handleError(audioError);
+
+      // Try next strategy recursively
+      await this.fallbackToNextStrategy(initError);
     }
   }
 
   /**
-   * Stop specific sound type with active sound management
+   * Stop specific sound
    */
   public stopSound(soundKey: SoundKey): void {
-    for (const [soundId, activeSound] of this.activeSounds.entries()) {
-      if (activeSound.soundKey === soundKey) {
-        try {
-          activeSound.source.stop();
-          this.activeSounds.delete(soundId);
-        } catch {
-          // Ignore if already stopped
-        }
-      }
+    if (this.currentStrategy) {
+      this.currentStrategy.stopSound(soundKey);
     }
   }
 
   /**
-   * Stop all active sounds with cleanup
+   * Stop all sounds
    */
   public stopAllSounds(): void {
-    for (const [, activeSound] of this.activeSounds.entries()) {
-      try {
-        activeSound.source.stop();
-      } catch {
-        // Ignore if already stopped
-      }
+    if (this.currentStrategy) {
+      this.currentStrategy.stopAllSounds();
     }
-    this.activeSounds.clear();
   }
 
   /**
-   * Master volume control with range clamping
+   * Set master volume
    */
   public setMasterVolume(volume: number): void {
-    this.masterVolume = Math.max(0, Math.min(1, volume));
-    this.updateMasterVolume();
+    if (this.currentStrategy) {
+      this.currentStrategy.setMasterVolume(volume);
+    }
   }
 
   /**
-   * Get current master volume
+   * Get master volume
    */
   public getMasterVolume(): number {
-    return this.masterVolume;
+    return this.currentStrategy ? this.currentStrategy.getMasterVolume() : 0.5;
   }
 
   /**
-   * Mute state control
+   * Set mute state
    */
   public setMuted(muted: boolean): void {
-    this.isMuted = muted;
-    this.updateMasterVolume();
+    if (this.currentStrategy) {
+      this.currentStrategy.setMuted(muted);
+    }
   }
 
   /**
-   * Get current mute state
+   * Get mute state
    */
   public isMutedState(): boolean {
-    return this.isMuted;
+    return this.currentStrategy ? this.currentStrategy.isMutedState() : false;
   }
 
   /**
-   * Apply master volume changes to audio graph
+   * Preload all sounds
    */
-  private updateMasterVolume(): void {
-    if (this.audioState.gainNode) {
-      const effectiveVolume = this.isMuted ? 0 : this.masterVolume;
-      this.audioState.gainNode.gain.value = effectiveVolume;
+  public async preloadAllSounds(): Promise<void> {
+    if (!this.initialized) {
+      await this.initialize();
+    }
+
+    if (this.currentStrategy) {
+      try {
+        await this.currentStrategy.preloadSounds();
+      } catch (error) {
+        const audioError = new AudioError(
+          'Failed to preload sounds',
+          {
+            action: 'audio_preload',
+            component: 'AudioManagerV2',
+            additionalData: { strategy: this.currentStrategy.constructor.name, error },
+          },
+          { recoverable: true, retryable: false }
+        );
+        handleError(audioError);
+      }
     }
   }
 
   /**
-   * Audio system state inspection for debugging and monitoring
+   * Get current audio state
    */
-  public getAudioState(): {
-    initialized: boolean;
-    suspended: boolean;
-    loadedSounds: SoundKey[];
-    activeSounds: number;
-    masterVolume: number;
-    isMuted: boolean;
-  } {
+  public getAudioState(): AudioState & { currentStrategy: string } {
+    const baseState = this.currentStrategy
+      ? this.currentStrategy.getAudioState()
+      : {
+          initialized: false,
+          suspended: false,
+          loadedSounds: [],
+          activeSounds: 0,
+          masterVolume: 0.5,
+          isMuted: false,
+          strategyType: 'None',
+        };
+
     return {
-      initialized: this.audioState.initialized,
-      suspended: this.audioState.suspended,
-      loadedSounds: Object.keys(this.audioBuffers) as SoundKey[],
-      activeSounds: this.activeSounds.size,
-      masterVolume: this.masterVolume,
-      isMuted: this.isMuted,
+      ...baseState,
+      currentStrategy: this.currentStrategy ? this.currentStrategy.constructor.name : 'None',
     };
   }
 
   /**
-   * Memory cleanup and resource disposal
+   * Get available strategies
+   */
+  public getAvailableStrategies(): string[] {
+    return this.strategies
+      .filter((strategy) => strategy.canPlayAudio())
+      .map((strategy) => strategy.constructor.name);
+  }
+
+  /**
+   * Force switch to specific strategy (for testing)
+   */
+  public async switchToStrategy(strategyName: string): Promise<boolean> {
+    const strategyIndex = this.strategies.findIndex(
+      (strategy) => strategy.constructor.name === strategyName
+    );
+
+    if (strategyIndex === -1) {
+      return false;
+    }
+
+    const strategy = this.strategies[strategyIndex];
+
+    if (!strategy.canPlayAudio()) {
+      return false;
+    }
+
+    try {
+      await strategy.initialize();
+
+      // Dispose current strategy
+      if (this.currentStrategy) {
+        this.currentStrategy.dispose();
+      }
+
+      this.currentStrategy = strategy;
+      this.strategyIndex = strategyIndex;
+
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Clean up all resources
    */
   public dispose(): void {
-    this.stopAllSounds();
-
-    if (this.audioState.context) {
-      this.audioState.context.close();
+    if (this.currentStrategy) {
+      this.currentStrategy.dispose();
     }
 
-    this.audioBuffers = {};
-    this.loadingPromises.clear();
-    this.audioState = {
-      context: null,
-      gainNode: null,
-      initialized: false,
-      suspended: false,
-    };
+    for (const strategy of this.strategies) {
+      strategy.dispose();
+    }
+
+    this.strategies = [];
+    this.initialized = false;
+    AudioManagerV2.instance = null;
   }
 }
 
 // Export singleton instance
-export const audioManager = AudioManager.getInstance();
+export const audioManagerV2 = AudioManagerV2.getInstance();
+export const audioManager = audioManagerV2; // Backward compatibility
 
-// Export convenience functions
+// Export convenience functions with same interface as original
 export const playSound = (soundKey: SoundKey, config?: Partial<SoundConfig>) =>
-  audioManager.playSound(soundKey, config);
+  audioManagerV2.playSound(soundKey, config);
 
-export const preloadSounds = () => audioManager.preloadAllSounds();
-export const setMasterVolume = (volume: number) => audioManager.setMasterVolume(volume);
-export const setMuted = (muted: boolean) => audioManager.setMuted(muted);
-export const getMasterVolume = () => audioManager.getMasterVolume();
-export const isMuted = () => audioManager.isMutedState();
-export const getAudioState = () => audioManager.getAudioState();
-export const stopSound = (soundKey: SoundKey) => audioManager.stopSound(soundKey);
-export const stopAllSounds = () => audioManager.stopAllSounds();
+export const preloadSounds = () => audioManagerV2.preloadAllSounds();
+export const setMasterVolume = (volume: number) => audioManagerV2.setMasterVolume(volume);
+export const setMuted = (muted: boolean) => audioManagerV2.setMuted(muted);
+export const getMasterVolume = () => audioManagerV2.getMasterVolume();
+export const isMuted = () => audioManagerV2.isMutedState();
+export const getAudioState = () => audioManagerV2.getAudioState();
+export const stopSound = (soundKey: SoundKey) => audioManagerV2.stopSound(soundKey);
+export const stopAllSounds = () => audioManagerV2.stopAllSounds();
