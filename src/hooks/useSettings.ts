@@ -53,7 +53,7 @@ function loadFromLocalStorage(): GameSettings | null {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       const parsed = JSON.parse(stored);
-      // 設定の妥当性をチェック
+      // Check settings validity
       return {
         ...DEFAULT_SETTINGS,
         ...parsed,
@@ -74,7 +74,7 @@ export function useSettings() {
     return loadFromLocalStorage() || DEFAULT_SETTINGS;
   });
 
-  // 設定を更新して保存
+  // Update and save settings
   const updateSettings = useCallback((updates: Partial<GameSettings>) => {
     setSettingsState((prevSettings) => {
       const newSettings = { ...prevSettings, ...updates };
@@ -83,13 +83,13 @@ export function useSettings() {
     });
   }, []);
 
-  // 設定をデフォルトにリセット
+  // Reset settings to default
   const resetSettings = useCallback(() => {
     setSettingsState(DEFAULT_SETTINGS);
     saveToLocalStorage(DEFAULT_SETTINGS);
   }, []);
 
-  // 特定のキーバインディングを更新
+  // Update specific key binding
   const updateKeyBinding = useCallback(
     (action: keyof GameSettings['keyBindings'], keys: string[]) => {
       updateSettings({
@@ -102,7 +102,7 @@ export function useSettings() {
     [settings.keyBindings, updateSettings]
   );
 
-  // 音量を更新
+  // Update volume
   const setVolume = useCallback(
     (volume: number) => {
       const clampedVolume = Math.max(0, Math.min(1, volume));
@@ -111,12 +111,12 @@ export function useSettings() {
     [updateSettings]
   );
 
-  // オーディオ有効/無効を切り替え
+  // Toggle audio enabled/disabled
   const toggleAudio = useCallback(() => {
     updateSettings({ audioEnabled: !settings.audioEnabled });
   }, [settings.audioEnabled, updateSettings]);
 
-  // localStorage変更の監視（他のタブでの変更を検知）
+  // Monitor localStorage changes (detect changes in other tabs)
   useEffect(() => {
     if (typeof window === 'undefined') return;
 

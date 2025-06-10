@@ -1,14 +1,14 @@
 /**
- * レイアウト・UI寸法関連の定数
+ * Layout and UI dimension related constants
  *
- * ゲームボード、UI要素のサイズ、ブレークポイント設定
+ * Game board, UI element sizes, and breakpoint settings
  */
 
-// ゲームボード設定
+// Game board settings
 export const BOARD_WIDTH = 10;
 export const BOARD_HEIGHT = 20;
 
-// エフェクト・アニメーション設定
+// Effects and animation settings
 export const EFFECTS = {
   FLASH_DURATION: 300,
   SHAKE_DURATION: 200,
@@ -19,7 +19,7 @@ export const EFFECTS = {
   NEON_BLUR_XL: '16px',
 } as const;
 
-// モバイル・レスポンシブ設定
+// Mobile and responsive settings
 export const MOBILE_CONFIG = {
   TOUCH_DELAY: 100,
   VIRTUAL_BUTTON_SIZE: 48,
@@ -27,7 +27,7 @@ export const MOBILE_CONFIG = {
   TABLET_BREAKPOINT: 768,
 } as const;
 
-// テーマ・視覚設定
+// Theme and visual settings
 export const THEME_CONFIG = {
   DEFAULT_VOLUME: 0.5,
   DEFAULT_EFFECT_INTENSITY: 50,

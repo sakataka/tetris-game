@@ -1,10 +1,10 @@
 /**
- * タイミング・アニメーション関連の定数
+ * Timing and animation related constants
  *
- * フレームレート、アニメーション持続時間、タイマー設定
+ * Frame rate, animation duration, and timer settings
  */
 
-// 多言語化設定
+// Internationalization settings
 export const I18N_CONFIG = {
   DEFAULT_LOCALE: 'ja',
   SUPPORTED_LOCALES: ['ja', 'en', 'zh', 'ko'] as const,
@@ -17,7 +17,7 @@ export const I18N_CONFIG = {
   },
 } as const;
 
-// フレームとタイミング設定
+// Frame and timing settings
 export const TIMING = {
   FRAME_RATE: 60, // FPS
   ANIMATION_FRAME_TIME: 16.67, // ms (1000/60)
@@ -25,7 +25,7 @@ export const TIMING = {
   THROTTLE_DELAY: 100, // ms
 } as const;
 
-// アニメーション設定
+// Animation settings
 export const ANIMATIONS = {
   FADE_DURATION: 300,
   SLIDE_DURATION: 250,
@@ -33,5 +33,5 @@ export const ANIMATIONS = {
   PULSE_INTERVAL: 1000,
 } as const;
 
-// 型エクスポート
+// Type exports
 export type SupportedLocale = (typeof I18N_CONFIG.SUPPORTED_LOCALES)[number];

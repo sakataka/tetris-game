@@ -1,10 +1,10 @@
 /**
- * ストレージ管理関連の定数
+ * Storage management related constants
  *
- * LocalStorageキー、データ永続化設定
+ * LocalStorage keys and data persistence settings
  */
 
-// ローカルストレージキー
+// Local storage keys
 export const STORAGE_KEYS = {
   GAME_SETTINGS: 'tetris-settings',
   HIGH_SCORES: 'tetris-high-scores',
@@ -15,12 +15,12 @@ export const STORAGE_KEYS = {
   LOCALE: 'tetris-locale',
 } as const;
 
-// データ管理設定
+// Data management settings
 export const DATA_MANAGEMENT = {
-  AUTO_SAVE_INTERVAL: 5000, // 5秒
+  AUTO_SAVE_INTERVAL: 5000, // 5 seconds
   MAX_SESSION_HISTORY: 100,
   BACKUP_RETENTION_DAYS: 30,
 } as const;
 
-// 型エクスポート
+// Type exports
 export type StorageKey = keyof typeof STORAGE_KEYS;

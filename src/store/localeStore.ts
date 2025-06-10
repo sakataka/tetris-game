@@ -41,7 +41,7 @@ const isRTLLanguage = (language: SupportedLocale): boolean => {
   return RTL_LANGUAGES.includes(language);
 };
 
-// ブラウザ言語の検出とフォールバック
+// Browser language detection and fallback
 const detectBrowserLanguage = (): SupportedLocale => {
   if (typeof window === 'undefined') {
     return I18N_CONFIG.DEFAULT_LOCALE;
@@ -49,22 +49,22 @@ const detectBrowserLanguage = (): SupportedLocale => {
 
   const browserLang = navigator.language;
 
-  // 完全一致をチェック
+  // Check for exact match
   if (I18N_CONFIG.SUPPORTED_LOCALES.includes(browserLang as SupportedLocale)) {
     return browserLang as SupportedLocale;
   }
 
-  // 言語コードのみでの一致をチェック（例: en-US → en）
+  // Check for language code only match (e.g., en-US → en)
   const langCode = browserLang.split('-')[0] as SupportedLocale;
   if (I18N_CONFIG.SUPPORTED_LOCALES.includes(langCode)) {
     return langCode;
   }
 
-  // フォールバック
+  // Fallback
   return I18N_CONFIG.DEFAULT_LOCALE;
 };
 
-// Zustandストア
+// Zustand store
 export const useLocaleStore = create<LocaleState>()(
   persist(
     (set, get) => ({
@@ -84,7 +84,7 @@ export const useLocaleStore = create<LocaleState>()(
           isRTL: isRTLLanguage(language),
         });
 
-        // HTML lang属性を更新
+        // Update HTML lang attribute
         if (typeof document !== 'undefined') {
           document.documentElement.lang = language;
           document.documentElement.dir = isRTLLanguage(language) ? 'rtl' : 'ltr';
@@ -114,10 +114,10 @@ export const useLocaleStore = create<LocaleState>()(
       name: 'tetris-locale',
       version: 1,
 
-      // ストレージからの復元時の処理
+      // Processing when restoring from storage
       onRehydrateStorage: () => (state) => {
         if (state) {
-          // 復元時にHTML属性を設定
+          // Set HTML attributes on restoration
           if (typeof document !== 'undefined') {
             document.documentElement.lang = state.currentLanguage;
             document.documentElement.dir = state.isRTL ? 'rtl' : 'ltr';
@@ -125,7 +125,7 @@ export const useLocaleStore = create<LocaleState>()(
         }
       },
 
-      // ストレージに保存する値をフィルタリング
+      // Filter values to save to storage
       partialize: (state) => ({
         currentLanguage: state.currentLanguage,
       }),
@@ -133,20 +133,20 @@ export const useLocaleStore = create<LocaleState>()(
   )
 );
 
-// セレクター関数（パフォーマンス最適化）
+// Selector functions (performance optimization)
 export const useCurrentLanguage = () => useLocaleStore((state) => state.currentLanguage);
 export const useSupportedLanguages = () => useLocaleStore((state) => state.supportedLanguages);
 export const useIsRTL = () => useLocaleStore((state) => state.isRTL);
 export const useDateFormat = () => useLocaleStore((state) => state.dateFormat);
 export const useSetLanguage = () => useLocaleStore((state) => state.setLanguage);
 
-// 言語変更時のコールバック型
+// Callback type for language changes
 export type LanguageChangeCallback = (
   newLanguage: SupportedLocale,
   oldLanguage: SupportedLocale
 ) => void;
 
-// 言語変更の監視用カスタムフック
+// Custom hook for monitoring language changes
 export const useLanguageChange = (callback: LanguageChangeCallback) => {
   const currentLanguage = useCurrentLanguage();
   const prevLanguageRef = useRef(currentLanguage);

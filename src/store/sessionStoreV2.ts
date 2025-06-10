@@ -1,8 +1,8 @@
 /**
- * 簡素化されたセッションストア (v2)
+ * Simplified session store (v2)
  *
- * SessionManagerサービスクラスをベースにした
- * 軽量なZustandストア実装
+ * Lightweight Zustand store implementation
+ * based on SessionManager service class
  */
 
 import { create } from 'zustand';
@@ -10,12 +10,12 @@ import { PlaySession } from '../types/tetris';
 import { sessionManager, SessionStats } from '../utils/data/sessionManager';
 
 interface SessionStoreV2 {
-  // State (SessionManagerから取得)
+  // State (obtained from SessionManager)
   currentSession: PlaySession | null;
   sessions: PlaySession[];
   stats: SessionStats;
 
-  // Actions (SessionManagerのラッパー)
+  // Actions (SessionManager wrappers)
   startSession: () => void;
   endSession: () => void;
   onGameStart: () => void;
@@ -27,7 +27,7 @@ interface SessionStoreV2 {
 }
 
 export const useSessionStoreV2 = create<SessionStoreV2>()((set) => {
-  // SessionManagerからの変更通知をリッスン
+  // Listen to change notifications from SessionManager
   const updateFromManager = () => {
     set({
       currentSession: sessionManager.getCurrentSession(),
@@ -37,10 +37,10 @@ export const useSessionStoreV2 = create<SessionStoreV2>()((set) => {
     });
   };
 
-  // 初回データロード
+  // Initial data loading
   updateFromManager();
 
-  // SessionManagerの変更をリッスン
+  // Listen to SessionManager changes
   sessionManager.addChangeListener(updateFromManager);
 
   return {
@@ -53,8 +53,8 @@ export const useSessionStoreV2 = create<SessionStoreV2>()((set) => {
     // Actions
     startSession: () => {
       sessionManager.startSession();
-      // SessionManagerが自動的にリスナーを呼び出すため、
-      // ここでは明示的なstateUpdateは不要
+      // No explicit state update needed here since SessionManager
+      // automatically calls listeners
     },
 
     endSession: () => {
@@ -75,13 +75,13 @@ export const useSessionStoreV2 = create<SessionStoreV2>()((set) => {
   };
 });
 
-// 個別セレクターフック（パフォーマンス最適化）
+// Individual selector hooks (performance optimization)
 export const useCurrentSession = () => useSessionStoreV2((state) => state.currentSession);
 export const useSessionStats = () => useSessionStoreV2((state) => state.stats);
 export const useIsSessionActive = () => useSessionStoreV2((state) => state.isSessionActive);
 export const useAllSessions = () => useSessionStoreV2((state) => state.sessions);
 
-// アクションフック（関数参照安定化）
+// Action hooks (function reference stabilization)
 export const useStartSession = () => useSessionStoreV2((state) => state.startSession);
 export const useEndSession = () => useSessionStoreV2((state) => state.endSession);
 export const useOnGameStart = () => useSessionStoreV2((state) => state.onGameStart);

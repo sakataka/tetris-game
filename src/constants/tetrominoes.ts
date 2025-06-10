@@ -1,21 +1,21 @@
 /**
- * テトリミノ定義関連の定数
+ * Tetromino definition related constants
  *
- * テトリミノの形状、色、タイプ定義
+ * Tetromino shape, color, and type definitions
  */
 
-// テトリミノの色定義
+// Tetromino color definitions
 export const TETROMINO_COLORS = {
-  I: '#00ffff', // シアン
-  O: '#ffff00', // イエロー
-  T: '#ff00ff', // マゼンタ
-  S: '#00ff00', // グリーン
-  Z: '#ff0000', // レッド
-  J: '#0000ff', // ブルー
-  L: '#ff8000', // オレンジ
+  I: '#00ffff', // Cyan
+  O: '#ffff00', // Yellow
+  T: '#ff00ff', // Magenta
+  S: '#00ff00', // Green
+  Z: '#ff0000', // Red
+  J: '#0000ff', // Blue
+  L: '#ff8000', // Orange
 } as const;
 
-// テトリミノの形状定義
+// Tetromino shape definitions
 export const TETROMINO_SHAPES = {
   I: [
     [0, 0, 0, 0],
@@ -54,10 +54,10 @@ export const TETROMINO_SHAPES = {
   ],
 } as const;
 
-// テトリミノタイプ一覧
+// Tetromino type list
 export const TETROMINO_TYPES = ['I', 'O', 'T', 'S', 'Z', 'J', 'L'] as const;
 
-// 型エクスポート
+// Type exports
 export type TetrominoColor = keyof typeof TETROMINO_COLORS;
 export type TetrominoShape = keyof typeof TETROMINO_SHAPES;
 export type TetrominoTypeList = typeof TETROMINO_TYPES;
