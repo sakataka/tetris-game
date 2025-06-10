@@ -11,7 +11,7 @@ import {
   updateGameStateWithPiece,
 } from '../utils/game';
 
-// 初期ゲーム状態
+// Initial game state
 const INITIAL_GAME_STATE: GameState = {
   board: createEmptyBoard(),
   currentPiece: getRandomTetromino(),
@@ -123,28 +123,28 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
         lineEffect: {
           flashingLines: [],
           shaking: false,
-          particles: state.gameState.lineEffect.particles, // パーティクルは保持
+          particles: state.gameState.lineEffect.particles, // Preserve particles
         },
       },
     })),
 
   calculatePiecePlacementState: (piece, bonusPoints = 0, playSound) =>
     set((state) => {
-      // 0. ピース着地音を再生（ライン消去音より前に）
+      // 0. Play piece landing sound (before line clear sound)
       if (playSound) {
         if (bonusPoints > 0) {
-          // ボーナスポイントがある場合はハードドロップ音
+          // Hard drop sound when bonus points are present
           playSound('hardDrop');
         } else {
-          // 通常のピース着地音
+          // Normal piece landing sound
           playSound('pieceLand');
         }
       }
 
-      // 1. ライン消去処理
+      // 1. Line clearing processing
       const lineClearResult = processLineClear(state.gameState.board, piece);
 
-      // 2. スコア計算
+      // 2. Score calculation
       const scoreResult = calculateScoreIncrease(
         state.gameState.score,
         state.gameState.lines,
@@ -152,7 +152,7 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
         bonusPoints
       );
 
-      // 3. ライン消去エフェクト作成
+      // 3. Create line clear effects
       const lineEffect = createLineEffects(
         lineClearResult.linesCleared,
         lineClearResult.linesToClear,
@@ -161,7 +161,7 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
         playSound
       );
 
-      // 4. ゲームオーバー判定
+      // 4. Game over determination
       const gameOverResult = checkGameOver(
         lineClearResult.newBoard,
         state.gameState.nextPiece!,
@@ -169,7 +169,7 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
         playSound
       );
 
-      // 5. 最終的なゲーム状態更新
+      // 5. Final game state update
       const newGameState = updateGameStateWithPiece(
         state.gameState,
         lineClearResult,
@@ -208,7 +208,7 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
 export const useGameState = () => useGameStateStore((state) => state.gameState);
 export const useDropTime = () => useGameStateStore((state) => state.dropTime);
 
-// 個別アクションフック（関数参照安定化）
+// Individual action hooks (function reference stabilization)
 export const useSetGameState = () => useGameStateStore((state) => state.setGameState);
 export const useUpdateParticles = () => useGameStateStore((state) => state.updateParticles);
 export const useResetGame = () => useGameStateStore((state) => state.resetGame);

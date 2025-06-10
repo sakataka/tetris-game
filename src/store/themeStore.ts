@@ -8,7 +8,7 @@ import {
 } from '../types/tetris';
 import { getThemePreset } from '../utils/ui/themePresets';
 
-// デフォルトテーマ状態
+// Default theme state
 const DEFAULT_THEME_STATE: ThemeState = {
   current: 'cyberpunk' as ThemeVariant,
   effectIntensity: 1.0,
@@ -108,7 +108,7 @@ export const useTheme = () => useThemeStore((state) => state.theme);
 export const useThemeConfig = () => useThemeStore((state) => state.theme.config);
 export const useThemeAccessibility = () => useThemeStore((state) => state.theme.accessibility);
 
-// 個別アクションフック（関数参照安定化）
+// Individual action hooks (function reference stabilization)
 export const useSetTheme = () => useThemeStore((state) => state.setTheme);
 export const useUpdateThemeState = () => useThemeStore((state) => state.updateThemeState);
 export const useSetCustomColors = () => useThemeStore((state) => state.setCustomColors);

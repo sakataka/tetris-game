@@ -1,4 +1,4 @@
-// 新しい分割されたZustandストア群の統合エクスポート
+// Unified export of new split Zustand store collection
 
 // Settings Store
 export {
@@ -78,4 +78,4 @@ export {
   useClearError,
 } from './sessionStore';
 
-// レガシーストア削除完了
+// Legacy store removal completed

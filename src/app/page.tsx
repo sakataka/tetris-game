@@ -5,7 +5,7 @@ import TetrisGame from '../components/TetrisGame';
 export default function Home() {
   return (
     <div className='min-h-screen grid-background flex items-center justify-center relative overflow-hidden'>
-      {/* メインコンテンツ */}
+      {/* Main content */}
       <div className='text-center relative z-10 px-4'>
         <div className='mb-8 md:mb-12'>
           <h1 className='text-4xl md:text-6xl font-bold text-white mb-2 relative'>
@@ -24,7 +24,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* 背景エフェクト */}
+      {/* Background effects */}
       <div className='absolute top-10 left-10 w-32 h-32 bg-cyan-400 rounded-full opacity-10 blur-3xl animate-pulse'></div>
       <div
         className='absolute bottom-10 right-10 w-40 h-40 bg-purple-400 rounded-full opacity-10 blur-3xl animate-pulse'

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { GameStatistics, HighScore } from '../types/tetris';
 
-// デフォルト統計値
+// Default statistics values
 const DEFAULT_STATISTICS: GameStatistics = {
   totalGames: 0,
   totalLines: 0,
@@ -161,7 +161,7 @@ export const useStatisticsStore = create<StatisticsStore>()((set, get) => ({
 export const useHighScores = () => useStatisticsStore((state) => state.highScores);
 export const useStatistics = () => useStatisticsStore((state) => state.statistics);
 
-// 個別アクションフック（関数参照安定化）
+// Individual action hooks (function reference stabilization)
 export const useAddHighScore = () => useStatisticsStore((state) => state.addHighScore);
 export const useClearHighScores = () => useStatisticsStore((state) => state.clearHighScores);
 export const useUpdateStatistics = () => useStatisticsStore((state) => state.updateStatistics);

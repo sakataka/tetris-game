@@ -1,30 +1,30 @@
 /**
- * 統合定数エクスポート
+ * Unified constants export
  *
- * 機能別に分割された定数ファイルからの再エクスポート
- * 単一の信頼できる情報源として使用
+ * Re-export from functionally split constant files
+ * Used as single source of truth
  */
 
-// ゲームルール関連
+// Game rules related
 export * from './gameRules';
 
-// レイアウト・UI関連
+// Layout and UI related
 export * from './layout';
 
-// テトリミノ定義
+// Tetromino definitions
 export * from './tetrominoes';
 
-// パフォーマンス最適化
+// Performance optimization
 export * from './performance';
 
-// ストレージ管理
+// Storage management
 export * from './storage';
 
-// タイミング・多言語化
+// Timing and internationalization
 export * from './timing';
 
-// 文字列リソース
+// String resources
 export * from './strings';
 
-// 後方互換性のためのエイリアス
+// Aliases for backward compatibility
 export const EFFECT_RESET_DELAY = 300; // EFFECTS.RESET_DELAY へのエイリアス

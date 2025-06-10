@@ -1,10 +1,10 @@
 /**
- * パフォーマンス最適化関連の定数
+ * Performance optimization related constants
  *
- * パーティクル、レンダリング、メモリ管理の設定値
+ * Configuration values for particles, rendering, and memory management
  */
 
-// パーティクル物理設定
+// Particle physics settings
 export const PARTICLE_PHYSICS = {
   GRAVITY: 0.2,
   MAX_Y: 500,
@@ -15,7 +15,7 @@ export const PARTICLE_PHYSICS = {
   PARTICLES_PER_CELL: 3,
 } as const;
 
-// パーティクルシステム設定
+// Particle system settings
 export const PARTICLE_CONFIG = {
   GRAVITY: 0.2,
   MAX_Y: 500,
@@ -27,13 +27,13 @@ export const PARTICLE_CONFIG = {
   MAX_PARTICLES: 200,
 } as const;
 
-// レンダリング最適化
+// Rendering optimization
 export const PERFORMANCE = {
   RENDER_BATCH_SIZE: 20,
-  CLEANUP_INTERVAL: 10000, // 10秒
+  CLEANUP_INTERVAL: 10000, // 10 seconds
 } as const;
 
-// 個別エクスポート（後方互換性）
+// Individual exports (backward compatibility)
 export const PARTICLE_GRAVITY = PARTICLE_PHYSICS.GRAVITY;
 export const PARTICLE_MAX_Y = PARTICLE_PHYSICS.MAX_Y;
 export const PARTICLE_LIFE_DURATION = PARTICLE_PHYSICS.LIFE_DURATION;

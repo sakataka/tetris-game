@@ -3,21 +3,21 @@ import { persist } from 'zustand/middleware';
 import { useRef, useEffect } from 'react';
 import { I18N_CONFIG, type SupportedLocale } from '../constants';
 
-// 言語設定の型定義
+// Type definitions for language settings
 export interface LocaleState {
   currentLanguage: SupportedLocale;
   supportedLanguages: readonly SupportedLocale[];
   dateFormat: string;
   isRTL: boolean;
 
-  // アクション
+  // Actions
   setLanguage: (language: SupportedLocale) => void;
   getDateFormat: () => string;
   isLanguageSupported: (language: string) => boolean;
   reset: () => void;
 }
 
-// 初期状態
+// Initial state
 const DEFAULT_LOCALE_STATE: Pick<
   LocaleState,
   'currentLanguage' | 'supportedLanguages' | 'dateFormat' | 'isRTL'
@@ -25,18 +25,18 @@ const DEFAULT_LOCALE_STATE: Pick<
   currentLanguage: I18N_CONFIG.DEFAULT_LOCALE,
   supportedLanguages: I18N_CONFIG.SUPPORTED_LOCALES,
   dateFormat: I18N_CONFIG.DATE_FORMAT[I18N_CONFIG.DEFAULT_LOCALE],
-  isRTL: false, // 現在サポート言語にRTL言語なし
+  isRTL: false, // Currently no RTL languages supported
 };
 
-// RTL言語の判定
-const RTL_LANGUAGES: readonly SupportedLocale[] = [] as const; // 将来のアラビア語対応時に拡張
+// RTL language determination
+const RTL_LANGUAGES: readonly SupportedLocale[] = [] as const; // To be extended for future Arabic support
 
-// 日付フォーマットの取得
+// Get date format
 const getDateFormatForLanguage = (language: SupportedLocale): string => {
   return I18N_CONFIG.DATE_FORMAT[language] || I18N_CONFIG.DATE_FORMAT[I18N_CONFIG.FALLBACK_LOCALE];
 };
 
-// RTL判定
+// RTL determination
 const isRTLLanguage = (language: SupportedLocale): boolean => {
   return RTL_LANGUAGES.includes(language);
 };

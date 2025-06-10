@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { GameSettings, ThemeVariant } from '../types/tetris';
 
-// デフォルト設定値
+// Default settings values
 const DEFAULT_SETTINGS: GameSettings = {
   volume: 0.5,
   isMuted: false,
@@ -54,7 +54,7 @@ export const useSettingsStore = create<SettingsStore>()((set) => ({
 // Selector hooks for optimized access
 export const useSettings = () => useSettingsStore((state) => state.settings);
 
-// 個別アクションフック（関数参照安定化）
+// Individual action hooks (function reference stabilization)
 export const useUpdateSettings = () => useSettingsStore((state) => state.updateSettings);
 export const useResetSettings = () => useSettingsStore((state) => state.resetSettings);
 export const useUpdateTheme = () => useSettingsStore((state) => state.updateTheme);
