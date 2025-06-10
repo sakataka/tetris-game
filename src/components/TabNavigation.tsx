@@ -1,9 +1,9 @@
 'use client';
 
 import { memo } from 'react';
-import { NAVIGATION } from '../constants/strings';
+import { useTranslation } from 'react-i18next';
 
-export type TabType = 'game' | 'stats' | 'theme';
+export type TabType = 'game' | 'stats' | 'theme' | 'settings';
 
 interface TabNavigationProps {
   activeTab: TabType;
@@ -16,21 +16,28 @@ const TabNavigation = memo(function TabNavigation({
   onTabChange,
   className = '',
 }: TabNavigationProps) {
+  const { t } = useTranslation();
+
   const tabs: { key: TabType; label: string; color: string }[] = [
     {
       key: 'game',
-      label: NAVIGATION.GAME_INFO,
+      label: t('tabs.game'),
       color: 'cyan',
     },
     {
       key: 'stats',
-      label: NAVIGATION.STATISTICS,
+      label: t('tabs.statistics'),
       color: 'purple',
     },
     {
       key: 'theme',
-      label: NAVIGATION.THEME,
+      label: t('tabs.themes'),
       color: 'yellow',
+    },
+    {
+      key: 'settings',
+      label: t('tabs.settings'),
+      color: 'green',
     },
   ];
 

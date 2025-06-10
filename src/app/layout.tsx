@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
+import '../i18n'; // Initialize i18n
 import ErrorBoundary from '../components/ErrorBoundary';
 import ErrorNotification from '../components/ErrorNotification';
 import ErrorStoreInitializer from '../components/ErrorStoreInitializer';
+import LanguageInitializer from '../components/LanguageInitializer';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -26,10 +28,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='ja'>
+    <html lang='en'>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ErrorBoundary level='page'>
           <ErrorStoreInitializer />
+          <LanguageInitializer />
           {children}
           <ErrorNotification position='top-right' maxNotifications={3} />
         </ErrorBoundary>

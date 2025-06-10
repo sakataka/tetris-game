@@ -1,0 +1,141 @@
+{
+  "game": {
+    "title": "Cyberpunk Tetris",
+    "score": "Score",
+    "level": "Level",
+    "lines": "Lines",
+    "nextPiece": "Next",
+    "hold": "Hold",
+    "pause": "Pause",
+    "resume": "Resume",
+    "gameOver": "Game Over",
+    "paused": "Paused",
+    "newGame": "New Game",
+    "restart": "Restart",
+    "finalScore": "Final Score: {{score}}",
+    "newHighScore": "New High Score!",
+    "congratulations": "Congratulations!"
+  },
+  "controls": {
+    "title": "Controls",
+    "moveLeft": "Move Left",
+    "moveRight": "Move Right",
+    "moveDown": "Soft Drop",
+    "rotate": "Rotate",
+    "hardDrop": "Hard Drop",
+    "pause": "Pause",
+    "keyboardControls": "Keyboard Controls",
+    "touchControls": "Touch Controls",
+    "tap": "Tap",
+    "enabled": "Enabled",
+    "disabled": "Disabled"
+  },
+  "settings": {
+    "title": "Settings",
+    "audio": "Audio",
+    "volume": "Volume",
+    "soundEffects": "Sound Effects",
+    "mute": "Mute",
+    "unmute": "Unmute",
+    "theme": "Theme",
+    "language": "Language",
+    "accessibility": "Accessibility",
+    "reducedMotion": "Reduced Motion",
+    "highContrast": "High Contrast",
+    "colorBlindFriendly": "Color Blind Friendly"
+  },
+  "themes": {
+    "cyberpunk": "Cyberpunk",
+    "classic": "Classic",
+    "retro": "Retro",
+    "minimal": "Minimal",
+    "neon": "Neon",
+    "custom": "Custom",
+    "preview": "Preview",
+    "resetToDefault": "Reset to Default",
+    "customColors": "Custom Colors",
+    "primary": "Primary",
+    "secondary": "Secondary",
+    "accent": "Accent",
+    "background": "Background"
+  },
+  "statistics": {
+    "title": "Statistics",
+    "highScores": "High Scores",
+    "rank": "Rank",
+    "gamesPlayed": "Games Played",
+    "totalLines": "Total Lines",
+    "totalScore": "Total Score",
+    "averageScore": "Average Score",
+    "bestScore": "Best Score",
+    "playTime": "Play Time",
+    "efficiency": "Efficiency",
+    "consistency": "Consistency",
+    "tetrisRate": "Tetris Rate",
+    "period": {
+      "all": "All Time",
+      "today": "Today",
+      "week": "This Week",
+      "month": "This Month"
+    },
+    "metrics": {
+      "linesPerMinute": "Lines Per Minute",
+      "scorePerLine": "Score Per Line",
+      "pieceEfficiency": "Piece Efficiency",
+      "dropAccuracy": "Drop Accuracy"
+    },
+    "noData": "No data available",
+    "reset": "Reset Statistics"
+  },
+  "tabs": {
+    "game": "Game",
+    "statistics": "Statistics",
+    "themes": "Themes",
+    "settings": "Settings"
+  },
+  "buttons": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "save": "Save",
+    "reset": "Reset",
+    "apply": "Apply",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Information",
+    "on": "On",
+    "off": "Off",
+    "yes": "Yes",
+    "no": "No",
+    "unknown": "Unknown",
+    "none": "None"
+  },
+  "scoring": {
+    "single": "Single",
+    "double": "Double",
+    "triple": "Triple",
+    "tetris": "Tetris",
+    "combo": "Combo",
+    "bonus": "Bonus"
+  },
+  "aria": {
+    "gameBoard": "Tetris game board",
+    "nextPiece": "Next piece preview",
+    "currentScore": "Current score: {{score}}",
+    "currentLevel": "Current level: {{level}}",
+    "linesCleared": "Lines cleared: {{lines}}",
+    "pauseGame": "Pause game",
+    "resumeGame": "Resume game",
+    "muteAudio": "Mute audio",
+    "unmuteAudio": "Unmute audio",
+    "changeTheme": "Change theme",
+    "changeLanguage": "Change language"
+  }
+}

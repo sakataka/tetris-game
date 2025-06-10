@@ -1,0 +1,141 @@
+{
+  "game": {
+    "title": "サイバーパンク テトリス",
+    "score": "スコア",
+    "level": "レベル",
+    "lines": "ライン",
+    "nextPiece": "ネクスト",
+    "hold": "ホールド",
+    "pause": "一時停止",
+    "resume": "再開",
+    "gameOver": "ゲームオーバー",
+    "paused": "一時停止中",
+    "newGame": "新しいゲーム",
+    "restart": "リスタート",
+    "finalScore": "最終スコア: {{score}}",
+    "newHighScore": "新記録達成！",
+    "congratulations": "おめでとうございます！"
+  },
+  "controls": {
+    "title": "操作方法",
+    "moveLeft": "左移動",
+    "moveRight": "右移動",
+    "moveDown": "ソフトドロップ",
+    "rotate": "回転",
+    "hardDrop": "ハードドロップ",
+    "pause": "一時停止",
+    "keyboardControls": "キーボード操作",
+    "touchControls": "タッチ操作",
+    "tap": "タップ",
+    "enabled": "有効",
+    "disabled": "無効"
+  },
+  "settings": {
+    "title": "設定",
+    "audio": "音声",
+    "volume": "音量",
+    "soundEffects": "効果音",
+    "mute": "ミュート",
+    "unmute": "ミュート解除",
+    "theme": "テーマ",
+    "language": "言語",
+    "accessibility": "アクセシビリティ",
+    "reducedMotion": "モーション軽減",
+    "highContrast": "ハイコントラスト",
+    "colorBlindFriendly": "色覚異常対応"
+  },
+  "themes": {
+    "cyberpunk": "サイバーパンク",
+    "classic": "クラシック",
+    "retro": "レトロ",
+    "minimal": "ミニマル",
+    "neon": "ネオン",
+    "custom": "カスタム",
+    "preview": "プレビュー",
+    "resetToDefault": "デフォルトに戻す",
+    "customColors": "カスタムカラー",
+    "primary": "プライマリ",
+    "secondary": "セカンダリ",
+    "accent": "アクセント",
+    "background": "背景"
+  },
+  "statistics": {
+    "title": "統計",
+    "highScores": "ハイスコア",
+    "rank": "順位",
+    "gamesPlayed": "プレイ回数",
+    "totalLines": "総ライン数",
+    "totalScore": "総スコア",
+    "averageScore": "平均スコア",
+    "bestScore": "最高スコア",
+    "playTime": "プレイ時間",
+    "efficiency": "効率性",
+    "consistency": "一貫性",
+    "tetrisRate": "テトリス率",
+    "period": {
+      "all": "全期間",
+      "today": "今日",
+      "week": "今週",
+      "month": "今月"
+    },
+    "metrics": {
+      "linesPerMinute": "1分間あたりライン数",
+      "scorePerLine": "ライン当たりスコア",
+      "pieceEfficiency": "ピース効率",
+      "dropAccuracy": "ドロップ精度"
+    },
+    "noData": "データがありません",
+    "reset": "統計をリセット"
+  },
+  "tabs": {
+    "game": "ゲーム",
+    "statistics": "統計",
+    "themes": "テーマ",
+    "settings": "設定"
+  },
+  "buttons": {
+    "ok": "OK",
+    "cancel": "キャンセル",
+    "save": "保存",
+    "reset": "リセット",
+    "apply": "適用",
+    "close": "閉じる",
+    "back": "戻る",
+    "next": "次へ",
+    "previous": "前へ"
+  },
+  "common": {
+    "loading": "読み込み中...",
+    "error": "エラー",
+    "success": "成功",
+    "warning": "警告",
+    "info": "情報",
+    "on": "オン",
+    "off": "オフ",
+    "yes": "はい",
+    "no": "いいえ",
+    "unknown": "不明",
+    "none": "なし"
+  },
+  "scoring": {
+    "single": "シングル",
+    "double": "ダブル",
+    "triple": "トリプル",
+    "tetris": "テトリス",
+    "combo": "コンボ",
+    "bonus": "ボーナス"
+  },
+  "aria": {
+    "gameBoard": "テトリスゲームボード",
+    "nextPiece": "次のピースプレビュー",
+    "currentScore": "現在のスコア: {{score}}",
+    "currentLevel": "現在のレベル: {{level}}",
+    "linesCleared": "消去ライン数: {{lines}}",
+    "pauseGame": "ゲームを一時停止",
+    "resumeGame": "ゲームを再開",
+    "muteAudio": "音声をミュート",
+    "unmuteAudio": "音声のミュートを解除",
+    "changeTheme": "テーマを変更",
+    "changeLanguage": "言語を変更"
+  }
+}

@@ -1,14 +1,15 @@
 'use client';
 
 import { memo, useState, lazy, Suspense } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Tetromino } from '../types/tetris';
 import TabNavigation, { TabType } from './TabNavigation';
 import GameTabContent from './GameTabContent';
 import StatisticsTabContent from './StatisticsTabContent';
 import MobileGameInfo from './MobileGameInfo';
-
-// 重いコンポーネントの動的インポート
+// Heavy component lazy loading
 const ThemeTabContent = lazy(() => import('./ThemeTabContent'));
+const SettingsTabContent = lazy(() => import('./SettingsTabContent'));
 import { useSettings, useUpdateSettings } from '../store/settingsStore';
 
 interface GameInfoProps {
@@ -62,6 +63,7 @@ const GameInfo = memo(function GameInfo({
   onVolumeChange,
   audioSystemStatus,
 }: GameInfoProps) {
+  const { t } = useTranslation();
   const settings = useSettings();
   const updateSettings = useUpdateSettings();
 
@@ -76,11 +78,28 @@ const GameInfo = memo(function GameInfo({
           <Suspense
             fallback={
               <div className='flex items-center justify-center p-4'>
-                <div className='text-cyan-300 text-sm'>テーマ設定を読み込み中...</div>
+                <div className='text-cyan-300 text-sm'>{t('common.loading')}</div>
               </div>
             }
           >
             <ThemeTabContent />
+          </Suspense>
+        );
+      case 'settings':
+        return (
+          <Suspense
+            fallback={
+              <div className='flex items-center justify-center p-4'>
+                <div className='text-cyan-300 text-sm'>{t('common.loading')}</div>
+              </div>
+            }
+          >
+            <SettingsTabContent
+              isMuted={isMuted}
+              volume={volume}
+              onToggleMute={onToggleMute}
+              onVolumeChange={onVolumeChange}
+            />
           </Suspense>
         );
       default:
