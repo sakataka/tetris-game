@@ -1,6 +1,6 @@
 /**
  * Unified color conversion and manipulation utility
- * 
+ *
  * This class provides a comprehensive set of color manipulation functions
  * with consistent API design and optimal performance through caching.
  */
@@ -67,7 +67,7 @@ export class ColorConverter {
    */
   static rgbToHex(rgb: RGB): string {
     const cacheKey = `${rgb.r},${rgb.g},${rgb.b}`;
-    
+
     // Check cache first
     if (this.rgbToHexCache.has(cacheKey)) {
       return this.rgbToHexCache.get(cacheKey)!;
@@ -79,7 +79,7 @@ export class ColorConverter {
     const b = Math.max(0, Math.min(255, Math.round(rgb.b)));
 
     const hex = `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
-    
+
     // Cache the result
     this.rgbToHexCache.set(cacheKey, hex);
     return hex;
@@ -192,7 +192,7 @@ export class ColorConverter {
 
     const adjustValue = (value: number): number => {
       const normalized = value / 255;
-      const adjusted = ((normalized - 0.5) * factor) + 0.5;
+      const adjusted = (normalized - 0.5) * factor + 0.5;
       return Math.max(0, Math.min(255, Math.round(adjusted * 255)));
     };
 
@@ -231,10 +231,7 @@ export class ColorConverter {
    * @param levels - Array of transparency levels (0-100)
    * @returns Record of transparency variations
    */
-  static generateTransparencies(
-    color: string,
-    levels: readonly number[]
-  ): Record<string, string> {
+  static generateTransparencies(color: string, levels: readonly number[]): Record<string, string> {
     const rgb = this.hexToRgb(color);
     if (!rgb) return {};
 
@@ -272,7 +269,7 @@ export class ColorConverter {
   static mix(color1: string, color2: string, ratio: number): string {
     const rgb1 = this.hexToRgb(color1);
     const rgb2 = this.hexToRgb(color2);
-    
+
     if (!rgb1 || !rgb2) return color1;
 
     const clampedRatio = Math.max(0, Math.min(1, ratio));
@@ -296,8 +293,8 @@ export class ColorConverter {
 
     const srgbToLinear = (value: number): number => {
       const normalized = value / 255;
-      return normalized <= 0.03928 
-        ? normalized / 12.92 
+      return normalized <= 0.03928
+        ? normalized / 12.92
         : Math.pow((normalized + 0.055) / 1.055, 2.4);
     };
 
@@ -317,10 +314,10 @@ export class ColorConverter {
   static getContrastRatio(color1: string, color2: string): number {
     const lum1 = this.getRelativeLuminance(color1);
     const lum2 = this.getRelativeLuminance(color2);
-    
+
     const lighter = Math.max(lum1, lum2);
     const darker = Math.min(lum1, lum2);
-    
+
     return (lighter + 0.05) / (darker + 0.05);
   }
 
@@ -339,11 +336,11 @@ export class ColorConverter {
     isLargeText: boolean = false
   ): boolean {
     const ratio = this.getContrastRatio(foreground, background);
-    
+
     if (level === 'AAA') {
       return isLargeText ? ratio >= 4.5 : ratio >= 7;
     }
-    
+
     return isLargeText ? ratio >= 3 : ratio >= 4.5;
   }
 

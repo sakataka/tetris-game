@@ -9,7 +9,7 @@ import {
   AnimationIntensity,
   FontSizeLevel,
   VisualAssistance,
-} from '../../store/accessibilityStore';
+} from '../../types/accessibility';
 
 /**
  * アクセシビリティ設定をCSS変数に適用

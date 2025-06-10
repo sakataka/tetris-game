@@ -1,562 +1,281 @@
 /**
- * アクセシビリティ専用ストア
+ * Accessibility Store Orchestrator
  *
- * テーマから分離されたアクセシビリティ設定の一元管理
- * WCAG準拠機能の拡張とユーザビリティ向上
+ * Main accessibility store that coordinates between specialized stores:
+ * - Visual accessibility (contrast, fonts, animations)
+ * - Cognitive accessibility (simplified UI, confirmations)
+ * - Input accessibility (keyboard, feedback)
+ *
+ * Provides unified API and level management while delegating
+ * specific functionality to focused stores.
  */
 
 import { create } from 'zustand';
 import { persist, PersistOptions } from 'zustand/middleware';
-import { ColorBlindnessType, ContrastLevel } from '../types/tetris';
+import {
+  AccessibilityLevel,
+  AccessibilityState,
+  ACCESSIBILITY_PRESETS,
+} from '../types/accessibility';
 
-// アクセシビリティレベル定義
-export type AccessibilityLevel = 'minimal' | 'standard' | 'enhanced' | 'maximum';
+import { useVisualAccessibilityStore, useVisualAccessibilityState } from './visualAccessibility';
+import {
+  useCognitiveAccessibilityStore,
+  useCognitiveAccessibilityState,
+} from './cognitiveAccessibility';
+import { useInputAccessibilityStore, useInputAccessibilityState } from './inputAccessibility';
 
-// アニメーション強度レベル
-export type AnimationIntensity = 'none' | 'reduced' | 'normal' | 'enhanced';
-
-// フォントサイズレベル
-export type FontSizeLevel = 'small' | 'normal' | 'large' | 'extra-large';
-
-// キーボードナビゲーション設定
-export interface KeyboardNavigation {
-  enabled: boolean;
-  focusOutline: boolean;
-  skipLinks: boolean;
-  tabOrder: 'default' | 'optimized';
-}
-
-// 視覚的支援設定
-export interface VisualAssistance {
-  highContrast: boolean;
-  largeText: boolean;
-  boldText: boolean;
-  underlineLinks: boolean;
-  cursorSize: 'normal' | 'large' | 'extra-large';
-}
-
-// 音声・触覚フィードバック設定
-export interface FeedbackSettings {
-  soundEffects: boolean;
-  voiceAnnouncements: boolean;
-  hapticFeedback: boolean;
-  screenReader: boolean;
-}
-
-// 認知支援設定
-export interface CognitiveAssistance {
-  simplifiedUI: boolean;
-  confirmActions: boolean;
-  timeoutWarnings: boolean;
-  autoSave: boolean;
-  pauseOnFocusLoss: boolean;
-}
-
-// 完全なアクセシビリティ状態
-export interface AccessibilityState {
-  // 基本設定
+// Orchestrator store interface - manages accessibility level and coordinates stores
+interface AccessibilityOrchestratorStore {
+  // Core state
   level: AccessibilityLevel;
   enabled: boolean;
 
-  // 視覚的アクセシビリティ
-  colorBlindnessType: ColorBlindnessType;
-  contrast: ContrastLevel;
-  fontSize: FontSizeLevel;
-  visual: VisualAssistance;
-
-  // モーション・アニメーション
-  animationIntensity: AnimationIntensity;
-  reducedMotion: boolean;
-  respectSystemPreferences: boolean;
-
-  // ナビゲーション
-  keyboard: KeyboardNavigation;
-
-  // フィードバック
-  feedback: FeedbackSettings;
-
-  // 認知支援
-  cognitive: CognitiveAssistance;
-
-  // ゲーム固有設定
-  gameSpecific: {
-    pauseOnBlur: boolean;
-    visualGameOver: boolean;
-    colorCodedPieces: boolean;
-    gridLines: boolean;
-    dropPreview: boolean;
-  };
-}
-
-// デフォルト設定
-const DEFAULT_ACCESSIBILITY_STATE: AccessibilityState = {
-  level: 'standard',
-  enabled: true,
-
-  colorBlindnessType: 'none',
-  contrast: 'normal',
-  fontSize: 'normal',
-  visual: {
-    highContrast: false,
-    largeText: false,
-    boldText: false,
-    underlineLinks: false,
-    cursorSize: 'normal',
-  },
-
-  animationIntensity: 'normal',
-  reducedMotion: false,
-  respectSystemPreferences: true,
-
-  keyboard: {
-    enabled: true,
-    focusOutline: true,
-    skipLinks: false,
-    tabOrder: 'default',
-  },
-
-  feedback: {
-    soundEffects: true,
-    voiceAnnouncements: false,
-    hapticFeedback: false,
-    screenReader: false,
-  },
-
-  cognitive: {
-    simplifiedUI: false,
-    confirmActions: false,
-    timeoutWarnings: true,
-    autoSave: true,
-    pauseOnFocusLoss: true,
-  },
-
-  gameSpecific: {
-    pauseOnBlur: true,
-    visualGameOver: true,
-    colorCodedPieces: true,
-    gridLines: false,
-    dropPreview: true,
-  },
-};
-
-// プリセット設定
-export const ACCESSIBILITY_PRESETS: Record<AccessibilityLevel, Partial<AccessibilityState>> = {
-  minimal: {
-    level: 'minimal',
-    visual: {
-      highContrast: false,
-      largeText: false,
-      boldText: false,
-      underlineLinks: false,
-      cursorSize: 'normal',
-    },
-    animationIntensity: 'normal',
-    keyboard: { enabled: true, focusOutline: false, skipLinks: false, tabOrder: 'default' },
-    feedback: {
-      soundEffects: true,
-      voiceAnnouncements: false,
-      hapticFeedback: false,
-      screenReader: false,
-    },
-    cognitive: {
-      simplifiedUI: false,
-      confirmActions: false,
-      timeoutWarnings: false,
-      autoSave: false,
-      pauseOnFocusLoss: false,
-    },
-  },
-
-  standard: {
-    level: 'standard',
-    visual: {
-      highContrast: false,
-      largeText: false,
-      boldText: false,
-      underlineLinks: false,
-      cursorSize: 'normal',
-    },
-    animationIntensity: 'normal',
-    keyboard: { enabled: true, focusOutline: true, skipLinks: false, tabOrder: 'default' },
-    feedback: {
-      soundEffects: true,
-      voiceAnnouncements: false,
-      hapticFeedback: false,
-      screenReader: false,
-    },
-    cognitive: {
-      simplifiedUI: false,
-      confirmActions: false,
-      timeoutWarnings: true,
-      autoSave: false,
-      pauseOnFocusLoss: false,
-    },
-  },
-
-  enhanced: {
-    level: 'enhanced',
-    visual: {
-      highContrast: true,
-      largeText: true,
-      boldText: true,
-      underlineLinks: false,
-      cursorSize: 'normal',
-    },
-    animationIntensity: 'reduced',
-    keyboard: { enabled: true, focusOutline: true, skipLinks: true, tabOrder: 'optimized' },
-    feedback: {
-      soundEffects: true,
-      voiceAnnouncements: true,
-      hapticFeedback: false,
-      screenReader: false,
-    },
-    cognitive: {
-      simplifiedUI: true,
-      confirmActions: true,
-      timeoutWarnings: true,
-      autoSave: false,
-      pauseOnFocusLoss: false,
-    },
-  },
-
-  maximum: {
-    level: 'maximum',
-    contrast: 'high',
-    fontSize: 'extra-large',
-    visual: {
-      highContrast: true,
-      largeText: true,
-      boldText: true,
-      underlineLinks: true,
-      cursorSize: 'extra-large',
-    },
-    animationIntensity: 'none',
-    reducedMotion: true,
-    keyboard: {
-      enabled: true,
-      focusOutline: true,
-      skipLinks: true,
-      tabOrder: 'optimized',
-    },
-    feedback: {
-      soundEffects: true,
-      voiceAnnouncements: true,
-      hapticFeedback: true,
-      screenReader: true,
-    },
-    cognitive: {
-      simplifiedUI: true,
-      confirmActions: true,
-      timeoutWarnings: true,
-      autoSave: true,
-      pauseOnFocusLoss: true,
-    },
-    gameSpecific: {
-      pauseOnBlur: true,
-      visualGameOver: true,
-      colorCodedPieces: true,
-      gridLines: true,
-      dropPreview: true,
-    },
-  },
-};
-
-// ストアインターフェース
-interface AccessibilityStore {
-  // State
-  accessibility: AccessibilityState;
-
-  // Actions
+  // Level management
   setAccessibilityLevel: (level: AccessibilityLevel) => void;
-  updateAccessibility: (updates: Partial<AccessibilityState>) => void;
+  toggleAccessibility: () => void;
 
-  // 個別設定更新
-  setColorBlindnessType: (type: ColorBlindnessType) => void;
-  setContrast: (level: ContrastLevel) => void;
-  setFontSize: (size: FontSizeLevel) => void;
-  setAnimationIntensity: (intensity: AnimationIntensity) => void;
+  // Unified state access (computed from specialized stores)
+  getAccessibilityState: () => AccessibilityState;
 
-  // 視覚的支援
-  updateVisualAssistance: (visual: Partial<VisualAssistance>) => void;
-  toggleHighContrast: () => void;
-  toggleLargeText: () => void;
-
-  // キーボードナビゲーション
-  updateKeyboardNavigation: (keyboard: Partial<KeyboardNavigation>) => void;
-  toggleKeyboardFocus: () => void;
-
-  // フィードバック設定
-  updateFeedbackSettings: (feedback: Partial<FeedbackSettings>) => void;
-  toggleSoundEffects: () => void;
-  toggleVoiceAnnouncements: () => void;
-
-  // 認知支援
-  updateCognitiveAssistance: (cognitive: Partial<CognitiveAssistance>) => void;
-  toggleSimplifiedUI: () => void;
-
-  // ゲーム固有
-  updateGameSpecific: (gameSettings: Partial<AccessibilityState['gameSpecific']>) => void;
-
-  // システム設定検出
-  detectSystemPreferences: () => void;
-
-  // リセット
-  resetToDefaults: () => void;
+  // Cross-store operations
   applyPreset: (preset: AccessibilityLevel) => void;
+  resetAllToDefaults: () => void;
+  detectAllSystemPreferences: () => void;
+
+  // Convenience methods for common operations
+  enableAccessibilityMode: () => void;
+  enableGamingMode: () => void;
+  enableScreenReaderMode: () => void;
 }
 
-// システム設定検出関数
-function detectSystemAccessibilityPreferences(): Partial<AccessibilityState> {
-  const preferences: Partial<AccessibilityState> = {};
+// Helper function to apply presets across all stores
+function applyPresetToStores(preset: AccessibilityLevel) {
+  const presetConfig = ACCESSIBILITY_PRESETS[preset];
 
-  if (typeof window !== 'undefined') {
-    // Reduced motion の検出
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) {
-      preferences.reducedMotion = true;
-      preferences.animationIntensity = 'reduced';
-    }
+  // Apply to visual store
+  const visualStore = useVisualAccessibilityStore.getState();
+  if (presetConfig.colorBlindnessType !== undefined)
+    visualStore.setColorBlindnessType(presetConfig.colorBlindnessType);
+  if (presetConfig.contrast !== undefined) visualStore.setContrast(presetConfig.contrast);
+  if (presetConfig.fontSize !== undefined) visualStore.setFontSize(presetConfig.fontSize);
+  if (presetConfig.animationIntensity !== undefined)
+    visualStore.setAnimationIntensity(presetConfig.animationIntensity);
+  if (presetConfig.visual !== undefined) visualStore.updateVisualAssistance(presetConfig.visual);
 
-    // High contrast の検出
-    const prefersHighContrast = window.matchMedia('(prefers-contrast: high)').matches;
-    if (prefersHighContrast) {
-      preferences.contrast = 'high';
-      preferences.visual = { ...DEFAULT_ACCESSIBILITY_STATE.visual, highContrast: true };
-    }
+  // Apply to cognitive store
+  const cognitiveStore = useCognitiveAccessibilityStore.getState();
+  if (presetConfig.cognitive !== undefined)
+    cognitiveStore.updateCognitiveAssistance(presetConfig.cognitive);
+  if (presetConfig.gameSpecific !== undefined)
+    cognitiveStore.updateGameSpecific(presetConfig.gameSpecific);
 
-    // Color scheme の検出
-    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    if (prefersDarkMode) {
-      preferences.contrast = 'high';
-    }
-  }
-
-  return preferences;
+  // Apply to input store
+  const inputStore = useInputAccessibilityStore.getState();
+  if (presetConfig.keyboard !== undefined)
+    inputStore.updateKeyboardNavigation(presetConfig.keyboard);
+  if (presetConfig.feedback !== undefined) inputStore.updateFeedbackSettings(presetConfig.feedback);
 }
 
-// Zustand ストア作成
-export const useAccessibilityStore = create<AccessibilityStore>()(
+// Create the orchestrator store
+export const useAccessibilityStore = create<AccessibilityOrchestratorStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       // Initial state
-      accessibility: DEFAULT_ACCESSIBILITY_STATE,
+      level: 'standard',
+      enabled: true,
 
       // Level management
-      setAccessibilityLevel: (level) => {
-        const preset = ACCESSIBILITY_PRESETS[level];
-        set((state) => ({
-          accessibility: { ...state.accessibility, ...preset },
-        }));
+      setAccessibilityLevel: (level: AccessibilityLevel) => {
+        applyPresetToStores(level);
+        set({ level });
       },
 
-      updateAccessibility: (updates) =>
-        set((state) => ({
-          accessibility: { ...state.accessibility, ...updates },
-        })),
+      toggleAccessibility: () => set((state) => ({ enabled: !state.enabled })),
 
-      // Individual settings
-      setColorBlindnessType: (type) =>
-        set((state) => ({
-          accessibility: { ...state.accessibility, colorBlindnessType: type },
-        })),
+      // Unified state access (computed from specialized stores)
+      getAccessibilityState: (): AccessibilityState => {
+        const visualState = useVisualAccessibilityStore.getState();
+        const cognitiveState = useCognitiveAccessibilityStore.getState();
+        const inputState = useInputAccessibilityStore.getState();
+        const orchestratorState = get();
 
-      setContrast: (level) =>
-        set((state) => ({
-          accessibility: { ...state.accessibility, contrast: level },
-        })),
-
-      setFontSize: (size) =>
-        set((state) => ({
-          accessibility: { ...state.accessibility, fontSize: size },
-        })),
-
-      setAnimationIntensity: (intensity) =>
-        set((state) => ({
-          accessibility: {
-            ...state.accessibility,
-            animationIntensity: intensity,
-            reducedMotion: intensity === 'none' || intensity === 'reduced',
-          },
-        })),
-
-      // Visual assistance
-      updateVisualAssistance: (visual) =>
-        set((state) => ({
-          accessibility: {
-            ...state.accessibility,
-            visual: { ...state.accessibility.visual, ...visual },
-          },
-        })),
-
-      toggleHighContrast: () =>
-        set((state) => ({
-          accessibility: {
-            ...state.accessibility,
-            visual: {
-              ...state.accessibility.visual,
-              highContrast: !state.accessibility.visual.highContrast,
-            },
-          },
-        })),
-
-      toggleLargeText: () =>
-        set((state) => ({
-          accessibility: {
-            ...state.accessibility,
-            visual: {
-              ...state.accessibility.visual,
-              largeText: !state.accessibility.visual.largeText,
-            },
-          },
-        })),
-
-      // Keyboard navigation
-      updateKeyboardNavigation: (keyboard) =>
-        set((state) => ({
-          accessibility: {
-            ...state.accessibility,
-            keyboard: { ...state.accessibility.keyboard, ...keyboard },
-          },
-        })),
-
-      toggleKeyboardFocus: () =>
-        set((state) => ({
-          accessibility: {
-            ...state.accessibility,
-            keyboard: {
-              ...state.accessibility.keyboard,
-              focusOutline: !state.accessibility.keyboard.focusOutline,
-            },
-          },
-        })),
-
-      // Feedback settings
-      updateFeedbackSettings: (feedback) =>
-        set((state) => ({
-          accessibility: {
-            ...state.accessibility,
-            feedback: { ...state.accessibility.feedback, ...feedback },
-          },
-        })),
-
-      toggleSoundEffects: () =>
-        set((state) => ({
-          accessibility: {
-            ...state.accessibility,
-            feedback: {
-              ...state.accessibility.feedback,
-              soundEffects: !state.accessibility.feedback.soundEffects,
-            },
-          },
-        })),
-
-      toggleVoiceAnnouncements: () =>
-        set((state) => ({
-          accessibility: {
-            ...state.accessibility,
-            feedback: {
-              ...state.accessibility.feedback,
-              voiceAnnouncements: !state.accessibility.feedback.voiceAnnouncements,
-            },
-          },
-        })),
-
-      // Cognitive assistance
-      updateCognitiveAssistance: (cognitive) =>
-        set((state) => ({
-          accessibility: {
-            ...state.accessibility,
-            cognitive: { ...state.accessibility.cognitive, ...cognitive },
-          },
-        })),
-
-      toggleSimplifiedUI: () =>
-        set((state) => ({
-          accessibility: {
-            ...state.accessibility,
-            cognitive: {
-              ...state.accessibility.cognitive,
-              simplifiedUI: !state.accessibility.cognitive.simplifiedUI,
-            },
-          },
-        })),
-
-      // Game specific
-      updateGameSpecific: (gameSettings) =>
-        set((state) => ({
-          accessibility: {
-            ...state.accessibility,
-            gameSpecific: { ...state.accessibility.gameSpecific, ...gameSettings },
-          },
-        })),
-
-      // System preferences
-      detectSystemPreferences: () => {
-        const detected = detectSystemAccessibilityPreferences();
-        if (Object.keys(detected).length > 0) {
-          set((state) => ({
-            accessibility: { ...state.accessibility, ...detected },
-          }));
-        }
+        return {
+          level: orchestratorState.level,
+          enabled: orchestratorState.enabled,
+          ...visualState,
+          ...cognitiveState,
+          ...inputState,
+        };
       },
 
-      // Reset and presets
-      resetToDefaults: () =>
-        set(() => ({
-          accessibility: DEFAULT_ACCESSIBILITY_STATE,
-        })),
+      // Cross-store operations
+      applyPreset: (preset: AccessibilityLevel) => {
+        applyPresetToStores(preset);
+        set({ level: preset });
+      },
 
-      applyPreset: (preset) => {
-        const presetConfig = ACCESSIBILITY_PRESETS[preset];
-        set((state) => ({
-          accessibility: { ...state.accessibility, ...presetConfig },
-        }));
+      resetAllToDefaults: () => {
+        useVisualAccessibilityStore.getState().resetToDefaults();
+        useCognitiveAccessibilityStore.getState().resetToDefaults();
+        useInputAccessibilityStore.getState().resetToDefaults();
+        set({ level: 'standard', enabled: true });
+      },
+
+      detectAllSystemPreferences: () => {
+        useVisualAccessibilityStore.getState().detectSystemPreferences();
+        // Cognitive and input stores don't have system preferences detection
+      },
+
+      // Convenience methods for common operations
+      enableAccessibilityMode: () => {
+        get().applyPreset('enhanced');
+        set({ enabled: true });
+      },
+
+      enableGamingMode: () => {
+        // Gaming-optimized settings across stores
+        useInputAccessibilityStore.getState().enableGamingMode();
+        useCognitiveAccessibilityStore.getState().enableFocusMode();
+        // Keep current visual settings
+        set({ level: 'standard' });
+      },
+
+      enableScreenReaderMode: () => {
+        useInputAccessibilityStore.getState().enableScreenReaderMode();
+        get().applyPreset('maximum');
+        set({ enabled: true });
       },
     }),
     {
-      name: 'tetris-accessibility-settings',
-      partialize: (state) =>
-        ({ accessibility: state.accessibility }) as Partial<AccessibilityStore>,
+      name: 'tetris-accessibility-orchestrator',
+      partialize: (state) => ({
+        level: state.level,
+        enabled: state.enabled,
+      }),
       onRehydrateStorage: () => (state) => {
-        // 復元後にシステム設定を検出
-        if (state?.accessibility.respectSystemPreferences) {
-          state.detectSystemPreferences();
+        // Apply current level preset on rehydration
+        if (state?.level) {
+          applyPresetToStores(state.level);
+        }
+        // Detect system preferences if enabled
+        if (state?.enabled) {
+          state.detectAllSystemPreferences();
         }
       },
-    } as PersistOptions<AccessibilityStore>
+    } as PersistOptions<
+      AccessibilityOrchestratorStore,
+      Pick<AccessibilityOrchestratorStore, 'level' | 'enabled'>
+    >
   )
 );
 
-// Selector hooks for optimized access
-export const useAccessibility = () => useAccessibilityStore((state) => state.accessibility);
-export const useAccessibilityLevel = () =>
-  useAccessibilityStore((state) => state.accessibility.level);
-export const useVisualAssistance = () =>
-  useAccessibilityStore((state) => state.accessibility.visual);
-export const useKeyboardNavigation = () =>
-  useAccessibilityStore((state) => state.accessibility.keyboard);
-export const useFeedbackSettings = () =>
-  useAccessibilityStore((state) => state.accessibility.feedback);
-export const useCognitiveAssistance = () =>
-  useAccessibilityStore((state) => state.accessibility.cognitive);
-export const useGameAccessibility = () =>
-  useAccessibilityStore((state) => state.accessibility.gameSpecific);
+// Backward compatibility hooks (delegate to specialized stores)
+export const useAccessibility = () => {
+  const orchestratorState = useAccessibilityStore((state) => ({
+    level: state.level,
+    enabled: state.enabled,
+  }));
+  const visualState = useVisualAccessibilityState();
+  const cognitiveState = useCognitiveAccessibilityState();
+  const inputState = useInputAccessibilityState();
 
-// Individual action hooks for stable references
+  return {
+    ...orchestratorState,
+    ...visualState,
+    ...cognitiveState,
+    ...inputState,
+  };
+};
+
+export const useAccessibilityLevel = () => useAccessibilityStore((state) => state.level);
+
+export const useAccessibilityEnabled = () => useAccessibilityStore((state) => state.enabled);
+
+// Orchestrator action hooks
 export const useSetAccessibilityLevel = () =>
   useAccessibilityStore((state) => state.setAccessibilityLevel);
-export const useUpdateAccessibility = () =>
-  useAccessibilityStore((state) => state.updateAccessibility);
-export const useSetColorBlindnessType = () =>
-  useAccessibilityStore((state) => state.setColorBlindnessType);
-export const useSetContrast = () => useAccessibilityStore((state) => state.setContrast);
-export const useSetAnimationIntensity = () =>
-  useAccessibilityStore((state) => state.setAnimationIntensity);
-export const useToggleHighContrast = () =>
-  useAccessibilityStore((state) => state.toggleHighContrast);
-export const useToggleSoundEffects = () =>
-  useAccessibilityStore((state) => state.toggleSoundEffects);
-export const useDetectSystemPreferences = () =>
-  useAccessibilityStore((state) => state.detectSystemPreferences);
+
+export const useToggleAccessibility = () =>
+  useAccessibilityStore((state) => state.toggleAccessibility);
+
 export const useApplyAccessibilityPreset = () =>
   useAccessibilityStore((state) => state.applyPreset);
+
+export const useResetAllAccessibility = () =>
+  useAccessibilityStore((state) => state.resetAllToDefaults);
+
+export const useDetectSystemPreferences = () =>
+  useAccessibilityStore((state) => state.detectAllSystemPreferences);
+
+export const useEnableAccessibilityMode = () =>
+  useAccessibilityStore((state) => state.enableAccessibilityMode);
+
+export const useEnableGamingMode = () => useAccessibilityStore((state) => state.enableGamingMode);
+
+export const useEnableScreenReaderMode = () =>
+  useAccessibilityStore((state) => state.enableScreenReaderMode);
+
+// Re-export specialized store hooks for direct access
+export {
+  // Visual accessibility
+  useVisualAccessibilityState,
+  useColorBlindnessType,
+  useContrastLevel,
+  useFontSizeLevel,
+  useVisualAssistance,
+  useAnimationSettings,
+  useSetColorBlindnessType,
+  useSetContrast,
+  useSetFontSize,
+  useSetAnimationIntensity,
+  useUpdateVisualAssistance,
+  useToggleHighContrast,
+  useToggleLargeText,
+  useToggleReducedMotion,
+} from './visualAccessibility';
+
+export {
+  // Cognitive accessibility
+  useCognitiveAccessibilityState,
+  useCognitiveAssistance,
+  useGameAccessibility,
+  useSimplifiedUI,
+  useConfirmActions,
+  useAutoSave,
+  useTimeoutWarnings,
+  usePauseOnFocusLoss,
+  usePauseOnBlur,
+  useVisualGameOver,
+  useColorCodedPieces,
+  useGridLines,
+  useDropPreview,
+  useUpdateCognitiveAssistance,
+  useUpdateGameSpecific,
+  useToggleSimplifiedUI,
+  useToggleConfirmActions,
+  useToggleAutoSave,
+  useEnableFocusMode,
+  useDisableFocusMode,
+} from './cognitiveAccessibility';
+
+export {
+  // Input accessibility
+  useInputAccessibilityState,
+  useKeyboardNavigation,
+  useFeedbackSettings,
+  useKeyboardEnabled,
+  useFocusOutline,
+  useSkipLinks,
+  useTabOrder,
+  useSoundEffects,
+  useVoiceAnnouncements,
+  useHapticFeedback,
+  useScreenReader,
+  useUpdateKeyboardNavigation,
+  useUpdateFeedbackSettings,
+  useToggleKeyboardFocus,
+  useToggleSoundEffects,
+  useToggleVoiceAnnouncements,
+  useToggleHapticFeedback,
+} from './inputAccessibility';
