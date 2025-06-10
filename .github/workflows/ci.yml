@@ -115,10 +115,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-output
-          path: |
-            .next/
-            out/
+          path: .next/
           retention-days: 7
+        if: always()
 
       - name: 📤 Upload bundle analysis
         uses: actions/upload-artifact@v4
@@ -126,6 +125,8 @@ jobs:
           name: bundle-analysis
           path: .next/analyze/
           retention-days: 7
+        if: always()
+        continue-on-error: true
 
   security-check:
     name: Security Audit
@@ -145,6 +146,9 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
+
+      - name: 📚 Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: 🔒 Run security audit
         run: pnpm audit --audit-level=moderate
