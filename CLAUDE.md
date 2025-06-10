@@ -270,13 +270,49 @@ pnpm format         # コードフォーマット
 ✅ 自動化率: pre-commit 100%実行
 ```
 
+## CI/CD Pipeline & Automation (Added: 2025/12/17)
+
+### 🚀 GitHub Actions統合
+
+**実装済みワークフロー**:
+
+#### 1. メインCI/CDパイプライン (`ci.yml`)
+
+- **quality-check**: 型チェック、ESLint、フォーマット、テスト実行
+- **build**: Next.jsビルド、バンドル分析、アーティファクト保存
+- **security-check**: npm audit、Snyk脆弱性スキャン
+- **lighthouse**: PRでのパフォーマンス測定
+- **deploy-preview**: Vercelプレビューデプロイ
+
+#### 2. プルリクエスト専用チェック (`pr-checks.yml`)
+
+- **自動ラベリング**: 変更ファイルベースの分類
+- **バンドルサイズ比較**: ベースブランチとの差分表示
+- **コード品質レビュー**: ESLintアノテーション付きフィードバック
+- **テスト結果サマリー**: 詳細なテストレポート生成
+- **アクセシビリティ監査**: WCAG準拠チェック
+
+#### 3. 定期品質レビュー (`scheduled-quality.yml`)
+
+- **週次実行**: 毎週月曜日朝9時（JST）
+- **依存関係更新チェック**: outdated/セキュリティ監査
+- **コード複雑度分析**: es6-plato による詳細レポート
+- **パフォーマンスベースライン**: Lighthouse定期測定
+- **自動Issue作成**: 週次サマリー・アクションアイテム
+
+**キャッシュ戦略**:
+
+- pnpm store キャッシュ（依存関係）
+- Next.js ビルドキャッシュ
+- Node.js 組み込みキャッシュ活用
+
+**生成アーティファクト**:
+
+- ビルド成果物（7日間保持）
+- バンドル分析レポート
+- 複雑度・パフォーマンスレポート（30日間保持）
+
 ### 🔮 将来検討事項
-
-**CI/CDパイプライン統合**:
-
-- GitHub Actions workflow追加
-- 自動テスト・品質チェック・デプロイ
-- SonarCloud連携による継続的品質監視
 
 **追加静的解析ツール**:
 
@@ -284,16 +320,10 @@ pnpm format         # コードフォーマット
 - **Dependency-cruiser**: 依存関係循環検出
 - **TypeScript Coverage**: 型カバレッジ測定
 
-**パフォーマンス監視**:
+**高度なモニタリング**:
 
-- **Lighthouse CI**: パフォーマンススコア自動測定
 - **Bundle Buddy**: 重複依存関係分析
 - **Size Limit**: バンドルサイズ制限強制
-
-**セキュリティ強化**:
-
-- **npm audit**: 脆弱性チェック自動化
-- **Snyk**: 依存関係セキュリティ監視
 - **CSP (Content Security Policy)**: XSS防止強化
 
 ## Development Guidelines
