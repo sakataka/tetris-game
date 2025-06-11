@@ -82,7 +82,6 @@ export const SCORING = {
   TWO_LINES: '2 LINES',
   THREE_LINES: '3 LINES',
   FOUR_LINES: '4 LINES',
-  TETRIS_BONUS: '★ TETRIS BONUS! ★',
   HARD_DROP_LABEL: 'HARD DROP',
 } as const;
 

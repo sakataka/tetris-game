@@ -4,7 +4,7 @@
     "score": "スコア",
     "level": "レベル",
     "lines": "ライン",
-    "nextPiece": "ネクスト",
+    "nextPiece": "次",
     "hold": "ホールド",
     "pause": "一時停止",
     "resume": "再開",
@@ -130,7 +130,7 @@
     "none": "なし"
   },
   "scoring": {
-    "title": "スコアリング",
+    "title": "スコア",
     "single": "シングル",
     "double": "ダブル",
     "triple": "トリプル",

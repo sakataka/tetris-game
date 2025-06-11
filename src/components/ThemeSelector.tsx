@@ -47,7 +47,6 @@ export default function ThemeSelector({
 
       {/* テーマプレビュー */}
       <div className='mt-3 p-3 rounded-lg hologram'>
-        <div className='text-xs text-cyber-cyan mb-2'>{t('themes.preview')}:</div>
         <div className='flex gap-2'>
           {Object.entries(THEME_PRESETS[currentTheme].colors)
             .slice(0, 3)

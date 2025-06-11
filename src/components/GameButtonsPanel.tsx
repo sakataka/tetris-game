@@ -1,7 +1,7 @@
 'use client';
 
 import { memo } from 'react';
-import { BUTTONS } from '../constants/strings';
+import { useTranslation } from 'react-i18next';
 
 interface GameButtonsPanelProps {
   gameOver: boolean;
@@ -16,6 +16,7 @@ const GameButtonsPanel = memo(function GameButtonsPanel({
   onTogglePause,
   onReset,
 }: GameButtonsPanelProps) {
+  const { t } = useTranslation();
   return (
     <div className='space-y-4'>
       <button
@@ -29,7 +30,7 @@ const GameButtonsPanel = memo(function GameButtonsPanel({
       >
         <div className='absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-blue-400/20 blur-sm'></div>
         <span className='relative font-mono text-base md:text-lg'>
-          {isPaused ? BUTTONS.RESUME : BUTTONS.PAUSE}
+          {isPaused ? t('game.resume') : t('game.pause')}
         </span>
       </button>
 
@@ -41,7 +42,7 @@ const GameButtonsPanel = memo(function GameButtonsPanel({
                    border border-red-400/50 relative overflow-hidden'
       >
         <div className='absolute inset-0 bg-gradient-to-r from-red-400/20 to-pink-400/20 blur-sm'></div>
-        <span className='relative font-mono text-base md:text-lg'>{BUTTONS.RESET}</span>
+        <span className='relative font-mono text-base md:text-lg'>{t('buttons.reset')}</span>
       </button>
     </div>
   );

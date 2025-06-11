@@ -130,7 +130,7 @@ export default function ThemeSettings({
             {/* Effect intensity */}
             <div>
               <label className='block text-sm font-medium mb-2 text-cyber-cyan'>
-                Effect Intensity: {(effectIntensity * 100).toFixed(0)}%
+                {t('colorPalette.advancedSettings')}: {(effectIntensity * 100).toFixed(0)}%
               </label>
               <input
                 type='range'
@@ -146,13 +146,11 @@ export default function ThemeSettings({
                 }}
               />
               <div className='flex justify-between text-xs text-cyber-purple mt-1'>
-                <span>Low</span>
-                <span>Normal</span>
-                <span>High</span>
+                <span>{t('accessibility.lowContrast')}</span>
+                <span>{t('accessibility.standard')}</span>
+                <span>{t('accessibility.highContrast')}</span>
               </div>
-              <p className='text-xs text-cyber-purple mt-2'>
-                Adjust intensity of neon effects, blur, and glow
-              </p>
+              <p className='text-xs text-cyber-purple mt-2'>{t('colorPalette.advancedSettings')}</p>
             </div>
 
             {/* Animation enable/disable */}
@@ -165,17 +163,19 @@ export default function ThemeSettings({
                   className='w-4 h-4 accent-cyber-cyan rounded focus:ring-2 focus:ring-cyber-cyan'
                 />
                 <div>
-                  <span className='text-sm font-medium text-cyber-cyan'>Enable Animations</span>
-                  <p className='text-xs text-cyber-purple'>
-                    Enable floating animations, pulse effects, etc.
-                  </p>
+                  <span className='text-sm font-medium text-cyber-cyan'>
+                    {t('accessibility.fullAnimation')}
+                  </span>
+                  <p className='text-xs text-cyber-purple'>{t('accessibility.fullAnimation')}</p>
                 </div>
               </label>
             </div>
 
             {/* Effect preview */}
             <div className='p-4 rounded-lg hologram'>
-              <div className='text-sm font-medium mb-3 text-cyber-cyan'>Effect Preview</div>
+              <div className='text-sm font-medium mb-3 text-cyber-cyan'>
+                {t('colorPalette.preview')}
+              </div>
               <div className='space-y-3'>
                 <div
                   className='p-3 rounded neon-border text-center'

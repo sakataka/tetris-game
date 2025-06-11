@@ -1,7 +1,7 @@
 'use client';
 
 import React, { memo, useCallback, useMemo } from 'react';
-import { BUTTONS, ARIA_LABELS } from '../constants/strings';
+import { useTranslation } from 'react-i18next';
 
 interface VirtualControlsProps {
   onMove: (direction: { x: number; y: number }) => void;
@@ -18,6 +18,7 @@ const VirtualControls = memo(function VirtualControls({
   isVisible,
   unlockAudio,
 }: VirtualControlsProps) {
+  const { t } = useTranslation();
   // handleTouchStartをuseCallbackでメモ化
   const handleTouchStart = useCallback(
     (action: () => void) => (e: React.TouchEvent) => {
@@ -57,7 +58,7 @@ const VirtualControls = memo(function VirtualControls({
                       border border-purple-400/50 shadow-[0_0_15px_rgba(147,51,234,0.5)]
                       flex items-center justify-center text-white font-bold text-sm
                       touch-manipulation select-none'
-            aria-label={ARIA_LABELS.ROTATE}
+            aria-label={t('controls.rotate')}
           >
             ↻
           </button>
@@ -72,7 +73,7 @@ const VirtualControls = memo(function VirtualControls({
                         border border-cyan-400/50 shadow-[0_0_15px_rgba(6,182,212,0.5)]
                         flex items-center justify-center text-white font-bold text-sm
                         touch-manipulation select-none'
-              aria-label={ARIA_LABELS.MOVE_LEFT}
+              aria-label={t('controls.moveLeft')}
             >
               ←
             </button>
@@ -85,7 +86,7 @@ const VirtualControls = memo(function VirtualControls({
                         border border-yellow-400/50 shadow-[0_0_15px_rgba(245,158,11,0.5)]
                         flex items-center justify-center text-white font-bold text-sm
                         touch-manipulation select-none'
-              aria-label={ARIA_LABELS.SOFT_DROP}
+              aria-label={t('controls.moveDown')}
             >
               ↓
             </button>
@@ -98,7 +99,7 @@ const VirtualControls = memo(function VirtualControls({
                         border border-cyan-400/50 shadow-[0_0_15px_rgba(6,182,212,0.5)]
                         flex items-center justify-center text-white font-bold text-sm
                         touch-manipulation select-none'
-              aria-label={ARIA_LABELS.MOVE_RIGHT}
+              aria-label={t('controls.moveRight')}
             >
               →
             </button>
@@ -113,10 +114,10 @@ const VirtualControls = memo(function VirtualControls({
                     border border-red-400/50 shadow-[0_0_20px_rgba(239,68,68,0.6)]
                     flex flex-col items-center justify-center text-white font-bold
                     touch-manipulation select-none'
-          aria-label={ARIA_LABELS.HARD_DROP}
+          aria-label={t('controls.hardDrop')}
         >
           <div className='text-sm'>⚡</div>
-          <div className='text-xs'>{BUTTONS.DROP}</div>
+          <div className='text-xs'>{t('scoring.hardDrop')}</div>
         </button>
       </div>
     </div>
