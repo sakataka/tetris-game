@@ -117,8 +117,8 @@ export class AnimationManager {
         const targetInterval = 1000 / fullOptions.fps;
         const deltaTime = currentTime - animation.lastFrameTime;
 
-        // FPS制限チェック
-        if (deltaTime >= targetInterval) {
+        // FPS制限チェック (初回フレームまたはインターバル経過時)
+        if (animation.lastFrameTime === 0 || deltaTime >= targetInterval) {
           // 自動停止条件チェック
           const elapsed = currentTime - animation.startTime;
           const maxDuration = fullOptions.autoStop.maxDuration ?? Infinity;

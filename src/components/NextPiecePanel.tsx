@@ -1,6 +1,7 @@
 'use client';
 
 import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Tetromino } from '../types/tetris';
 import PanelBase from './ui/PanelBase';
 
@@ -9,8 +10,10 @@ interface NextPiecePanelProps {
 }
 
 const NextPiecePanel = memo(function NextPiecePanel({ nextPiece }: NextPiecePanelProps) {
+  const { t } = useTranslation();
+
   return (
-    <PanelBase title='NEXT PIECE' theme='purple'>
+    <PanelBase title={t('game.nextPiece').toUpperCase()} theme='purple'>
       <div className='grid gap-0 w-fit mx-auto p-4 bg-black/30 rounded-lg border border-purple-400/30'>
         {nextPiece ? (
           nextPiece.shape.map((row, y) => (

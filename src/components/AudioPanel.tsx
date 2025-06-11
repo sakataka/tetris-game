@@ -69,7 +69,7 @@ const AudioPanel = memo(function AudioPanel({
           </div>
         </div>
         <div className='flex justify-between items-center'>
-          <span className='text-gray-300'>ミュート</span>
+          <span className='text-gray-300'>{t('settings.mute')}</span>
           <button
             onClick={onToggleMute}
             className={`px-3 py-1 rounded font-mono text-sm transition-all duration-300 ${

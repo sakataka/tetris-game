@@ -130,6 +130,7 @@
     "none": "None"
   },
   "scoring": {
+    "title": "Scoring",
     "single": "Single",
     "double": "Double",
     "triple": "Triple",

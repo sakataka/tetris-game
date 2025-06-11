@@ -130,6 +130,7 @@
     "none": "なし"
   },
   "scoring": {
+    "title": "スコアリング",
     "single": "シングル",
     "double": "ダブル",
     "triple": "トリプル",
