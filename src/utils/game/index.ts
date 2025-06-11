@@ -1,7 +1,7 @@
 /**
- * ゲームロジック関連ユーティリティ
+ * Game logic related utilities
  *
- * テトリス中核ロジック、状態管理、スコア計算
+ * Tetris core logic, state management, score calculation
  */
 
 export * from './tetrisUtils';

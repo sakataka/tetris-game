@@ -14,15 +14,15 @@
     "jsx": "preserve",
     "incremental": true,
 
-    // 厳密な型チェック設定（実用的なレベル）
+    // Strict type checking settings (practical level)
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "noUnusedLocals": false, // 開発中は許可
-    "noUnusedParameters": false, // 開発中は許可
-    "exactOptionalPropertyTypes": false, // 実用性のため無効
+    "noUnusedLocals": false, // Allowed during development
+    "noUnusedParameters": false, // Allowed during development
+    "exactOptionalPropertyTypes": false, // Disabled for practicality
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": false, // 実用性のため無効
+    "noUncheckedIndexedAccess": false, // Disabled for practicality
     "strictNullChecks": true,
     "strictBindCallApply": true,
     "strictFunctionTypes": true,

@@ -1,23 +1,23 @@
 /**
- * 統合ユーティリティエクスポート
+ * Integrated utility exports
  *
- * 機能別に分割されたユーティリティからの再エクスポート
+ * Re-exports from utilities split by functionality
  */
 
-// ゲームロジック
+// Game logic
 export * from './game';
 
-// 音響システム
+// Audio system
 export * from './audio';
 
-// UI・テーマ
+// UI and themes
 export * from './ui';
 
-// パフォーマンス最適化
+// Performance optimization
 export * from './performance';
 
-// アニメーション統一管理
+// Unified animation management
 export * from './animation';
 
-// データ管理
+// Data management
 export * from './data';

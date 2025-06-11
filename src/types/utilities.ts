@@ -1,13 +1,13 @@
 /**
- * 型安全性を向上させるユーティリティ型定義
+ * Utility type definitions for improved type safety
  */
 
-// 厳密な範囲制約型
+// Strict range constraint types
 export type NonNegativeNumber = number & { readonly __brand: 'NonNegative' };
 export type PositiveNumber = number & { readonly __brand: 'Positive' };
 export type PercentageNumber = number & { readonly __brand: 'Percentage' }; // 0-100
 
-// 型安全なファクトリ関数
+// Type-safe factory functions
 export const createNonNegativeNumber = (value: number): NonNegativeNumber => {
   if (value < 0) throw new Error(`Value must be non-negative, got ${value}`);
   return value as NonNegativeNumber;
@@ -23,21 +23,21 @@ export const createPercentageNumber = (value: number): PercentageNumber => {
   return value as PercentageNumber;
 };
 
-// 配列の型安全性を向上させるユーティリティ
+// Utilities for improving array type safety
 export type NonEmptyArray<T> = [T, ...T[]];
 export type ReadonlyNonEmptyArray<T> = readonly [T, ...T[]];
 
-// 型安全な配列チェック関数
+// Type-safe array checking function
 export const isNonEmptyArray = <T>(arr: T[]): arr is NonEmptyArray<T> => {
   return arr.length > 0;
 };
 
-// オブジェクトの厳密な型定義ユーティリティ
+// Strict object type definition utilities
 export type StrictRecord<K extends string | number | symbol, V> = Record<K, V> & {
   readonly [P in K]: V;
 };
 
-// 部分的な更新のための型安全なユーティリティ
+// Type-safe utilities for partial updates
 export type DeepReadonly<T> = {
   readonly [P in keyof T]: T[P] extends object ? DeepReadonly<T[P]> : T[P];
 };
@@ -45,14 +45,14 @@ export type DeepReadonly<T> = {
 export type RequiredKeys<T, K extends keyof T> = T & Required<Pick<T, K>>;
 export type OptionalKeys<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
-// 関数の型安全性を向上させるユーティリティ
+// Utilities for improving function type safety
 export type SafeFunction<TArgs extends readonly unknown[], TReturn> = (...args: TArgs) => TReturn;
 
 export type AsyncSafeFunction<TArgs extends readonly unknown[], TReturn> = (
   ...args: TArgs
 ) => Promise<TReturn>;
 
-// エラーハンドリングのための型安全なResult型
+// Type-safe Result type for error handling
 export type Result<T, E = Error> =
   | { readonly success: true; readonly data: T }
   | { readonly success: false; readonly error: E };
@@ -67,11 +67,11 @@ export const createError = <E>(error: E): Result<never, E> => ({
   error,
 });
 
-// 型安全なイベントハンドラー
+// Type-safe event handlers
 export type EventHandler<TEvent = Event> = SafeFunction<[TEvent], void>;
 export type AsyncEventHandler<TEvent = Event> = AsyncSafeFunction<[TEvent], void>;
 
-// キーと値の厳密な対応を保証する型
+// Type that ensures strict key-value correspondence
 export type StrictKeyValuePair<T extends Record<string, unknown>> = {
   [K in keyof T]: {
     readonly key: K;
@@ -79,7 +79,7 @@ export type StrictKeyValuePair<T extends Record<string, unknown>> = {
   };
 }[keyof T];
 
-// 型安全な列挙型代替
+// Type-safe enum alternative
 export const createEnum = <T extends Record<string, string | number>>(
   obj: T
 ): Readonly<T> & { readonly values: ReadonlyArray<T[keyof T]> } => {
@@ -90,14 +90,14 @@ export const createEnum = <T extends Record<string, string | number>>(
   });
 };
 
-// 型ガード用のユーティリティ
+// Utilities for type guards
 export type TypeGuard<T> = (value: unknown) => value is T;
 
 export const createTypeGuard = <T>(predicate: (value: unknown) => boolean): TypeGuard<T> => {
   return (value: unknown): value is T => predicate(value);
 };
 
-// 配列の型安全な操作ユーティリティ
+// Type-safe array operation utilities
 export const safeArrayAccess = <T>(array: readonly T[], index: number): T | undefined => {
   return index >= 0 && index < array.length ? array[index] : undefined;
 };

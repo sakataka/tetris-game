@@ -1,13 +1,13 @@
 /**
- * アニメーション統一管理システム - インデックスファイル
+ * Unified animation management system - Index file
  *
- * 全てのアニメーション関連ユーティリティとフックを統合エクスポート
+ * Integrated export of all animation-related utilities and hooks
  */
 
-// アニメーションマネージャー
+// Animation manager
 export { AnimationManager, animationManager, type AnimationOptions } from './animationManager';
 
-// カスタムフック
+// Custom hooks
 export {
   useAnimationFrame,
   useSimpleAnimation,
@@ -17,40 +17,40 @@ export {
   type UseAnimationOptions,
 } from './useAnimationFrame';
 
-// 便利な定数
+// Convenient constants
 export const ANIMATION_PRESETS = {
-  /** 高性能ゲームループ (60FPS) */
+  /** High-performance game loop (60FPS) */
   GAME_LOOP: { fps: 60, priority: 'high' as const },
 
-  /** UIアニメーション (30FPS) */
+  /** UI animations (30FPS) */
   UI_ANIMATION: { fps: 30, priority: 'normal' as const },
 
-  /** パーティクルエフェクト (45FPS) */
+  /** Particle effects (45FPS) */
   PARTICLE_EFFECT: { fps: 45, priority: 'normal' as const },
 
-  /** 低優先度バックグラウンド (15FPS) */
+  /** Low-priority background (15FPS) */
   BACKGROUND: { fps: 15, priority: 'low' as const },
 
-  /** アクセシビリティ配慮 (24FPS) */
+  /** Accessibility consideration (24FPS) */
   REDUCED_MOTION: { fps: 24, priority: 'normal' as const },
 } as const;
 
 /**
- * アニメーション管理のベストプラクティス
+ * Animation management best practices
  */
 export const ANIMATION_BEST_PRACTICES = {
   /**
-   * ゲームループ向けアニメーション設定
+   * Animation settings for game loops
    */
   gameLoop: () => ({
     ...ANIMATION_PRESETS.GAME_LOOP,
     autoStop: {
-      condition: () => document.hidden, // タブが非アクティブ時は停止
+      condition: () => document.hidden, // Stop when tab is inactive
     },
   }),
 
   /**
-   * UI効果向けアニメーション設定
+   * Animation settings for UI effects
    */
   uiEffect: (maxDuration: number = 5000) => ({
     ...ANIMATION_PRESETS.UI_ANIMATION,
@@ -58,7 +58,7 @@ export const ANIMATION_BEST_PRACTICES = {
   }),
 
   /**
-   * パーティクル向けアニメーション設定
+   * Animation settings for particles
    */
   particleEffect: (maxDuration: number = 10000) => ({
     ...ANIMATION_PRESETS.PARTICLE_EFFECT,

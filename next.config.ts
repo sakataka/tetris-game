@@ -6,13 +6,13 @@ const withBundleAnalyzer = bundleAnalyzer({
 });
 
 const nextConfig: NextConfig = {
-  // 本番環境最適化
-  poweredByHeader: false, // X-Powered-By ヘッダーを無効化
-  compress: true, // gzip圧縮を有効化
+  // Production environment optimization
+  poweredByHeader: false, // Disable X-Powered-By header
+  compress: true, // Enable gzip compression
 
-  // コンパイラー最適化
+  // Compiler optimization
   compiler: {
-    // 本番環境でconsole.logを除去（console.warn/errorは保持）
+    // Remove console.log in production (keep console.warn/error)
     removeConsole:
       process.env.NODE_ENV === 'production'
         ? {
@@ -21,26 +21,26 @@ const nextConfig: NextConfig = {
         : false,
   },
 
-  // 実験的機能による最適化
+  // Optimization with experimental features
   experimental: {
-    // パッケージインポートの最適化
+    // Package import optimization
     optimizePackageImports: ['zustand', 'immer', 'react', 'react-dom'],
   },
 
-  // 画像最適化設定
+  // Image optimization settings
   images: {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 768, 1024, 1280, 1600],
     imageSizes: [16, 32, 48, 64, 96],
   },
 
-  // TypeScript設定
+  // TypeScript settings
   typescript: {
-    // 本番ビルド時の型チェック効率化
+    // Efficient type checking for production builds
     tsconfigPath: './tsconfig.json',
   },
 
-  // セキュリティヘッダー
+  // Security headers
   async headers() {
     return [
       {

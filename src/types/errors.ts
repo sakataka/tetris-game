@@ -1,11 +1,11 @@
 /**
- * アプリケーション内のエラー処理用型定義とカスタムエラークラス
+ * Type definitions and custom error classes for error handling within the application
  */
 
-// エラーレベルの定義
+// Error level definitions
 export type ErrorLevel = 'info' | 'warning' | 'error' | 'critical';
 
-// エラーカテゴリの定義
+// Error category definitions
 export type ErrorCategory =
   | 'game'
   | 'audio'
@@ -16,7 +16,7 @@ export type ErrorCategory =
   | 'system'
   | 'unknown';
 
-// エラーコンテキスト情報
+// Error context information
 export interface ErrorContext {
   component?: string;
   action?: string;
@@ -28,7 +28,7 @@ export interface ErrorContext {
   additionalData?: Record<string, unknown>;
 }
 
-// エラー情報の基本構造
+// Basic structure of error information
 export interface ErrorInfo {
   id: string;
   level: ErrorLevel;
@@ -38,10 +38,10 @@ export interface ErrorInfo {
   stack?: string;
   recoverable: boolean;
   retryable: boolean;
-  userMessage?: string; // ユーザー向け表示メッセージ
+  userMessage?: string; // User-facing display message
 }
 
-// 基底カスタムエラークラス
+// Base custom error class
 export abstract class BaseAppError extends Error {
   public readonly id: string;
   public readonly level: ErrorLevel;
@@ -79,7 +79,7 @@ export abstract class BaseAppError extends Error {
     this.retryable = options.retryable ?? false;
     this.userMessage = options.userMessage;
 
-    // スタックトレースの設定
+    // Set up stack trace
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, this.constructor);
     }
@@ -108,7 +108,7 @@ export abstract class BaseAppError extends Error {
   }
 }
 
-// ゲーム関連エラー
+// Game-related errors
 export class GameError extends BaseAppError {
   constructor(
     message: string,
@@ -122,13 +122,13 @@ export class GameError extends BaseAppError {
   ) {
     super(message, 'error', 'game', context, {
       recoverable: true,
-      userMessage: 'ゲーム処理でエラーが発生しました',
+      userMessage: 'An error occurred during game processing',
       ...options,
     });
   }
 }
 
-// 音声関連エラー
+// Audio-related errors
 export class AudioError extends BaseAppError {
   constructor(
     message: string,
@@ -143,13 +143,13 @@ export class AudioError extends BaseAppError {
     super(message, 'warning', 'audio', context, {
       recoverable: true,
       retryable: true,
-      userMessage: '音声の再生に失敗しました',
+      userMessage: 'Failed to play audio',
       ...options,
     });
   }
 }
 
-// ストレージ関連エラー
+// Storage-related errors
 export class StorageError extends BaseAppError {
   constructor(
     message: string,
@@ -164,13 +164,13 @@ export class StorageError extends BaseAppError {
     super(message, 'warning', 'storage', context, {
       recoverable: true,
       retryable: false,
-      userMessage: 'データの保存に失敗しました',
+      userMessage: 'Failed to save data',
       ...options,
     });
   }
 }
 
-// ネットワーク関連エラー
+// Network-related errors
 export class NetworkError extends BaseAppError {
   constructor(
     message: string,
@@ -185,13 +185,13 @@ export class NetworkError extends BaseAppError {
     super(message, 'error', 'network', context, {
       recoverable: true,
       retryable: true,
-      userMessage: 'ネットワークエラーが発生しました',
+      userMessage: 'A network error occurred',
       ...options,
     });
   }
 }
 
-// UI関連エラー
+// UI-related errors
 export class UIError extends BaseAppError {
   constructor(
     message: string,
@@ -206,13 +206,13 @@ export class UIError extends BaseAppError {
     super(message, 'warning', 'ui', context, {
       recoverable: true,
       retryable: false,
-      userMessage: '画面表示でエラーが発生しました',
+      userMessage: 'An error occurred in screen display',
       ...options,
     });
   }
 }
 
-// バリデーション関連エラー
+// Validation-related errors
 export class ValidationError extends BaseAppError {
   constructor(
     message: string,
@@ -227,13 +227,13 @@ export class ValidationError extends BaseAppError {
     super(message, 'warning', 'validation', context, {
       recoverable: true,
       retryable: false,
-      userMessage: '入力データが正しくありません',
+      userMessage: 'Input data is incorrect',
       ...options,
     });
   }
 }
 
-// システム関連エラー（クリティカル）
+// System-related errors (critical)
 export class SystemError extends BaseAppError {
   constructor(
     message: string,
@@ -248,13 +248,13 @@ export class SystemError extends BaseAppError {
     super(message, 'critical', 'system', context, {
       recoverable: false,
       retryable: false,
-      userMessage: 'システムエラーが発生しました。ページを再読み込みしてください',
+      userMessage: 'A system error occurred. Please reload the page',
       ...options,
     });
   }
 }
 
-// エラー処理結果の型
+// Type for error handling results
 export interface ErrorHandlingResult {
   handled: boolean;
   retry?: boolean;
@@ -266,10 +266,10 @@ export interface ErrorHandlingResult {
   };
 }
 
-// エラーハンドラーの型
+// Error handler type
 export type ErrorHandler = (error: BaseAppError) => ErrorHandlingResult;
 
-// エラー発生時のアクション型
+// Action type for when errors occur
 export interface ErrorAction {
   type: 'ERROR_OCCURRED' | 'ERROR_RESOLVED' | 'ERROR_DISMISSED' | 'ERRORS_CLEARED';
   payload?: {
@@ -278,7 +278,7 @@ export interface ErrorAction {
   };
 }
 
-// エラー統計情報
+// Error statistics information
 export interface ErrorStats {
   totalErrors: number;
   errorsByCategory: Record<ErrorCategory, number>;
@@ -287,7 +287,7 @@ export interface ErrorStats {
   lastErrorTime?: number;
 }
 
-// エラーレポート設定
+// Error report configuration
 export interface ErrorReportConfig {
   enableConsoleLogging: boolean;
   enableUserNotifications: boolean;
@@ -297,7 +297,7 @@ export interface ErrorReportConfig {
   autoReportCritical: boolean;
 }
 
-// デフォルトエラーレポート設定
+// Default error report configuration
 export const DEFAULT_ERROR_CONFIG: ErrorReportConfig = {
   enableConsoleLogging: process.env.NODE_ENV === 'development',
   enableUserNotifications: true,
@@ -307,7 +307,7 @@ export const DEFAULT_ERROR_CONFIG: ErrorReportConfig = {
   autoReportCritical: true,
 } as const;
 
-// エラーレベルの重要度（数値が大きいほど重要）
+// Error level priority (higher numbers indicate higher priority)
 export const ERROR_LEVEL_PRIORITY: Record<ErrorLevel, number> = {
   info: 1,
   warning: 2,
@@ -315,7 +315,7 @@ export const ERROR_LEVEL_PRIORITY: Record<ErrorLevel, number> = {
   critical: 4,
 } as const;
 
-// エラーメッセージのローカライゼーション対応
+// Localization support for error messages
 export interface LocalizedErrorMessages {
   [key: string]: {
     ja: string;
@@ -325,7 +325,7 @@ export interface LocalizedErrorMessages {
   };
 }
 
-// よく使用されるエラーメッセージ
+// Commonly used error messages
 export const COMMON_ERROR_MESSAGES: LocalizedErrorMessages = {
   NETWORK_TIMEOUT: {
     ja: 'ネットワークがタイムアウトしました',

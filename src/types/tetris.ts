@@ -1,15 +1,15 @@
-// 基本的なゲーム要素の型定義
+// Type definitions for basic game elements
 export type TetrominoType = 'I' | 'O' | 'T' | 'S' | 'Z' | 'J' | 'L';
 export type ThemeVariant = 'cyberpunk' | 'classic' | 'retro' | 'minimal' | 'neon';
 export type GameMode = 'single' | 'versus' | 'cooperative';
 export type DifficultyLevel = 'easy' | 'normal' | 'hard' | 'extreme';
 
-// アクセシビリティ関連の型定義
+// Type definitions for accessibility features
 export type ColorBlindnessType = 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia';
 export type ContrastLevel = 'low' | 'normal' | 'high';
 export type AnimationIntensity = 'none' | 'reduced' | 'normal' | 'enhanced';
 
-// 音響システムの厳密な型定義
+// Strict type definitions for audio system
 export type SoundKey =
   | 'lineClear'
   | 'pieceLand'
@@ -36,20 +36,20 @@ export interface KeyBinding {
 // Board type definition
 export type Board = (string | null)[][];
 
-// ゲーム状態の厳密な型定義
+// Strict type definitions for game state
 export type GameStatus = 'idle' | 'playing' | 'paused' | 'gameOver' | 'loading';
 export type InputSource = 'keyboard' | 'touch' | 'gamepad' | 'mouse';
 
-// パフォーマンス関連の型定義
+// Type definitions for performance features
 export type RendererType = 'dom' | 'canvas' | 'webgl';
 export type PerformanceLevel = 'excellent' | 'good' | 'fair' | 'poor';
 
-// データ範囲の制約型
-export type ScoreRange = number; // 0以上の整数
-export type LevelRange = number; // 1以上の整数
-export type LineRange = number; // 0以上の整数
+// Data range constraint types
+export type ScoreRange = number; // Integer 0 or greater
+export type LevelRange = number; // Integer 1 or greater
+export type LineRange = number; // Integer 0 or greater
 
-// ブランド型による型安全性の向上
+// Improved type safety with branded types
 export type PlayerId = string & { readonly __brand: 'PlayerId' };
 export type SessionId = string & { readonly __brand: 'SessionId' };
 export type GameId = string & { readonly __brand: 'GameId' };
@@ -59,7 +59,7 @@ export interface Position {
   readonly y: number;
 }
 
-// 不変のTetromino定義（形状データは読み取り専用）
+// Immutable Tetromino definition (shape data is read-only)
 export interface Tetromino {
   readonly type: TetrominoType;
   readonly shape: ReadonlyArray<ReadonlyArray<number>>;
@@ -67,27 +67,27 @@ export interface Tetromino {
   readonly color: string;
 }
 
-// パーティクルは可変（アニメーション用）
+// Particles are mutable (for animations)
 export interface Particle {
-  id: string; // プールでの再利用のため可変
+  id: string; // Mutable for pool reuse
   x: number;
   y: number;
-  color: string; // プールでの再利用のため可変
+  color: string; // Mutable for pool reuse
   vx: number;
   vy: number;
   life: number;
 }
 
-// ラインエフェクト状態（パーティクル配列は可変）
+// Line effect state (particle array is mutable)
 export interface LineEffectState {
   readonly flashingLines: ReadonlyArray<number>;
   readonly shaking: boolean;
-  particles: Particle[]; // アニメーション更新のため可変
+  particles: Particle[]; // Mutable for animation updates
 }
 
-// ゲーム状態（スコア等は変更可能、ボードは可変）
+// Game state (scores etc. are changeable, board is mutable)
 export interface GameState {
-  board: (string | null)[][]; // ゲーム進行で変更される
+  board: (string | null)[][]; // Modified during game progression
   currentPiece: Readonly<Tetromino> | null;
   nextPiece: Readonly<Tetromino> | null;
   score: ScoreRange;
@@ -98,7 +98,7 @@ export interface GameState {
   lineEffect: LineEffectState;
 }
 
-// エラーハンドリング用の型定義
+// Type definitions for error handling
 export interface GameError {
   readonly type: 'AUDIO_LOAD_ERROR' | 'STORAGE_ERROR' | 'GAME_STATE_ERROR';
   readonly message: string;
@@ -110,8 +110,8 @@ export interface ErrorState {
   readonly hasErrors: boolean;
 }
 
-// 定数は constants/index.ts に移動済み
-// このファイルは型定義のみを含む
+// Constants have been moved to constants/index.ts
+// This file contains only type definitions
 
 // Phase 2: Enhanced state management types
 export interface HighScore {
@@ -144,7 +144,7 @@ export interface GameSettings {
   readonly virtualControlsEnabled: boolean;
 }
 
-// カスタムカラーパレット設定
+// Custom color palette settings
 export interface ColorPalette {
   readonly primary: string;
   readonly secondary: string;
@@ -154,7 +154,7 @@ export interface ColorPalette {
   readonly accent: string;
 }
 
-// テーマ詳細設定
+// Theme detail settings
 export interface ThemeConfig {
   readonly name: string;
   readonly colors: ColorPalette;
@@ -171,7 +171,7 @@ export interface ThemeConfig {
   };
 }
 
-// 拡張されたテーマ状態
+// Extended theme state
 export interface ThemeState {
   readonly current: ThemeVariant;
   readonly customColors?: Record<string, string>;

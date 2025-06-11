@@ -27,4 +27,4 @@ export * from './timing';
 export * from './strings';
 
 // Aliases for backward compatibility
-export const EFFECT_RESET_DELAY = 300; // EFFECTS.RESET_DELAY へのエイリアス
+export const EFFECT_RESET_DELAY = 300; // Alias for EFFECTS.RESET_DELAY

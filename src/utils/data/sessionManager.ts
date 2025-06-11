@@ -1,8 +1,8 @@
 /**
- * セッション管理専用サービスクラス
+ * Dedicated session management service class
  *
- * PlaySessionの追跡、localStorage同期、タイムアウト管理を
- * 一元化したシンプルなアーキテクチャ
+ * Simple architecture that centralizes PlaySession tracking,
+ * localStorage synchronization, and timeout management
  */
 
 import { PlaySession } from '../../types/tetris';
@@ -38,17 +38,17 @@ export class SessionManager {
   }
 
   /**
-   * 現在のアクティブセッションを取得
+   * Get the current active session
    */
   public getCurrentSession(): PlaySession | null {
     return this.currentSession;
   }
 
   /**
-   * 全てのセッション履歴を取得
+   * Get all session history
    */
   public getAllSessions(): PlaySession[] {
-    if (typeof window === 'undefined') return []; // SSR対応
+    if (typeof window === 'undefined') return []; // SSR support
 
     const stored = localStorage.getItem(SESSION_STORAGE_KEY);
     if (!stored) return [];
@@ -61,15 +61,15 @@ export class SessionManager {
   }
 
   /**
-   * 新しいセッションを開始
+   * Start a new session
    */
   public startSession(): PlaySession {
-    // 既存のアクティブセッションを終了
+    // End existing active session
     if (this.currentSession?.isActive) {
       this.endCurrentSession();
     }
 
-    // 新しいセッション作成
+    // Create new session
     this.currentSession = {
       id: this.generateSessionId(),
       startTime: Date.now(),
@@ -85,7 +85,7 @@ export class SessionManager {
   }
 
   /**
-   * 現在のセッションを終了
+   * End the current session
    */
   public endCurrentSession(): void {
     if (!this.currentSession?.isActive) return;
@@ -96,10 +96,10 @@ export class SessionManager {
       isActive: false,
     };
 
-    // セッション履歴に保存
+    // Save to session history
     this.saveSessionToHistory(completedSession);
 
-    // 現在のセッションをクリア
+    // Clear current session
     this.currentSession = null;
     this.clearCurrentSession();
     this.clearTimeout();
@@ -107,15 +107,15 @@ export class SessionManager {
   }
 
   /**
-   * ゲーム開始時の処理
+   * Process when game starts
    */
   public onGameStart(): void {
-    // アクティブセッションがない場合は新規作成
+    // Create new session if no active session exists
     if (!this.currentSession?.isActive) {
       this.startSession();
     }
 
-    // ゲーム数を増加
+    // Increment game count
     if (this.currentSession) {
       this.currentSession = {
         ...this.currentSession,
@@ -128,7 +128,7 @@ export class SessionManager {
   }
 
   /**
-   * セッション統計を計算
+   * Calculate session statistics
    */
   public getSessionStats(): SessionStats {
     const sessions = this.getAllSessions();
@@ -166,7 +166,7 @@ export class SessionManager {
   }
 
   /**
-   * 変更リスナーを追加
+   * Add change listener
    */
   public addChangeListener(listener: () => void): () => void {
     this.changeListeners.add(listener);
@@ -174,7 +174,7 @@ export class SessionManager {
   }
 
   /**
-   * セッション履歴をクリア（開発・テスト用）
+   * Clear session history (for development and testing)
    */
   public clearAllSessions(): void {
     localStorage.removeItem(SESSION_STORAGE_KEY);
@@ -188,7 +188,7 @@ export class SessionManager {
   }
 
   private loadFromStorage(): void {
-    if (typeof window === 'undefined') return; // SSR対応
+    if (typeof window === 'undefined') return; // SSR support
 
     const stored = localStorage.getItem(CURRENT_SESSION_KEY);
     if (!stored) return;
@@ -196,12 +196,12 @@ export class SessionManager {
     try {
       const session = JSON.parse(stored);
 
-      // セッションが期限切れかチェック
+      // Check if session has expired
       const now = Date.now();
       const timeSinceStart = now - session.startTime;
 
       if (timeSinceStart > SESSION_TIMEOUT) {
-        // 期限切れセッションを履歴に移動
+        // Move expired session to history
         this.saveSessionToHistory({
           ...session,
           endTime: session.startTime + SESSION_TIMEOUT,
@@ -213,13 +213,13 @@ export class SessionManager {
         this.resetTimeout();
       }
     } catch {
-      // 破損データは削除
+      // Delete corrupted data
       this.clearCurrentSession();
     }
   }
 
   private saveCurrentSession(): void {
-    if (typeof window === 'undefined') return; // SSR対応
+    if (typeof window === 'undefined') return; // SSR support
 
     if (this.currentSession) {
       localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(this.currentSession));
@@ -227,18 +227,18 @@ export class SessionManager {
   }
 
   private clearCurrentSession(): void {
-    if (typeof window === 'undefined') return; // SSR対応
+    if (typeof window === 'undefined') return; // SSR support
 
     localStorage.removeItem(CURRENT_SESSION_KEY);
   }
 
   private saveSessionToHistory(session: PlaySession): void {
-    if (typeof window === 'undefined') return; // SSR対応
+    if (typeof window === 'undefined') return; // SSR support
 
     const sessions = this.getAllSessions();
     sessions.push(session);
 
-    // 最新100セッションのみ保持
+    // Keep only the latest 100 sessions
     if (sessions.length > 100) {
       sessions.splice(0, sessions.length - 100);
     }
@@ -261,14 +261,14 @@ export class SessionManager {
   }
 
   private setupWindowListeners(): void {
-    if (typeof window === 'undefined') return; // SSR対応
+    if (typeof window === 'undefined') return; // SSR support
 
-    // ページアンロード時の処理
+    // Process when page unloads
     const handleBeforeUnload = () => {
       this.endCurrentSession();
     };
 
-    // ページフォーカス復帰時の処理
+    // Process when page focus returns
     const handleFocus = () => {
       this.loadFromStorage();
       this.notifyListeners();
@@ -283,5 +283,5 @@ export class SessionManager {
   }
 }
 
-// シングルトンインスタンスをエクスポート
+// Export singleton instance
 export const sessionManager = SessionManager.getInstance();

@@ -14,7 +14,8 @@ interface UseGameTimerProps {
  */
 export function useGameTimer({ isActive, interval, onTick }: UseGameTimerProps) {
   // Use unified animation management system
-  useTimerAnimation(onTick, interval, [onTick, interval], {
+  // Important: Only depend on interval, not onTick to prevent timer reset
+  useTimerAnimation(onTick, interval, [interval], {
     ...ANIMATION_PRESETS.GAME_LOOP,
     enabled: isActive,
     // Remove auto-stop when tab is inactive (maintain game progress)

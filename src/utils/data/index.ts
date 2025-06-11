@@ -1,7 +1,7 @@
 /**
- * データ管理関連ユーティリティ
+ * Data management related utilities
  *
- * セッション管理、統計計算、エラーハンドリング
+ * Session management, statistics calculation, error handling
  */
 
 export * from './sessionManager';
