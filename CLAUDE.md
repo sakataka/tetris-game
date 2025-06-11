@@ -201,33 +201,17 @@ The current architecture is designed to support future expansion with minimal re
 - **Extensible Game Logic**: Configurable game modes through gameStateStore extensions
 - **PWA Conversion Ready**: Service worker structure and offline-first design patterns
 
-### 🚀 Large Features (3-6 months)
+### 🟢 High Priority Features (1-3 months)
 
-1. **Real-time Multiplayer System**
+1. **Custom Control Schemes**
 
-   - WebSocket/WebRTC integration for low-latency gameplay
-   - Battle mode (1v1, 2v2, team battles)
-   - Spectator mode with live commentary
-   - Matchmaking and ELO rating system
-   - Architecture: Extend GameStateStore with multiplayer sync layer
+   - Fully remappable keys
+   - Multiple control profiles
+   - Gamepad support (Xbox, PlayStation)
+   - Touch gesture customization
+   - Architecture: Extend settingsStore with control mapping
 
-2. **AI Opponent System**
-
-   - Machine learning-based difficulty adaptation
-   - Multiple AI personalities (aggressive, defensive, balanced)
-   - Training mode against AI
-   - Architecture: New AIStrategyStore + TensorFlow.js integration
-
-3. **Tournament & Competition Platform**
-   - Tournament bracket system
-   - Scheduled events and seasons
-   - Prize pool management
-   - Live streaming integration
-   - Architecture: New CompetitionStore + backend API integration
-
-### ⭐ Medium Features (1-3 months)
-
-4. **Advanced Game Modes**
+2. **Advanced Game Modes**
 
    - **Puzzle Mode**: Pre-set challenges to solve
    - **Marathon Mode**: Endless gameplay with increasing difficulty
@@ -235,7 +219,7 @@ The current architecture is designed to support future expansion with minimal re
    - **Gravity Mode**: Pieces affected by physics
    - Architecture: Extend gameStateStore with mode-specific logic
 
-5. **Achievement & Progression System**
+3. **Achievement & Progression System**
 
    - 50+ achievements with different tiers
    - Player level and experience points
@@ -243,7 +227,32 @@ The current architecture is designed to support future expansion with minimal re
    - Daily/weekly challenges
    - Architecture: New ProgressionStore + persistent storage
 
-6. **Replay System**
+4. **Tutorial & Training System**
+
+   - Interactive tutorial for beginners
+   - Advanced technique training (T-spins, etc.)
+   - Practice specific scenarios
+   - Video tutorials integration
+   - Architecture: New TutorialStore + guided tour library
+
+### 🟡 Medium Priority Features (3-6 months)
+
+5. **Real-time Multiplayer System**
+
+   - WebSocket/WebRTC integration for low-latency gameplay
+   - Battle mode (1v1, 2v2, team battles)
+   - Spectator mode with live commentary
+   - Matchmaking and ELO rating system
+   - Architecture: Extend GameStateStore with multiplayer sync layer
+
+6. **AI Opponent System**
+
+   - Machine learning-based difficulty adaptation
+   - Multiple AI personalities (aggressive, defensive, balanced)
+   - Training mode against AI
+   - Architecture: New AIStrategyStore + TensorFlow.js integration
+
+7. **Replay System**
 
    - Record and playback gameplay sessions
    - Share replays with unique URLs
@@ -251,7 +260,7 @@ The current architecture is designed to support future expansion with minimal re
    - Export as video (WebRTC)
    - Architecture: New ReplayStore + compression algorithms
 
-7. **Power-ups & Special Blocks**
+8. **Power-ups & Special Blocks**
 
    - Bomb blocks (clear area)
    - Rainbow blocks (match any color)
@@ -259,22 +268,13 @@ The current architecture is designed to support future expansion with minimal re
    - Ghost mode (temporary invincibility)
    - Architecture: Extend tetrisUtils with power-up logic
 
-8. **Social Features**
+9. **Social Features**
+
    - Friend system with invites
    - Global and friend leaderboards
    - Profile customization
    - Chat system (with moderation)
    - Architecture: New SocialStore + OAuth integration
-
-### 💡 Small Features (1-2 weeks)
-
-9. **Custom Control Schemes**
-
-   - Fully remappable keys
-   - Multiple control profiles
-   - Gamepad support (Xbox, PlayStation)
-   - Touch gesture customization
-   - Architecture: Extend settingsStore with control mapping
 
 10. **Advanced Statistics Dashboard**
 
@@ -284,15 +284,7 @@ The current architecture is designed to support future expansion with minimal re
     - Export statistics as CSV/PDF
     - Architecture: Extend StatisticsService with visualization
 
-11. **Tutorial & Training System**
-
-    - Interactive tutorial for beginners
-    - Advanced technique training (T-spins, etc.)
-    - Practice specific scenarios
-    - Video tutorials integration
-    - Architecture: New TutorialStore + guided tour library
-
-12. **Music & Sound Customization**
+11. **Music & Sound Customization**
 
     - Custom music playlists
     - Sound effect packs
@@ -300,7 +292,7 @@ The current architecture is designed to support future expansion with minimal re
     - Community sound sharing
     - Architecture: Extend AudioManagerV2 with playlist support
 
-13. **Enhanced Visual Customization**
+12. **Enhanced Visual Customization**
 
     - Piece skin editor
     - Custom background animations
@@ -308,13 +300,23 @@ The current architecture is designed to support future expansion with minimal re
     - Import/export theme packages
     - Architecture: Extend themeStore with advanced options
 
-14. **Accessibility Enhancements**
+### 🔴 Low Priority Features (6+ months)
 
-    - Voice commands
-    - Screen reader improvements
-    - One-handed play mode
-    - Customizable visual indicators
-    - Architecture: Extend accessibilityStore with new features
+13. **Tournament & Competition Platform**
+
+    - Tournament bracket system
+    - Scheduled events and seasons
+    - Prize pool management
+    - Live streaming integration
+    - Architecture: New CompetitionStore + backend API integration
+
+14. **Plugin System Architecture**
+
+    - Modular component loading system
+    - Third-party extension APIs
+    - Plugin marketplace integration
+    - Hot-swappable game modules
+    - Architecture: Plugin manager with lifecycle hooks and dependency injection
 
 15. **Performance Profiler**
 
@@ -324,28 +326,34 @@ The current architecture is designed to support future expansion with minimal re
     - Performance recommendations
     - Architecture: Extend performanceMonitor with UI overlay
 
-16. **Plugin System Architecture**
-    - Modular component loading system
-    - Third-party extension APIs
-    - Plugin marketplace integration
-    - Hot-swappable game modules
-    - Architecture: Plugin manager with lifecycle hooks and dependency injection
+16. **Accessibility Enhancements**
+
+    - Voice commands
+    - Screen reader improvements
+    - One-handed play mode
+    - Customizable visual indicators
+    - Architecture: Extend accessibilityStore with new features
 
 ### Implementation Priority Matrix
 
-| Feature             | User Value | Technical Complexity | Architecture Fit | Priority  |
-| ------------------- | ---------- | -------------------- | ---------------- | --------- |
-| Custom Controls     | High       | Low                  | Excellent        | 🟢 High   |
-| Advanced Game Modes | High       | Medium               | Excellent        | 🟢 High   |
-| Achievement System  | High       | Medium               | Good             | 🟢 High   |
-| Tutorial System     | High       | Low                  | Good             | 🟢 High   |
-| Multiplayer         | Very High  | High                 | Good             | 🟡 Medium |
-| AI Opponent         | Medium     | High                 | Good             | 🟡 Medium |
-| Replay System       | Medium     | Medium               | Good             | 🟡 Medium |
-| Power-ups           | Medium     | Medium               | Good             | 🟡 Medium |
-| Social Features     | Medium     | High                 | Fair             | 🟡 Medium |
-| Tournament Platform | Low        | Very High            | Fair             | 🔴 Low    |
-| Plugin System       | Medium     | Very High            | Excellent        | 🔴 Low    |
+| Feature                           | User Value | Technical Complexity | Architecture Fit | Priority  |
+| --------------------------------- | ---------- | -------------------- | ---------------- | --------- |
+| Custom Control Schemes            | High       | Low                  | Excellent        | 🟢 High   |
+| Advanced Game Modes               | High       | Medium               | Excellent        | 🟢 High   |
+| Achievement & Progression System  | High       | Medium               | Good             | 🟢 High   |
+| Tutorial & Training System        | High       | Low                  | Good             | 🟢 High   |
+| Real-time Multiplayer System      | Very High  | High                 | Good             | 🟡 Medium |
+| AI Opponent System                | Medium     | High                 | Good             | 🟡 Medium |
+| Replay System                     | Medium     | Medium               | Good             | 🟡 Medium |
+| Power-ups & Special Blocks        | Medium     | Medium               | Good             | 🟡 Medium |
+| Social Features                   | Medium     | High                 | Fair             | 🟡 Medium |
+| Advanced Statistics Dashboard     | Medium     | Low                  | Good             | 🟡 Medium |
+| Music & Sound Customization       | Medium     | Low                  | Good             | 🟡 Medium |
+| Enhanced Visual Customization     | Medium     | Medium               | Good             | 🟡 Medium |
+| Tournament & Competition Platform | Low        | Very High            | Fair             | 🔴 Low    |
+| Plugin System Architecture        | Medium     | Very High            | Excellent        | 🔴 Low    |
+| Performance Profiler              | Low        | Medium               | Good             | 🔴 Low    |
+| Accessibility Enhancements        | Medium     | Medium               | Good             | 🔴 Low    |
 
 ### Technical Preparation Checklist
 
