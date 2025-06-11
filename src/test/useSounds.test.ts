@@ -64,7 +64,14 @@ const mockAudioPreloader = {
   preloadAudio: vi.fn().mockResolvedValue(undefined),
   resetPreload: vi.fn(),
   getHtmlAudioElement: vi.fn(),
-  htmlAudioElements: new Map(),
+  htmlAudioElements: {} as {
+    lineClear?: HTMLAudioElement;
+    pieceLand?: HTMLAudioElement;
+    pieceRotate?: HTMLAudioElement;
+    tetris?: HTMLAudioElement;
+    gameOver?: HTMLAudioElement;
+    hardDrop?: HTMLAudioElement;
+  },
   isPreloadComplete: true,
   isPreloading: false,
   hasPreloadErrors: false,
