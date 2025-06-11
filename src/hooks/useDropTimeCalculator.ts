@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { GAME_TIMING } from '../constants';
 
 interface UseDropTimeCalculatorProps {
   level: number;
@@ -12,7 +13,7 @@ export function useDropTimeCalculator({
   onDropTimeChange,
 }: UseDropTimeCalculatorProps) {
   useEffect(() => {
-    const newDropTime = Math.max(50, initialDropTime - (level - 1) * 100);
+    const newDropTime = Math.max(GAME_TIMING.MIN_DROP_TIME, initialDropTime - (level - 1) * 100);
     onDropTimeChange(newDropTime);
   }, [level, initialDropTime, onDropTimeChange]);
 }

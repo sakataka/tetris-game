@@ -27,6 +27,15 @@ export const PARTICLE_CONFIG = {
   MAX_PARTICLES: 200,
 } as const;
 
+// Performance monitoring and optimization
+export const PERFORMANCE_LIMITS = {
+  FPS_HISTORY_SIZE: 10, // Number of frames to track for performance
+  PERFORMANCE_THRESHOLD_MS: 50, // Performance threshold in milliseconds
+  FRAME_DROP_THRESHOLD: 0.2, // 20% frame drop rate threshold
+  MIN_FPS_LIMIT: 30, // Minimum FPS limit for optimization
+  FPS_REDUCTION_STEP: 10, // FPS reduction step for optimization
+} as const;
+
 // Rendering optimization
 export const PERFORMANCE = {
   RENDER_BATCH_SIZE: 20,

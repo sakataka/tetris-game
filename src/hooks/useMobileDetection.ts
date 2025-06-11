@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { BREAKPOINTS } from '../constants/layout';
 
 interface MobileDetectionResult {
   isMobile: boolean;
@@ -20,7 +21,7 @@ export function useMobileDetection(): MobileDetectionResult {
       const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
       const screenWidth = window.innerWidth;
       const screenHeight = window.innerHeight;
-      const isMobile = screenWidth <= 768 || isTouchDevice;
+      const isMobile = screenWidth <= BREAKPOINTS.MOBILE_WIDTH || isTouchDevice;
 
       setDetection({
         isMobile,

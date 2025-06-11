@@ -40,5 +40,32 @@ export const VALIDATION = {
   SESSION_TIMEOUT,
 } as const;
 
+// Game physics and visual settings
+export const GAME_PHYSICS = {
+  CELL_SIZE: 24, // Cell pixel size
+  CELL_CENTER_OFFSET: 12, // Cell center offset
+  BOARD_POSITION_OFFSET: 8, // Board position adjustment
+
+  // Piece movement
+  MOVE_DELAY: 100, // Movement delay (ms)
+  REPEAT_DELAY: 150, // Key repeat delay (ms)
+  REPEAT_INTERVAL: 50, // Key repeat interval (ms)
+} as const;
+
+// Particle system settings
+export const PARTICLE_SYSTEM = {
+  POOL_SIZE: 150,
+  PRELOAD_COUNT: 50,
+  POSITION_VARIANCE_X: 20,
+  POSITION_VARIANCE_Y: 10,
+
+  // Particle physics
+  GRAVITY: 0.5,
+  LIFE_DURATION: 20, // frames
+  SCALE_BASE: 0.5,
+  SCALE_MULTIPLIER: 1.5,
+  OPACITY_MULTIPLIER: 0.8,
+} as const;
+
 // Type exports
 export type ScoreType = keyof typeof SCORES;

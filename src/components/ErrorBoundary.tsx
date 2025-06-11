@@ -3,6 +3,7 @@
 import React, { Component, ReactNode, ErrorInfo } from 'react';
 import { UIError } from '../types/errors';
 import { errorHandler } from '../utils/data';
+import { DEFAULT_VALUES, GAME_TIMING } from '../constants';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -19,7 +20,7 @@ interface ErrorBoundaryState {
 }
 
 class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  private readonly maxRetries = 3;
+  private readonly maxRetries = DEFAULT_VALUES.ERROR_LIMITS.MAX_RETRIES;
 
   constructor(props: ErrorBoundaryProps) {
     super(props);
@@ -77,7 +78,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         if (typeof window !== 'undefined') {
           window.location.reload();
         }
-      }, 3000);
+      }, GAME_TIMING.ERROR_RELOAD_DELAY);
     }
   }
 

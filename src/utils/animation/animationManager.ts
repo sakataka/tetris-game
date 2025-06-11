@@ -8,6 +8,8 @@
 import { handleError } from '../data/errorHandler';
 import { SystemError } from '../../types/errors';
 import { log } from '../logging';
+import { PERFORMANCE_LIMITS } from '../../constants/performance';
+import { INTERVALS } from '../../constants/timing';
 
 export interface AnimationOptions {
   /** Target FPS (default: 60) */
@@ -48,7 +50,7 @@ export class AnimationManager {
   private isPaused = false;
   private isReducedMotion = false;
   private globalFPSLimit = 60;
-  private performanceThreshold = 16.67; // 60FPS baseline
+  private performanceThreshold = PERFORMANCE_LIMITS.PERFORMANCE_THRESHOLD_MS;
 
   // Performance statistics
   private stats = {
@@ -271,10 +273,10 @@ export class AnimationManager {
    * Start performance monitoring
    */
   private startPerformanceMonitoring(): void {
-    // Performance check at 5-second intervals
+    // Performance check at regular intervals
     setInterval(() => {
       this.checkPerformance();
-    }, 5000);
+    }, INTERVALS.PERFORMANCE_CHECK);
   }
 
   /**
@@ -296,12 +298,12 @@ export class AnimationManager {
    */
   private checkPerformance(): void {
     const now = performance.now();
-    if (now - this.stats.lastPerformanceCheck < 5000) return;
+    if (now - this.stats.lastPerformanceCheck < INTERVALS.PERFORMANCE_CHECK) return;
 
     const dropRate = this.stats.droppedFrames / this.stats.totalFrames;
 
-    // Auto-optimize when frame drop rate exceeds 20%
-    if (dropRate > 0.2) {
+    // Auto-optimize when frame drop rate exceeds threshold
+    if (dropRate > PERFORMANCE_LIMITS.FRAME_DROP_THRESHOLD) {
       log.warn(`High frame drop rate (${(dropRate * 100).toFixed(1)}%). Optimizing...`, {
         component: 'AnimationManager',
         action: 'checkPerformance',
@@ -314,8 +316,8 @@ export class AnimationManager {
       this.pauseLowPriorityAnimations();
 
       // Lower global FPS limit
-      if (this.globalFPSLimit > 30) {
-        this.setGlobalFPSLimit(this.globalFPSLimit - 10);
+      if (this.globalFPSLimit > PERFORMANCE_LIMITS.MIN_FPS_LIMIT) {
+        this.setGlobalFPSLimit(this.globalFPSLimit - PERFORMANCE_LIMITS.FPS_REDUCTION_STEP);
       }
     }
 

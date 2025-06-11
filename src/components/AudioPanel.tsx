@@ -4,6 +4,7 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GameSettings } from '../types/tetris';
 import PanelBase from './ui/PanelBase';
+import { UI_SIZES, GAME_UI_SIZES } from '../constants/layout';
 
 interface AudioSystemStatus {
   isWebAudioEnabled: boolean;
@@ -60,12 +61,11 @@ const AudioPanel = memo(function AudioPanel({
               step='0.1'
               value={volume}
               onChange={(e) => onVolumeChange(parseFloat(e.target.value))}
-              className='w-20 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer
-                        [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 
-                        [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 
-                        [&::-webkit-slider-thumb]:shadow-[0_0_10px_rgba(0,255,255,0.5)]'
+              className={`${UI_SIZES.SLIDER.WIDTH} ${UI_SIZES.SLIDER.HEIGHT} bg-gray-700 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:shadow-[0_0_10px_rgba(0,255,255,0.5)]`}
             />
-            <span className='font-mono text-cyan-400 text-sm w-8'>{Math.round(volume * 100)}</span>
+            <span className={`font-mono text-cyan-400 text-sm ${GAME_UI_SIZES.VOLUME_DISPLAY}`}>
+              {Math.round(volume * 100)}
+            </span>
           </div>
         </div>
         <div className='flex justify-between items-center'>

@@ -5,11 +5,20 @@
  * Used as single source of truth
  */
 
+// Color and visual constants
+export * from './colors';
+
+// Default values and initial settings
+export * from './defaults';
+
 // Game rules related
 export * from './gameRules';
 
 // Layout and UI related
 export * from './layout';
+
+// System limits and thresholds
+export * from './limits';
 
 // Tetromino definitions
 export * from './tetrominoes';

@@ -6,6 +6,8 @@ import {
   BOARD_HEIGHT,
   PARTICLES_PER_CELL,
   PARTICLE_LIFE_DURATION,
+  GAME_PHYSICS,
+  PARTICLE_SYSTEM,
 } from '../../constants';
 import { particlePool } from '../performance/particlePool';
 
@@ -187,10 +189,14 @@ export function createParticles(linesToClear: number[], board: (string | null)[]
         for (let i = 0; i < PARTICLES_PER_CELL; i++) {
           const particle = particlePool.getParticle(
             `${Date.now()}-${lineIndex}-${x}-${i}-${Math.random()}`,
-            x * 24 + 12 + 8, // Cell center + board position adjustment
-            lineIndex * 24 + 12 + 8,
+            x * GAME_PHYSICS.CELL_SIZE +
+              GAME_PHYSICS.CELL_CENTER_OFFSET +
+              GAME_PHYSICS.BOARD_POSITION_OFFSET, // Cell center + board position adjustment
+            lineIndex * GAME_PHYSICS.CELL_SIZE +
+              GAME_PHYSICS.CELL_CENTER_OFFSET +
+              GAME_PHYSICS.BOARD_POSITION_OFFSET,
             cellColor,
-            (Math.random() - 0.5) * 8, // Random horizontal velocity
+            ((Math.random() - 0.5) * PARTICLE_SYSTEM.POSITION_VARIANCE_X) / 2.5, // Random horizontal velocity
             Math.random() * -4 - 2, // Upward velocity
             PARTICLE_LIFE_DURATION
           );

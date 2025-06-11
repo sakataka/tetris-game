@@ -6,6 +6,7 @@
 import type { SoundKey } from '../../../types/tetris';
 import { AudioError, handleError } from '../../data/errorHandler';
 import { AudioStrategy, type SoundConfig, type AudioState } from './AudioStrategy';
+import { GAME_TIMING } from '../../../constants/timing';
 
 interface HTMLAudioElement extends globalThis.HTMLAudioElement {
   volume: number;
@@ -148,7 +149,7 @@ export class HTMLAudioStrategy extends AudioStrategy {
       return new Promise((resolve, reject) => {
         const timeout = setTimeout(() => {
           reject(new Error('Audio load timeout'));
-        }, 10000); // 10 second timeout
+        }, GAME_TIMING.AUDIO_TIMEOUT);
 
         audio.addEventListener(
           'loadeddata',

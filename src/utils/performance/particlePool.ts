@@ -1,4 +1,5 @@
 import { Particle } from '../../types/tetris';
+import { PARTICLE_LIMITS } from '../../constants';
 
 /**
  * Optimized Particle Pool with batch processing and memory efficiency
@@ -6,7 +7,7 @@ import { Particle } from '../../types/tetris';
  */
 class ParticlePool {
   private pool: Particle[] = [];
-  private maxPoolSize = 150; // Increased pool size for better reuse
+  private maxPoolSize = PARTICLE_LIMITS.POOL_SIZE; // Increased pool size for better reuse
   private allocatedCount = 0;
   private reuseCount = 0;
 
@@ -24,8 +25,8 @@ class ParticlePool {
     for (let i = 0; i < count; i++) {
       const particle = this.getSingleParticle(
         `particle_${Date.now()}_${i}`,
-        baseX + (Math.random() - 0.5) * 20, // Small position variance
-        baseY + (Math.random() - 0.5) * 10,
+        baseX + (Math.random() - 0.5) * PARTICLE_LIMITS.POSITION_VARIANCE_X, // Small position variance
+        baseY + (Math.random() - 0.5) * PARTICLE_LIMITS.POSITION_VARIANCE_Y,
         color,
         velocityRange.vxMin + Math.random() * (velocityRange.vxMax - velocityRange.vxMin),
         velocityRange.vyMin + Math.random() * (velocityRange.vyMax - velocityRange.vyMin),
@@ -127,7 +128,7 @@ class ParticlePool {
   }
 
   // Preload pool with particles to reduce initial allocation overhead
-  preloadPool(count: number = 50): void {
+  preloadPool(count: number = PARTICLE_LIMITS.PRELOAD_COUNT): void {
     const particlesToCreate = Math.min(count, this.maxPoolSize - this.pool.length);
 
     for (let i = 0; i < particlesToCreate; i++) {

@@ -4,6 +4,7 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Tetromino } from '../types/tetris';
 import PanelBase from './ui/PanelBase';
+import { GAME_UI_SIZES } from '../constants/layout';
 
 interface NextPiecePanelProps {
   nextPiece: Tetromino | null;
@@ -21,7 +22,7 @@ const NextPiecePanel = memo(function NextPiecePanel({ nextPiece }: NextPiecePane
               {row.map((cell, x) => (
                 <div
                   key={`${y}-${x}`}
-                  className={`w-5 h-5 border border-gray-600/50 relative ${
+                  className={`${GAME_UI_SIZES.NEXT_PIECE.CELL} border border-gray-600/50 relative ${
                     cell ? 'shadow-[0_0_10px_rgba(255,255,255,0.3)]' : 'bg-transparent'
                   }`}
                   style={{
@@ -36,7 +37,9 @@ const NextPiecePanel = memo(function NextPiecePanel({ nextPiece }: NextPiecePane
             </div>
           ))
         ) : (
-          <div className='w-20 h-20 bg-gray-700/50 rounded border border-gray-500'></div>
+          <div
+            className={`${GAME_UI_SIZES.NEXT_PIECE.CONTAINER} bg-gray-700/50 rounded border border-gray-500`}
+          ></div>
         )}
       </div>
     </PanelBase>

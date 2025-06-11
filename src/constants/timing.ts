@@ -33,5 +33,27 @@ export const ANIMATIONS = {
   PULSE_INTERVAL: 1000,
 } as const;
 
+// Game-specific timing
+export const GAME_TIMING = {
+  MIN_DROP_TIME: 50, // Minimum piece drop time (ms)
+  STANDARD_TIMEOUT: 100, // General timeout duration (ms)
+  ERROR_RELOAD_DELAY: 3000, // Error boundary reload delay (ms)
+  AUDIO_TIMEOUT: 10000, // Audio strategy timeout (ms)
+  DEFAULT_SOUND_DURATION: 1000, // Default sound duration (ms)
+
+  // User interaction delays
+  KEY_REPEAT_DELAY: 150, // Key repeat initial delay
+  KEY_REPEAT_INTERVAL: 50, // Key repeat interval
+  TOUCH_FEEDBACK_DURATION: 100, // Touch feedback duration
+} as const;
+
+// Timer intervals
+export const INTERVALS = {
+  PERFORMANCE_CHECK: 5000, // Performance monitoring interval
+  SESSION_SAVE: 30000, // Session data save interval
+  ERROR_CLEANUP: 60000, // Error history cleanup interval
+  CACHE_CLEANUP: 300000, // Cache cleanup interval (5 minutes)
+} as const;
+
 // Type exports
 export type SupportedLocale = (typeof I18N_CONFIG.SUPPORTED_LOCALES)[number];
