@@ -101,13 +101,21 @@ const ParticleEffect = memo(function ParticleEffect({
         performanceCheckCountRef.current = 0;
 
         const fpsInfo = globalFpsController.getFpsInfo();
-        
+
         // Switch to canvas for better performance
-        if (fpsInfo.performanceLevel === 'poor' && currentRenderer === 'dom' && particleCount > 15) {
+        if (
+          fpsInfo.performanceLevel === 'poor' &&
+          currentRenderer === 'dom' &&
+          particleCount > 15
+        ) {
           setCurrentRenderer('canvas');
         }
         // Switch back to DOM when performance is good and particle count is low
-        else if (fpsInfo.performanceLevel === 'excellent' && currentRenderer === 'canvas' && particleCount < 8) {
+        else if (
+          fpsInfo.performanceLevel === 'excellent' &&
+          currentRenderer === 'canvas' &&
+          particleCount < 8
+        ) {
           setCurrentRenderer('dom');
         }
         // Force canvas when too many particles
@@ -122,9 +130,9 @@ const ParticleEffect = memo(function ParticleEffect({
   // Optimized particle update with performance constraints
   const updateParticles = useCallback(() => {
     // Limit particle count for performance
-    const particlesToProcess = performanceMode ? 
-      lineEffect.particles.slice(0, maxParticles) : 
-      lineEffect.particles;
+    const particlesToProcess = performanceMode
+      ? lineEffect.particles.slice(0, maxParticles)
+      : lineEffect.particles;
 
     if (enablePerformanceMonitoring) {
       performanceMonitor.startFrame();
@@ -185,12 +193,12 @@ const ParticleEffect = memo(function ParticleEffect({
     if (process.env.NODE_ENV === 'development' && enablePerformanceMonitoring) {
       const fpsInfo = globalFpsController.getFpsInfo();
       const poolStats = particlePool.getPoolStatistics();
-      
+
       console.log(
         `🎮 Particle System - Renderer: ${selectedRenderer.toUpperCase()}, ` +
-        `Particles: ${lineEffect.particles.length}, ` +
-        `FPS: ${fpsInfo.currentFps} (${fpsInfo.performanceLevel}), ` +
-        `Pool Reuse: ${(poolStats.reuseRatio * 100).toFixed(1)}%`
+          `Particles: ${lineEffect.particles.length}, ` +
+          `FPS: ${fpsInfo.currentFps} (${fpsInfo.performanceLevel}), ` +
+          `Pool Reuse: ${(poolStats.reuseRatio * 100).toFixed(1)}%`
       );
     }
   }, [selectedRenderer, lineEffect.particles.length, enablePerformanceMonitoring]);

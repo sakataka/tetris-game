@@ -46,7 +46,7 @@ export class FpsController {
   // Check if current frame should be rendered based on FPS control
   shouldRenderFrame(timestamp: number): FrameInfo {
     const deltaTime = timestamp - this.lastFrameTime;
-    
+
     // First frame is always rendered
     if (this.lastFrameTime === 0) {
       this.lastFrameTime = timestamp;
@@ -58,14 +58,14 @@ export class FpsController {
         shouldRender: true,
       };
     }
-    
+
     // Calculate current FPS
     this.frameCount++;
     if (timestamp - this.lastFpsCalculation >= 1000) {
       this.currentFps = this.frameCount;
       this.frameCount = 0;
       this.lastFpsCalculation = timestamp;
-      
+
       // Update adaptive interval if enabled
       if (this.config.adaptiveMode) {
         this.updateAdaptiveInterval();
@@ -102,29 +102,24 @@ export class FpsController {
   private updateAdaptiveInterval(): void {
     // Add current FPS to performance history
     this.performanceHistory.push(this.currentFps);
-    
+
     // Keep only recent history (last 10 measurements)
     if (this.performanceHistory.length > 10) {
       this.performanceHistory.shift();
     }
 
-    const avgFps = this.performanceHistory.reduce((sum, fps) => sum + fps, 0) / this.performanceHistory.length;
-    
+    const avgFps =
+      this.performanceHistory.reduce((sum, fps) => sum + fps, 0) / this.performanceHistory.length;
+
     // Adjust interval based on performance
     if (avgFps < this.config.minFps) {
       // Performance is poor, reduce target FPS
-      this.adaptiveInterval = Math.min(
-        this.adaptiveInterval * 1.1,
-        1000 / this.config.minFps
-      );
+      this.adaptiveInterval = Math.min(this.adaptiveInterval * 1.1, 1000 / this.config.minFps);
       this.isThrottling = true;
     } else if (avgFps > this.config.targetFps * 1.1 && this.isThrottling) {
       // Performance is good, try to restore target FPS
-      this.adaptiveInterval = Math.max(
-        this.adaptiveInterval * 0.95,
-        this.frameInterval
-      );
-      
+      this.adaptiveInterval = Math.max(this.adaptiveInterval * 0.95, this.frameInterval);
+
       if (this.adaptiveInterval <= this.frameInterval) {
         this.isThrottling = false;
       }
@@ -140,7 +135,7 @@ export class FpsController {
     performanceLevel: 'excellent' | 'good' | 'fair' | 'poor';
   } {
     let performanceLevel: 'excellent' | 'good' | 'fair' | 'poor';
-    
+
     if (this.currentFps >= this.config.targetFps * 0.9) {
       performanceLevel = 'excellent';
     } else if (this.currentFps >= this.config.targetFps * 0.75) {
@@ -163,7 +158,7 @@ export class FpsController {
   // Update configuration dynamically
   updateConfig(newConfig: Partial<FpsControllerConfig>): void {
     Object.assign(this.config, newConfig);
-    
+
     if (newConfig.targetFps) {
       this.frameInterval = 1000 / this.config.targetFps;
       if (!this.isThrottling) {

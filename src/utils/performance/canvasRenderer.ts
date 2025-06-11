@@ -24,7 +24,7 @@ export class CanvasRenderer {
   private gradientCache = new Map<string, CanvasGradient>();
   private lastClearTime = 0;
   private dirtyRegions: Array<{ x: number; y: number; width: number; height: number }> = [];
-  
+
   // Pre-allocated objects to avoid garbage collection
   private tempTransform: DOMMatrix | null = null;
   private shadowSettings = {
@@ -50,10 +50,10 @@ export class CanvasRenderer {
     // Optimize canvas rendering context
     this.ctx.imageSmoothingEnabled = true;
     this.ctx.imageSmoothingQuality = 'high';
-    
+
     // Set default composite operation for better performance
     this.ctx.globalCompositeOperation = 'source-over';
-    
+
     // Initialize DOMMatrix if available (browser environment)
     if (typeof DOMMatrix !== 'undefined') {
       this.tempTransform = new DOMMatrix();
@@ -63,7 +63,7 @@ export class CanvasRenderer {
   // Optimized gradient creation with caching
   private getGradient(color: string, size: number): CanvasGradient {
     const key = `${color}_${Math.floor(size)}`;
-    
+
     if (this.gradientCache.has(key)) {
       return this.gradientCache.get(key)!;
     }
@@ -81,7 +81,7 @@ export class CanvasRenderer {
         this.gradientCache.delete(firstKey);
       }
     }
-    
+
     this.gradientCache.set(key, gradient);
     return gradient;
   }
@@ -89,20 +89,21 @@ export class CanvasRenderer {
   // Efficient canvas clearing strategy
   clearCanvas(canvasWidth: number, canvasHeight: number): void {
     const now = performance.now();
-    
+
     switch (this.config.clearStrategy) {
       case 'full':
         this.ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         break;
-        
+
       case 'selective':
         // Only clear if enough time has passed
-        if (now - this.lastClearTime > 16.67) { // ~60fps
+        if (now - this.lastClearTime > 16.67) {
+          // ~60fps
           this.ctx.clearRect(0, 0, canvasWidth, canvasHeight);
           this.lastClearTime = now;
         }
         break;
-        
+
       case 'dirty':
         // Clear only dirty regions (experimental)
         for (const region of this.dirtyRegions) {
@@ -118,7 +119,7 @@ export class CanvasRenderer {
     if (particles.length === 0) return;
 
     const particlesToRender = Math.min(particles.length, this.config.maxParticlesPerFrame);
-    
+
     // Sort particles by color to minimize state changes
     const sortedParticles = particles
       .slice(0, particlesToRender)
@@ -130,7 +131,7 @@ export class CanvasRenderer {
     for (let i = 0; i < sortedParticles.length; i++) {
       const particle = sortedParticles[i];
       this.renderSingleParticle(particle, currentColor, currentShadowColor);
-      
+
       // Update current colors to minimize context state changes
       currentColor = particle.color;
       currentShadowColor = particle.color;
@@ -240,7 +241,7 @@ export class CanvasRenderer {
   // Update configuration dynamically
   updateConfig(newConfig: Partial<CanvasRendererConfig>): void {
     Object.assign(this.config, newConfig);
-    
+
     // Clear cache if gradient settings changed
     if ('enableGradients' in newConfig) {
       this.gradientCache.clear();

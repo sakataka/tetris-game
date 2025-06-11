@@ -2,11 +2,13 @@
 
 import { useEffect, useRef, memo, useCallback, useState } from 'react';
 import { LineEffectState } from '../types/tetris';
+import { PARTICLE_GRAVITY, PARTICLE_MAX_Y } from '../constants';
 import {
-  PARTICLE_GRAVITY,
-  PARTICLE_MAX_Y,
-} from '../constants';
-import { particlePool, CanvasRenderer, FpsController, performanceMonitor } from '../utils/performance';
+  particlePool,
+  CanvasRenderer,
+  FpsController,
+  performanceMonitor,
+} from '../utils/performance';
 
 interface ParticleCanvasProps {
   lineEffect: LineEffectState;
@@ -103,14 +105,20 @@ const ParticleCanvas = memo(function ParticleCanvas({
   const animate = useCallback(() => {
     const renderer = rendererRef.current;
     const fpsController = fpsControllerRef.current;
-    
+
     if (!renderer || !fpsController) return;
 
-    const frameCallback = (frameInfo: { shouldRender: boolean; actualFps: number; timestamp: number }) => {
+    const frameCallback = (frameInfo: {
+      shouldRender: boolean;
+      actualFps: number;
+      timestamp: number;
+    }) => {
       if (!frameInfo.shouldRender) {
         // Skip this frame but continue animation
         if (lineEffect.particles.length > 0) {
-          animationRef.current = requestAnimationFrame(fpsController.createFrameLimiter(frameCallback));
+          animationRef.current = requestAnimationFrame(
+            fpsController.createFrameLimiter(frameCallback)
+          );
         }
         return;
       }
@@ -138,14 +146,23 @@ const ParticleCanvas = memo(function ParticleCanvas({
 
       // Continue animation if particles remain
       if (updatedParticles.length > 0) {
-        animationRef.current = requestAnimationFrame(fpsController.createFrameLimiter(frameCallback));
+        animationRef.current = requestAnimationFrame(
+          fpsController.createFrameLimiter(frameCallback)
+        );
       } else {
         animationRef.current = undefined;
       }
     };
 
     animationRef.current = requestAnimationFrame(fpsController.createFrameLimiter(frameCallback));
-  }, [lineEffect.particles, onParticleUpdate, updateParticlePhysics, width, height, enablePerformanceMode]);
+  }, [
+    lineEffect.particles,
+    onParticleUpdate,
+    updateParticlePhysics,
+    width,
+    height,
+    enablePerformanceMode,
+  ]);
 
   useEffect(() => {
     if (lineEffect.particles.length === 0) {

@@ -20,7 +20,7 @@ class ParticlePool {
     lifeRange: { min: number; max: number }
   ): Particle[] {
     const particles: Particle[] = [];
-    
+
     for (let i = 0; i < count; i++) {
       const particle = this.getSingleParticle(
         `particle_${Date.now()}_${i}`,
@@ -33,7 +33,7 @@ class ParticlePool {
       );
       particles.push(particle);
     }
-    
+
     return particles;
   }
 
@@ -78,10 +78,10 @@ class ParticlePool {
   // Optimized batch release with capacity checking
   releaseParticles(particles: Particle[]) {
     if (particles.length === 0) return;
-    
+
     const availableSpace = this.maxPoolSize - this.pool.length;
     const releaseCount = Math.min(particles.length, availableSpace);
-    
+
     // Batch push for better performance
     if (releaseCount > 0) {
       this.pool.push(...particles.slice(0, releaseCount));
@@ -129,7 +129,7 @@ class ParticlePool {
   // Preload pool with particles to reduce initial allocation overhead
   preloadPool(count: number = 50): void {
     const particlesToCreate = Math.min(count, this.maxPoolSize - this.pool.length);
-    
+
     for (let i = 0; i < particlesToCreate; i++) {
       this.pool.push({
         id: '',
