@@ -1,6 +1,7 @@
 'use client';
 
 import { memo, lazy, Suspense } from 'react';
+import { useTranslation } from 'react-i18next';
 
 // Dynamically import statistics dashboard
 const StatisticsDashboard = lazy(() => import('./StatisticsDashboard'));
@@ -14,6 +15,7 @@ interface StatisticsTabContentProps {
 const StatisticsTabContent = memo(function StatisticsTabContent({
   className = '',
 }: StatisticsTabContentProps) {
+  const { t } = useTranslation();
   const highScores = useHighScores();
   const statistics = useStatistics();
 
@@ -25,7 +27,7 @@ const StatisticsTabContent = memo(function StatisticsTabContent({
       <Suspense
         fallback={
           <div className='flex items-center justify-center p-8'>
-            <div className='text-cyan-300 text-sm'>統計データを読み込み中...</div>
+            <div className='text-cyan-300 text-sm'>{t('common.loading')}...</div>
           </div>
         }
       >

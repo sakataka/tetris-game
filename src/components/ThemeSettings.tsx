@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ThemeSelectorMemo } from './ThemeSelector';
 import { ColorPaletteEditorMemo } from './ColorPaletteEditor';
 import { AccessibilitySettingsMemo } from './AccessibilitySettings';
@@ -52,6 +53,7 @@ export default function ThemeSettings({
   onResetToDefault,
   className = '',
 }: ThemeSettingsProps) {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'theme' | 'colors' | 'accessibility' | 'effects'>(
     'theme'
   );
@@ -64,10 +66,10 @@ export default function ThemeSettings({
   );
 
   const tabs = [
-    { id: 'theme', label: 'テーマ選択', icon: '🎨' },
-    { id: 'colors', label: 'カラー設定', icon: '🌈' },
-    { id: 'accessibility', label: 'アクセシビリティ', icon: '♿' },
-    { id: 'effects', label: 'エフェクト', icon: '✨' },
+    { id: 'theme', label: t('themes.preview'), icon: '🎨' },
+    { id: 'colors', label: t('colorPalette.title'), icon: '🌈' },
+    { id: 'accessibility', label: t('settings.accessibility'), icon: '♿' },
+    { id: 'effects', label: t('accessibility.motion'), icon: '✨' },
   ] as const;
 
   return (

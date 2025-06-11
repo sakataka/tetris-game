@@ -1,6 +1,7 @@
 'use client';
 
 import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { HighScore } from '../types/tetris';
 
 interface HighScoreDisplayProps {
@@ -16,11 +17,12 @@ const HighScoreDisplay = memo(function HighScoreDisplay({
   maxDisplay = 10,
   className = '',
 }: HighScoreDisplayProps) {
+  const { t, i18n } = useTranslation();
   const displayScores = highScores.slice(0, maxDisplay);
 
   return (
     <div data-testid='high-score-display' className={`hologram-cyan p-4 ${className}`}>
-      <h3 className='text-xl font-bold mb-4 text-cyber-cyan'>🏆 High Scores</h3>
+      <h3 className='text-xl font-bold mb-4 text-cyber-cyan'>🏆 {t('statistics.highScores')}</h3>
 
       <div className='space-y-2'>
         {displayScores.map((score, index) => (
@@ -34,7 +36,7 @@ const HighScoreDisplay = memo(function HighScoreDisplay({
               <div>
                 <div className='font-bold text-cyber-cyan'>{score.score.toLocaleString()}</div>
                 <div className='text-sm text-gray-400'>
-                  Level {score.level} • {score.lines} lines
+                  {t('game.level')} {score.level} • {score.lines} {t('game.lines').toLowerCase()}
                 </div>
               </div>
             </div>
@@ -44,7 +46,9 @@ const HighScoreDisplay = memo(function HighScoreDisplay({
                 <div className='text-sm text-cyber-purple font-semibold'>{score.playerName}</div>
               )}
               <div className='text-xs text-gray-500'>
-                {new Date(score.date).toLocaleDateString('ja-JP')}
+                {new Date(score.date).toLocaleDateString(
+                  i18n.language === 'ja' ? 'ja-JP' : 'en-US'
+                )}
               </div>
             </div>
           </div>
@@ -53,7 +57,7 @@ const HighScoreDisplay = memo(function HighScoreDisplay({
 
       {highScores.length === 0 && (
         <div className='text-center text-gray-500 py-8' data-testid='no-scores-message'>
-          まだハイスコアがありません
+          {t('statistics.noHighScores')}
         </div>
       )}
     </div>

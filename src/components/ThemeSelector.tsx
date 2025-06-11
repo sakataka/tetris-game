@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ThemeVariant } from '../types/tetris';
 import { THEME_PRESETS } from '../utils/ui';
 
@@ -15,6 +16,7 @@ export default function ThemeSelector({
   onThemeChange,
   className = '',
 }: ThemeSelectorProps) {
+  const { t } = useTranslation();
   const handleThemeChange = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       onThemeChange(event.target.value as ThemeVariant);
@@ -26,7 +28,9 @@ export default function ThemeSelector({
 
   return (
     <div className={`theme-selector ${className}`}>
-      <label className='block text-sm font-medium mb-2 text-cyber-cyan'>テーマ選択</label>
+      <label className='block text-sm font-medium mb-2 text-cyber-cyan'>
+        {t('themes.preview')}
+      </label>
       <select
         value={currentTheme}
         onChange={handleThemeChange}
@@ -43,7 +47,7 @@ export default function ThemeSelector({
 
       {/* テーマプレビュー */}
       <div className='mt-3 p-3 rounded-lg hologram'>
-        <div className='text-xs text-cyber-cyan mb-2'>プレビュー:</div>
+        <div className='text-xs text-cyber-cyan mb-2'>{t('themes.preview')}:</div>
         <div className='flex gap-2'>
           {Object.entries(THEME_PRESETS[currentTheme].colors)
             .slice(0, 3)
@@ -57,7 +61,7 @@ export default function ThemeSelector({
             ))}
         </div>
         <div className='text-xs text-cyber-purple mt-2'>
-          エフェクト強度: {THEME_PRESETS[currentTheme].effects.glow}px
+          {t('accessibility.motion')}: {THEME_PRESETS[currentTheme].effects.glow}px
         </div>
       </div>
     </div>
