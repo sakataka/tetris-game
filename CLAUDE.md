@@ -192,16 +192,14 @@ export const useSetGameState = () =>
 2. Monitor particle count
 3. Verify RAF timing
 
-## Future-Ready Architecture
-
-The codebase is prepared for:
-
-- Multiplayer (state sync patterns)
-- Plugin system (modular design)
-- Advanced game modes (extensible logic)
-- PWA conversion (minimal changes needed)
-
 ## Future Feature Roadmap
+
+The current architecture is designed to support future expansion with minimal refactoring. Key architectural foundations include:
+
+- **Multiplayer-Ready**: State sync patterns via Zustand stores and centralized game logic
+- **Plugin Architecture**: Modular component design with clear interfaces and dependency injection
+- **Extensible Game Logic**: Configurable game modes through gameStateStore extensions
+- **PWA Conversion Ready**: Service worker structure and offline-first design patterns
 
 ### 🚀 Large Features (3-6 months)
 
@@ -319,11 +317,19 @@ The codebase is prepared for:
     - Architecture: Extend accessibilityStore with new features
 
 15. **Performance Profiler**
+
     - In-game FPS counter
     - Network latency display
     - Memory usage monitoring
     - Performance recommendations
     - Architecture: Extend performanceMonitor with UI overlay
+
+16. **Plugin System Architecture**
+    - Modular component loading system
+    - Third-party extension APIs
+    - Plugin marketplace integration
+    - Hot-swappable game modules
+    - Architecture: Plugin manager with lifecycle hooks and dependency injection
 
 ### Implementation Priority Matrix
 
@@ -339,6 +345,7 @@ The codebase is prepared for:
 | Power-ups           | Medium     | Medium               | Good             | 🟡 Medium |
 | Social Features     | Medium     | High                 | Fair             | 🟡 Medium |
 | Tournament Platform | Low        | Very High            | Fair             | 🔴 Low    |
+| Plugin System       | Medium     | Very High            | Excellent        | 🔴 Low    |
 
 ### Technical Preparation Checklist
 
@@ -477,12 +484,6 @@ Based on recent bug fixes and structural analysis, these refactoring items will 
     - **Issue**: Limited visibility into runtime performance issues
     - **Solution**: Built-in performance metrics with user feedback
 
-14. **Plugin Architecture Foundation**
-    - **Complexity**: ⭐⭐⭐⭐⭐ Extremely Hard (6-8 weeks)
-    - **Impact**: Extensibility + Modularity
-    - **Issue**: Monolithic architecture limiting feature extensions
-    - **Solution**: Plugin system with defined APIs and lifecycle hooks
-
 ### Implementation Strategy
 
 **Phase 1: Foundation (1-2 months)**
@@ -497,7 +498,7 @@ Based on recent bug fixes and structural analysis, these refactoring items will 
 
 **Phase 3: Advanced (6+ months)**
 
-- Items 10-14: Long-term architectural evolution
+- Items 10-13: Long-term architectural evolution
 - Major rewrites supporting multiplayer and complex features
 
 ### Bug Prevention Measures
