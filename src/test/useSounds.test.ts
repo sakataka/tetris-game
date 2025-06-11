@@ -47,8 +47,12 @@ const mockAudioPreloader = {
       'gameOver',
       'hardDrop',
     ] as const),
-    failed: new Set(),
-    loading: new Set(),
+    failed: new Set() as Set<
+      'lineClear' | 'pieceLand' | 'pieceRotate' | 'tetris' | 'gameOver' | 'hardDrop'
+    >,
+    loading: new Set() as Set<
+      'lineClear' | 'pieceLand' | 'pieceRotate' | 'tetris' | 'gameOver' | 'hardDrop'
+    >,
   },
   preloadAudio: vi.fn().mockResolvedValue(undefined),
   resetPreload: vi.fn(),
