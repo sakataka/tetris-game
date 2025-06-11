@@ -7,6 +7,7 @@
 
 import { handleError } from '../data/errorHandler';
 import { SystemError } from '../../types/errors';
+import { log } from '../logging';
 
 export interface AnimationOptions {
   /** Target FPS (default: 60) */
@@ -301,9 +302,15 @@ export class AnimationManager {
 
     // Auto-optimize when frame drop rate exceeds 20%
     if (dropRate > 0.2) {
-      console.warn(
-        `AnimationManager: High frame drop rate (${(dropRate * 100).toFixed(1)}%). Optimizing...`
-      );
+      log.warn(`High frame drop rate (${(dropRate * 100).toFixed(1)}%). Optimizing...`, {
+        component: 'AnimationManager',
+        action: 'checkPerformance',
+        metadata: {
+          dropRate,
+          totalFrames: this.stats.totalFrames,
+          droppedFrames: this.stats.droppedFrames,
+        },
+      });
       this.pauseLowPriorityAnimations();
 
       // Lower global FPS limit

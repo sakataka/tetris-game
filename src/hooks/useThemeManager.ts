@@ -1,6 +1,7 @@
 import { useEffect, useCallback } from 'react';
 import { ThemeVariant, ThemeState } from '../types/tetris';
 import { initializeTheme, applyColorBlindnessFilter, adjustColorsForContrast } from '../utils/ui';
+import { log } from '../utils/logging';
 
 interface UseThemeManagerProps {
   themeState: ThemeState;
@@ -48,7 +49,10 @@ export function useThemeManager({
     try {
       localStorage.setItem('tetris-theme-state', JSON.stringify(themeState));
     } catch (error) {
-      console.warn('Failed to save theme state to localStorage:', error);
+      log.warn('Failed to save theme state to localStorage', {
+        component: 'ThemeManager',
+        metadata: { error },
+      });
     }
   }, [themeState]);
 
@@ -58,7 +62,10 @@ export function useThemeManager({
 
     const handleSystemThemeChange = (e: MediaQueryListEvent) => {
       // Process when system color scheme changes (if necessary)
-      console.log('System color scheme changed:', e.matches ? 'dark' : 'light');
+      log.debug('System color scheme changed', {
+        component: 'ThemeManager',
+        metadata: { scheme: e.matches ? 'dark' : 'light' },
+      });
     };
 
     mediaQuery.addEventListener('change', handleSystemThemeChange);
@@ -121,7 +128,10 @@ export function useThemeManager({
         return true;
       }
     } catch (error) {
-      console.warn('Failed to load theme state from localStorage:', error);
+      log.warn('Failed to load theme state from localStorage', {
+        component: 'ThemeManager',
+        metadata: { error },
+      });
     }
     return false;
   }, [updateThemeState]);

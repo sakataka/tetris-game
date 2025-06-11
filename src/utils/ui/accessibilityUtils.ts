@@ -10,6 +10,7 @@ import {
   FontSizeLevel,
   VisualAssistance,
 } from '../../types/accessibility';
+import { log } from '../logging';
 
 /**
  * Apply accessibility settings to CSS variables
@@ -157,7 +158,10 @@ export function detectSystemAccessibilitySettings(): Partial<AccessibilityState>
       settings.fontSize = 'large';
     }
   } catch (error) {
-    console.warn('Failed to detect system accessibility preferences:', error);
+    log.warn('Failed to detect system accessibility preferences', {
+      component: 'AccessibilityUtils',
+      metadata: { error },
+    });
   }
 
   return settings;

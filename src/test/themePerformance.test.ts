@@ -8,6 +8,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { getThemePreset as getLegacyTheme } from '../utils/ui/themePresets';
 import { getThemePresetAsync as getJsonTheme, themeCache } from '../utils/ui/themeLoader';
 import type { ThemeVariant } from '../types/tetris';
+import { log } from '../utils/logging';
 
 describe('テーマシステムパフォーマンス比較', () => {
   beforeEach(() => {
@@ -50,9 +51,18 @@ describe('テーマシステムパフォーマンス比較', () => {
       const jsonEndTime = performance.now();
       const jsonTime = jsonEndTime - jsonStartTime;
 
-      console.log(`Legacy TypeScript: ${legacyTime.toFixed(2)}ms for ${iterations} loads`);
-      console.log(`JSON + Cache: ${jsonTime.toFixed(2)}ms for ${iterations} loads`);
-      console.log(`Performance ratio: ${(jsonTime / legacyTime).toFixed(2)}x`);
+      log.performance(
+        `Legacy TypeScript: ${legacyTime.toFixed(2)}ms for ${iterations} loads`,
+        legacyTime,
+        { component: 'ThemePerformanceTest' }
+      );
+      log.performance(`JSON + Cache: ${jsonTime.toFixed(2)}ms for ${iterations} loads`, jsonTime, {
+        component: 'ThemePerformanceTest',
+      });
+      log.debug(`Performance ratio: ${(jsonTime / legacyTime).toFixed(2)}x`, {
+        component: 'ThemePerformanceTest',
+        metadata: { ratio: jsonTime / legacyTime },
+      });
 
       // JSON実装がキャッシュ後は高速であることを期待
       // 初回ロードのオーバーヘッドを考慮しても、大量読み込みでは有利
@@ -109,9 +119,18 @@ describe('テーマシステムパフォーマンス比較', () => {
         const legacyMemoryDiff = legacyMemory.used - initialMemory.used;
         const jsonMemoryDiff = jsonMemory.used - initialMemory.used;
 
-        console.log(`Legacy memory usage: ${(legacyMemoryDiff / 1024).toFixed(2)} KB`);
-        console.log(`JSON memory usage: ${(jsonMemoryDiff / 1024).toFixed(2)} KB`);
-        console.log(`Memory efficiency: ${(jsonMemoryDiff / legacyMemoryDiff).toFixed(2)}x`);
+        log.debug(`Legacy memory usage: ${(legacyMemoryDiff / 1024).toFixed(2)} KB`, {
+          component: 'ThemePerformanceTest',
+          metadata: { memoryKB: legacyMemoryDiff / 1024 },
+        });
+        log.debug(`JSON memory usage: ${(jsonMemoryDiff / 1024).toFixed(2)} KB`, {
+          component: 'ThemePerformanceTest',
+          metadata: { memoryKB: jsonMemoryDiff / 1024 },
+        });
+        log.debug(`Memory efficiency: ${(jsonMemoryDiff / legacyMemoryDiff).toFixed(2)}x`, {
+          component: 'ThemePerformanceTest',
+          metadata: { efficiency: jsonMemoryDiff / legacyMemoryDiff },
+        });
 
         // JSON実装はキャッシュにより重複オブジェクト生成を避けるため、メモリ効率が良い
         expect(jsonMemoryDiff).toBeLessThan(legacyMemoryDiff);
@@ -133,8 +152,10 @@ describe('テーマシステムパフォーマンス比較', () => {
       const jsonEndTime = performance.now();
       const jsonModuleTime = jsonEndTime - jsonStartTime;
 
-      console.log(`Legacy module load: ${legacyModuleTime.toFixed(2)}ms`);
-      console.log(`JSON module load: ${jsonModuleTime.toFixed(2)}ms`);
+      log.performance(`Legacy module load`, legacyModuleTime, {
+        component: 'ThemePerformanceTest',
+      });
+      log.performance(`JSON module load`, jsonModuleTime, { component: 'ThemePerformanceTest' });
 
       expect(legacyModule).toBeDefined();
       expect(jsonModule).toBeDefined();
@@ -157,8 +178,10 @@ describe('テーマシステムパフォーマンス比較', () => {
       const jsonEndTime = performance.now();
       const jsonFirstAccess = jsonEndTime - jsonStartTime;
 
-      console.log(`Legacy first access: ${legacyFirstAccess.toFixed(2)}ms`);
-      console.log(`JSON first access: ${jsonFirstAccess.toFixed(2)}ms`);
+      log.performance(`Legacy first access`, legacyFirstAccess, {
+        component: 'ThemePerformanceTest',
+      });
+      log.performance(`JSON first access`, jsonFirstAccess, { component: 'ThemePerformanceTest' });
 
       expect(legacyTheme).toBeDefined();
       expect(jsonTheme).toBeDefined();
@@ -193,10 +216,12 @@ describe('テーマシステムパフォーマンス比較', () => {
       const jsonEndTime = performance.now();
       const jsonConcurrentTime = jsonEndTime - jsonStartTime;
 
-      console.log(
-        `Legacy concurrent (${concurrentRequests}): ${legacyConcurrentTime.toFixed(2)}ms`
-      );
-      console.log(`JSON concurrent (${concurrentRequests}): ${jsonConcurrentTime.toFixed(2)}ms`);
+      log.performance(`Legacy concurrent (${concurrentRequests})`, legacyConcurrentTime, {
+        component: 'ThemePerformanceTest',
+      });
+      log.performance(`JSON concurrent (${concurrentRequests})`, jsonConcurrentTime, {
+        component: 'ThemePerformanceTest',
+      });
 
       // 並列アクセスでもパフォーマンスが劣化しないことを確認
       expect(legacyConcurrentTime).toBeLessThan(50);
@@ -221,8 +246,12 @@ describe('テーマシステムパフォーマンス比較', () => {
       const cacheAccessTime = endTime - startTime;
       const averageAccessTime = cacheAccessTime / accessCount;
 
-      console.log(`Cache access time for ${accessCount} requests: ${cacheAccessTime.toFixed(2)}ms`);
-      console.log(`Average access time: ${averageAccessTime.toFixed(4)}ms`);
+      log.performance(`Cache access time for ${accessCount} requests`, cacheAccessTime, {
+        component: 'ThemePerformanceTest',
+      });
+      log.performance(`Average access time`, averageAccessTime, {
+        component: 'ThemePerformanceTest',
+      });
 
       // キャッシュアクセスは高速（CI環境では平均0.05ms以下）
       expect(averageAccessTime).toBeLessThan(0.05);
@@ -239,8 +268,12 @@ describe('テーマシステムパフォーマンス比較', () => {
       // JSON実装のデータサイズは同等（構造は同じ）
       const expectedJsonSize = legacyJsonSize;
 
-      console.log(`Theme data size: ${legacyJsonSize} characters`);
-      console.log(`Expected JSON size: ${expectedJsonSize} characters`);
+      log.debug(`Theme data size: ${legacyJsonSize} characters`, {
+        component: 'ThemePerformanceTest',
+      });
+      log.debug(`Expected JSON size: ${expectedJsonSize} characters`, {
+        component: 'ThemePerformanceTest',
+      });
 
       // データ構造は同じなので、サイズも同等
       expect(legacyJsonSize).toBeGreaterThan(0);
@@ -255,8 +288,9 @@ describe('テーマシステムパフォーマンス比較', () => {
 
       const totalLegacySize = JSON.stringify(allLegacyThemes).length;
 
-      console.log(
-        `Total theme data size: ${totalLegacySize} characters (${(totalLegacySize / 1024).toFixed(2)} KB)`
+      log.debug(
+        `Total theme data size: ${totalLegacySize} characters (${(totalLegacySize / 1024).toFixed(2)} KB)`,
+        { component: 'ThemePerformanceTest', metadata: { totalSizeKB: totalLegacySize / 1024 } }
       );
 
       // テーマデータが合理的なサイズであることを確認（5KB以下）
@@ -296,8 +330,12 @@ describe('テーマシステムパフォーマンス比較', () => {
       const jsonEndTime = performance.now();
       const jsonSwitchTime = jsonEndTime - jsonStartTime;
 
-      console.log(`Legacy theme switching: ${legacySwitchTime.toFixed(2)}ms`);
-      console.log(`JSON theme switching: ${jsonSwitchTime.toFixed(2)}ms`);
+      log.performance(`Legacy theme switching`, legacySwitchTime, {
+        component: 'ThemePerformanceTest',
+      });
+      log.performance(`JSON theme switching`, jsonSwitchTime, {
+        component: 'ThemePerformanceTest',
+      });
 
       // ユーザー体験に影響しない範囲（100ms以下）であることを確認
       expect(legacySwitchTime).toBeLessThan(100);
@@ -320,7 +358,9 @@ describe('テーマシステムパフォーマンス比較', () => {
       const endTime = performance.now();
       const startupTime = endTime - startTime;
 
-      console.log(`Application startup with theme preloading: ${startupTime.toFixed(2)}ms`);
+      log.performance(`Application startup with theme preloading`, startupTime, {
+        component: 'ThemePerformanceTest',
+      });
 
       expect(initialTheme).toBeDefined();
       expect(startupTime).toBeLessThan(50); // 50ms以下で起動完了

@@ -13,6 +13,7 @@ import {
   type SoundConfig,
   type AudioState,
 } from './strategies';
+import { log } from '../logging';
 
 export class AudioManagerV2 {
   private static instance: AudioManagerV2 | null = null;
@@ -57,7 +58,7 @@ export class AudioManagerV2 {
         this.initialized = true;
 
         // Log successful strategy selection
-        console.info(`Audio system initialized with ${strategy.constructor.name}`);
+        log.audio(`Audio system initialized with ${strategy.constructor.name}`);
         return;
       } catch (error) {
         const audioError = new AudioError(
@@ -83,7 +84,7 @@ export class AudioManagerV2 {
     this.strategyIndex = this.strategies.length - 1;
     this.initialized = true;
 
-    console.warn('All audio strategies failed, using silent fallback');
+    log.warn('All audio strategies failed, using silent fallback', { component: 'Audio' });
   }
 
   /**
@@ -143,7 +144,7 @@ export class AudioManagerV2 {
       this.currentStrategy = nextStrategy;
       this.strategyIndex = nextIndex;
 
-      console.warn(`Audio strategy fallback: ${nextStrategy.constructor.name}`);
+      log.warn(`Audio strategy fallback: ${nextStrategy.constructor.name}`, { component: 'Audio' });
     } catch (initError) {
       const audioError = new AudioError(
         `Failed to fallback to ${nextStrategy.constructor.name}`,

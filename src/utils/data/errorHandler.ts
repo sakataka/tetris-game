@@ -17,6 +17,7 @@ import {
   SystemError,
   ValidationError,
 } from '../../types/errors';
+import { log } from '../logging';
 
 // Singleton class for error handler
 class ErrorHandlerService {
@@ -83,7 +84,10 @@ class ErrorHandlerService {
       try {
         result = handler(appError);
       } catch (handlerError) {
-        console.error('Error in error handler:', handlerError);
+        log.error('Error in error handler', {
+          component: 'ErrorHandler',
+          metadata: { handlerError },
+        });
       }
     }
 
@@ -132,7 +136,10 @@ class ErrorHandlerService {
           try {
             return result.fallback() as R;
           } catch (fallbackError) {
-            console.error('Error in fallback function:', fallbackError);
+            log.error('Error in fallback function', {
+              component: 'ErrorHandler',
+              metadata: { fallbackError },
+            });
           }
         }
 
@@ -262,19 +269,26 @@ class ErrorHandlerService {
       try {
         callback(errorInfo);
       } catch (callbackError) {
-        console.error('Error in error callback:', callbackError);
+        log.error('Error in error callback', {
+          component: 'ErrorHandler',
+          metadata: { callbackError },
+        });
       }
     });
   }
 
   private reportCriticalError(errorInfo: ErrorInfo): void {
     // 将来的に外部サービスへのレポート機能を実装
-    console.error('CRITICAL ERROR REPORT:', {
-      id: errorInfo.id,
-      message: errorInfo.message,
-      context: errorInfo.context,
-      stack: errorInfo.stack,
-      timestamp: new Date(errorInfo.context.timestamp).toISOString(),
+    log.error('CRITICAL ERROR REPORT', {
+      component: 'ErrorHandler',
+      action: 'reportCriticalError',
+      metadata: {
+        id: errorInfo.id,
+        message: errorInfo.message,
+        context: errorInfo.context,
+        stack: errorInfo.stack,
+        timestamp: new Date(errorInfo.context.timestamp).toISOString(),
+      },
     });
   }
 
@@ -287,7 +301,10 @@ class ErrorHandlerService {
         retry: error.retryable,
         fallback: () => {
           // Reset game state, etc.
-          console.log('Game error fallback executed');
+          log.info('Game error fallback executed', {
+            component: 'ErrorHandler',
+            action: 'gameErrorFallback',
+          });
         },
       })
     );

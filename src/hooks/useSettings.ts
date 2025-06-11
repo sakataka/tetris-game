@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
+import { log } from '../utils/logging';
 
 export interface GameSettings {
   audioEnabled: boolean;
@@ -42,7 +43,10 @@ function saveToLocalStorage(settings: GameSettings): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
   } catch (error) {
-    console.warn('Failed to save settings to localStorage:', error);
+    log.warn('Failed to save settings to localStorage', {
+      component: 'Settings',
+      metadata: { error },
+    });
   }
 }
 
@@ -64,7 +68,10 @@ function loadFromLocalStorage(): GameSettings | null {
       };
     }
   } catch (error) {
-    console.warn('Failed to load settings from localStorage:', error);
+    log.warn('Failed to load settings from localStorage', {
+      component: 'Settings',
+      metadata: { error },
+    });
   }
   return null;
 }
@@ -133,7 +140,10 @@ export function useSettings() {
             },
           });
         } catch (error) {
-          console.warn('Failed to parse settings from storage event:', error);
+          log.warn('Failed to parse settings from storage event', {
+            component: 'Settings',
+            metadata: { error },
+          });
         }
       }
     };

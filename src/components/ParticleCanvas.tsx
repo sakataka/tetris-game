@@ -9,6 +9,7 @@ import {
   FpsController,
   performanceMonitor,
 } from '../utils/performance';
+import { log } from '../utils/logging';
 
 interface ParticleCanvasProps {
   lineEffect: LineEffectState;
@@ -198,9 +199,16 @@ const ParticleCanvas = memo(function ParticleCanvas({
 
   useEffect(() => {
     if (shouldShowStats && renderStats.particleCount > 0) {
-      console.log(
-        `🎨 Canvas Renderer - FPS: ${renderStats.fps}, Particles: ${renderStats.particleCount}`,
-        rendererRef.current?.getStats()
+      log.performance(
+        `Canvas Renderer - FPS: ${renderStats.fps}, Particles: ${renderStats.particleCount}`,
+        renderStats.fps,
+        {
+          component: 'ParticleCanvas',
+          metadata: {
+            particleCount: renderStats.particleCount,
+            stats: rendererRef.current?.getStats(),
+          },
+        }
       );
     }
   }, [renderStats, shouldShowStats]);

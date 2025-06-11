@@ -7,6 +7,7 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useTimerAnimation } from '../utils/animation/useAnimationFrame';
+import { log } from '../utils/logging';
 
 describe('タイマー動作デバッグ', () => {
   beforeEach(() => {
@@ -23,27 +24,32 @@ describe('タイマー動作デバッグ', () => {
     let callCount = 0;
     const debugCallback = vi.fn(() => {
       callCount++;
-      console.log(`Timer fired! Call count: ${callCount}`);
+      log.debug(`Timer fired! Call count: ${callCount}`, { component: 'DebugTimerTest' });
     });
 
-    console.log('Starting timer test...');
+    log.debug('Starting timer test...', { component: 'DebugTimerTest' });
 
     const { result } = renderHook(() =>
       useTimerAnimation(debugCallback, 100, [debugCallback], { enabled: true })
     );
 
-    console.log('Hook rendered, result:', result.current);
+    log.debug('Hook rendered', {
+      component: 'DebugTimerTest',
+      metadata: { result: result.current },
+    });
 
     // 手動でdeltaTimeを送信
     act(() => {
-      console.log('Triggering manual deltaTime: 120ms');
+      log.debug('Triggering manual deltaTime: 120ms', { component: 'DebugTimerTest' });
       // useTimerAnimationは内部でuseAnimationFrameを使用している
       // 実際のAnimationManagerを直接操作する代わりに、
       // より直接的なアプローチを試す
     });
 
-    console.log(`Final call count: ${callCount}`);
-    console.log(`Mock called times: ${debugCallback.mock.calls.length}`);
+    log.debug(`Final call count: ${callCount}`, { component: 'DebugTimerTest' });
+    log.debug(`Mock called times: ${debugCallback.mock.calls.length}`, {
+      component: 'DebugTimerTest',
+    });
   });
 
   it('最小限のタイマーロジックテスト', () => {
@@ -54,28 +60,29 @@ describe('タイマー動作デバッグ', () => {
 
     const mockCallback = () => {
       callCount++;
-      console.log(`Manual timer fired! Call count: ${callCount}`);
+      log.debug(`Manual timer fired! Call count: ${callCount}`, { component: 'DebugTimerTest' });
     };
 
     // 手動でuseTimerAnimationのロジックを再現
     const simulateTimer = (deltaTime: number) => {
       accumulatedTime += deltaTime;
-      console.log(
-        `Accumulated time: ${accumulatedTime}, Delta: ${deltaTime}, Interval: ${interval}`
+      log.debug(
+        `Accumulated time: ${accumulatedTime}, Delta: ${deltaTime}, Interval: ${interval}`,
+        { component: 'DebugTimerTest' }
       );
 
       if (accumulatedTime >= interval) {
-        console.log('Interval reached, firing callback');
+        log.debug('Interval reached, firing callback', { component: 'DebugTimerTest' });
         mockCallback();
         accumulatedTime = accumulatedTime % interval;
-        console.log(`Remaining time: ${accumulatedTime}`);
+        log.debug(`Remaining time: ${accumulatedTime}`, { component: 'DebugTimerTest' });
       }
     };
 
     // 120msを送信（100ms間隔なので1回発火）
     simulateTimer(120);
 
-    console.log(`Expected: 1, Actual: ${callCount}`);
+    log.debug(`Expected: 1, Actual: ${callCount}`, { component: 'DebugTimerTest' });
     expect(callCount).toBe(1);
     expect(accumulatedTime).toBe(20); // 120 - 100 = 20ms残り
   });

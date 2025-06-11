@@ -5,6 +5,7 @@
 
 import { SoundKey } from '../../types/tetris';
 import { AudioError, handleError } from '../data/errorHandler';
+import { log } from '../logging';
 
 interface FallbackLevel {
   name: string;
@@ -388,7 +389,7 @@ class AudioFallbackManager {
         silent: true,
       });
     } else {
-      console.log(`♪ Audio: ${soundKey}`);
+      log.info(`♪ Audio: ${soundKey}`, { component: 'AudioFallback' });
     }
   }
 

@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { useRef, useEffect } from 'react';
 import { I18N_CONFIG, type SupportedLocale } from '../constants';
+import { log } from '../utils/logging';
 
 // Type definitions for language settings
 export interface LocaleState {
@@ -72,8 +73,9 @@ export const useLocaleStore = create<LocaleState>()(
 
       setLanguage: (language: SupportedLocale) => {
         if (!get().isLanguageSupported(language)) {
-          console.warn(
-            `Unsupported language: ${language}. Falling back to ${I18N_CONFIG.DEFAULT_LOCALE}`
+          log.warn(
+            `Unsupported language: ${language}. Falling back to ${I18N_CONFIG.DEFAULT_LOCALE}`,
+            { component: 'LocaleStore' }
           );
           language = I18N_CONFIG.DEFAULT_LOCALE;
         }

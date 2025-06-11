@@ -7,6 +7,7 @@
 
 import { vi, expect } from 'vitest';
 import type { GameState, HighScore, GameStatistics, ThemeConfig } from '../../types/tetris';
+import { log } from '../../utils/logging';
 
 // ===== 音声システムモック =====
 
@@ -377,7 +378,7 @@ export const measurePerformance = async <T>(
   const result = await fn();
   const duration = performance.now() - start;
 
-  console.log(`📊 ${label}: ${duration.toFixed(2)}ms`);
+  log.performance(label, duration, { component: 'TestFixtures' });
 
   return { result, duration };
 };

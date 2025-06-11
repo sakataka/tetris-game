@@ -6,6 +6,7 @@
  */
 
 import { ThemeConfig, ThemeVariant, ColorBlindnessType } from '../../types/tetris';
+import { log } from '../logging';
 
 // Type definitions for JSON schema validation
 interface ThemeConfigData {
@@ -51,7 +52,10 @@ async function loadThemePresetsJSON(): Promise<ThemePresetsJSON> {
     const response = await import('../../data/themePresets.json');
     return response.default || response;
   } catch (error) {
-    console.error('Failed to load theme presets JSON:', error);
+    log.error('Failed to load theme presets JSON', {
+      component: 'ThemeLoader',
+      metadata: { error },
+    });
     throw new Error('Theme presets could not be loaded');
   }
 }
@@ -249,7 +253,9 @@ export function getThemePresetSync(theme: ThemeVariant): ThemeConfig {
   if (themeCache.getCacheStats().keys.includes(theme)) {
     // Note: This gets from cache synchronously
     // Actual implementation requires using Promise.resolve
-    console.warn('getThemePresetSync is deprecated. Use getThemePresetAsync instead.');
+    log.warn('getThemePresetSync is deprecated. Use getThemePresetAsync instead.', {
+      component: 'ThemeLoader',
+    });
   }
 
   // Fallback: return minimal default theme

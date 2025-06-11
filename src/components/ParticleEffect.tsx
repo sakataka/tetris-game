@@ -13,6 +13,7 @@ import {
 import { particlePool, performanceMonitor, globalFpsController } from '../utils/performance';
 import { useConditionalAnimation, ANIMATION_PRESETS } from '../utils/animation';
 import ParticleCanvas from './ParticleCanvas';
+import { log } from '../utils/logging';
 
 interface ParticleEffectProps {
   lineEffect: LineEffectState;
@@ -199,11 +200,18 @@ const ParticleEffect = memo(function ParticleEffect({
       const fpsInfo = globalFpsController.getFpsInfo();
       const poolStats = particlePool.getPoolStatistics();
 
-      console.log(
-        `🎮 Particle System - Renderer: ${selectedRenderer.toUpperCase()}, ` +
-          `Particles: ${lineEffect.particles.length}, ` +
-          `FPS: ${fpsInfo.currentFps} (${fpsInfo.performanceLevel}), ` +
-          `Pool Reuse: ${(poolStats.reuseRatio * 100).toFixed(1)}%`
+      log.performance(
+        `Particle System - Renderer: ${selectedRenderer.toUpperCase()}`,
+        fpsInfo.currentFps,
+        {
+          component: 'ParticleEffect',
+          metadata: {
+            renderer: selectedRenderer,
+            particleCount: lineEffect.particles.length,
+            performanceLevel: fpsInfo.performanceLevel,
+            poolReuseRatio: poolStats.reuseRatio,
+          },
+        }
       );
     }
   }, [selectedRenderer, lineEffect.particles.length, enablePerformanceMonitoring]);

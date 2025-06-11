@@ -5,6 +5,7 @@
  */
 
 import { KeyBinding, VirtualControl } from './tetris';
+import { log } from '../utils/logging';
 
 // Game-specific keyboard events
 export type GameKey = keyof KeyBinding;
@@ -112,7 +113,7 @@ export function createEventHandler<E extends Event>(
     try {
       handler(event);
     } catch (error) {
-      console.error('Event handler error:', error);
+      log.error('Event handler error', { component: 'EventHandler', metadata: { error } });
     }
   };
 }
