@@ -4,7 +4,7 @@ import { useSounds } from '../hooks/useSounds';
 
 // Mock decomposed hooks that useSounds uses
 const mockAudioStrategy = {
-  currentStrategy: 'webaudio' as const,
+  currentStrategy: 'webaudio' as 'webaudio' | 'htmlaudio' | 'silent',
   isWebAudioActive: true,
   isHtmlAudioActive: false,
   isSilentMode: false,
@@ -39,7 +39,14 @@ const mockAudioState = {
 const mockAudioPreloader = {
   progress: { loaded: 6, total: 6, failed: 0, inProgress: 0, progress: 1.0 },
   loadState: {
-    loaded: new Set(['lineClear', 'pieceLand', 'pieceRotate', 'tetris', 'gameOver', 'hardDrop']),
+    loaded: new Set([
+      'lineClear',
+      'pieceLand',
+      'pieceRotate',
+      'tetris',
+      'gameOver',
+      'hardDrop',
+    ] as const),
     failed: new Set(),
     loading: new Set(),
   },
@@ -68,9 +75,9 @@ const mockAudioPlayer = {
   stopLoopedSound: vi.fn(),
   stopAllSounds: vi.fn(),
   isPlaybackEnabled: true,
-  canPlaySound: true,
+  canPlaySound: vi.fn().mockReturnValue(true),
   playbackThrottleMs: 100,
-  currentStrategy: 'webaudio' as const,
+  currentStrategy: 'webaudio' as 'webaudio' | 'htmlaudio' | 'silent',
   resetPlayStats: vi.fn(),
   getPlayStats: vi.fn().mockReturnValue({ totalPlayed: 0, errors: 0 }),
 };
@@ -167,7 +174,7 @@ beforeEach(() => {
     'tetris',
     'gameOver',
     'hardDrop',
-  ]);
+  ] as const);
   mockAudioPreloader.loadState.failed = new Set();
   mockAudioPreloader.loadState.loading = new Set();
 
@@ -315,7 +322,7 @@ describe('useSounds - Web Audio API対応', () => {
 
   it('should handle playback errors gracefully', async () => {
     // Set up failed state before creating hook
-    mockAudioPreloader.loadState.failed = new Set(['lineClear']);
+    mockAudioPreloader.loadState.failed = new Set(['lineClear'] as const);
     mockUseAudioPreloader.mockReturnValue(mockAudioPreloader);
 
     const { result } = renderHook(() => useSounds());
