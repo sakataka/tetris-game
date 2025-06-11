@@ -116,11 +116,23 @@ export function AudioController({ children }: AudioControllerProps) {
     }
 
     if (detailedState) {
+      // Type-safe property access for backward compatibility
+      const hasProgressData =
+        detailedState && typeof detailedState === 'object' && detailedState !== null;
+      const progressData = hasProgressData
+        ? (detailedState as unknown as Record<string, unknown>)
+        : {};
+
       result.detailedState = {
-        initialized: detailedState.initialized,
-        suspended: detailedState.suspended,
-        loadedSounds: detailedState.loadedSounds,
-        activeSounds: detailedState.activeSounds,
+        initialized: Boolean(hasProgressData && 'totalSounds' in progressData),
+        suspended: Boolean(
+          hasProgressData && 'isLoading' in progressData && progressData['isLoading']
+        ),
+        loadedSounds: Array.isArray(progressData['loadedSounds'])
+          ? (progressData['loadedSounds'] as string[])
+          : [],
+        activeSounds:
+          typeof progressData['totalSounds'] === 'number' ? progressData['totalSounds'] : 0,
       };
     }
 
