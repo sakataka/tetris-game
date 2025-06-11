@@ -98,9 +98,12 @@ class AudioPreloader {
     // Progress tracking - removed unused variable
 
     // Parallel preloading with staggered start for load balancing
-    const loadPromises = sortedSounds.map(
-      (soundPriority, index) => this.preloadSingleSound(soundPriority, config, index * 100) // 100ms intervals to distribute network load
-    );
+    const loadPromises = sortedSounds.map((soundPriority, index) => {
+      if (!config) {
+        throw new Error('Preload config is required');
+      }
+      return this.preloadSingleSound(soundPriority, config, index * 100); // 100ms intervals to distribute network load
+    });
 
     await Promise.allSettled(loadPromises);
 
@@ -294,22 +297,31 @@ class AudioPreloader {
    * Intelligent preloading based on network conditions using Network Information API
    */
   public async preloadBasedOnNetwork(): Promise<PreloadProgress> {
+    // Type definition for Network Information API
+    interface NetworkInformation {
+      effectiveType: '2g' | '3g' | '4g' | 'slow-2g';
+      downlink: number;
+      rtt?: number;
+      saveData?: boolean;
+    }
+
+    interface NavigatorWithConnection extends Navigator {
+      connection?: NetworkInformation;
+      mozConnection?: NetworkInformation;
+      webkitConnection?: NetworkInformation;
+    }
+
     // Network Information API support check with vendor prefixes
+    const navigatorWithConnection = navigator as NavigatorWithConnection;
     const connection =
-      (
-        navigator as unknown as {
-          connection?: unknown;
-          mozConnection?: unknown;
-          webkitConnection?: unknown;
-        }
-      ).connection ||
-      (navigator as unknown as { mozConnection?: unknown }).mozConnection ||
-      (navigator as unknown as { webkitConnection?: unknown }).webkitConnection;
+      navigatorWithConnection.connection ||
+      navigatorWithConnection.mozConnection ||
+      navigatorWithConnection.webkitConnection;
 
     let strategy: keyof typeof this.strategies = 'normal';
 
     if (connection) {
-      const { effectiveType, downlink } = connection as { effectiveType: string; downlink: number };
+      const { effectiveType, downlink } = connection;
 
       // Network-aware strategy selection for optimal performance
       if (effectiveType === '4g' && downlink > 5) {

@@ -71,13 +71,24 @@ describe('テーマシステムパフォーマンス比較', () => {
     });
 
     it('should measure memory usage comparison', async () => {
+      // Type definition for Chrome's performance.memory API
+      interface PerformanceMemory {
+        usedJSHeapSize: number;
+        totalJSHeapSize: number;
+        jsHeapSizeLimit: number;
+      }
+
+      interface PerformanceWithMemory extends Performance {
+        memory?: PerformanceMemory;
+      }
+
       const measureMemory = () => {
-        const perfMemory = (performance as any).memory;
-        if (perfMemory) {
+        const perfWithMemory = performance as PerformanceWithMemory;
+        if (perfWithMemory.memory) {
           return {
-            used: perfMemory.usedJSHeapSize,
-            total: perfMemory.totalJSHeapSize,
-            limit: perfMemory.jsHeapSizeLimit,
+            used: perfWithMemory.memory.usedJSHeapSize,
+            total: perfWithMemory.memory.totalJSHeapSize,
+            limit: perfWithMemory.memory.jsHeapSizeLimit,
           };
         }
         return null;

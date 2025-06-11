@@ -114,7 +114,7 @@ export function createLineEffects(
 export function checkGameOver(
   board: (string | null)[][],
   nextPiece: Tetromino,
-  gameState: GameState,
+  _gameState: GameState,
   playSound?: (soundType: SoundKey) => void
 ): GameOverCheckResult {
   if (!isValidPosition(board, nextPiece, nextPiece.position)) {

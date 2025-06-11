@@ -14,19 +14,21 @@
     "jsx": "preserve",
     "incremental": true,
 
-    // Strict type checking settings (practical level)
+    // Strict type checking settings (enhanced level)
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "noUnusedLocals": false, // Allowed during development
-    "noUnusedParameters": false, // Allowed during development
-    "exactOptionalPropertyTypes": false, // Disabled for practicality
+    "noUnusedLocals": true, // Enhanced: Catch unused variables
+    "noUnusedParameters": true, // Enhanced: Catch unused parameters
+    "exactOptionalPropertyTypes": true, // Enhanced: More precise optional property handling
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": false, // Disabled for practicality
+    "noUncheckedIndexedAccess": true, // Enhanced: Safer array/object access
     "strictNullChecks": true,
     "strictBindCallApply": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
+    "noPropertyAccessFromIndexSignature": true, // Enhanced: Explicit property access
+    "noImplicitOverride": true, // Enhanced: Explicit override keyword
     "plugins": [
       {
         "name": "next"

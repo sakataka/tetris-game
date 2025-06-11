@@ -39,7 +39,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  override componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // Create custom error object
     const appError = new UIError(
       error.message,
@@ -91,15 +91,6 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         retryCount: prevState.retryCount + 1,
       }));
     }
-  };
-
-  private handleReset = () => {
-    this.setState({
-      hasError: false,
-      error: null,
-      errorId: null,
-      retryCount: 0,
-    });
   };
 
   private renderErrorFallback() {
@@ -206,7 +197,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     );
   }
 
-  render() {
+  override render() {
     if (this.state.hasError) {
       return this.renderErrorFallback();
     }

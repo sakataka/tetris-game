@@ -98,25 +98,33 @@ export function AudioController({ children }: AudioControllerProps) {
     const fallbackStatus = getFallbackStatus();
     const detailedState = getDetailedAudioState();
 
-    return {
+    const preloadProgress = getPreloadProgress();
+    const result: AudioSystemAPI['audioSystemStatus'] = {
       isWebAudioEnabled,
-      preloadProgress: getPreloadProgress(),
-      fallbackStatus: fallbackStatus
-        ? {
-            currentLevel: fallbackStatus.currentLevel,
-            availableLevels: fallbackStatus.availableLevels,
-            silentMode: fallbackStatus.silentMode,
-          }
-        : undefined,
-      detailedState: detailedState
-        ? {
-            initialized: detailedState.initialized,
-            suspended: detailedState.suspended,
-            loadedSounds: detailedState.loadedSounds,
-            activeSounds: detailedState.activeSounds,
-          }
-        : undefined,
     };
+
+    if (preloadProgress) {
+      result.preloadProgress = preloadProgress;
+    }
+
+    if (fallbackStatus) {
+      result.fallbackStatus = {
+        currentLevel: fallbackStatus.currentLevel,
+        availableLevels: fallbackStatus.availableLevels,
+        silentMode: fallbackStatus.silentMode,
+      };
+    }
+
+    if (detailedState) {
+      result.detailedState = {
+        initialized: detailedState.initialized,
+        suspended: detailedState.suspended,
+        loadedSounds: detailedState.loadedSounds,
+        activeSounds: detailedState.activeSounds,
+      };
+    }
+
+    return result;
   }, [isWebAudioEnabled, getPreloadProgress, getFallbackStatus, getDetailedAudioState]);
 
   // Construct API object

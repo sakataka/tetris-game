@@ -79,6 +79,8 @@ const ParticleEffect = memo(function ParticleEffect({
 
     for (let i = 0; i < particles.length; i++) {
       const particle = particles[i];
+      if (!particle) continue;
+
       const updatedParticle = {
         ...particle,
         x: particle.x + particle.vx,

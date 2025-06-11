@@ -77,6 +77,7 @@ const ParticleCanvas = memo(function ParticleCanvas({
 
     for (let i = 0; i < particles.length; i++) {
       const particle = particles[i];
+      if (!particle) continue;
 
       // Update particle physics
       const updatedParticle = {

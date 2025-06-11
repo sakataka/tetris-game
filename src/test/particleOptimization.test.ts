@@ -109,30 +109,35 @@ describe('Canvas Renderer Optimization', () => {
   let renderer: CanvasRenderer;
 
   beforeEach(() => {
-    // Create mock context
-
-    mockContext = {
-      clearRect: vi.fn(),
-      beginPath: vi.fn(),
-      arc: vi.fn(),
-      fill: vi.fn(),
-      save: vi.fn(),
-      restore: vi.fn(),
-      translate: vi.fn(),
-      rotate: vi.fn(),
-      createRadialGradient: vi.fn(() => ({
+    // Create mock context with proper typing
+    const createMockCanvasContext = (): CanvasRenderingContext2D => {
+      const mockGradient: CanvasGradient = {
         addColorStop: vi.fn(),
-      })),
-      set globalAlpha(value: number) {},
-      set fillStyle(value: string | CanvasGradient) {},
-      set shadowColor(value: string) {},
-      set shadowBlur(value: number) {},
-      set shadowOffsetX(value: number) {},
-      set shadowOffsetY(value: number) {},
-      set imageSmoothingEnabled(value: boolean) {},
-      set imageSmoothingQuality(value: ImageSmoothingQuality) {},
-      set globalCompositeOperation(value: GlobalCompositeOperation) {},
-    } as unknown as CanvasRenderingContext2D;
+      } as unknown as CanvasGradient;
+
+      return {
+        clearRect: vi.fn(),
+        beginPath: vi.fn(),
+        arc: vi.fn(),
+        fill: vi.fn(),
+        save: vi.fn(),
+        restore: vi.fn(),
+        translate: vi.fn(),
+        rotate: vi.fn(),
+        createRadialGradient: vi.fn(() => mockGradient),
+        globalAlpha: 1,
+        fillStyle: '',
+        shadowColor: '',
+        shadowBlur: 0,
+        shadowOffsetX: 0,
+        shadowOffsetY: 0,
+        imageSmoothingEnabled: true,
+        imageSmoothingQuality: 'high' as ImageSmoothingQuality,
+        globalCompositeOperation: 'source-over' as GlobalCompositeOperation,
+      } as unknown as CanvasRenderingContext2D;
+    };
+
+    mockContext = createMockCanvasContext();
 
     renderer = new CanvasRenderer(mockContext, {
       enableShadows: true,
@@ -317,7 +322,11 @@ describe('Integrated Particle System Performance', () => {
   });
 
   it('should handle high-performance scenarios', () => {
-    const mockContext = {
+    const mockGradient: CanvasGradient = {
+      addColorStop: vi.fn(),
+    } as unknown as CanvasGradient;
+
+    const mockContext: CanvasRenderingContext2D = {
       clearRect: vi.fn(),
       beginPath: vi.fn(),
       arc: vi.fn(),
@@ -326,18 +335,16 @@ describe('Integrated Particle System Performance', () => {
       restore: vi.fn(),
       translate: vi.fn(),
       rotate: vi.fn(),
-      createRadialGradient: vi.fn(() => ({
-        addColorStop: vi.fn(),
-      })),
-      set globalAlpha(value: number) {},
-      set fillStyle(value: string | CanvasGradient) {},
-      set shadowColor(value: string) {},
-      set shadowBlur(value: number) {},
-      set shadowOffsetX(value: number) {},
-      set shadowOffsetY(value: number) {},
-      set imageSmoothingEnabled(value: boolean) {},
-      set imageSmoothingQuality(value: ImageSmoothingQuality) {},
-      set globalCompositeOperation(value: GlobalCompositeOperation) {},
+      createRadialGradient: vi.fn(() => mockGradient),
+      globalAlpha: 1,
+      fillStyle: '',
+      shadowColor: '',
+      shadowBlur: 0,
+      shadowOffsetX: 0,
+      shadowOffsetY: 0,
+      imageSmoothingEnabled: true,
+      imageSmoothingQuality: 'high' as ImageSmoothingQuality,
+      globalCompositeOperation: 'source-over' as GlobalCompositeOperation,
     } as unknown as CanvasRenderingContext2D;
 
     const renderer = new CanvasRenderer(mockContext, {

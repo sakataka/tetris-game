@@ -21,6 +21,10 @@ export function getRandomTetromino(): Tetromino {
   const types: TetrominoType[] = ['I', 'O', 'T', 'S', 'Z', 'J', 'L'];
   const type = types[Math.floor(Math.random() * types.length)];
 
+  if (!type) {
+    throw new Error('Failed to generate random tetromino type');
+  }
+
   return {
     type,
     shape: TETROMINO_SHAPES[type],
@@ -30,7 +34,12 @@ export function getRandomTetromino(): Tetromino {
 }
 
 export function rotatePiece(piece: Tetromino): Tetromino {
-  const rotated = piece.shape[0].map((_, index) => piece.shape.map((row) => row[index]).reverse());
+  const firstRow = piece.shape[0];
+  if (!firstRow) {
+    throw new Error('Invalid piece shape for rotation');
+  }
+
+  const rotated = firstRow.map((_, index) => piece.shape.map((row) => row?.[index] ?? 0).reverse());
 
   return {
     ...piece,
@@ -44,8 +53,11 @@ function isWithinBounds(x: number, y: number): boolean {
 
 function checkPieceBounds(piece: Tetromino, newPosition: { x: number; y: number }): boolean {
   for (let y = 0; y < piece.shape.length; y++) {
-    for (let x = 0; x < piece.shape[y].length; x++) {
-      if (piece.shape[y][x]) {
+    const row = piece.shape[y];
+    if (!row) continue;
+
+    for (let x = 0; x < row.length; x++) {
+      if (row[x]) {
         const boardX = newPosition.x + x;
         const boardY = newPosition.y + y;
         if (!isWithinBounds(boardX, boardY)) {
@@ -66,10 +78,13 @@ function checkBoardCollisions(
     const boardY = newPosition.y + y;
     if (boardY < 0) continue;
 
-    for (let x = 0; x < piece.shape[y].length; x++) {
-      if (piece.shape[y][x]) {
+    const row = piece.shape[y];
+    if (!row) continue;
+
+    for (let x = 0; x < row.length; x++) {
+      if (row[x]) {
         const boardX = newPosition.x + x;
-        if (board[boardY][boardX]) {
+        if (board[boardY]?.[boardX]) {
           return false;
         }
       }
@@ -95,15 +110,24 @@ function createOptimizedBoard(
 
   // Copy unmodified rows directly (shallow copy)
   for (let y = 0; y < startY; y++) {
-    newBoard[y] = board[y];
+    const row = board[y];
+    if (row) {
+      newBoard[y] = row;
+    }
   }
   for (let y = endY + 1; y < BOARD_HEIGHT; y++) {
-    newBoard[y] = board[y];
+    const row = board[y];
+    if (row) {
+      newBoard[y] = row;
+    }
   }
 
   // Only deep copy affected rows
   for (let y = startY; y <= endY; y++) {
-    newBoard[y] = [...board[y]];
+    const row = board[y];
+    if (row) {
+      newBoard[y] = [...row];
+    }
   }
 
   return newBoard;
@@ -113,11 +137,17 @@ function placePieceRow(newBoard: (string | null)[][], piece: Tetromino, pieceY: 
   const boardY = piece.position.y + pieceY;
   if (boardY < 0 || boardY >= BOARD_HEIGHT) return;
 
-  for (let x = 0; x < piece.shape[pieceY].length; x++) {
-    if (piece.shape[pieceY][x]) {
+  const pieceRow = piece.shape[pieceY];
+  if (!pieceRow) return;
+
+  for (let x = 0; x < pieceRow.length; x++) {
+    if (pieceRow[x]) {
       const boardX = piece.position.x + x;
       if (boardX >= 0 && boardX < BOARD_WIDTH) {
-        newBoard[boardY][boardX] = piece.color;
+        const targetRow = newBoard[boardY];
+        if (targetRow) {
+          targetRow[boardX] = piece.color;
+        }
       }
     }
   }
@@ -149,7 +179,8 @@ export function clearLines(board: (string | null)[][]): {
 
   // Identify complete lines
   for (let y = 0; y < BOARD_HEIGHT; y++) {
-    if (board[y].every((cell) => cell !== null)) {
+    const row = board[y];
+    if (row && row.every((cell) => cell !== null)) {
       linesToClear.push(y);
     }
   }
@@ -165,7 +196,10 @@ export function clearLines(board: (string | null)[][]): {
   // Build new board by copying non-cleared lines
   for (let y = 0; y < BOARD_HEIGHT; y++) {
     if (!linesToClearSet.has(y)) {
-      newBoard.push(board[y]);
+      const row = board[y];
+      if (row) {
+        newBoard.push(row);
+      }
     }
   }
 
@@ -182,8 +216,11 @@ export function createParticles(linesToClear: number[], board: (string | null)[]
   const particles: Particle[] = [];
 
   linesToClear.forEach((lineIndex) => {
+    const lineRow = board[lineIndex];
+    if (!lineRow) return;
+
     for (let x = 0; x < BOARD_WIDTH; x++) {
-      const cellColor = board[lineIndex][x];
+      const cellColor = lineRow[x];
       if (cellColor) {
         // Generate multiple particles from each cell (retrieved from pool)
         for (let i = 0; i < PARTICLES_PER_CELL; i++) {

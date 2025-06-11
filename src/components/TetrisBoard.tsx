@@ -78,7 +78,8 @@ const TetrisBoard = memo(function TetrisBoard({
 
         {displayBoard.map((row, y) =>
           row.map((cell, x) => {
-            const cellStyle = cellStyles[y][x];
+            const cellStyle = cellStyles[y]?.[x];
+            if (!cellStyle) return null;
 
             return (
               <div key={`${y}-${x}`} className={cellStyle.className} style={cellStyle.style}>

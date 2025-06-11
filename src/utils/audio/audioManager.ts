@@ -24,7 +24,11 @@ export class AudioManagerV2 {
 
   private constructor() {
     this.initializeStrategies();
-    this.currentStrategy = this.strategies[0];
+    const firstStrategy = this.strategies[0];
+    if (!firstStrategy) {
+      throw new Error('No audio strategies available');
+    }
+    this.currentStrategy = firstStrategy;
   }
 
   public static getInstance(): AudioManagerV2 {
@@ -46,6 +50,7 @@ export class AudioManagerV2 {
 
     for (let i = 0; i < this.strategies.length; i++) {
       const strategy = this.strategies[i];
+      if (!strategy) continue;
 
       if (!strategy.canPlayAudio()) {
         continue;
@@ -133,6 +138,7 @@ export class AudioManagerV2 {
     }
 
     const nextStrategy = this.strategies[nextIndex];
+    if (!nextStrategy) return;
 
     try {
       await nextStrategy.initialize();
@@ -282,6 +288,7 @@ export class AudioManagerV2 {
     }
 
     const strategy = this.strategies[strategyIndex];
+    if (!strategy) return false;
 
     if (!strategy.canPlayAudio()) {
       return false;

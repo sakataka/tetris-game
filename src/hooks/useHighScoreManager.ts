@@ -53,26 +53,29 @@ export function useHighScoreManager({ gameState, playSound }: UseHighScoreManage
       // High score determination
       if (isHighScore(finalScore, highScores)) {
         const rank = getHighScoreRank(finalScore, highScores);
-        const message = rank ? getHighScoreMessage(rank) : '';
 
-        // Create and save high score entry
-        const highScoreEntry = createHighScoreEntry(finalScore, level, lines);
-        addHighScore(highScoreEntry);
+        if (rank) {
+          const message = getHighScoreMessage(rank);
 
-        // Play sound effects
-        if (playSound) {
-          if (rank === 1) {
-            playSound('tetris'); // Special sound for 1st place
-          } else {
-            playSound('lineClear'); // For other high scores
+          // Create and save high score entry
+          const highScoreEntry = createHighScoreEntry(finalScore, level, lines);
+          addHighScore(highScoreEntry);
+
+          // Play sound effects
+          if (playSound) {
+            if (rank === 1) {
+              playSound('tetris'); // Special sound for 1st place
+            } else {
+              playSound('lineClear'); // For other high scores
+            }
           }
-        }
 
-        return {
-          isNewHighScore: true,
-          rank: rank || undefined,
-          message,
-        };
+          return {
+            isNewHighScore: true,
+            rank,
+            message,
+          };
+        }
       }
 
       return { isNewHighScore: false };
@@ -123,12 +126,12 @@ export function useHighScoreManager({ gameState, playSound }: UseHighScoreManage
 
   const getCurrentHighScore = useCallback(() => {
     const { highScores } = useStatisticsStore.getState();
-    return highScores.length > 0 ? highScores[0].score : 0;
+    return highScores.length > 0 ? (highScores[0]?.score ?? 0) : 0;
   }, []);
 
   const getLowestHighScore = useCallback(() => {
     const { highScores } = useStatisticsStore.getState();
-    return highScores.length > 0 ? highScores[highScores.length - 1].score : 0;
+    return highScores.length > 0 ? (highScores[highScores.length - 1]?.score ?? 0) : 0;
   }, []);
 
   // Function to manually save high score (for testing)

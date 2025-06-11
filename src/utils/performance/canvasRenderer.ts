@@ -26,13 +26,6 @@ export class CanvasRenderer {
   private dirtyRegions: Array<{ x: number; y: number; width: number; height: number }> = [];
 
   // Pre-allocated objects to avoid garbage collection
-  private tempTransform: DOMMatrix | null = null;
-  private shadowSettings = {
-    color: '',
-    blur: 0,
-    offsetX: 0,
-    offsetY: 0,
-  };
 
   constructor(ctx: CanvasRenderingContext2D, config: CanvasRendererConfig = {}) {
     this.ctx = ctx;
@@ -55,9 +48,7 @@ export class CanvasRenderer {
     this.ctx.globalCompositeOperation = 'source-over';
 
     // Initialize DOMMatrix if available (browser environment)
-    if (typeof DOMMatrix !== 'undefined') {
-      this.tempTransform = new DOMMatrix();
-    }
+    // (Removed tempTransform as it was unused)
   }
 
   // Optimized gradient creation with caching
@@ -125,25 +116,16 @@ export class CanvasRenderer {
       .slice(0, particlesToRender)
       .sort((a, b) => a.color.localeCompare(b.color));
 
-    let currentColor = '';
-    let currentShadowColor = '';
-
     for (let i = 0; i < sortedParticles.length; i++) {
       const particle = sortedParticles[i];
-      this.renderSingleParticle(particle, currentColor, currentShadowColor);
+      if (!particle) continue;
 
-      // Update current colors to minimize context state changes
-      currentColor = particle.color;
-      currentShadowColor = particle.color;
+      this.renderSingleParticle(particle);
     }
   }
 
   // Optimized single particle rendering
-  private renderSingleParticle(
-    particle: Particle,
-    currentColor: string,
-    currentShadowColor: string
-  ): void {
+  private renderSingleParticle(particle: Particle): void {
     const lifeRatio = particle.life / PARTICLE_LIFE_DURATION;
     const scale = PARTICLE_SCALE_BASE + lifeRatio * PARTICLE_SCALE_MULTIPLIER;
     const opacity = lifeRatio * PARTICLE_OPACITY_MULTIPLIER;
@@ -161,8 +143,8 @@ export class CanvasRenderer {
     // Set opacity
     this.ctx.globalAlpha = opacity;
 
-    // Set shadow only if enabled and color changed
-    if (this.config.enableShadows && currentShadowColor !== particle.color) {
+    // Set shadow if enabled
+    if (this.config.enableShadows) {
       this.ctx.shadowColor = particle.color;
       this.ctx.shadowBlur = 4 + scale * 2;
       this.ctx.shadowOffsetX = 0;
@@ -215,7 +197,7 @@ export class CanvasRenderer {
     }
 
     for (const particle of particles) {
-      this.renderSingleParticle(particle, color, color);
+      this.renderSingleParticle(particle);
     }
   }
 

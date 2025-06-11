@@ -54,11 +54,11 @@ export function isTetromino(value: unknown): value is Tetromino {
 
   const obj = value as Record<string, unknown>;
   return (
-    isTetrominoType(obj.type) &&
-    isPosition(obj.position) &&
-    typeof obj.rotation === 'number' &&
-    Array.isArray(obj.shape) &&
-    typeof obj.color === 'string'
+    isTetrominoType(obj['type']) &&
+    isPosition(obj['position']) &&
+    typeof obj['rotation'] === 'number' &&
+    Array.isArray(obj['shape']) &&
+    typeof obj['color'] === 'string'
   );
 }
 

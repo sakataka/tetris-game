@@ -51,7 +51,14 @@ export class PeriodFilter {
   }
 
   static getPeriodByLabel(label: string): StatisticsPeriod {
-    return STATISTICS_PERIODS.find((p) => p.label === label) || STATISTICS_PERIODS[3];
+    const found = STATISTICS_PERIODS.find((p) => p.label === label);
+    if (found) return found;
+
+    const defaultPeriod = STATISTICS_PERIODS[3];
+    if (!defaultPeriod) {
+      throw new Error('No default statistics period available');
+    }
+    return defaultPeriod;
   }
 }
 
@@ -100,9 +107,12 @@ export class StatisticsCalculator {
     );
 
     return parseInt(
-      Object.keys(levelCounts).reduce((a, b) =>
-        levelCounts[parseInt(a)] > levelCounts[parseInt(b)] ? a : b
-      )
+      Object.keys(levelCounts).reduce((a, b) => {
+        const countA = levelCounts[parseInt(a)];
+        const countB = levelCounts[parseInt(b)];
+        if (countA === undefined || countB === undefined) return a;
+        return countA > countB ? a : b;
+      })
     );
   }
 
@@ -211,7 +221,7 @@ export class StatisticsService {
    * Calculate period-specific statistics
    */
   static calculatePeriodStatistics(
-    baseStats: GameStatistics,
+    _baseStats: GameStatistics,
     sessions: GameSession[],
     highScores: readonly HighScore[],
     period: StatisticsPeriod
@@ -259,14 +269,16 @@ export class StatisticsService {
    */
   static calculateAdvancedMetrics(
     sessions: GameSession[],
-    period: StatisticsPeriod = STATISTICS_PERIODS[3] // All Time default
+    period?: StatisticsPeriod
   ): {
     tetrisRate: number;
     averageGameDuration: number;
     gamesPerSession: number;
     improvementTrend: number;
   } {
-    const filteredSessions = PeriodFilter.filterSessionsByPeriod(sessions, period);
+    const actualPeriod = period ||
+      STATISTICS_PERIODS[3] || { days: Infinity, label: 'All Time', key: 'all' };
+    const filteredSessions = PeriodFilter.filterSessionsByPeriod(sessions, actualPeriod);
 
     const tetrisRate = StatisticsCalculator.calculateTetrisRate(filteredSessions);
     const averageGameDuration = StatisticsCalculator.calculateAverageGameDuration(filteredSessions);

@@ -14,7 +14,7 @@ interface SettingsTabContentProps {
   settings: GameSettings;
   updateSettings: (settings: Partial<GameSettings>) => void;
   // Audio system status for enhanced display
-  audioSystemStatus?: {
+  audioSystemStatus: {
     isWebAudioEnabled: boolean;
     preloadProgress?: {
       total: number;

@@ -13,7 +13,7 @@ export function isHighScore(
   }
 
   const lowestHighScore = currentHighScores[currentHighScores.length - 1];
-  return score > lowestHighScore.score;
+  return lowestHighScore ? score > lowestHighScore.score : true;
 }
 
 /**
@@ -29,7 +29,8 @@ export function getHighScoreRank(
   }
 
   for (let i = 0; i < currentHighScores.length; i++) {
-    if (score > currentHighScores[i].score) {
+    const highScore = currentHighScores[i];
+    if (highScore && score > highScore.score) {
       return i + 1;
     }
   }
@@ -77,7 +78,7 @@ export function createHighScoreEntry(
     level,
     lines,
     date: Date.now(),
-    playerName,
+    ...(playerName !== undefined && { playerName }),
   };
 }
 

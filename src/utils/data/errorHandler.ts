@@ -71,14 +71,15 @@ class ErrorHandlerService {
     const handler = this.errorHandlers.get(errorInfo.category);
     let result: ErrorHandlingResult = {
       handled: false,
-      userNotification: this.config.enableUserNotifications
-        ? {
-            message: appError.userMessage || errorInfo.message,
-            level: errorInfo.level,
-            duration: this.getNotificationDuration(errorInfo.level),
-          }
-        : undefined,
     };
+
+    if (this.config.enableUserNotifications) {
+      result.userNotification = {
+        message: appError.userMessage || errorInfo.message,
+        level: errorInfo.level,
+        duration: this.getNotificationDuration(errorInfo.level),
+      };
+    }
 
     if (handler) {
       try {
@@ -161,7 +162,7 @@ class ErrorHandlerService {
       recentErrors: this.errorHistory.slice(-10),
       lastErrorTime:
         this.errorHistory.length > 0
-          ? this.errorHistory[this.errorHistory.length - 1].context.timestamp
+          ? this.errorHistory[this.errorHistory.length - 1]?.context.timestamp
           : undefined,
     };
 

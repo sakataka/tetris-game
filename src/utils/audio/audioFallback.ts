@@ -273,6 +273,7 @@ class AudioFallbackManager {
 
     for (let i = this.currentLevel; i < this.fallbackLevels.length; i++) {
       const level = this.fallbackLevels[i];
+      if (!level) continue;
 
       try {
         await this.executePlayback(level.name, soundKey, options);
@@ -348,7 +349,11 @@ class AudioFallbackManager {
   private async playWithWebAudio(soundKey: SoundKey, options: { volume?: number }): Promise<void> {
     // Check if AudioManager is available
     const { audioManager } = await import('./audioManager');
-    await audioManager.playSound(soundKey, { volume: options.volume });
+    if (options.volume !== undefined) {
+      await audioManager.playSound(soundKey, { volume: options.volume });
+    } else {
+      await audioManager.playSound(soundKey);
+    }
   }
 
   /**

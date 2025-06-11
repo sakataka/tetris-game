@@ -141,13 +141,17 @@ export class BoardRenderer implements IBoardRenderer {
     }
 
     for (let y = 0; y < piece.shape.length; y++) {
-      for (let x = 0; x < piece.shape[y].length; x++) {
-        if (piece.shape[y][x]) {
+      const row = piece.shape[y];
+      if (!row) continue;
+
+      for (let x = 0; x < row.length; x++) {
+        if (row[x]) {
           const boardX = piece.position.x + x;
           const boardY = ghostY + y;
 
-          if (this.isValidBoardPosition(boardX, boardY) && !board[boardY][boardX]) {
-            board[boardY][boardX] = 'ghost';
+          const boardRow = board[boardY];
+          if (this.isValidBoardPosition(boardX, boardY) && boardRow && !boardRow[boardX]) {
+            boardRow[boardX] = 'ghost';
           }
         }
       }
@@ -159,13 +163,17 @@ export class BoardRenderer implements IBoardRenderer {
    */
   addCurrentPiece(board: DisplayBoard, piece: Tetromino): void {
     for (let y = 0; y < piece.shape.length; y++) {
-      for (let x = 0; x < piece.shape[y].length; x++) {
-        if (piece.shape[y][x]) {
+      const row = piece.shape[y];
+      if (!row) continue;
+
+      for (let x = 0; x < row.length; x++) {
+        if (row[x]) {
           const boardX = piece.position.x + x;
           const boardY = piece.position.y + y;
 
-          if (this.isValidBoardPosition(boardX, boardY)) {
-            board[boardY][boardX] = piece.color;
+          const boardRow = board[boardY];
+          if (this.isValidBoardPosition(boardX, boardY) && boardRow) {
+            boardRow[boardX] = piece.color;
           }
         }
       }

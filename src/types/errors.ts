@@ -69,15 +69,25 @@ export abstract class BaseAppError extends Error {
     this.id = this.generateErrorId();
     this.level = level;
     this.category = category;
-    this.context = {
+    const baseContext: ErrorContext = {
       timestamp: Date.now(),
-      url: typeof window !== 'undefined' ? window.location.href : undefined,
-      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : undefined,
       ...context,
     };
+
+    if (typeof window !== 'undefined') {
+      baseContext.url = window.location.href;
+    }
+
+    if (typeof navigator !== 'undefined') {
+      baseContext.userAgent = navigator.userAgent;
+    }
+
+    this.context = baseContext;
     this.recoverable = options.recoverable ?? true;
     this.retryable = options.retryable ?? false;
-    this.userMessage = options.userMessage;
+    if (options.userMessage !== undefined) {
+      this.userMessage = options.userMessage;
+    }
 
     // Set up stack trace
     if (Error.captureStackTrace) {
@@ -90,20 +100,28 @@ export abstract class BaseAppError extends Error {
   }
 
   public toErrorInfo(): ErrorInfo {
-    return {
+    const info: ErrorInfo = {
       id: this.id,
       level: this.level,
       category: this.category,
       message: this.message,
       context: this.context,
-      stack: this.stack,
       recoverable: this.recoverable,
       retryable: this.retryable,
-      userMessage: this.userMessage,
     };
+
+    if (this.stack) {
+      info.stack = this.stack;
+    }
+
+    if (this.userMessage) {
+      info.userMessage = this.userMessage;
+    }
+
+    return info;
   }
 
-  public toString(): string {
+  public override toString(): string {
     return `[${this.level.toUpperCase()}] ${this.category}/${this.name}: ${this.message}`;
   }
 }

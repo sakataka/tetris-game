@@ -94,15 +94,17 @@ const GameInfo = memo(function GameInfo({
               </div>
             }
           >
-            <SettingsTabContent
-              isMuted={isMuted}
-              volume={volume}
-              onToggleMute={onToggleMute}
-              onVolumeChange={onVolumeChange}
-              settings={settings}
-              updateSettings={updateSettings}
-              audioSystemStatus={audioSystemStatus}
-            />
+            {audioSystemStatus && (
+              <SettingsTabContent
+                isMuted={isMuted}
+                volume={volume}
+                onToggleMute={onToggleMute}
+                onVolumeChange={onVolumeChange}
+                settings={settings}
+                updateSettings={updateSettings}
+                audioSystemStatus={audioSystemStatus}
+              />
+            )}
           </Suspense>
         );
       default:

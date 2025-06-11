@@ -42,6 +42,11 @@ const isRTLLanguage = (language: SupportedLocale): boolean => {
   return RTL_LANGUAGES.includes(language);
 };
 
+// Type guard for SupportedLocale
+const isSupportedLocale = (locale: string): locale is SupportedLocale => {
+  return I18N_CONFIG.SUPPORTED_LOCALES.includes(locale as SupportedLocale);
+};
+
 // Browser language detection and fallback
 const detectBrowserLanguage = (): SupportedLocale => {
   if (typeof window === 'undefined') {
@@ -51,13 +56,13 @@ const detectBrowserLanguage = (): SupportedLocale => {
   const browserLang = navigator.language;
 
   // Check for exact match
-  if (I18N_CONFIG.SUPPORTED_LOCALES.includes(browserLang as SupportedLocale)) {
-    return browserLang as SupportedLocale;
+  if (isSupportedLocale(browserLang)) {
+    return browserLang;
   }
 
   // Check for language code only match (e.g., en-US → en)
-  const langCode = browserLang.split('-')[0] as SupportedLocale;
-  if (I18N_CONFIG.SUPPORTED_LOCALES.includes(langCode)) {
+  const langCode = browserLang.split('-')[0];
+  if (langCode && isSupportedLocale(langCode)) {
     return langCode;
   }
 
@@ -99,7 +104,7 @@ export const useLocaleStore = create<LocaleState>()(
       },
 
       isLanguageSupported: (language: string): boolean => {
-        return I18N_CONFIG.SUPPORTED_LOCALES.includes(language as SupportedLocale);
+        return isSupportedLocale(language);
       },
 
       reset: () => {

@@ -62,7 +62,6 @@ const INITIAL_STATS: ErrorStats = {
     critical: 0,
   },
   recentErrors: [],
-  lastErrorTime: undefined,
 };
 
 // Statistics update function with category and level aggregation
@@ -72,8 +71,14 @@ const updateStats = (errors: ErrorInfo[]): ErrorStats => {
     errorsByCategory: { ...INITIAL_STATS.errorsByCategory },
     errorsByLevel: { ...INITIAL_STATS.errorsByLevel },
     recentErrors: errors.slice(-10).reverse(),
-    lastErrorTime: errors.length > 0 ? errors[errors.length - 1].context.timestamp : undefined,
   };
+
+  if (errors.length > 0) {
+    const lastError = errors[errors.length - 1];
+    if (lastError) {
+      stats.lastErrorTime = lastError.context.timestamp;
+    }
+  }
 
   errors.forEach((error) => {
     stats.errorsByCategory[error.category]++;
@@ -91,7 +96,6 @@ export const useErrorStore = create<ErrorState>()(
       stats: INITIAL_STATS,
       config: DEFAULT_ERROR_CONFIG,
       showErrorPanel: false,
-      selectedErrorId: undefined,
 
       addError: (error: ErrorInfo) => {
         set((state) => {
@@ -112,11 +116,16 @@ export const useErrorStore = create<ErrorState>()(
       removeError: (errorId: string) => {
         set((state) => {
           const newErrors = state.errors.filter((error) => error.id !== errorId);
-          return {
+          const updates: Partial<ErrorState> = {
             errors: newErrors,
             stats: updateStats(newErrors),
-            selectedErrorId: state.selectedErrorId === errorId ? undefined : state.selectedErrorId,
           };
+
+          if (state.selectedErrorId === errorId) {
+            delete updates.selectedErrorId;
+          }
+
+          return updates;
         });
       },
 
@@ -124,7 +133,6 @@ export const useErrorStore = create<ErrorState>()(
         set({
           errors: [],
           stats: INITIAL_STATS,
-          selectedErrorId: undefined,
         });
       },
 
@@ -154,7 +162,15 @@ export const useErrorStore = create<ErrorState>()(
       },
 
       setSelectedError: (errorId?: string) => {
-        set({ selectedErrorId: errorId });
+        if (errorId === undefined) {
+          set((state) => {
+            const { selectedErrorId, ...rest } = state;
+            void selectedErrorId; // Explicitly mark as intentionally unused
+            return rest;
+          });
+        } else {
+          set({ selectedErrorId: errorId });
+        }
       },
 
       // Selector functions for efficient state access
@@ -196,7 +212,7 @@ export const useErrorStore = create<ErrorState>()(
           state.errors = [];
           state.stats = INITIAL_STATS;
           state.showErrorPanel = false;
-          state.selectedErrorId = undefined;
+          delete state.selectedErrorId;
         }
       },
     }
