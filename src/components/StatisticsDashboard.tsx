@@ -58,7 +58,7 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
         </select>
       </div>
 
-      {/* 主要統計 */}
+      {/* Main statistics */}
       <div className='responsive-grid-stats' data-testid='main-stats'>
         <div className='hologram-cyan p-4 rounded neon-border-cyan'>
           <div className='text-sm text-gray-400'>{t('statistics.totalGames')}</div>
@@ -87,7 +87,7 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
 
       {showDetailedView && (
         <>
-          {/* 効率指標 */}
+          {/* Efficiency metrics */}
           <div
             className='hologram-yellow neon-border-yellow p-4 rounded'
             data-testid='efficiency-stats'
@@ -135,7 +135,7 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
             </div>
           </div>
 
-          {/* プレイ履歴概要 */}
+          {/* Play history summary */}
           <div className='hologram-cyan neon-border-cyan p-4 rounded' data-testid='play-history'>
             <h3 className='responsive-text-lg font-bold text-cyan-400 mb-3'>📅 Play History</h3>
             <div className='grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm'>
@@ -176,7 +176,7 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
             </div>
           </div>
 
-          {/* 最近のハイスコア */}
+          {/* Recent high scores */}
           <div
             className='hologram-purple neon-border-purple p-4 rounded'
             data-testid='recent-achievements'
@@ -203,7 +203,7 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
         </>
       )}
 
-      {/* 空の状態 */}
+      {/* Empty state */}
       {statistics.totalGames === 0 && (
         <div className='text-center py-8' data-testid='empty-state'>
           <div className='text-gray-500 text-lg'>{t('statistics.noStatistics')}</div>

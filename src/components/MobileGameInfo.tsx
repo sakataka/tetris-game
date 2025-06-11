@@ -32,7 +32,7 @@ const MobileGameInfo = memo(function MobileGameInfo({
   const { t } = useTranslation();
   return (
     <div className={`flex space-x-4 h-full overflow-hidden ${className}`}>
-      {/* スコア情報 */}
+      {/* Score information */}
       <div className='flex-1 min-w-0'>
         <div className='hologram-cyan neon-border p-2 rounded-lg text-xs'>
           <div className='font-bold text-cyan-400 mb-1'>{t('game.score')}</div>
@@ -43,7 +43,7 @@ const MobileGameInfo = memo(function MobileGameInfo({
         </div>
       </div>
 
-      {/* 次のピース */}
+      {/* Next piece */}
       <div className='w-16 flex-shrink-0'>
         <div className='hologram-purple neon-border p-2 rounded-lg h-full'>
           <div className='font-bold text-purple-400 text-xs mb-1'>{t('game.nextPiece')}</div>
@@ -51,7 +51,7 @@ const MobileGameInfo = memo(function MobileGameInfo({
         </div>
       </div>
 
-      {/* ゲームボタン */}
+      {/* Game buttons */}
       <div className='w-20 flex-shrink-0'>
         <GameButtonsPanel
           gameOver={gameOver}

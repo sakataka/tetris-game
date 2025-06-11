@@ -183,15 +183,15 @@ export function createParticles(linesToClear: number[], board: (string | null)[]
     for (let x = 0; x < BOARD_WIDTH; x++) {
       const cellColor = board[lineIndex][x];
       if (cellColor) {
-        // 各セルから複数のパーティクルを生成（プールから取得）
+        // Generate multiple particles from each cell (retrieved from pool)
         for (let i = 0; i < PARTICLES_PER_CELL; i++) {
           const particle = particlePool.getParticle(
             `${Date.now()}-${lineIndex}-${x}-${i}-${Math.random()}`,
-            x * 24 + 12 + 8, // セル中央 + ボード位置調整
+            x * 24 + 12 + 8, // Cell center + board position adjustment
             lineIndex * 24 + 12 + 8,
             cellColor,
-            (Math.random() - 0.5) * 8, // 水平方向のランダムな速度
-            Math.random() * -4 - 2, // 上向きの速度
+            (Math.random() - 0.5) * 8, // Random horizontal velocity
+            Math.random() * -4 - 2, // Upward velocity
             PARTICLE_LIFE_DURATION
           );
           particles.push(particle);

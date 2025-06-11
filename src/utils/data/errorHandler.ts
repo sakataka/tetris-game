@@ -278,7 +278,7 @@ class ErrorHandlerService {
   }
 
   private reportCriticalError(errorInfo: ErrorInfo): void {
-    // 将来的に外部サービスへのレポート機能を実装
+    // Future implementation for reporting to external services
     log.error('CRITICAL ERROR REPORT', {
       component: 'ErrorHandler',
       action: 'reportCriticalError',

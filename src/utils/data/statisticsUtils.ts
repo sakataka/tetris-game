@@ -1,6 +1,6 @@
 import { HighScore, GameStatistics } from '../../types/tetris';
 
-// 拡張統計型定義
+// Extended statistics type definition
 export interface EnhancedStatistics extends GameStatistics {
   readonly efficiency: number; // lines per minute
   readonly consistency: number; // score variance percentage
@@ -40,7 +40,7 @@ export const STATISTICS_PERIODS: StatisticsPeriod[] = [
 ];
 
 /**
- * 基本統計から拡張統計を計算する
+ * Calculate enhanced statistics from basic statistics
  */
 export function calculateEnhancedStatistics(
   baseStats: GameStatistics,
@@ -66,7 +66,7 @@ export function calculateEnhancedStatistics(
 }
 
 /**
- * 効率（lines per minute）を計算する
+ * Calculate efficiency (lines per minute)
  */
 export function calculateEfficiency(totalLines: number, playTimeSeconds: number): number {
   if (playTimeSeconds === 0) return 0;
@@ -75,7 +75,7 @@ export function calculateEfficiency(totalLines: number, playTimeSeconds: number)
 }
 
 /**
- * スコアの一貫性を計算する（分散ベース）
+ * Calculate score consistency (variance-based)
  */
 export function calculateConsistency(scores: number[]): number {
   if (scores.length === 0) return 0;
@@ -88,11 +88,11 @@ export function calculateConsistency(scores: number[]): number {
   if (average === 0) return 0;
 
   const consistency = Math.max(0, 100 - (standardDeviation / average) * 100);
-  return Math.round(consistency * 10) / 10; // 小数点第1位で四捨五入
+  return Math.round(consistency * 10) / 10; // Round to 1 decimal place
 }
 
 /**
- * 最も頻繁に到達するレベルを特定する
+ * Identify the most frequently reached level
  */
 export function findFavoriteLevel(sessions: GameSession[]): number {
   if (sessions.length === 0) return 1;
@@ -114,7 +114,7 @@ export function findFavoriteLevel(sessions: GameSession[]): number {
 }
 
 /**
- * セッション統計を計算する
+ * Calculate session statistics
  */
 export function calculateSessionStatistics(sessions: GameSession[]): {
   sessionCount: number;
@@ -148,7 +148,7 @@ export function calculateSessionStatistics(sessions: GameSession[]): {
 }
 
 /**
- * 指定期間の統計をフィルタリングする
+ * Filter statistics by specified period
  */
 export function filterStatisticsByPeriod(sessions: GameSession[], days: number): GameSession[] {
   if (days === 0) return sessions; // All time
@@ -164,7 +164,7 @@ export function filterStatisticsByPeriod(sessions: GameSession[], days: number):
 }
 
 /**
- * プレイ時間統計を計算する
+ * Calculate play time statistics
  */
 export function calculatePlayTimeStatistics(sessions: GameSession[]): {
   totalPlayTime: number;
@@ -191,7 +191,7 @@ export function calculatePlayTimeStatistics(sessions: GameSession[]): {
 }
 
 /**
- * Tetris関連統計を計算する
+ * Calculate Tetris-related statistics
  */
 export function calculateTetrisStatistics(sessions: GameSession[]): {
   totalTetris: number;
@@ -219,12 +219,12 @@ export function calculateTetrisStatistics(sessions: GameSession[]): {
 }
 
 /**
- * 統計データの妥当性を検証する
+ * Validate statistics data
  */
 export function validateStatisticsData(stats: Partial<EnhancedStatistics>): boolean {
   const { totalGames, totalScore, efficiency, consistency } = stats;
 
-  // 負の値チェックと一貫性範囲チェックを単一return文で実行
+  // Execute negative value check and consistency range check in single return statement
   return !(
     (totalGames !== undefined && totalGames < 0) ||
     (totalScore !== undefined && totalScore < 0) ||
@@ -234,7 +234,7 @@ export function validateStatisticsData(stats: Partial<EnhancedStatistics>): bool
 }
 
 /**
- * 表示用に統計データをフォーマットする
+ * Format statistics data for display
  */
 export function formatStatisticsForDisplay(stats: Partial<EnhancedStatistics>): {
   playTime: string;
@@ -256,7 +256,7 @@ export function formatStatisticsForDisplay(stats: Partial<EnhancedStatistics>): 
 }
 
 /**
- * 統計サマリーテキストを生成する
+ * Generate statistics summary text
  */
 export function generateStatisticsSummary(
   currentStats: EnhancedStatistics,

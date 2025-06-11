@@ -19,11 +19,11 @@ const VirtualControls = memo(function VirtualControls({
   unlockAudio,
 }: VirtualControlsProps) {
   const { t } = useTranslation();
-  // handleTouchStartをuseCallbackでメモ化
+  // Memoize handleTouchStart with useCallback
   const handleTouchStart = useCallback(
     (action: () => void) => (e: React.TouchEvent) => {
       e.preventDefault();
-      // 初回タッチ時に音声をアンロック
+      // Unlock audio on first touch
       if (unlockAudio) {
         unlockAudio();
       }
@@ -32,7 +32,7 @@ const VirtualControls = memo(function VirtualControls({
     [unlockAudio]
   );
 
-  // 移動ハンドラーをuseMemoでメモ化
+  // Memoize move handlers with useMemo
   const moveHandlers = useMemo(
     () => ({
       left: () => onMove({ x: -1, y: 0 }),
@@ -47,9 +47,9 @@ const VirtualControls = memo(function VirtualControls({
   return (
     <div className='h-full w-full flex items-center justify-center bg-gradient-to-t from-black/80 to-transparent'>
       <div className='flex justify-between items-center w-full max-w-sm px-4'>
-        {/* 左側: 十字方向パッド */}
+        {/* Left side: D-pad */}
         <div className='relative'>
-          {/* 回転ボタン (上) */}
+          {/* Rotate button (top) */}
           <button
             onTouchStart={handleTouchStart(onRotate)}
             className='absolute left-1/2 -translate-x-1/2 -translate-y-full mb-1
@@ -63,9 +63,9 @@ const VirtualControls = memo(function VirtualControls({
             ↻
           </button>
 
-          {/* 水平移動とソフトドロップ */}
+          {/* Horizontal movement and soft drop */}
           <div className='flex items-center gap-1'>
-            {/* 左移動 */}
+            {/* Move left */}
             <button
               onTouchStart={handleTouchStart(moveHandlers.left)}
               className='w-10 h-10 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500
@@ -78,7 +78,7 @@ const VirtualControls = memo(function VirtualControls({
               ←
             </button>
 
-            {/* ソフトドロップ (下) */}
+            {/* Soft drop (down) */}
             <button
               onTouchStart={handleTouchStart(moveHandlers.down)}
               className='w-10 h-10 rounded-lg bg-gradient-to-r from-yellow-500 to-orange-500
@@ -91,7 +91,7 @@ const VirtualControls = memo(function VirtualControls({
               ↓
             </button>
 
-            {/* 右移動 */}
+            {/* Move right */}
             <button
               onTouchStart={handleTouchStart(moveHandlers.right)}
               className='w-10 h-10 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500
@@ -106,7 +106,7 @@ const VirtualControls = memo(function VirtualControls({
           </div>
         </div>
 
-        {/* 右側: ハードドロップボタン */}
+        {/* Right side: Hard drop button */}
         <button
           onTouchStart={handleTouchStart(onHardDrop)}
           className='w-14 h-14 rounded-lg bg-gradient-to-r from-red-500 to-pink-500

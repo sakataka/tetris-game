@@ -83,7 +83,7 @@ export default function AccessibilitySettings({
       <h3 className='text-lg font-bold text-cyber-cyan mb-4'>アクセシビリティ設定</h3>
 
       <div className='space-y-4'>
-        {/* 色覚異常対応 */}
+        {/* Color blindness support */}
         <div>
           <label className='block text-sm font-medium mb-2 text-cyber-cyan'>色覚対応</label>
           <select
@@ -108,7 +108,7 @@ export default function AccessibilitySettings({
           </p>
         </div>
 
-        {/* コントラスト設定 */}
+        {/* Contrast settings */}
         <div>
           <label className='block text-sm font-medium mb-2 text-cyber-cyan'>コントラスト</label>
           <select
@@ -131,7 +131,7 @@ export default function AccessibilitySettings({
           <p className='text-xs text-cyber-purple mt-1'>テキストと背景のコントラストを調整します</p>
         </div>
 
-        {/* アニメーション強度 */}
+        {/* Animation intensity */}
         <div>
           <label className='block text-sm font-medium mb-2 text-cyber-cyan'>
             アニメーション強度
@@ -176,7 +176,7 @@ export default function AccessibilitySettings({
           </label>
         </div>
 
-        {/* プレビューエリア */}
+        {/* Preview area */}
         <div className='mt-4 p-3 rounded-lg hologram'>
           <div className='text-sm font-medium mb-2 text-cyber-cyan'>現在の設定</div>
           <div className='text-xs space-y-1'>

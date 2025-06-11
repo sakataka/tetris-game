@@ -136,7 +136,7 @@ export function checkGameOver(
 }
 
 /**
- * ピース配置後のゲーム状態更新の純粋関数
+ * Pure function for updating game state after piece placement
  */
 export function updateGameStateWithPiece(
   prevState: GameState,
@@ -147,7 +147,7 @@ export function updateGameStateWithPiece(
 ): GameState {
   const nextPiece = getRandomTetromino();
 
-  // ゲームオーバーの場合
+  // Case when game is over
   if (gameOverResult.isGameOver) {
     return {
       ...prevState,
@@ -160,7 +160,7 @@ export function updateGameStateWithPiece(
     };
   }
 
-  // 通常のゲーム継続
+  // Normal game continuation
   return {
     ...prevState,
     board: lineClearResult.newBoard,

@@ -1,30 +1,30 @@
 /**
- * useAnimationFrame カスタムフック
+ * useAnimationFrame custom hook
  *
- * AnimationManagerを活用した統一されたアニメーション管理フック
- * 従来の分散したrequestAnimationFrame使用を置き換える
+ * Unified animation management hook leveraging AnimationManager
+ * Replaces traditional scattered requestAnimationFrame usage
  */
 
 import { useEffect, useCallback, useRef } from 'react';
 import { animationManager, AnimationOptions } from './animationManager';
 
 /**
- * 統一されたアニメーションフックの設定オプション
+ * Configuration options for unified animation hook
  */
 export interface UseAnimationOptions extends AnimationOptions {
-  /** アニメーションの有効/無効 */
+  /** Enable/disable animation */
   enabled?: boolean;
-  /** コンポーネントアンマウント時の自動クリーンアップ */
+  /** Automatic cleanup on component unmount */
   autoCleanup?: boolean;
 }
 
 /**
- * requestAnimationFrameの統一管理フック
+ * Unified requestAnimationFrame management hook
  *
- * @param callback アニメーションコールバック関数
- * @param deps 依存配列
- * @param options アニメーションオプション
- * @returns アニメーション制御関数
+ * @param callback Animation callback function
+ * @param deps Dependency array
+ * @param options Animation options
+ * @returns Animation control functions
  */
 export function useAnimationFrame(
   callback: (deltaTime: number) => void,
@@ -36,13 +36,13 @@ export function useAnimationFrame(
   const previousTimeRef = useRef<number | undefined>(undefined);
   const animationIdRef = useRef<string | undefined>(undefined);
 
-  // オプションとコールバック参照の更新
+  // Update options and callback references
   useEffect(() => {
     optionsRef.current = options;
     callbackRef.current = callback;
   }, [options, callback]);
 
-  // アニメーション開始/停止の制御
+  // Animation start/stop control
   const startAnimation = useCallback(() => {
     const currentOptions = optionsRef.current;
     if (!(currentOptions.enabled ?? true)) return;
@@ -69,9 +69,9 @@ export function useAnimationFrame(
     }
   }, []);
 
-  // 依存配列の変更時にアニメーション再開
+  // Restart animation when dependency array changes
   useEffect(() => {
-    // 依存配列変更時は前の状態をリセット
+    // Reset previous state when dependency array changes
     previousTimeRef.current = undefined;
 
     const currentOptions = optionsRef.current;
@@ -86,11 +86,11 @@ export function useAnimationFrame(
         stopAnimation();
       }
     };
-    // ESLint警告を抑制（意図的な設計）
+    // Suppress ESLint warning (intentional design)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [...deps]);
 
-  // コンポーネントアンマウント時のクリーンアップ
+  // Cleanup on component unmount
   useEffect(() => {
     return () => {
       stopAnimation();
@@ -105,11 +105,11 @@ export function useAnimationFrame(
 }
 
 /**
- * deltaTime ベースの更新が不要なシンプルなアニメーションフック
+ * Simple animation hook that doesn't require deltaTime-based updates
  *
- * @param callback フレーム毎のコールバック
- * @param deps 依存配列
- * @param options アニメーションオプション
+ * @param callback Per-frame callback
+ * @param deps Dependency array
+ * @param options Animation options
  */
 export function useSimpleAnimation(
   callback: () => void,
@@ -120,12 +120,12 @@ export function useSimpleAnimation(
 }
 
 /**
- * 条件付きアニメーションフック
+ * Conditional animation hook
  *
- * @param callback アニメーションコールバック
- * @param condition アニメーション実行条件
- * @param deps 依存配列
- * @param options アニメーションオプション
+ * @param callback Animation callback
+ * @param condition Animation execution condition
+ * @param deps Dependency array
+ * @param options Animation options
  */
 export function useConditionalAnimation(
   callback: (deltaTime: number) => void,
@@ -137,12 +137,12 @@ export function useConditionalAnimation(
 }
 
 /**
- * タイマーベースのアニメーションフック（setIntervalの代替）
+ * Timer-based animation hook (alternative to setInterval)
  *
- * @param callback 実行するコールバック
- * @param interval 実行間隔（ミリ秒）
- * @param deps 依存配列
- * @param options アニメーションオプション
+ * @param callback Callback to execute
+ * @param interval Execution interval (milliseconds)
+ * @param deps Dependency array
+ * @param options Animation options
  */
 export function useTimerAnimation(
   callback: () => void,
@@ -152,7 +152,7 @@ export function useTimerAnimation(
 ) {
   const accumulatedTimeRef = useRef<number>(0);
 
-  // useEffectで依存配列変更時に累積時間をリセット
+  // Reset accumulated time when dependency array changes in useEffect
   useEffect(() => {
     accumulatedTimeRef.current = 0;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -160,13 +160,13 @@ export function useTimerAnimation(
 
   return useAnimationFrame(
     (deltaTime) => {
-      // deltaTimeを累積
+      // Accumulate deltaTime
       accumulatedTimeRef.current += deltaTime;
 
-      // インターバル時間が経過したら実行
+      // Execute when interval time has elapsed
       if (accumulatedTimeRef.current >= interval) {
         callback();
-        // 次回のために余った時間を保持（精度向上）
+        // Retain remaining time for next execution (improved accuracy)
         accumulatedTimeRef.current = accumulatedTimeRef.current % interval;
       }
     },
@@ -176,12 +176,12 @@ export function useTimerAnimation(
 }
 
 /**
- * パフォーマンス監視付きアニメーションフック
+ * Animation hook with performance monitoring
  *
- * @param callback アニメーションコールバック
- * @param deps 依存配列
- * @param options アニメーションオプション
- * @returns アニメーション制御とパフォーマンス統計
+ * @param callback Animation callback
+ * @param deps Dependency array
+ * @param options Animation options
+ * @returns Animation control and performance statistics
  */
 export function usePerformanceAnimation(
   callback: (deltaTime: number) => void,
@@ -200,7 +200,7 @@ export function usePerformanceAnimation(
       const frameTime = endTime - startTime;
       frameCountRef.current++;
 
-      // 移動平均でフレーム時間を計算
+      // Calculate frame time using moving average
       averageFrameTimeRef.current = averageFrameTimeRef.current * 0.9 + frameTime * 0.1;
     },
     [callback]

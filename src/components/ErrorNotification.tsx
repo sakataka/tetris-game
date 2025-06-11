@@ -29,7 +29,7 @@ const ErrorNotification = memo(function ErrorNotification({
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
 
   useEffect(() => {
-    // エラーハンドラーからの通知を受信
+    // Receive notifications from error handler
     return errorHandler.onError((errorInfo: ErrorInfo) => {
       const notification: NotificationItem = {
         id: errorInfo.id,
@@ -46,7 +46,7 @@ const ErrorNotification = memo(function ErrorNotification({
     });
   }, [maxNotifications]);
 
-  // 統一アニメーション管理システムを使用した自動削除タイマー
+  // Auto-cleanup timer using unified animation management system
   const cleanupNotifications = () => {
     const now = Date.now();
     setNotifications((prev) =>
@@ -59,12 +59,12 @@ const ErrorNotification = memo(function ErrorNotification({
 
   useTimerAnimation(
     cleanupNotifications,
-    1000, // 1秒間隔
+    1000, // 1 second interval
     [cleanupNotifications],
     {
       ...ANIMATION_PRESETS.UI_ANIMATION,
       enabled: autoClose && notifications.length > 0,
-      priority: 'low', // 低優先度（パフォーマンス重視時は停止）
+      priority: 'low', // Low priority (stops when performance is prioritized)
     }
   );
 
@@ -140,7 +140,7 @@ const ErrorNotification = memo(function ErrorNotification({
               animationDelay: `${index * 100}ms`,
             }}
           >
-            {/* 進行状況バー（自動閉じる場合） */}
+            {/* Progress bar (when auto-closing) */}
             {autoClose && notification.duration && (
               <div
                 className='absolute bottom-0 left-0 h-1 bg-current opacity-30 animate-pulse'
@@ -152,10 +152,10 @@ const ErrorNotification = memo(function ErrorNotification({
             )}
 
             <div className='flex items-start gap-3'>
-              {/* アイコン */}
+              {/* Icon */}
               <div className='text-lg flex-shrink-0 mt-0.5'>{getIcon(notification.level)}</div>
 
-              {/* メッセージ */}
+              {/* Message */}
               <div className='flex-1 min-w-0'>
                 <p className='text-sm font-medium break-words'>{notification.message}</p>
                 <p className='text-xs opacity-70 mt-1'>
@@ -163,7 +163,7 @@ const ErrorNotification = memo(function ErrorNotification({
                 </p>
               </div>
 
-              {/* 閉じるボタン */}
+              {/* Close button */}
               <button
                 onClick={() => dismissNotification(notification.id)}
                 className='flex-shrink-0 text-current opacity-50 hover:opacity-100 transition-opacity p-1 rounded hover:bg-current/10'
@@ -180,7 +180,7 @@ const ErrorNotification = memo(function ErrorNotification({
               </button>
             </div>
 
-            {/* レベル別の装飾 */}
+            {/* Level-specific decoration */}
             {notification.level === 'critical' && (
               <div className='absolute -inset-1 bg-gradient-to-r from-purple-600/20 to-red-600/20 rounded-lg -z-10 animate-pulse' />
             )}
@@ -188,7 +188,7 @@ const ErrorNotification = memo(function ErrorNotification({
         ))}
       </div>
 
-      {/* 全体クリアボタン（複数通知がある場合） */}
+      {/* Clear all button (when multiple notifications exist) */}
       {notifications.length > 1 && (
         <button
           onClick={() => {

@@ -123,15 +123,15 @@ const GameInfo = memo(function GameInfo({
 
   return (
     <div className='text-white h-full flex flex-col min-w-[280px]'>
-      {/* Tab Navigation - デスクトップのみ表示 */}
+      {/* Tab Navigation - Desktop only */}
       <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} className='hidden md:flex' />
 
-      {/* コンテンツエリア */}
+      {/* Content area */}
       <div className='flex-1 overflow-auto'>
-        {/* デスクトップ: タブ切替表示 */}
+        {/* Desktop: Tab switching display */}
         <div className='hidden md:block'>{renderTabContent()}</div>
 
-        {/* モバイル: コンパクト表示（ゲーム情報のみ） */}
+        {/* Mobile: Compact display (game info only) */}
         <div className='md:hidden'>
           <MobileGameInfo
             score={score}
