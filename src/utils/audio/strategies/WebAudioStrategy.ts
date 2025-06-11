@@ -123,7 +123,7 @@ export class WebAudioStrategy extends AudioStrategy {
         {
           recoverable: true,
           retryable: true,
-          userMessage: '音声を有効にするには画面をタップしてください',
+          userMessage: 'Tap the screen to enable audio',
         }
       );
       handleError(audioError);

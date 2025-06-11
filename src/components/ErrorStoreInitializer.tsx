@@ -5,9 +5,9 @@ import { initializeErrorStoreIntegration } from '../store/errorStore';
 
 export default function ErrorStoreInitializer() {
   useEffect(() => {
-    // エラーストアとエラーハンドラーの連携を初期化
+    // Initialize integration between error store and error handlers
     initializeErrorStoreIntegration();
   }, []);
 
-  return null; // UIをレンダリングしない
+  return null; // Does not render UI
 }

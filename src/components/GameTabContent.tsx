@@ -37,16 +37,16 @@ const GameTabContent = memo(function GameTabContent({
 
   return (
     <div className={`space-y-4 ${className}`}>
-      {/* スコア情報 */}
+      {/* Score information */}
       <GameStatsPanel score={score} level={level} lines={lines} />
 
-      {/* 次のピース */}
+      {/* Next piece */}
       <NextPiecePanel nextPiece={nextPiece} />
 
-      {/* コントロール */}
+      {/* Controls */}
       <ControlsPanel />
 
-      {/* ボタン */}
+      {/* Buttons */}
       <GameButtonsPanel
         gameOver={gameOver}
         isPaused={isPaused}
@@ -54,10 +54,10 @@ const GameTabContent = memo(function GameTabContent({
         onReset={onReset}
       />
 
-      {/* スコア目安 */}
+      {/* Score reference */}
       <ScoringPanel />
 
-      {/* ハイスコア */}
+      {/* High scores */}
       <HighScoreDisplay highScores={highScores} maxDisplay={5} className='text-sm' />
     </div>
   );

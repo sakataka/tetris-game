@@ -45,7 +45,7 @@ export default function ThemeSelector({
         ))}
       </select>
 
-      {/* テーマプレビュー */}
+      {/* Theme preview */}
       <div className='mt-3 p-3 rounded-lg hologram'>
         <div className='flex gap-2'>
           {Object.entries(THEME_PRESETS[currentTheme].colors)

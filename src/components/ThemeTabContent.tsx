@@ -17,7 +17,7 @@ interface ThemeTabContentProps {
 }
 
 const ThemeTabContent = memo(function ThemeTabContent({ className = '' }: ThemeTabContentProps) {
-  // テーマ関連の状態とアクション
+  // Theme-related state and actions
   const themeState = useTheme();
   const setTheme = useSetTheme();
   const setCustomColors = useSetCustomColors();
