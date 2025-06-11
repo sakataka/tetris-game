@@ -1,22 +1,21 @@
-import { useState, useCallback, useEffect } from 'react';
-import { log } from '../utils/logging';
+/**
+ * Unified settings management hook
+ *
+ * Composed of specialized hooks for maintainability:
+ * - useSettingsStorage: localStorage operations
+ * - useSettingsState: in-memory state management
+ * - useKeyBindings: key binding operations
+ * - useSettingsSync: cross-tab synchronization
+ */
 
-export interface GameSettings {
-  audioEnabled: boolean;
-  volume: number;
-  keyBindings: {
-    moveLeft: string[];
-    moveRight: string[];
-    moveDown: string[];
-    rotate: string[];
-    hardDrop: string[];
-    pause: string[];
-    reset: string[];
-  };
-  theme: 'cyberpunk' | 'classic' | 'neon';
-  showGhost: boolean;
-  showParticles: boolean;
-}
+import { useCallback } from 'react';
+import { useSettingsStorage, type GameSettings } from './useSettingsStorage';
+import { useSettingsState } from './useSettingsState';
+import { useKeyBindings } from './useKeyBindings';
+import { useSettingsSync } from './useSettingsSync';
+
+// Re-export GameSettings for backward compatibility
+export type { GameSettings };
 
 const DEFAULT_SETTINGS: GameSettings = {
   audioEnabled: true,
@@ -35,81 +34,49 @@ const DEFAULT_SETTINGS: GameSettings = {
   showParticles: true,
 };
 
-const STORAGE_KEY = 'tetris-game-settings';
-
-function saveToLocalStorage(settings: GameSettings): void {
-  if (typeof window === 'undefined') return;
-
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
-  } catch (error) {
-    log.warn('Failed to save settings to localStorage', {
-      component: 'Settings',
-      metadata: { error },
-    });
-  }
-}
-
-function loadFromLocalStorage(): GameSettings | null {
-  if (typeof window === 'undefined') return null;
-
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      // Check settings validity
-      return {
-        ...DEFAULT_SETTINGS,
-        ...parsed,
-        keyBindings: {
-          ...DEFAULT_SETTINGS.keyBindings,
-          ...parsed.keyBindings,
-        },
-      };
-    }
-  } catch (error) {
-    log.warn('Failed to load settings from localStorage', {
-      component: 'Settings',
-      metadata: { error },
-    });
-  }
-  return null;
-}
-
 export function useSettings() {
-  const [settings, setSettingsState] = useState<GameSettings>(() => {
-    return loadFromLocalStorage() || DEFAULT_SETTINGS;
+  // Storage operations hook
+  const { saveSettings, loadSettings } = useSettingsStorage(DEFAULT_SETTINGS);
+
+  // Initialize settings from storage or defaults
+  const initialSettings = loadSettings() || DEFAULT_SETTINGS;
+
+  // State management hook with auto-save
+  const {
+    settings,
+    updateSettings: updateState,
+    resetToDefaults,
+  } = useSettingsState(initialSettings, (newSettings) => {
+    saveSettings(newSettings);
   });
 
-  // Update and save settings
-  const updateSettings = useCallback((updates: Partial<GameSettings>) => {
-    setSettingsState((prevSettings) => {
-      const newSettings = { ...prevSettings, ...updates };
-      saveToLocalStorage(newSettings);
-      return newSettings;
-    });
-  }, []);
-
-  // Reset settings to default
-  const resetSettings = useCallback(() => {
-    setSettingsState(DEFAULT_SETTINGS);
-    saveToLocalStorage(DEFAULT_SETTINGS);
-  }, []);
-
-  // Update specific key binding
-  const updateKeyBinding = useCallback(
-    (action: keyof GameSettings['keyBindings'], keys: string[]) => {
-      updateSettings({
-        keyBindings: {
-          ...settings.keyBindings,
-          [action]: keys,
-        },
-      });
-    },
-    [settings.keyBindings, updateSettings]
+  // Key bindings management hook
+  const { updateKeyBinding } = useKeyBindings(
+    settings.keyBindings,
+    DEFAULT_SETTINGS.keyBindings,
+    (newKeyBindings) => {
+      updateState({ keyBindings: newKeyBindings });
+    }
   );
 
-  // Update volume
+  // Cross-tab synchronization hook
+  useSettingsSync(DEFAULT_SETTINGS, (syncedSettings) => {
+    updateState(syncedSettings);
+  });
+
+  // Public API functions (maintain backward compatibility)
+  const updateSettings = useCallback(
+    (updates: Partial<GameSettings>) => {
+      updateState(updates);
+    },
+    [updateState]
+  );
+
+  const resetSettings = useCallback(() => {
+    resetToDefaults(DEFAULT_SETTINGS);
+    saveSettings(DEFAULT_SETTINGS);
+  }, [resetToDefaults, saveSettings]);
+
   const setVolume = useCallback(
     (volume: number) => {
       const clampedVolume = Math.max(0, Math.min(1, volume));
@@ -118,39 +85,9 @@ export function useSettings() {
     [updateSettings]
   );
 
-  // Toggle audio enabled/disabled
   const toggleAudio = useCallback(() => {
     updateSettings({ audioEnabled: !settings.audioEnabled });
   }, [settings.audioEnabled, updateSettings]);
-
-  // Monitor localStorage changes (detect changes in other tabs)
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === STORAGE_KEY && e.newValue) {
-        try {
-          const newSettings = JSON.parse(e.newValue);
-          setSettingsState({
-            ...DEFAULT_SETTINGS,
-            ...newSettings,
-            keyBindings: {
-              ...DEFAULT_SETTINGS.keyBindings,
-              ...newSettings.keyBindings,
-            },
-          });
-        } catch (error) {
-          log.warn('Failed to parse settings from storage event', {
-            component: 'Settings',
-            metadata: { error },
-          });
-        }
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
 
   return {
     settings,
