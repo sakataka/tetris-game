@@ -146,7 +146,7 @@ class AudioPreloader {
         this.preloadProgress.set(soundKey, 'loading');
         this.loadTimestamps.set(soundKey, Date.now());
 
-        // タイムアウト制御付きプリロード
+        // Preload with timeout control
         await Promise.race([
           this.loadWithAudioManager(soundKey),
           this.createTimeoutPromise(config.timeout, soundKey),
@@ -185,7 +185,7 @@ class AudioPreloader {
    * Actual loading process using AudioManager's internal preloading
    */
   private async loadWithAudioManager(soundKey: SoundKey): Promise<void> {
-    // AudioManagerの内部プリロード機能を利用
+    // Use AudioManager's internal preload functionality
     const audioState = audioManager.getAudioState();
 
     if (!audioState.loadedSounds.includes(soundKey)) {

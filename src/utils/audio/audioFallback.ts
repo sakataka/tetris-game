@@ -1,6 +1,6 @@
 /**
- * 堅牢な音声フォールバックシステム
- * 段階的フォールバック、エラー回復、代替手段
+ * Robust Audio Fallback System
+ * Progressive fallback, error recovery, and alternative methods
  */
 
 import { SoundKey } from '../../types/tetris';
@@ -9,7 +9,7 @@ import { AudioError, handleError } from '../data/errorHandler';
 interface FallbackLevel {
   name: string;
   available: boolean;
-  priority: number; // 1-5, 5が最優先
+  priority: number; // 1-5, 5 is highest priority
   testResult?: boolean;
 }
 
@@ -17,7 +17,7 @@ interface FallbackConfig {
   enableFallback: boolean;
   maxRetries: number;
   fallbackDelay: number; // ms
-  silentMode: boolean; // 完全無音モード
+  silentMode: boolean; // Complete silent mode
 }
 
 interface AudioCapabilities {
@@ -42,7 +42,7 @@ class AudioFallbackManager {
     silentMode: false,
   };
 
-  // 各フォールバックレベルでの音声インスタンス
+  // Audio instances for each fallback level
   private audioInstances: Map<string, Map<SoundKey, HTMLAudioElement | AudioBuffer>> = new Map();
   private fallbackCallbacks: Map<string, (soundKey: SoundKey) => Promise<void>> = new Map();
 
@@ -58,7 +58,7 @@ class AudioFallbackManager {
   }
 
   /**
-   * フォールバックレベルの初期化と検出
+   * Initialize and detect fallback levels
    */
   private async initializeFallbackLevels(): Promise<void> {
     this.capabilities = await this.detectAudioCapabilities();
@@ -81,27 +81,27 @@ class AudioFallbackManager {
       },
       {
         name: 'visual-feedback',
-        available: true, // 常に利用可能
+        available: true, // Always available
         priority: 2,
       },
       {
         name: 'silent-mode',
-        available: true, // 最終フォールバック
+        available: true, // Final fallback
         priority: 1,
       },
     ];
 
-    // 利用可能なレベルのみを残してソート
+    // Keep only available levels and sort
     this.fallbackLevels = this.fallbackLevels
       .filter((level) => level.available)
       .sort((a, b) => b.priority - a.priority);
 
-    // 各レベルの実際の動作テスト
+    // Test actual operation of each level
     await this.testFallbackLevels();
   }
 
   /**
-   * ブラウザの音声機能検出
+   * Detect browser audio capabilities
    */
   private async detectAudioCapabilities(): Promise<AudioCapabilities> {
     const capabilities: AudioCapabilities = {
@@ -115,7 +115,7 @@ class AudioFallbackManager {
 
     if (typeof window === 'undefined') return capabilities;
 
-    // Web Audio API対応チェック
+    // Check Web Audio API support
     try {
       const AudioContextClass =
         window.AudioContext ||
@@ -123,7 +123,7 @@ class AudioFallbackManager {
       if (AudioContextClass) {
         capabilities.webAudio = true;
 
-        // AudioContext作成テスト
+        // Test AudioContext creation
         const testContext = new AudioContextClass();
         capabilities.audioContextSupport = true;
         testContext.close();
@@ -132,12 +132,12 @@ class AudioFallbackManager {
       capabilities.webAudio = false;
     }
 
-    // HTMLAudioElement対応チェック
+    // Check HTMLAudioElement support
     try {
       const audio = new Audio();
       capabilities.htmlAudio = true;
 
-      // コーデック対応チェック
+      // Check codec support
       const testCodecs = ['audio/mpeg', 'audio/mp4', 'audio/ogg', 'audio/wav'];
       capabilities.codecs = testCodecs.filter((codec) => audio.canPlayType(codec) !== '');
       capabilities.mp3Support = capabilities.codecs.includes('audio/mpeg');
@@ -145,14 +145,14 @@ class AudioFallbackManager {
       capabilities.htmlAudio = false;
     }
 
-    // 自動再生ポリシー検出
+    // Detect autoplay policy
     await this.detectAutoplayPolicy(capabilities);
 
     return capabilities;
   }
 
   /**
-   * 自動再生ポリシーの検出
+   * Detect autoplay policy
    */
   private async detectAutoplayPolicy(capabilities: AudioCapabilities): Promise<void> {
     if (!capabilities.htmlAudio) return;
@@ -178,7 +178,7 @@ class AudioFallbackManager {
   }
 
   /**
-   * フォールバックレベルの実際の動作テスト
+   * Test actual operation of fallback levels
    */
   private async testFallbackLevels(): Promise<void> {
     for (const level of this.fallbackLevels) {
@@ -190,12 +190,12 @@ class AudioFallbackManager {
       }
     }
 
-    // テスト結果でフィルタリング
+    // Filter by test results
     this.fallbackLevels = this.fallbackLevels.filter((level) => level.testResult);
   }
 
   /**
-   * 個別フォールバックレベルのテスト
+   * Test individual fallback level
    */
   private async testFallbackLevel(levelName: string): Promise<boolean> {
     switch (levelName) {
@@ -206,14 +206,14 @@ class AudioFallbackManager {
         return this.testHTMLAudio();
       case 'visual-feedback':
       case 'silent-mode':
-        return true; // 常に成功
+        return true; // Always successful
       default:
         return false;
     }
   }
 
   /**
-   * Web Audio APIテスト
+   * Test Web Audio API
    */
   private async testWebAudioAPI(): Promise<boolean> {
     try {
@@ -222,7 +222,7 @@ class AudioFallbackManager {
         (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
       const context = new AudioContextClass();
 
-      // 無音のAudioBufferを作成してテスト
+      // Create silent AudioBuffer for testing
       const buffer = context.createBuffer(1, 1, context.sampleRate);
       const source = context.createBufferSource();
       source.buffer = buffer;
@@ -237,7 +237,7 @@ class AudioFallbackManager {
   }
 
   /**
-   * HTMLAudio要素テスト
+   * Test HTML Audio element
    */
   private async testHTMLAudio(): Promise<boolean> {
     try {
@@ -245,14 +245,14 @@ class AudioFallbackManager {
       audio.muted = true;
       audio.volume = 0;
 
-      // data URLを使用してテスト
+      // Test using data URL
       audio.src =
         'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUY7Tv5Z9NEAxPpuPwtmMcBjiS1/LNeSsFJHfJ8N6QQAoUYrPv5Z9NEAxPpuPwtmMcBjiS1/LNeSsFJHfI8N6QQAoUYrPu5Z9NEAxPpuPwtmQcBjiS1/LNeSsFJHfI8N6QQAoUYrPu5Z9NEAxQpuPwtmQcBjiS1/LNeSsFJHfI8N6QQAoUYrPu5Z9NEAxQpuPxtmQcBjiS1/LNeSsFJHfI8N6QQAoUYrPu5Z9NEAxQpuPxtmQcBjiS1/LNeSsFJHfJ8N6QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N6QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N6QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N6QQAoUYrPv5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N6QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N6QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEAxQpuPxtmQcBjiT1/LNeSsFJHfJ8N+QQAoUYrPu5Z9NEA=';
 
       return new Promise((resolve) => {
         audio.oncanplaythrough = () => resolve(true);
         audio.onerror = () => resolve(false);
-        setTimeout(() => resolve(false), 1000); // 1秒でタイムアウト
+        setTimeout(() => resolve(false), 1000); // 1-second timeout
       });
     } catch {
       return false;
@@ -260,7 +260,7 @@ class AudioFallbackManager {
   }
 
   /**
-   * 音声再生のフォールバック実行
+   * Execute audio playback fallback
    */
   public async playWithFallback(
     soundKey: SoundKey,
@@ -275,11 +275,11 @@ class AudioFallbackManager {
 
       try {
         await this.executePlayback(level.name, soundKey, options);
-        return; // 成功した場合は終了
+        return; // Exit if successful
       } catch (error) {
         lastError = error as Error;
 
-        // エラーをログに記録
+        // Log error
         const audioError = new AudioError(
           `Fallback level '${level.name}' failed for ${soundKey}`,
           {
@@ -291,7 +291,7 @@ class AudioFallbackManager {
         );
         handleError(audioError);
 
-        // 次のレベルに自動フォールバック
+        // Auto-fallback to next level
         this.currentLevel = i + 1;
 
         if (this.config.fallbackDelay > 0) {
@@ -300,7 +300,7 @@ class AudioFallbackManager {
       }
     }
 
-    // 全フォールバックが失敗した場合
+    // When all fallbacks fail
     if (lastError) {
       const finalError = new AudioError(
         `All fallback levels failed for ${soundKey}`,
@@ -314,12 +314,12 @@ class AudioFallbackManager {
       handleError(finalError);
     }
 
-    // 最終手段：サイレントモード
+    // Last resort: silent mode
     this.config.silentMode = true;
   }
 
   /**
-   * 特定レベルでの再生実行
+   * Execute playback at specific level
    */
   private async executePlayback(
     levelName: string,
@@ -335,23 +335,23 @@ class AudioFallbackManager {
       case 'visual-feedback':
         return this.playWithVisualFeedback(soundKey);
       case 'silent-mode':
-        return; // 何もしない
+        return; // Do nothing
       default:
         throw new Error(`Unknown fallback level: ${levelName}`);
     }
   }
 
   /**
-   * Web Audio APIでの再生
+   * Playback with Web Audio API
    */
   private async playWithWebAudio(soundKey: SoundKey, options: { volume?: number }): Promise<void> {
-    // AudioManagerが利用可能かチェック
+    // Check if AudioManager is available
     const { audioManager } = await import('./audioManager');
     await audioManager.playSound(soundKey, { volume: options.volume });
   }
 
   /**
-   * HTMLAudioElementでの再生
+   * Playback with HTMLAudioElement
    */
   private async playWithHTMLAudio(soundKey: SoundKey, options: { volume?: number }): Promise<void> {
     const levelKey = 'html-audio';
@@ -377,12 +377,12 @@ class AudioFallbackManager {
   }
 
   /**
-   * 視覚フィードバックでの再生
+   * Playback with visual feedback
    */
   private async playWithVisualFeedback(soundKey: SoundKey): Promise<void> {
-    // ブラウザ通知またはコンソールでフィードバック
+    // Browser notification or console feedback
     if ('Notification' in window && Notification.permission === 'granted') {
-      new Notification(`音声: ${soundKey}`, {
+      new Notification(`Audio: ${soundKey}`, {
         icon: '/icon-192x192.png',
         tag: 'tetris-audio',
         silent: true,
@@ -393,7 +393,7 @@ class AudioFallbackManager {
   }
 
   /**
-   * 現在のフォールバック状態の取得
+   * Get current fallback status
    */
   public getFallbackStatus(): {
     currentLevel: number;
@@ -410,14 +410,14 @@ class AudioFallbackManager {
   }
 
   /**
-   * フォールバック設定の更新
+   * Update fallback configuration
    */
   public updateConfig(newConfig: Partial<FallbackConfig>): void {
     this.config = { ...this.config, ...newConfig };
   }
 
   /**
-   * フォールバックレベルのリセット
+   * Reset fallback level
    */
   public resetFallback(): void {
     this.currentLevel = 0;
@@ -425,7 +425,7 @@ class AudioFallbackManager {
   }
 
   /**
-   * メモリクリーンアップ
+   * Memory cleanup
    */
   public dispose(): void {
     for (const instances of this.audioInstances.values()) {
@@ -441,10 +441,10 @@ class AudioFallbackManager {
   }
 }
 
-// シングルトンインスタンスをエクスポート
+// Export singleton instance
 export const audioFallbackManager = AudioFallbackManager.getInstance();
 
-// 便利な関数をエクスポート
+// Export convenient functions
 export const playWithFallback = (soundKey: SoundKey, options?: { volume?: number }) =>
   audioFallbackManager.playWithFallback(soundKey, options);
 

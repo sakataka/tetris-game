@@ -74,7 +74,7 @@ export default function ThemeSettings({
 
   return (
     <div className={`theme-settings ${className}`}>
-      {/* タブナビゲーション */}
+      {/* Tab navigation */}
       <div className='flex flex-wrap gap-1 mb-4 p-1 rounded-lg bg-cyber-cyan-10'>
         {tabs.map((tab) => (
           <button
@@ -93,7 +93,7 @@ export default function ThemeSettings({
         ))}
       </div>
 
-      {/* タブコンテンツ */}
+      {/* Tab content */}
       <div className='min-h-[400px]'>
         {activeTab === 'theme' && (
           <div className='space-y-4'>
@@ -105,7 +105,7 @@ export default function ThemeSettings({
                 className='px-4 py-2 rounded bg-cyber-red-20 border border-cyber-red-30
                            text-cyber-red hover:bg-cyber-red-30 transition-colors text-sm'
               >
-                すべてリセット
+                {t('buttons.reset')}
               </button>
             </div>
           </div>
@@ -127,10 +127,10 @@ export default function ThemeSettings({
 
         {activeTab === 'effects' && (
           <div className='space-y-6'>
-            {/* エフェクト強度 */}
+            {/* Effect intensity */}
             <div>
               <label className='block text-sm font-medium mb-2 text-cyber-cyan'>
-                エフェクト強度: {(effectIntensity * 100).toFixed(0)}%
+                Effect Intensity: {(effectIntensity * 100).toFixed(0)}%
               </label>
               <input
                 type='range'
@@ -146,16 +146,16 @@ export default function ThemeSettings({
                 }}
               />
               <div className='flex justify-between text-xs text-cyber-purple mt-1'>
-                <span>弱</span>
-                <span>標準</span>
-                <span>強</span>
+                <span>Low</span>
+                <span>Normal</span>
+                <span>High</span>
               </div>
               <p className='text-xs text-cyber-purple mt-2'>
-                ネオンエフェクト、ブラー、グローの強度を調整します
+                Adjust intensity of neon effects, blur, and glow
               </p>
             </div>
 
-            {/* アニメーション有効/無効 */}
+            {/* Animation enable/disable */}
             <div>
               <label className='flex items-center space-x-3 cursor-pointer'>
                 <input
@@ -165,17 +165,17 @@ export default function ThemeSettings({
                   className='w-4 h-4 accent-cyber-cyan rounded focus:ring-2 focus:ring-cyber-cyan'
                 />
                 <div>
-                  <span className='text-sm font-medium text-cyber-cyan'>アニメーション有効</span>
+                  <span className='text-sm font-medium text-cyber-cyan'>Enable Animations</span>
                   <p className='text-xs text-cyber-purple'>
-                    浮遊アニメーション、パルス効果等を有効にします
+                    Enable floating animations, pulse effects, etc.
                   </p>
                 </div>
               </label>
             </div>
 
-            {/* エフェクトプレビュー */}
+            {/* Effect preview */}
             <div className='p-4 rounded-lg hologram'>
-              <div className='text-sm font-medium mb-3 text-cyber-cyan'>エフェクトプレビュー</div>
+              <div className='text-sm font-medium mb-3 text-cyber-cyan'>Effect Preview</div>
               <div className='space-y-3'>
                 <div
                   className='p-3 rounded neon-border text-center'
@@ -184,7 +184,7 @@ export default function ThemeSettings({
                     animation: animations ? 'pulse 2s infinite' : 'none',
                   }}
                 >
-                  ネオンエフェクト
+                  Neon Effect
                 </div>
                 <div
                   className='p-3 rounded hologram-purple text-center'
@@ -193,7 +193,7 @@ export default function ThemeSettings({
                     animation: animations ? 'float 3s ease-in-out infinite' : 'none',
                   }}
                 >
-                  ホログラム + ブラー
+                  Hologram + Blur
                 </div>
               </div>
             </div>
@@ -206,7 +206,7 @@ export default function ThemeSettings({
 
 export const ThemeSettingsMemo = React.memo(ThemeSettings);
 
-/* カスタムスライダースタイル */
+/* Custom slider styles */
 const sliderStyles = `
 .slider-thumb::-webkit-slider-thumb {
   appearance: none;
@@ -230,7 +230,7 @@ const sliderStyles = `
 }
 `;
 
-// スタイルを動的に注入
+// Dynamically inject styles
 if (typeof document !== 'undefined') {
   const styleElement = document.createElement('style');
   styleElement.textContent = sliderStyles;

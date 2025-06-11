@@ -1,13 +1,13 @@
 /**
- * JSONベーステーマプリセットローダー
+ * JSON-based Theme Preset Loader
  *
- * 統合JSONファイルからテーマプリセットを動的に読み込み、
- * 型安全性を保証しながらランタイム検証を行う
+ * Dynamically loads theme presets from unified JSON files,
+ * performs runtime validation while ensuring type safety
  */
 
 import { ThemeConfig, ThemeVariant, ColorBlindnessType } from '../../types/tetris';
 
-// JSONスキーマ検証用の型定義
+// Type definitions for JSON schema validation
 interface ThemeConfigData {
   name: string;
   colors: {
@@ -43,11 +43,11 @@ interface ThemePresetsJSON extends Record<string, unknown> {
 }
 
 /**
- * JSONプリセットファイルを読み込み
+ * Load JSON preset file
  */
 async function loadThemePresetsJSON(): Promise<ThemePresetsJSON> {
   try {
-    // 動的インポートでJSONを読み込み
+    // Load JSON with dynamic import
     const response = await import('../../data/themePresets.json');
     return response.default || response;
   } catch (error) {
@@ -57,10 +57,10 @@ async function loadThemePresetsJSON(): Promise<ThemePresetsJSON> {
 }
 
 /**
- * JSONデータの型安全性検証
+ * Type safety validation for JSON data
  */
 function validateThemeConfig(data: ThemeConfigData, themeName: string): ThemeConfig {
-  // 必須フィールドの存在確認
+  // Check existence of required fields
   if (!data.name || typeof data.name !== 'string') {
     throw new Error(`Invalid theme config: missing or invalid name for ${themeName}`);
   }
@@ -77,7 +77,7 @@ function validateThemeConfig(data: ThemeConfigData, themeName: string): ThemeCon
     throw new Error(`Invalid theme config: missing accessibility for ${themeName}`);
   }
 
-  // カラーパレットの検証
+  // Color palette validation
   const colors = data.colors;
   const requiredColorKeys = [
     'primary',
@@ -94,7 +94,7 @@ function validateThemeConfig(data: ThemeConfigData, themeName: string): ThemeCon
     ) {
       throw new Error(`Invalid theme config: missing or invalid color.${key} for ${themeName}`);
     }
-    // Hexカラーコード形式の簡易検証
+    // Simple validation of hex color code format
     if (!/^#[0-9a-fA-F]{6}$/.test(colors[key as keyof typeof colors])) {
       throw new Error(
         `Invalid theme config: invalid hex color format for ${themeName}.colors.${key}`
@@ -102,7 +102,7 @@ function validateThemeConfig(data: ThemeConfigData, themeName: string): ThemeCon
     }
   }
 
-  // エフェクトの検証
+  // Effects validation
   const effects = data.effects;
   const requiredEffectKeys = ['blur', 'glow', 'saturation', 'brightness'];
   for (const key of requiredEffectKeys) {
@@ -111,7 +111,7 @@ function validateThemeConfig(data: ThemeConfigData, themeName: string): ThemeCon
     }
   }
 
-  // アクセシビリティ設定の検証
+  // Accessibility settings validation
   const accessibility = data.accessibility;
   const validColorBlindnessTypes = ['none', 'protanopia', 'deuteranopia', 'tritanopia'];
   const validContrastLevels = ['low', 'normal', 'high'];
@@ -129,7 +129,7 @@ function validateThemeConfig(data: ThemeConfigData, themeName: string): ThemeCon
     throw new Error(`Invalid theme config: invalid animationIntensity for ${themeName}`);
   }
 
-  // 検証済みデータを型安全なThemeConfigとして返す
+  // Return validated data as type-safe ThemeConfig
   return {
     name: data.name,
     colors: {
@@ -159,7 +159,7 @@ function validateThemeConfig(data: ThemeConfigData, themeName: string): ThemeCon
 }
 
 /**
- * メモリキャッシュでパフォーマンス最適化
+ * Performance optimization with memory cache
  */
 class ThemeCache {
   private static instance: ThemeCache;
@@ -181,12 +181,12 @@ class ThemeCache {
   }
 
   public async getTheme(themeName: ThemeVariant): Promise<ThemeConfig> {
-    // キャッシュから取得
+    // Get from cache
     if (this.cache.has(themeName)) {
       return this.cache.get(themeName)!;
     }
 
-    // JSONから読み込み・検証
+    // Load and validate from JSON
     const presetsData = await this.getPresetsData();
 
     if (!presetsData[themeName]) {
@@ -195,7 +195,7 @@ class ThemeCache {
 
     const themeConfig = validateThemeConfig(presetsData[themeName] as ThemeConfigData, themeName);
 
-    // キャッシュに保存
+    // Save to cache
     this.cache.set(themeName, themeConfig);
 
     return themeConfig;
@@ -226,11 +226,11 @@ class ThemeCache {
   }
 }
 
-// シングルトンインスタンスをエクスポート
+// Export singleton instance
 export const themeCache = ThemeCache.getInstance();
 
 /**
- * 便利な関数エクスポート（既存コードとの互換性保持）
+ * Convenient function exports (maintaining compatibility with existing code)
  */
 export async function getThemePresetAsync(theme: ThemeVariant): Promise<ThemeConfig> {
   return themeCache.getTheme(theme);
@@ -241,18 +241,18 @@ export async function getAllThemePresetsAsync(): Promise<Record<ThemeVariant, Th
 }
 
 /**
- * 同期版フォールバック（後方互換性）
- * 注意: 初回呼び出し時にはfallbackテーマを返し、バックグラウンドで実際のテーマを読み込む
+ * Synchronous fallback version (backward compatibility)
+ * Note: Returns fallback theme on first call, loads actual theme in background
  */
 export function getThemePresetSync(theme: ThemeVariant): ThemeConfig {
-  // キャッシュにある場合はすぐに返す
+  // Return immediately if in cache
   if (themeCache.getCacheStats().keys.includes(theme)) {
-    // 注意: これは同期的にキャッシュから取得する
-    // 実際の実装では Promise.resolve を使う必要がある
+    // Note: This gets from cache synchronously
+    // Actual implementation requires using Promise.resolve
     console.warn('getThemePresetSync is deprecated. Use getThemePresetAsync instead.');
   }
 
-  // フォールバック: 最小限のデフォルトテーマを返す
+  // Fallback: return minimal default theme
   return {
     name: 'Default',
     colors: {

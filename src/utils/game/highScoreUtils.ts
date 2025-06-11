@@ -1,7 +1,7 @@
 import { HighScore } from '../../types/tetris';
 
 /**
- * 指定されたスコアがハイスコアリストに入るかどうかを判定する
+ * Determine if the specified score qualifies for the high score list
  */
 export function isHighScore(
   score: number,
@@ -17,7 +17,7 @@ export function isHighScore(
 }
 
 /**
- * 新しいスコアがハイスコアリストに入る場合の順位を取得する
+ * Get the rank when a new score enters the high score list
  */
 export function getHighScoreRank(
   score: number,
@@ -38,14 +38,14 @@ export function getHighScoreRank(
 }
 
 /**
- * ハイスコア達成時のお祝いメッセージを生成する
+ * Generate congratulatory message for high score achievement
  */
 export function getHighScoreMessage(rank: number): string {
   const messages = {
-    1: '🎉 新記録達成！史上最高スコアです！',
-    2: '🥈 素晴らしい！2位のスコアです！',
-    3: '🥉 おめでとう！3位入賞です！',
-    default: `🏆 Top ${rank} 入り！素晴らしいスコアです！`,
+    1: '🎉 New Record! Highest score ever!',
+    2: '🥈 Excellent! 2nd place score!',
+    3: '🥉 Congratulations! 3rd place!',
+    default: `🏆 Top ${rank}! Amazing score!`,
   };
 
   if (rank <= 3) {
@@ -56,14 +56,14 @@ export function getHighScoreMessage(rank: number): string {
 }
 
 /**
- * ハイスコア用のユニークIDを生成する
+ * Generate unique ID for high score
  */
 export function generateHighScoreId(): string {
   return `score_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 }
 
 /**
- * スコアデータをハイスコア形式に変換する
+ * Convert score data to high score format
  */
 export function createHighScoreEntry(
   score: number,
@@ -82,7 +82,7 @@ export function createHighScoreEntry(
 }
 
 /**
- * ハイスコアデータの妥当性を検証する
+ * Validate high score data
  */
 export function validateHighScore(highScore: HighScore): boolean {
   return (
@@ -100,22 +100,22 @@ export function validateHighScore(highScore: HighScore): boolean {
 }
 
 /**
- * ハイスコアリストをソートする（スコア降順）
+ * Sort high score list (descending by score)
  */
 export function sortHighScores(highScores: readonly HighScore[]): HighScore[] {
   return [...highScores].sort((a, b) => {
-    // まずスコアで比較
+    // First compare by score
     if (b.score !== a.score) {
       return b.score - a.score;
     }
 
-    // スコアが同じ場合は日付で比較（新しい方が上位）
+    // If scores are same, compare by date (newer comes first)
     return b.date - a.date;
   });
 }
 
 /**
- * プレイヤー名の妥当性を検証する
+ * Validate player name
  */
 export function validatePlayerName(name: string): boolean {
   return (
@@ -126,7 +126,7 @@ export function validatePlayerName(name: string): boolean {
 }
 
 /**
- * ハイスコア統計を計算する
+ * Calculate high score statistics
  */
 export function calculateHighScoreStats(highScores: readonly HighScore[]) {
   if (highScores.length === 0) {
