@@ -185,15 +185,18 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
     }),
 
   // Piece control adapters for useGameControls
-  movePieceToPosition: (newPosition) =>
-    set((state) => ({
-      gameState: {
-        ...state.gameState,
-        currentPiece: state.gameState.currentPiece
-          ? { ...state.gameState.currentPiece, position: newPosition }
-          : null,
-      },
-    })),
+  movePieceToPosition: (newPosition) => {
+    set((state) => {
+      return {
+        gameState: {
+          ...state.gameState,
+          currentPiece: state.gameState.currentPiece
+            ? { ...state.gameState.currentPiece, position: newPosition }
+            : null,
+        },
+      };
+    });
+  },
 
   rotatePieceTo: (rotatedPiece) =>
     set((state) => ({

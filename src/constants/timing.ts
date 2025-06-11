@@ -6,8 +6,8 @@
 
 // Internationalization settings
 export const I18N_CONFIG = {
-  DEFAULT_LOCALE: 'ja',
-  SUPPORTED_LOCALES: ['ja', 'en', 'zh', 'ko'] as const,
+  DEFAULT_LOCALE: 'en',
+  SUPPORTED_LOCALES: ['en', 'ja', 'zh', 'ko'] as const,
   FALLBACK_LOCALE: 'en',
   DATE_FORMAT: {
     ja: 'YYYY年MM月DD日',

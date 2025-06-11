@@ -1,4 +1,5 @@
-import { useTimerAnimation, ANIMATION_PRESETS } from '../utils/animation';
+import { useEffect, useRef } from 'react';
+// import { useTimerAnimation, ANIMATION_PRESETS } from '../utils/animation';
 
 interface UseGameTimerProps {
   isActive: boolean;
@@ -13,11 +14,31 @@ interface UseGameTimerProps {
  * improving performance and behavior when tab is inactive
  */
 export function useGameTimer({ isActive, interval, onTick }: UseGameTimerProps) {
-  // Use unified animation management system
-  // Important: Only depend on interval, not onTick to prevent timer reset
-  useTimerAnimation(onTick, interval, [interval], {
-    ...ANIMATION_PRESETS.GAME_LOOP,
-    enabled: isActive,
-    // Remove auto-stop when tab is inactive (maintain game progress)
-  });
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const onTickRef = useRef(onTick);
+
+  // Update callback ref when it changes
+  useEffect(() => {
+    onTickRef.current = onTick;
+  }, [onTick]);
+
+  useEffect(() => {
+    if (isActive) {
+      intervalRef.current = setInterval(() => {
+        onTickRef.current();
+      }, interval);
+    } else {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
+  }, [isActive, interval]);
 }

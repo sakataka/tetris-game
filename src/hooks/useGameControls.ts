@@ -33,7 +33,9 @@ export function useGameControls({
         y: gameState.currentPiece.position.y + dir.y,
       };
 
-      if (isValidPosition(gameState.board, gameState.currentPiece, newPosition)) {
+      const isValid = isValidPosition(gameState.board, gameState.currentPiece, newPosition);
+
+      if (isValid) {
         const newState = actions.onPieceMove(gameState, newPosition);
         onStateChange(newState);
       } else if (dir.y > 0) {
