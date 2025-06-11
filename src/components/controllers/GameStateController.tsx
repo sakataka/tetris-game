@@ -1,15 +1,15 @@
 'use client';
 
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import type { GameState, SoundKey, LineEffectState, Tetromino } from '../../types/tetris';
 import { useGameControls } from '../../hooks/useGameControls';
 import { useGameLoop } from '../../hooks/useGameLoop';
 import { useHighScoreManager } from '../../hooks/useHighScoreManager';
 import { useSessionTrackingV2 } from '../../hooks/useSessionTrackingV2';
+import { animationManager } from '../../utils/animation/animationManager';
 import {
   useGameState,
   useDropTime,
-  useSetGameState,
   useUpdateParticles,
   useResetGame,
   useTogglePause,
@@ -56,7 +56,6 @@ export function GameStateController({
   // Zustand store integration for game state
   const gameState = useGameState();
   const dropTime = useDropTime();
-  const setGameState = useSetGameState();
   const updateParticles = useUpdateParticles();
   const resetGame = useResetGame();
   const togglePause = useTogglePause();
@@ -69,32 +68,65 @@ export function GameStateController({
   const movePieceToPosition = useMovePieceToPosition();
   const rotatePieceTo = useRotatePieceTo();
 
-  // Line clear effect auto-cleanup - fast and synchronized
+  // Line clear effect auto-cleanup - unified with AnimationManager
+  const effectCleanupIdRef = useRef<string | null>(null);
+
   useEffect(() => {
     const hasFlashingLines = gameState.lineEffect.flashingLines.length > 0;
     const hasShaking = gameState.lineEffect.shaking;
-
-    // Fast cleanup for flash and shake effects
-    if (hasFlashingLines || hasShaking) {
-      const flashTimeoutId = setTimeout(() => {
-        // Clear flash and shake simultaneously after short duration
-        updateLineEffect({ flashingLines: [], shaking: false });
-      }, EFFECTS.FLASH_DURATION);
-
-      return () => clearTimeout(flashTimeoutId);
-    }
-
-    // Quick cleanup for particles - don't wait for natural death
     const hasParticles = gameState.lineEffect.particles.length > 0;
-    if (hasParticles && !hasFlashingLines && !hasShaking) {
-      const particleCleanupId = setTimeout(() => {
-        clearLineEffect();
-      }, EFFECTS.FLASH_DURATION + 100); // Just 100ms after flash ends
 
-      return () => clearTimeout(particleCleanupId);
+    // Cleanup previous timer if exists
+    if (effectCleanupIdRef.current) {
+      animationManager.unregisterAnimation(effectCleanupIdRef.current);
+      effectCleanupIdRef.current = null;
     }
 
-    return undefined;
+    // Setup unified cleanup timer for all effects
+    if (hasFlashingLines || hasShaking || hasParticles) {
+      const animationId = `line-effect-cleanup-${Date.now()}`;
+      effectCleanupIdRef.current = animationId;
+
+      let startTime = 0;
+      let flashCleared = false;
+
+      const cleanupCallback = (currentTime: number) => {
+        if (startTime === 0) {
+          startTime = currentTime;
+        }
+
+        const elapsed = currentTime - startTime;
+
+        // Clear flash and shake after FLASH_DURATION
+        if (!flashCleared && elapsed >= EFFECTS.FLASH_DURATION) {
+          updateLineEffect({ flashingLines: [], shaking: false });
+          flashCleared = true;
+        }
+
+        // Clear all effects after FLASH_DURATION + 100ms
+        if (elapsed >= EFFECTS.FLASH_DURATION + 100) {
+          clearLineEffect();
+          animationManager.unregisterAnimation(animationId);
+          effectCleanupIdRef.current = null;
+        }
+      };
+
+      animationManager.registerAnimation(animationId, cleanupCallback, {
+        fps: 60,
+        priority: 'normal',
+        autoStop: {
+          maxDuration: EFFECTS.FLASH_DURATION + 200, // Safety timeout
+        },
+      });
+    }
+
+    return () => {
+      // Cleanup on unmount or dependency change
+      if (effectCleanupIdRef.current) {
+        animationManager.unregisterAnimation(effectCleanupIdRef.current);
+        effectCleanupIdRef.current = null;
+      }
+    };
   }, [
     gameState.lineEffect.flashingLines,
     gameState.lineEffect.shaking,
@@ -140,7 +172,6 @@ export function GameStateController({
     gameState,
     actions: pieceControlActions,
     playSound,
-    onStateChange: setGameState,
   });
 
   // Game loop integration

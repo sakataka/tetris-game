@@ -13,16 +13,9 @@ interface UseGameControlsProps {
   gameState: GameState;
   actions: PieceControlActions;
   playSound: (soundType: SoundKey) => void;
-  onStateChange: (newState: GameState) => void;
 }
 
-export function useGameControls({
-  gameState,
-  actions,
-  playSound,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onStateChange: _onStateChange,
-}: UseGameControlsProps) {
+export function useGameControls({ gameState, actions, playSound }: UseGameControlsProps) {
   const movePiece = useCallback(
     (dir: { x: number; y: number }) => {
       if (!gameState.currentPiece || gameState.gameOver || gameState.isPaused) {

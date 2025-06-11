@@ -14,8 +14,8 @@ vi.mock('../hooks/useKeyboardInput', () => ({
   useKeyboardInput: vi.fn(),
 }));
 
-vi.mock('../hooks/useGameTimer', () => ({
-  useGameTimer: vi.fn(),
+vi.mock('../hooks/useAnimationTimer', () => ({
+  useAnimationTimer: vi.fn(),
 }));
 
 vi.mock('../hooks/useDropTimeCalculator', () => ({
@@ -33,7 +33,7 @@ describe('useGameLoop - ゲーム統合テスト', () => {
   };
 
   let mockOnDropTimeChange: ReturnType<typeof vi.fn>;
-  let mockUseGameTimer: ReturnType<typeof vi.fn>;
+  let mockUseAnimationTimer: ReturnType<typeof vi.fn>;
   let mockUseKeyboardInput: ReturnType<typeof vi.fn>;
   let mockUseDropTimeCalculator: ReturnType<typeof vi.fn>;
 
@@ -53,7 +53,9 @@ describe('useGameLoop - ゲーム統合テスト', () => {
     mockOnDropTimeChange = vi.fn();
 
     // 依存フックのモック
-    mockUseGameTimer = vi.mocked((await import('../hooks/useGameTimer')).useGameTimer);
+    mockUseAnimationTimer = vi.mocked(
+      (await import('../hooks/useAnimationTimer')).useAnimationTimer
+    );
     mockUseKeyboardInput = vi.mocked((await import('../hooks/useKeyboardInput')).useKeyboardInput);
     mockUseDropTimeCalculator = vi.mocked(
       (await import('../hooks/useDropTimeCalculator')).useDropTimeCalculator
@@ -79,7 +81,7 @@ describe('useGameLoop - ゲーム統合テスト', () => {
       renderHook(() => useGameLoop(gameState));
 
       // 各フックが適切に呼ばれることを確認
-      expect(mockUseGameTimer).toHaveBeenCalledWith({
+      expect(mockUseAnimationTimer).toHaveBeenCalledWith({
         isActive: true, // !isGameOver && !isPaused
         interval: 1000,
         onTick: mockActions.dropPiece,
@@ -118,7 +120,7 @@ describe('useGameLoop - ゲーム統合テスト', () => {
       renderHook(() => useGameLoop(gameState));
 
       // ゲームオーバー時はタイマー非アクティブ
-      expect(mockUseGameTimer).toHaveBeenCalledWith({
+      expect(mockUseAnimationTimer).toHaveBeenCalledWith({
         isActive: false, // isGameOver = true
         interval: 500,
         onTick: mockActions.dropPiece,
@@ -146,7 +148,7 @@ describe('useGameLoop - ゲーム統合テスト', () => {
       renderHook(() => useGameLoop(gameState));
 
       // 一時停止時はタイマー非アクティブ
-      expect(mockUseGameTimer).toHaveBeenCalledWith({
+      expect(mockUseAnimationTimer).toHaveBeenCalledWith({
         isActive: false, // isPaused = true
         interval: 700,
         onTick: mockActions.dropPiece,
@@ -259,7 +261,7 @@ describe('useGameLoop - ゲーム統合テスト', () => {
       rerender({ level: 5, dropTime: 400 });
 
       // 新しい速度でタイマーが設定される
-      expect(mockUseGameTimer).toHaveBeenLastCalledWith({
+      expect(mockUseAnimationTimer).toHaveBeenLastCalledWith({
         isActive: true,
         interval: 400, // 高速化された間隔
         onTick: mockActions.dropPiece,
@@ -294,7 +296,7 @@ describe('useGameLoop - ゲーム統合テスト', () => {
         );
 
         // クラッシュしないことを確認
-        expect(mockUseGameTimer).toHaveBeenCalledWith(
+        expect(mockUseAnimationTimer).toHaveBeenCalledWith(
           expect.objectContaining({
             interval: dropTime,
           })
@@ -322,19 +324,19 @@ describe('useGameLoop - ゲーム統合テスト', () => {
       );
 
       // 初期状態: アクティブ
-      expect(mockUseGameTimer).toHaveBeenLastCalledWith(
+      expect(mockUseAnimationTimer).toHaveBeenLastCalledWith(
         expect.objectContaining({ isActive: true })
       );
 
       // 一時停止
       rerender({ isPaused: true });
-      expect(mockUseGameTimer).toHaveBeenLastCalledWith(
+      expect(mockUseAnimationTimer).toHaveBeenLastCalledWith(
         expect.objectContaining({ isActive: false })
       );
 
       // 再開
       rerender({ isPaused: false });
-      expect(mockUseGameTimer).toHaveBeenLastCalledWith(
+      expect(mockUseAnimationTimer).toHaveBeenLastCalledWith(
         expect.objectContaining({ isActive: true })
       );
     });
@@ -356,13 +358,13 @@ describe('useGameLoop - ゲーム統合テスト', () => {
 
       // ゲームオーバー
       rerender({ isGameOver: true, level: 1 });
-      expect(mockUseGameTimer).toHaveBeenLastCalledWith(
+      expect(mockUseAnimationTimer).toHaveBeenLastCalledWith(
         expect.objectContaining({ isActive: false })
       );
 
       // リセット後（レベル1に戻る）
       rerender({ isGameOver: false, level: 1 });
-      expect(mockUseGameTimer).toHaveBeenLastCalledWith(
+      expect(mockUseAnimationTimer).toHaveBeenLastCalledWith(
         expect.objectContaining({ isActive: true })
       );
     });

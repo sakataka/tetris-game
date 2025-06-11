@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useKeyboardInput } from './useKeyboardInput';
-import { useGameTimer } from './useGameTimer';
+import { useAnimationTimer } from './useAnimationTimer';
 import { useDropTimeCalculator } from './useDropTimeCalculator';
 
 interface GameActions {
@@ -50,8 +50,8 @@ export function useGameLoop({
     onConfirm,
   });
 
-  // Game timer
-  useGameTimer({
+  // Game timer (unified with AnimationManager)
+  useAnimationTimer({
     isActive: !isGameOver && !isPaused,
     interval: dropTime,
     onTick: actions.dropPiece,

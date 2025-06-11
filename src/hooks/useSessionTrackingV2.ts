@@ -1,8 +1,8 @@
 /**
- * Simplified session tracking hook (v2)
+ * Unified session tracking hook
  *
- * Simple and efficient hook implementation
- * using SessionManager service class
+ * Uses the unified sessionStore to eliminate
+ * synchronization issues with SessionManager
  */
 
 import { useEffect } from 'react';
@@ -13,7 +13,7 @@ import {
   useStartSession,
   useEndSession,
   useOnGameStart,
-} from '../store/sessionStoreV2';
+} from '../store/sessionStore';
 
 export function useSessionTrackingV2() {
   const currentSession = useCurrentSession();
