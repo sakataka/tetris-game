@@ -362,3 +362,148 @@ Before implementing major features:
    - Anti-cheat systems
    - Rate limiting
    - Content moderation tools
+
+## Code Quality & Refactoring Roadmap
+
+Based on recent bug fixes and structural analysis, these refactoring items will improve code maintainability, reduce bug occurrence, and support future feature development.
+
+### 🔴 High Priority (Quick Wins)
+
+1. **Debug Log Cleanup**
+
+   - **Complexity**: ⭐ Easy (1-2 days)
+   - **Impact**: Performance + Production readiness
+   - **Issue**: Scattered console.log statements affecting performance
+   - **Solution**: Implement unified logging system with environment-based levels
+
+2. **Constants Centralization**
+
+   - **Complexity**: ⭐ Easy (2-3 days)
+   - **Impact**: Maintainability + Consistency
+   - **Issue**: Magic numbers and strings scattered across components
+   - **Solution**: Create centralized constants with semantic naming
+
+3. **Type Safety Enhancement**
+
+   - **Complexity**: ⭐⭐ Medium (1 week)
+   - **Impact**: Bug prevention + Developer experience
+   - **Issue**: Remaining `any` types and loose type assertions
+   - **Solution**: Strict typing with branded types and validation guards
+
+4. **Error Boundary Expansion**
+   - **Complexity**: ⭐ Easy (2-3 days)
+   - **Impact**: User experience + Debugging
+   - **Issue**: Limited error handling for component failures
+   - **Solution**: Granular error boundaries with fallback UI
+
+### 🟡 Medium Priority (Structural Improvements)
+
+5. **State Management Unification**
+
+   - **Complexity**: ⭐⭐⭐ Hard (2-3 weeks)
+   - **Impact**: Bug reduction + Predictability
+   - **Issue**: Zustand + React state conflicts causing timing bugs
+   - **Solution**: Single source of truth with clear state ownership
+
+6. **Custom Hook Decomposition**
+
+   - **Complexity**: ⭐⭐ Medium (1-2 weeks)
+   - **Impact**: Testability + Reusability
+   - **Issue**: Monolithic hooks with multiple responsibilities
+   - **Solution**: Single-responsibility hooks with clear interfaces
+
+7. **Component Size Reduction**
+
+   - **Complexity**: ⭐⭐ Medium (1-2 weeks)
+   - **Impact**: Maintainability + Testing
+   - **Issue**: Large components mixing UI, logic, and effects
+   - **Solution**: Extract logic to custom hooks, split UI concerns
+
+8. **Timer Management Unification**
+
+   - **Complexity**: ⭐⭐⭐ Hard (1-2 weeks)
+   - **Impact**: Bug prevention + Performance
+   - **Issue**: Multiple timer systems causing synchronization issues
+   - **Solution**: Unified timer manager with priority-based scheduling
+
+9. **Configuration Management**
+   - **Complexity**: ⭐⭐ Medium (1 week)
+   - **Impact**: Flexibility + Environment handling
+   - **Issue**: Hardcoded settings and environment-specific values
+   - **Solution**: Centralized config with environment overrides
+
+### 🟢 Low Priority (Advanced Improvements)
+
+10. **Animation System Redesign**
+
+    - **Complexity**: ⭐⭐⭐⭐ Very Hard (3-4 weeks)
+    - **Impact**: Performance + Extensibility
+    - **Issue**: Complex animation manager with performance bottlenecks
+    - **Solution**: Lightweight, composable animation primitives
+
+11. **Game Logic Functional Refactor**
+
+    - **Complexity**: ⭐⭐⭐⭐ Very Hard (4-6 weeks)
+    - **Impact**: Testability + Predictability
+    - **Issue**: Mixed imperative/functional styles in game logic
+    - **Solution**: Pure functional game engine with immutable state
+
+12. **Event System Implementation**
+
+    - **Complexity**: ⭐⭐⭐ Hard (2-3 weeks)
+    - **Impact**: Decoupling + Extensibility
+    - **Issue**: Direct component communication creating tight coupling
+    - **Solution**: Event-driven architecture with typed events
+
+13. **Performance Monitoring Integration**
+
+    - **Complexity**: ⭐⭐⭐ Hard (2-3 weeks)
+    - **Impact**: Performance insights + User experience
+    - **Issue**: Limited visibility into runtime performance issues
+    - **Solution**: Built-in performance metrics with user feedback
+
+14. **Plugin Architecture Foundation**
+    - **Complexity**: ⭐⭐⭐⭐⭐ Extremely Hard (6-8 weeks)
+    - **Impact**: Extensibility + Modularity
+    - **Issue**: Monolithic architecture limiting feature extensions
+    - **Solution**: Plugin system with defined APIs and lifecycle hooks
+
+### Implementation Strategy
+
+**Phase 1: Foundation (1-2 months)**
+
+- Items 1-4: Quick wins that improve stability immediately
+- Focus on reducing technical debt and improving developer experience
+
+**Phase 2: Structure (2-3 months)**
+
+- Items 5-9: Architectural improvements supporting future features
+- Address core design issues revealed by recent bugs
+
+**Phase 3: Advanced (6+ months)**
+
+- Items 10-14: Long-term architectural evolution
+- Major rewrites supporting multiplayer and complex features
+
+### Bug Prevention Measures
+
+**Recently Fixed Issues:**
+
+1. ✅ Piece drop bug: State management conflicts
+2. ✅ Effect timing: Multiple timer synchronization
+3. ✅ Language detection: Browser override conflicts
+
+**Preventive Measures:**
+
+- Comprehensive state management testing
+- Timer synchronization validation
+- Configuration hierarchy testing
+- Integration test coverage for cross-system interactions
+
+### Success Metrics
+
+- **Bug Reduction**: 50% fewer state-related bugs
+- **Development Speed**: 30% faster feature implementation
+- **Test Coverage**: 90%+ for critical game logic
+- **Performance**: Consistent 60fps under load
+- **Maintainability**: New developer onboarding < 1 day
