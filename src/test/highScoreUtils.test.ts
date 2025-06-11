@@ -60,24 +60,24 @@ describe('highScoreUtils', () => {
   describe('getHighScoreMessage', () => {
     it('1位の場合、特別なメッセージを返す', () => {
       const message = getHighScoreMessage(1);
-      expect(message).toContain('新記録達成');
-      expect(message).toContain('史上最高');
+      expect(message).toContain('New Record');
+      expect(message).toContain('Highest score ever');
     });
 
     it('2位の場合、2位用のメッセージを返す', () => {
       const message = getHighScoreMessage(2);
-      expect(message).toContain('2位');
+      expect(message).toContain('2nd place');
     });
 
     it('3位の場合、3位用のメッセージを返す', () => {
       const message = getHighScoreMessage(3);
-      expect(message).toContain('3位');
+      expect(message).toContain('3rd place');
     });
 
     it('4位以下の場合、一般的なメッセージを返す', () => {
       const message = getHighScoreMessage(5);
       expect(message).toContain('Top 5');
-      expect(message).toContain('素晴らしい');
+      expect(message).toContain('Amazing score');
     });
   });
 
