@@ -126,9 +126,9 @@ describe('GameStore - ハイスコア機能', () => {
       scores.forEach((score) => testStore.addHighScore(score));
 
       expect(testStore.getState().highScores).toHaveLength(3);
-      expect(testStore.getState().highScores[0].score).toBe(25000);
-      expect(testStore.getState().highScores[1].score).toBe(15000);
-      expect(testStore.getState().highScores[2].score).toBe(10000);
+      expect(testStore.getState().highScores[0]?.score).toBe(25000);
+      expect(testStore.getState().highScores[1]?.score).toBe(15000);
+      expect(testStore.getState().highScores[2]?.score).toBe(10000);
     });
 
     it('11個以上のスコアが追加されたとき、上位10個のみを保持する', () => {
@@ -145,8 +145,8 @@ describe('GameStore - ハイスコア機能', () => {
 
       expect(testStore.getState().highScores).toHaveLength(10);
       // 最高スコアが15000、最低が6000であることを確認
-      expect(testStore.getState().highScores[0].score).toBe(15000);
-      expect(testStore.getState().highScores[9].score).toBe(6000);
+      expect(testStore.getState().highScores[0]?.score).toBe(15000);
+      expect(testStore.getState().highScores[9]?.score).toBe(6000);
     });
 
     it('ハイスコアをクリアできる', () => {

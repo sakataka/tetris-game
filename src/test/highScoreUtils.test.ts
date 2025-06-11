@@ -175,9 +175,9 @@ describe('highScoreUtils', () => {
 
       const sorted = sortHighScores(unsorted);
 
-      expect(sorted[0].score).toBe(50000);
-      expect(sorted[1].score).toBe(40000);
-      expect(sorted[2].score).toBe(30000);
+      expect(sorted[0]?.score).toBe(50000);
+      expect(sorted[1]?.score).toBe(40000);
+      expect(sorted[2]?.score).toBe(30000);
     });
 
     it('同じスコアの場合、日付の新しい順でソートする', () => {
@@ -189,9 +189,9 @@ describe('highScoreUtils', () => {
 
       const sorted = sortHighScores(unsorted);
 
-      expect(sorted[0].date).toBe(2000);
-      expect(sorted[1].date).toBe(1500);
-      expect(sorted[2].date).toBe(1000);
+      expect(sorted[0]?.date).toBe(2000);
+      expect(sorted[1]?.date).toBe(1500);
+      expect(sorted[2]?.date).toBe(1000);
     });
   });
 

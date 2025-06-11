@@ -106,8 +106,8 @@ describe('SessionManager', () => {
 
       const sessions = sessionManager.getAllSessions();
       expect(sessions).toHaveLength(1);
-      expect(sessions[0].isActive).toBe(false);
-      expect(sessions[0].endTime).toBeDefined();
+      expect(sessions[0]?.isActive).toBe(false);
+      expect(sessions[0]?.endTime).toBeDefined();
     });
 
     it('should handle multiple sessions', () => {
@@ -235,8 +235,8 @@ describe('SessionManager', () => {
       // 履歴に移動されているか確認
       const sessions = newManager.getAllSessions();
       expect(sessions).toHaveLength(1);
-      expect(sessions[0].id).toBe('expired-session');
-      expect(sessions[0].isActive).toBe(false);
+      expect(sessions[0]?.id).toBe('expired-session');
+      expect(sessions[0]?.isActive).toBe(false);
     });
   });
 

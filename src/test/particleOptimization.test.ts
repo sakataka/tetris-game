@@ -26,12 +26,12 @@ describe('Particle Pool Optimization', () => {
       );
 
       expect(particles).toHaveLength(10);
-      expect(particles[0].color).toBe('#ff0000');
+      expect(particles[0]?.color).toBe('#ff0000');
       // Allow for reasonable variance in position (±20 pixels)
-      expect(particles[0].x).toBeGreaterThanOrEqual(80);
-      expect(particles[0].x).toBeLessThanOrEqual(120);
-      expect(particles[0].y).toBeGreaterThanOrEqual(180);
-      expect(particles[0].y).toBeLessThanOrEqual(220);
+      expect(particles[0]?.x).toBeGreaterThanOrEqual(80);
+      expect(particles[0]?.x).toBeLessThanOrEqual(120);
+      expect(particles[0]?.y).toBeGreaterThanOrEqual(180);
+      expect(particles[0]?.y).toBeLessThanOrEqual(220);
     });
 
     it('should optimize batch particle release', () => {

@@ -121,7 +121,7 @@ describe('statisticsUtils', () => {
       );
 
       const favoriteLevel = parseInt(
-        Object.entries(levelCounts).sort(([, a], [, b]) => b - a)[0][0]
+        Object.entries(levelCounts).sort(([, a], [, b]) => b - a)[0]?.[0] ?? '1'
       );
 
       expect(favoriteLevel).toBeGreaterThan(0);

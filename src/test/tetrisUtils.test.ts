@@ -19,7 +19,7 @@ describe('tetrisUtils', () => {
       const board = createEmptyBoard();
       for (let y = 0; y < BOARD_HEIGHT; y++) {
         for (let x = 0; x < BOARD_WIDTH; x++) {
-          expect(board[y][x]).toBeNull();
+          expect(board[y]?.[x]).toBeNull();
         }
       }
     });
@@ -74,7 +74,7 @@ describe('tetrisUtils', () => {
     it('should return false for position with collision', () => {
       const board = createEmptyBoard();
       // Place something on the board
-      board[1][4] = '#ff0000';
+      board[1]![4] = '#ff0000';
 
       const tetromino = {
         type: 'I' as const,

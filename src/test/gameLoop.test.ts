@@ -169,11 +169,11 @@ describe('useGameLoop - ゲーム統合テスト', () => {
       );
 
       // キーボード入力の設定を取得
-      const keyboardInputCall = mockUseKeyboardInput.mock.calls[0][0];
+      const keyboardInputCall = mockUseKeyboardInput.mock.calls[0]?.[0];
 
       // 左移動テスト
       act(() => {
-        keyboardInputCall.onMoveLeft();
+        keyboardInputCall?.onMoveLeft();
       });
       expect(mockActions.movePiece).toHaveBeenCalledWith({ x: -1, y: 0 });
 
@@ -209,11 +209,11 @@ describe('useGameLoop - ゲーム統合テスト', () => {
         })
       );
 
-      const keyboardInputCall = mockUseKeyboardInput.mock.calls[0][0];
+      const keyboardInputCall = mockUseKeyboardInput.mock.calls[0]?.[0];
 
       // 回転テスト
       act(() => {
-        keyboardInputCall.onRotate();
+        keyboardInputCall?.onRotate();
       });
       expect(mockActions.rotatePieceClockwise).toHaveBeenCalled();
 
