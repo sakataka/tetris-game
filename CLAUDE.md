@@ -192,3 +192,173 @@ The codebase is prepared for:
 - Plugin system (modular design)
 - Advanced game modes (extensible logic)
 - PWA conversion (minimal changes needed)
+
+## Future Feature Roadmap
+
+### 🚀 Large Features (3-6 months)
+
+1. **Real-time Multiplayer System**
+
+   - WebSocket/WebRTC integration for low-latency gameplay
+   - Battle mode (1v1, 2v2, team battles)
+   - Spectator mode with live commentary
+   - Matchmaking and ELO rating system
+   - Architecture: Extend GameStateStore with multiplayer sync layer
+
+2. **AI Opponent System**
+
+   - Machine learning-based difficulty adaptation
+   - Multiple AI personalities (aggressive, defensive, balanced)
+   - Training mode against AI
+   - Architecture: New AIStrategyStore + TensorFlow.js integration
+
+3. **Tournament & Competition Platform**
+   - Tournament bracket system
+   - Scheduled events and seasons
+   - Prize pool management
+   - Live streaming integration
+   - Architecture: New CompetitionStore + backend API integration
+
+### ⭐ Medium Features (1-3 months)
+
+4. **Advanced Game Modes**
+
+   - **Puzzle Mode**: Pre-set challenges to solve
+   - **Marathon Mode**: Endless gameplay with increasing difficulty
+   - **Time Attack**: Score maximization in fixed time
+   - **Gravity Mode**: Pieces affected by physics
+   - Architecture: Extend gameStateStore with mode-specific logic
+
+5. **Achievement & Progression System**
+
+   - 50+ achievements with different tiers
+   - Player level and experience points
+   - Unlockable themes, sounds, and effects
+   - Daily/weekly challenges
+   - Architecture: New ProgressionStore + persistent storage
+
+6. **Replay System**
+
+   - Record and playback gameplay sessions
+   - Share replays with unique URLs
+   - Frame-by-frame analysis
+   - Export as video (WebRTC)
+   - Architecture: New ReplayStore + compression algorithms
+
+7. **Power-ups & Special Blocks**
+
+   - Bomb blocks (clear area)
+   - Rainbow blocks (match any color)
+   - Time freeze power-up
+   - Ghost mode (temporary invincibility)
+   - Architecture: Extend tetrisUtils with power-up logic
+
+8. **Social Features**
+   - Friend system with invites
+   - Global and friend leaderboards
+   - Profile customization
+   - Chat system (with moderation)
+   - Architecture: New SocialStore + OAuth integration
+
+### 💡 Small Features (1-2 weeks)
+
+9. **Custom Control Schemes**
+
+   - Fully remappable keys
+   - Multiple control profiles
+   - Gamepad support (Xbox, PlayStation)
+   - Touch gesture customization
+   - Architecture: Extend settingsStore with control mapping
+
+10. **Advanced Statistics Dashboard**
+
+    - Heat maps of piece placements
+    - Performance graphs over time
+    - Detailed session analytics
+    - Export statistics as CSV/PDF
+    - Architecture: Extend StatisticsService with visualization
+
+11. **Tutorial & Training System**
+
+    - Interactive tutorial for beginners
+    - Advanced technique training (T-spins, etc.)
+    - Practice specific scenarios
+    - Video tutorials integration
+    - Architecture: New TutorialStore + guided tour library
+
+12. **Music & Sound Customization**
+
+    - Custom music playlists
+    - Sound effect packs
+    - Dynamic music (adapts to gameplay)
+    - Community sound sharing
+    - Architecture: Extend AudioManagerV2 with playlist support
+
+13. **Enhanced Visual Customization**
+
+    - Piece skin editor
+    - Custom background animations
+    - Particle effect designer
+    - Import/export theme packages
+    - Architecture: Extend themeStore with advanced options
+
+14. **Accessibility Enhancements**
+
+    - Voice commands
+    - Screen reader improvements
+    - One-handed play mode
+    - Customizable visual indicators
+    - Architecture: Extend accessibilityStore with new features
+
+15. **Performance Profiler**
+    - In-game FPS counter
+    - Network latency display
+    - Memory usage monitoring
+    - Performance recommendations
+    - Architecture: Extend performanceMonitor with UI overlay
+
+### Implementation Priority Matrix
+
+| Feature             | User Value | Technical Complexity | Architecture Fit | Priority  |
+| ------------------- | ---------- | -------------------- | ---------------- | --------- |
+| Custom Controls     | High       | Low                  | Excellent        | 🟢 High   |
+| Advanced Game Modes | High       | Medium               | Excellent        | 🟢 High   |
+| Achievement System  | High       | Medium               | Good             | 🟢 High   |
+| Tutorial System     | High       | Low                  | Good             | 🟢 High   |
+| Multiplayer         | Very High  | High                 | Good             | 🟡 Medium |
+| AI Opponent         | Medium     | High                 | Good             | 🟡 Medium |
+| Replay System       | Medium     | Medium               | Good             | 🟡 Medium |
+| Power-ups           | Medium     | Medium               | Good             | 🟡 Medium |
+| Social Features     | Medium     | High                 | Fair             | 🟡 Medium |
+| Tournament Platform | Low        | Very High            | Fair             | 🔴 Low    |
+
+### Technical Preparation Checklist
+
+Before implementing major features:
+
+1. **Backend Infrastructure** (for multiplayer/social)
+
+   - WebSocket server setup
+   - Database design (PostgreSQL/Redis)
+   - Authentication system (JWT/OAuth)
+   - CDN for replay storage
+
+2. **Performance Optimizations**
+
+   - Code splitting for feature modules
+   - Web Workers for AI calculations
+   - IndexedDB for large data storage
+   - WebAssembly for critical paths
+
+3. **Testing Infrastructure**
+
+   - E2E tests for multiplayer
+   - Load testing for concurrent users
+   - AI behavior testing framework
+   - Replay validation tests
+
+4. **Security Measures**
+   - Input validation for multiplayer
+   - Anti-cheat systems
+   - Rate limiting
+   - Content moderation tools
