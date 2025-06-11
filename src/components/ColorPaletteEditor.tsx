@@ -25,7 +25,7 @@ function ColorInput({ label, value, onChange, description }: ColorInputProps) {
       const newValue = event.target.value;
       setInputValue(newValue);
 
-      // 有効なHexカラーかチェック
+      // Check if it's a valid hex color
       if (/^#[0-9A-F]{6}$/i.test(newValue)) {
         onChange(newValue);
       }
@@ -34,7 +34,7 @@ function ColorInput({ label, value, onChange, description }: ColorInputProps) {
   );
 
   const handleBlur = useCallback(() => {
-    // フォーカスが外れた時に有効な値に修正
+    // Correct to valid value when focus is lost
     if (!/^#[0-9A-F]{6}$/i.test(inputValue)) {
       setInputValue(value);
     }
@@ -93,32 +93,32 @@ export default function ColorPaletteEditor({
     {
       key: 'primary',
       label: t('colorPalette.primaryColor'),
-      description: 'メインアクセントカラー（ネオンエフェクト等）',
+      description: 'Main accent color (neon effects, etc.)',
     },
     {
       key: 'secondary',
       label: t('colorPalette.secondaryColor'),
-      description: '二番目のアクセントカラー',
+      description: 'Secondary accent color',
     },
     {
       key: 'tertiary',
       label: t('colorPalette.tertiaryColor'),
-      description: '三番目のアクセントカラー',
+      description: 'Tertiary accent color',
     },
     {
       key: 'background',
       label: t('colorPalette.backgroundColor'),
-      description: 'メイン背景色',
+      description: 'Main background color',
     },
     {
       key: 'foreground',
       label: t('colorPalette.textColor'),
-      description: '主要テキストの色',
+      description: 'Primary text color',
     },
     {
       key: 'accent',
       label: t('colorPalette.accentColor'),
-      description: '強調色（特別な要素用）',
+      description: 'Accent color (for special elements)',
     },
   ];
 
@@ -147,7 +147,7 @@ export default function ColorPaletteEditor({
         </button>
       </div>
 
-      {/* カラープレビュー（常に表示） */}
+      {/* Color preview (always displayed) */}
       <div className='mb-4 p-3 rounded-lg hologram'>
         <div className='text-sm font-medium mb-2 text-cyber-cyan'>{t('colorPalette.preview')}</div>
         <div className='grid grid-cols-6 gap-2'>
@@ -165,7 +165,7 @@ export default function ColorPaletteEditor({
         </div>
       </div>
 
-      {/* 詳細設定（展開時のみ） */}
+      {/* Detailed settings (when expanded only) */}
       {isExpanded && (
         <div className='space-y-1'>
           {colorFields.map(({ key, label, description }) => (
@@ -184,7 +184,7 @@ export default function ColorPaletteEditor({
               className='px-4 py-2 rounded bg-cyber-yellow-20 border border-cyber-yellow-30
                          text-cyber-yellow hover:bg-cyber-yellow-30 transition-colors text-sm'
             >
-              デフォルトに戻す
+              {t('colorPalette.resetToDefaults')}
             </button>
           </div>
         </div>

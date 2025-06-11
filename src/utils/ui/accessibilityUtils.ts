@@ -1,7 +1,7 @@
 /**
- * アクセシビリティ統合ユーティリティ
+ * Accessibility Integration Utilities
  *
- * CSS変数適用、システム設定検出、WCAG準拠チェック
+ * CSS variable application, system settings detection, WCAG compliance checks
  */
 
 import {
@@ -12,12 +12,12 @@ import {
 } from '../../types/accessibility';
 
 /**
- * アクセシビリティ設定をCSS変数に適用
+ * Apply accessibility settings to CSS variables
  */
 export function applyAccessibilityToCSS(accessibility: AccessibilityState): void {
   const root = document.documentElement;
 
-  // フォントサイズ設定
+  // Font size settings
   const fontSizeMap: Record<FontSizeLevel, string> = {
     small: '0.875rem',
     normal: '1rem',
@@ -26,18 +26,18 @@ export function applyAccessibilityToCSS(accessibility: AccessibilityState): void
   };
   root.style.setProperty('--base-font-size', fontSizeMap[accessibility.fontSize]);
 
-  // コントラスト設定
+  // Contrast settings
   const contrastMultiplier =
     accessibility.contrast === 'high' ? 1.5 : accessibility.contrast === 'low' ? 0.7 : 1.0;
   root.style.setProperty('--contrast-multiplier', contrastMultiplier.toString());
 
-  // アニメーション設定
+  // Animation settings
   const animationSettings = getAnimationSettings(accessibility.animationIntensity);
   root.style.setProperty('--animation-duration', `${animationSettings.duration}s`);
   root.style.setProperty('--particle-enabled', animationSettings.particles ? '1' : '0');
   root.style.setProperty('--effects-enabled', animationSettings.effects ? '1' : '0');
 
-  // 視覚的支援設定
+  // Visual assistance settings
   if (accessibility.visual.highContrast) {
     root.style.setProperty('--high-contrast-mode', '1');
     root.style.setProperty('--border-width', '2px');
@@ -46,10 +46,10 @@ export function applyAccessibilityToCSS(accessibility: AccessibilityState): void
     root.style.setProperty('--border-width', '1px');
   }
 
-  // フォント重量設定
+  // Font weight settings
   root.style.setProperty('--font-weight', accessibility.visual.boldText ? '700' : '400');
 
-  // カーソルサイズ
+  // Cursor size
   const cursorSizeMap = {
     normal: '1rem',
     large: '1.5rem',
@@ -57,7 +57,7 @@ export function applyAccessibilityToCSS(accessibility: AccessibilityState): void
   };
   root.style.setProperty('--cursor-size', cursorSizeMap[accessibility.visual.cursorSize]);
 
-  // フォーカスアウトライン
+  // Focus outline
   if (accessibility.keyboard.focusOutline) {
     root.style.setProperty('--focus-outline', '2px solid var(--cyber-cyan)');
     root.style.setProperty('--focus-outline-offset', '2px');
@@ -66,7 +66,7 @@ export function applyAccessibilityToCSS(accessibility: AccessibilityState): void
     root.style.setProperty('--focus-outline-offset', '0');
   }
 
-  // ゲーム固有設定
+  // Game-specific settings
   root.style.setProperty(
     '--grid-lines-opacity',
     accessibility.gameSpecific.gridLines ? '0.3' : '0'
@@ -78,7 +78,7 @@ export function applyAccessibilityToCSS(accessibility: AccessibilityState): void
 }
 
 /**
- * アニメーション設定を取得
+ * Get animation settings
  */
 function getAnimationSettings(intensity: AnimationIntensity) {
   const settings = {
@@ -92,7 +92,7 @@ function getAnimationSettings(intensity: AnimationIntensity) {
 }
 
 /**
- * 色覚異常対応色を取得
+ * Get color blindness-safe colors
  */
 export function getColorBlindnessSafeColor(
   originalColor: string,
@@ -124,7 +124,7 @@ export function getColorBlindnessSafeColor(
 }
 
 /**
- * システムアクセシビリティ設定を検出
+ * Detect system accessibility settings
  */
 export function detectSystemAccessibilitySettings(): Partial<AccessibilityState> {
   const settings: Partial<AccessibilityState> = {};
@@ -132,13 +132,13 @@ export function detectSystemAccessibilitySettings(): Partial<AccessibilityState>
   if (typeof window === 'undefined') return settings;
 
   try {
-    // Reduced motion の検出
+    // Detect reduced motion
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       settings.reducedMotion = true;
       settings.animationIntensity = 'reduced';
     }
 
-    // High contrast の検出
+    // Detect high contrast
     if (window.matchMedia('(prefers-contrast: high)').matches) {
       settings.contrast = 'high';
       settings.visual = {
@@ -164,7 +164,7 @@ export function detectSystemAccessibilitySettings(): Partial<AccessibilityState>
 }
 
 /**
- * WCAG準拠チェック
+ * WCAG compliance check
  */
 export interface WCAGComplianceResult {
   level: 'A' | 'AA' | 'AAA' | 'non-compliant';
@@ -231,7 +231,7 @@ export function checkWCAGCompliance(accessibility: AccessibilityState): WCAGComp
 }
 
 /**
- * アクセシビリティ推奨設定を生成
+ * Generate accessibility recommendations
  */
 export function generateAccessibilityRecommendations(
   currentSettings: AccessibilityState,
@@ -308,7 +308,7 @@ export function generateAccessibilityRecommendations(
 }
 
 /**
- * アクセシビリティレポートを生成
+ * Generate accessibility report
  */
 export function generateAccessibilityReport(accessibility: AccessibilityState): {
   summary: string;

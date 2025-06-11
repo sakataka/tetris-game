@@ -149,7 +149,8 @@
     "accentColor": "Accent Color",
     "advancedSettings": "Advanced Settings",
     "collapse": "Collapse",
-    "preview": "Preview"
+    "preview": "Preview",
+    "resetToDefaults": "Reset to Defaults"
   },
   "accessibility": {
     "colorVisionSupport": "Color Vision Support",

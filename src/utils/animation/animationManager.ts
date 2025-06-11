@@ -1,23 +1,23 @@
 /**
- * アニメーション統一管理システム
+ * Unified Animation Management System
  *
- * 分散していたrequestAnimationFrame管理を統合し、
- * パフォーマンスと保守性を向上させる中央集権型アニメーションマネージャー
+ * Integrates previously scattered requestAnimationFrame management,
+ * providing a centralized animation manager that improves performance and maintainability
  */
 
 import { handleError } from '../data/errorHandler';
 import { SystemError } from '../../types/errors';
 
 export interface AnimationOptions {
-  /** 目標FPS (デフォルト: 60) */
+  /** Target FPS (default: 60) */
   fps?: number;
-  /** アニメーション優先度 (高優先度は低FPS時も継続) */
+  /** Animation priority (high priority continues even at low FPS) */
   priority?: 'low' | 'normal' | 'high';
-  /** 自動停止条件 */
+  /** Auto-stop conditions */
   autoStop?: {
-    /** 最大実行時間（ミリ秒） */
+    /** Maximum execution time (milliseconds) */
     maxDuration?: number;
-    /** 条件関数（trueで停止） */
+    /** Condition function (stops when true) */
     condition?: () => boolean;
   };
 }
@@ -33,13 +33,13 @@ interface ActiveAnimation {
 }
 
 /**
- * シングルトンアニメーションマネージャー
+ * Singleton Animation Manager
  *
- * 機能:
- * - requestAnimationFrame の統一管理
- * - FPS制限と優先度ベースの実行制御
- * - パフォーマンス監視と自動最適化
- * - デバッグ用統計情報
+ * Features:
+ * - Unified requestAnimationFrame management
+ * - FPS limiting and priority-based execution control
+ * - Performance monitoring and auto-optimization
+ * - Debug statistics
  */
 export class AnimationManager {
   private static instance: AnimationManager;
@@ -47,9 +47,9 @@ export class AnimationManager {
   private isPaused = false;
   private isReducedMotion = false;
   private globalFPSLimit = 60;
-  private performanceThreshold = 16.67; // 60FPS基準
+  private performanceThreshold = 16.67; // 60FPS baseline
 
-  // パフォーマンス統計
+  // Performance statistics
   private stats = {
     totalFrames: 0,
     droppedFrames: 0,
@@ -70,7 +70,7 @@ export class AnimationManager {
   }
 
   /**
-   * アニメーションを登録して実行開始
+   * Register and start animation execution
    */
   public registerAnimation(
     id: string,
@@ -78,12 +78,12 @@ export class AnimationManager {
     options: AnimationOptions = {}
   ): void {
     try {
-      // 既存アニメーションがあれば停止
+      // Stop existing animation if present
       if (this.activeAnimations.has(id)) {
         this.unregisterAnimation(id);
       }
 
-      // オプションのデフォルト値設定
+      // Set default option values
       const fullOptions: Required<AnimationOptions> = {
         fps: options.fps ?? this.globalFPSLimit,
         priority: options.priority ?? 'normal',
@@ -93,7 +93,7 @@ export class AnimationManager {
         },
       };
 
-      // reduced-motion設定時は低優先度アニメーションをスキップ
+      // Skip low priority animations when reduced-motion is enabled
       if (this.isReducedMotion && fullOptions.priority === 'low') {
         return;
       }
@@ -108,7 +108,7 @@ export class AnimationManager {
         frameCount: 0,
       };
 
-      // アニメーション実行ループ
+      // Animation execution loop
       const animate = (currentTime: number) => {
         if (this.isPaused || !this.activeAnimations.has(id)) {
           return;
@@ -117,9 +117,9 @@ export class AnimationManager {
         const targetInterval = 1000 / fullOptions.fps;
         const deltaTime = currentTime - animation.lastFrameTime;
 
-        // FPS制限チェック (初回フレームまたはインターバル経過時)
+        // FPS limit check (first frame or interval elapsed)
         if (animation.lastFrameTime === 0 || deltaTime >= targetInterval) {
-          // 自動停止条件チェック
+          // Auto-stop condition check
           const elapsed = currentTime - animation.startTime;
           const maxDuration = fullOptions.autoStop.maxDuration ?? Infinity;
           if (elapsed >= maxDuration || fullOptions.autoStop.condition?.()) {
@@ -132,7 +132,7 @@ export class AnimationManager {
             animation.frameCount++;
             animation.lastFrameTime = currentTime;
 
-            // パフォーマンス統計更新
+            // Update performance statistics
             this.updatePerformanceStats(deltaTime);
           } catch (error) {
             handleError(
@@ -166,7 +166,7 @@ export class AnimationManager {
   }
 
   /**
-   * アニメーションの登録解除
+   * Unregister animation
    */
   public unregisterAnimation(id: string): void {
     const animation = this.activeAnimations.get(id);
@@ -177,7 +177,7 @@ export class AnimationManager {
   }
 
   /**
-   * 全アニメーションの一時停止
+   * Pause all animations
    */
   public pauseAll(): void {
     this.isPaused = true;
@@ -187,20 +187,20 @@ export class AnimationManager {
   }
 
   /**
-   * 全アニメーションの再開
+   * Resume all animations
    */
   public resumeAll(): void {
     if (!this.isPaused) return;
 
     this.isPaused = false;
     this.activeAnimations.forEach((animation, id) => {
-      // 再開時は新しいrequestAnimationFrameを開始
+      // Start new requestAnimationFrame on resume
       this.registerAnimation(id, animation.callback, animation.options);
     });
   }
 
   /**
-   * 低優先度アニメーションの停止（パフォーマンス最適化）
+   * Stop low priority animations (performance optimization)
    */
   public pauseLowPriorityAnimations(): void {
     this.activeAnimations.forEach((animation, id) => {
@@ -211,7 +211,7 @@ export class AnimationManager {
   }
 
   /**
-   * 全アニメーションの強制停止
+   * Force stop all animations
    */
   public stopAll(): void {
     this.activeAnimations.forEach((animation) => {
@@ -221,7 +221,7 @@ export class AnimationManager {
   }
 
   /**
-   * アクセシビリティ設定の更新
+   * Update accessibility settings
    */
   public setReducedMotion(enabled: boolean): void {
     this.isReducedMotion = enabled;
@@ -231,14 +231,14 @@ export class AnimationManager {
   }
 
   /**
-   * グローバルFPS制限の設定
+   * Set global FPS limit
    */
   public setGlobalFPSLimit(fps: number): void {
     this.globalFPSLimit = Math.max(1, Math.min(120, fps));
   }
 
   /**
-   * デバッグ用統計情報取得
+   * Get debug statistics
    */
   public getStats() {
     return {
@@ -251,15 +251,15 @@ export class AnimationManager {
   }
 
   /**
-   * 初期設定の読み込み
+   * Load initial settings
    */
   private initializeSettings(): void {
-    // prefers-reduced-motion の検出
+    // Detect prefers-reduced-motion
     if (typeof window !== 'undefined') {
       const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
       this.isReducedMotion = mediaQuery.matches;
 
-      // 設定変更の監視
+      // Monitor setting changes
       mediaQuery.addEventListener('change', (e) => {
         this.setReducedMotion(e.matches);
       });
@@ -267,17 +267,17 @@ export class AnimationManager {
   }
 
   /**
-   * パフォーマンス監視の開始
+   * Start performance monitoring
    */
   private startPerformanceMonitoring(): void {
-    // 5秒間隔でパフォーマンスチェック
+    // Performance check at 5-second intervals
     setInterval(() => {
       this.checkPerformance();
     }, 5000);
   }
 
   /**
-   * パフォーマンス統計の更新
+   * Update performance statistics
    */
   private updatePerformanceStats(frameTime: number): void {
     this.stats.totalFrames++;
@@ -286,12 +286,12 @@ export class AnimationManager {
       this.stats.droppedFrames++;
     }
 
-    // 移動平均でフレーム時間を計算
+    // Calculate frame time with moving average
     this.stats.averageFrameTime = this.stats.averageFrameTime * 0.9 + frameTime * 0.1;
   }
 
   /**
-   * パフォーマンスチェックと自動最適化
+   * Performance check and auto-optimization
    */
   private checkPerformance(): void {
     const now = performance.now();
@@ -299,14 +299,14 @@ export class AnimationManager {
 
     const dropRate = this.stats.droppedFrames / this.stats.totalFrames;
 
-    // フレームドロップ率が20%を超える場合、自動最適化
+    // Auto-optimize when frame drop rate exceeds 20%
     if (dropRate > 0.2) {
       console.warn(
         `AnimationManager: High frame drop rate (${(dropRate * 100).toFixed(1)}%). Optimizing...`
       );
       this.pauseLowPriorityAnimations();
 
-      // グローバルFPS制限を下げる
+      // Lower global FPS limit
       if (this.globalFPSLimit > 30) {
         this.setGlobalFPSLimit(this.globalFPSLimit - 10);
       }
@@ -316,5 +316,5 @@ export class AnimationManager {
   }
 }
 
-// シングルトンインスタンスのエクスポート
+// Export singleton instance
 export const animationManager = AnimationManager.getInstance();

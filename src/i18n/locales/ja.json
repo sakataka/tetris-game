@@ -149,7 +149,8 @@
     "accentColor": "アクセント色",
     "advancedSettings": "詳細設定",
     "collapse": "折りたたむ",
-    "preview": "プレビュー"
+    "preview": "プレビュー",
+    "resetToDefaults": "デフォルトに戻す"
   },
   "accessibility": {
     "colorVisionSupport": "色覚対応",

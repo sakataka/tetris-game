@@ -1,6 +1,6 @@
 /**
- * エラーハンドリングユーティリティ
- * 統一されたエラー処理とロギング機能を提供
+ * Error Handling Utilities
+ * Provides unified error processing and logging functionality
  */
 
 import {
@@ -18,7 +18,7 @@ import {
   ValidationError,
 } from '../../types/errors';
 
-// エラーハンドラーのシングルトンクラス
+// Singleton class for error handler
 class ErrorHandlerService {
   private config: ErrorReportConfig = DEFAULT_ERROR_CONFIG;
   private errorHistory: ErrorInfo[] = [];
@@ -30,43 +30,43 @@ class ErrorHandlerService {
     this.setupGlobalErrorHandling();
   }
 
-  // 設定の更新
+  // Update configuration
   public updateConfig(newConfig: Partial<ErrorReportConfig>): void {
     this.config = { ...this.config, ...newConfig };
   }
 
-  // エラーハンドラーの登録
+  // Register error handler
   public registerHandler(category: ErrorCategory, handler: ErrorHandler): void {
     this.errorHandlers.set(category, handler);
   }
 
-  // エラー発生時のコールバック登録
+  // Register callback for error occurrence
   public onError(callback: (error: ErrorInfo) => void): () => void {
     this.onErrorCallbacks.add(callback);
 
-    // アンサブスクライブ関数を返す
+    // Return unsubscribe function
     return () => {
       this.onErrorCallbacks.delete(callback);
     };
   }
 
-  // メインエラーハンドリング関数
+  // Main error handling function
   public handleError(error: Error | BaseAppError): ErrorHandlingResult {
     const appError = this.normalizeError(error);
     const errorInfo = appError.toErrorInfo();
 
-    // エラー履歴に追加
+    // Add to error history
     this.addToHistory(errorInfo);
 
-    // コンソールログ出力
+    // Console log output
     if (this.config.enableConsoleLogging) {
       this.logToConsole(errorInfo);
     }
 
-    // 登録されたコールバックを実行
+    // Execute registered callbacks
     this.notifyCallbacks(errorInfo);
 
-    // カテゴリ別ハンドラーを実行
+    // Execute category-specific handler
     const handler = this.errorHandlers.get(errorInfo.category);
     let result: ErrorHandlingResult = {
       handled: false,
@@ -87,7 +87,7 @@ class ErrorHandlerService {
       }
     }
 
-    // クリティカルエラーの自動レポート
+    // Automatic reporting of critical errors
     if (this.config.autoReportCritical && errorInfo.level === 'critical') {
       this.reportCriticalError(errorInfo);
     }
@@ -95,7 +95,7 @@ class ErrorHandlerService {
     return result;
   }
 
-  // 非同期エラーハンドリング
+  // Asynchronous error handling
   public async handleAsyncError(
     asyncFn: () => Promise<unknown>,
     context: Partial<{ component: string; action: string }> = {}
@@ -115,7 +115,7 @@ class ErrorHandlerService {
     }
   }
 
-  // 関数実行時のエラーハンドリング
+  // Error handling during function execution
   public withErrorHandling<T extends unknown[], R>(
     fn: (...args: T) => R,
     context: Partial<{ component: string; action: string }> = {}
@@ -145,7 +145,7 @@ class ErrorHandlerService {
     };
   }
 
-  // エラー統計の取得
+  // Get error statistics
   public getErrorStats() {
     const stats = {
       totalErrors: this.errorHistory.length,
@@ -158,7 +158,7 @@ class ErrorHandlerService {
           : undefined,
     };
 
-    // カテゴリ別とレベル別の集計
+    // Aggregation by category and level
     this.errorHistory.forEach((error) => {
       stats.errorsByCategory[error.category] = (stats.errorsByCategory[error.category] || 0) + 1;
       stats.errorsByLevel[error.level] = (stats.errorsByLevel[error.level] || 0) + 1;
@@ -167,12 +167,12 @@ class ErrorHandlerService {
     return stats;
   }
 
-  // エラー履歴のクリア
+  // Clear error history
   public clearErrorHistory(): void {
     this.errorHistory = [];
   }
 
-  // 特定エラーの解決マーク
+  // Mark specific error as resolved
   public resolveError(errorId: string): boolean {
     const index = this.errorHistory.findIndex((error) => error.id === errorId);
     if (index !== -1) {
@@ -182,7 +182,7 @@ class ErrorHandlerService {
     return false;
   }
 
-  // プライベートメソッド群
+  // Private methods
 
   private normalizeError(
     error: Error | BaseAppError,
@@ -192,7 +192,7 @@ class ErrorHandlerService {
       return error;
     }
 
-    // 一般的なErrorをBaseAppErrorに変換
+    // Convert general Error to BaseAppError
     if (error.name === 'TypeError') {
       return new ValidationError(error.message, context, { cause: error });
     }
@@ -205,14 +205,14 @@ class ErrorHandlerService {
       return new NetworkError(error.message, context, { cause: error });
     }
 
-    // デフォルトはGameErrorとして処理
+    // Process as GameError by default
     return new GameError(error.message, context, { cause: error });
   }
 
   private addToHistory(errorInfo: ErrorInfo): void {
     this.errorHistory.push(errorInfo);
 
-    // 履歴サイズの制限
+    // Limit history size
     if (this.errorHistory.length > this.config.maxStoredErrors) {
       this.errorHistory.shift();
     }
@@ -279,55 +279,55 @@ class ErrorHandlerService {
   }
 
   private initializeDefaultHandlers(): void {
-    // ゲームエラーハンドラー
+    // Game error handler
     this.registerHandler(
       'game',
       (error: BaseAppError): ErrorHandlingResult => ({
         handled: true,
         retry: error.retryable,
         fallback: () => {
-          // ゲーム状態のリセットなど
+          // Reset game state, etc.
           console.log('Game error fallback executed');
         },
       })
     );
 
-    // 音声エラーハンドラー
+    // Audio error handler
     this.registerHandler(
       'audio',
       (): ErrorHandlingResult => ({
         handled: true,
-        retry: true, // 音声は通常リトライ可能
+        retry: true, // Audio is usually retryable
         userNotification: {
-          message: '音声の再生に失敗しました。しばらく後にお試しください。',
+          message: 'Audio playback failed. Please try again later.',
           level: 'warning',
           duration: 3000,
         },
       })
     );
 
-    // ストレージエラーハンドラー
+    // Storage error handler
     this.registerHandler(
       'storage',
       (): ErrorHandlingResult => ({
         handled: true,
         retry: false,
         userNotification: {
-          message: 'データの保存に失敗しました。ブラウザの設定をご確認ください。',
+          message: 'Data save failed. Please check your browser settings.',
           level: 'warning',
           duration: 5000,
         },
       })
     );
 
-    // ネットワークエラーハンドラー
+    // Network error handler
     this.registerHandler(
       'network',
       (): ErrorHandlingResult => ({
         handled: true,
         retry: true,
         userNotification: {
-          message: 'ネットワークエラーが発生しました。接続を確認してください。',
+          message: 'Network error occurred. Please check your connection.',
           level: 'error',
           duration: 5000,
         },
@@ -336,7 +336,7 @@ class ErrorHandlerService {
   }
 
   private setupGlobalErrorHandling(): void {
-    // グローバルなunhandled promise rejectionをキャッチ
+    // Catch global unhandled promise rejections
     if (typeof window !== 'undefined') {
       window.addEventListener('unhandledrejection', (event) => {
         const error = new SystemError(`Unhandled Promise Rejection: ${event.reason}`, {
@@ -345,7 +345,7 @@ class ErrorHandlerService {
         this.handleError(error);
       });
 
-      // グローバルエラーをキャッチ
+      // Catch global errors
       window.addEventListener('error', (event) => {
         const error = new SystemError(event.message, {
           action: 'global_error',
@@ -361,17 +361,17 @@ class ErrorHandlerService {
   }
 }
 
-// シングルトンインスタンス
+// Singleton instance
 export const errorHandler = new ErrorHandlerService();
 
-// 便利な関数エクスポート
+// Convenient function exports
 export const handleError = errorHandler.handleError.bind(errorHandler);
 export const handleAsyncError = errorHandler.handleAsyncError.bind(errorHandler);
 export const withErrorHandling = errorHandler.withErrorHandling.bind(errorHandler);
 export const onError = errorHandler.onError.bind(errorHandler);
 export const getErrorStats = errorHandler.getErrorStats.bind(errorHandler);
 
-// エラークラスのre-export
+// Re-export error classes
 export {
   BaseAppError,
   GameError,

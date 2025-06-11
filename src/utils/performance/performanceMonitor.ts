@@ -1,5 +1,5 @@
 /**
- * パフォーマンス監視ユーティリティ
+ * Performance Monitoring Utilities
  */
 
 interface PerformanceMetrics {
@@ -30,7 +30,7 @@ class PerformanceMonitor {
   constructor(config: PerformanceConfig = {}) {
     this.sampleSize = config.sampleSize || 60;
     this.enableMemoryMonitoring = config.enableMemoryMonitoring ?? true;
-    this.logInterval = config.logInterval || 1000; // 1秒間隔
+    this.logInterval = config.logInterval || 1000; // 1-second interval
   }
 
   startFrame(): void {
@@ -49,11 +49,11 @@ class PerformanceMonitor {
     const deltaTime = now - this.lastTime;
     this.frameCount++;
 
-    // フレーム時間を記録
+    // Record frame time
     this.frameTimes.push(deltaTime);
     this.renderTimes.push(renderTime);
 
-    // サンプルサイズを超えた場合、古いデータを削除
+    // Remove old data when sample size is exceeded
     if (this.frameTimes.length > this.sampleSize) {
       this.frameTimes.shift();
       this.renderTimes.shift();
@@ -63,7 +63,7 @@ class PerformanceMonitor {
 
     const metrics = this.getMetrics(particleCount);
 
-    // 定期的にログ出力
+    // Periodic log output
     if (now - this.lastLogTime > this.logInterval) {
       this.logMetrics(metrics);
       this.lastLogTime = now;
@@ -92,7 +92,7 @@ class PerformanceMonitor {
       particleCount,
     };
 
-    // メモリ使用量の監視（対応ブラウザのみ）
+    // Memory usage monitoring (supported browsers only)
     if (this.enableMemoryMonitoring && 'memory' in performance) {
       const memory = (performance as Performance & { memory?: { usedJSHeapSize: number } }).memory;
       if (memory?.usedJSHeapSize) {
@@ -133,7 +133,7 @@ class PerformanceMonitor {
     this.lastLogTime = 0;
   }
 
-  // FPS警告レベルの判定
+  // Determine FPS warning level
   getPerformanceLevel(fps: number): 'excellent' | 'good' | 'fair' | 'poor' {
     if (fps >= 55) return 'excellent';
     if (fps >= 45) return 'good';
@@ -141,35 +141,31 @@ class PerformanceMonitor {
     return 'poor';
   }
 
-  // パフォーマンス推奨事項
+  // Performance recommendations
   getRecommendations(metrics: PerformanceMetrics): string[] {
     const recommendations: string[] = [];
 
     if (metrics.fps < 30) {
-      recommendations.push(
-        'フレームレートが低下しています。パーティクル数を減らすことを検討してください。'
-      );
+      recommendations.push('Frame rate is low. Consider reducing the number of particles.');
     }
 
     if (metrics.renderTime > 16) {
-      recommendations.push('レンダリング時間が長すぎます。Canvas APIの使用を検討してください。');
+      recommendations.push('Rendering time is too long. Consider using Canvas API.');
     }
 
     if (metrics.particleCount > 100) {
-      recommendations.push(
-        'パーティクル数が多すぎます。オブジェクトプールの最適化を検討してください。'
-      );
+      recommendations.push('Too many particles. Consider optimizing object pool.');
     }
 
     if (metrics.memoryUsage && metrics.memoryUsage > 50) {
-      recommendations.push('メモリ使用量が多いです。不要なオブジェクトの解放を確認してください。');
+      recommendations.push('High memory usage. Check for unnecessary object releases.');
     }
 
     return recommendations;
   }
 }
 
-// シングルトンインスタンス
+// Singleton instance
 export const performanceMonitor = new PerformanceMonitor({
   sampleSize: 60,
   enableMemoryMonitoring: true,
