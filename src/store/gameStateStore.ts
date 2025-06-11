@@ -123,7 +123,7 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
         lineEffect: {
           flashingLines: [],
           shaking: false,
-          particles: state.gameState.lineEffect.particles, // Preserve particles
+          particles: [], // Clear particles too
         },
       },
     })),

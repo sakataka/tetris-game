@@ -20,7 +20,8 @@ export function useGameControls({
   gameState,
   actions,
   playSound,
-  onStateChange,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onStateChange: _onStateChange,
 }: UseGameControlsProps) {
   const movePiece = useCallback(
     (dir: { x: number; y: number }) => {
@@ -36,8 +37,8 @@ export function useGameControls({
       const isValid = isValidPosition(gameState.board, gameState.currentPiece, newPosition);
 
       if (isValid) {
-        const newState = actions.onPieceMove(gameState, newPosition);
-        onStateChange(newState);
+        actions.onPieceMove(gameState, newPosition);
+        // onStateChange not needed as Zustand store is updated directly
       } else if (dir.y > 0) {
         // Piece hit bottom, place it
         // Sound playback is handled within calculatePiecePlacementState, not here
@@ -45,7 +46,7 @@ export function useGameControls({
         // onStateChange is omitted as calculatePiecePlacementState directly updates Zustand store
       }
     },
-    [gameState, actions, onStateChange]
+    [gameState, actions]
   );
 
   const rotatePieceClockwise = useCallback(() => {
@@ -57,10 +58,10 @@ export function useGameControls({
 
     if (isValidPosition(gameState.board, rotatedPiece, rotatedPiece.position)) {
       playSound('pieceRotate');
-      const newState = actions.onPieceRotate(gameState, rotatedPiece);
-      onStateChange(newState);
+      actions.onPieceRotate(gameState, rotatedPiece);
+      // onStateChange not needed as Zustand store is updated directly
     }
-  }, [gameState, actions, playSound, onStateChange]);
+  }, [gameState, actions, playSound]);
 
   const dropPiece = useCallback(() => {
     movePiece({ x: 0, y: 1 });

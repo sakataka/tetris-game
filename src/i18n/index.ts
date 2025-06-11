@@ -34,9 +34,9 @@ if (typeof window !== 'undefined') {
       lng: defaultLanguage,
       fallbackLng: defaultLanguage,
 
-      // Language detection options
+      // Language detection options - force English as default
       detection: {
-        order: ['localStorage', 'navigator', 'htmlTag'],
+        order: ['localStorage'],
         caches: ['localStorage'],
         lookupLocalStorage: 'tetris-language',
       },

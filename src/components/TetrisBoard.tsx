@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { Tetromino, LineEffectState } from '../types/tetris';
 import { BoardRendererFactory } from '../utils/game/boardRenderer';
 import { BoardRenderState, RenderEffects, DEFAULT_RENDERING_OPTIONS } from '../types/rendering';
@@ -17,7 +17,7 @@ interface TetrisBoardProps {
   onParticleUpdate: (particles: LineEffectState['particles']) => void;
 }
 
-const TetrisBoard = function TetrisBoard({
+const TetrisBoard = memo(function TetrisBoard({
   board,
   currentPiece,
   gameOver,
@@ -30,14 +30,17 @@ const TetrisBoard = function TetrisBoard({
     return BoardRendererFactory.createRenderer();
   }, []);
 
-  // Prepare render state and effects (no memoization to ensure updates)
-  const renderState: BoardRenderState = {
-    board,
-    currentPiece,
-    gameOver,
-    isPaused,
-    lineEffect,
-  };
+  // Prepare render state and effects
+  const renderState = useMemo(
+    (): BoardRenderState => ({
+      board,
+      currentPiece,
+      gameOver,
+      isPaused,
+      lineEffect,
+    }),
+    [board, currentPiece, gameOver, isPaused, lineEffect]
+  );
 
   const renderEffects = useMemo(
     (): RenderEffects => ({
@@ -48,11 +51,15 @@ const TetrisBoard = function TetrisBoard({
     [lineEffect.flashingLines, lineEffect.shaking, lineEffect.particles]
   );
 
-  // Generate display board using BoardRenderer (no memoization)
-  const displayBoard = boardRenderer.renderBoard(renderState, DEFAULT_RENDERING_OPTIONS);
+  // Generate display board using BoardRenderer
+  const displayBoard = useMemo(() => {
+    return boardRenderer.renderBoard(renderState, DEFAULT_RENDERING_OPTIONS);
+  }, [boardRenderer, renderState]);
 
-  // Calculate styles for all cells using BoardRenderer (no memoization)
-  const cellStyles = boardRenderer.renderDisplayBoard(displayBoard, renderEffects);
+  // Calculate styles for all cells using BoardRenderer
+  const cellStyles = useMemo(() => {
+    return boardRenderer.renderDisplayBoard(displayBoard, renderEffects);
+  }, [boardRenderer, displayBoard, renderEffects]);
 
   // Get board container styles from renderer
   const boardContainerStyle = useMemo(() => {
@@ -92,6 +99,6 @@ const TetrisBoard = function TetrisBoard({
       {isPaused && !gameOver && <PausedMessage />}
     </div>
   );
-};
+});
 
 export default TetrisBoard;

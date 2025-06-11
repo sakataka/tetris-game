@@ -14,6 +14,7 @@ import {
   useResetGame,
   useTogglePause,
   useSetDropTime,
+  useUpdateLineEffect,
   useCalculatePiecePlacementState,
   useMovePieceToPosition,
   useRotatePieceTo,
@@ -60,6 +61,7 @@ export function GameStateController({
   const resetGame = useResetGame();
   const togglePause = useTogglePause();
   const setDropTime = useSetDropTime();
+  const updateLineEffect = useUpdateLineEffect();
   const clearLineEffect = useClearLineEffect();
 
   // Game action functions
@@ -67,22 +69,39 @@ export function GameStateController({
   const movePieceToPosition = useMovePieceToPosition();
   const rotatePieceTo = useRotatePieceTo();
 
-  // Line clear effect auto-cleanup
+  // Line clear effect auto-cleanup - fast and synchronized
   useEffect(() => {
-    const hasActiveEffects =
-      gameState.lineEffect.flashingLines.length > 0 ||
-      gameState.lineEffect.particles.some((p) => p.life > 0);
+    const hasFlashingLines = gameState.lineEffect.flashingLines.length > 0;
+    const hasShaking = gameState.lineEffect.shaking;
 
-    if (hasActiveEffects) {
-      const timeoutId = setTimeout(() => {
-        clearLineEffect();
+    // Fast cleanup for flash and shake effects
+    if (hasFlashingLines || hasShaking) {
+      const flashTimeoutId = setTimeout(() => {
+        // Clear flash and shake simultaneously after short duration
+        updateLineEffect({ flashingLines: [], shaking: false });
       }, EFFECTS.FLASH_DURATION);
 
-      return () => clearTimeout(timeoutId);
+      return () => clearTimeout(flashTimeoutId);
+    }
+
+    // Quick cleanup for particles - don't wait for natural death
+    const hasParticles = gameState.lineEffect.particles.length > 0;
+    if (hasParticles && !hasFlashingLines && !hasShaking) {
+      const particleCleanupId = setTimeout(() => {
+        clearLineEffect();
+      }, EFFECTS.FLASH_DURATION + 100); // Just 100ms after flash ends
+
+      return () => clearTimeout(particleCleanupId);
     }
 
     return undefined;
-  }, [gameState.lineEffect.flashingLines, gameState.lineEffect.particles, clearLineEffect]);
+  }, [
+    gameState.lineEffect.flashingLines,
+    gameState.lineEffect.shaking,
+    gameState.lineEffect.particles,
+    clearLineEffect,
+    updateLineEffect,
+  ]);
 
   // Piece control actions
   const pieceControlActions = useMemo(() => {

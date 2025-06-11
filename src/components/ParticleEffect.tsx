@@ -35,12 +35,16 @@ const Particle = memo(function Particle({
     const blur = (1 - lifeRatio) * 2;
     const rotation = particle.life * 5;
 
+    // Accelerated fade out - exponential decay for quicker disappearance
+    const fadeRatio = lifeRatio < 0.5 ? lifeRatio * lifeRatio * 4 : lifeRatio;
+    const opacity = fadeRatio * PARTICLE_OPACITY_MULTIPLIER;
+
     return {
       left: `${particle.x}px`,
       top: `${particle.y}px`,
       width: `${2 + scale}px`,
       height: `${2 + scale}px`,
-      opacity: lifeRatio * PARTICLE_OPACITY_MULTIPLIER,
+      opacity,
       transform: `scale(${scale}) rotate(${rotation}deg)`,
       filter: `blur(${blur}px)`,
       // CSS custom properties for performance optimization
@@ -145,6 +149,7 @@ const ParticleEffect = memo(function ParticleEffect({
       particlePool.releaseParticles(expired);
     }
 
+    // Update particles and check if all are finished
     onParticleUpdate(updated);
 
     // Performance monitoring and automatic renderer switching

@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-// import { useTimerAnimation, ANIMATION_PRESETS } from '../utils/animation';
 
 interface UseGameTimerProps {
   isActive: boolean;
@@ -8,10 +7,7 @@ interface UseGameTimerProps {
 }
 
 /**
- * Game timer hook
- *
- * Migrated from traditional setInterval to unified animation management system,
- * improving performance and behavior when tab is inactive
+ * Game timer hook with simple setInterval implementation for debugging
  */
 export function useGameTimer({ isActive, interval, onTick }: UseGameTimerProps) {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);

@@ -6,9 +6,9 @@
 
 // Particle physics settings
 export const PARTICLE_PHYSICS = {
-  GRAVITY: 0.2,
+  GRAVITY: 0.5, // increased from 0.2 to 0.5 for faster falling
   MAX_Y: 500,
-  LIFE_DURATION: 60, // frames
+  LIFE_DURATION: 20, // frames (reduced from 60 to 20 - about 0.33 seconds at 60fps)
   SCALE_BASE: 0.5,
   SCALE_MULTIPLIER: 1.5,
   OPACITY_MULTIPLIER: 0.9,
@@ -17,9 +17,9 @@ export const PARTICLE_PHYSICS = {
 
 // Particle system settings
 export const PARTICLE_CONFIG = {
-  GRAVITY: 0.2,
+  GRAVITY: 0.5, // sync with PARTICLE_PHYSICS.GRAVITY
   MAX_Y: 500,
-  LIFE_MAX: 60,
+  LIFE_MAX: 20, // sync with PARTICLE_PHYSICS.LIFE_DURATION
   SCALE_BASE: 1.0,
   OPACITY_MULTIPLIER: 0.8,
   COUNT_PER_LINE: 15,

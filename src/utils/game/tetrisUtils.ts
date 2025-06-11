@@ -37,7 +37,7 @@ export function rotatePiece(piece: Tetromino): Tetromino {
 }
 
 function isWithinBounds(x: number, y: number): boolean {
-  return x >= 0 && x < BOARD_WIDTH && y < BOARD_HEIGHT;
+  return x >= 0 && x < BOARD_WIDTH && y >= 0 && y < BOARD_HEIGHT;
 }
 
 function checkPieceBounds(piece: Tetromino, newPosition: { x: number; y: number }): boolean {

@@ -10,8 +10,8 @@ export const BOARD_HEIGHT = 20;
 
 // Effects and animation settings
 export const EFFECTS = {
-  FLASH_DURATION: 300,
-  SHAKE_DURATION: 200,
+  FLASH_DURATION: 80, // very short flash for instant feel
+  SHAKE_DURATION: 80, // sync with flash duration
   RESET_DELAY: 300, // ms
   NEON_BLUR_SM: '4px',
   NEON_BLUR_MD: '8px',
