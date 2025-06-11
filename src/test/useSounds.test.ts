@@ -37,7 +37,14 @@ const mockAudioState = {
 };
 
 const mockAudioPreloader = {
-  progress: { loaded: 6, total: 6, failed: 0, inProgress: 0, progress: 1.0 },
+  progress: {
+    totalSounds: 6,
+    loadedSounds: 6,
+    failedSounds: 0,
+    isLoading: false,
+    isComplete: true,
+    progressPercentage: 100,
+  },
   loadState: {
     loaded: new Set([
       'lineClear',
@@ -179,8 +186,12 @@ beforeEach(() => {
     'gameOver',
     'hardDrop',
   ] as const);
-  mockAudioPreloader.loadState.failed = new Set();
-  mockAudioPreloader.loadState.loading = new Set();
+  mockAudioPreloader.loadState.failed = new Set() as Set<
+    'lineClear' | 'pieceLand' | 'pieceRotate' | 'tetris' | 'gameOver' | 'hardDrop'
+  >;
+  mockAudioPreloader.loadState.loading = new Set() as Set<
+    'lineClear' | 'pieceLand' | 'pieceRotate' | 'tetris' | 'gameOver' | 'hardDrop'
+  >;
 
   mockAudioPlayer.isPlaybackEnabled = true;
 
