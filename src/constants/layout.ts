@@ -83,7 +83,7 @@ export const TYPOGRAPHY = {
   PANEL_TITLE: 'text-sm', // Main panel titles
   SECTION_HEADER: 'text-xs', // Section headers within panels
   BODY_TEXT: 'text-xs', // Standard body text
-  SMALL_LABEL: 'text-2xs', // Small labels and captions
+  SMALL_LABEL: 'text-xs', // Small labels and captions (improved from text-2xs)
   BUTTON_TEXT: 'text-xs', // Button text
   STAT_VALUE: 'text-xs', // Statistics values
   // Font weights
@@ -94,10 +94,10 @@ export const TYPOGRAPHY = {
 
 // Standardized spacing patterns
 export const SPACING = {
-  PANEL_INTERNAL: 'space-y-1', // Internal panel spacing
+  PANEL_INTERNAL: 'space-y-1.5', // Internal panel spacing (improved from space-y-1)
   SECTION_GAP: 'space-y-2', // Between major sections
-  FORM_ELEMENTS: 'space-y-1.5', // Form element spacing
-  TIGHT: 'space-y-0.5', // Very tight spacing (rare use)
+  FORM_ELEMENTS: 'space-y-2', // Form element spacing (improved from space-y-1.5)
+  TIGHT: 'space-y-1', // Very tight spacing (improved from space-y-0.5)
   LOOSE: 'space-y-3', // Loose spacing for breathing room
   // Margins
   PANEL_TITLE_BOTTOM: 'mb-1', // Space after panel titles

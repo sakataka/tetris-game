@@ -60,12 +60,7 @@ const GameTabContent = memo(function GameTabContent({
       <ControlsPanel size='xs' />
 
       {/* High scores */}
-      <HighScoreDisplay
-        highScores={highScores}
-        maxDisplay={3}
-        className={TYPOGRAPHY.SMALL_LABEL}
-        size='xs'
-      />
+      <HighScoreDisplay highScores={highScores} maxDisplay={3} className='' size='xs' />
 
       {/* Score reference - collapsible */}
       <details className={TYPOGRAPHY.SMALL_LABEL}>

@@ -33,7 +33,7 @@ const ThemeTabContent = memo(function ThemeTabContent({ className = '' }: ThemeT
   });
 
   return (
-    <div className={`space-y-0.5 ${className}`}>
+    <div className={`space-y-1.5 ${className}`}>
       <ThemeSettingsMemo
         currentTheme={themeState.current}
         colors={themeState.config.colors}

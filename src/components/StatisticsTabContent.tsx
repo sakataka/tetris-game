@@ -23,7 +23,7 @@ const StatisticsTabContent = memo(function StatisticsTabContent({
   const sessions: GameSession[] = [];
 
   return (
-    <div className={`space-y-0.5 ${className}`}>
+    <div className={`space-y-1.5 ${className}`}>
       <Suspense
         fallback={
           <div className='flex items-center justify-center p-8'>

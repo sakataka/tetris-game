@@ -4,7 +4,7 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Tetromino } from '../types/tetris';
 import PanelBase from './ui/PanelBase';
-import { GAME_UI_SIZES } from '../constants/layout';
+import { GAME_UI_SIZES, SPACING, TYPOGRAPHY } from '../constants/layout';
 
 interface CombinedStatsNextPanelProps {
   score: number;
@@ -34,28 +34,34 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
       theme='cyan'
       size={size}
     >
-      <div className='grid grid-cols-2 gap-1'>
+      <div className='grid grid-cols-2 gap-2'>
         {/* Score Information */}
-        <div className='space-y-0.5'>
+        <div className={SPACING.TIGHT}>
           <div className='flex justify-between items-center'>
-            <span className='text-gray-300 text-2xs'>{t('game.score')}</span>
-            <span className='font-mono text-xs text-yellow-400 font-bold'>
+            <span className={`text-gray-300 ${TYPOGRAPHY.SMALL_LABEL}`}>{t('game.score')}</span>
+            <span className={`font-mono ${TYPOGRAPHY.STAT_VALUE} text-yellow-400 font-bold`}>
               {score.toLocaleString()}
             </span>
           </div>
           <div className='flex justify-between items-center'>
-            <span className='text-gray-300 text-2xs'>{t('game.level')}</span>
-            <span className='font-mono text-xs text-green-400 font-bold'>{level}</span>
+            <span className={`text-gray-300 ${TYPOGRAPHY.SMALL_LABEL}`}>{t('game.level')}</span>
+            <span className={`font-mono ${TYPOGRAPHY.STAT_VALUE} text-green-400 font-bold`}>
+              {level}
+            </span>
           </div>
           <div className='flex justify-between items-center'>
-            <span className='text-gray-300 text-2xs'>{t('game.lines')}</span>
-            <span className='font-mono text-xs text-blue-400 font-bold'>{lines}</span>
+            <span className={`text-gray-300 ${TYPOGRAPHY.SMALL_LABEL}`}>{t('game.lines')}</span>
+            <span className={`font-mono ${TYPOGRAPHY.STAT_VALUE} text-blue-400 font-bold`}>
+              {lines}
+            </span>
           </div>
         </div>
 
         {/* Next Piece Preview */}
         <div className='flex flex-col items-center justify-center'>
-          <div className='text-2xs text-gray-400 mb-0.5'>{t('game.nextPiece')}</div>
+          <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400 mb-1`}>
+            {t('game.nextPiece')}
+          </div>
           <div className='grid gap-0 w-fit p-1 bg-black/30 rounded border border-purple-400/30'>
             {nextPiece ? (
               nextPiece.shape.map((row, y) => (

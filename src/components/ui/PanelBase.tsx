@@ -73,7 +73,7 @@ const SIZE_CONFIGS: Record<
   }
 > = {
   xs: {
-    padding: 'p-1',
+    padding: 'p-1.5',
     titleSize: 'text-sm',
     titleSpacing: 'mb-1',
   },
