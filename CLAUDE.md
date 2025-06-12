@@ -14,7 +14,8 @@ Production-ready cyberpunk-themed Tetris game built with Next.js 15, TypeScript,
 pnpm dev          # Development server
 pnpm build        # Production build
 pnpm test         # Run tests
-pnpm lint         # ESLint validation
+pnpm lint         # Oxlint validation (9.5x faster)
+pnpm lint:full    # Oxlint + ESLint complete check
 ```
 
 ## Architecture Overview
@@ -163,11 +164,35 @@ export const useSetGameState = () =>
 - **Component Integration**: All UI text internationalized
 - **Accessibility**: ARIA labels and announcements
 
+## Code Quality & Linting
+
+### Oxlint Integration (Rust-based, 50-100x faster)
+
+- **Primary Linter**: Oxlint 1.0 with 500+ rules
+- **Performance**: 7-8ms execution time vs ESLint's 1.4s
+- **Memory Usage**: 78MB vs ESLint's 416MB (5.3x less)
+- **Configuration**: `.oxlintrc.json` with Next.js/React/TypeScript plugins
+
+```bash
+pnpm lint         # Oxlint only (daily development)
+pnpm lint:oxlint  # Oxlint explicit execution
+pnpm lint:eslint  # ESLint only (when needed)
+pnpm lint:full    # Both linters (comprehensive check)
+pnpm lint:fix     # Auto-fix with both linters
+```
+
+### Linting Strategy
+
+- **Development**: Oxlint for instant feedback
+- **Pre-commit**: Oxlint via lint-staged (fast commits)
+- **CI/CD**: Oxlint in pipeline (faster builds)
+- **Comprehensive**: ESLint available when needed
+
 ## Important Notes
 
 - Package manager: pnpm (required)
 - Comments and commits: English only
-- ESLint warnings: Intentional useCallback optimizations
+- Linting: Oxlint primary, ESLint secondary
 - Build before commit: Always run `pnpm build`
 - Git hooks: Pre-commit checks via Husky
 

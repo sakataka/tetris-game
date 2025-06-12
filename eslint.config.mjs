@@ -2,6 +2,7 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { FlatCompat } from '@eslint/eslintrc';
 import sonarjs from 'eslint-plugin-sonarjs';
+import oxlint from 'eslint-plugin-oxlint';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -40,6 +41,8 @@ const eslintConfig = [
       'sonarjs/cognitive-complexity': 'off',
     },
   },
+  // Oxlint統合 - ESLintとの重複ルールを無効化（最後に配置）
+  ...oxlint.buildFromOxlintConfigFile('./.oxlintrc.json'),
 ];
 
 export default eslintConfig;

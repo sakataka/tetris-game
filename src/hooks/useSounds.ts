@@ -86,11 +86,7 @@ export function useSounds({
 
     // Return empty cleanup function for consistent return
     return () => {};
-  }, [
-    audioStrategy.hasInitializationError,
-    audioStrategy.canRetry,
-    audioStrategy.retryInitialization,
-  ]);
+  }, [audioStrategy]); // Use entire audioStrategy object to fix exhaustive-deps
 
   // Legacy audio unlock function for compatibility
   const unlockAudio = useCallback(async () => {

@@ -6,7 +6,11 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "oxlint",
+    "lint:oxlint": "oxlint",
+    "lint:eslint": "next lint",
+    "lint:full": "oxlint && next lint",
+    "lint:fix": "oxlint --fix && next lint --fix",
     "test": "vitest",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
@@ -15,7 +19,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "quality:check": "pnpm lint && pnpm tsc --noEmit && pnpm test:run",
-    "quality:fix": "pnpm format && pnpm lint --fix"
+    "quality:full": "pnpm lint:full && pnpm tsc --noEmit && pnpm test:run",
+    "quality:fix": "pnpm format && pnpm lint:fix"
   },
   "dependencies": {
     "i18next": "^25.2.1",
@@ -42,10 +47,12 @@
     "eslint": "^9",
     "eslint-config-next": "15.3.3",
     "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-oxlint": "^1.1.0",
     "eslint-plugin-sonarjs": "^3.0.2",
     "husky": "^9.1.7",
     "jsdom": "^26.1.0",
     "lint-staged": "^16.1.0",
+    "oxlint": "^1.1.0",
     "prettier": "^3.5.3",
     "tailwindcss": "^4",
     "typescript": "^5",
@@ -54,7 +61,7 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "prettier --write",
-      "eslint --fix"
+      "oxlint --fix"
     ],
     "*.{json,css,md}": [
       "prettier --write"

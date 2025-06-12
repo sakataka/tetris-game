@@ -106,7 +106,7 @@ function createOptimizedBoard(
   startY: number,
   endY: number
 ): (string | null)[][] {
-  const newBoard: (string | null)[][] = new Array(BOARD_HEIGHT);
+  const newBoard: (string | null)[][] = Array.from({ length: BOARD_HEIGHT });
 
   // Copy unmodified rows directly (shallow copy)
   for (let y = 0; y < startY; y++) {

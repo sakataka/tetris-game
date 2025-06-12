@@ -143,7 +143,7 @@ export function detectSystemAccessibilitySettings(): Partial<AccessibilityState>
     if (window.matchMedia('(prefers-contrast: high)').matches) {
       settings.contrast = 'high';
       settings.visual = {
-        ...(settings.visual || {}),
+        ...settings.visual,
         highContrast: true,
       } as VisualAssistance;
     }

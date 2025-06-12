@@ -50,7 +50,7 @@ jobs:
       - name: 🔍 Run type checking
         run: pnpm tsc --noEmit
 
-      - name: 🧹 Run ESLint
+      - name: 🧹 Run Oxlint
         run: pnpm lint
 
       - name: 💅 Check code formatting

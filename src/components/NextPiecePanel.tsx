@@ -18,7 +18,7 @@ const NextPiecePanel = memo(function NextPiecePanel({ nextPiece }: NextPiecePane
       <div className='grid gap-0 w-fit mx-auto p-4 bg-black/30 rounded-lg border border-purple-400/30'>
         {nextPiece ? (
           nextPiece.shape.map((row, y) => (
-            <div key={y} className='flex'>
+            <div key={`next-piece-row-${y}`} className='flex'>
               {row.map((cell, x) => (
                 <div
                   key={`${y}-${x}`}
