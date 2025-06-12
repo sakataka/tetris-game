@@ -51,11 +51,47 @@ export function useAudioStrategy({
     }
   }, []);
 
+  // Test Web Audio API initialization
+  const testWebAudioStrategy = useCallback(async (): Promise<boolean> => {
+    try {
+      await audioManager.initialize();
+      const webAudioState = audioManager.getAudioState();
+
+      if (!webAudioState.initialized) {
+        throw new Error('Web Audio initialization failed');
+      }
+      return true;
+    } catch (webAudioError) {
+      console.warn('Web Audio initialization failed, falling back to HTML Audio:', webAudioError);
+      return false;
+    }
+  }, []);
+
+  // Test HTML Audio capability
+  const testHtmlAudioStrategy = useCallback(async (): Promise<boolean> => {
+    try {
+      const testAudio = new Audio();
+      testAudio.volume = 0;
+      testAudio.muted = true;
+
+      const canPlay = testAudio.canPlayType('audio/mpeg');
+      if (!canPlay) {
+        throw new Error('HTML Audio MP3 support not available');
+      }
+      return true;
+    } catch (htmlAudioError) {
+      console.warn('HTML Audio test failed, falling back to silent mode:', htmlAudioError);
+      return false;
+    }
+  }, []);
+
   // Initialize audio strategy
   const initializeStrategy = useCallback(
-    async (strategy: AudioStrategyType = preferredStrategy) => {
-      if (initializationAttempted.current) return;
-      initializationAttempted.current = true;
+    async (strategy: AudioStrategyType = preferredStrategy, forceRetry: boolean = false) => {
+      // Allow retry if explicitly requested or if initialization failed
+      if (initializationAttempted.current && !forceRetry && strategyState.isInitialized) {
+        return;
+      }
 
       setStrategyState((prev) => ({
         ...prev,
@@ -65,28 +101,28 @@ export function useAudioStrategy({
 
       try {
         const webAudioSupported = enableWebAudio && detectWebAudioSupport();
-
         let finalStrategy: AudioStrategyType = strategy;
 
-        // Strategy selection logic
+        // Strategy selection and testing
         if (strategy === 'webaudio' && !webAudioSupported) {
           finalStrategy = 'htmlaudio';
         }
 
-        // Test Web Audio API initialization if selected
         if (finalStrategy === 'webaudio') {
-          try {
-            // Test if audioManager can initialize Web Audio
-            const webAudioState = audioManager.getAudioState();
-            if (webAudioState.loadedSounds.length === 0) {
-              // Need to initialize, but don't preload here
-              // That's handled by useAudioPreloader
-            }
-          } catch {
-            // Web Audio failed, fallback to HTML Audio
+          const webAudioWorking = await testWebAudioStrategy();
+          if (!webAudioWorking) {
             finalStrategy = 'htmlaudio';
           }
         }
+
+        if (finalStrategy === 'htmlaudio') {
+          const htmlAudioWorking = await testHtmlAudioStrategy();
+          if (!htmlAudioWorking) {
+            finalStrategy = 'silent';
+          }
+        }
+
+        initializationAttempted.current = true;
 
         setStrategyState({
           currentStrategy: finalStrategy,
@@ -95,7 +131,8 @@ export function useAudioStrategy({
           initializationError: null,
         });
       } catch (error) {
-        // Final fallback to silent mode
+        initializationAttempted.current = false;
+
         setStrategyState({
           currentStrategy: 'silent',
           isWebAudioSupported: false,
@@ -105,17 +142,31 @@ export function useAudioStrategy({
         });
       }
     },
-    [preferredStrategy, enableWebAudio, detectWebAudioSupport]
+    [
+      preferredStrategy,
+      enableWebAudio,
+      detectWebAudioSupport,
+      strategyState.isInitialized,
+      testWebAudioStrategy,
+      testHtmlAudioStrategy,
+    ]
   );
 
   // Switch to a different strategy
   const switchStrategy = useCallback(
     async (newStrategy: AudioStrategyType) => {
       initializationAttempted.current = false;
-      await initializeStrategy(newStrategy);
+      await initializeStrategy(newStrategy, true);
     },
     [initializeStrategy]
   );
+
+  // Retry current strategy initialization
+  const retryInitialization = useCallback(async () => {
+    const currentStrategy = strategyState.currentStrategy;
+    initializationAttempted.current = false;
+    await initializeStrategy(currentStrategy, true);
+  }, [initializeStrategy, strategyState.currentStrategy]);
 
   // Get current strategy capabilities
   const getStrategyCapabilities = useCallback(() => {
@@ -148,6 +199,7 @@ export function useAudioStrategy({
     initializeStrategy,
     switchStrategy,
     resetStrategy,
+    retryInitialization,
 
     // Strategy information
     getStrategyCapabilities,
@@ -156,5 +208,9 @@ export function useAudioStrategy({
     isWebAudioActive: strategyState.currentStrategy === 'webaudio',
     isHtmlAudioActive: strategyState.currentStrategy === 'htmlaudio',
     isSilentMode: strategyState.currentStrategy === 'silent',
+
+    // Debug information
+    hasInitializationError: strategyState.initializationError !== null,
+    canRetry: !strategyState.isInitialized || strategyState.initializationError !== null,
   };
 }

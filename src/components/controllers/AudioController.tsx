@@ -10,6 +10,10 @@ export interface AudioSystemAPI {
   volume: number;
   audioSystemStatus: {
     isWebAudioEnabled: boolean;
+    strategy: string;
+    initialized: boolean;
+    hasError: boolean;
+    canRetry: boolean;
     preloadProgress?: {
       total: number;
       loaded: number;
@@ -32,6 +36,7 @@ export interface AudioSystemAPI {
   onVolumeChange: (volume: number) => void;
   onToggleMute: () => void;
   unlockAudio: () => Promise<void>;
+  retryAudioInitialization?: (() => Promise<void>) | undefined;
 }
 
 interface AudioControllerProps {
@@ -64,6 +69,10 @@ export function AudioController({ children }: AudioControllerProps) {
     getDetailedAudioState,
     getPreloadProgress,
     getFallbackStatus,
+    audioSystemStatus,
+    hasInitializationError,
+    canRetryInitialization,
+    retryAudioInitialization,
   } = useSounds({
     initialVolume: settings.volume,
     initialMuted: settings.isMuted,
@@ -94,13 +103,17 @@ export function AudioController({ children }: AudioControllerProps) {
   }, [updateSettings, settings.isMuted, toggleMute]);
 
   // Audio system status computation
-  const audioSystemStatus = useMemo(() => {
+  const enhancedAudioSystemStatus = useMemo(() => {
     const fallbackStatus = getFallbackStatus();
     const detailedState = getDetailedAudioState();
-
     const preloadProgress = getPreloadProgress();
+
     const result: AudioSystemAPI['audioSystemStatus'] = {
       isWebAudioEnabled,
+      strategy: audioSystemStatus.strategy,
+      initialized: audioSystemStatus.initialized,
+      hasError: hasInitializationError,
+      canRetry: canRetryInitialization,
     };
 
     if (preloadProgress) {
@@ -137,17 +150,26 @@ export function AudioController({ children }: AudioControllerProps) {
     }
 
     return result;
-  }, [isWebAudioEnabled, getPreloadProgress, getFallbackStatus, getDetailedAudioState]);
+  }, [
+    isWebAudioEnabled,
+    audioSystemStatus,
+    hasInitializationError,
+    canRetryInitialization,
+    getPreloadProgress,
+    getFallbackStatus,
+    getDetailedAudioState,
+  ]);
 
   // Construct API object
   const audioSystemAPI: AudioSystemAPI = {
     isMuted,
     volume,
-    audioSystemStatus,
+    audioSystemStatus: enhancedAudioSystemStatus,
     playSound: stablePlaySound,
     onVolumeChange: handleVolumeChange,
     onToggleMute: handleToggleMute,
     unlockAudio,
+    ...(canRetryInitialization && { retryAudioInitialization }),
   };
 
   return children(audioSystemAPI);

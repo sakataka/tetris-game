@@ -23,12 +23,13 @@ export function useSounds({
   initialMuted = false,
   useWebAudio = true, // Use Web Audio API by default
 }: UseSoundsProps = {}) {
-  // Use decomposed hooks
+  // Primary hook: Audio strategy (must be initialized first)
   const audioStrategy = useAudioStrategy({
     preferredStrategy: useWebAudio ? 'webaudio' : 'htmlaudio',
     enableWebAudio: useWebAudio,
   });
 
+  // Secondary hooks: Depend on strategy being initialized
   const audioState = useAudioState({
     initialVolume,
     initialMuted,
@@ -37,7 +38,7 @@ export function useSounds({
 
   const audioPreloader = useAudioPreloader({
     strategy: audioStrategy.currentStrategy,
-    autoPreload: true,
+    autoPreload: audioStrategy.isInitialized, // Only preload when strategy is ready
   });
 
   const audioPlayer = useAudioPlayer({
@@ -47,12 +48,38 @@ export function useSounds({
     getHtmlAudioElement: audioPreloader.getHtmlAudioElement,
   });
 
-  // Initialize audio strategy on mount
+  // Initialize audio strategy on mount with proper error handling
   useEffect(() => {
-    if (!audioStrategy.isInitialized) {
-      audioStrategy.initializeStrategy();
+    const initializeAudio = async () => {
+      try {
+        if (!audioStrategy.isInitialized) {
+          await audioStrategy.initializeStrategy();
+        }
+      } catch (error) {
+        console.warn('Audio initialization failed:', error);
+        // Strategy will automatically fallback to silent mode
+      }
+    };
+
+    initializeAudio();
+  }, [audioStrategy]); // Include audioStrategy to satisfy eslint
+
+  // Retry initialization if it failed
+  useEffect(() => {
+    if (audioStrategy.hasInitializationError && audioStrategy.canRetry) {
+      console.warn('Audio initialization error detected, attempting retry...');
+      const retryTimer = setTimeout(() => {
+        audioStrategy.retryInitialization().catch((error) => {
+          console.error('Audio retry failed:', error);
+        });
+      }, 1000); // Retry after 1 second
+
+      return () => clearTimeout(retryTimer);
     }
-  }, [audioStrategy]);
+
+    // Return empty cleanup function for consistent return
+    return () => {};
+  }, [audioStrategy.hasInitializationError, audioStrategy.canRetry, audioStrategy]);
 
   // Legacy audio unlock function for compatibility
   const unlockAudio = useCallback(async () => {
@@ -103,5 +130,20 @@ export function useSounds({
     preloadProgress: audioPreloader.progress,
     canPlayAudio: audioPlayer.isPlaybackEnabled,
     playStats: audioPlayer.getPlayStats(),
+
+    // Debug and recovery features
+    hasInitializationError: audioStrategy.hasInitializationError,
+    initializationError: audioStrategy.initializationError,
+    canRetryInitialization: audioStrategy.canRetry,
+    retryAudioInitialization: audioStrategy.retryInitialization,
+
+    // System status
+    audioSystemStatus: {
+      strategy: audioStrategy.currentStrategy,
+      initialized: audioStrategy.isInitialized,
+      webAudioSupported: audioStrategy.isWebAudioSupported,
+      error: audioStrategy.initializationError,
+      canRetry: audioStrategy.canRetry,
+    },
   };
 }
