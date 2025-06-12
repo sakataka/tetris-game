@@ -78,7 +78,7 @@ const AudioPanel = memo(function AudioPanel({
                 : 'bg-green-500/20 text-green-400 border border-green-400/50'
             }`}
           >
-            {isMuted ? 'OFF' : 'ON'}
+            {isMuted ? t('common.off').toUpperCase() : t('common.on').toUpperCase()}
           </button>
         </div>
         <div className='flex justify-between items-center'>
@@ -93,7 +93,9 @@ const AudioPanel = memo(function AudioPanel({
                 : 'bg-gray-500/20 text-gray-400 border border-gray-400/50'
             }`}
           >
-            {settings.virtualControlsEnabled ? 'ON' : 'OFF'}
+            {settings.virtualControlsEnabled
+              ? t('common.on').toUpperCase()
+              : t('common.off').toUpperCase()}
           </button>
         </div>
 
@@ -114,7 +116,7 @@ const AudioPanel = memo(function AudioPanel({
                     : 'bg-yellow-500/20 text-yellow-400'
                 }`}
               >
-                {audioStatus.isWebAudioEnabled ? 'Web Audio API' : 'HTML Audio'}
+                {audioStatus.isWebAudioEnabled ? t('audio.webAudioApi') : t('audio.htmlAudio')}
               </span>
             </div>
 
@@ -135,7 +137,7 @@ const AudioPanel = memo(function AudioPanel({
                 </div>
                 {audioStatus.preloadProgress.failed > 0 && (
                   <span className='text-red-400 text-xs'>
-                    {audioStatus.preloadProgress.failed} failed
+                    {audioStatus.preloadProgress.failed} {t('common.failed').toLowerCase()}
                   </span>
                 )}
               </div>
@@ -153,7 +155,9 @@ const AudioPanel = memo(function AudioPanel({
                         : 'bg-red-500/20 text-red-400'
                     }`}
                   >
-                    {audioStatus.detailedState.initialized ? 'Ready' : 'Loading'}
+                    {audioStatus.detailedState.initialized
+                      ? t('common.ready')
+                      : t('common.loading')}
                   </span>
                 </div>
                 <div className='flex justify-between items-center'>
@@ -174,7 +178,7 @@ const AudioPanel = memo(function AudioPanel({
                 )}
                 {audioStatus.detailedState.suspended && (
                   <div className='text-xs text-yellow-400 text-center pt-1'>
-                    Tap to unlock audio
+                    {t('audio.tapToUnlock')}
                   </div>
                 )}
               </div>
@@ -186,13 +190,13 @@ const AudioPanel = memo(function AudioPanel({
                 <div className='flex justify-between items-center'>
                   <span className='text-gray-300 text-xs md:text-sm'>{t('settings.fallback')}</span>
                   <span className='font-mono text-xs text-cyan-400'>
-                    Level {audioStatus.fallbackStatus.currentLevel + 1}
+                    {t('common.level')} {audioStatus.fallbackStatus.currentLevel + 1}
                   </span>
                 </div>
                 <div className='text-xs text-gray-400'>
                   {audioStatus.fallbackStatus.availableLevels[
                     audioStatus.fallbackStatus.currentLevel
-                  ] || 'Unknown'}
+                  ] || t('common.unknown')}
                 </div>
                 {audioStatus.fallbackStatus.silentMode && (
                   <div className='text-xs text-red-400 text-center'>

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ColorBlindnessType, ContrastLevel, AnimationIntensity } from '../types/tetris';
 
 interface AccessibilitySettingsProps {
@@ -25,6 +26,7 @@ export default function AccessibilitySettings({
   onSettingsChange,
   className = '',
 }: AccessibilitySettingsProps) {
+  const { t } = useTranslation();
   const handleColorBlindnessChange = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       onSettingsChange({ colorBlindnessType: event.target.value as ColorBlindnessType });
@@ -59,33 +61,35 @@ export default function AccessibilitySettings({
   }, [reducedMotion, onSettingsChange]);
 
   const colorBlindnessOptions = [
-    { value: 'none', label: 'なし（標準）' },
-    { value: 'protanopia', label: '1型色覚（赤色盲）' },
-    { value: 'deuteranopia', label: '2型色覚（緑色盲）' },
-    { value: 'tritanopia', label: '3型色覚（青色盲）' },
+    { value: 'none', label: t('accessibility.none') },
+    { value: 'protanopia', label: t('accessibility.protanopia') },
+    { value: 'deuteranopia', label: t('accessibility.deuteranopia') },
+    { value: 'tritanopia', label: t('accessibility.tritanopia') },
   ];
 
   const contrastOptions = [
-    { value: 'low', label: '低コントラスト' },
-    { value: 'normal', label: '標準' },
-    { value: 'high', label: '高コントラスト' },
+    { value: 'low', label: t('accessibility.lowContrast') },
+    { value: 'normal', label: t('accessibility.standard') },
+    { value: 'high', label: t('accessibility.highContrast') },
   ];
 
   const animationOptions = [
-    { value: 'none', label: 'アニメーションなし' },
-    { value: 'reduced', label: '控えめ' },
-    { value: 'normal', label: '標準' },
-    { value: 'enhanced', label: '強化' },
+    { value: 'none', label: t('accessibility.noAnimation') },
+    { value: 'reduced', label: t('accessibility.reduced') },
+    { value: 'normal', label: t('accessibility.standard') },
+    { value: 'enhanced', label: t('accessibility.enhanced') },
   ];
 
   return (
     <div className={`accessibility-settings ${className}`}>
-      <h3 className='text-lg font-bold text-cyber-cyan mb-4'>アクセシビリティ設定</h3>
+      <h3 className='text-lg font-bold text-cyber-cyan mb-4'>{t('settings.accessibility')}</h3>
 
       <div className='space-y-4'>
         {/* Color blindness support */}
         <div>
-          <label className='block text-sm font-medium mb-2 text-cyber-cyan'>色覚対応</label>
+          <label className='block text-sm font-medium mb-2 text-cyber-cyan'>
+            {t('accessibility.colorVisionSupport')}
+          </label>
           <select
             value={colorBlindnessType}
             onChange={handleColorBlindnessChange}
@@ -104,13 +108,15 @@ export default function AccessibilitySettings({
             ))}
           </select>
           <p className='text-xs text-cyber-purple mt-1'>
-            色覚の特性に応じてカラーパレットを調整します
+            {t('accessibility.colorVisionSupportDescription')}
           </p>
         </div>
 
         {/* Contrast settings */}
         <div>
-          <label className='block text-sm font-medium mb-2 text-cyber-cyan'>コントラスト</label>
+          <label className='block text-sm font-medium mb-2 text-cyber-cyan'>
+            {t('accessibility.contrast')}
+          </label>
           <select
             value={contrast}
             onChange={handleContrastChange}
@@ -128,13 +134,13 @@ export default function AccessibilitySettings({
               </option>
             ))}
           </select>
-          <p className='text-xs text-cyber-purple mt-1'>テキストと背景のコントラストを調整します</p>
+          <p className='text-xs text-cyber-purple mt-1'>{t('accessibility.contrastDescription')}</p>
         </div>
 
         {/* Animation intensity */}
         <div>
           <label className='block text-sm font-medium mb-2 text-cyber-cyan'>
-            アニメーション強度
+            {t('accessibility.animationIntensity')}
           </label>
           <select
             value={animationIntensity}
@@ -154,7 +160,7 @@ export default function AccessibilitySettings({
             ))}
           </select>
           <p className='text-xs text-cyber-purple mt-1'>
-            アニメーションの強度を調整します（パーティクル、エフェクト等）
+            {t('accessibility.animationIntensityDescription')}
           </p>
         </div>
 
@@ -168,9 +174,11 @@ export default function AccessibilitySettings({
               className='w-4 h-4 accent-cyber-cyan rounded focus:ring-2 focus:ring-cyber-cyan'
             />
             <div>
-              <span className='text-sm font-medium text-cyber-cyan'>モーション感度軽減</span>
+              <span className='text-sm font-medium text-cyber-cyan'>
+                {t('settings.reducedMotion')}
+              </span>
               <p className='text-xs text-cyber-purple'>
-                動きによる不快感を軽減するため、アニメーションを最小限に抑えます
+                {t('accessibility.animationIntensityDescription')}
               </p>
             </div>
           </label>
@@ -178,21 +186,24 @@ export default function AccessibilitySettings({
 
         {/* Preview area */}
         <div className='mt-4 p-3 rounded-lg hologram'>
-          <div className='text-sm font-medium mb-2 text-cyber-cyan'>現在の設定</div>
+          <div className='text-sm font-medium mb-2 text-cyber-cyan'>
+            {t('accessibility.currentSettings')}
+          </div>
           <div className='text-xs space-y-1'>
             <div className='text-cyber-purple'>
-              色覚対応:{' '}
+              {t('accessibility.colorVisionSupport')}:{' '}
               {colorBlindnessOptions.find((opt) => opt.value === colorBlindnessType)?.label}
             </div>
             <div className='text-cyber-purple'>
-              コントラスト: {contrastOptions.find((opt) => opt.value === contrast)?.label}
+              {t('accessibility.contrast')}:{' '}
+              {contrastOptions.find((opt) => opt.value === contrast)?.label}
             </div>
             <div className='text-cyber-purple'>
-              アニメーション:{' '}
+              {t('accessibility.animationIntensity')}:{' '}
               {animationOptions.find((opt) => opt.value === animationIntensity)?.label}
             </div>
             {reducedMotion && (
-              <div className='text-cyber-yellow'>⚠ モーション感度軽減が有効です</div>
+              <div className='text-cyber-yellow'>{t('accessibility.reducedMotionActive')}</div>
             )}
           </div>
         </div>

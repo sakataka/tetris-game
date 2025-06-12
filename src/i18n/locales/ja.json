@@ -53,6 +53,14 @@
     "fallback": "フォールバック",
     "silentModeActive": "サイレントモード有効"
   },
+  "audio": {
+    "webAudioApi": "Web Audio API",
+    "htmlAudio": "HTML Audio",
+    "tapToUnlock": "タップして音声をアンロック"
+  },
+  "panels": {
+    "scoreData": "スコアデータ"
+  },
   "themes": {
     "cyberpunk": "サイバーパンク",
     "classic": "クラシック",
@@ -127,7 +135,10 @@
     "yes": "はい",
     "no": "いいえ",
     "unknown": "不明",
-    "none": "なし"
+    "none": "なし",
+    "failed": "失敗",
+    "ready": "準備完了",
+    "level": "レベル"
   },
   "scoring": {
     "title": "スコア",
@@ -165,7 +176,15 @@
     "motion": "モーション",
     "fullAnimation": "フルアニメーション",
     "reducedAnimation": "軽減アニメーション",
-    "noAnimation": "アニメーションなし"
+    "noAnimation": "アニメーションなし",
+    "animationIntensity": "アニメーション強度",
+    "enhanced": "強化",
+    "reduced": "控えめ",
+    "currentSettings": "現在の設定",
+    "colorVisionSupportDescription": "色覚の特性に応じてカラーパレットを調整します",
+    "contrastDescription": "テキストと背景のコントラストを調整します",
+    "animationIntensityDescription": "アニメーションの強度を調整します（パーティクル、エフェクト等）",
+    "reducedMotionActive": "⚠ モーション感度軽減が有効です"
   },
   "notifications": {
     "close": "通知を閉じる",
@@ -184,5 +203,18 @@
     "changeTheme": "テーマを変更",
     "changeLanguage": "言語を変更",
     "closeNotification": "通知を閉じる"
+  },
+  "errors": {
+    "systemError": "システムエラー",
+    "componentError": "コンポーネントエラー",
+    "sectionError": "セクションエラー",
+    "unexpectedError": "申し訳ございません。予期しないエラーが発生しました。",
+    "componentRenderError": "コンポーネントの表示でエラーが発生しました",
+    "sectionDisplayError": "この部分の表示中にエラーが発生しました",
+    "retry": "再試行",
+    "retryWithCount": "再試行 ({{count}}回まで)",
+    "reloadPage": "ページを再読み込み",
+    "backToHome": "ホームに戻る",
+    "errorId": "エラーID"
   }
 }

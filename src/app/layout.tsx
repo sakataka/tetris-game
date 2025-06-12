@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import ErrorBoundary from '../components/ErrorBoundary';
+import ErrorBoundaryWithTranslation from '../components/ErrorBoundaryWithTranslation';
 import ErrorNotification from '../components/ErrorNotification';
 import ErrorStoreInitializer from '../components/ErrorStoreInitializer';
+import I18nProvider from '../components/I18nProvider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -28,11 +29,13 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <ErrorBoundary level='page'>
-          <ErrorStoreInitializer />
-          {children}
-          <ErrorNotification position='top-right' maxNotifications={3} />
-        </ErrorBoundary>
+        <I18nProvider>
+          <ErrorBoundaryWithTranslation level='page'>
+            <ErrorStoreInitializer />
+            {children}
+            <ErrorNotification position='top-right' maxNotifications={3} />
+          </ErrorBoundaryWithTranslation>
+        </I18nProvider>
       </body>
     </html>
   );

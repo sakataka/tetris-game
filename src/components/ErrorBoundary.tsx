@@ -7,7 +7,15 @@ import { DEFAULT_VALUES, GAME_TIMING } from '../constants';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
-  fallback?: ReactNode;
+  fallback?:
+    | ReactNode
+    | ((props: {
+        error: Error;
+        resetError: () => void;
+        retryCount: number;
+        maxRetries: number;
+        errorId: string | null;
+      }) => ReactNode);
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
   level?: 'page' | 'component' | 'section';
 }
@@ -95,9 +103,20 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   private renderErrorFallback() {
     const { fallback, level } = this.props;
+    const { error, errorId, retryCount } = this.state;
 
     // When custom fallback is provided
     if (fallback) {
+      // If fallback is a function, call it with error details
+      if (typeof fallback === 'function') {
+        return fallback({
+          error: error!,
+          resetError: this.handleRetry,
+          retryCount,
+          maxRetries: this.maxRetries,
+          errorId,
+        });
+      }
       return fallback;
     }
 

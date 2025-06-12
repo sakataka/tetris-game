@@ -2,7 +2,6 @@
 
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { PANELS } from '../constants/strings';
 import PanelBase from './ui/PanelBase';
 
 interface GameStatsPanelProps {
@@ -15,7 +14,7 @@ const GameStatsPanel = memo(function GameStatsPanel({ score, level, lines }: Gam
   const { t } = useTranslation();
 
   return (
-    <PanelBase title={PANELS.SCORE_DATA} theme='cyan'>
+    <PanelBase title={t('panels.scoreData').toUpperCase()} theme='cyan'>
       <div className='space-y-2 md:space-y-3'>
         <div className='flex justify-between items-center'>
           <span className='text-gray-300 text-sm md:text-base'>{t('game.score')}</span>

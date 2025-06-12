@@ -53,6 +53,14 @@
     "fallback": "Fallback",
     "silentModeActive": "Silent Mode Active"
   },
+  "audio": {
+    "webAudioApi": "Web Audio API",
+    "htmlAudio": "HTML Audio",
+    "tapToUnlock": "Tap to unlock audio"
+  },
+  "panels": {
+    "scoreData": "Score Data"
+  },
   "themes": {
     "cyberpunk": "Cyberpunk",
     "classic": "Classic",
@@ -127,7 +135,10 @@
     "yes": "Yes",
     "no": "No",
     "unknown": "Unknown",
-    "none": "None"
+    "none": "None",
+    "failed": "Failed",
+    "ready": "Ready",
+    "level": "Level"
   },
   "scoring": {
     "title": "Scoring",
@@ -165,7 +176,15 @@
     "motion": "Motion",
     "fullAnimation": "Full Animation",
     "reducedAnimation": "Reduced Animation",
-    "noAnimation": "No Animation"
+    "noAnimation": "No Animation",
+    "animationIntensity": "Animation Intensity",
+    "enhanced": "Enhanced",
+    "reduced": "Reduced",
+    "currentSettings": "Current Settings",
+    "colorVisionSupportDescription": "Adjusts color palette according to vision characteristics",
+    "contrastDescription": "Adjusts contrast between text and background",
+    "animationIntensityDescription": "Adjusts animation intensity (particles, effects, etc.)",
+    "reducedMotionActive": "⚠ Reduced motion is active"
   },
   "notifications": {
     "close": "Close notification",
@@ -184,5 +203,18 @@
     "changeTheme": "Change theme",
     "changeLanguage": "Change language",
     "closeNotification": "Close notification"
+  },
+  "errors": {
+    "systemError": "System Error",
+    "componentError": "Component Error",
+    "sectionError": "Section Error",
+    "unexpectedError": "We're sorry. An unexpected error occurred.",
+    "componentRenderError": "An error occurred while displaying the component",
+    "sectionDisplayError": "An error occurred while displaying this section",
+    "retry": "Retry",
+    "retryWithCount": "Retry ({{count}} attempts remaining)",
+    "reloadPage": "Reload Page",
+    "backToHome": "Back to Home",
+    "errorId": "Error ID"
   }
 }
