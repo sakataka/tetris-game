@@ -19,7 +19,7 @@ interface PanelBaseProps {
   className?: string;
   titleClassName?: string;
   contentClassName?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
 }
 
 // Theme configurations for consistent styling
@@ -65,13 +65,18 @@ const THEME_CONFIGS: Record<
 
 // Size configurations for responsive padding
 const SIZE_CONFIGS: Record<
-  'sm' | 'md' | 'lg',
+  'xs' | 'sm' | 'md' | 'lg',
   {
     padding: string;
     titleSize: string;
     titleSpacing: string;
   }
 > = {
+  xs: {
+    padding: 'p-1',
+    titleSize: 'text-xs',
+    titleSpacing: 'mb-1',
+  },
   sm: {
     padding: 'p-2 md:p-3',
     titleSize: 'text-sm md:text-base',

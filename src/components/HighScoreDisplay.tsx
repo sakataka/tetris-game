@@ -9,7 +9,7 @@ interface HighScoreDisplayProps {
   showRank?: boolean;
   maxDisplay?: number;
   className?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
 }
 
 const HighScoreDisplay = memo(function HighScoreDisplay({
@@ -22,9 +22,9 @@ const HighScoreDisplay = memo(function HighScoreDisplay({
   const { t, i18n } = useTranslation();
   const displayScores = highScores.slice(0, maxDisplay);
 
-  const padding = size === 'sm' ? 'p-2' : 'p-4';
-  const titleSize = size === 'sm' ? 'text-sm' : 'text-xl';
-  const titleMargin = size === 'sm' ? 'mb-2' : 'mb-4';
+  const padding = size === 'xs' ? 'p-1' : size === 'sm' ? 'p-2' : 'p-4';
+  const titleSize = size === 'xs' ? 'text-xs' : size === 'sm' ? 'text-sm' : 'text-xl';
+  const titleMargin = size === 'xs' ? 'mb-1' : size === 'sm' ? 'mb-2' : 'mb-4';
 
   return (
     <div data-testid='high-score-display' className={`hologram-cyan ${padding} ${className}`}>

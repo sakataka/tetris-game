@@ -2,8 +2,7 @@
 
 import { memo } from 'react';
 import { Tetromino } from '../types/tetris';
-import GameStatsPanel from './GameStatsPanel';
-import NextPiecePanel from './NextPiecePanel';
+import CombinedStatsNextPanel from './CombinedStatsNextPanel';
 import ControlsPanel from './ControlsPanel';
 import GameButtonsPanel from './GameButtonsPanel';
 import ScoringPanel from './ScoringPanel';
@@ -36,34 +35,38 @@ const GameTabContent = memo(function GameTabContent({
   const highScores = useHighScores();
 
   return (
-    <div className={`space-y-2 ${className}`}>
-      {/* Score information */}
-      <GameStatsPanel score={score} level={level} lines={lines} size='sm' />
+    <div className={`space-y-1 ${className}`}>
+      {/* Combined Score & Next Piece */}
+      <CombinedStatsNextPanel
+        score={score}
+        level={level}
+        lines={lines}
+        nextPiece={nextPiece}
+        size='xs'
+      />
 
-      {/* Next piece */}
-      <NextPiecePanel nextPiece={nextPiece} size='sm' />
-
-      {/* Buttons */}
+      {/* Buttons - Horizontal Layout */}
       <GameButtonsPanel
         gameOver={gameOver}
         isPaused={isPaused}
         onTogglePause={onTogglePause}
         onReset={onReset}
-        size='sm'
+        size='xs'
+        layout='horizontal'
       />
 
       {/* Controls */}
-      <ControlsPanel size='sm' />
+      <ControlsPanel size='xs' />
 
       {/* High scores */}
-      <HighScoreDisplay highScores={highScores} maxDisplay={3} className='text-xs' size='sm' />
+      <HighScoreDisplay highScores={highScores} maxDisplay={3} className='text-2xs' size='xs' />
 
       {/* Score reference - collapsible */}
-      <details className='text-xs'>
+      <details className='text-2xs'>
         <summary className='cursor-pointer text-cyan-400 hover:text-cyan-300'>
           Score Reference
         </summary>
-        <ScoringPanel size='sm' />
+        <ScoringPanel size='xs' />
       </details>
     </div>
   );

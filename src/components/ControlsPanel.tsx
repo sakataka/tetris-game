@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import PanelBase from './ui/PanelBase';
 
 interface ControlsPanelProps {
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
 }
 
 const ControlsPanel = memo(function ControlsPanel({ size = 'md' }: ControlsPanelProps) {
@@ -13,7 +13,7 @@ const ControlsPanel = memo(function ControlsPanel({ size = 'md' }: ControlsPanel
 
   return (
     <PanelBase title={t('controls.title').toUpperCase()} theme='green' size={size}>
-      <div className='space-y-1 text-xs'>
+      <div className='space-y-1 text-2xs'>
         <div className='flex justify-between items-center'>
           <span className='text-gray-300'>
             {t('controls.moveLeft')} / {t('controls.moveRight')}

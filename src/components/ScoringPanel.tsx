@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import PanelBase from './ui/PanelBase';
 
 interface ScoringPanelProps {
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
 }
 
 const ScoringPanel = memo(function ScoringPanel({ size = 'md' }: ScoringPanelProps) {
@@ -13,7 +13,7 @@ const ScoringPanel = memo(function ScoringPanel({ size = 'md' }: ScoringPanelPro
 
   return (
     <PanelBase title={t('scoring.title', 'SCORING').toUpperCase()} theme='yellow' size={size}>
-      <div className='space-y-1 text-xs'>
+      <div className='space-y-1 text-2xs'>
         <div className='flex justify-between items-center text-gray-300'>
           <span>{t('scoring.single').toUpperCase()}</span>
           <span className='font-mono text-blue-400'>100 × LV</span>
