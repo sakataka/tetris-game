@@ -21,25 +21,26 @@ interface SessionGame {
 
 // Removed unused interface - using the one from utils if needed
 
-// テスト用のモックデータ
+// Mock data for testing with fixed timestamps to avoid timing issues
+const FIXED_BASE_TIME = 1700000000000; // Fixed timestamp: 2023-11-14T22:13:20.000Z
 const mockSessions: GameSession[] = [
   {
     id: 'session-1',
-    startTime: Date.now() - 7200000, // 2 hours ago
-    endTime: Date.now() - 5400000, // 1.5 hours ago (duration: 1800000 = 30 minutes)
+    startTime: FIXED_BASE_TIME - 7200000, // 2 hours before base time
+    endTime: FIXED_BASE_TIME - 5400000, // 1.5 hours before base time (duration: 1800000 = 30 minutes)
     games: [
-      { score: 15000, level: 5, lines: 25, tetrisCount: 2, timestamp: Date.now() - 7000000 },
-      { score: 22000, level: 7, lines: 35, tetrisCount: 3, timestamp: Date.now() - 6500000 },
-      { score: 18000, level: 6, lines: 28, tetrisCount: 1, timestamp: Date.now() - 6000000 },
+      { score: 15000, level: 5, lines: 25, tetrisCount: 2, timestamp: FIXED_BASE_TIME - 7000000 },
+      { score: 22000, level: 7, lines: 35, tetrisCount: 3, timestamp: FIXED_BASE_TIME - 6500000 },
+      { score: 18000, level: 6, lines: 28, tetrisCount: 1, timestamp: FIXED_BASE_TIME - 6000000 },
     ],
   },
   {
     id: 'session-2',
-    startTime: Date.now() - 86400000, // 1 day ago
-    endTime: Date.now() - 83700000, // 22.75 hours ago (duration: 2700000 = 45 minutes)
+    startTime: FIXED_BASE_TIME - 86400000, // 1 day before base time
+    endTime: FIXED_BASE_TIME - 83700000, // 22.75 hours before base time (duration: 2700000 = 45 minutes)
     games: [
-      { score: 28000, level: 8, lines: 42, tetrisCount: 4, timestamp: Date.now() - 86000000 },
-      { score: 35000, level: 9, lines: 55, tetrisCount: 5, timestamp: Date.now() - 85000000 },
+      { score: 28000, level: 8, lines: 42, tetrisCount: 4, timestamp: FIXED_BASE_TIME - 86000000 },
+      { score: 35000, level: 9, lines: 55, tetrisCount: 5, timestamp: FIXED_BASE_TIME - 85000000 },
     ],
   },
 ];
@@ -57,15 +58,15 @@ const mockBaseStatistics: GameStatistics = {
   tetrisCount: 15,
 };
 
-// 統計計算ユーティリティ関数（まだ実装されていない）をテスト
+// Test statistics calculation utility functions (not yet implemented)
 describe('statisticsUtils', () => {
   describe('calculateEnhancedStatistics', () => {
-    it('基本統計から拡張統計を正しく計算する', () => {
-      // この関数は後で実装予定
+    it('should correctly calculate enhanced statistics from basic statistics', () => {
+      // This function is planned for later implementation
       const enhanced = {
         ...mockBaseStatistics,
         efficiency: 185 / (4500 / 60), // lines per minute
-        consistency: 85.0, // 仮の値
+        consistency: 85.0, // placeholder value
         longestSession: 2700, // longest session duration
         favoriteLevel: 7, // most common level
         linesClearingRate: 185 / 5, // lines per game
@@ -81,21 +82,21 @@ describe('statisticsUtils', () => {
   });
 
   describe('calculateEfficiency', () => {
-    it('効率（lines per minute）を正しく計算する', () => {
+    it('should correctly calculate efficiency (lines per minute)', () => {
       // totalLines / (playTime in minutes)
       const efficiency = 185 / (4500 / 60);
       expect(efficiency).toBeCloseTo(2.47, 2);
     });
 
-    it('プレイ時間が0の場合は0を返す', () => {
+    it('should return 0 when play time is 0', () => {
       const efficiency = 0 / 0;
       expect(isNaN(efficiency) || efficiency === 0).toBe(true);
     });
   });
 
   describe('calculateConsistency', () => {
-    it('スコアの一貫性を計算する', () => {
-      // この関数は後で実装予定 - スコアの分散を基に一貫性を計算
+    it('should calculate score consistency', () => {
+      // This function is planned for later implementation - calculate consistency based on score variance
       const scores = [15000, 22000, 18000, 28000, 35000];
       const average = scores.reduce((sum, score) => sum + score, 0) / scores.length;
       const variance =
@@ -109,8 +110,8 @@ describe('statisticsUtils', () => {
   });
 
   describe('findFavoriteLevel', () => {
-    it('最も頻繁に到達するレベルを特定する', () => {
-      // この関数は後で実装予定
+    it('should identify the most frequently reached level', () => {
+      // This function is planned for later implementation
       const games = mockSessions.flatMap((session) => session.games);
       const levelCounts = games.reduce(
         (counts, game) => {
@@ -130,8 +131,8 @@ describe('statisticsUtils', () => {
   });
 
   describe('calculateSessionStatistics', () => {
-    it('セッション統計を正しく計算する', () => {
-      // この関数は後で実装予定
+    it('should correctly calculate session statistics', () => {
+      // This function is planned for later implementation
       const sessionCount = mockSessions.length;
       const longestSession = Math.max(
         ...mockSessions.map((session) => session.endTime - session.startTime)
@@ -146,8 +147,8 @@ describe('statisticsUtils', () => {
   });
 
   describe('filterStatisticsByPeriod', () => {
-    it('指定期間の統計をフィルタリングする', () => {
-      // この関数は後で実装予定
+    it('should filter statistics for specified period', () => {
+      // This function is planned for later implementation
       const twelveHoursAgo = Date.now() - 43200000; // 12 hours ago
       const recentGames = mockSessions
         .flatMap((session) => session.games)
@@ -156,7 +157,7 @@ describe('statisticsUtils', () => {
       expect(recentGames).toHaveLength(3); // Last 3 games within 12 hours (session-1 games)
     });
 
-    it('期間が0の場合は全ての統計を返す', () => {
+    it('should return all statistics when period is 0', () => {
       // this should return all statistics (all time)
       const allGames = mockSessions.flatMap((session) => session.games);
       expect(allGames).toHaveLength(5);
@@ -164,8 +165,8 @@ describe('statisticsUtils', () => {
   });
 
   describe('calculatePlayTimeStatistics', () => {
-    it('プレイ時間統計を計算する', () => {
-      // この関数は後で実装予定
+    it('should calculate play time statistics', () => {
+      // This function is planned for later implementation
       const sessionDurations = mockSessions.map((session) => session.endTime - session.startTime);
       const totalPlayTime = sessionDurations.reduce((sum, duration) => sum + duration, 0);
       const averageSessionTime = totalPlayTime / sessionDurations.length;
@@ -178,8 +179,8 @@ describe('statisticsUtils', () => {
   });
 
   describe('calculateTetrisStatistics', () => {
-    it('Tetris関連統計を計算する', () => {
-      // この関数は後で実装予定
+    it('should calculate Tetris-related statistics', () => {
+      // This function is planned for later implementation
       const allGames = mockSessions.flatMap((session) => session.games);
       const totalTetris = allGames.reduce((sum, game) => sum + game.tetrisCount, 0);
       const tetrisRate = (totalTetris / allGames.length) * 100;
@@ -192,8 +193,8 @@ describe('statisticsUtils', () => {
   });
 
   describe('validateStatisticsData', () => {
-    it('統計データの妥当性を検証する', () => {
-      // この関数は後で実装予定
+    it('should validate statistics data', () => {
+      // This function is planned for later implementation
       const validStats = {
         ...mockBaseStatistics,
         efficiency: 2.5,
@@ -208,8 +209,8 @@ describe('statisticsUtils', () => {
       expect(validStats.consistency).toBeLessThanOrEqual(100);
     });
 
-    it('無効な統計データを検出する', () => {
-      // この関数は後で実装予定
+    it('should detect invalid statistics data', () => {
+      // This function is planned for later implementation
       const invalidStats = {
         ...mockBaseStatistics,
         totalGames: -1, // invalid
@@ -224,8 +225,8 @@ describe('statisticsUtils', () => {
   });
 
   describe('formatStatisticsForDisplay', () => {
-    it('表示用に統計データをフォーマットする', () => {
-      // この関数は後で実装予定
+    it('should format statistics data for display', () => {
+      // This function is planned for later implementation
       const formatted = {
         playTime: '1h 15m', // from 4500 seconds
         efficiency: '2.5 LPM', // lines per minute
@@ -241,8 +242,8 @@ describe('statisticsUtils', () => {
   });
 
   describe('generateStatisticsSummary', () => {
-    it('統計サマリーテキストを生成する', () => {
-      // この関数は後で実装予定
+    it('should generate statistics summary text', () => {
+      // This function is planned for later implementation
       const summary = {
         totalGames: 5,
         bestScore: 35000,

@@ -226,7 +226,7 @@ describe('StatisticsDashboard component', () => {
       expect(screen.getByText('📊 Statistics Dashboard')).toBeInTheDocument();
     });
 
-    it('期間選択セレクトボックスを表示する', () => {
+    it('should display period selection select box', () => {
       render(<MockStatisticsDashboard statistics={mockStatistics} highScores={mockHighScores} />);
 
       const periodSelector = screen.getByTestId('period-selector');
@@ -234,7 +234,7 @@ describe('StatisticsDashboard component', () => {
       expect(periodSelector).toHaveValue('All Time');
     });
 
-    it('主要統計を正しく表示する', () => {
+    it('should display main statistics correctly', () => {
       render(<MockStatisticsDashboard statistics={mockStatistics} highScores={mockHighScores} />);
 
       const mainStats = screen.getByTestId('main-stats');
@@ -245,8 +245,8 @@ describe('StatisticsDashboard component', () => {
     });
   });
 
-  describe('詳細統計表示', () => {
-    it('効率指標を正しく表示する', () => {
+  describe('Detailed statistics display', () => {
+    it('should display efficiency metrics correctly', () => {
       render(<MockStatisticsDashboard statistics={mockStatistics} highScores={mockHighScores} />);
 
       const efficiencyStats = screen.getByTestId('efficiency-stats');
@@ -256,14 +256,14 @@ describe('StatisticsDashboard component', () => {
       expect(efficiencyStats).toHaveTextContent('150'); // Score per line
     });
 
-    it('Tetris達成率を計算して表示する', () => {
+    it('should calculate and display Tetris achievement rate', () => {
       render(<MockStatisticsDashboard statistics={mockStatistics} highScores={mockHighScores} />);
 
       // tetrisCount(42) / totalGames(150) * 100 = 28.0%
       expect(screen.getByText('28.0%')).toBeInTheDocument();
     });
 
-    it('プレイ履歴概要を表示する', () => {
+    it('should display play history summary', () => {
       render(<MockStatisticsDashboard statistics={mockStatistics} highScores={mockHighScores} />);
 
       expect(screen.getByText('📅 Play History')).toBeInTheDocument();
@@ -272,7 +272,7 @@ describe('StatisticsDashboard component', () => {
       expect(screen.getByText('5.4')).toBeInTheDocument(); // Games per session
     });
 
-    it('最近のハイスコアを表示する', () => {
+    it('should display recent high scores', () => {
       render(<MockStatisticsDashboard statistics={mockStatistics} highScores={mockHighScores} />);
 
       expect(screen.getByText('🏆 Recent Achievements')).toBeInTheDocument();
@@ -282,8 +282,8 @@ describe('StatisticsDashboard component', () => {
     });
   });
 
-  describe('期間フィルタリング機能', () => {
-    it('期間選択の変更ができる', () => {
+  describe('Period filtering functionality', () => {
+    it('should allow period selection change', () => {
       const onPeriodChange = vi.fn();
       render(
         <MockStatisticsDashboard
@@ -299,7 +299,7 @@ describe('StatisticsDashboard component', () => {
       // Period change tests will be added during implementation
     });
 
-    it('全ての期間オプションが利用可能', () => {
+    it('should have all period options available', () => {
       render(<MockStatisticsDashboard statistics={mockStatistics} highScores={mockHighScores} />);
 
       const selector = screen.getByTestId('period-selector');
@@ -313,8 +313,8 @@ describe('StatisticsDashboard component', () => {
     });
   });
 
-  describe('表示モード切り替え', () => {
-    it('簡易表示モードでは詳細統計を非表示にする', () => {
+  describe('Display mode switching', () => {
+    it('should hide detailed statistics in simple display mode', () => {
       render(
         <MockStatisticsDashboard
           statistics={mockStatistics}
@@ -329,7 +329,7 @@ describe('StatisticsDashboard component', () => {
       expect(screen.queryByTestId('recent-achievements')).not.toBeInTheDocument();
     });
 
-    it('詳細表示モードでは全ての統計を表示する', () => {
+    it('should display all statistics in detailed display mode', () => {
       render(
         <MockStatisticsDashboard
           statistics={mockStatistics}
@@ -345,8 +345,8 @@ describe('StatisticsDashboard component', () => {
     });
   });
 
-  describe('空の状態の処理', () => {
-    it('統計データがない場合、適切なメッセージを表示する', () => {
+  describe('Empty state handling', () => {
+    it('should display appropriate message when no statistics data', () => {
       const emptyStats: EnhancedStatistics = {
         ...mockStatistics,
         totalGames: 0,
@@ -360,8 +360,8 @@ describe('StatisticsDashboard component', () => {
     });
   });
 
-  describe('データフォーマット', () => {
-    it('大きな数値を適切にカンマ区切りで表示する', () => {
+  describe('Data formatting', () => {
+    it('should display large numbers with proper comma separation', () => {
       const largeStats: EnhancedStatistics = {
         ...mockStatistics,
         bestScore: 1234567,
@@ -375,7 +375,7 @@ describe('StatisticsDashboard component', () => {
       expect(mainStats).toHaveTextContent('12,345');
     });
 
-    it('時間を適切な形式で表示する', () => {
+    it('should display time in appropriate format', () => {
       const timeStats: EnhancedStatistics = {
         ...mockStatistics,
         playTime: 7323, // 2 hours 2 minutes 3 seconds
@@ -393,17 +393,17 @@ describe('StatisticsDashboard component', () => {
 });
 
 describe('Statistics calculation utilities (planned)', () => {
-  it('期間フィルタリングされた統計を計算できる', () => {
+  it('should calculate period-filtered statistics', () => {
     // This feature is planned for later implementation
     expect(true).toBe(true);
   });
 
-  it('効率指標を正しく計算できる', () => {
+  it('should calculate efficiency metrics correctly', () => {
     // This feature is planned for later implementation
     expect(true).toBe(true);
   });
 
-  it('一貫性スコアを計算できる', () => {
+  it('should calculate consistency score', () => {
     // This feature is planned for later implementation
     expect(true).toBe(true);
   });

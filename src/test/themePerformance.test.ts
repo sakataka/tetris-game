@@ -1,7 +1,7 @@
 /**
- * テーマシステムパフォーマンス比較テスト
+ * Theme System Performance Comparison Tests
  *
- * 既存TypeScript実装 vs JSON実装のパフォーマンス・メモリ使用量を比較
+ * Compare performance and memory usage between existing TypeScript implementation vs JSON implementation
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
@@ -10,10 +10,10 @@ import { getThemePresetAsync as getJsonTheme, themeCache } from '../utils/ui/the
 import type { ThemeVariant } from '../types/tetris';
 import { log } from '../utils/logging';
 
-describe('テーマシステムパフォーマンス比較', () => {
+describe('Theme System Performance Comparison', () => {
   beforeEach(() => {
     themeCache.clearCache();
-    // ガベージコレクションを促進
+    // Force garbage collection
     if (global.gc) {
       global.gc();
     }
@@ -23,12 +23,12 @@ describe('テーマシステムパフォーマンス比較', () => {
     themeCache.clearCache();
   });
 
-  describe('読み込み速度比較', () => {
+  describe('Loading Speed Comparison', () => {
     it('should compare single theme loading performance', async () => {
       const iterations = 1000;
       const themeName: ThemeVariant = 'cyberpunk';
 
-      // Legacy TypeScript実装のパフォーマンス測定
+      // Legacy TypeScript implementation performance measurement
       const legacyStartTime = performance.now();
       for (let i = 0; i < iterations; i++) {
         const theme = getLegacyTheme(themeName);
@@ -37,13 +37,13 @@ describe('テーマシステムパフォーマンス比較', () => {
       const legacyEndTime = performance.now();
       const legacyTime = legacyEndTime - legacyStartTime;
 
-      // JSON実装のパフォーマンス測定（初回ロード含む）
+      // JSON implementation performance measurement (including initial load)
       const jsonStartTime = performance.now();
 
-      // 初回ロード
+      // Initial load
       await getJsonTheme(themeName);
 
-      // キャッシュされた状態での繰り返し読み込み
+      // Repeated loading with cached state
       for (let i = 0; i < iterations - 1; i++) {
         const theme = await getJsonTheme(themeName);
         expect(theme).toBeDefined();
@@ -64,10 +64,10 @@ describe('テーマシステムパフォーマンス比較', () => {
         metadata: { ratio: jsonTime / legacyTime },
       });
 
-      // JSON実装がキャッシュ後は高速であることを期待
-      // 初回ロードのオーバーヘッドを考慮しても、大量読み込みでは有利
-      // CI環境での変動を考慮して余裕を持たせる
-      expect(jsonTime).toBeLessThan(legacyTime * 5); // 5倍以内の性能
+      // JSON implementation should be fast after caching
+      // Advantageous for bulk loading even considering initial load overhead
+      // Allow margin considering CI environment variations
+      expect(jsonTime).toBeLessThan(legacyTime * 5); // Performance within 5x
     });
 
     it('should measure memory usage comparison', async () => {
@@ -96,7 +96,7 @@ describe('テーマシステムパフォーマンス比較', () => {
 
       const initialMemory = measureMemory();
 
-      // Legacy実装でのメモリ使用量測定
+      // Memory usage measurement with Legacy implementation
       const legacyThemes = [];
       for (let i = 0; i < 100; i++) {
         legacyThemes.push(getLegacyTheme('cyberpunk'));
@@ -106,14 +106,14 @@ describe('テーマシステムパフォーマンス比較', () => {
 
       const legacyMemory = measureMemory();
 
-      // Legacy測定結果の確認（未使用コレクション対策）
+      // Confirm Legacy measurement results (prevent unused collection)
       expect(legacyThemes.length).toBe(300);
 
-      // メモリクリア
+      // Clear memory
       legacyThemes.length = 0;
       if (global.gc) global.gc();
 
-      // JSON実装でのメモリ使用量測定
+      // Memory usage measurement with JSON implementation
       const jsonThemes = [];
       for (let i = 0; i < 100; i++) {
         jsonThemes.push(await getJsonTheme('cyberpunk'));
@@ -123,7 +123,7 @@ describe('テーマシステムパフォーマンス比較', () => {
 
       const jsonMemory = measureMemory();
 
-      // JSON測定結果の確認（未使用コレクション対策）
+      // Confirm JSON measurement results (prevent unused collection)
       expect(jsonThemes.length).toBe(300);
 
       if (initialMemory && legacyMemory && jsonMemory) {
@@ -143,21 +143,21 @@ describe('テーマシステムパフォーマンス比較', () => {
           metadata: { efficiency: jsonMemoryDiff / legacyMemoryDiff },
         });
 
-        // JSON実装はキャッシュにより重複オブジェクト生成を避けるため、メモリ効率が良い
+        // JSON implementation is memory efficient by avoiding duplicate object creation through caching
         expect(jsonMemoryDiff).toBeLessThan(legacyMemoryDiff);
       }
     });
   });
 
-  describe('初期化時間比較', () => {
+  describe('Initialization time comparison', () => {
     it('should compare module loading time', async () => {
-      // Legacy実装のモジュール読み込み時間（実際にはバンドル時に解決済み）
+      // Legacy implementation module loading time (actually resolved at bundle time)
       const legacyStartTime = performance.now();
       const legacyModule = await import('../utils/ui/themePresets');
       const legacyEndTime = performance.now();
       const legacyModuleTime = legacyEndTime - legacyStartTime;
 
-      // JSON実装のモジュール読み込み時間
+      // JSON implementation module loading time
       const jsonStartTime = performance.now();
       const jsonModule = await import('../utils/ui/themeLoader');
       const jsonEndTime = performance.now();
@@ -171,19 +171,19 @@ describe('テーマシステムパフォーマンス比較', () => {
       expect(legacyModule).toBeDefined();
       expect(jsonModule).toBeDefined();
 
-      // モジュール読み込み時間は通常どちらも高速
+      // Module loading time is usually fast for both
       expect(legacyModuleTime).toBeLessThan(50);
       expect(jsonModuleTime).toBeLessThan(50);
     });
 
     it('should measure first theme access time', async () => {
-      // Legacy実装での初回アクセス
+      // First access with Legacy implementation
       const legacyStartTime = performance.now();
       const legacyTheme = getLegacyTheme('cyberpunk');
       const legacyEndTime = performance.now();
       const legacyFirstAccess = legacyEndTime - legacyStartTime;
 
-      // JSON実装での初回アクセス（JSONファイル読み込み含む）
+      // First access with JSON implementation (including JSON file loading)
       const jsonStartTime = performance.now();
       const jsonTheme = await getJsonTheme('cyberpunk');
       const jsonEndTime = performance.now();
@@ -197,19 +197,19 @@ describe('テーマシステムパフォーマンス比較', () => {
       expect(legacyTheme).toBeDefined();
       expect(jsonTheme).toBeDefined();
 
-      // Legacy実装は即座にアクセス可能
+      // Legacy implementation is immediately accessible
       expect(legacyFirstAccess).toBeLessThan(1);
 
-      // JSON実装は初回のみファイル読み込みでオーバーヘッドあり（10ms以内を期待）
+      // JSON implementation has file loading overhead only on first access (expect within 10ms)
       expect(jsonFirstAccess).toBeLessThan(10);
     });
   });
 
-  describe('スケーラビリティテスト', () => {
+  describe('Scalability tests', () => {
     it('should test performance with many concurrent requests', async () => {
       const concurrentRequests = 50;
 
-      // Legacy実装での並列アクセス
+      // Concurrent access with Legacy implementation
       const legacyStartTime = performance.now();
       const legacyPromises = Array.from({ length: concurrentRequests }, () =>
         Promise.resolve(getLegacyTheme('cyberpunk'))
@@ -218,7 +218,7 @@ describe('テーマシステムパフォーマンス比較', () => {
       const legacyEndTime = performance.now();
       const legacyConcurrentTime = legacyEndTime - legacyStartTime;
 
-      // JSON実装での並列アクセス
+      // Concurrent access with JSON implementation
       const jsonStartTime = performance.now();
       const jsonPromises = Array.from({ length: concurrentRequests }, () =>
         getJsonTheme('cyberpunk')
@@ -234,7 +234,7 @@ describe('テーマシステムパフォーマンス比較', () => {
         component: 'ThemePerformanceTest',
       });
 
-      // 並列アクセスでもパフォーマンスが劣化しないことを確認
+      // Verify that performance doesn't degrade with concurrent access
       expect(legacyConcurrentTime).toBeLessThan(50);
       expect(jsonConcurrentTime).toBeLessThan(50);
     });
@@ -242,10 +242,10 @@ describe('テーマシステムパフォーマンス比較', () => {
     it('should validate cache efficiency with repeated access', async () => {
       const accessCount = 1000;
 
-      // 初回ロード（キャッシュ構築）
+      // Initial load (cache construction)
       await getJsonTheme('cyberpunk');
 
-      // キャッシュされた状態での大量アクセス
+      // Bulk access with cached state
       const startTime = performance.now();
 
       for (let i = 0; i < accessCount; i++) {
@@ -264,19 +264,19 @@ describe('テーマシステムパフォーマンス比較', () => {
         component: 'ThemePerformanceTest',
       });
 
-      // キャッシュアクセスは高速（CI環境では平均0.05ms以下）
+      // Cache access is fast (average 0.05ms or less in CI environment)
       expect(averageAccessTime).toBeLessThan(0.05);
       expect(cacheAccessTime).toBeLessThan(50);
     });
   });
 
-  describe('バンドルサイズ影響評価', () => {
+  describe('Bundle size impact evaluation', () => {
     it('should validate theme data structure size', () => {
-      // Legacy実装のデータサイズ推定
+      // Legacy implementation data size estimation
       const legacyTheme = getLegacyTheme('cyberpunk');
       const legacyJsonSize = JSON.stringify(legacyTheme).length;
 
-      // JSON実装のデータサイズは同等（構造は同じ）
+      // JSON implementation data size is equivalent (same structure)
       const expectedJsonSize = legacyJsonSize;
 
       log.debug(`Theme data size: ${legacyJsonSize} characters`, {
@@ -286,13 +286,13 @@ describe('テーマシステムパフォーマンス比較', () => {
         component: 'ThemePerformanceTest',
       });
 
-      // データ構造は同じなので、サイズも同等
+      // Same data structure, so size is also equivalent
       expect(legacyJsonSize).toBeGreaterThan(0);
-      expect(legacyJsonSize).toBeLessThan(1000); // 1KB以下の妥当なサイズ
+      expect(legacyJsonSize).toBeLessThan(1000); // Reasonable size under 1KB
     });
 
     it('should estimate total bundle impact', async () => {
-      // 全テーマのデータサイズ
+      // Data size of all themes
       const allLegacyThemes = ['cyberpunk', 'classic', 'retro', 'minimal', 'neon'].map((theme) =>
         getLegacyTheme(theme as ThemeVariant)
       );
@@ -304,16 +304,16 @@ describe('テーマシステムパフォーマンス比較', () => {
         { component: 'ThemePerformanceTest', metadata: { totalSizeKB: totalLegacySize / 1024 } }
       );
 
-      // テーマデータが合理的なサイズであることを確認（5KB以下）
+      // Verify theme data is reasonable size (under 5KB)
       expect(totalLegacySize).toBeLessThan(5 * 1024);
 
-      // JSON化による追加オーバーヘッドは最小限
-      const jsonOverhead = totalLegacySize * 0.1; // 10%以下のオーバーヘッドを想定
-      expect(jsonOverhead).toBeLessThan(512); // 512バイト以下
+      // Additional overhead from JSON conversion is minimal
+      const jsonOverhead = totalLegacySize * 0.1; // Assume overhead under 10%
+      expect(jsonOverhead).toBeLessThan(512); // Under 512 bytes
     });
   });
 
-  describe('リアルワールドシナリオ', () => {
+  describe('Real-world scenarios', () => {
     it('should simulate user theme switching', async () => {
       const themeSequence: ThemeVariant[] = [
         'cyberpunk',
@@ -323,7 +323,7 @@ describe('テーマシステムパフォーマンス比較', () => {
         'cyberpunk',
       ];
 
-      // Legacy実装でのテーマ切り替え
+      // Theme switching with Legacy implementation
       const legacyStartTime = performance.now();
       for (const themeName of themeSequence) {
         const theme = getLegacyTheme(themeName);
@@ -332,7 +332,7 @@ describe('テーマシステムパフォーマンス比較', () => {
       const legacyEndTime = performance.now();
       const legacySwitchTime = legacyEndTime - legacyStartTime;
 
-      // JSON実装でのテーマ切り替え
+      // Theme switching with JSON implementation
       const jsonStartTime = performance.now();
       for (const themeName of themeSequence) {
         const theme = await getJsonTheme(themeName);
@@ -348,19 +348,19 @@ describe('テーマシステムパフォーマンス比較', () => {
         component: 'ThemePerformanceTest',
       });
 
-      // ユーザー体験に影響しない範囲（100ms以下）であることを確認
+      // Verify it's within range that doesn't affect user experience (under 100ms)
       expect(legacySwitchTime).toBeLessThan(100);
       expect(jsonSwitchTime).toBeLessThan(100);
     });
 
     it('should test application startup simulation', async () => {
-      // アプリケーション起動時の初期テーマロード
+      // Initial theme loading at application startup
       const startTime = performance.now();
 
-      // 初期テーマロード
+      // Initial theme loading
       const initialTheme = await getJsonTheme('cyberpunk');
 
-      // プリロード（バックグラウンドで他のテーマも読み込み）
+      // Preload (load other themes in background)
       const preloadPromises = ['classic', 'retro', 'minimal', 'neon'].map((theme) =>
         getJsonTheme(theme as ThemeVariant)
       );
@@ -374,9 +374,9 @@ describe('テーマシステムパフォーマンス比較', () => {
       });
 
       expect(initialTheme).toBeDefined();
-      expect(startupTime).toBeLessThan(50); // 50ms以下で起動完了
+      expect(startupTime).toBeLessThan(50); // Startup completion under 50ms
 
-      // 全テーマがキャッシュされていることを確認
+      // Verify all themes are cached
       const cacheStats = themeCache.getCacheStats();
       expect(cacheStats.size).toBe(5);
     });
