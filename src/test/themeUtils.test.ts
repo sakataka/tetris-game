@@ -1,7 +1,7 @@
 /**
- * テーマユーティリティ機能のテスト
+ * Tests for theme utility functionality
  *
- * CSS変数自動生成とキャッシュ機能の動作確認
+ * Tests automatic CSS variable generation and cache functionality
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
@@ -9,7 +9,7 @@ import { applyThemeToCSS, createCustomTheme, applyAnimationSettings } from '../u
 import { getThemePreset } from '../utils/ui/themePresets';
 import type { ThemeConfig } from '../types/tetris';
 
-// DOM環境のモック
+// DOM environment mock
 const mockDocumentElement = {
   style: {
     setProperty: vi.fn(),
@@ -27,25 +27,25 @@ const mockDocument = {
   },
 };
 
-// グローバルdocumentを置き換え
+// Replace global document
 Object.defineProperty(global, 'document', {
   value: mockDocument,
   writable: true,
 });
 
-describe('ThemeUtils - CSS変数自動生成システム', () => {
+describe('ThemeUtils - Automatic CSS variable generation system', () => {
   beforeEach(() => {
-    // モックをリセット
+    // Reset mocks
     vi.clearAllMocks();
   });
 
-  describe('applyThemeToCSS - 基本機能', () => {
+  describe('applyThemeToCSS - Basic functionality', () => {
     it('should apply basic color variables', () => {
       const cyberpunkTheme = getThemePreset('cyberpunk');
 
       applyThemeToCSS(cyberpunkTheme);
 
-      // 基本カラー変数の設定確認
+      // Verify basic color variable settings
       expect(mockDocumentElement.style.setProperty).toHaveBeenCalledWith(
         '--background',
         cyberpunkTheme.colors.background
@@ -69,29 +69,29 @@ describe('ThemeUtils - CSS変数自動生成システム', () => {
 
       applyThemeToCSS(cyberpunkTheme);
 
-      // 透明度バリエーションの自動生成確認
+      // Verify automatic generation of transparency variations
       const transparencyLevels = [10, 20, 30, 40, 50, 60, 70, 80, 90];
 
       transparencyLevels.forEach((level) => {
-        // Primary色（cyan）の透明度バリエーション
+        // Primary color (cyan) transparency variations
         expect(mockDocumentElement.style.setProperty).toHaveBeenCalledWith(
           `--cyber-cyan-${level}`,
           expect.stringMatching(/^rgba\(\d+, \d+, \d+, 0\.\d+\)$/)
         );
 
-        // Secondary色（purple）の透明度バリエーション
+        // Secondary color (purple) transparency variations
         expect(mockDocumentElement.style.setProperty).toHaveBeenCalledWith(
           `--cyber-purple-${level}`,
           expect.stringMatching(/^rgba\(\d+, \d+, \d+, 0\.\d+\)$/)
         );
 
-        // Tertiary色（yellow）の透明度バリエーション
+        // Tertiary color (yellow) transparency variations
         expect(mockDocumentElement.style.setProperty).toHaveBeenCalledWith(
           `--cyber-yellow-${level}`,
           expect.stringMatching(/^rgba\(\d+, \d+, \d+, 0\.\d+\)$/)
         );
 
-        // Accent色（green）の透明度バリエーション
+        // Accent color (green) transparency variations
         expect(mockDocumentElement.style.setProperty).toHaveBeenCalledWith(
           `--cyber-green-${level}`,
           expect.stringMatching(/^rgba\(\d+, \d+, \d+, 0\.\d+\)$/)
@@ -104,7 +104,7 @@ describe('ThemeUtils - CSS変数自動生成システム', () => {
 
       applyThemeToCSS(cyberpunkTheme);
 
-      // エフェクト変数の設定確認
+      // Verify effect variable settings
       const expectedBlur = cyberpunkTheme.effects.blur;
       expect(mockDocumentElement.style.setProperty).toHaveBeenCalledWith(
         '--neon-blur-sm',
@@ -129,7 +129,7 @@ describe('ThemeUtils - CSS変数自動生成システム', () => {
 
       applyThemeToCSS(cyberpunkTheme);
 
-      // ホログラム背景の生成確認
+      // Verify hologram background generation
       expect(mockDocumentElement.style.setProperty).toHaveBeenCalledWith(
         '--hologram-bg',
         'linear-gradient(45deg, var(--cyber-cyan-10) 0%, var(--cyber-purple-10) 50%, var(--cyber-yellow-10) 100%)'
@@ -141,15 +141,15 @@ describe('ThemeUtils - CSS変数自動生成システム', () => {
     });
   });
 
-  describe('透明度計算の正確性', () => {
+  describe('Transparency calculation accuracy', () => {
     it('should generate correct RGBA values for known hex colors', () => {
       const testTheme: ThemeConfig = {
         name: 'Test',
         colors: {
-          primary: '#ff0000', // 赤
-          secondary: '#00ff00', // 緑
-          tertiary: '#0000ff', // 青
-          accent: '#ffff00', // 黄
+          primary: '#ff0000', // Red
+          secondary: '#00ff00', // Green
+          tertiary: '#0000ff', // Blue
+          accent: '#ffff00', // Yellow
           background: '#000000',
           foreground: '#ffffff',
         },
@@ -163,19 +163,19 @@ describe('ThemeUtils - CSS変数自動生成システム', () => {
 
       applyThemeToCSS(testTheme);
 
-      // 赤色の30%透明度確認
+      // Verify 30% transparency of red color
       expect(mockDocumentElement.style.setProperty).toHaveBeenCalledWith(
         '--cyber-cyan-30',
         'rgba(255, 0, 0, 0.3)'
       );
 
-      // 緑色の50%透明度確認
+      // Verify 50% transparency of green color
       expect(mockDocumentElement.style.setProperty).toHaveBeenCalledWith(
         '--cyber-purple-50',
         'rgba(0, 255, 0, 0.5)'
       );
 
-      // 青色の90%透明度確認
+      // Verify 90% transparency of blue color
       expect(mockDocumentElement.style.setProperty).toHaveBeenCalledWith(
         '--cyber-yellow-90',
         'rgba(0, 0, 255, 0.9)'
@@ -183,17 +183,17 @@ describe('ThemeUtils - CSS変数自動生成システム', () => {
     });
   });
 
-  describe('パフォーマンステスト', () => {
+  describe('Performance tests', () => {
     it('should call setProperty efficiently for all transparency levels', () => {
       const cyberpunkTheme = getThemePreset('cyberpunk');
 
       applyThemeToCSS(cyberpunkTheme);
 
-      // 基本変数: 10個 (background, foreground, 4×accent, 4×cyber)
-      // 透明度変数: 36個 (4色 × 9レベル)
-      // エフェクト変数: 4個 (blur)
-      // ホログラム変数: 2個 (bg, border)
-      // 合計: 52個のsetProperty呼び出し予想
+      // Basic variables: 10 (background, foreground, 4×accent, 4×cyber)
+      // Transparency variables: 36 (4 colors × 9 levels)
+      // Effect variables: 4 (blur)
+      // Hologram variables: 2 (bg, border)
+      // Total: Expected 52 setProperty calls
 
       const setPropertyCalls = mockDocumentElement.style.setProperty.mock.calls.length;
       expect(setPropertyCalls).toBeGreaterThanOrEqual(50);
@@ -204,12 +204,12 @@ describe('ThemeUtils - CSS変数自動生成システム', () => {
       const cyberpunkTheme = getThemePreset('cyberpunk');
       const classicTheme = getThemePreset('classic');
 
-      // 複数回テーマ適用
+      // Apply themes multiple times
       applyThemeToCSS(cyberpunkTheme);
       vi.clearAllMocks();
       applyThemeToCSS(classicTheme);
 
-      // 2回目の適用でも正常に動作することを確認
+      // Verify second application still works correctly
       expect(mockDocumentElement.style.setProperty).toHaveBeenCalled();
       const secondCallCount = mockDocumentElement.style.setProperty.mock.calls.length;
       expect(secondCallCount).toBeGreaterThanOrEqual(50);
@@ -219,12 +219,12 @@ describe('ThemeUtils - CSS変数自動生成システム', () => {
   describe('createCustomTheme', () => {
     it('should create custom theme with partial overrides', () => {
       const customTheme = createCustomTheme('cyberpunk', {
-        primary: '#ff1493', // デイープピンク
+        primary: '#ff1493', // Deep pink
       });
 
       expect(customTheme.name).toBe('Custom');
       expect(customTheme.colors.primary).toBe('#ff1493');
-      expect(customTheme.colors.secondary).toBe(getThemePreset('cyberpunk').colors.secondary); // 元の値を保持
+      expect(customTheme.colors.secondary).toBe(getThemePreset('cyberpunk').colors.secondary); // Retain original value
     });
 
     it('should create custom theme with effect overrides', () => {
@@ -239,7 +239,7 @@ describe('ThemeUtils - CSS変数自動生成システム', () => {
 
       expect(customTheme.effects.blur).toBe(20);
       expect(customTheme.effects.glow).toBe(24);
-      expect(customTheme.effects.saturation).toBe(getThemePreset('cyberpunk').effects.saturation); // 元の値を保持
+      expect(customTheme.effects.saturation).toBe(getThemePreset('cyberpunk').effects.saturation); // Retain original value
     });
   });
 
@@ -265,13 +265,13 @@ describe('ThemeUtils - CSS変数自動生成システム', () => {
     });
   });
 
-  describe('後方互換性', () => {
+  describe('Backward compatibility', () => {
     it('should maintain backward compatibility with existing CSS variable names', () => {
       const cyberpunkTheme = getThemePreset('cyberpunk');
 
       applyThemeToCSS(cyberpunkTheme);
 
-      // 既存のCSS変数名が維持されていることを確認
+      // Verify existing CSS variable names are maintained
       expect(mockDocumentElement.style.setProperty).toHaveBeenCalledWith(
         '--cyber-cyan',
         expect.any(String)
@@ -289,7 +289,7 @@ describe('ThemeUtils - CSS変数自動生成システム', () => {
         expect.any(String)
       );
 
-      // 既存の透明度レベルが生成されていることを確認
+      // Verify existing transparency levels are generated
       expect(mockDocumentElement.style.setProperty).toHaveBeenCalledWith(
         '--cyber-cyan-10',
         expect.any(String)

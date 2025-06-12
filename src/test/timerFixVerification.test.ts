@@ -1,15 +1,15 @@
 /**
- * タイマー修正の直接検証
+ * Direct verification of timer fix
  *
- * 実装されたuseTimerAnimationが正しく動作し、
- * ゲームでの使用に耐える性能を持つことを確認
+ * Verifies that the implemented useTimerAnimation works correctly
+ * and has performance suitable for game use
  */
 
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { useTimerAnimation } from '../utils/animation/useAnimationFrame';
 
-// シンプルなAnimationManagerモック
+// Simple AnimationManager mock
 vi.mock('../utils/animation/animationManager', () => ({
   animationManager: {
     registerAnimation: vi.fn(),
@@ -29,7 +29,7 @@ vi.mock('../utils/animation/animationManager', () => ({
   },
 }));
 
-describe('タイマー修正の直接検証', () => {
+describe('Direct verification of timer fix', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -38,8 +38,8 @@ describe('タイマー修正の直接検証', () => {
     vi.restoreAllMocks();
   });
 
-  describe('基本的なタイマー累積ロジック', () => {
-    it('1秒間隔でフックが正常に初期化される', () => {
+  describe('Basic timer accumulation logic', () => {
+    it('Hook initializes normally with 1 second interval', () => {
       let executionCount = 0;
       const callback = vi.fn(() => executionCount++);
 
@@ -48,7 +48,7 @@ describe('タイマー修正の直接検証', () => {
       expect(result.current).toBeDefined();
     });
 
-    it('短い間隔でフックが正常に初期化される', () => {
+    it('Hook initializes normally with short interval', () => {
       let executionCount = 0;
       const callback = vi.fn(() => executionCount++);
 
@@ -57,7 +57,7 @@ describe('タイマー修正の直接検証', () => {
       expect(result.current).toBeDefined();
     });
 
-    it('累積時間のリセット機能が設定される', () => {
+    it('Accumulated time reset functionality is configured', () => {
       let executionCount = 0;
       const callback = vi.fn(() => executionCount++);
 
@@ -66,15 +66,15 @@ describe('タイマー修正の直接検証', () => {
         { initialProps: { interval: 2000 } }
       );
 
-      // 間隔を短く変更
+      // Change interval to shorter
       rerender({ interval: 300 });
 
       expect(true).toBe(true);
     });
   });
 
-  describe('ゲーム実用性の確認', () => {
-    it('ピース落下シミュレーション（800ms間隔）設定', () => {
+  describe('Game practicality verification', () => {
+    it('Piece drop simulation (800ms interval) settings', () => {
       let dropCount = 0;
       const dropPiece = () => dropCount++;
 
@@ -83,7 +83,7 @@ describe('タイマー修正の直接検証', () => {
       }).not.toThrow();
     });
 
-    it('レベル上昇時の高速化（1000ms→300ms）設定', () => {
+    it('Level increase speed acceleration (1000ms→300ms) settings', () => {
       let tickCount = 0;
 
       const { rerender } = renderHook(
@@ -92,15 +92,15 @@ describe('タイマー修正の直接検証', () => {
         { initialProps: { interval: 1000 } }
       );
 
-      // 高速化
+      // Speed acceleration
       rerender({ interval: 300 });
 
       expect(true).toBe(true);
     });
   });
 
-  describe('精度とエッジケース', () => {
-    it('余剰時間の正確な管理システム設定', () => {
+  describe('Precision and edge cases', () => {
+    it('Accurate surplus time management system settings', () => {
       let executionCount = 0;
       const callback = () => executionCount++;
 
@@ -109,7 +109,7 @@ describe('タイマー修正の直接検証', () => {
       }).not.toThrow();
     });
 
-    it('不規則なdeltaTimeでも安定動作する設定', () => {
+    it('Stable operation settings even with irregular deltaTime', () => {
       let executionCount = 0;
       const callback = () => executionCount++;
 
@@ -118,7 +118,7 @@ describe('タイマー修正の直接検証', () => {
       }).not.toThrow();
     });
 
-    it('enabled/disabled切り替えの正常動作設定', () => {
+    it('Normal operation settings for enabled/disabled switching', () => {
       let executionCount = 0;
       const callback = () => executionCount++;
 
@@ -127,7 +127,7 @@ describe('タイマー修正の直接検証', () => {
         { initialProps: { enabled: false } }
       );
 
-      // 有効化
+      // Enable
       rerender({ enabled: true });
 
       expect(true).toBe(true);

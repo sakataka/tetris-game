@@ -134,7 +134,7 @@ vi.mock('../utils/audio', () => ({
   }),
 }));
 
-// モック関数への参照を取得
+// Get references to mock functions
 
 // Get references to mocked hooks
 import { useAudioStrategy } from '../hooks/useAudioStrategy';
@@ -149,13 +149,13 @@ const mockUseAudioPreloader = vi.mocked(useAudioPreloader);
 const mockUseAudioPlayer = vi.mocked(useAudioPlayer);
 const mockGetFallbackStatus = vi.mocked(getFallbackStatus);
 
-// Fetch API モック（音声ファイル取得用）
+// Fetch API mock (for audio file retrieval)
 global.fetch = vi.fn().mockResolvedValue({
   ok: true,
   arrayBuffer: vi.fn().mockResolvedValue(new ArrayBuffer(1024)),
 });
 
-// HTML Audio Element モック
+// HTML Audio Element mock
 const mockAudio = {
   play: vi.fn().mockResolvedValue(undefined),
   pause: vi.fn(),
@@ -167,7 +167,7 @@ const mockAudio = {
   src: '',
 };
 
-// グローバルモック設定
+// Global mock setup
 Object.defineProperty(window, 'Audio', {
   writable: true,
   value: vi.fn(() => mockAudio),
@@ -209,7 +209,7 @@ beforeEach(() => {
   mockUseAudioPlayer.mockReturnValue(mockAudioPlayer);
 });
 
-describe('useSounds - Web Audio API対応', () => {
+describe('useSounds - Web Audio API support', () => {
   it('should initialize with default values', async () => {
     const { result } = renderHook(() => useSounds());
 
@@ -360,7 +360,7 @@ describe('useSounds - Web Audio API対応', () => {
       }
     });
 
-    // エラーが処理され、失敗状態が記録されることを確認
+    // Verify that errors are handled and failure state is recorded
     expect(result.current.audioState.failed.has('lineClear')).toBe(true);
   });
 
@@ -455,7 +455,7 @@ describe('useSounds - Web Audio API対応', () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
-    // Web Audio APIで正常にロードされた状態
+    // State properly loaded with Web Audio API
     expect(result.current.audioState.loaded.size).toBe(6);
     expect(result.current.audioState.failed.size).toBe(0);
     expect(result.current.audioState.loading.size).toBe(0);
@@ -471,14 +471,14 @@ describe('useSounds - Web Audio API対応', () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
-    // 初期化時に音量が同期されることを確認
+    // Verify volume is synchronized during initialization
     expect(mockUseAudioState).toHaveBeenCalledWith({
       initialVolume: 0.3,
       initialMuted: false,
       strategy: 'webaudio',
     });
 
-    // 音量変更時の同期確認
+    // Verify synchronization when volume changes
     await act(async () => {
       result.current.setVolumeLevel(0.9);
     });

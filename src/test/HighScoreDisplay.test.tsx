@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { HighScore } from '../types/tetris';
 
-// モックデータ
+// Mock data
 const mockHighScores: HighScore[] = [
   {
     id: '1',
@@ -29,7 +29,7 @@ const mockHighScores: HighScore[] = [
   },
 ];
 
-// HighScoreDisplayコンポーネント（まだ実装されていない）をモック
+// Mock HighScoreDisplay component (not yet implemented)
 const MockHighScoreDisplay = ({
   highScores,
   showRank = true,
@@ -71,41 +71,41 @@ const MockHighScoreDisplay = ({
       </div>
       {highScores.length === 0 && (
         <div className='text-center text-gray-500 py-8' data-testid='no-scores-message'>
-          まだハイスコアがありません
+          No high scores yet
         </div>
       )}
     </div>
   );
 };
 
-describe('HighScoreDisplay コンポーネント', () => {
+describe('HighScoreDisplay component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  describe('基本的な表示機能', () => {
-    it('ハイスコアリストを正しく表示する', () => {
+  describe('Basic display functionality', () => {
+    it('Displays high score list correctly', () => {
       render(<MockHighScoreDisplay highScores={mockHighScores} />);
 
       expect(screen.getByTestId('high-score-display')).toBeInTheDocument();
       expect(screen.getByText('🏆 High Scores')).toBeInTheDocument();
 
-      // 各スコアアイテムが表示されることを確認
+      // Verify each score item is displayed
       expect(screen.getByTestId('high-score-item-0')).toBeInTheDocument();
       expect(screen.getByTestId('high-score-item-1')).toBeInTheDocument();
       expect(screen.getByTestId('high-score-item-2')).toBeInTheDocument();
     });
 
-    it('スコアを正しい形式で表示する', () => {
+    it('Displays scores in correct format', () => {
       render(<MockHighScoreDisplay highScores={mockHighScores} />);
 
-      // 数値がカンマ区切りで表示されることを確認
+      // Verify numbers are displayed with comma separators
       expect(screen.getByText('50,000')).toBeInTheDocument();
       expect(screen.getByText('35,000')).toBeInTheDocument();
       expect(screen.getByText('25,000')).toBeInTheDocument();
     });
 
-    it('レベルとライン数を表示する', () => {
+    it('Displays level and line count', () => {
       render(<MockHighScoreDisplay highScores={mockHighScores} />);
 
       expect(screen.getByText('Level 10 • 80 lines')).toBeInTheDocument();
@@ -113,16 +113,16 @@ describe('HighScoreDisplay コンポーネント', () => {
       expect(screen.getByText('Level 6 • 40 lines')).toBeInTheDocument();
     });
 
-    it('プレイヤー名がある場合は表示する', () => {
+    it('Displays player name if available', () => {
       render(<MockHighScoreDisplay highScores={mockHighScores} />);
 
       expect(screen.getByText('TETRIS_MASTER')).toBeInTheDocument();
       expect(screen.getByText('CYBER_PLAYER')).toBeInTheDocument();
-      // プレイヤー名がない3番目のスコアには名前が表示されない
+      // Player name is not displayed for the 3rd score which has no name
       expect(screen.queryByText('Player 3')).not.toBeInTheDocument();
     });
 
-    it('日付を日本語形式で表示する', () => {
+    it('Displays date in Japanese format', () => {
       render(<MockHighScoreDisplay highScores={mockHighScores} />);
 
       expect(screen.getByText('2024/1/15')).toBeInTheDocument();
@@ -131,8 +131,8 @@ describe('HighScoreDisplay コンポーネント', () => {
     });
   });
 
-  describe('順位表示機能', () => {
-    it('showRankがtrueの場合、順位を表示する', () => {
+  describe('Rank display functionality', () => {
+    it('Displays rank when showRank is true', () => {
       render(<MockHighScoreDisplay highScores={mockHighScores} showRank={true} />);
 
       expect(screen.getByText('#1')).toBeInTheDocument();
@@ -140,7 +140,7 @@ describe('HighScoreDisplay コンポーネント', () => {
       expect(screen.getByText('#3')).toBeInTheDocument();
     });
 
-    it('showRankがfalseの場合、順位を表示しない', () => {
+    it('Does not display rank when showRank is false', () => {
       render(<MockHighScoreDisplay highScores={mockHighScores} showRank={false} />);
 
       expect(screen.queryByText('#1')).not.toBeInTheDocument();
@@ -149,8 +149,8 @@ describe('HighScoreDisplay コンポーネント', () => {
     });
   });
 
-  describe('表示件数制限機能', () => {
-    it('maxDisplayで表示件数を制限できる', () => {
+  describe('Display count limitation functionality', () => {
+    it('Can limit display count with maxDisplay', () => {
       render(<MockHighScoreDisplay highScores={mockHighScores} maxDisplay={2} />);
 
       expect(screen.getByTestId('high-score-item-0')).toBeInTheDocument();
@@ -158,7 +158,7 @@ describe('HighScoreDisplay コンポーネント', () => {
       expect(screen.queryByTestId('high-score-item-2')).not.toBeInTheDocument();
     });
 
-    it('maxDisplayが配列長より大きい場合、全て表示する', () => {
+    it('Displays all items when maxDisplay is larger than array length', () => {
       render(<MockHighScoreDisplay highScores={mockHighScores} maxDisplay={10} />);
 
       expect(screen.getByTestId('high-score-item-0')).toBeInTheDocument();
@@ -167,17 +167,17 @@ describe('HighScoreDisplay コンポーネント', () => {
     });
   });
 
-  describe('空の状態の表示', () => {
-    it('ハイスコアが空の場合、適切なメッセージを表示する', () => {
+  describe('Empty state display', () => {
+    it('Displays appropriate message when high scores are empty', () => {
       render(<MockHighScoreDisplay highScores={[]} />);
 
       expect(screen.getByTestId('no-scores-message')).toBeInTheDocument();
-      expect(screen.getByText('まだハイスコアがありません')).toBeInTheDocument();
+      expect(screen.getByText('No high scores yet')).toBeInTheDocument();
     });
   });
 
-  describe('CSS クラスとスタイリング', () => {
-    it('サイバーパンクテーマのCSSクラスが適用されている', () => {
+  describe('CSS classes and styling', () => {
+    it('Cyberpunk theme CSS classes are applied', () => {
       render(<MockHighScoreDisplay highScores={mockHighScores} />);
 
       const container = screen.getByTestId('high-score-display');
@@ -185,7 +185,7 @@ describe('HighScoreDisplay コンポーネント', () => {
       expect(container).toHaveClass('p-4');
     });
 
-    it('各スコアアイテムにネオンボーダーが適用されている', () => {
+    it('Neon border is applied to each score item', () => {
       render(<MockHighScoreDisplay highScores={mockHighScores} />);
 
       const firstItem = screen.getByTestId('high-score-item-0');
@@ -194,19 +194,19 @@ describe('HighScoreDisplay コンポーネント', () => {
   });
 });
 
-describe('ハイスコア関連のユーティリティ関数（予定）', () => {
-  it('スコアがTop 10入りするかを判定できる', () => {
-    // この関数は後で実装予定
+describe('High score related utility functions (planned)', () => {
+  it('Can determine if score ranks in Top 10', () => {
+    // This function will be implemented later
     expect(true).toBe(true);
   });
 
-  it('新記録達成時のランクを取得できる', () => {
-    // この関数は後で実装予定
+  it('Can get rank when achieving new record', () => {
+    // This function will be implemented later
     expect(true).toBe(true);
   });
 
-  it('ハイスコア達成時のお祝いメッセージを生成できる', () => {
-    // この関数は後で実装予定
+  it('Can generate congratulatory message when achieving high score', () => {
+    // This function will be implemented later
     expect(true).toBe(true);
   });
 });

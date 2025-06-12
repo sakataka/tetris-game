@@ -1,15 +1,15 @@
 /**
- * ゲームタイマー機能の基本テスト
+ * Basic tests for game timer functionality
  *
- * ピース自動落下の核心機能を検証し、
- * ゲームプレイ不能バグを防止する
+ * Verifies core functionality of automatic piece dropping
+ * and prevents game-breaking bugs
  */
 
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { useGameTimer } from '../hooks/useGameTimer';
 
-// シンプルなAnimationManagerモック
+// Simple AnimationManager mock
 vi.mock('../utils/animation/animationManager', () => ({
   animationManager: {
     registerAnimation: vi.fn(),
@@ -29,7 +29,7 @@ vi.mock('../utils/animation/animationManager', () => ({
   },
 }));
 
-describe('useGameTimer - 基本ゲーム機能テスト', () => {
+describe('useGameTimer - Basic game functionality tests', () => {
   let mockOnTick: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
@@ -41,8 +41,8 @@ describe('useGameTimer - 基本ゲーム機能テスト', () => {
     vi.restoreAllMocks();
   });
 
-  describe('基本動作テスト', () => {
-    it('useGameTimer フックが正常にマウントされる', () => {
+  describe('Basic operation tests', () => {
+    it('useGameTimer hook mounts successfully', () => {
       const { result } = renderHook(() =>
         useGameTimer({
           isActive: true,
@@ -51,11 +51,11 @@ describe('useGameTimer - 基本ゲーム機能テスト', () => {
         })
       );
 
-      // フックがエラーなくマウントされることを確認
+      // Verify hook mounts without errors
       expect(result.current).toBeUndefined();
     });
 
-    it('非アクティブ時でもフックがマウントされる', () => {
+    it('Hook mounts even when inactive', () => {
       const { result } = renderHook(() =>
         useGameTimer({
           isActive: false,
@@ -64,11 +64,11 @@ describe('useGameTimer - 基本ゲーム機能テスト', () => {
         })
       );
 
-      // フックがエラーなくマウントされることを確認
+      // Verify hook mounts without errors
       expect(result.current).toBeUndefined();
     });
 
-    it('プロパティ変更時にフックが再レンダリングされる', () => {
+    it('Hook re-renders when properties change', () => {
       const { rerender } = renderHook(
         ({ isActive, interval }) =>
           useGameTimer({
@@ -79,33 +79,33 @@ describe('useGameTimer - 基本ゲーム機能テスト', () => {
         { initialProps: { isActive: true, interval: 1000 } }
       );
 
-      // プロパティを変更してもエラーが発生しないことを確認
+      // Verify no errors occur when changing properties
       rerender({ isActive: false, interval: 500 });
       rerender({ isActive: true, interval: 300 });
 
-      // 複数回のrerenderでエラーが発生しないことを確認
+      // Verify no errors occur with multiple rerenders
       expect(true).toBe(true);
     });
   });
 
-  describe('ゲームプレイ重要機能テスト', () => {
-    it('ピース自動落下設定でフックが動作する', () => {
+  describe('Critical gameplay functionality tests', () => {
+    it('Hook works with automatic piece drop settings', () => {
       let dropCount = 0;
       const dropPiece = () => dropCount++;
 
       const { result } = renderHook(() =>
         useGameTimer({
           isActive: true,
-          interval: 800, // 800ms間隔でピース落下
+          interval: 800, // Piece drops every 800ms
           onTick: dropPiece,
         })
       );
 
-      // フックが正常に動作することを確認
+      // Verify hook operates normally
       expect(result.current).toBeUndefined();
     });
 
-    it('レベル変更によるスピード調整が適用される', () => {
+    it('Speed adjustment is applied with level changes', () => {
       const onTick = vi.fn();
 
       const { rerender } = renderHook(
@@ -118,14 +118,14 @@ describe('useGameTimer - 基本ゲーム機能テスト', () => {
         { initialProps: { interval: 1000 } }
       );
 
-      // 間隔を変更
+      // Change interval
       rerender({ interval: 300 });
 
-      // レンダリングが正常に完了することを確認
+      // Verify rendering completes successfully
       expect(true).toBe(true);
     });
 
-    it('ゲーム一時停止・再開機能が動作する', () => {
+    it('Game pause and resume functionality works', () => {
       let tickCount = 0;
 
       const { rerender } = renderHook(
@@ -138,19 +138,19 @@ describe('useGameTimer - 基本ゲーム機能テスト', () => {
         { initialProps: { isActive: true } }
       );
 
-      // 一時停止
+      // Pause
       rerender({ isActive: false });
 
-      // 再開
+      // Resume
       rerender({ isActive: true });
 
-      // 状態変更が正常に処理されることを確認
+      // Verify state changes are processed correctly
       expect(true).toBe(true);
     });
   });
 
-  describe('エラー耐性テスト', () => {
-    it('コールバック関数にエラーがあってもクラッシュしない', () => {
+  describe('Error resilience tests', () => {
+    it('Does not crash when callback function has errors', () => {
       const faultyCallback = vi.fn(() => {
         throw new Error('Test error');
       });
@@ -166,11 +166,11 @@ describe('useGameTimer - 基本ゲーム機能テスト', () => {
       }).not.toThrow();
     });
 
-    it('極端な間隔値でも安定して動作する', () => {
+    it('Operates stably with extreme interval values', () => {
       const fastTick = vi.fn();
       const slowTick = vi.fn();
 
-      // 極小間隔（1ms）
+      // Extremely small interval (1ms)
       expect(() => {
         renderHook(() =>
           useGameTimer({
@@ -181,7 +181,7 @@ describe('useGameTimer - 基本ゲーム機能テスト', () => {
         );
       }).not.toThrow();
 
-      // 極大間隔（1時間）
+      // Extremely large interval (1 hour)
       expect(() => {
         renderHook(() =>
           useGameTimer({

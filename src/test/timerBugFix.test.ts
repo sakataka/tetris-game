@@ -1,15 +1,15 @@
 /**
- * タイマーバグ修正の検証テスト
+ * Timer bug fix verification tests
  *
- * useTimerAnimationの正しい動作を確認し、
- * ゲームプレイ中のタイマー停止バグを防止する
+ * Verifies correct operation of useTimerAnimation
+ * and prevents timer stop bugs during gameplay
  */
 
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { useTimerAnimation } from '../utils/animation/useAnimationFrame';
 
-// シンプルなAnimationManagerモック
+// Simple AnimationManager mock
 vi.mock('../utils/animation/animationManager', () => ({
   animationManager: {
     registerAnimation: vi.fn(),
@@ -29,7 +29,7 @@ vi.mock('../utils/animation/animationManager', () => ({
   },
 }));
 
-describe('タイマーバグ修正検証', () => {
+describe('Timer bug fix verification', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -38,19 +38,19 @@ describe('タイマーバグ修正検証', () => {
     vi.restoreAllMocks();
   });
 
-  describe('useTimerAnimation修正テスト', () => {
-    it('useTimerAnimationフックが正常にマウントされる', () => {
+  describe('useTimerAnimation fix tests', () => {
+    it('useTimerAnimation hook mounts normally', () => {
       const mockCallback = vi.fn();
 
       const { result } = renderHook(() =>
         useTimerAnimation(mockCallback, 1000, [], { enabled: true })
       );
 
-      // フックがエラーなくマウントされることを確認
+      // Verify hook mounts without errors
       expect(result.current).toBeDefined();
     });
 
-    it('短い間隔でも正常に動作する', () => {
+    it('Works normally even with short intervals', () => {
       const mockCallback = vi.fn();
 
       expect(() => {
@@ -58,7 +58,7 @@ describe('タイマーバグ修正検証', () => {
       }).not.toThrow();
     });
 
-    it('累積時間リセット機能が動作する', () => {
+    it('Accumulated time reset functionality works', () => {
       const mockCallback = vi.fn();
 
       const { rerender } = renderHook(
@@ -66,15 +66,15 @@ describe('タイマーバグ修正検証', () => {
         { initialProps: { interval: 1000 } }
       );
 
-      // 間隔を変更してもエラーが発生しないことを確認
+      // Verify no errors occur when changing interval
       rerender({ interval: 200 });
 
       expect(true).toBe(true);
     });
   });
 
-  describe('ゲーム実用性テスト', () => {
-    it('ピース自動落下シミュレーション設定', () => {
+  describe('Game practicality tests', () => {
+    it('Automatic piece drop simulation settings', () => {
       let dropCount = 0;
       const dropPiece = () => dropCount++;
 
@@ -82,7 +82,7 @@ describe('タイマーバグ修正検証', () => {
         renderHook(() =>
           useTimerAnimation(
             dropPiece,
-            800, // 800ms間隔
+            800, // 800ms interval
             [],
             { enabled: true }
           )
@@ -90,7 +90,7 @@ describe('タイマーバグ修正検証', () => {
       }).not.toThrow();
     });
 
-    it('レベル上昇時の高速化設定', () => {
+    it('Level increase speed acceleration settings', () => {
       let tickCount = 0;
 
       const { rerender } = renderHook(
@@ -99,13 +99,13 @@ describe('タイマーバグ修正検証', () => {
         { initialProps: { interval: 1000 } }
       );
 
-      // 高速化の設定変更
+      // Speed acceleration setting change
       rerender({ interval: 300 });
 
       expect(true).toBe(true);
     });
 
-    it('一時停止・再開の動作設定', () => {
+    it('Pause and resume operation settings', () => {
       let tickCount = 0;
       const onTick = () => tickCount++;
 
@@ -114,25 +114,25 @@ describe('タイマーバグ修正検証', () => {
         { initialProps: { enabled: true } }
       );
 
-      // 一時停止
+      // Pause
       rerender({ enabled: false });
 
-      // 再開
+      // Resume
       rerender({ enabled: true });
 
       expect(true).toBe(true);
     });
   });
 
-  describe('エッジケーステスト', () => {
-    it('極小間隔でもクラッシュしない', () => {
+  describe('Edge case tests', () => {
+    it('Does not crash even with extremely small intervals', () => {
       const fastCallback = vi.fn();
 
       expect(() => {
         renderHook(() =>
           useTimerAnimation(
             fastCallback,
-            1, // 1ms間隔
+            1, // 1ms interval
             [],
             { enabled: true }
           )
@@ -140,14 +140,14 @@ describe('タイマーバグ修正検証', () => {
       }).not.toThrow();
     });
 
-    it('極大間隔での正常動作', () => {
+    it('Normal operation with extremely large intervals', () => {
       const slowCallback = vi.fn();
 
       expect(() => {
         renderHook(() =>
           useTimerAnimation(
             slowCallback,
-            10000, // 10秒間隔
+            10000, // 10 second interval
             [],
             { enabled: true }
           )

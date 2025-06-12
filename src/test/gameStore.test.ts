@@ -1,13 +1,13 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { HighScore, GameStatistics } from '../types/tetris';
 
-// 型安全なストア状態の型定義
+// Type-safe store state type definition
 interface TestStoreState {
   highScores: HighScore[];
   statistics: GameStatistics;
 }
 
-// テスト専用のストア作成関数をモック
+// Mock test-specific store creation function
 const createTestStore = () => {
   let state: TestStoreState = {
     highScores: [],
@@ -75,21 +75,21 @@ const createTestStore = () => {
 // Mock zustand store
 let testStore = createTestStore();
 
-describe('GameStore - ハイスコア機能', () => {
+describe('GameStore - High score functionality', () => {
   beforeEach(() => {
-    // テストストアをリセット
+    // Reset test store
     testStore = createTestStore();
   });
 
-  describe('ハイスコアの追加と管理', () => {
-    it('新しいハイスコアを追加できる', () => {
+  describe('Adding and managing high scores', () => {
+    it('Can add new high score', () => {
       const newScore: HighScore = {
         id: 'test-1',
         score: 15000,
         level: 5,
         lines: 25,
         date: Date.now(),
-        playerName: 'テストプレイヤー',
+        playerName: 'Test Player',
       };
 
       testStore.addHighScore(newScore);
@@ -98,7 +98,7 @@ describe('GameStore - ハイスコア機能', () => {
       expect(testStore.getState().highScores[0]).toEqual(newScore);
     });
 
-    it('複数のハイスコアをスコア順（降順）でソートする', () => {
+    it('Sorts multiple high scores in descending order', () => {
       const scores: HighScore[] = [
         {
           id: 'test-1',
@@ -131,8 +131,8 @@ describe('GameStore - ハイスコア機能', () => {
       expect(testStore.getState().highScores[2]?.score).toBe(10000);
     });
 
-    it('11個以上のスコアが追加されたとき、上位10個のみを保持する', () => {
-      // 15個のスコアを追加
+    it('Keeps only top 10 scores when more than 11 scores are added', () => {
+      // Add 15 scores
       const scores: HighScore[] = Array.from({ length: 15 }, (_, i) => ({
         id: `test-${i}`,
         score: (i + 1) * 1000,
@@ -144,12 +144,12 @@ describe('GameStore - ハイスコア機能', () => {
       scores.forEach((score) => testStore.addHighScore(score));
 
       expect(testStore.getState().highScores).toHaveLength(10);
-      // 最高スコアが15000、最低が6000であることを確認
+      // Verify highest score is 15000, lowest is 6000
       expect(testStore.getState().highScores[0]?.score).toBe(15000);
       expect(testStore.getState().highScores[9]?.score).toBe(6000);
     });
 
-    it('ハイスコアをクリアできる', () => {
+    it('Can clear high scores', () => {
       const newScore: HighScore = {
         id: 'test-1',
         score: 15000,
@@ -166,8 +166,8 @@ describe('GameStore - ハイスコア機能', () => {
     });
   });
 
-  describe('統計機能', () => {
-    it('統計データを更新できる', () => {
+  describe('Statistics functionality', () => {
+    it('Can update statistics data', () => {
       const newStats: Partial<GameStatistics> = {
         totalGames: 5,
         totalLines: 50,
@@ -181,11 +181,11 @@ describe('GameStore - ハイスコア機能', () => {
       expect(testStore.getState().statistics.totalLines).toBe(50);
       expect(testStore.getState().statistics.totalScore).toBe(75000);
       expect(testStore.getState().statistics.tetrisCount).toBe(3);
-      // 平均スコアが自動計算されることを確認
+      // Verify average score is automatically calculated
       expect(testStore.getState().statistics.averageScore).toBe(15000);
     });
 
-    it('ベストスコアがハイスコア追加時に自動更新される', () => {
+    it('Best score is automatically updated when adding high score', () => {
       expect(testStore.getState().statistics.bestScore).toBe(0);
 
       const newScore: HighScore = {
@@ -201,8 +201,8 @@ describe('GameStore - ハイスコア機能', () => {
       expect(testStore.getState().statistics.bestScore).toBe(25000);
     });
 
-    it('統計データをリセットできる', () => {
-      // まず統計を更新
+    it('Can reset statistics data', () => {
+      // First update statistics
       testStore.updateStatistics({
         totalGames: 10,
         totalScore: 100000,
@@ -211,7 +211,7 @@ describe('GameStore - ハイスコア機能', () => {
 
       expect(testStore.getState().statistics.totalGames).toBe(10);
 
-      // リセット
+      // Reset
       testStore.resetStatistics();
 
       expect(testStore.getState().statistics.totalGames).toBe(0);
@@ -221,20 +221,20 @@ describe('GameStore - ハイスコア機能', () => {
     });
   });
 
-  describe('ゲームリセット時の統計更新', () => {
-    it('ゲームリセット時にtotalGamesが増加し、averageScoreが再計算される', () => {
-      // 初期状態の確認
+  describe('Statistics update on game reset', () => {
+    it('totalGames increases and averageScore is recalculated on game reset', () => {
+      // Verify initial state
       expect(testStore.getState().statistics.totalGames).toBe(0);
       expect(testStore.getState().statistics.averageScore).toBe(0);
 
-      // 最初にスコアを設定してゲーム終了をシミュレート
+      // First set score and simulate game end
       testStore.updateStatistics({ totalScore: 10000, totalGames: 1 });
 
       const updatedStats = testStore.getState().statistics;
       expect(updatedStats.totalGames).toBe(1);
       expect(updatedStats.averageScore).toBe(10000);
 
-      // 2回目のゲーム
+      // Second game
       testStore.updateStatistics({ totalScore: 30000, totalGames: 2 });
 
       const finalStats = testStore.getState().statistics;
@@ -244,14 +244,14 @@ describe('GameStore - ハイスコア機能', () => {
   });
 });
 
-describe('ハイスコア判定ユーティリティ（予定）', () => {
-  it('スコアがハイスコアランクインするかを判定できる', () => {
-    // この機能は後で実装予定
+describe('High score judgment utility (planned)', () => {
+  it('Can determine if score ranks in high scores', () => {
+    // This feature will be implemented later
     expect(true).toBe(true);
   });
 
-  it('ハイスコア達成時の適切なメッセージを生成できる', () => {
-    // この機能は後で実装予定
+  it('Can generate appropriate message when achieving high score', () => {
+    // This feature will be implemented later
     expect(true).toBe(true);
   });
 });

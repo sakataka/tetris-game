@@ -50,12 +50,12 @@ describe('ThemeLoader - JSON-based theme system', () => {
         expect(theme.effects).toBeDefined();
         expect(theme.accessibility).toBeDefined();
 
-        // カラー形式の検証
+        // Validate color format
         expect(theme.colors.primary).toMatch(/^#[0-9a-fA-F]{6}$/);
         expect(theme.colors.secondary).toMatch(/^#[0-9a-fA-F]{6}$/);
         expect(theme.colors.tertiary).toMatch(/^#[0-9a-fA-F]{6}$/);
 
-        // エフェクト数値の検証
+        // Validate effect values
         expect(typeof theme.effects.blur).toBe('number');
         expect(typeof theme.effects.glow).toBe('number');
         expect(theme.effects.saturation).toBeGreaterThan(0);
@@ -73,7 +73,7 @@ describe('ThemeLoader - JSON-based theme system', () => {
       expect(allThemes.minimal).toBeDefined();
       expect(allThemes.neon).toBeDefined();
 
-      // 各テーマの完整性チェック
+      // Check integrity of each theme
       Object.values(allThemes).forEach((theme) => {
         expect(theme.name).toBeTruthy();
         expect(Object.keys(theme.colors)).toHaveLength(6);
@@ -83,11 +83,11 @@ describe('ThemeLoader - JSON-based theme system', () => {
     });
   });
 
-  describe('型安全性検証', () => {
+  describe('Type safety validation', () => {
     it('should validate color format correctly', async () => {
       const theme = await getThemePresetAsync('classic');
 
-      // Classic テーマの特定値を検証
+      // Validate Classic theme specific values
       expect(theme.colors.primary).toBe('#0066cc');
       expect(theme.colors.secondary).toBe('#cc6600');
       expect(theme.colors.background).toBe('#f5f5f5');
@@ -98,7 +98,7 @@ describe('ThemeLoader - JSON-based theme system', () => {
     it('should ensure all required properties exist', async () => {
       const theme = await getThemePresetAsync('minimal');
 
-      // 必須プロパティの存在確認
+      // Verify existence of required properties
       const requiredColorKeys = [
         'primary',
         'secondary',
@@ -127,15 +127,15 @@ describe('ThemeLoader - JSON-based theme system', () => {
       const themes = await getAllThemePresetsAsync();
 
       Object.values(themes).forEach((theme) => {
-        // colorBlindnessType の有効値チェック
+        // Check valid values for colorBlindnessType
         expect(['none', 'protanopia', 'deuteranopia', 'tritanopia']).toContain(
           theme.accessibility.colorBlindnessType
         );
 
-        // contrast の有効値チェック
+        // Check valid values for contrast
         expect(['low', 'normal', 'high']).toContain(theme.accessibility.contrast);
 
-        // animationIntensity の有効値チェック
+        // Check valid values for animationIntensity
         expect(['none', 'reduced', 'normal', 'enhanced']).toContain(
           theme.accessibility.animationIntensity
         );
@@ -143,22 +143,22 @@ describe('ThemeLoader - JSON-based theme system', () => {
     });
   });
 
-  describe('キャッシュ機能', () => {
+  describe('Cache functionality', () => {
     it('should cache themes after first load', async () => {
-      // 初回ロード
+      // First load
       const theme1 = await getThemePresetAsync('neon');
       expect(theme1).toBeDefined();
 
-      // キャッシュ統計確認
+      // Verify cache statistics
       let cacheStats = themeCache.getCacheStats();
       expect(cacheStats.size).toBe(1);
       expect(cacheStats.keys).toContain('neon');
 
-      // 2回目ロード（キャッシュから）
+      // Second load (from cache)
       const theme2 = await getThemePresetAsync('neon');
       expect(theme2).toEqual(theme1);
 
-      // キャッシュサイズが変わらないことを確認
+      // Verify cache size does not change
       cacheStats = themeCache.getCacheStats();
       expect(cacheStats.size).toBe(1);
     });
@@ -177,23 +177,23 @@ describe('ThemeLoader - JSON-based theme system', () => {
       await getThemePresetAsync('classic');
       await getThemePresetAsync('minimal');
 
-      // キャッシュにデータがあることを確認
+      // Verify data exists in cache
       expect(themeCache.getCacheStats().size).toBe(2);
 
-      // キャッシュクリア
+      // Clear cache
       themeCache.clearCache();
 
-      // キャッシュが空になったことを確認
+      // Verify cache is empty
       expect(themeCache.getCacheStats().size).toBe(0);
       expect(themeCache.getCacheStats().keys).toHaveLength(0);
     });
   });
 
-  describe('パフォーマンステスト', () => {
+  describe('Performance tests', () => {
     it('should load themes efficiently', async () => {
       const startTime = performance.now();
 
-      // 全テーマを順次ロード
+      // Load all themes sequentially
       await getThemePresetAsync('cyberpunk');
       await getThemePresetAsync('classic');
       await getThemePresetAsync('retro');
@@ -203,30 +203,30 @@ describe('ThemeLoader - JSON-based theme system', () => {
       const endTime = performance.now();
       const loadTime = endTime - startTime;
 
-      // 100ms以内で全テーマロード完了を期待
+      // Expect all themes to load within 100ms
       expect(loadTime).toBeLessThan(100);
     });
 
     it('should demonstrate cache performance benefit', async () => {
-      // 初回ロード時間測定
+      // Measure first load time
       const startTime1 = performance.now();
       await getThemePresetAsync('cyberpunk');
       const firstLoadTime = performance.now() - startTime1;
 
-      // キャッシュからのロード時間測定
+      // Measure cache load time
       const startTime2 = performance.now();
       await getThemePresetAsync('cyberpunk');
       const cachedLoadTime = performance.now() - startTime2;
 
-      // キャッシュからの方が速いことを確認
+      // Verify cache is faster
       expect(cachedLoadTime).toBeLessThan(firstLoadTime);
-      expect(cachedLoadTime).toBeLessThan(1); // 1ms以内
+      expect(cachedLoadTime).toBeLessThan(1); // Within 1ms
     });
 
     it('should handle concurrent theme loading', async () => {
       const startTime = performance.now();
 
-      // 並列でテーマをロード
+      // Load themes in parallel
       const promises = [
         getThemePresetAsync('cyberpunk'),
         getThemePresetAsync('classic'),
@@ -240,21 +240,21 @@ describe('ThemeLoader - JSON-based theme system', () => {
       const endTime = performance.now();
       const concurrentLoadTime = endTime - startTime;
 
-      // 全テーマが正常にロードされることを確認
+      // Verify all themes load correctly
       expect(themes).toHaveLength(5);
       themes.forEach((theme) => {
         expect(theme).toBeDefined();
         expect(theme.name).toBeTruthy();
       });
 
-      // 並列ロードが効率的であることを確認（50ms以内）
+      // Verify parallel loading is efficient (within 50ms)
       expect(concurrentLoadTime).toBeLessThan(50);
     });
   });
 
-  describe('後方互換性', () => {
+  describe('Backward compatibility', () => {
     it('should provide sync fallback function', () => {
-      // 同期版フォールバック関数の動作確認
+      // Verify sync fallback function operation
       const fallbackTheme = getThemePresetSync('cyberpunk');
 
       expect(fallbackTheme).toBeDefined();
@@ -267,7 +267,7 @@ describe('ThemeLoader - JSON-based theme system', () => {
     it('should maintain interface compatibility', async () => {
       const theme = await getThemePresetAsync('retro');
 
-      // 既存のThemeConfig型との互換性確認
+      // Verify compatibility with existing ThemeConfig type
       const requiredProperties: (keyof ThemeConfig)[] = [
         'name',
         'colors',
@@ -279,7 +279,7 @@ describe('ThemeLoader - JSON-based theme system', () => {
         expect(theme[prop]).toBeDefined();
       });
 
-      // 戻り値の型が正確であることを確認
+      // Verify return value type is correct
       expect(typeof theme.name).toBe('string');
       expect(typeof theme.colors).toBe('object');
       expect(typeof theme.effects).toBe('object');
@@ -287,7 +287,7 @@ describe('ThemeLoader - JSON-based theme system', () => {
     });
   });
 
-  describe('エラーハンドリング', () => {
+  describe('Error handling', () => {
     it('should handle invalid theme names', async () => {
       await expect(getThemePresetAsync('invalid' as ThemeVariant)).rejects.toThrow(
         "Theme 'invalid' not found in presets"
@@ -295,7 +295,7 @@ describe('ThemeLoader - JSON-based theme system', () => {
     });
 
     it('should validate theme data structure', async () => {
-      // 正常なテーマの検証（エラーが発生しないことを確認）
+      // Validate normal themes (verify no errors occur)
       await expect(getThemePresetAsync('cyberpunk')).resolves.toBeDefined();
       await expect(getThemePresetAsync('classic')).resolves.toBeDefined();
       await expect(getThemePresetAsync('retro')).resolves.toBeDefined();
@@ -304,18 +304,18 @@ describe('ThemeLoader - JSON-based theme system', () => {
     });
   });
 
-  describe('メモリ使用量', () => {
+  describe('Memory usage', () => {
     it('should maintain reasonable cache size', async () => {
-      // 全テーマをロード
+      // Load all themes
       await getAllThemePresetsAsync();
 
       const cacheStats = themeCache.getCacheStats();
 
-      // 5つのテーマがキャッシュされていることを確認
+      // Verify 5 themes are cached
       expect(cacheStats.size).toBe(5);
       expect(cacheStats.keys).toHaveLength(5);
 
-      // 予想されるテーマ名がすべて含まれていることを確認
+      // Verify all expected theme names are included
       const expectedThemes = ['cyberpunk', 'classic', 'retro', 'minimal', 'neon'];
       expectedThemes.forEach((themeName) => {
         expect(cacheStats.keys).toContain(themeName);

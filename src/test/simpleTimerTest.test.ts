@@ -1,22 +1,22 @@
 /**
- * シンプルなタイマーデバッグテスト
+ * Simple timer debug tests
  *
- * useTimerAnimationが実際に動作するかを確認
+ * Verifies that useTimerAnimation actually works
  */
 
 import { describe, it, expect } from 'vitest';
 
-describe('タイマー動作デバッグ', () => {
-  it('useTimerAnimationの基本動作確認', () => {
-    // 直接useTimerAnimationをインポートせず、動作確認のみ
+describe('Timer operation debug', () => {
+  it('Basic operation verification of useTimerAnimation', () => {
+    // Do not directly import useTimerAnimation, only verify operation
     let callCount = 0;
     const callback = () => callCount++;
 
-    // 手動でdeltaTime累積ロジックをテスト
+    // Manually test deltaTime accumulation logic
     let accumulatedTime = 0;
-    const interval = 1000; // 1秒間隔
+    const interval = 1000; // 1 second interval
 
-    // 60fps相当のdeltaTime (16.67ms) を60回実行
+    // Execute 60 times with deltaTime equivalent to 60fps (16.67ms)
     for (let i = 0; i < 60; i++) {
       const deltaTime = 16.67;
       accumulatedTime += deltaTime;
@@ -27,19 +27,19 @@ describe('タイマー動作デバッグ', () => {
       }
     }
 
-    // 1秒経過で1回実行される
+    // Executed once after 1 second
     expect(callCount).toBe(1);
     expect(accumulatedTime).toBeLessThan(interval);
   });
 
-  it('複数回実行のテスト', () => {
+  it('Multiple execution test', () => {
     let callCount = 0;
     const callback = () => callCount++;
 
     let accumulatedTime = 0;
-    const interval = 100; // 100ms間隔
+    const interval = 100; // 100ms interval
 
-    // 1秒分のフレーム実行
+    // Execute 1 second worth of frames
     for (let i = 0; i < 60; i++) {
       const deltaTime = 16.67;
       accumulatedTime += deltaTime;
@@ -50,18 +50,18 @@ describe('タイマー動作デバッグ', () => {
       }
     }
 
-    // 約10回実行される（1000ms / 100ms = 10回）
+    // Executed approximately 10 times (1000ms / 100ms = 10 times)
     expect(callCount).toBe(10);
   });
 
-  it('累積時間リセットのテスト', () => {
+  it('Accumulated time reset test', () => {
     let callCount = 0;
     const callback = () => callCount++;
 
     let accumulatedTime = 0;
-    let interval = 500; // 500ms間隔
+    let interval = 500; // 500ms interval
 
-    // 300ms分実行（まだ発火しない）
+    // Execute for 300ms (does not fire yet)
     for (let i = 0; i < 18; i++) {
       const deltaTime = 16.67;
       accumulatedTime += deltaTime;
@@ -73,11 +73,11 @@ describe('タイマー動作デバッグ', () => {
     }
     expect(callCount).toBe(0);
 
-    // 間隔変更（累積時間リセットをシミュレート）
+    // Change interval (simulate accumulated time reset)
     interval = 200;
-    accumulatedTime = 0; // リセット
+    accumulatedTime = 0; // Reset
 
-    // さらに200ms分実行
+    // Execute for additional 200ms
     for (let i = 0; i < 12; i++) {
       const deltaTime = 16.67;
       accumulatedTime += deltaTime;
@@ -88,29 +88,29 @@ describe('タイマー動作デバッグ', () => {
       }
     }
 
-    // 新しい間隔で発火される
+    // Fires with new interval
     expect(callCount).toBe(1);
   });
 
-  it('精度保持のテスト', () => {
+  it('Precision maintenance test', () => {
     let callCount = 0;
     const callback = () => callCount++;
 
     let accumulatedTime = 0;
-    const interval = 16.67; // 1フレーム間隔
+    const interval = 16.67; // 1 frame interval
 
-    // 10フレーム実行
+    // Execute 10 frames
     for (let i = 0; i < 10; i++) {
       const deltaTime = 16.67;
       accumulatedTime += deltaTime;
 
       while (accumulatedTime >= interval) {
         callback();
-        accumulatedTime -= interval; // より精密な計算
+        accumulatedTime -= interval; // More precise calculation
       }
     }
 
-    // 10回実行される
+    // Executed 10 times
     expect(callCount).toBe(10);
     expect(accumulatedTime).toBeLessThan(interval);
   });

@@ -4,7 +4,7 @@ import { useHighScoreManager } from '../hooks/useHighScoreManager';
 import { GameState } from '../types/tetris';
 import { createTestFixtures } from './fixtures';
 
-// テストフィクスチャとモックを作成
+// Create test fixtures and mocks
 const fixtures = createTestFixtures();
 const mockActions = {
   addHighScore: vi.fn(),
@@ -71,8 +71,8 @@ describe('useHighScoreManager', () => {
     mockActions.clearStatistics.mockClear();
   });
 
-  describe('ハイスコア判定機能', () => {
-    it('空のハイスコアリストに対して、任意のスコアがハイスコアと判定される', () => {
+  describe('High score determination functionality', () => {
+    it('Any score is determined as high score for empty high score list', () => {
       const gameState = createMockGameState();
       const { result } = renderHook(() =>
         useHighScoreManager({ gameState, playSound: mockPlaySound })
@@ -82,7 +82,7 @@ describe('useHighScoreManager', () => {
       expect(result.current.checkIsHighScore(100)).toBe(true);
     });
 
-    it('既存のハイスコアより高いスコアがハイスコアと判定される', () => {
+    it('Score higher than existing high score is determined as high score', () => {
       fixtures.highScores.push({ id: '1', score: 10000, level: 5, lines: 25, date: Date.now() });
 
       const gameState = createMockGameState();
@@ -91,10 +91,10 @@ describe('useHighScoreManager', () => {
       );
 
       expect(result.current.checkIsHighScore(15000)).toBe(true);
-      expect(result.current.checkIsHighScore(5000)).toBe(true); // リストが満杯でないため
+      expect(result.current.checkIsHighScore(5000)).toBe(true); // Because list is not full
     });
 
-    it('現在のハイスコアを正しく取得できる', () => {
+    it('Can correctly get current high score', () => {
       fixtures.highScores.push(
         { id: '1', score: 25000, level: 8, lines: 40, date: Date.now() },
         { id: '2', score: 15000, level: 5, lines: 25, date: Date.now() }
@@ -108,7 +108,7 @@ describe('useHighScoreManager', () => {
       expect(result.current.getCurrentHighScore()).toBe(25000);
     });
 
-    it('ハイスコアが空の場合、現在のハイスコアは0', () => {
+    it('Current high score is 0 when high scores are empty', () => {
       const gameState = createMockGameState();
       const { result } = renderHook(() =>
         useHighScoreManager({ gameState, playSound: mockPlaySound })
@@ -118,7 +118,7 @@ describe('useHighScoreManager', () => {
     });
   });
 
-  describe('スコアランク機能', () => {
+  describe('Score rank functionality', () => {
     beforeEach(() => {
       fixtures.highScores.push(
         { id: '1', score: 30000, level: 8, lines: 40, date: Date.now() },
@@ -127,7 +127,7 @@ describe('useHighScoreManager', () => {
       );
     });
 
-    it('1位になるスコアの順位を正しく取得できる', () => {
+    it('Can correctly get rank for score that ranks 1st', () => {
       const gameState = createMockGameState();
       const { result } = renderHook(() =>
         useHighScoreManager({ gameState, playSound: mockPlaySound })
@@ -136,7 +136,7 @@ describe('useHighScoreManager', () => {
       expect(result.current.getScoreRank(40000)).toBe(1);
     });
 
-    it('2位になるスコアの順位を正しく取得できる', () => {
+    it('Can correctly get rank for score that ranks 2nd', () => {
       const gameState = createMockGameState();
       const { result } = renderHook(() =>
         useHighScoreManager({ gameState, playSound: mockPlaySound })
@@ -145,8 +145,8 @@ describe('useHighScoreManager', () => {
       expect(result.current.getScoreRank(25000)).toBe(2);
     });
 
-    it('ランクインしないスコアではnullを返す', () => {
-      // 10個のハイスコアで満杯にする
+    it('Returns null for score that does not rank', () => {
+      // Fill with 10 high scores
       fixtures.highScores.push(
         ...Array.from({ length: 10 }, (_, i) => ({
           id: `${i}`,
@@ -166,8 +166,8 @@ describe('useHighScoreManager', () => {
     });
   });
 
-  describe('ゲーム終了時の自動保存', () => {
-    it('ゲーム終了時に統計が更新される', () => {
+  describe('Automatic save on game end', () => {
+    it('Statistics are updated when game ends', () => {
       const gameState = createMockGameState({
         gameOver: false,
         score: 15000,
@@ -179,7 +179,7 @@ describe('useHighScoreManager', () => {
         initialProps: { gameState, playSound: mockPlaySound },
       });
 
-      // ゲーム終了状態に変更
+      // Change to game over state
       const gameOverState = createMockGameState({
         gameOver: true,
         score: 15000,
@@ -199,7 +199,7 @@ describe('useHighScoreManager', () => {
       );
     });
 
-    it('ハイスコア達成時にハイスコアが保存される', () => {
+    it('High score is saved when achieving high score', () => {
       const gameState = createMockGameState({
         gameOver: false,
         score: 25000,
@@ -211,7 +211,7 @@ describe('useHighScoreManager', () => {
         initialProps: { gameState, playSound: mockPlaySound },
       });
 
-      // ゲーム終了状態に変更
+      // Change to game over state
       const gameOverState = createMockGameState({
         gameOver: true,
         score: 25000,
@@ -232,7 +232,7 @@ describe('useHighScoreManager', () => {
       );
     });
 
-    it('1位達成時に特別な音効果が再生される', () => {
+    it('Special sound effect is played when achieving 1st place', () => {
       const gameState = createMockGameState({
         gameOver: false,
         score: 50000,
@@ -244,7 +244,7 @@ describe('useHighScoreManager', () => {
         initialProps: { gameState, playSound: mockPlaySound },
       });
 
-      // ゲーム終了状態に変更
+      // Change to game over state
       const gameOverState = createMockGameState({
         gameOver: true,
         score: 50000,
@@ -259,7 +259,7 @@ describe('useHighScoreManager', () => {
       expect(mockPlaySound).toHaveBeenCalledWith('tetris');
     });
 
-    it('同じゲーム終了が複数回処理されない', () => {
+    it('Same game end is not processed multiple times', () => {
       const gameOverState = createMockGameState({
         gameOver: true,
         score: 15000,
@@ -271,18 +271,18 @@ describe('useHighScoreManager', () => {
         initialProps: { gameState: gameOverState, playSound: mockPlaySound },
       });
 
-      // 同じ状態で再レンダー
+      // Re-render with same state
       act(() => {
         rerender({ gameState: gameOverState, playSound: mockPlaySound });
       });
 
-      // 統計更新は1回だけ呼ばれるべき
+      // Statistics update should be called only once
       expect(mockActions.updateStatistics).toHaveBeenCalledTimes(1);
     });
   });
 
-  describe('手動ハイスコア保存', () => {
-    it('手動でハイスコアを保存できる', () => {
+  describe('Manual high score save', () => {
+    it('Can manually save high score', () => {
       const gameState = createMockGameState();
       const { result } = renderHook(() =>
         useHighScoreManager({ gameState, playSound: mockPlaySound })

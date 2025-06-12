@@ -26,7 +26,9 @@ const STATISTICS_PERIODS: StatisticsPeriod[] = [
   { label: 'All Time', days: 0 },
 ];
 
-// Mock data
+// Mock data with fixed timestamps
+const FIXED_BASE_TIME = 1700000000000; // Fixed timestamp: 2023-11-14T22:13:20.000Z
+
 const mockStatistics: EnhancedStatistics = {
   totalGames: 150,
   totalLines: 3500,
@@ -43,13 +45,13 @@ const mockStatistics: EnhancedStatistics = {
   linesClearingRate: 23.3,
   scorePerLine: 150,
   sessionCount: 28,
-  lastPlayDate: Date.now() - 3600000, // 1 hour ago
+  lastPlayDate: FIXED_BASE_TIME - 3600000, // 1 hour before base time
 };
 
 const mockHighScores: HighScore[] = [
-  { id: '1', score: 45000, level: 10, lines: 85, date: Date.now() - 86400000 },
-  { id: '2', score: 38000, level: 9, lines: 72, date: Date.now() - 172800000 },
-  { id: '3', score: 32000, level: 8, lines: 68, date: Date.now() - 259200000 },
+  { id: '1', score: 45000, level: 10, lines: 85, date: FIXED_BASE_TIME - 86400000 },
+  { id: '2', score: 38000, level: 9, lines: 72, date: FIXED_BASE_TIME - 172800000 },
+  { id: '3', score: 32000, level: 8, lines: 68, date: FIXED_BASE_TIME - 259200000 },
 ];
 
 // Mock the StatisticsDashboard component (not yet implemented)
@@ -172,7 +174,7 @@ const MockStatisticsDashboard = ({
               <div>
                 <span className='text-gray-400'>Last Played: </span>
                 <span className='text-yellow-400 font-semibold'>
-                  {Math.floor((Date.now() - statistics.lastPlayDate) / 3600000)}h ago
+                  {Math.floor((FIXED_BASE_TIME - statistics.lastPlayDate) / 3600000)}h ago
                 </span>
               </div>
             </div>
@@ -193,7 +195,7 @@ const MockStatisticsDashboard = ({
                   </span>
                   <span className='text-purple-400'>Level {score.level}</span>
                   <span className='text-gray-500'>
-                    {Math.floor((Date.now() - score.date) / 86400000)}d ago
+                    {Math.floor((FIXED_BASE_TIME - score.date) / 86400000)}d ago
                   </span>
                 </div>
               ))}

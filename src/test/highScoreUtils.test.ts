@@ -22,59 +22,59 @@ const mockHighScores: HighScore[] = [
 
 describe('highScoreUtils', () => {
   describe('isHighScore', () => {
-    it('ハイスコアリストが満杯でない場合、常にtrueを返す', () => {
+    it('Returns true when high score list is not full', () => {
       expect(isHighScore(1000, mockHighScores.slice(0, 3), 10)).toBe(true);
     });
 
-    it('新しいスコアが最低スコアより高い場合、trueを返す', () => {
+    it('Returns true when new score is higher than lowest score', () => {
       expect(isHighScore(15000, mockHighScores, 5)).toBe(true);
     });
 
-    it('新しいスコアが最低スコアより低い場合、falseを返す', () => {
+    it('Returns false when new score is lower than lowest score', () => {
       expect(isHighScore(5000, mockHighScores, 5)).toBe(false);
     });
 
-    it('新しいスコアが最低スコアと同じ場合、falseを返す', () => {
+    it('Returns false when new score equals lowest score', () => {
       expect(isHighScore(10000, mockHighScores, 5)).toBe(false);
     });
   });
 
   describe('getHighScoreRank', () => {
-    it('1位になるスコアの場合、1を返す', () => {
+    it('Returns 1 for score that ranks first', () => {
       expect(getHighScoreRank(60000, mockHighScores)).toBe(1);
     });
 
-    it('3位になるスコアの場合、3を返す', () => {
+    it('Returns 3 for score that ranks third', () => {
       expect(getHighScoreRank(35000, mockHighScores)).toBe(3);
     });
 
-    it('最下位になるスコアの場合、適切な順位を返す', () => {
+    it('Returns appropriate rank for score that ranks last', () => {
       expect(getHighScoreRank(15000, mockHighScores, 10)).toBe(5);
     });
 
-    it('ハイスコアに入らないスコアの場合、nullを返す', () => {
+    it('Returns null for score that does not rank', () => {
       expect(getHighScoreRank(5000, mockHighScores, 5)).toBe(null);
     });
   });
 
   describe('getHighScoreMessage', () => {
-    it('1位の場合、特別なメッセージを返す', () => {
+    it('Returns special message for 1st place', () => {
       const message = getHighScoreMessage(1);
       expect(message).toContain('New Record');
       expect(message).toContain('Highest score ever');
     });
 
-    it('2位の場合、2位用のメッセージを返す', () => {
+    it('Returns message for 2nd place', () => {
       const message = getHighScoreMessage(2);
       expect(message).toContain('2nd place');
     });
 
-    it('3位の場合、3位用のメッセージを返す', () => {
+    it('Returns message for 3rd place', () => {
       const message = getHighScoreMessage(3);
       expect(message).toContain('3rd place');
     });
 
-    it('4位以下の場合、一般的なメッセージを返す', () => {
+    it('Returns general message for 4th place and below', () => {
       const message = getHighScoreMessage(5);
       expect(message).toContain('Top 5');
       expect(message).toContain('Amazing score');
@@ -82,7 +82,7 @@ describe('highScoreUtils', () => {
   });
 
   describe('generateHighScoreId', () => {
-    it('ユニークなIDを生成する', () => {
+    it('Generates unique IDs', () => {
       const id1 = generateHighScoreId();
       const id2 = generateHighScoreId();
 
@@ -93,7 +93,7 @@ describe('highScoreUtils', () => {
   });
 
   describe('createHighScoreEntry', () => {
-    it('プレイヤー名ありで正しいハイスコアエントリを作成する', () => {
+    it('Creates correct high score entry with player name', () => {
       const entry = createHighScoreEntry(25000, 5, 30, 'TestPlayer');
 
       expect(entry.score).toBe(25000);
@@ -104,7 +104,7 @@ describe('highScoreUtils', () => {
       expect(entry.date).toBeTypeOf('number');
     });
 
-    it('プレイヤー名なしで正しいハイスコアエントリを作成する', () => {
+    it('Creates correct high score entry without player name', () => {
       const entry = createHighScoreEntry(25000, 5, 30);
 
       expect(entry.score).toBe(25000);
@@ -115,7 +115,7 @@ describe('highScoreUtils', () => {
   });
 
   describe('validateHighScore', () => {
-    it('有効なハイスコアでtrueを返す', () => {
+    it('Returns true for valid high score', () => {
       const validScore: HighScore = {
         id: 'test-1',
         score: 25000,
@@ -128,7 +128,7 @@ describe('highScoreUtils', () => {
       expect(validateHighScore(validScore)).toBe(true);
     });
 
-    it('プレイヤー名なしでも有効', () => {
+    it('Valid without player name', () => {
       const validScore: HighScore = {
         id: 'test-1',
         score: 25000,
@@ -140,7 +140,7 @@ describe('highScoreUtils', () => {
       expect(validateHighScore(validScore)).toBe(true);
     });
 
-    it('負のスコアで無効', () => {
+    it('Invalid with negative score', () => {
       const invalidScore = {
         id: 'test-1',
         score: -1000,
@@ -152,7 +152,7 @@ describe('highScoreUtils', () => {
       expect(validateHighScore(invalidScore)).toBe(false);
     });
 
-    it('レベル0で無効', () => {
+    it('Invalid with level 0', () => {
       const invalidScore = {
         id: 'test-1',
         score: 25000,
@@ -166,7 +166,7 @@ describe('highScoreUtils', () => {
   });
 
   describe('sortHighScores', () => {
-    it('スコア順（降順）でソートする', () => {
+    it('Sorts by score in descending order', () => {
       const unsorted: HighScore[] = [
         { id: '1', score: 30000, level: 6, lines: 40, date: 1000 },
         { id: '2', score: 50000, level: 10, lines: 80, date: 2000 },
@@ -180,7 +180,7 @@ describe('highScoreUtils', () => {
       expect(sorted[2]?.score).toBe(30000);
     });
 
-    it('同じスコアの場合、日付の新しい順でソートする', () => {
+    it('Sorts by date (newest first) when scores are equal', () => {
       const unsorted: HighScore[] = [
         { id: '1', score: 30000, level: 6, lines: 40, date: 1000 },
         { id: '2', score: 30000, level: 6, lines: 40, date: 2000 },
@@ -196,33 +196,33 @@ describe('highScoreUtils', () => {
   });
 
   describe('validatePlayerName', () => {
-    it('有効な英数字名でtrueを返す', () => {
+    it('Returns true for valid alphanumeric name', () => {
       expect(validatePlayerName('PLAYER123')).toBe(true);
     });
 
-    it('有効な日本語名でtrueを返す', () => {
-      expect(validatePlayerName('テトリス王者')).toBe(true);
+    it('Returns true for valid Japanese name', () => {
+      expect(validatePlayerName('TetrisChampion')).toBe(true);
     });
 
-    it('アンダースコア含みでtrueを返す', () => {
+    it('Returns true with underscores', () => {
       expect(validatePlayerName('CYBER_MASTER')).toBe(true);
     });
 
-    it('空文字でfalseを返す', () => {
+    it('Returns false for empty string', () => {
       expect(validatePlayerName('')).toBe(false);
     });
 
-    it('長すぎる名前でfalseを返す', () => {
+    it('Returns false for name that is too long', () => {
       expect(validatePlayerName('A'.repeat(21))).toBe(false);
     });
 
-    it('特殊文字含みでfalseを返す', () => {
+    it('Returns false with special characters', () => {
       expect(validatePlayerName('PLAYER@123')).toBe(false);
     });
   });
 
   describe('calculateHighScoreStats', () => {
-    it('空のリストで正しい統計を返す', () => {
+    it('Returns correct stats for empty list', () => {
       const stats = calculateHighScoreStats([]);
 
       expect(stats.totalScores).toBe(0);
@@ -231,7 +231,7 @@ describe('highScoreUtils', () => {
       expect(stats.lowestScore).toBe(0);
     });
 
-    it('複数のスコアで正しい統計を計算する', () => {
+    it('Calculates correct stats for multiple scores', () => {
       const stats = calculateHighScoreStats(mockHighScores);
 
       expect(stats.totalScores).toBe(5);

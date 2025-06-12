@@ -52,7 +52,7 @@ describe('useGameLoop - Game integration tests', () => {
 
     mockOnDropTimeChange = vi.fn();
 
-    // 依存フックのモック
+    // Mock dependent hooks
     mockUseAnimationTimer = vi.mocked(
       (await import('../hooks/useAnimationTimer')).useAnimationTimer
     );
@@ -66,8 +66,8 @@ describe('useGameLoop - Game integration tests', () => {
     vi.restoreAllMocks();
   });
 
-  describe('基本統合動作', () => {
-    it('通常ゲーム状態での全フック統合', () => {
+  describe('Basic integration operations', () => {
+    it('Integration of all hooks in normal game state', () => {
       const gameState = {
         isGameOver: false,
         isPaused: false,
@@ -80,7 +80,7 @@ describe('useGameLoop - Game integration tests', () => {
 
       renderHook(() => useGameLoop(gameState));
 
-      // 各フックが適切に呼ばれることを確認
+      // Verify that each hook is called appropriately
       expect(mockUseAnimationTimer).toHaveBeenCalledWith({
         isActive: true, // !isGameOver && !isPaused
         interval: 1000,
@@ -106,7 +106,7 @@ describe('useGameLoop - Game integration tests', () => {
       });
     });
 
-    it('ゲームオーバー状態での適切な制御', () => {
+    it('Proper control in game over state', () => {
       const gameState = {
         isGameOver: true,
         isPaused: false,
@@ -119,14 +119,14 @@ describe('useGameLoop - Game integration tests', () => {
 
       renderHook(() => useGameLoop(gameState));
 
-      // ゲームオーバー時はタイマー非アクティブ
+      // Timer is inactive during game over
       expect(mockUseAnimationTimer).toHaveBeenCalledWith({
         isActive: false, // isGameOver = true
         interval: 500,
         onTick: mockActions.dropPiece,
       });
 
-      // キーボード入力にはゲームオーバー状態が渡される
+      // Game over state is passed to keyboard input
       expect(mockUseKeyboardInput).toHaveBeenCalledWith(
         expect.objectContaining({
           isGameOver: true,
@@ -134,7 +134,7 @@ describe('useGameLoop - Game integration tests', () => {
       );
     });
 
-    it('一時停止状態での適切な制御', () => {
+    it('Proper control in paused state', () => {
       const gameState = {
         isGameOver: false,
         isPaused: true,
@@ -147,7 +147,7 @@ describe('useGameLoop - Game integration tests', () => {
 
       renderHook(() => useGameLoop(gameState));
 
-      // 一時停止時はタイマー非アクティブ
+      // Timer is inactive when paused
       expect(mockUseAnimationTimer).toHaveBeenCalledWith({
         isActive: false, // isPaused = true
         interval: 700,
@@ -156,8 +156,8 @@ describe('useGameLoop - Game integration tests', () => {
     });
   });
 
-  describe('キーボード入力統合', () => {
-    it('移動コールバックが正しく設定される', () => {
+  describe('Keyboard input integration', () => {
+    it('Movement callbacks are correctly configured', () => {
       renderHook(() =>
         useGameLoop({
           isGameOver: false,
@@ -170,35 +170,35 @@ describe('useGameLoop - Game integration tests', () => {
         })
       );
 
-      // キーボード入力の設定を取得
+      // Get keyboard input configuration
       const keyboardInputCall = mockUseKeyboardInput.mock.calls[0]?.[0];
 
-      // 左移動テスト
+      // Test left movement
       act(() => {
         keyboardInputCall?.onMoveLeft();
       });
       expect(mockActions.movePiece).toHaveBeenCalledWith({ x: -1, y: 0 });
 
-      // 右移動テスト
+      // Test right movement
       act(() => {
         keyboardInputCall.onMoveRight();
       });
       expect(mockActions.movePiece).toHaveBeenCalledWith({ x: 1, y: 0 });
 
-      // 下移動テスト
+      // Test down movement
       act(() => {
         keyboardInputCall.onMoveDown();
       });
       expect(mockActions.movePiece).toHaveBeenCalledWith({ x: 0, y: 1 });
 
-      // リセット確認テスト
+      // Test reset confirmation
       act(() => {
         keyboardInputCall.onConfirm();
       });
       expect(mockActions.resetGame).toHaveBeenCalled();
     });
 
-    it('ゲームアクションが直接連携される', () => {
+    it('Game actions are directly linked', () => {
       renderHook(() =>
         useGameLoop({
           isGameOver: false,
@@ -213,25 +213,25 @@ describe('useGameLoop - Game integration tests', () => {
 
       const keyboardInputCall = mockUseKeyboardInput.mock.calls[0]?.[0];
 
-      // 回転テスト
+      // Test rotation
       act(() => {
         keyboardInputCall?.onRotate();
       });
       expect(mockActions.rotatePieceClockwise).toHaveBeenCalled();
 
-      // ハードドロップテスト
+      // Test hard drop
       act(() => {
         keyboardInputCall.onHardDrop();
       });
       expect(mockActions.hardDrop).toHaveBeenCalled();
 
-      // 一時停止テスト
+      // Test pause
       act(() => {
         keyboardInputCall.onPause();
       });
       expect(mockActions.togglePause).toHaveBeenCalled();
 
-      // リセットテスト
+      // Test reset
       act(() => {
         keyboardInputCall.onReset();
       });
@@ -239,8 +239,8 @@ describe('useGameLoop - Game integration tests', () => {
     });
   });
 
-  describe('レベル・速度統合', () => {
-    it('レベル変化時の適切な更新', () => {
+  describe('Level and speed integration', () => {
+    it('Proper updates when level changes', () => {
       const { rerender } = renderHook(
         ({ level, dropTime }) =>
           useGameLoop({
@@ -257,17 +257,17 @@ describe('useGameLoop - Game integration tests', () => {
         }
       );
 
-      // レベル5に上昇
+      // Increase to level 5
       rerender({ level: 5, dropTime: 400 });
 
-      // 新しい速度でタイマーが設定される
+      // Timer is set with new speed
       expect(mockUseAnimationTimer).toHaveBeenLastCalledWith({
         isActive: true,
-        interval: 400, // 高速化された間隔
+        interval: 400, // Accelerated interval
         onTick: mockActions.dropPiece,
       });
 
-      // ドロップタイム計算器にも新しいレベルが渡される
+      // New level is also passed to drop time calculator
       expect(mockUseDropTimeCalculator).toHaveBeenLastCalledWith({
         level: 5,
         initialDropTime: 1000,
@@ -275,7 +275,7 @@ describe('useGameLoop - Game integration tests', () => {
       });
     });
 
-    it('極端なレベル値での安定動作', () => {
+    it('Stable operation with extreme level values', () => {
       const extremeCases = [
         { level: 0, dropTime: 2000 },
         { level: 99, dropTime: 50 },
@@ -295,7 +295,7 @@ describe('useGameLoop - Game integration tests', () => {
           })
         );
 
-        // クラッシュしないことを確認
+        // Verify no crashes occur
         expect(mockUseAnimationTimer).toHaveBeenCalledWith(
           expect.objectContaining({
             interval: dropTime,
@@ -307,8 +307,8 @@ describe('useGameLoop - Game integration tests', () => {
     });
   });
 
-  describe('状態変化シナリオ', () => {
-    it('ゲーム進行中→一時停止→再開の流れ', () => {
+  describe('State transition scenarios', () => {
+    it('Game progress → pause → resume flow', () => {
       const { rerender } = renderHook(
         ({ isPaused }) =>
           useGameLoop({
@@ -323,25 +323,25 @@ describe('useGameLoop - Game integration tests', () => {
         { initialProps: { isPaused: false } }
       );
 
-      // 初期状態: アクティブ
+      // Initial state: active
       expect(mockUseAnimationTimer).toHaveBeenLastCalledWith(
         expect.objectContaining({ isActive: true })
       );
 
-      // 一時停止
+      // Pause
       rerender({ isPaused: true });
       expect(mockUseAnimationTimer).toHaveBeenLastCalledWith(
         expect.objectContaining({ isActive: false })
       );
 
-      // 再開
+      // Resume
       rerender({ isPaused: false });
       expect(mockUseAnimationTimer).toHaveBeenLastCalledWith(
         expect.objectContaining({ isActive: true })
       );
     });
 
-    it('ゲーム進行中→ゲームオーバー→リセットの流れ', () => {
+    it('Game progress → game over → reset flow', () => {
       const { rerender } = renderHook(
         ({ isGameOver, level }) =>
           useGameLoop({
@@ -356,13 +356,13 @@ describe('useGameLoop - Game integration tests', () => {
         { initialProps: { isGameOver: false, level: 1 } }
       );
 
-      // ゲームオーバー
+      // Game over
       rerender({ isGameOver: true, level: 1 });
       expect(mockUseAnimationTimer).toHaveBeenLastCalledWith(
         expect.objectContaining({ isActive: false })
       );
 
-      // リセット後（レベル1に戻る）
+      // After reset (return to level 1)
       rerender({ isGameOver: false, level: 1 });
       expect(mockUseAnimationTimer).toHaveBeenLastCalledWith(
         expect.objectContaining({ isActive: true })

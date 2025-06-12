@@ -72,7 +72,7 @@ describe('statisticsUtils', () => {
         linesClearingRate: 185 / 5, // lines per game
         scorePerLine: 118000 / 185, // score per line
         sessionCount: 2,
-        lastPlayDate: Date.now() - 5400000,
+        lastPlayDate: FIXED_BASE_TIME - 5400000,
       };
 
       expect(enhanced.efficiency).toBeCloseTo(2.47, 1); // ~2.47 lines per minute
@@ -149,7 +149,7 @@ describe('statisticsUtils', () => {
   describe('filterStatisticsByPeriod', () => {
     it('should filter statistics for specified period', () => {
       // This function is planned for later implementation
-      const twelveHoursAgo = Date.now() - 43200000; // 12 hours ago
+      const twelveHoursAgo = FIXED_BASE_TIME - 43200000; // 12 hours before base time
       const recentGames = mockSessions
         .flatMap((session) => session.games)
         .filter((game) => game.timestamp > twelveHoursAgo);
