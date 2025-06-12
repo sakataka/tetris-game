@@ -46,8 +46,8 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
         <div className='absolute inset-0 bg-grid-pattern opacity-5' />
         <div className='absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/50' />
 
-        <div className='relative z-10 h-screen flex items-center justify-center px-4 py-1'>
-          <div className='grid grid-cols-[auto_320px] gap-6 items-stretch max-h-[calc(100vh-0.5rem)]'>
+        <div className='relative z-10 h-screen flex items-center justify-center px-2 py-0'>
+          <div className='grid grid-cols-[auto_320px] gap-4 items-stretch max-h-[calc(100vh-1rem)]'>
             {/* Game Board */}
             <div className='flex items-center'>
               <ErrorBoundary level='component'>

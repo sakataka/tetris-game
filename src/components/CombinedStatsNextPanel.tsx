@@ -34,9 +34,9 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
       theme='cyan'
       size={size}
     >
-      <div className='grid grid-cols-2 gap-2'>
+      <div className='grid grid-cols-2 gap-1'>
         {/* Score Information */}
-        <div className='space-y-1'>
+        <div className='space-y-0.5'>
           <div className='flex justify-between items-center'>
             <span className='text-gray-300 text-2xs'>{t('game.score')}</span>
             <span className='font-mono text-xs text-yellow-400 font-bold'>
@@ -55,7 +55,7 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
 
         {/* Next Piece Preview */}
         <div className='flex flex-col items-center justify-center'>
-          <div className='text-2xs text-gray-400 mb-1'>{t('game.nextPiece')}</div>
+          <div className='text-2xs text-gray-400 mb-0.5'>{t('game.nextPiece')}</div>
           <div className='grid gap-0 w-fit p-1 bg-black/30 rounded border border-purple-400/30'>
             {nextPiece ? (
               nextPiece.shape.map((row, y) => (

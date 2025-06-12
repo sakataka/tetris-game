@@ -42,7 +42,7 @@ const TabNavigation = memo(function TabNavigation({
   ];
 
   const getTabStyles = (tab: (typeof tabs)[0], isActive: boolean) => {
-    const baseClasses = 'px-4 py-2 rounded-t-lg font-semibold transition-colors';
+    const baseClasses = 'px-3 py-1 rounded-t-lg font-semibold transition-colors text-sm';
 
     if (isActive) {
       return `${baseClasses} bg-${tab.color}-500/20 text-${tab.color}-400 border-b-2 border-${tab.color}-400`;
@@ -52,7 +52,7 @@ const TabNavigation = memo(function TabNavigation({
   };
 
   return (
-    <div className={`flex space-x-2 mb-4 flex-shrink-0 ${className}`}>
+    <div className={`flex space-x-1 mb-2 flex-shrink-0 ${className}`}>
       {tabs.map((tab) => (
         <button
           key={tab.key}

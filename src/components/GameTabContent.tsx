@@ -35,7 +35,7 @@ const GameTabContent = memo(function GameTabContent({
   const highScores = useHighScores();
 
   return (
-    <div className={`space-y-1 ${className}`}>
+    <div className={`space-y-0.5 ${className}`}>
       {/* Combined Score & Next Piece */}
       <CombinedStatsNextPanel
         score={score}

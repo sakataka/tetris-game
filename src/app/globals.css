@@ -212,6 +212,21 @@ body {
   line-height: 1.1rem;
 }
 
+/* Ultra compact layout utilities */
+.ultra-compact-layout {
+  padding: 0.125rem 0.25rem; /* py-0.5 px-1 */
+  margin: 0;
+}
+
+.ultra-compact-spacing {
+  gap: 0.25rem; /* space-y-1 equivalent */
+}
+
+.ultra-compact-container {
+  max-height: calc(100vh - 0.5rem);
+  overflow: hidden;
+}
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   *,
