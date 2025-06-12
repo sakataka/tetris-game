@@ -8,6 +8,7 @@ interface GameButtonsPanelProps {
   isPaused: boolean;
   onTogglePause: () => void;
   onReset: () => void;
+  size?: 'sm' | 'md' | 'lg';
 }
 
 const GameButtonsPanel = memo(function GameButtonsPanel({
@@ -15,34 +16,39 @@ const GameButtonsPanel = memo(function GameButtonsPanel({
   isPaused,
   onTogglePause,
   onReset,
+  size = 'md',
 }: GameButtonsPanelProps) {
   const { t } = useTranslation();
+
+  const buttonPadding = size === 'sm' ? 'py-1 px-3' : 'py-2 md:py-3 px-4 md:px-6';
+  const textSize = size === 'sm' ? 'text-sm' : 'text-base md:text-lg';
+
   return (
-    <div className='space-y-4'>
+    <div className='space-y-2'>
       <button
         onClick={onTogglePause}
         disabled={gameOver}
-        className='w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 
-                   disabled:from-gray-600 disabled:to-gray-700 text-white font-bold py-2 md:py-3 px-4 md:px-6 rounded-lg 
+        className={`w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 
+                   disabled:from-gray-600 disabled:to-gray-700 text-white font-bold ${buttonPadding} rounded-lg 
                    transition-all duration-300 transform hover:scale-105 disabled:scale-100 
                    shadow-[0_0_20px_rgba(0,255,255,0.3)] hover:shadow-[0_0_30px_rgba(0,255,255,0.5)]
-                   border border-cyan-400/50 relative overflow-hidden'
+                   border border-cyan-400/50 relative overflow-hidden`}
       >
         <div className='absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-blue-400/20 blur-sm'></div>
-        <span className='relative font-mono text-base md:text-lg'>
+        <span className={`relative font-mono ${textSize}`}>
           {isPaused ? t('game.resume') : t('game.pause')}
         </span>
       </button>
 
       <button
         onClick={onReset}
-        className='w-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-400 hover:to-pink-400 
-                   text-white font-bold py-2 md:py-3 px-4 md:px-6 rounded-lg transition-all duration-300 transform 
+        className={`w-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-400 hover:to-pink-400 
+                   text-white font-bold ${buttonPadding} rounded-lg transition-all duration-300 transform 
                    hover:scale-105 shadow-[0_0_20px_rgba(255,0,0,0.3)] hover:shadow-[0_0_30px_rgba(255,0,0,0.5)]
-                   border border-red-400/50 relative overflow-hidden'
+                   border border-red-400/50 relative overflow-hidden`}
       >
         <div className='absolute inset-0 bg-gradient-to-r from-red-400/20 to-pink-400/20 blur-sm'></div>
-        <span className='relative font-mono text-base md:text-lg'>{t('buttons.reset')}</span>
+        <span className={`relative font-mono ${textSize}`}>{t('buttons.reset')}</span>
       </button>
     </div>
   );

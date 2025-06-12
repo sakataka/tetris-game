@@ -176,6 +176,42 @@ body {
   animation: particle-sparkle 0.8s ease-in-out infinite;
 }
 
+/* Responsive text utilities */
+.text-2xs {
+  font-size: 0.625rem; /* 10px */
+  line-height: 0.875rem; /* 14px */
+}
+
+/* Responsive grid for statistics */
+.responsive-grid-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .responsive-grid-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .responsive-grid-stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Compact text sizes for panels */
+.text-compact-xs {
+  font-size: 0.7rem;
+  line-height: 0.95rem;
+}
+
+.text-compact-sm {
+  font-size: 0.8rem;
+  line-height: 1.1rem;
+}
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   *,

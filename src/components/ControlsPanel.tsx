@@ -4,12 +4,16 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import PanelBase from './ui/PanelBase';
 
-const ControlsPanel = memo(function ControlsPanel() {
+interface ControlsPanelProps {
+  size?: 'sm' | 'md' | 'lg';
+}
+
+const ControlsPanel = memo(function ControlsPanel({ size = 'md' }: ControlsPanelProps) {
   const { t } = useTranslation();
 
   return (
-    <PanelBase title={t('controls.title').toUpperCase()} theme='green'>
-      <div className='space-y-2 md:space-y-3 text-xs md:text-sm'>
+    <PanelBase title={t('controls.title').toUpperCase()} theme='green' size={size}>
+      <div className='space-y-1 text-xs'>
         <div className='flex justify-between items-center'>
           <span className='text-gray-300'>
             {t('controls.moveLeft')} / {t('controls.moveRight')}

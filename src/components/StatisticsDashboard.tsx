@@ -41,11 +41,9 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
     return StatisticsService.calculateAdvancedMetrics(sessions, period);
   }, [sessions, selectedPeriod, showDetailedView]);
   return (
-    <div data-testid='statistics-dashboard' className='hologram-purple p-6 space-y-6'>
+    <div data-testid='statistics-dashboard' className='hologram-purple p-3 space-y-3'>
       <div className='flex justify-between items-center'>
-        <h2 className='responsive-text-xl font-bold text-cyber-purple'>
-          📊 {t('statistics.title')}
-        </h2>
+        <h2 className='text-base font-bold text-cyber-purple'>📊 {t('statistics.title')}</h2>
         <select
           value={selectedPeriod}
           onChange={(e) => onPeriodChange(e.target.value)}
@@ -61,26 +59,26 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
       </div>
 
       {/* Main statistics */}
-      <div className='responsive-grid-stats' data-testid='main-stats'>
-        <div className='hologram-cyan p-4 rounded neon-border-cyan'>
-          <div className='text-sm text-gray-400'>{t('statistics.totalGames')}</div>
-          <div className='text-2xl font-bold text-cyan-400'>{statistics.totalGames}</div>
+      <div className='grid grid-cols-2 gap-2' data-testid='main-stats'>
+        <div className='hologram-cyan p-2 rounded neon-border-cyan'>
+          <div className='text-xs text-gray-400'>{t('statistics.totalGames')}</div>
+          <div className='text-sm font-bold text-cyan-400'>{statistics.totalGames}</div>
         </div>
-        <div className='hologram-cyan p-4 rounded neon-border-cyan'>
-          <div className='text-sm text-gray-400'>{t('statistics.bestScore')}</div>
-          <div className='text-2xl font-bold text-yellow-400'>
+        <div className='hologram-cyan p-2 rounded neon-border-cyan'>
+          <div className='text-xs text-gray-400'>{t('statistics.bestScore')}</div>
+          <div className='text-sm font-bold text-yellow-400'>
             {statistics.bestScore.toLocaleString()}
           </div>
         </div>
-        <div className='hologram-cyan p-4 rounded neon-border-cyan'>
-          <div className='text-sm text-gray-400'>{t('statistics.totalLines')}</div>
-          <div className='text-2xl font-bold text-green-400'>
+        <div className='hologram-cyan p-2 rounded neon-border-cyan'>
+          <div className='text-xs text-gray-400'>{t('statistics.totalLines')}</div>
+          <div className='text-sm font-bold text-green-400'>
             {statistics.totalLines.toLocaleString()}
           </div>
         </div>
-        <div className='hologram-cyan p-4 rounded neon-border-cyan'>
-          <div className='text-sm text-gray-400'>{t('statistics.playTime')}</div>
-          <div className='text-2xl font-bold text-purple-400'>
+        <div className='hologram-cyan p-2 rounded neon-border-cyan'>
+          <div className='text-xs text-gray-400'>{t('statistics.playTime')}</div>
+          <div className='text-sm font-bold text-purple-400'>
             {Math.floor(statistics.playTime / 3600)}h{' '}
             {Math.floor((statistics.playTime % 3600) / 60)}m
           </div>
@@ -91,13 +89,13 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
         <>
           {/* Efficiency metrics */}
           <div
-            className='hologram-yellow neon-border-yellow p-4 rounded'
+            className='hologram-yellow neon-border-yellow p-2 rounded'
             data-testid='efficiency-stats'
           >
-            <h3 className='responsive-text-lg font-bold text-yellow-400 mb-3'>
+            <h3 className='text-sm font-bold text-yellow-400 mb-2'>
               🎯 {t('statistics.efficiency')}
             </h3>
-            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm'>
+            <div className='grid grid-cols-2 gap-1 text-xs'>
               <div>
                 <span className='text-gray-400'>{t('statistics.efficiency')}: </span>
                 <span className='text-cyan-400 font-semibold'>
@@ -138,11 +136,9 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
           </div>
 
           {/* Play history summary */}
-          <div className='hologram-cyan neon-border-cyan p-4 rounded' data-testid='play-history'>
-            <h3 className='responsive-text-lg font-bold text-cyan-400 mb-3'>
-              📅 {t('statistics.playTime')}
-            </h3>
-            <div className='grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm'>
+          <div className='hologram-cyan neon-border-cyan p-2 rounded' data-testid='play-history'>
+            <h3 className='text-sm font-bold text-cyan-400 mb-2'>📅 {t('statistics.playTime')}</h3>
+            <div className='grid grid-cols-2 gap-1 text-xs'>
               <div>
                 <span className='text-gray-400'>{t('statistics.gamesPlayed')}: </span>
                 <span className='text-cyan-400 font-semibold'>{statistics.sessionCount}</span>
@@ -182,29 +178,29 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
 
           {/* Recent high scores */}
           <div
-            className='hologram-purple neon-border-purple p-4 rounded'
+            className='hologram-purple neon-border-purple p-2 rounded'
             data-testid='recent-achievements'
           >
-            <h3 className='text-lg font-bold text-purple-400 mb-3'>
+            <h3 className='text-sm font-bold text-purple-400 mb-2'>
               🏆 {t('statistics.highScores')}
             </h3>
-            <div className='space-y-2'>
+            <div className='space-y-1'>
               {highScores.slice(0, 3).map((score, index) => (
-                <div key={score.id} className='flex justify-between items-center text-sm'>
+                <div key={score.id} className='flex justify-between items-center text-xs'>
                   <span className='text-gray-400'>#{index + 1}</span>
                   <span className='text-cyan-400 font-semibold'>
                     {score.score.toLocaleString()}
                   </span>
-                  <span className='text-purple-400'>
-                    {t('game.level')} {score.level}
-                  </span>
+                  <span className='text-purple-400'>Lv{score.level}</span>
                   <span className='text-gray-500'>
                     {Math.floor((Date.now() - score.date) / 86400000)}日前
                   </span>
                 </div>
               ))}
               {highScores.length === 0 && (
-                <div className='text-gray-500 text-center py-2'>{t('statistics.noHighScores')}</div>
+                <div className='text-gray-500 text-center py-1 text-xs'>
+                  {t('statistics.noHighScores')}
+                </div>
               )}
             </div>
           </div>

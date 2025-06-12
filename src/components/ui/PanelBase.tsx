@@ -73,19 +73,19 @@ const SIZE_CONFIGS: Record<
   }
 > = {
   sm: {
+    padding: 'p-2 md:p-3',
+    titleSize: 'text-sm md:text-base',
+    titleSpacing: 'mb-1 md:mb-2',
+  },
+  md: {
     padding: 'p-3 md:p-4',
     titleSize: 'text-base md:text-lg',
     titleSpacing: 'mb-2 md:mb-3',
   },
-  md: {
+  lg: {
     padding: 'p-4 md:p-6',
     titleSize: 'text-lg md:text-xl',
     titleSpacing: 'mb-3 md:mb-4',
-  },
-  lg: {
-    padding: 'p-6 md:p-8',
-    titleSize: 'text-xl md:text-2xl',
-    titleSpacing: 'mb-4 md:mb-6',
   },
 };
 

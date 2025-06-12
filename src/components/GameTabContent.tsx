@@ -36,15 +36,12 @@ const GameTabContent = memo(function GameTabContent({
   const highScores = useHighScores();
 
   return (
-    <div className={`space-y-4 ${className}`}>
+    <div className={`space-y-2 ${className}`}>
       {/* Score information */}
-      <GameStatsPanel score={score} level={level} lines={lines} />
+      <GameStatsPanel score={score} level={level} lines={lines} size='sm' />
 
       {/* Next piece */}
-      <NextPiecePanel nextPiece={nextPiece} />
-
-      {/* Controls */}
-      <ControlsPanel />
+      <NextPiecePanel nextPiece={nextPiece} size='sm' />
 
       {/* Buttons */}
       <GameButtonsPanel
@@ -52,13 +49,22 @@ const GameTabContent = memo(function GameTabContent({
         isPaused={isPaused}
         onTogglePause={onTogglePause}
         onReset={onReset}
+        size='sm'
       />
 
-      {/* Score reference */}
-      <ScoringPanel />
+      {/* Controls */}
+      <ControlsPanel size='sm' />
 
       {/* High scores */}
-      <HighScoreDisplay highScores={highScores} maxDisplay={5} className='text-sm' />
+      <HighScoreDisplay highScores={highScores} maxDisplay={3} className='text-xs' size='sm' />
+
+      {/* Score reference - collapsible */}
+      <details className='text-xs'>
+        <summary className='cursor-pointer text-cyan-400 hover:text-cyan-300'>
+          Score Reference
+        </summary>
+        <ScoringPanel size='sm' />
+      </details>
     </div>
   );
 });

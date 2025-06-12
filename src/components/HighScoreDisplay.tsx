@@ -9,6 +9,7 @@ interface HighScoreDisplayProps {
   showRank?: boolean;
   maxDisplay?: number;
   className?: string;
+  size?: 'sm' | 'md' | 'lg';
 }
 
 const HighScoreDisplay = memo(function HighScoreDisplay({
@@ -16,35 +17,41 @@ const HighScoreDisplay = memo(function HighScoreDisplay({
   showRank = true,
   maxDisplay = 10,
   className = '',
+  size = 'md',
 }: HighScoreDisplayProps) {
   const { t, i18n } = useTranslation();
   const displayScores = highScores.slice(0, maxDisplay);
 
-  return (
-    <div data-testid='high-score-display' className={`hologram-cyan p-4 ${className}`}>
-      <h3 className='text-xl font-bold mb-4 text-cyber-cyan'>🏆 {t('statistics.highScores')}</h3>
+  const padding = size === 'sm' ? 'p-2' : 'p-4';
+  const titleSize = size === 'sm' ? 'text-sm' : 'text-xl';
+  const titleMargin = size === 'sm' ? 'mb-2' : 'mb-4';
 
-      <div className='space-y-2'>
+  return (
+    <div data-testid='high-score-display' className={`hologram-cyan ${padding} ${className}`}>
+      <h3 className={`${titleSize} font-bold ${titleMargin} text-cyber-cyan`}>
+        🏆 {t('statistics.highScores')}
+      </h3>
+
+      <div className='space-y-1'>
         {displayScores.map((score, index) => (
           <div
             key={score.id}
-            className='flex justify-between items-center p-2 rounded neon-border-cyan'
+            className='flex justify-between items-center p-1 rounded'
             data-testid={`high-score-item-${index}`}
           >
-            <div className='flex items-center gap-2'>
-              {showRank && <span className='text-cyber-yellow font-bold w-8'>#{index + 1}</span>}
+            <div className='flex items-center gap-1'>
+              {showRank && (
+                <span className='text-cyber-yellow font-bold w-6 text-xs'>#{index + 1}</span>
+              )}
               <div>
-                <div className='font-bold text-cyber-cyan'>{score.score.toLocaleString()}</div>
-                <div className='text-sm text-gray-400'>
-                  {t('game.level')} {score.level} • {score.lines} {t('game.lines').toLowerCase()}
+                <div className='font-bold text-cyber-cyan text-xs'>
+                  {score.score.toLocaleString()}
                 </div>
+                <div className='text-xs text-gray-400'>Lv{score.level}</div>
               </div>
             </div>
 
             <div className='text-right'>
-              {score.playerName && (
-                <div className='text-sm text-cyber-purple font-semibold'>{score.playerName}</div>
-              )}
               <div className='text-xs text-gray-500'>
                 {new Date(score.date).toLocaleDateString(
                   i18n.language === 'ja' ? 'ja-JP' : 'en-US'

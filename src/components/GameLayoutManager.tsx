@@ -46,10 +46,10 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
         <div className='absolute inset-0 bg-grid-pattern opacity-5' />
         <div className='absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/50' />
 
-        <div className='relative z-10 container mx-auto px-4 py-4 lg:py-8'>
-          <div className='flex flex-col lg:flex-row gap-6 lg:gap-8 items-start justify-center min-h-screen'>
+        <div className='relative z-10 h-screen flex items-center justify-center px-4 py-4'>
+          <div className='grid grid-cols-[auto_320px] gap-6 items-stretch max-h-[calc(100vh-2rem)]'>
             {/* Game Board */}
-            <div className='flex-shrink-0'>
+            <div className='flex items-center'>
               <ErrorBoundary level='component'>
                 <TetrisBoard
                   board={gameState.board}
@@ -63,7 +63,7 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
             </div>
 
             {/* Game Information Panel */}
-            <div className='flex-shrink-0 w-full lg:w-auto lg:max-w-sm'>
+            <div className='h-full'>
               <ErrorBoundary level='component'>
                 <GameInfo
                   score={gameState.score}
