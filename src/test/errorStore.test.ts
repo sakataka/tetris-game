@@ -1,12 +1,12 @@
 /**
  * errorStore test
- * 
+ *
  * Tests for unified error management system
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { act } from '@testing-library/react';
-import type { ErrorInfo, ErrorLevel, ErrorCategory } from '../types/errors';
+import type { ErrorInfo } from '../types/errors';
 
 // Import the actual store
 import { useErrorStore } from '../store/errorStore';
@@ -14,7 +14,7 @@ import { useErrorStore } from '../store/errorStore';
 describe('errorStore', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     // Reset store to initial state completely
     act(() => {
       useErrorStore.getState().clearErrors();
@@ -22,7 +22,6 @@ describe('errorStore', () => {
       useErrorStore.getState().setSelectedError(undefined);
       useErrorStore.getState().updateConfig({
         maxStoredErrors: 100,
-        autoCleanupInterval: 300000
       });
     });
   });
@@ -36,10 +35,10 @@ describe('errorStore', () => {
         category: 'system',
         context: {
           timestamp: Date.now(),
-          component: 'TestComponent'
+          component: 'TestComponent',
         },
         recoverable: true,
-        retryable: false
+        retryable: false,
       };
 
       act(() => {
@@ -48,8 +47,8 @@ describe('errorStore', () => {
 
       const state = useErrorStore.getState();
       expect(state.errors).toHaveLength(1);
-      expect(state.errors[0].message).toBe('Test error');
-      expect(state.errors[0].level).toBe('error');
+      expect(state.errors[0]?.message).toBe('Test error');
+      expect(state.errors[0]?.level).toBe('error');
     });
 
     it('should manage multiple errors', () => {
@@ -61,7 +60,7 @@ describe('errorStore', () => {
           category: 'game',
           context: { timestamp: Date.now() },
           recoverable: true,
-          retryable: false
+          retryable: false,
         },
         {
           id: '2',
@@ -70,7 +69,7 @@ describe('errorStore', () => {
           category: 'ui',
           context: { timestamp: Date.now() },
           recoverable: true,
-          retryable: false
+          retryable: false,
         },
         {
           id: '3',
@@ -79,11 +78,11 @@ describe('errorStore', () => {
           category: 'system',
           context: { timestamp: Date.now() },
           recoverable: true,
-          retryable: false
-        }
+          retryable: false,
+        },
       ];
 
-      errors.forEach(error => {
+      errors.forEach((error) => {
         act(() => {
           useErrorStore.getState().addError(error);
         });
@@ -101,7 +100,7 @@ describe('errorStore', () => {
         category: 'system',
         context: { timestamp: Date.now() },
         recoverable: true,
-        retryable: false
+        retryable: false,
       };
 
       const error2: ErrorInfo = {
@@ -111,7 +110,7 @@ describe('errorStore', () => {
         category: 'system',
         context: { timestamp: Date.now() },
         recoverable: true,
-        retryable: false
+        retryable: false,
       };
 
       act(() => {
@@ -125,7 +124,7 @@ describe('errorStore', () => {
 
       const state = useErrorStore.getState();
       expect(state.errors).toHaveLength(1);
-      expect(state.errors[0].id).toBe('keep-1');
+      expect(state.errors[0]?.id).toBe('keep-1');
     });
 
     it('should clear all errors', () => {
@@ -139,7 +138,7 @@ describe('errorStore', () => {
             category: 'system',
             context: { timestamp: Date.now() },
             recoverable: true,
-            retryable: false
+            retryable: false,
           });
         });
       }
@@ -165,7 +164,7 @@ describe('errorStore', () => {
           category: 'system',
           context: { timestamp: Date.now() },
           recoverable: false,
-          retryable: false
+          retryable: false,
         },
         {
           id: 'error-1',
@@ -174,7 +173,7 @@ describe('errorStore', () => {
           category: 'game',
           context: { timestamp: Date.now() },
           recoverable: true,
-          retryable: true
+          retryable: true,
         },
         {
           id: 'warning-1',
@@ -183,11 +182,11 @@ describe('errorStore', () => {
           category: 'audio',
           context: { timestamp: Date.now() },
           recoverable: true,
-          retryable: false
-        }
+          retryable: false,
+        },
       ];
 
-      testErrors.forEach(error => {
+      testErrors.forEach((error) => {
         act(() => {
           useErrorStore.getState().addError(error);
         });
@@ -216,18 +215,18 @@ describe('errorStore', () => {
 
     it('should get critical errors only', () => {
       const criticalErrors = useErrorStore.getState().getCriticalErrors();
-      
+
       expect(criticalErrors).toHaveLength(1);
-      expect(criticalErrors[0].level).toBe('critical');
+      expect(criticalErrors[0]?.level).toBe('critical');
     });
 
     it('should get recent errors', () => {
       const recentErrors = useErrorStore.getState().getRecentErrors(2);
-      
+
       expect(recentErrors).toHaveLength(2);
       // Should return in newest first order
-      expect(recentErrors[0].id).toBe('warning-1');
-      expect(recentErrors[1].id).toBe('error-1');
+      expect(recentErrors[0]?.id).toBe('warning-1');
+      expect(recentErrors[1]?.id).toBe('error-1');
     });
   });
 
@@ -241,7 +240,7 @@ describe('errorStore', () => {
           category: 'game',
           context: { timestamp: Date.now() },
           recoverable: true,
-          retryable: false
+          retryable: false,
         },
         {
           id: '2',
@@ -250,7 +249,7 @@ describe('errorStore', () => {
           category: 'audio',
           context: { timestamp: Date.now() },
           recoverable: true,
-          retryable: false
+          retryable: false,
         },
         {
           id: '3',
@@ -259,18 +258,18 @@ describe('errorStore', () => {
           category: 'ui',
           context: { timestamp: Date.now() },
           recoverable: true,
-          retryable: false
-        }
+          retryable: false,
+        },
       ];
 
-      errors.forEach(error => {
+      errors.forEach((error) => {
         act(() => {
           useErrorStore.getState().addError(error);
         });
       });
 
       const stats = useErrorStore.getState().stats;
-      
+
       expect(stats.totalErrors).toBe(3);
       expect(stats.errorsByLevel.error).toBe(2);
       expect(stats.errorsByLevel.warning).toBe(1);
@@ -289,7 +288,7 @@ describe('errorStore', () => {
           category: 'system',
           context: { timestamp: Date.now() },
           recoverable: true,
-          retryable: false
+          retryable: false,
         });
       });
 
@@ -315,7 +314,7 @@ describe('errorStore', () => {
           category: 'game',
           context: { timestamp: Date.now() },
           recoverable: true,
-          retryable: false
+          retryable: false,
         },
         {
           id: 'audio-1',
@@ -324,7 +323,7 @@ describe('errorStore', () => {
           category: 'audio',
           context: { timestamp: Date.now() },
           recoverable: true,
-          retryable: false
+          retryable: false,
         },
         {
           id: 'game-2',
@@ -333,11 +332,11 @@ describe('errorStore', () => {
           category: 'game',
           context: { timestamp: Date.now() },
           recoverable: true,
-          retryable: false
-        }
+          retryable: false,
+        },
       ];
 
-      errors.forEach(error => {
+      errors.forEach((error) => {
         act(() => {
           useErrorStore.getState().addError(error);
         });
@@ -349,7 +348,7 @@ describe('errorStore', () => {
 
       const state = useErrorStore.getState();
       expect(state.errors).toHaveLength(1);
-      expect(state.errors[0].category).toBe('audio');
+      expect(state.errors[0]?.category).toBe('audio');
     });
   });
 
@@ -397,18 +396,16 @@ describe('errorStore', () => {
 
   describe('Configuration management', () => {
     it('should update error configuration', () => {
-      const initialConfig = useErrorStore.getState().config;
-      
       act(() => {
         useErrorStore.getState().updateConfig({
           maxStoredErrors: 50,
-          autoCleanupInterval: 60000
+          enableConsoleLogging: true,
         });
       });
 
       const updatedConfig = useErrorStore.getState().config;
       expect(updatedConfig.maxStoredErrors).toBe(50);
-      expect(updatedConfig.autoCleanupInterval).toBe(60000);
+      expect(updatedConfig.enableConsoleLogging).toBe(true);
     });
   });
 
@@ -429,15 +426,15 @@ describe('errorStore', () => {
             category: 'system',
             context: { timestamp: Date.now() + i }, // Ensure order
             recoverable: true,
-            retryable: false
+            retryable: false,
           });
         });
       }
 
       const state = useErrorStore.getState();
       expect(state.errors).toHaveLength(3);
-      expect(state.errors[0].id).toBe('limited-1'); // First error removed
-      expect(state.errors[2].id).toBe('limited-3'); // Latest error kept
+      expect(state.errors[0]?.id).toBe('limited-1'); // First error removed
+      expect(state.errors[2]?.id).toBe('limited-3'); // Latest error kept
     });
   });
 });

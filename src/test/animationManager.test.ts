@@ -1,6 +1,6 @@
 /**
  * AnimationManager test
- * 
+ *
  * Tests for unified animation management system
  */
 
@@ -8,7 +8,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 // Mock error handler first
 vi.mock('../utils/data/errorHandler', () => ({
-  handleError: vi.fn()
+  handleError: vi.fn(),
 }));
 
 // Mock matchMedia
@@ -25,7 +25,7 @@ const mockMatchMedia = vi.fn().mockImplementation((query: string) => ({
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: mockMatchMedia
+  value: mockMatchMedia,
 });
 
 // Mock requestAnimationFrame and cancelAnimationFrame
@@ -38,20 +38,20 @@ const mockCancelAnimationFrame = vi.fn();
 
 Object.defineProperty(window, 'requestAnimationFrame', {
   writable: true,
-  value: mockRequestAnimationFrame
+  value: mockRequestAnimationFrame,
 });
 
 Object.defineProperty(window, 'cancelAnimationFrame', {
   writable: true,
-  value: mockCancelAnimationFrame
+  value: mockCancelAnimationFrame,
 });
 
 // Mock performance.now
 Object.defineProperty(window, 'performance', {
   writable: true,
   value: {
-    now: vi.fn(() => Date.now())
-  }
+    now: vi.fn(() => Date.now()),
+  },
 });
 
 import { AnimationManager } from '../utils/animation/animationManager';
@@ -63,11 +63,11 @@ describe('AnimationManager', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockCallback = vi.fn();
-    
+
     // Reset singleton instance
     (AnimationManager as any).instance = null;
     animationManager = AnimationManager.getInstance();
-    
+
     // Reset frame ID counter
     frameId = 1;
   });
@@ -76,7 +76,7 @@ describe('AnimationManager', () => {
     // Stop all animations to prevent leaks
     try {
       animationManager.stopAll();
-    } catch (e) {
+    } catch {
       // Ignore errors during cleanup
     }
   });
@@ -85,7 +85,7 @@ describe('AnimationManager', () => {
     it('should always return the same instance', () => {
       const manager1 = AnimationManager.getInstance();
       const manager2 = AnimationManager.getInstance();
-      
+
       expect(manager1).toBe(manager2);
     });
   });
@@ -93,15 +93,15 @@ describe('AnimationManager', () => {
   describe('Animation registration and management', () => {
     it('should register animation successfully', () => {
       animationManager.registerAnimation('test-animation', mockCallback);
-      
+
       expect(window.requestAnimationFrame).toHaveBeenCalled();
     });
 
     it('should handle unregistering non-existent animation gracefully', () => {
       const initialCalls = (window.cancelAnimationFrame as any).mock.calls.length;
-      
+
       animationManager.unregisterAnimation('non-existent');
-      
+
       // No additional cancel calls for non-existent animation
       expect((window.cancelAnimationFrame as any).mock.calls.length).toBe(initialCalls);
     });
@@ -110,7 +110,7 @@ describe('AnimationManager', () => {
   describe('Performance monitoring', () => {
     it('should provide performance statistics', () => {
       const stats = animationManager.getStats();
-      
+
       expect(stats).toHaveProperty('totalFrames');
       expect(stats).toHaveProperty('droppedFrames');
       expect(stats).toHaveProperty('averageFrameTime');
@@ -122,7 +122,7 @@ describe('AnimationManager', () => {
 
     it('should set global FPS limit', () => {
       animationManager.setGlobalFPSLimit(30);
-      
+
       const stats = animationManager.getStats();
       expect(stats.globalFPSLimit).toBe(30);
     });
