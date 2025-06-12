@@ -26,13 +26,13 @@ const SettingsTabContent = memo(function SettingsTabContent({
   const { t } = useTranslation();
 
   return (
-    <div className='space-y-6 p-4'>
+    <div className='space-y-0.5 p-0.5'>
       {/* Language Settings */}
-      <div className='space-y-3'>
-        <h3 className='text-lg font-bold text-cyber-cyan border-b border-cyber-cyan/30 pb-2'>
+      <div className='space-y-0.5'>
+        <h3 className='text-xs font-bold text-cyber-cyan border-b border-cyber-cyan/30 pb-0.5'>
           {t('settings.language')}
         </h3>
-        <Suspense fallback={<div className='text-gray-400 text-sm'>{t('common.loading')}</div>}>
+        <Suspense fallback={<div className='text-gray-400 text-xs'>{t('common.loading')}</div>}>
           <LanguageSelector />
         </Suspense>
       </div>

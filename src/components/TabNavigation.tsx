@@ -42,7 +42,7 @@ const TabNavigation = memo(function TabNavigation({
   ];
 
   const getTabStyles = (tab: (typeof tabs)[0], isActive: boolean) => {
-    const baseClasses = 'px-3 py-1 rounded-t-lg font-semibold transition-colors text-sm';
+    const baseClasses = 'px-3 py-1 rounded-t-lg font-semibold transition-colors text-xs';
 
     if (isActive) {
       return `${baseClasses} bg-${tab.color}-500/20 text-${tab.color}-400 border-b-2 border-${tab.color}-400`;

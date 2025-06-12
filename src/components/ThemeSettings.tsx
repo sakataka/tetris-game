@@ -75,12 +75,12 @@ export default function ThemeSettings({
   return (
     <div className={`theme-settings ${className}`}>
       {/* Tab navigation */}
-      <div className='flex flex-wrap gap-1 mb-4 p-1 rounded-lg bg-cyber-cyan-10'>
+      <div className='flex flex-wrap gap-0.5 mb-2 p-0.5 rounded-lg bg-cyber-cyan-10'>
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex-1 min-w-0 px-3 py-2 rounded-md text-sm font-medium transition-colors
+            className={`flex-1 min-w-0 px-2 py-1 rounded-md text-xs font-medium transition-colors
               ${
                 activeTab === tab.id
                   ? 'bg-cyber-cyan text-background'
@@ -94,9 +94,9 @@ export default function ThemeSettings({
       </div>
 
       {/* Tab content */}
-      <div className='min-h-[400px]'>
+      <div className='min-h-[200px]'>
         {activeTab === 'theme' && (
-          <div className='space-y-4'>
+          <div className='space-y-0.5'>
             <ThemeSelectorMemo currentTheme={currentTheme} onThemeChange={onThemeChange} />
 
             <div className='flex gap-2'>
@@ -126,10 +126,10 @@ export default function ThemeSettings({
         )}
 
         {activeTab === 'effects' && (
-          <div className='space-y-6'>
+          <div className='space-y-0.5'>
             {/* Effect intensity */}
             <div>
-              <label className='block text-sm font-medium mb-2 text-cyber-cyan'>
+              <label className='block text-xs font-medium mb-0.5 text-cyber-cyan'>
                 {t('colorPalette.advancedSettings')}: {(effectIntensity * 100).toFixed(0)}%
               </label>
               <input
@@ -145,12 +145,14 @@ export default function ThemeSettings({
                   background: `linear-gradient(to right, var(--cyber-cyan) 0%, var(--cyber-cyan) ${effectIntensity * 50}%, var(--cyber-cyan-20) ${effectIntensity * 50}%, var(--cyber-cyan-20) 100%)`,
                 }}
               />
-              <div className='flex justify-between text-xs text-cyber-purple mt-1'>
+              <div className='flex justify-between text-2xs text-cyber-purple mt-0.5'>
                 <span>{t('accessibility.lowContrast')}</span>
                 <span>{t('accessibility.standard')}</span>
                 <span>{t('accessibility.highContrast')}</span>
               </div>
-              <p className='text-xs text-cyber-purple mt-2'>{t('colorPalette.advancedSettings')}</p>
+              <p className='text-2xs text-cyber-purple mt-1'>
+                {t('colorPalette.advancedSettings')}
+              </p>
             </div>
 
             {/* Animation enable/disable */}
@@ -163,10 +165,10 @@ export default function ThemeSettings({
                   className='w-4 h-4 accent-cyber-cyan rounded focus:ring-2 focus:ring-cyber-cyan'
                 />
                 <div>
-                  <span className='text-sm font-medium text-cyber-cyan'>
+                  <span className='text-xs font-medium text-cyber-cyan'>
                     {t('accessibility.fullAnimation')}
                   </span>
-                  <p className='text-xs text-cyber-purple'>{t('accessibility.fullAnimation')}</p>
+                  <p className='text-2xs text-cyber-purple'>{t('accessibility.fullAnimation')}</p>
                 </div>
               </label>
             </div>
