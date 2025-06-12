@@ -5,7 +5,9 @@ import { useAudioStrategy } from '../hooks/useAudioStrategy';
 // Mock audio utilities
 vi.mock('../utils/audio', () => ({
   audioManager: {
+    initialize: vi.fn().mockResolvedValue(undefined),
     getAudioState: vi.fn(() => ({
+      initialized: true,
       loadedSounds: [],
     })),
   },
@@ -27,9 +29,47 @@ Object.defineProperty(window, 'webkitAudioContext', {
   value: mockAudioContext,
 });
 
+// Mock HTMLAudioElement
+const mockAudio = {
+  canPlayType: vi.fn((type: string) => {
+    if (type === 'audio/mpeg') return 'probably';
+    return '';
+  }),
+  play: vi.fn().mockResolvedValue(undefined),
+  pause: vi.fn(),
+  addEventListener: vi.fn(),
+  removeEventListener: vi.fn(),
+  volume: 0.5,
+  muted: false,
+  currentTime: 0,
+  duration: 0,
+  src: '',
+};
+
+Object.defineProperty(window, 'Audio', {
+  writable: true,
+  value: vi.fn(() => mockAudio),
+});
+
 describe('useAudioStrategy', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+
+    // Reset Audio mock
+    mockAudio.canPlayType.mockImplementation((type: string) => {
+      if (type === 'audio/mpeg') return 'probably';
+      return '';
+    });
+
+    // Reset AudioContext mock
+    Object.defineProperty(window, 'AudioContext', {
+      writable: true,
+      value: mockAudioContext,
+    });
+    Object.defineProperty(window, 'webkitAudioContext', {
+      writable: true,
+      value: mockAudioContext,
+    });
   });
 
   afterEach(() => {
@@ -58,6 +98,7 @@ describe('useAudioStrategy', () => {
 
     expect(result.current.isWebAudioSupported).toBe(true);
     expect(result.current.isInitialized).toBe(true);
+    expect(result.current.currentStrategy).toBe('webaudio');
   });
 
   it('should fallback to HTML Audio when Web Audio is disabled', async () => {
