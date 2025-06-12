@@ -6,32 +6,10 @@ import { GameSettings } from '../types/tetris';
 import PanelBase from './ui/PanelBase';
 import { UI_SIZES, GAME_UI_SIZES } from '../constants/layout';
 
-interface AudioSystemStatus {
-  isWebAudioEnabled: boolean;
-  preloadProgress?: {
-    total: number;
-    loaded: number;
-    failed: number;
-    progress: number;
-  };
-  fallbackStatus?: {
-    currentLevel: number;
-    availableLevels: string[];
-    silentMode: boolean;
-  };
-  detailedState?: {
-    initialized: boolean;
-    suspended: boolean;
-    loadedSounds: string[];
-    activeSounds: number;
-  };
-}
-
 interface AudioPanelProps {
   isMuted: boolean;
   volume: number;
   settings: GameSettings;
-  audioStatus?: AudioSystemStatus;
   onToggleMute: () => void;
   onVolumeChange: (volume: number) => void;
   onUpdateSettings: (settings: Partial<GameSettings>) => void;
@@ -41,7 +19,6 @@ const AudioPanel = memo(function AudioPanel({
   isMuted,
   volume,
   settings,
-  audioStatus,
   onToggleMute,
   onVolumeChange,
   onUpdateSettings,
@@ -98,115 +75,6 @@ const AudioPanel = memo(function AudioPanel({
               : t('common.off').toUpperCase()}
           </button>
         </div>
-
-        {/* Audio System Status Section */}
-        {audioStatus && (
-          <div className='border-t border-cyan-400/30 pt-3 md:pt-4 space-y-2 md:space-y-3'>
-            <h4 className='text-sm font-semibold text-cyan-300 mb-2'>
-              {t('settings.systemStatus').toUpperCase()}
-            </h4>
-
-            {/* Audio Engine Type */}
-            <div className='flex justify-between items-center'>
-              <span className='text-gray-300 text-xs md:text-sm'>{t('settings.engine')}</span>
-              <span
-                className={`font-mono text-xs px-2 py-1 rounded ${
-                  audioStatus.isWebAudioEnabled
-                    ? 'bg-green-500/20 text-green-400'
-                    : 'bg-yellow-500/20 text-yellow-400'
-                }`}
-              >
-                {audioStatus.isWebAudioEnabled ? t('audio.webAudioApi') : t('audio.htmlAudio')}
-              </span>
-            </div>
-
-            {/* Preload Progress */}
-            {audioStatus.preloadProgress && (
-              <div className='space-y-1'>
-                <div className='flex justify-between items-center'>
-                  <span className='text-gray-300 text-xs md:text-sm'>{t('settings.preload')}</span>
-                  <span className='font-mono text-xs text-cyan-400'>
-                    {audioStatus.preloadProgress.loaded}/{audioStatus.preloadProgress.total}
-                  </span>
-                </div>
-                <div className='w-full bg-gray-700 rounded-full h-1.5'>
-                  <div
-                    className='bg-cyan-400 h-1.5 rounded-full transition-all duration-300'
-                    style={{ width: `${audioStatus.preloadProgress.progress * 100}%` }}
-                  />
-                </div>
-                {audioStatus.preloadProgress.failed > 0 && (
-                  <span className='text-red-400 text-xs'>
-                    {audioStatus.preloadProgress.failed} {t('common.failed').toLowerCase()}
-                  </span>
-                )}
-              </div>
-            )}
-
-            {/* Detailed State */}
-            {audioStatus.detailedState && (
-              <div className='space-y-1'>
-                <div className='flex justify-between items-center'>
-                  <span className='text-gray-300 text-xs md:text-sm'>{t('settings.status')}</span>
-                  <span
-                    className={`font-mono text-xs px-2 py-1 rounded ${
-                      audioStatus.detailedState.initialized
-                        ? 'bg-green-500/20 text-green-400'
-                        : 'bg-red-500/20 text-red-400'
-                    }`}
-                  >
-                    {audioStatus.detailedState.initialized
-                      ? t('common.ready')
-                      : t('common.loading')}
-                  </span>
-                </div>
-                <div className='flex justify-between items-center'>
-                  <span className='text-gray-300 text-xs md:text-sm'>{t('settings.loaded')}</span>
-                  <span className='font-mono text-xs text-cyan-400'>
-                    {audioStatus.detailedState.loadedSounds.length}/6
-                  </span>
-                </div>
-                {audioStatus.detailedState.activeSounds > 0 && (
-                  <div className='flex justify-between items-center'>
-                    <span className='text-gray-300 text-xs md:text-sm'>
-                      {t('settings.playing')}
-                    </span>
-                    <span className='font-mono text-xs text-yellow-400'>
-                      {audioStatus.detailedState.activeSounds}
-                    </span>
-                  </div>
-                )}
-                {audioStatus.detailedState.suspended && (
-                  <div className='text-xs text-yellow-400 text-center pt-1'>
-                    {t('audio.tapToUnlock')}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Fallback Status */}
-            {audioStatus.fallbackStatus && (
-              <div className='space-y-1'>
-                <div className='flex justify-between items-center'>
-                  <span className='text-gray-300 text-xs md:text-sm'>{t('settings.fallback')}</span>
-                  <span className='font-mono text-xs text-cyan-400'>
-                    {t('common.level')} {audioStatus.fallbackStatus.currentLevel + 1}
-                  </span>
-                </div>
-                <div className='text-xs text-gray-400'>
-                  {audioStatus.fallbackStatus.availableLevels[
-                    audioStatus.fallbackStatus.currentLevel
-                  ] || t('common.unknown')}
-                </div>
-                {audioStatus.fallbackStatus.silentMode && (
-                  <div className='text-xs text-red-400 text-center'>
-                    {t('settings.silentModeActive')}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
       </div>
     </PanelBase>
   );

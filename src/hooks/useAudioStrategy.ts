@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback } from 'react';
 import { audioManager } from '../utils/audio';
+import { log } from '../utils/logging/logger';
 
 export type AudioStrategyType = 'webaudio' | 'htmlaudio' | 'silent';
 
@@ -54,22 +55,19 @@ export function useAudioStrategy({
   // Test Web Audio API initialization
   const testWebAudioStrategy = useCallback(async (): Promise<boolean> => {
     try {
-      console.log('[AudioStrategy] Testing Web Audio strategy...');
+      log.audio('Testing Web Audio strategy...');
       await audioManager.initialize();
       const webAudioState = audioManager.getAudioState();
 
-      console.log('[AudioStrategy] Web Audio state:', webAudioState);
+      log.audio(`Web Audio state: ${JSON.stringify(webAudioState)}`);
 
       if (!webAudioState.initialized) {
         throw new Error('Web Audio initialization failed');
       }
-      console.log('[AudioStrategy] Web Audio strategy test successful');
+      log.audio('Web Audio strategy test successful');
       return true;
     } catch (webAudioError) {
-      console.warn(
-        '[AudioStrategy] Web Audio initialization failed, falling back to HTML Audio:',
-        webAudioError
-      );
+      log.audio(`Web Audio initialization failed, falling back to HTML Audio: ${webAudioError}`);
       return false;
     }
   }, []);
@@ -77,24 +75,21 @@ export function useAudioStrategy({
   // Test HTML Audio capability
   const testHtmlAudioStrategy = useCallback(async (): Promise<boolean> => {
     try {
-      console.log('[AudioStrategy] Testing HTML Audio strategy...');
+      log.audio('Testing HTML Audio strategy...');
       const testAudio = new Audio();
       testAudio.volume = 0;
       testAudio.muted = true;
 
       const canPlay = testAudio.canPlayType('audio/mpeg');
-      console.log('[AudioStrategy] HTML Audio MP3 support:', canPlay);
+      log.audio(`HTML Audio MP3 support: ${canPlay}`);
 
       if (!canPlay) {
         throw new Error('HTML Audio MP3 support not available');
       }
-      console.log('[AudioStrategy] HTML Audio strategy test successful');
+      log.audio('HTML Audio strategy test successful');
       return true;
     } catch (htmlAudioError) {
-      console.warn(
-        '[AudioStrategy] HTML Audio test failed, falling back to silent mode:',
-        htmlAudioError
-      );
+      log.audio(`HTML Audio test failed, falling back to silent mode: ${htmlAudioError}`);
       return false;
     }
   }, []);
@@ -124,44 +119,40 @@ export function useAudioStrategy({
       }));
 
       try {
-        console.log(
-          `[AudioStrategy] Initializing audio strategy: ${strategy}, forceRetry: ${forceRetry}`
-        );
+        log.audio(`Initializing audio strategy: ${strategy}, forceRetry: ${forceRetry}`);
 
         const webAudioSupported = enableWebAudio && detectWebAudioSupport();
-        console.log(
-          `[AudioStrategy] Web Audio supported: ${webAudioSupported}, enableWebAudio: ${enableWebAudio}`
-        );
+        log.audio(`Web Audio supported: ${webAudioSupported}, enableWebAudio: ${enableWebAudio}`);
 
         let finalStrategy: AudioStrategyType = strategy;
 
         // Strategy selection and testing
         if (strategy === 'webaudio' && !webAudioSupported) {
-          console.log('[AudioStrategy] Web Audio not supported, falling back to HTML Audio');
+          log.audio('Web Audio not supported, falling back to HTML Audio');
           finalStrategy = 'htmlaudio';
         }
 
         if (finalStrategy === 'webaudio') {
-          console.log('[AudioStrategy] Testing Web Audio strategy');
+          log.audio('Testing Web Audio strategy');
           const webAudioWorking = await testWebAudioStrategy();
           if (!webAudioWorking) {
-            console.log('[AudioStrategy] Web Audio failed, falling back to HTML Audio');
+            log.audio('Web Audio failed, falling back to HTML Audio');
             finalStrategy = 'htmlaudio';
           }
         }
 
         if (finalStrategy === 'htmlaudio') {
-          console.log('[AudioStrategy] Testing HTML Audio strategy');
+          log.audio('Testing HTML Audio strategy');
           const htmlAudioWorking = await testHtmlAudioStrategy();
           if (!htmlAudioWorking) {
-            console.log('[AudioStrategy] HTML Audio failed, falling back to silent mode');
+            log.audio('HTML Audio failed, falling back to silent mode');
             finalStrategy = 'silent';
           }
         }
 
         initializationAttempted.current = true;
 
-        console.log(`[AudioStrategy] Initialization complete. Final strategy: ${finalStrategy}`);
+        log.audio(`Initialization complete. Final strategy: ${finalStrategy}`);
 
         setStrategyState({
           currentStrategy: finalStrategy,
@@ -173,7 +164,7 @@ export function useAudioStrategy({
         // Don't mark as attempted if initialization failed, allow retry
         initializationAttempted.current = false;
 
-        console.error('[AudioStrategy] Critical initialization error:', error);
+        log.audio(`Critical initialization error: ${error}`);
 
         setStrategyState({
           currentStrategy: 'silent',

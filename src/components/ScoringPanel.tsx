@@ -26,9 +26,6 @@ const ScoringPanel = memo(function ScoringPanel() {
           <span>{t('scoring.tetris').toUpperCase()}</span>
           <span className='font-mono text-red-400 font-bold'>700 × LV</span>
         </div>
-        <div className='text-center text-red-400 text-xs animate-pulse mt-2'>
-          ★ {t('scoring.tetris').toUpperCase()} {t('scoring.bonus').toUpperCase()}! ★
-        </div>
         <div className='flex justify-between items-center text-gray-300 border-t border-gray-600 pt-2'>
           <span>{t('scoring.hardDrop').toUpperCase()}</span>
           <span className='font-mono text-purple-400'>DIST × 2</span>

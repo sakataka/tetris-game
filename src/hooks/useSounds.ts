@@ -5,6 +5,7 @@ import { useAudioStrategy } from './useAudioStrategy';
 import { useAudioState } from './useAudioState';
 import { useAudioPreloader } from './useAudioPreloader';
 import { useAudioPlayer } from './useAudioPlayer';
+import { log } from '../utils/logging/logger';
 
 interface AudioState {
   loaded: Set<SoundKey>;
@@ -52,18 +53,18 @@ export function useSounds({
   useEffect(() => {
     const initializeAudio = async () => {
       try {
-        console.log(
-          `[useSounds] Checking audio strategy initialization. isInitialized: ${audioStrategy.isInitialized}`
+        log.audio(
+          `Checking audio strategy initialization. isInitialized: ${audioStrategy.isInitialized}`
         );
         if (!audioStrategy.isInitialized) {
-          console.log('[useSounds] Initializing audio strategy...');
+          log.audio('Initializing audio strategy...');
           await audioStrategy.initializeStrategy();
-          console.log('[useSounds] Audio strategy initialization completed');
+          log.audio('Audio strategy initialization completed');
         } else {
-          console.log('[useSounds] Audio strategy already initialized');
+          log.audio('Audio strategy already initialized');
         }
       } catch (error) {
-        console.warn('[useSounds] Audio initialization failed:', error);
+        log.audio(`Audio initialization failed: ${error}`);
         // Strategy will automatically fallback to silent mode
       }
     };

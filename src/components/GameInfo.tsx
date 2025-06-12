@@ -102,7 +102,6 @@ const GameInfo = memo(function GameInfo({
                 onVolumeChange={onVolumeChange}
                 settings={settings}
                 updateSettings={updateSettings}
-                audioSystemStatus={audioSystemStatus}
               />
             )}
           </Suspense>

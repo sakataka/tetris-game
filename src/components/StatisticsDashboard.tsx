@@ -43,7 +43,9 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
   return (
     <div data-testid='statistics-dashboard' className='hologram-purple p-6 space-y-6'>
       <div className='flex justify-between items-center'>
-        <h2 className='responsive-text-xl font-bold text-cyber-purple'>📊 Statistics Dashboard</h2>
+        <h2 className='responsive-text-xl font-bold text-cyber-purple'>
+          📊 {t('statistics.title')}
+        </h2>
         <select
           value={selectedPeriod}
           onChange={(e) => onPeriodChange(e.target.value)}
@@ -52,7 +54,7 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
         >
           {STATISTICS_PERIODS.map((period) => (
             <option key={period.label} value={period.label}>
-              {period.label}
+              {t(`statistics.period.${period.label.toLowerCase().replace(/\s+/g, '')}`)}
             </option>
           ))}
         </select>
@@ -93,39 +95,39 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
             data-testid='efficiency-stats'
           >
             <h3 className='responsive-text-lg font-bold text-yellow-400 mb-3'>
-              🎯 Performance Metrics
+              🎯 {t('statistics.efficiency')}
             </h3>
             <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm'>
               <div>
-                <span className='text-gray-400'>Efficiency: </span>
+                <span className='text-gray-400'>{t('statistics.efficiency')}: </span>
                 <span className='text-cyan-400 font-semibold'>
                   {statistics.efficiency.toFixed(1)} LPM
                 </span>
               </div>
               <div>
-                <span className='text-gray-400'>Consistency: </span>
+                <span className='text-gray-400'>{t('statistics.consistency')}: </span>
                 <span className='text-green-400 font-semibold'>
                   {statistics.consistency.toFixed(1)}%
                 </span>
               </div>
               <div>
-                <span className='text-gray-400'>Score/Line: </span>
+                <span className='text-gray-400'>{t('statistics.metrics.scorePerLine')}: </span>
                 <span className='text-purple-400 font-semibold'>
                   {Math.round(statistics.scorePerLine)}
                 </span>
               </div>
               <div>
-                <span className='text-gray-400'>Tetris Rate: </span>
+                <span className='text-gray-400'>{t('statistics.tetrisRate')}: </span>
                 <span className='text-red-400 font-semibold'>
                   {advancedMetrics?.tetrisRate.toFixed(1) || '0.0'}%
                 </span>
               </div>
               <div>
-                <span className='text-gray-400'>Avg Level: </span>
+                <span className='text-gray-400'>{t('statistics.averageScore')}: </span>
                 <span className='text-yellow-400 font-semibold'>{statistics.favoriteLevel}</span>
               </div>
               <div>
-                <span className='text-gray-400'>Avg Game Duration: </span>
+                <span className='text-gray-400'>{t('statistics.playTime')}: </span>
                 <span className='text-pink-400 font-semibold'>
                   {advancedMetrics
                     ? `${Math.floor(advancedMetrics.averageGameDuration / 60)}m`
@@ -137,26 +139,28 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
 
           {/* Play history summary */}
           <div className='hologram-cyan neon-border-cyan p-4 rounded' data-testid='play-history'>
-            <h3 className='responsive-text-lg font-bold text-cyan-400 mb-3'>📅 Play History</h3>
+            <h3 className='responsive-text-lg font-bold text-cyan-400 mb-3'>
+              📅 {t('statistics.playTime')}
+            </h3>
             <div className='grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm'>
               <div>
-                <span className='text-gray-400'>Sessions: </span>
+                <span className='text-gray-400'>{t('statistics.gamesPlayed')}: </span>
                 <span className='text-cyan-400 font-semibold'>{statistics.sessionCount}</span>
               </div>
               <div>
-                <span className='text-gray-400'>Longest Session: </span>
+                <span className='text-gray-400'>{t('statistics.bestScore')}: </span>
                 <span className='text-purple-400 font-semibold'>
                   {Math.floor(statistics.longestSession / 60)}m
                 </span>
               </div>
               <div>
-                <span className='text-gray-400'>Games/Session: </span>
+                <span className='text-gray-400'>{t('statistics.gamesPlayed')}: </span>
                 <span className='text-green-400 font-semibold'>
                   {advancedMetrics?.gamesPerSession.toFixed(1) || '0.0'}
                 </span>
               </div>
               <div>
-                <span className='text-gray-400'>Improvement Trend: </span>
+                <span className='text-gray-400'>{t('statistics.efficiency')}: </span>
                 <span className='text-cyan-400 font-semibold'>
                   {advancedMetrics
                     ? (advancedMetrics.improvementTrend > 0 ? '+' : '') +
@@ -166,7 +170,7 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
                 </span>
               </div>
               <div>
-                <span className='text-gray-400'>Last Played: </span>
+                <span className='text-gray-400'>{t('statistics.playTime')}: </span>
                 <span className='text-yellow-400 font-semibold'>
                   {statistics.lastPlayDate > 0
                     ? `${Math.floor((Date.now() - statistics.lastPlayDate) / 3600000)}h ago`
@@ -181,7 +185,9 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
             className='hologram-purple neon-border-purple p-4 rounded'
             data-testid='recent-achievements'
           >
-            <h3 className='text-lg font-bold text-purple-400 mb-3'>🏆 Recent Achievements</h3>
+            <h3 className='text-lg font-bold text-purple-400 mb-3'>
+              🏆 {t('statistics.highScores')}
+            </h3>
             <div className='space-y-2'>
               {highScores.slice(0, 3).map((score, index) => (
                 <div key={score.id} className='flex justify-between items-center text-sm'>
@@ -189,9 +195,11 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
                   <span className='text-cyan-400 font-semibold'>
                     {score.score.toLocaleString()}
                   </span>
-                  <span className='text-purple-400'>Level {score.level}</span>
+                  <span className='text-purple-400'>
+                    {t('game.level')} {score.level}
+                  </span>
                   <span className='text-gray-500'>
-                    {Math.floor((Date.now() - score.date) / 86400000)}d ago
+                    {Math.floor((Date.now() - score.date) / 86400000)}日前
                   </span>
                 </div>
               ))}
@@ -207,7 +215,7 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
       {statistics.totalGames === 0 && (
         <div className='text-center py-8' data-testid='empty-state'>
           <div className='text-gray-500 text-lg'>{t('statistics.noStatistics')}</div>
-          <div className='text-gray-600 text-sm mt-2'>Play some games to see your stats!</div>
+          <div className='text-gray-600 text-sm mt-2'>ゲームをプレイして統計を確認しよう！</div>
         </div>
       )}
     </div>

@@ -13,27 +13,6 @@ interface SettingsTabContentProps {
   onVolumeChange: (volume: number) => void;
   settings: GameSettings;
   updateSettings: (settings: Partial<GameSettings>) => void;
-  // Audio system status for enhanced display
-  audioSystemStatus: {
-    isWebAudioEnabled: boolean;
-    preloadProgress?: {
-      total: number;
-      loaded: number;
-      failed: number;
-      progress: number;
-    };
-    fallbackStatus?: {
-      currentLevel: number;
-      availableLevels: string[];
-      silentMode: boolean;
-    };
-    detailedState?: {
-      initialized: boolean;
-      suspended: boolean;
-      loadedSounds: string[];
-      activeSounds: number;
-    };
-  };
 }
 
 const SettingsTabContent = memo(function SettingsTabContent({
@@ -43,7 +22,6 @@ const SettingsTabContent = memo(function SettingsTabContent({
   onVolumeChange,
   settings,
   updateSettings,
-  audioSystemStatus,
 }: SettingsTabContentProps) {
   const { t } = useTranslation();
 
@@ -59,12 +37,11 @@ const SettingsTabContent = memo(function SettingsTabContent({
         </Suspense>
       </div>
 
-      {/* Audio Settings - Enhanced */}
+      {/* Audio Settings */}
       <AudioPanel
         isMuted={isMuted}
         volume={volume}
         settings={settings}
-        audioStatus={audioSystemStatus}
         onToggleMute={onToggleMute}
         onVolumeChange={onVolumeChange}
         onUpdateSettings={updateSettings}

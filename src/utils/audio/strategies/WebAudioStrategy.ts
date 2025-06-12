@@ -6,6 +6,7 @@
 import type { SoundKey } from '../../../types/tetris';
 import { AudioError, handleError } from '../../data/errorHandler';
 import { AudioStrategy, type SoundConfig, type AudioState } from './AudioStrategy';
+import { log } from '../../logging/logger';
 
 interface AudioContextState {
   context: AudioContext | null;
@@ -117,17 +118,22 @@ export class WebAudioStrategy extends AudioStrategy {
     if (this.isMuted || !this.audioState.context || !this.audioState.gainNode) return;
 
     if (this.audioState.suspended) {
-      const audioError = new AudioError(
-        `Audio context suspended, requires user interaction: ${soundKey}`,
-        { action: 'audio_play', component: 'WebAudioStrategy', additionalData: { soundKey } },
-        {
-          recoverable: true,
-          retryable: true,
-          userMessage: 'Tap the screen to enable audio',
-        }
+      log.audio(
+        `Audio context suspended, requires user interaction for: ${soundKey}. Trying to resume...`
       );
-      handleError(audioError);
-      return;
+      try {
+        await this.audioState.context.resume();
+        this.audioState.suspended = this.audioState.context.state === 'suspended';
+        log.audio(`Audio context resume attempt: ${this.audioState.context.state}`);
+
+        if (this.audioState.suspended) {
+          log.audio('Audio context still suspended after resume attempt');
+          return;
+        }
+      } catch (error) {
+        log.audio(`Failed to resume audio context: ${error}`);
+        return;
+      }
     }
 
     // Load audio buffer if needed
