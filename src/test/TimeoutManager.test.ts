@@ -24,10 +24,10 @@ describe('TimeoutManager', () => {
     vi.clearAllMocks();
     mockRegisterAnimation = vi.mocked(animationManager.registerAnimation);
     mockUnregisterAnimation = vi.mocked(animationManager.unregisterAnimation);
-    
+
     // Reset performance.now to start at 0
     mockPerformanceNow.mockReturnValue(0);
-    
+
     // Get fresh instance
     manager = TimeoutManager.getInstance();
     manager.clearAllTimeouts(); // Clean slate
@@ -60,7 +60,7 @@ describe('TimeoutManager', () => {
       const delay = 1000;
       mockPerformanceNow.mockReturnValue(0);
 
-      const timeoutId = manager.setTimeout(callback, delay);
+      manager.setTimeout(callback, delay);
 
       // Get the animation callback that was registered
       const animationCallback = mockRegisterAnimation.mock.calls[0][1];
@@ -87,9 +87,8 @@ describe('TimeoutManager', () => {
       expect(mockUnregisterAnimation).toHaveBeenCalled();
 
       // Get the animation callback and try to execute it
-      const animationCallback = mockRegisterAnimation.mock.calls[0][1];
       mockPerformanceNow.mockReturnValue(1000);
-      
+
       // Callback should not be accessible since timeout was cleared
       // This tests that the timeout was properly removed
       const activeTimeouts = manager.getActiveTimeouts();
@@ -102,7 +101,7 @@ describe('TimeoutManager', () => {
       });
       const delay = 1000;
 
-      const timeoutId = manager.setTimeout(errorCallback, delay);
+      manager.setTimeout(errorCallback, delay);
       const animationCallback = mockRegisterAnimation.mock.calls[0][1];
 
       // Execute callback - should not throw
@@ -126,8 +125,8 @@ describe('TimeoutManager', () => {
       expect(activeTimeouts).toHaveLength(2);
 
       // Check timeout information
-      const timeout1Info = activeTimeouts.find(t => t.id === timeout1);
-      const timeout2Info = activeTimeouts.find(t => t.id === timeout2);
+      const timeout1Info = activeTimeouts.find((t) => t.id === timeout1);
+      const timeout2Info = activeTimeouts.find((t) => t.id === timeout2);
 
       expect(timeout1Info).toMatchObject({
         duration: 1000,
@@ -146,18 +145,18 @@ describe('TimeoutManager', () => {
       const callback = vi.fn();
       mockPerformanceNow.mockReturnValue(0);
 
-      const timeoutId = manager.setTimeout(callback, 1000);
+      manager.setTimeout(callback, 1000);
 
       // Advance time
       mockPerformanceNow.mockReturnValue(300);
-      
+
       const activeTimeouts = manager.getActiveTimeouts();
-      expect(activeTimeouts[0].remainingTime).toBe(700);
+      expect(activeTimeouts[0]?.remainingTime).toBe(700);
     });
 
     it('should provide statistics', () => {
       const callback = vi.fn();
-      
+
       manager.setTimeout(callback, 1000);
       manager.setTimeout(callback, 2000);
 
@@ -170,7 +169,7 @@ describe('TimeoutManager', () => {
   describe('clearAllTimeouts', () => {
     it('should clear all active timeouts', () => {
       const callback = vi.fn();
-      
+
       manager.setTimeout(callback, 1000);
       manager.setTimeout(callback, 2000);
       manager.setTimeout(callback, 3000);
@@ -188,7 +187,7 @@ describe('TimeoutManager', () => {
     it('should return the same instance', () => {
       const instance1 = TimeoutManager.getInstance();
       const instance2 = TimeoutManager.getInstance();
-      
+
       expect(instance1).toBe(instance2);
       expect(instance1).toBe(timeoutManager);
     });
@@ -196,15 +195,17 @@ describe('TimeoutManager', () => {
 
   describe('convenience functions', () => {
     it('should work with unifiedSetTimeout and unifiedClearTimeout', async () => {
-      const { unifiedSetTimeout, unifiedClearTimeout } = await import('../utils/timing/TimeoutManager');
-      
+      const { unifiedSetTimeout, unifiedClearTimeout } = await import(
+        '../utils/timing/TimeoutManager'
+      );
+
       const callback = vi.fn();
       const timeoutId = unifiedSetTimeout(callback, 1000);
-      
+
       expect(mockRegisterAnimation).toHaveBeenCalled();
-      
+
       unifiedClearTimeout(timeoutId);
-      
+
       expect(mockUnregisterAnimation).toHaveBeenCalled();
     });
   });

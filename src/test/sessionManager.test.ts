@@ -11,7 +11,7 @@ import { SessionManager } from '../utils/data/sessionManager';
 // Mock TimeoutManager
 vi.mock('../utils/timing/TimeoutManager', () => ({
   timeoutManager: {
-    setTimeout: vi.fn((callback: () => void, delay: number) => {
+    setTimeout: vi.fn((callback: () => void) => {
       // Return a mock timeout ID and store callback for testing
       const timeoutId = `mock-timeout-${Math.random()}`;
       // Store callback so we can trigger it in tests
@@ -280,7 +280,7 @@ describe('SessionManager', () => {
 
       // Start a session - should set timeout
       sessionManager.startSession();
-      
+
       expect(mockSetTimeout).toHaveBeenCalledWith(
         expect.any(Function),
         30 * 60 * 1000 // 30 minutes
@@ -288,7 +288,7 @@ describe('SessionManager', () => {
 
       // End session - should clear timeout
       sessionManager.endCurrentSession();
-      
+
       expect(mockClearTimeout).toHaveBeenCalled();
     });
 
@@ -298,7 +298,7 @@ describe('SessionManager', () => {
       const mockClearTimeout = vi.mocked(timeoutManager.clearTimeout);
 
       sessionManager.startSession();
-      
+
       // Reset mock calls
       mockSetTimeout.mockClear();
       mockClearTimeout.mockClear();
@@ -307,10 +307,7 @@ describe('SessionManager', () => {
       sessionManager.onGameStart();
 
       expect(mockClearTimeout).toHaveBeenCalled();
-      expect(mockSetTimeout).toHaveBeenCalledWith(
-        expect.any(Function),
-        30 * 60 * 1000
-      );
+      expect(mockSetTimeout).toHaveBeenCalledWith(expect.any(Function), 30 * 60 * 1000);
     });
 
     it('should handle timeout expiration', async () => {
@@ -322,10 +319,11 @@ describe('SessionManager', () => {
       expect(session.isActive).toBe(true);
 
       // Get the timeout callback that was registered
-      const timeoutCallback = mockSetTimeout.mock.calls[0][0];
+      const timeoutCallback = mockSetTimeout.mock.calls[0]?.[0];
+      expect(timeoutCallback).toBeDefined();
 
       // Execute the timeout callback
-      timeoutCallback();
+      timeoutCallback?.();
 
       // Session should be ended
       const currentSession = sessionManager.getCurrentSession();
@@ -333,7 +331,7 @@ describe('SessionManager', () => {
 
       // Session in history should be marked as inactive
       const sessions = sessionManager.getAllSessions();
-      const endedSession = sessions.find(s => s.id === session.id);
+      const endedSession = sessions.find((s) => s.id === session.id);
       expect(endedSession?.isActive).toBe(false);
       expect(endedSession?.endTime).toBeDefined();
     });

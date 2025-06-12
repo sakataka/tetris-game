@@ -62,7 +62,10 @@ export class TimeoutManager {
         try {
           callback();
         } catch (error) {
-          log.error('Error in timeout callback', { error, timeoutId });
+          log.error('Error in timeout callback', {
+            component: 'TimeoutManager',
+            metadata: { error, timeoutId },
+          });
         } finally {
           this.clearTimeout(timeoutId);
         }
@@ -111,8 +114,8 @@ export class TimeoutManager {
 
     log.debug(`Timeout cleared: ${timeoutId}`, {
       component: 'TimeoutManager',
-      metadata: { 
-        timeoutId, 
+      metadata: {
+        timeoutId,
         wasCompleted: false,
         remainingTime: timeout.endTime - performance.now(),
       },
@@ -142,8 +145,8 @@ export class TimeoutManager {
    */
   public clearAllTimeouts(): void {
     const timeoutIds = Array.from(this.timeouts.keys());
-    timeoutIds.forEach(id => this.clearTimeout(id));
-    
+    timeoutIds.forEach((id) => this.clearTimeout(id));
+
     log.debug(`Cleared all timeouts: ${timeoutIds.length} timeouts`, {
       component: 'TimeoutManager',
       metadata: { clearedCount: timeoutIds.length },
