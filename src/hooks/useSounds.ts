@@ -90,7 +90,7 @@ export function useSounds({
     audioStrategy.hasInitializationError,
     audioStrategy.canRetry,
     audioStrategy.retryInitialization,
-  ]);  
+  ]);
 
   // Legacy audio unlock function for compatibility
   const unlockAudio = useCallback(async () => {
