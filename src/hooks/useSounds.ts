@@ -52,17 +52,24 @@ export function useSounds({
   useEffect(() => {
     const initializeAudio = async () => {
       try {
+        console.log(
+          `[useSounds] Checking audio strategy initialization. isInitialized: ${audioStrategy.isInitialized}`
+        );
         if (!audioStrategy.isInitialized) {
+          console.log('[useSounds] Initializing audio strategy...');
           await audioStrategy.initializeStrategy();
+          console.log('[useSounds] Audio strategy initialization completed');
+        } else {
+          console.log('[useSounds] Audio strategy already initialized');
         }
       } catch (error) {
-        console.warn('Audio initialization failed:', error);
+        console.warn('[useSounds] Audio initialization failed:', error);
         // Strategy will automatically fallback to silent mode
       }
     };
 
     initializeAudio();
-  }, [audioStrategy]); // Include audioStrategy to satisfy eslint
+  }, [audioStrategy.isInitialized, audioStrategy.initializeStrategy]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Retry initialization if it failed
   useEffect(() => {
@@ -79,7 +86,11 @@ export function useSounds({
 
     // Return empty cleanup function for consistent return
     return () => {};
-  }, [audioStrategy.hasInitializationError, audioStrategy.canRetry, audioStrategy]);
+  }, [
+    audioStrategy.hasInitializationError,
+    audioStrategy.canRetry,
+    audioStrategy.retryInitialization,
+  ]);  
 
   // Legacy audio unlock function for compatibility
   const unlockAudio = useCallback(async () => {

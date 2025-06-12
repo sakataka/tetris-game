@@ -40,10 +40,15 @@ export function useAudioPlayer({
   const playWebAudio = useCallback(
     async (soundKey: SoundKey, options: PlayOptions = {}) => {
       try {
+        console.log(
+          `[AudioPlayer] Playing sound via Web Audio: ${soundKey}, volume: ${options.volume ?? volume}`
+        );
         await playWithFallback(soundKey, {
           volume: options.volume ?? volume,
         });
+        console.log(`[AudioPlayer] Web Audio playback successful: ${soundKey}`);
       } catch (error) {
+        console.error(`[AudioPlayer] Web Audio playback failed for ${soundKey}:`, error);
         const playError = error instanceof Error ? error : new Error('Web Audio play failed');
         if (onPlayError) {
           onPlayError(soundKey, playError);
@@ -57,28 +62,40 @@ export function useAudioPlayer({
   // Play sound using HTML Audio element
   const playHtmlAudio = useCallback(
     async (soundKey: SoundKey, options: PlayOptions = {}) => {
+      console.log(`[AudioPlayer] Attempting HTML Audio playback: ${soundKey}`);
+
       if (!getHtmlAudioElement) {
+        console.error('[AudioPlayer] HTML Audio element getter not provided');
         throw new Error('HTML Audio element getter not provided');
       }
 
       const audio = getHtmlAudioElement(soundKey);
       if (!audio) {
+        console.error(`[AudioPlayer] HTML Audio element not found for sound: ${soundKey}`);
         throw new Error(`HTML Audio element not found for sound: ${soundKey}`);
       }
 
       try {
+        console.log(`[AudioPlayer] HTML Audio element found for ${soundKey}, src: ${audio.src}`);
+
         // Reset to beginning if already playing
         if (!audio.paused) {
           audio.currentTime = 0;
         }
 
         // Apply options
-        audio.volume = (options.volume ?? volume) * (isMuted ? 0 : 1);
+        const finalVolume = (options.volume ?? volume) * (isMuted ? 0 : 1);
+        audio.volume = finalVolume;
         audio.loop = options.loop ?? false;
         audio.playbackRate = options.playbackRate ?? 1.0;
 
+        console.log(
+          `[AudioPlayer] Playing HTML Audio: ${soundKey}, volume: ${finalVolume}, muted: ${isMuted}`
+        );
         await audio.play();
+        console.log(`[AudioPlayer] HTML Audio playback successful: ${soundKey}`);
       } catch (error) {
+        console.error(`[AudioPlayer] HTML Audio playback failed for ${soundKey}:`, error);
         const playError = error instanceof Error ? error : new Error('HTML Audio play failed');
         if (onPlayError) {
           onPlayError(soundKey, playError);
@@ -92,8 +109,18 @@ export function useAudioPlayer({
   // Main play function with throttling and strategy handling
   const playSound = useCallback(
     async (soundKey: SoundKey, options: PlayOptions = {}) => {
+      console.log(
+        `[AudioPlayer] playSound called: ${soundKey}, strategy: ${strategy}, muted: ${isMuted}`
+      );
+
       // Early return for silent mode or muted state
-      if (strategy === 'silent' || isMuted) {
+      if (strategy === 'silent') {
+        console.log(`[AudioPlayer] Skipping playback - silent mode`);
+        return;
+      }
+
+      if (isMuted) {
+        console.log(`[AudioPlayer] Skipping playback - muted`);
         return;
       }
 
@@ -101,6 +128,7 @@ export function useAudioPlayer({
       const now = Date.now();
       const lastPlay = lastPlayTime.current[soundKey];
       if (lastPlay && now - lastPlay < PLAY_THROTTLE_MS) {
+        console.log(`[AudioPlayer] Throttling rapid play of ${soundKey}`);
         return;
       }
 
@@ -109,11 +137,14 @@ export function useAudioPlayer({
 
       try {
         if (strategy === 'webaudio') {
+          console.log(`[AudioPlayer] Using Web Audio strategy for ${soundKey}`);
           await playWebAudio(soundKey, options);
         } else if (strategy === 'htmlaudio') {
+          console.log(`[AudioPlayer] Using HTML Audio strategy for ${soundKey}`);
           await playHtmlAudio(soundKey, options);
         }
-      } catch {
+      } catch (error) {
+        console.error(`[AudioPlayer] Playback failed for ${soundKey}:`, error);
         // Error already handled in individual play functions
         // This catch prevents unhandled promise rejections
       }
