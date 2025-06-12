@@ -12,6 +12,7 @@ import {
   ContrastLevel,
   AnimationIntensity,
 } from '../types/tetris';
+import { SPACING, TYPOGRAPHY } from '../constants/layout';
 
 interface ThemeSettingsProps {
   currentTheme: ThemeVariant;
@@ -75,12 +76,14 @@ export default function ThemeSettings({
   return (
     <div className={`theme-settings ${className}`}>
       {/* Tab navigation */}
-      <div className='flex flex-wrap gap-0.5 mb-2 p-0.5 rounded-lg bg-cyber-cyan-10'>
+      <div
+        className={`flex flex-wrap gap-0.5 ${SPACING.PANEL_TITLE_BOTTOM} p-0.5 rounded-lg bg-cyber-cyan-10`}
+      >
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex-1 min-w-0 px-2 py-1 rounded-md text-xs font-medium transition-colors
+            className={`flex-1 min-w-0 px-2 py-1 rounded-md ${TYPOGRAPHY.BUTTON_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} transition-colors
               ${
                 activeTab === tab.id
                   ? 'bg-cyber-cyan text-background'
@@ -96,14 +99,14 @@ export default function ThemeSettings({
       {/* Tab content */}
       <div className='min-h-[200px]'>
         {activeTab === 'theme' && (
-          <div className='space-y-0.5'>
+          <div className={SPACING.PANEL_INTERNAL}>
             <ThemeSelectorMemo currentTheme={currentTheme} onThemeChange={onThemeChange} />
 
             <div className='flex gap-2'>
               <button
                 onClick={onResetToDefault}
-                className='px-4 py-2 rounded bg-cyber-red-20 border border-cyber-red-30
-                           text-cyber-red hover:bg-cyber-red-30 transition-colors text-sm'
+                className={`px-4 py-2 rounded bg-cyber-red-20 border border-cyber-red-30
+                           text-cyber-red hover:bg-cyber-red-30 transition-colors ${TYPOGRAPHY.BUTTON_TEXT}`}
               >
                 {t('buttons.reset')}
               </button>
@@ -126,10 +129,12 @@ export default function ThemeSettings({
         )}
 
         {activeTab === 'effects' && (
-          <div className='space-y-0.5'>
+          <div className={SPACING.PANEL_INTERNAL}>
             {/* Effect intensity */}
             <div>
-              <label className='block text-xs font-medium mb-0.5 text-cyber-cyan'>
+              <label
+                className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-cyber-cyan`}
+              >
                 {t('colorPalette.advancedSettings')}: {(effectIntensity * 100).toFixed(0)}%
               </label>
               <input
@@ -145,12 +150,14 @@ export default function ThemeSettings({
                   background: `linear-gradient(to right, var(--cyber-cyan) 0%, var(--cyber-cyan) ${effectIntensity * 50}%, var(--cyber-cyan-20) ${effectIntensity * 50}%, var(--cyber-cyan-20) 100%)`,
                 }}
               />
-              <div className='flex justify-between text-2xs text-cyber-purple mt-0.5'>
+              <div
+                className={`flex justify-between ${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple mt-0.5`}
+              >
                 <span>{t('accessibility.lowContrast')}</span>
                 <span>{t('accessibility.standard')}</span>
                 <span>{t('accessibility.highContrast')}</span>
               </div>
-              <p className='text-2xs text-cyber-purple mt-1'>
+              <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple mt-1`}>
                 {t('colorPalette.advancedSettings')}
               </p>
             </div>
@@ -165,20 +172,26 @@ export default function ThemeSettings({
                   className='w-4 h-4 accent-cyber-cyan rounded focus:ring-2 focus:ring-cyber-cyan'
                 />
                 <div>
-                  <span className='text-xs font-medium text-cyber-cyan'>
+                  <span
+                    className={`${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} text-cyber-cyan`}
+                  >
                     {t('accessibility.fullAnimation')}
                   </span>
-                  <p className='text-2xs text-cyber-purple'>{t('accessibility.fullAnimation')}</p>
+                  <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple`}>
+                    {t('accessibility.fullAnimation')}
+                  </p>
                 </div>
               </label>
             </div>
 
             {/* Effect preview */}
             <div className='p-4 rounded-lg hologram'>
-              <div className='text-sm font-medium mb-3 text-cyber-cyan'>
+              <div
+                className={`${TYPOGRAPHY.SECTION_HEADER} ${TYPOGRAPHY.TITLE_WEIGHT} mb-3 text-cyber-cyan`}
+              >
                 {t('colorPalette.preview')}
               </div>
-              <div className='space-y-3'>
+              <div className={SPACING.LOOSE}>
                 <div
                   className='p-3 rounded neon-border text-center'
                   style={{

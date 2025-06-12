@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import LanguageSelector from './LanguageSelector';
 import AudioPanel from './AudioPanel';
 import { GameSettings } from '../types/tetris';
+import { SPACING, TYPOGRAPHY } from '../constants/layout';
 
 interface SettingsTabContentProps {
   isMuted: boolean;
@@ -26,13 +27,19 @@ const SettingsTabContent = memo(function SettingsTabContent({
   const { t } = useTranslation();
 
   return (
-    <div className='space-y-0.5 p-0.5'>
+    <div className={`${SPACING.PANEL_INTERNAL} p-1`}>
       {/* Language Settings */}
-      <div className='space-y-0.5'>
-        <h3 className='text-xs font-bold text-cyber-cyan border-b border-cyber-cyan/30 pb-0.5'>
+      <div className={SPACING.PANEL_INTERNAL}>
+        <h3
+          className={`${TYPOGRAPHY.SECTION_HEADER} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyber-cyan border-b border-cyber-cyan/30 ${SPACING.SECTION_TITLE_BOTTOM}`}
+        >
           {t('settings.language')}
         </h3>
-        <Suspense fallback={<div className='text-gray-400 text-xs'>{t('common.loading')}</div>}>
+        <Suspense
+          fallback={
+            <div className={`text-gray-400 ${TYPOGRAPHY.BODY_TEXT}`}>{t('common.loading')}</div>
+          }
+        >
           <LanguageSelector />
         </Suspense>
       </div>

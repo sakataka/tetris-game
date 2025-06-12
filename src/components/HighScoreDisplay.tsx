@@ -3,6 +3,8 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { HighScore } from '../types/tetris';
+import PanelBase from './ui/PanelBase';
+import { SPACING, TYPOGRAPHY } from '../constants/layout';
 
 interface HighScoreDisplayProps {
   highScores: readonly HighScore[];
@@ -22,17 +24,15 @@ const HighScoreDisplay = memo(function HighScoreDisplay({
   const { t, i18n } = useTranslation();
   const displayScores = highScores.slice(0, maxDisplay);
 
-  const padding = size === 'xs' ? 'p-1' : size === 'sm' ? 'p-2' : 'p-4';
-  const titleSize = size === 'xs' ? 'text-xs' : size === 'sm' ? 'text-sm' : 'text-xl';
-  const titleMargin = size === 'xs' ? 'mb-1' : size === 'sm' ? 'mb-2' : 'mb-4';
-
   return (
-    <div data-testid='high-score-display' className={`hologram-cyan ${padding} ${className}`}>
-      <h3 className={`${titleSize} font-bold ${titleMargin} text-cyber-cyan`}>
-        🏆 {t('statistics.highScores')}
-      </h3>
-
-      <div className='space-y-1'>
+    <PanelBase
+      title={`🏆 ${t('statistics.highScores')}`}
+      theme='cyan'
+      size={size}
+      className={className}
+      data-testid='high-score-display'
+    >
+      <div className={SPACING.PANEL_INTERNAL}>
         {displayScores.map((score, index) => (
           <div
             key={score.id}
@@ -41,18 +41,24 @@ const HighScoreDisplay = memo(function HighScoreDisplay({
           >
             <div className='flex items-center gap-1'>
               {showRank && (
-                <span className='text-cyber-yellow font-bold w-6 text-xs'>#{index + 1}</span>
+                <span
+                  className={`text-cyber-yellow ${TYPOGRAPHY.TITLE_WEIGHT} w-6 ${TYPOGRAPHY.BODY_TEXT}`}
+                >
+                  #{index + 1}
+                </span>
               )}
               <div>
-                <div className='font-bold text-cyber-cyan text-xs'>
+                <div
+                  className={`${TYPOGRAPHY.TITLE_WEIGHT} text-cyber-cyan ${TYPOGRAPHY.BODY_TEXT}`}
+                >
                   {score.score.toLocaleString()}
                 </div>
-                <div className='text-xs text-gray-400'>Lv{score.level}</div>
+                <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400`}>Lv{score.level}</div>
               </div>
             </div>
 
             <div className='text-right'>
-              <div className='text-xs text-gray-500'>
+              <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-500`}>
                 {new Date(score.date).toLocaleDateString(
                   i18n.language === 'ja' ? 'ja-JP' : 'en-US'
                 )}
@@ -60,14 +66,17 @@ const HighScoreDisplay = memo(function HighScoreDisplay({
             </div>
           </div>
         ))}
-      </div>
 
-      {highScores.length === 0 && (
-        <div className='text-center text-gray-500 py-8' data-testid='no-scores-message'>
-          {t('statistics.noHighScores')}
-        </div>
-      )}
-    </div>
+        {highScores.length === 0 && (
+          <div
+            className={`text-center text-gray-500 py-8 ${TYPOGRAPHY.BODY_TEXT}`}
+            data-testid='no-scores-message'
+          >
+            {t('statistics.noHighScores')}
+          </div>
+        )}
+      </div>
+    </PanelBase>
   );
 });
 

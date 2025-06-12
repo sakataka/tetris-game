@@ -4,6 +4,7 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCurrentLanguage, useSetLanguage } from '../store/languageStore';
 import { supportedLanguages, languageNames, type SupportedLanguage } from '../i18n';
+import { TYPOGRAPHY } from '../constants/layout';
 
 interface LanguageSelectorProps {
   className?: string;
@@ -26,7 +27,10 @@ const LanguageSelector = memo(function LanguageSelector({
   return (
     <div className={`flex items-center gap-2 ${className}`}>
       {showLabel && (
-        <label htmlFor='language-select' className='text-sm font-medium text-gray-300'>
+        <label
+          htmlFor='language-select'
+          className={`${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} text-gray-300`}
+        >
           {t('settings.language')}:
         </label>
       )}
@@ -34,11 +38,11 @@ const LanguageSelector = memo(function LanguageSelector({
         id='language-select'
         value={currentLanguage}
         onChange={handleLanguageChange}
-        className='
-          bg-gray-800 border border-gray-600 rounded px-2 py-1 text-sm
+        className={`
+          bg-gray-800 border border-gray-600 rounded px-2 py-1 ${TYPOGRAPHY.BODY_TEXT}
           text-gray-100 hover:border-cyber-cyan transition-colors
           focus:outline-none focus:ring-2 focus:ring-cyber-cyan focus:border-transparent
-        '
+        `}
         aria-label={t('aria.changeLanguage')}
       >
         {supportedLanguages.map((lang) => (

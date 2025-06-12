@@ -8,6 +8,7 @@ import GameButtonsPanel from './GameButtonsPanel';
 import ScoringPanel from './ScoringPanel';
 import HighScoreDisplay from './HighScoreDisplay';
 import { useHighScores } from '../store/statisticsStore';
+import { SPACING, TYPOGRAPHY } from '../constants/layout';
 
 interface GameTabContentProps {
   score: number;
@@ -35,7 +36,7 @@ const GameTabContent = memo(function GameTabContent({
   const highScores = useHighScores();
 
   return (
-    <div className={`space-y-0.5 ${className}`}>
+    <div className={`${SPACING.PANEL_INTERNAL} ${className}`}>
       {/* Combined Score & Next Piece */}
       <CombinedStatsNextPanel
         score={score}
@@ -59,11 +60,18 @@ const GameTabContent = memo(function GameTabContent({
       <ControlsPanel size='xs' />
 
       {/* High scores */}
-      <HighScoreDisplay highScores={highScores} maxDisplay={3} className='text-2xs' size='xs' />
+      <HighScoreDisplay
+        highScores={highScores}
+        maxDisplay={3}
+        className={TYPOGRAPHY.SMALL_LABEL}
+        size='xs'
+      />
 
       {/* Score reference - collapsible */}
-      <details className='text-2xs'>
-        <summary className='cursor-pointer text-cyan-400 hover:text-cyan-300'>
+      <details className={TYPOGRAPHY.SMALL_LABEL}>
+        <summary
+          className={`cursor-pointer text-cyan-400 hover:text-cyan-300 ${TYPOGRAPHY.BODY_TEXT}`}
+        >
           Score Reference
         </summary>
         <ScoringPanel size='xs' />

@@ -77,3 +77,30 @@ export const GAME_UI_SIZES = {
     LARGE: 'gap-4', // 16px
   },
 } as const;
+
+// Typography system for consistent text hierarchy
+export const TYPOGRAPHY = {
+  PANEL_TITLE: 'text-sm', // Main panel titles
+  SECTION_HEADER: 'text-xs', // Section headers within panels
+  BODY_TEXT: 'text-xs', // Standard body text
+  SMALL_LABEL: 'text-2xs', // Small labels and captions
+  BUTTON_TEXT: 'text-xs', // Button text
+  STAT_VALUE: 'text-xs', // Statistics values
+  // Font weights
+  TITLE_WEIGHT: 'font-bold',
+  BODY_WEIGHT: 'font-medium',
+  LABEL_WEIGHT: 'font-normal',
+} as const;
+
+// Standardized spacing patterns
+export const SPACING = {
+  PANEL_INTERNAL: 'space-y-1', // Internal panel spacing
+  SECTION_GAP: 'space-y-2', // Between major sections
+  FORM_ELEMENTS: 'space-y-1.5', // Form element spacing
+  TIGHT: 'space-y-0.5', // Very tight spacing (rare use)
+  LOOSE: 'space-y-3', // Loose spacing for breathing room
+  // Margins
+  PANEL_TITLE_BOTTOM: 'mb-1', // Space after panel titles
+  SECTION_TITLE_BOTTOM: 'mb-0.5', // Space after section titles
+  FORM_LABEL_BOTTOM: 'mb-0.5', // Space after form labels
+} as const;

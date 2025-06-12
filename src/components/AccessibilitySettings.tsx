@@ -3,6 +3,7 @@
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ColorBlindnessType, ContrastLevel, AnimationIntensity } from '../types/tetris';
+import { SPACING, TYPOGRAPHY } from '../constants/layout';
 
 interface AccessibilitySettingsProps {
   colorBlindnessType: ColorBlindnessType;
@@ -82,12 +83,18 @@ export default function AccessibilitySettings({
 
   return (
     <div className={`accessibility-settings ${className}`}>
-      <h3 className='text-lg font-bold text-cyber-cyan mb-4'>{t('settings.accessibility')}</h3>
+      <h3
+        className={`${TYPOGRAPHY.PANEL_TITLE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyber-cyan ${SPACING.PANEL_TITLE_BOTTOM}`}
+      >
+        {t('settings.accessibility')}
+      </h3>
 
-      <div className='space-y-4'>
+      <div className={SPACING.FORM_ELEMENTS}>
         {/* Color blindness support */}
         <div>
-          <label className='block text-sm font-medium mb-2 text-cyber-cyan'>
+          <label
+            className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-cyber-cyan`}
+          >
             {t('accessibility.colorVisionSupport')}
           </label>
           <select
@@ -107,14 +114,16 @@ export default function AccessibilitySettings({
               </option>
             ))}
           </select>
-          <p className='text-xs text-cyber-purple mt-1'>
+          <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple mt-1`}>
             {t('accessibility.colorVisionSupportDescription')}
           </p>
         </div>
 
         {/* Contrast settings */}
         <div>
-          <label className='block text-sm font-medium mb-2 text-cyber-cyan'>
+          <label
+            className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-cyber-cyan`}
+          >
             {t('accessibility.contrast')}
           </label>
           <select
@@ -134,12 +143,16 @@ export default function AccessibilitySettings({
               </option>
             ))}
           </select>
-          <p className='text-xs text-cyber-purple mt-1'>{t('accessibility.contrastDescription')}</p>
+          <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple mt-1`}>
+            {t('accessibility.contrastDescription')}
+          </p>
         </div>
 
         {/* Animation intensity */}
         <div>
-          <label className='block text-sm font-medium mb-2 text-cyber-cyan'>
+          <label
+            className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-cyber-cyan`}
+          >
             {t('accessibility.animationIntensity')}
           </label>
           <select
@@ -159,7 +172,7 @@ export default function AccessibilitySettings({
               </option>
             ))}
           </select>
-          <p className='text-xs text-cyber-purple mt-1'>
+          <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple mt-1`}>
             {t('accessibility.animationIntensityDescription')}
           </p>
         </div>
@@ -174,10 +187,10 @@ export default function AccessibilitySettings({
               className='w-4 h-4 accent-cyber-cyan rounded focus:ring-2 focus:ring-cyber-cyan'
             />
             <div>
-              <span className='text-sm font-medium text-cyber-cyan'>
+              <span className={`${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} text-cyber-cyan`}>
                 {t('settings.reducedMotion')}
               </span>
-              <p className='text-xs text-cyber-purple'>
+              <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple`}>
                 {t('accessibility.animationIntensityDescription')}
               </p>
             </div>
@@ -186,10 +199,12 @@ export default function AccessibilitySettings({
 
         {/* Preview area */}
         <div className='mt-4 p-3 rounded-lg hologram'>
-          <div className='text-sm font-medium mb-2 text-cyber-cyan'>
+          <div
+            className={`${TYPOGRAPHY.SECTION_HEADER} ${TYPOGRAPHY.TITLE_WEIGHT} ${SPACING.SECTION_TITLE_BOTTOM} text-cyber-cyan`}
+          >
             {t('accessibility.currentSettings')}
           </div>
-          <div className='text-xs space-y-1'>
+          <div className={`${TYPOGRAPHY.BODY_TEXT} ${SPACING.PANEL_INTERNAL}`}>
             <div className='text-cyber-purple'>
               {t('accessibility.colorVisionSupport')}:{' '}
               {colorBlindnessOptions.find((opt) => opt.value === colorBlindnessType)?.label}
