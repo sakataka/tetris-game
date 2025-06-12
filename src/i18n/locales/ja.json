@@ -108,7 +108,10 @@
       "dropAccuracy": "ドロップ精度"
     },
     "noData": "データがありません",
-    "reset": "統計をリセット"
+    "reset": "統計をリセット",
+    "playGameToViewStats": "ゲームをプレイして統計を確認しよう！",
+    "daysAgo": "{{count}}日前",
+    "hoursAgo": "{{count}}時間前"
   },
   "tabs": {
     "game": "ゲーム",

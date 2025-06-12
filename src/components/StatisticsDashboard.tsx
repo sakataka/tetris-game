@@ -193,7 +193,19 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
                   </span>
                   <span className='text-purple-400'>Lv{score.level}</span>
                   <span className='text-gray-500'>
-                    {Math.floor((Date.now() - score.date) / 86400000)}日前
+                    {(() => {
+                      const msAgo = Date.now() - score.date;
+                      const daysAgo = Math.floor(msAgo / 86400000);
+                      const hoursAgo = Math.floor(msAgo / 3600000);
+
+                      if (daysAgo > 0) {
+                        return t('statistics.daysAgo', { count: daysAgo });
+                      } else if (hoursAgo > 0) {
+                        return t('statistics.hoursAgo', { count: hoursAgo });
+                      } else {
+                        return t('statistics.hoursAgo', { count: 1 });
+                      }
+                    })()}
                   </span>
                 </div>
               ))}
@@ -211,7 +223,7 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
       {statistics.totalGames === 0 && (
         <div className='text-center py-8' data-testid='empty-state'>
           <div className='text-gray-500 text-lg'>{t('statistics.noStatistics')}</div>
-          <div className='text-gray-600 text-sm mt-2'>ゲームをプレイして統計を確認しよう！</div>
+          <div className='text-gray-600 text-sm mt-2'>{t('statistics.playGameToViewStats')}</div>
         </div>
       )}
     </div>

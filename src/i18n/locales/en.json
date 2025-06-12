@@ -105,7 +105,10 @@
       "dropAccuracy": "Drop Accuracy"
     },
     "noData": "No data available",
-    "reset": "Reset Statistics"
+    "reset": "Reset Statistics",
+    "playGameToViewStats": "Play a game to view statistics!",
+    "daysAgo": "{{count}}d ago",
+    "hoursAgo": "{{count}}h ago"
   },
   "tabs": {
     "game": "Game",
