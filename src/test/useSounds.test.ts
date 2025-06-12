@@ -13,12 +13,15 @@ const mockAudioStrategy = {
   initializeStrategy: vi.fn().mockResolvedValue(undefined),
   switchStrategy: vi.fn().mockResolvedValue(undefined),
   resetStrategy: vi.fn(),
+  retryInitialization: vi.fn().mockResolvedValue(undefined),
   getStrategyCapabilities: vi.fn().mockReturnValue({
     webAudio: true,
     htmlAudio: true,
     audioContextSupport: true,
   }),
   initializationError: null,
+  hasInitializationError: false,
+  canRetry: false,
 };
 
 const mockAudioState = {
