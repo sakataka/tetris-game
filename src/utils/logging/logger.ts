@@ -26,6 +26,11 @@ class Logger {
     this.level = this.isProduction ? LogLevel.WARN : LogLevel.DEBUG;
   }
 
+  // Configuration-specific logging helper
+  config(message: string, context?: LogContext): void {
+    this.info(`⚙️ ${message}`, { ...context, component: 'Config' });
+  }
+
   private formatMessage(level: string, message: string, context?: LogContext): string {
     const timestamp = new Date().toISOString();
     const component = context?.component ? `[${context.component}]` : '';
@@ -107,4 +112,5 @@ export const log = {
   audio: (message: string, context?: LogContext) => logger.audio(message, context),
   animation: (message: string, context?: LogContext) => logger.animation(message, context),
   game: (message: string, context?: LogContext) => logger.game(message, context),
+  config: (message: string, context?: LogContext) => logger.config(message, context),
 };

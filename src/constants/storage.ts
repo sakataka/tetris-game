@@ -13,6 +13,7 @@ export const STORAGE_KEYS = {
   PLAY_SESSIONS: 'tetris-sessions',
   ACCESSIBILITY: 'tetris-accessibility-settings',
   LOCALE: 'tetris-locale',
+  GAME_CONFIG: 'tetris-game-config', // New: Unified game configuration
 } as const;
 
 // Data management settings

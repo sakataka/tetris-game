@@ -36,6 +36,8 @@ export const ANIMATIONS = {
 // Game-specific timing
 export const GAME_TIMING = {
   MIN_DROP_TIME: 50, // Minimum piece drop time (ms)
+  INITIAL_DROP_TIME: 1000, // Initial piece drop time (ms)
+  SPEED_INCREMENT_PER_LEVEL: 50, // Speed increment per level (ms)
   STANDARD_TIMEOUT: 100, // General timeout duration (ms)
   ERROR_RELOAD_DELAY: 3000, // Error boundary reload delay (ms)
   AUDIO_TIMEOUT: 10000, // Audio strategy timeout (ms)

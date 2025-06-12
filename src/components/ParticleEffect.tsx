@@ -14,6 +14,7 @@ import { particlePool, performanceMonitor, globalFpsController } from '../utils/
 import { useConditionalAnimation, ANIMATION_PRESETS } from '../utils/animation';
 import ParticleCanvas from './ParticleCanvas';
 import { log } from '../utils/logging';
+import { useFeatureFlags, usePerformanceConfig } from '../config';
 
 interface ParticleEffectProps {
   lineEffect: LineEffectState;
@@ -63,9 +64,18 @@ const ParticleEffect = memo(function ParticleEffect({
   onParticleUpdate,
   forceRenderer = 'auto',
   enablePerformanceMonitoring = false,
-  maxParticles = 100,
-  performanceMode = false,
+  maxParticles: propMaxParticles,
+  performanceMode: propPerformanceMode = false,
 }: ParticleEffectProps) {
+  // Use configuration system for dynamic settings
+  const featureFlags = useFeatureFlags();
+  const performanceConfig = usePerformanceConfig();
+
+  // Override props with configuration values
+  const maxParticles = propMaxParticles ?? performanceConfig.maxParticles;
+  const performanceMode = propPerformanceMode || !performanceConfig.enableOptimizations;
+  const particlesEnabled = featureFlags.particlesEnabled;
+
   const [currentRenderer, setCurrentRenderer] = useState<'dom' | 'canvas'>('dom');
   const performanceCheckCountRef = useRef(0);
 
@@ -217,6 +227,15 @@ const ParticleEffect = memo(function ParticleEffect({
       );
     }
   }, [selectedRenderer, lineEffect.particles.length, enablePerformanceMonitoring]);
+
+  // Early return after all hooks are called
+  if (!particlesEnabled) {
+    log.config('Particles disabled by feature flag', {
+      action: 'ParticleEffect',
+      metadata: { particlesEnabled },
+    });
+    return null;
+  }
 
   return (
     <div className='absolute inset-0 pointer-events-none overflow-hidden'>

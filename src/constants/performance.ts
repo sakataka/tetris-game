@@ -34,6 +34,9 @@ export const PERFORMANCE_LIMITS = {
   FRAME_DROP_THRESHOLD: 0.2, // 20% frame drop rate threshold
   MIN_FPS_LIMIT: 30, // Minimum FPS limit for optimization
   FPS_REDUCTION_STEP: 10, // FPS reduction step for optimization
+  MAX_PARTICLES: 200, // Maximum particle count
+  TARGET_FPS: 60, // Target FPS
+  PARTICLE_POOL_SIZE: 150, // Particle pool size
 } as const;
 
 // Rendering optimization

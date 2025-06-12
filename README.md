@@ -1,24 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tetris Game
+
+Production-ready cyberpunk-themed Tetris game built with Next.js 15, TypeScript, and comprehensive configuration management.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Node.js 18+
+- pnpm (required package manager)
+
+### Installation
+
+1. Clone the repository
+2. Copy environment file: `cp .env.example .env.local`
+3. Install dependencies: `pnpm install`
+4. Start development server: `pnpm dev`
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Configuration System
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The game features a comprehensive configuration management system with environment-based overrides and runtime configuration.
+
+### Environment Variables
+
+Copy `.env.example` to `.env.local` and customize settings:
+
+```bash
+# Feature Flags
+NEXT_PUBLIC_AUDIO_ENABLED=true
+NEXT_PUBLIC_PARTICLES_ENABLED=true
+NEXT_PUBLIC_DEBUG_PERFORMANCE=false
+
+# Performance Settings
+NEXT_PUBLIC_MAX_PARTICLES=200
+NEXT_PUBLIC_TARGET_FPS=60
+
+# Game Settings
+NEXT_PUBLIC_DEFAULT_LEVEL=1
+NEXT_PUBLIC_GHOST_PIECE_ENABLED=true
+```
+
+### Using Configuration in Components
+
+```typescript
+import { useFeatureFlags, usePerformanceConfig } from '@/config';
+
+function MyComponent() {
+  const { particlesEnabled, audioEnabled } = useFeatureFlags();
+  const { maxParticles, targetFps } = usePerformanceConfig();
+
+  // Use configuration values...
+}
+```
+
+### Configuration Store
+
+Runtime configuration updates with persistence:
+
+```typescript
+import { useConfigActions } from '@/config';
+
+function SettingsPanel() {
+  const { updateConfig, toggleFeature } = useConfigActions();
+
+  const handleToggleParticles = () => {
+    toggleFeature('particlesEnabled');
+  };
+
+  const handleUpdatePerformance = () => {
+    updateConfig({
+      performance: { maxParticles: 150 },
+    });
+  };
+}
+```
 
 ## Learn More
 

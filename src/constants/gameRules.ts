@@ -19,6 +19,9 @@ export const LEVEL_UP_LINES = 10;
 export const MIN_LEVEL = 1;
 export const MAX_LEVEL = 999;
 
+// Game preview settings
+export const PREVIEW_PIECES = 3;
+
 // Game timing
 export const INITIAL_DROP_TIME = 1000; // ms
 export const DROP_TIME_MULTIPLIER = 0.9;
