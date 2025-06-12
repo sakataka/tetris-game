@@ -398,13 +398,6 @@ Based on recent bug fixes and structural analysis, these refactoring items will 
    - **Impact**: Performance + Production readiness
    - **Issue**: Scattered console.log statements affecting performance
    - **Solution**: ✅ Implemented unified logging system with environment-based levels
-   - **Implementation**:
-     - Created `src/utils/logging/logger.ts` with LogLevel enum (ERROR, WARN, INFO, DEBUG)
-     - Environment-aware: Development shows DEBUG+, Production shows WARN+
-     - Replaced 35+ console statements across the codebase
-     - Added structured logging with component context and metadata
-     - Performance logging helper for timing measurements
-     - Game-specific helpers: `log.audio()`, `log.animation()`, `log.game()`
 
 2. **Constants Centralization** ✅ **COMPLETED**
 
@@ -412,12 +405,6 @@ Based on recent bug fixes and structural analysis, these refactoring items will 
    - **Impact**: Maintainability + Consistency
    - **Issue**: Magic numbers and strings scattered across components
    - **Solution**: ✅ Created centralized constants with semantic naming
-   - **Implementation**:
-     - Added 3 new constant files: `colors.ts`, `defaults.ts`, `limits.ts`
-     - Extended existing files: `timing.ts`, `layout.ts`, `gameRules.ts`
-     - Replaced 50+ magic numbers across 10+ critical files
-     - Categorized constants: UI sizes, timing values, performance limits, game physics
-     - Unified naming conventions with semantic constant names
 
 3. **Type Safety Enhancement** ✅ **COMPLETED**
 
@@ -439,12 +426,6 @@ Based on recent bug fixes and structural analysis, these refactoring items will 
    - **Impact**: User experience + Debugging
    - **Issue**: Limited error handling for component failures
    - **Solution**: ✅ Implemented granular error boundaries with specialized fallback UI
-   - **Implementation**:
-     - Created 5 specialized error boundaries: AudioErrorBoundary, GameLogicErrorBoundary, UIRenderErrorBoundary, PerformanceErrorBoundary, CriticalErrorBoundary
-     - Built context-specific fallback components with Japanese localization
-     - Integrated error boundaries into critical system components (AudioController, GameLogicController, ParticleEffect)
-     - Added PerformanceError type and specialized retry limits for each boundary type
-     - Achieved graceful degradation with appropriate recovery options (retry, lightweight mode, reload)
 
 ### 🟡 Medium Priority (Structural Improvements)
 
@@ -469,38 +450,30 @@ Based on recent bug fixes and structural analysis, these refactoring items will 
    - **Impact**: Testability + Reusability
    - **Issue**: Monolithic hooks with multiple responsibilities
    - **Solution**: ✅ Implemented single-responsibility hooks with clear interfaces
-   - **Implementation**:
-     - Decomposed useSettings (164 lines → 112 lines) into 4 specialized hooks:
-       - `useSettingsStorage`: localStorage operations only
-       - `useSettingsState`: in-memory state management only
-       - `useKeyBindings`: key binding operations only
-       - `useSettingsSync`: cross-tab synchronization only
-     - Decomposed useThemeManager (151 lines → 57 lines) into 4 specialized hooks:
-       - `useThemeApplication`: CSS variable application to DOM
-       - `useAccessibilityFilters`: color blindness and contrast processing
-       - `useSystemPreferences`: system setting monitoring (reduced-motion, etc.)
-       - `useThemeStorage`: localStorage persistence operations
-     - Decomposed useHighScoreManager (164 lines → 57 lines) into 2 specialized hooks:
-       - `useGameEndDetection`: automatic game over detection and processing
-       - `useHighScoreUtils`: high score utility functions and manual operations
-     - Maintained 100% backward compatibility with existing APIs
-     - Applied composition pattern: specialized hooks → unified hooks
-     - Achieved Single Responsibility Principle compliance for all custom hooks
-     - Improved testability with 30-80 line focused hooks vs 150+ line monoliths
 
-7. **Component Size Reduction**
+7. **Component Size Reduction** ❌ **ANALYSIS COMPLETED - NOT RECOMMENDED**
 
    - **Complexity**: ⭐⭐ Medium (1-2 weeks)
-   - **Impact**: Maintainability + Testing
-   - **Issue**: Large components mixing UI, logic, and effects
-   - **Solution**: Extract logic to custom hooks, split UI concerns
+   - **Impact**: Low - Current component sizes are appropriate
+   - **Analysis Results**: 
+     - **Current Status**: Components average 100 lines, max 265 lines (within React standards)
+     - **Already Optimized**: 27 custom hooks, React.memo, lazy loading, proper patterns applied
+     - **Risk Assessment**: Splitting would increase complexity, reduce type safety, and add cognitive load
+     - **Decision**: Skip implementation - focus on higher-value features instead
+   - **Alternative**: Consider natural splitting during future feature development only
 
-8. **Timer Management Unification**
+8. **Timer Management Unification** ✅ **PARTIALLY COMPLETED**
 
    - **Complexity**: ⭐⭐⭐ Hard (1-2 weeks)
    - **Impact**: Bug prevention + Performance
-   - **Issue**: Multiple timer systems causing synchronization issues
-   - **Solution**: Unified timer manager with priority-based scheduling
+   - **Implementation Results**:
+     - **Scope**: Limited implementation - SessionManager timeout unification only
+     - **Created**: TimeoutManager class with AnimationManager integration
+     - **Unified**: Session timeout management (30-minute timeouts) with RAF-based system
+     - **Preserved**: Audio/error timeouts kept as-is (appropriate for their use cases)
+     - **Benefits**: Consistent timer debugging, unified animation scheduling
+     - **Tests**: 302/302 passing, including comprehensive TimeoutManager test suite
+   - **Decision**: Partial implementation optimal - core game timers already unified in previous phases
 
 9. **Configuration Management**
    - **Complexity**: ⭐⭐ Medium (1 week)

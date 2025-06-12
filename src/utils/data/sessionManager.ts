@@ -2,10 +2,11 @@
  * Dedicated session management service class
  *
  * Simple architecture that centralizes PlaySession tracking,
- * localStorage synchronization, and timeout management
+ * localStorage synchronization, and unified timeout management
  */
 
 import { PlaySession } from '../../types/tetris';
+import { timeoutManager } from '../timing/TimeoutManager';
 
 const SESSION_STORAGE_KEY = 'tetris-play-sessions';
 const CURRENT_SESSION_KEY = 'tetris-current-session';
@@ -22,7 +23,7 @@ export interface SessionStats {
 export class SessionManager {
   private static instance: SessionManager;
   private currentSession: PlaySession | null = null;
-  private timeoutId: NodeJS.Timeout | null = null;
+  private timeoutId: string | null = null;
   private changeListeners: Set<() => void> = new Set();
 
   private constructor() {
@@ -248,14 +249,14 @@ export class SessionManager {
 
   private resetTimeout(): void {
     this.clearTimeout();
-    this.timeoutId = setTimeout(() => {
+    this.timeoutId = timeoutManager.setTimeout(() => {
       this.endCurrentSession();
     }, SESSION_TIMEOUT);
   }
 
   private clearTimeout(): void {
     if (this.timeoutId) {
-      clearTimeout(this.timeoutId);
+      timeoutManager.clearTimeout(this.timeoutId);
       this.timeoutId = null;
     }
   }

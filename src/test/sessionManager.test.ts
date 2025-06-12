@@ -1,12 +1,31 @@
 /**
  * SessionManager integration tests
  *
- * Tests main SessionManager functionality
- * and localStorage synchronization
+ * Tests main SessionManager functionality,
+ * localStorage synchronization, and unified timeout management
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { SessionManager } from '../utils/data/sessionManager';
+
+// Mock TimeoutManager
+vi.mock('../utils/timing/TimeoutManager', () => ({
+  timeoutManager: {
+    setTimeout: vi.fn((callback: () => void, delay: number) => {
+      // Return a mock timeout ID and store callback for testing
+      const timeoutId = `mock-timeout-${Math.random()}`;
+      // Store callback so we can trigger it in tests
+      (global as any).__mockTimeoutCallbacks = (global as any).__mockTimeoutCallbacks || new Map();
+      (global as any).__mockTimeoutCallbacks.set(timeoutId, callback);
+      return timeoutId;
+    }),
+    clearTimeout: vi.fn((timeoutId: string) => {
+      if ((global as any).__mockTimeoutCallbacks) {
+        (global as any).__mockTimeoutCallbacks.delete(timeoutId);
+      }
+    }),
+  },
+}));
 
 // LocalStorage mock
 const localStorageMock = (() => {
@@ -250,6 +269,73 @@ describe('SessionManager', () => {
 
       const sessions = sessionManager.getAllSessions();
       expect(sessions).toHaveLength(100); // Keep only latest 100
+    });
+  });
+
+  describe('TimeoutManager integration', () => {
+    it('should use TimeoutManager for session timeouts', async () => {
+      const { timeoutManager } = await import('../utils/timing/TimeoutManager');
+      const mockSetTimeout = vi.mocked(timeoutManager.setTimeout);
+      const mockClearTimeout = vi.mocked(timeoutManager.clearTimeout);
+
+      // Start a session - should set timeout
+      sessionManager.startSession();
+      
+      expect(mockSetTimeout).toHaveBeenCalledWith(
+        expect.any(Function),
+        30 * 60 * 1000 // 30 minutes
+      );
+
+      // End session - should clear timeout
+      sessionManager.endCurrentSession();
+      
+      expect(mockClearTimeout).toHaveBeenCalled();
+    });
+
+    it('should reset timeout when adding games', async () => {
+      const { timeoutManager } = await import('../utils/timing/TimeoutManager');
+      const mockSetTimeout = vi.mocked(timeoutManager.setTimeout);
+      const mockClearTimeout = vi.mocked(timeoutManager.clearTimeout);
+
+      sessionManager.startSession();
+      
+      // Reset mock calls
+      mockSetTimeout.mockClear();
+      mockClearTimeout.mockClear();
+
+      // Start a game - should reset timeout
+      sessionManager.onGameStart();
+
+      expect(mockClearTimeout).toHaveBeenCalled();
+      expect(mockSetTimeout).toHaveBeenCalledWith(
+        expect.any(Function),
+        30 * 60 * 1000
+      );
+    });
+
+    it('should handle timeout expiration', async () => {
+      const { timeoutManager } = await import('../utils/timing/TimeoutManager');
+      const mockSetTimeout = vi.mocked(timeoutManager.setTimeout);
+
+      // Start session
+      const session = sessionManager.startSession();
+      expect(session.isActive).toBe(true);
+
+      // Get the timeout callback that was registered
+      const timeoutCallback = mockSetTimeout.mock.calls[0][0];
+
+      // Execute the timeout callback
+      timeoutCallback();
+
+      // Session should be ended
+      const currentSession = sessionManager.getCurrentSession();
+      expect(currentSession).toBeNull();
+
+      // Session in history should be marked as inactive
+      const sessions = sessionManager.getAllSessions();
+      const endedSession = sessions.find(s => s.id === session.id);
+      expect(endedSession?.isActive).toBe(false);
+      expect(endedSession?.endTime).toBeDefined();
     });
   });
 });
