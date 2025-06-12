@@ -8,14 +8,50 @@ Production-ready cyberpunk-themed Tetris game built with Next.js 15, TypeScript,
 
 **Tech Stack**: Next.js 15.3.3 + React 19 + TypeScript 5 + Zustand 5 + Tailwind CSS v4
 
+## Environment Setup
+
+**Prerequisites**: Node.js 18+, pnpm package manager
+
+**Configuration**: The game uses environment-based configuration with `.env.local` overrides:
+
+```bash
+# Key environment variables (see .env.example)
+NEXT_PUBLIC_AUDIO_ENABLED=true          # Audio system toggle
+NEXT_PUBLIC_PARTICLES_ENABLED=true      # Particle effects toggle
+NEXT_PUBLIC_MAX_PARTICLES=200           # Performance tuning
+NEXT_PUBLIC_TARGET_FPS=60               # Frame rate target
+NEXT_PUBLIC_DEFAULT_LEVEL=1             # Starting difficulty
+NEXT_PUBLIC_DEBUG_PERFORMANCE=false     # Performance debugging
+```
+
+**Development Tools**: Uses Turbopack for fast development, Husky for pre-commit hooks
+
 ## Quick Start
 
 ```bash
-pnpm dev          # Development server
-pnpm build        # Production build
-pnpm test         # Run tests
-pnpm lint         # Oxlint validation (9.5x faster)
-pnpm lint:full    # Oxlint + ESLint complete check
+# Setup
+pnpm install            # Install dependencies (required: pnpm)
+cp .env.example .env.local  # Copy environment configuration
+
+# Development
+pnpm dev                # Development server with Turbopack
+pnpm build              # Production build
+pnpm start              # Start production server
+
+# Testing
+pnpm test               # Run tests in watch mode
+pnpm test:run           # Run tests once
+pnpm test:coverage      # Run tests with coverage report
+
+# Code Quality
+pnpm lint               # Oxlint validation (7-8ms execution)
+pnpm lint:full          # Oxlint + ESLint comprehensive check
+pnpm lint:fix           # Auto-fix issues with both linters
+pnpm format             # Format code with Prettier
+pnpm quality:check      # Full quality pipeline (lint + typecheck + test)
+
+# Analysis
+pnpm analyze            # Bundle size analysis
 ```
 
 ## Architecture Overview
@@ -126,10 +162,19 @@ export const useSetGameState = () =>
 ## Testing Strategy
 
 - **Unit Tests**: Pure functions (tetrisUtils, statisticsUtils)
-- **Component Tests**: React Testing Library
-- **Integration Tests**: Zustand store testing
-- **Performance Tests**: Memory and rendering optimization
-- **Coverage**: 272 tests, 100% passing
+- **Component Tests**: React Testing Library with JSDOM
+- **Integration Tests**: Zustand store testing with mock scenarios
+- **Performance Tests**: Memory and rendering optimization validation
+- **Coverage**: 272 tests, 100% passing with Vitest
+
+```bash
+# Run specific test patterns
+pnpm test tetris           # Run tests matching "tetris"
+pnpm test src/test/hooks   # Run hook tests
+pnpm test --ui             # Run with Vitest UI
+```
+
+**Test Files Structure**: Located in `src/test/` with corresponding `*.test.ts` files
 
 ## Performance Optimizations
 
@@ -196,26 +241,48 @@ pnpm lint:fix     # Auto-fix with both linters
 - Build before commit: Always run `pnpm build`
 - Git hooks: Pre-commit checks via Husky
 
-## Common Tasks
+## Development Workflow
 
 ### Adding a New Feature
 
-1. Check existing patterns in similar components
-2. Use appropriate hooks and stores
-3. Follow TypeScript strict mode
-4. Add tests for new functionality
+1. Check existing patterns in similar components (follow MVC/hooks architecture)
+2. Use appropriate Zustand stores (`gameStateStore`, `settingsStore`, etc.)
+3. Follow TypeScript strict mode (no `any` types)
+4. Add comprehensive tests in `src/test/`
+5. Run `pnpm quality:check` before committing
 
-### Debugging Audio Issues
+### Debugging Common Issues
 
-1. Check AudioManagerV2 strategy status
-2. Verify browser permissions
-3. Check fallback chain in console
+**Audio Problems:**
 
-### Performance Issues
+```bash
+# Check audio strategy in browser console
+log.audio("Current strategy:", audioStrategy.currentStrategy)
+# Verify fallback chain: WebAudio → HTMLAudio → Silent
+```
 
-1. Check AnimationManager stats
-2. Monitor particle count
-3. Verify RAF timing
+**Performance Issues:**
+
+```bash
+# Enable performance debugging
+NEXT_PUBLIC_DEBUG_PERFORMANCE=true pnpm dev
+# Check AnimationManager stats in console
+log.performance("FPS:", animationManager.getFPS())
+```
+
+**State Management Issues:**
+
+- Use Zustand DevTools browser extension
+- Check individual selectors to prevent object regeneration
+- Verify store subscription patterns
+
+**Build Issues:**
+
+```bash
+pnpm build              # Check for build errors
+pnpm lint:full          # Comprehensive linting
+pnpm tsc --noEmit       # TypeScript validation
+```
 
 ## Future Feature Roadmap
 
@@ -410,232 +477,3 @@ Before implementing major features:
    - Anti-cheat systems
    - Rate limiting
    - Content moderation tools
-
-## Code Quality & Refactoring Roadmap
-
-Based on recent bug fixes and structural analysis, these refactoring items will improve code maintainability, reduce bug occurrence, and support future feature development.
-
-### 🔴 High Priority (Quick Wins)
-
-1. **Debug Log Cleanup** ✅ **COMPLETED**
-
-   - **Complexity**: ⭐ Easy (1-2 days)
-   - **Impact**: Performance + Production readiness
-   - **Issue**: Scattered console.log statements affecting performance
-   - **Solution**: ✅ Implemented unified logging system with environment-based levels
-
-2. **Constants Centralization** ✅ **COMPLETED**
-
-   - **Complexity**: ⭐ Easy (2-3 days)
-   - **Impact**: Maintainability + Consistency
-   - **Issue**: Magic numbers and strings scattered across components
-   - **Solution**: ✅ Created centralized constants with semantic naming
-
-3. **Type Safety Enhancement** ✅ **COMPLETED**
-
-   - **Complexity**: ⭐⭐ Medium (1 week)
-   - **Impact**: Bug prevention + Developer experience
-   - **Issue**: Remaining `any` types and loose type assertions
-   - **Solution**: ✅ Enhanced TypeScript strict mode with comprehensive type safety
-   - **Implementation**:
-     - Enhanced TypeScript strict mode: `exactOptionalPropertyTypes`, `noUncheckedIndexedAccess`, `noUnusedLocals/Parameters`
-     - Fixed 50+ type assertions replacing `as any` with proper type definitions
-     - Implemented 30+ safe array access patterns with optional chaining
-     - Added proper DOM API type extensions for performance, navigator APIs
-     - Created type guard functions for runtime validation
-     - Added `override` keywords for React lifecycle methods
-     - Achieved 100% build/test/lint success with zero type errors
-
-4. **Error Boundary Expansion** ✅ **COMPLETED**
-   - **Complexity**: ⭐ Easy (2-3 days)
-   - **Impact**: User experience + Debugging
-   - **Issue**: Limited error handling for component failures
-   - **Solution**: ✅ Implemented granular error boundaries with specialized fallback UI
-
-### 🟡 Medium Priority (Structural Improvements)
-
-5. **State Management Unification** ✅ **COMPLETED**
-
-   - **Complexity**: ⭐⭐⭐ Hard (2-3 weeks)
-   - **Impact**: Bug reduction + Predictability
-   - **Issue**: Zustand + React state conflicts causing timing bugs
-   - **Solution**: ✅ Unified state management with AnimationManager-based timing system
-   - **Implementation**:
-     - Created `useAnimationTimer` hook replacing setInterval with requestAnimationFrame
-     - Migrated `useGameLoop` from `useGameTimer` to `useAnimationTimer`
-     - Unified GameStateController line effect cleanup with single AnimationManager timer
-     - Replaced SessionManager + sessionStoreV2 dual architecture with unified sessionStore
-     - Eliminated `onStateChange` callback pattern in favor of direct Zustand updates
-     - Resolved timer conflicts, race conditions, and session synchronization issues
-     - Achieved 272/272 tests passing with zero timing-related failures
-
-6. **Custom Hook Decomposition** ✅ **COMPLETED**
-
-   - **Complexity**: ⭐⭐ Medium (1-2 weeks)
-   - **Impact**: Testability + Reusability
-   - **Issue**: Monolithic hooks with multiple responsibilities
-   - **Solution**: ✅ Implemented single-responsibility hooks with clear interfaces
-
-7. **Component Size Reduction** ❌ **ANALYSIS COMPLETED - NOT RECOMMENDED**
-
-   - **Complexity**: ⭐⭐ Medium (1-2 weeks)
-   - **Impact**: Low - Current component sizes are appropriate
-   - **Analysis Results**:
-     - **Current Status**: Components average 100 lines, max 265 lines (within React standards)
-     - **Already Optimized**: 27 custom hooks, React.memo, lazy loading, proper patterns applied
-     - **Risk Assessment**: Splitting would increase complexity, reduce type safety, and add cognitive load
-     - **Decision**: Skip implementation - focus on higher-value features instead
-   - **Alternative**: Consider natural splitting during future feature development only
-
-8. **Timer Management Unification** ✅ **COMPLETED**
-
-   - **Complexity**: ⭐⭐⭐ Hard (1-2 weeks)
-   - **Impact**: Bug prevention + Performance
-   - **Issue**: Multiple timer systems causing synchronization issues
-   - **Solution**: ✅ Unified timeout management using AnimationManager with priority-based scheduling
-   - **Implementation**:
-     - Created `TimeoutManager` singleton class with AnimationManager integration
-     - Implemented RAF-based timeout system with 1fps efficiency for long durations (30-minute sessions)
-     - Migrated SessionManager from native setTimeout to TimeoutManager.setTimeout
-     - Added comprehensive timeout tracking, statistics, and debug logging
-     - Enhanced error handling with graceful callback error recovery
-     - Provided convenience functions (unifiedSetTimeout, unifiedClearTimeout) matching native API
-     - Added timeout lifecycle management with automatic cleanup and resource management
-     - Fixed ESLint errors and TypeScript strict mode compliance
-     - Achieved 302/302 tests passing with comprehensive TimeoutManager test suite
-   - **Benefits**: Consistent timer debugging, unified animation scheduling, memory-efficient timeout management
-
-9. **Configuration Management** ✅ **ANALYSIS COMPLETED - ALREADY IMPLEMENTED**
-
-   - **Complexity**: ⭐⭐ Medium (1 week)
-   - **Impact**: Already achieved - Excellent implementation in place
-   - **Analysis Results**:
-     - **Current Status**: Production-ready configuration system already implemented
-     - **Existing Features**: 30 environment variables with type-safe management, Zustand-based ConfigStore, environment-specific settings (Dev/Prod/Test), runtime validation, localStorage persistence, configuration change monitoring
-     - **Architecture Quality**: Implements all Configuration Management best practices including Single Source of Truth, Type Safety, Environment Isolation, Validation, and Monitoring
-     - **Implementation Files**: `src/config/environment.ts`, `src/config/gameConfig.ts`, `src/config/configStore.ts`, `src/config/utils.ts`
-     - **Assessment**: Current system is exemplary implementation, not technical debt
-   - **Decision**: No refactoring needed - focus on higher-priority items instead
-   - **Optional Enhancements**: Minor developer experience improvements (config helpers, debug tools) available if needed
-
-### 🟢 Low Priority (Advanced Improvements)
-
-10. **Animation System Redesign** ❌ **ANALYSIS COMPLETED - NOT RECOMMENDED**
-
-    - **Complexity**: ⭐⭐⭐⭐ Very Hard (3-4 weeks)
-    - **Impact**: Minimal - Current system already excellent
-    - **Analysis Results**:
-      - **Current Status**: 326-line highly optimized AnimationManager already implements lightweight, composable design
-      - **Existing Features**: RAF integration, FPS control, performance monitoring, priority management, auto-optimization (low-performance device detection)
-      - **Performance**: No bottlenecks detected - comprehensive statistics and error handling already implemented
-      - **Assessment**: Current system already achieves the proposed "lightweight, composable animation primitives" goal
-    - **Decision**: Not recommended - high risk of introducing instability for minimal gain
-    - **ROI**: Extremely low - 3-4 weeks investment with no measurable improvement
-
-11. **Game Logic Functional Refactor** ❌ **ANALYSIS COMPLETED - NOT RECOMMENDED**
-
-    - **Complexity**: ⭐⭐⭐⭐ Very Hard (4-6 weeks)
-    - **Impact**: Negative - High risk of breaking stable system
-    - **Analysis Results**:
-      - **Current Status**: Game logic already follows functional programming principles with pure functions in tetrisUtils.ts
-      - **Architecture Quality**: GameLogicController uses dependency injection, game state is predictable and testable
-      - **Test Coverage**: 100% test success rate (318/318) demonstrates current system reliability
-      - **Assessment**: No evidence of "mixed imperative/functional styles" - code is already well-structured
-    - **Decision**: Not recommended - massive refactoring risk for unclear benefits
-    - **ROI**: Extremely low - 4-6 weeks could delay feature development significantly
-
-12. **Event System Implementation** 🟡 **ANALYSIS COMPLETED - CONDITIONAL**
-
-    - **Complexity**: ⭐⭐⭐ Hard (2-3 weeks)
-    - **Impact**: Limited - Current system already well-decoupled
-    - **Analysis Results**:
-      - **Current Status**: Controller-based design (EventController, AudioController, DeviceController) provides appropriate separation
-      - **Coupling Assessment**: No evidence of problematic tight coupling - components communicate through well-defined interfaces
-      - **Architecture Quality**: Dependency injection and controller patterns already achieve good decoupling
-      - **Future Needs**: Event system would become valuable for real-time multiplayer synchronization
-    - **Decision**: Conditional implementation - only recommend if/when implementing multiplayer features
-    - **ROI**: Low as standalone feature, medium-high when combined with multiplayer development
-
-13. **Performance Monitoring Integration** ❌ **ANALYSIS COMPLETED - NOT RECOMMENDED**
-
-    - **Complexity**: ⭐⭐⭐ Hard (2-3 weeks) - **Overestimated**
-    - **Impact**: Minimal - Comprehensive monitoring already implemented
-    - **Analysis Results**:
-      - **Current Status**: performanceMonitor.ts provides extensive monitoring (FPS, frame time, memory usage, rendering time)
-      - **Existing Features**: Performance recommendations, level detection, console.table metrics display, AnimationManager integration
-      - **Missing Component**: Only UI integration for user-facing display (estimated 1-3 days, not 2-3 weeks)
-      - **Assessment**: "Limited visibility" claim is inaccurate - comprehensive metrics already available
-    - **Decision**: Not recommended - monitoring system already complete, only minor UI work needed
-    - **ROI**: Very low - existing system already provides all necessary performance insights
-
-### Implementation Strategy
-
-**Phase 1: Foundation (1-2 months)**
-
-- Items 1-4: Quick wins that improve stability immediately
-- Focus on reducing technical debt and improving developer experience
-
-**Phase 2: Structure (2-3 months)**
-
-- Items 5-9: Architectural improvements supporting future features
-- Address core design issues revealed by recent bugs
-
-**Phase 3: Future Feature Development (Ongoing)**
-
-- Items 10-13: Analysis completed - Focus shifted to Feature Roadmap implementation
-- **Recommended**: Achievement System, Custom Controls, Advanced Game Modes (High Priority)
-- **Conditional**: Event System implementation only when adding multiplayer features
-- **Alternative to Refactoring**: Small-scale improvements (1-3 days each) and new feature development
-
-### Bug Prevention Measures
-
-**Preventive Measures:**
-
-- Comprehensive state management testing
-- Timer synchronization validation
-- Configuration hierarchy testing
-- Integration test coverage for cross-system interactions
-
-### Success Metrics
-
-- **Bug Reduction**: 50% fewer state-related bugs
-- **Development Speed**: 30% faster feature implementation
-- **Test Coverage**: 90%+ for critical game logic
-- **Performance**: Consistent 60fps under load
-- **Maintainability**: New developer onboarding < 1 day
-
-## Refactoring Analysis Summary
-
-### ✅ **Completed Refactoring Items (8/13)**
-
-1. ✅ Debug Log Cleanup
-2. ✅ Constants Centralization
-3. ✅ Type Safety Enhancement
-4. ✅ Error Boundary Expansion
-5. ✅ State Management Unification
-6. ✅ Custom Hook Decomposition
-7. ❌ Component Size Reduction (Analysis: Not needed)
-8. ✅ Timer Management Unification
-9. ✅ Configuration Management (Analysis: Already implemented)
-
-### 📊 **Advanced Items Analysis (4/4 Analyzed)**
-
-**Items 10-13 Decision Matrix:**
-
-- **10. Animation System Redesign**: ❌ Not recommended (already excellent)
-- **11. Game Logic Functional Refactor**: ❌ Not recommended (already functional)
-- **12. Event System Implementation**: 🟡 Conditional (multiplayer only)
-- **13. Performance Monitoring Integration**: ❌ Not recommended (already complete)
-
-### 🎯 **Final Recommendation**
-
-**Refactoring Phase Complete** - Focus on Feature Development
-
-Current codebase quality assessment:
-
-- **Architecture**: Excellent design patterns implemented
-- **Performance**: Comprehensive monitoring and optimization in place
-- **Maintainability**: High test coverage (100% success rate)
-- **Technical Debt**: Minimal (only minor TODOs remaining)
-
-**Next Steps**: Prioritize Feature Roadmap implementation over additional refactoring
