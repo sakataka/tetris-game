@@ -1,19 +1,19 @@
 /**
- * ErrorStoreInitializer コンポーネントテスト
+ * ErrorStoreInitializer component test
  * 
- * エラーストア初期化コンポーネントの機能を検証
+ * Tests for error store initialization component functionality
  */
 
 import React from 'react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render } from '@testing-library/react';
 
-// モックを先に定義
+// Mock the integration function before importing
 vi.mock('../store/errorStore', () => ({
   initializeErrorStoreIntegration: vi.fn()
 }));
 
-// モックと実際のコンポーネントをインポート
+// Import the component and mocked function
 import ErrorStoreInitializer from '../components/ErrorStoreInitializer';
 import { initializeErrorStoreIntegration } from '../store/errorStore';
 
@@ -24,38 +24,38 @@ describe('ErrorStoreInitializer', () => {
     vi.clearAllMocks();
   });
 
-  it('マウント時にinitializeErrorStoreIntegrationを呼び出す', () => {
+  it('should call initializeErrorStoreIntegration on mount', () => {
     render(<ErrorStoreInitializer />);
     
     expect(mockInitializeErrorStoreIntegration).toHaveBeenCalledTimes(1);
   });
 
-  it('何もレンダリングしない', () => {
+  it('should render nothing', () => {
     const { container } = render(<ErrorStoreInitializer />);
     
     expect(container.firstChild).toBeNull();
   });
 
-  it('アンマウント時に再度初期化されない', () => {
+  it('should not reinitialize on unmount', () => {
     const { unmount } = render(<ErrorStoreInitializer />);
     
     expect(mockInitializeErrorStoreIntegration).toHaveBeenCalledTimes(1);
     
     unmount();
     
-    // アンマウント時に追加の呼び出しがないことを確認
+    // No additional calls after unmount
     expect(mockInitializeErrorStoreIntegration).toHaveBeenCalledTimes(1);
   });
 
-  it('複数回レンダリングしても初期化は一度だけ', () => {
+  it('should initialize only once on re-render', () => {
     const { rerender } = render(<ErrorStoreInitializer />);
     
     expect(mockInitializeErrorStoreIntegration).toHaveBeenCalledTimes(1);
     
-    // 再レンダリング
+    // Re-render
     rerender(<ErrorStoreInitializer />);
     
-    // 初期化は一度だけ
+    // Still called only once
     expect(mockInitializeErrorStoreIntegration).toHaveBeenCalledTimes(1);
   });
 });
