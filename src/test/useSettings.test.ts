@@ -3,7 +3,7 @@ import { renderHook, act } from '@testing-library/react';
 import { useSettings } from '../hooks/useSettings';
 import { createMockDOMEnvironment, clearTestStorage } from './fixtures';
 
-// DOM環境モックをセットアップ
+// Setup DOM environment mock
 const domMocks = createMockDOMEnvironment();
 
 describe('useSettings', () => {
