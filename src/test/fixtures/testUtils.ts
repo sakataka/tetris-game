@@ -1,16 +1,16 @@
 /**
- * 共通テストユーティリティ関数
+ * Common test utility functions
  *
- * テスト間で再利用可能なヘルパー関数とアサーション
+ * Helper functions and assertions reusable across tests
  */
 
 import { expect } from 'vitest';
 import type { HighScore, GameStatistics } from '../../types/tetris';
 
-// ===== アサーションヘルパー =====
+// ===== Assertion Helpers =====
 
 /**
- * ハイスコアオブジェクトの構造検証
+ * High score object structure validation
  */
 export const expectValidHighScore = (highScore: unknown) => {
   expect(highScore).toMatchObject({
@@ -29,7 +29,7 @@ export const expectValidHighScore = (highScore: unknown) => {
 };
 
 /**
- * 統計オブジェクトの構造検証
+ * Statistics object structure validation
  */
 export const expectValidStatistics = (statistics: unknown) => {
   expect(statistics).toMatchObject({
@@ -55,7 +55,7 @@ export const expectValidStatistics = (statistics: unknown) => {
 };
 
 /**
- * テーマ設定の構造検証
+ * Theme configuration structure validation
  */
 export const expectValidThemeConfig = (theme: unknown) => {
   expect(theme).toMatchObject({
@@ -79,7 +79,7 @@ export const expectValidThemeConfig = (theme: unknown) => {
 };
 
 /**
- * 配列のソート状態検証
+ * Array sort state validation
  */
 export const expectArraySorted = <T>(
   array: T[],
@@ -94,16 +94,16 @@ export const expectArraySorted = <T>(
 };
 
 /**
- * ハイスコア配列の正しいソート検証
+ * Correct sort validation for high score arrays
  */
 export const expectHighScoresSorted = (highScores: HighScore[]) => {
   expectArraySorted(highScores, (a, b) => b.score - a.score, 'desc');
 };
 
-// ===== 数値検証ヘルパー =====
+// ===== Numeric Validation Helpers =====
 
 /**
- * 数値が指定範囲内にあることを検証
+ * Verify that a number is within a specified range
  */
 export const expectNumberInRange = (value: number, min: number, max: number, message?: string) => {
   expect(value, message).toBeGreaterThanOrEqual(min);
@@ -111,23 +111,23 @@ export const expectNumberInRange = (value: number, min: number, max: number, mes
 };
 
 /**
- * パーセンテージ値の検証 (0-100)
+ * Percentage value validation (0-100)
  */
 export const expectValidPercentage = (value: number, message?: string) => {
   expectNumberInRange(value, 0, 100, message);
 };
 
 /**
- * 色文字列の検証 (hex format)
+ * Color string validation (hex format)
  */
 export const expectValidHexColor = (color: string) => {
   expect(color).toMatch(/^#[0-9a-fA-F]{6}$/);
 };
 
-// ===== 時間・パフォーマンス検証 =====
+// ===== Time & Performance Validation =====
 
 /**
- * 実行時間が指定時間以下であることを検証
+ * Verify that execution time is under specified time
  */
 export const expectExecutionTime = async <T>(
   fn: () => Promise<T> | T,
@@ -147,23 +147,23 @@ export const expectExecutionTime = async <T>(
 };
 
 /**
- * 非同期操作の完了待機
+ * Wait for asynchronous operation completion
  */
 export const waitForNextTick = (): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, 0));
 };
 
 /**
- * 指定時間の待機
+ * Wait for specified time
  */
 export const waitFor = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
-// ===== モックリセットヘルパー =====
+// ===== Mock Reset Helpers =====
 
 /**
- * 複数のモック関数を一括リセット
+ * Batch reset multiple mock functions
  */
 export const resetMocks = (...mocks: Array<{ mockReset?: () => void; mockClear?: () => void }>) => {
   mocks.forEach((mock) => {
@@ -176,7 +176,7 @@ export const resetMocks = (...mocks: Array<{ mockReset?: () => void; mockClear?:
 };
 
 /**
- * localStorage のクリア（テスト間の状態クリーンアップ）
+ * Clear localStorage (state cleanup between tests)
  */
 export const clearTestStorage = () => {
   if (typeof window !== 'undefined' && window.localStorage) {
@@ -184,10 +184,10 @@ export const clearTestStorage = () => {
   }
 };
 
-// ===== エラーテストヘルパー =====
+// ===== Error Test Helpers =====
 
 /**
- * 非同期関数が特定のエラーをスローすることを検証
+ * Verify that an async function throws a specific error
  */
 export const expectAsyncToThrow = async (
   asyncFn: () => Promise<unknown>,
@@ -216,10 +216,10 @@ export const expectAsyncToThrow = async (
   return thrownError;
 };
 
-// ===== DOM テストヘルパー =====
+// ===== DOM Test Helpers =====
 
 /**
- * CSS プロパティが正しく設定されていることを検証
+ * Verify that CSS properties are set correctly
  */
 export const expectCSSProperty = (
   element: { style: { getPropertyValue: (prop: string) => string } },
@@ -231,7 +231,7 @@ export const expectCSSProperty = (
 };
 
 /**
- * 複数のCSS変数が設定されていることを検証
+ * Verify that multiple CSS variables are set
  */
 export const expectCSSVariables = (
   element: { style: { getPropertyValue: (prop: string) => string } },

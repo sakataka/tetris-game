@@ -1,7 +1,7 @@
 /**
- * タイマー動作のデバッグテスト
+ * Timer operation debug tests
  *
- * useTimerAnimationがなぜ動作しないかを調べる
+ * Investigating why useTimerAnimation is not working
  */
 
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
@@ -9,10 +9,10 @@ import { renderHook, act } from '@testing-library/react';
 import { useTimerAnimation } from '../utils/animation/useAnimationFrame';
 import { log } from '../utils/logging';
 
-describe('タイマー動作デバッグ', () => {
+describe('Timer operation debug', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    // 詳細なコンソールログを有効化
+    // Enable detailed console logging
     vi.spyOn(console, 'log').mockImplementation(() => {});
   });
 
@@ -20,7 +20,7 @@ describe('タイマー動作デバッグ', () => {
     vi.restoreAllMocks();
   });
 
-  it('useTimerAnimationが実際に呼び出されるかデバッグ', () => {
+  it('debug whether useTimerAnimation is actually called', () => {
     let callCount = 0;
     const debugCallback = vi.fn(() => {
       callCount++;
@@ -38,12 +38,12 @@ describe('タイマー動作デバッグ', () => {
       metadata: { result: result.current },
     });
 
-    // 手動でdeltaTimeを送信
+    // Manually send deltaTime
     act(() => {
       log.debug('Triggering manual deltaTime: 120ms', { component: 'DebugTimerTest' });
-      // useTimerAnimationは内部でuseAnimationFrameを使用している
-      // 実際のAnimationManagerを直接操作する代わりに、
-      // より直接的なアプローチを試す
+      // useTimerAnimation uses useAnimationFrame internally
+      // Instead of directly manipulating the actual AnimationManager,
+      // try a more direct approach
     });
 
     log.debug(`Final call count: ${callCount}`, { component: 'DebugTimerTest' });
@@ -52,8 +52,8 @@ describe('タイマー動作デバッグ', () => {
     });
   });
 
-  it('最小限のタイマーロジックテスト', () => {
-    // useTimerAnimationの核心ロジックを手動で再現
+  it('minimal timer logic test', () => {
+    // Manually reproduce the core logic of useTimerAnimation
     let accumulatedTime = 0;
     const interval = 100;
     let callCount = 0;
@@ -63,7 +63,7 @@ describe('タイマー動作デバッグ', () => {
       log.debug(`Manual timer fired! Call count: ${callCount}`, { component: 'DebugTimerTest' });
     };
 
-    // 手動でuseTimerAnimationのロジックを再現
+    // Manually reproduce useTimerAnimation logic
     const simulateTimer = (deltaTime: number) => {
       accumulatedTime += deltaTime;
       log.debug(
@@ -79,11 +79,11 @@ describe('タイマー動作デバッグ', () => {
       }
     };
 
-    // 120msを送信（100ms間隔なので1回発火）
+    // Send 120ms (should fire once with 100ms interval)
     simulateTimer(120);
 
     log.debug(`Expected: 1, Actual: ${callCount}`, { component: 'DebugTimerTest' });
     expect(callCount).toBe(1);
-    expect(accumulatedTime).toBe(20); // 120 - 100 = 20ms残り
+    expect(accumulatedTime).toBe(20); // 120 - 100 = 20ms remaining
   });
 });

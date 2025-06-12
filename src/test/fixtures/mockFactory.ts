@@ -1,21 +1,21 @@
 /**
- * テスト用モックファクトリ
+ * Test mock factory
  *
- * 重複するモック定義を統一し、型安全で再利用可能な
- * モック生成ユーティリティを提供
+ * Unifies duplicate mock definitions and provides type-safe,
+ * reusable mock generation utilities
  */
 
 import { vi, expect } from 'vitest';
 import type { GameState, HighScore, GameStatistics, ThemeConfig } from '../../types/tetris';
 import { log } from '../../utils/logging';
 
-// ===== 音声システムモック =====
+// ===== Audio System Mocks =====
 
 /**
- * Web Audio APIの包括的モック
+ * Comprehensive Web Audio API mock
  */
 export const createMockAudioSystem = () => {
-  // AudioContextモック
+  // AudioContext mock
   const mockAudioContext = {
     createGain: vi.fn(() => ({
       connect: vi.fn(),
@@ -38,7 +38,7 @@ export const createMockAudioSystem = () => {
     state: 'running' as AudioContextState,
   };
 
-  // HTMLAudioElementモック
+  // HTMLAudioElement mock
   const mockAudio = {
     play: vi.fn().mockResolvedValue(undefined),
     pause: vi.fn(),
@@ -55,7 +55,7 @@ export const createMockAudioSystem = () => {
     canPlayType: vi.fn().mockReturnValue('probably'),
   };
 
-  // グローバルモック設定
+  // Global mock setup
   Object.defineProperty(window, 'AudioContext', {
     writable: true,
     value: vi.fn(() => mockAudioContext),
@@ -98,7 +98,7 @@ export const createMockAudioSystem = () => {
 };
 
 /**
- * 音声マネージャーモック
+ * Audio manager mock
  */
 export const createMockAudioManager = () => ({
   isInitialized: vi.fn().mockReturnValue(true),
@@ -111,13 +111,13 @@ export const createMockAudioManager = () => ({
   getStats: vi.fn().mockReturnValue({ loadedSounds: 6, failedSounds: 0 }),
 });
 
-// ===== DOM環境モック =====
+// ===== DOM Environment Mocks =====
 
 /**
- * DOM要素とlocalStorageの標準モック
+ * Standard mock for DOM elements and localStorage
  */
 export const createMockDOMEnvironment = () => {
-  // LocalStorageモック
+  // LocalStorage mock
   const localStorageMock = (() => {
     let store: Record<string, string> = {};
     return {
@@ -138,7 +138,7 @@ export const createMockDOMEnvironment = () => {
     };
   })();
 
-  // matchMedia モック
+  // matchMedia mock
   const matchMediaMock = vi.fn().mockImplementation((query: string) => ({
     matches: false,
     media: query,
@@ -150,7 +150,7 @@ export const createMockDOMEnvironment = () => {
     dispatchEvent: vi.fn(),
   }));
 
-  // DocumentElementモック
+  // DocumentElement mock
   const mockDocumentElement = {
     style: {
       setProperty: vi.fn(),
@@ -165,7 +165,7 @@ export const createMockDOMEnvironment = () => {
     },
   };
 
-  // グローバル設定
+  // Global setup
   Object.defineProperty(window, 'localStorage', {
     value: localStorageMock,
     writable: true,
@@ -188,10 +188,10 @@ export const createMockDOMEnvironment = () => {
   };
 };
 
-// ===== Zustandストアモック =====
+// ===== Zustand Store Mocks =====
 
 /**
- * 型安全なZustandストアモック生成
+ * Type-safe Zustand store mock generation
  */
 export const createMockStore = <T extends Record<string, unknown>>(
   initialState: Partial<T>,
@@ -208,7 +208,7 @@ export const createMockStore = <T extends Record<string, unknown>>(
 };
 
 /**
- * 統計ストア専用モック
+ * Statistics store specific mock
  */
 export const createMockStatisticsStore = () => {
   const mockHighScores: HighScore[] = [
@@ -238,7 +238,7 @@ export const createMockStatisticsStore = () => {
 };
 
 /**
- * ゲーム状態ストア専用モック
+ * Game state store specific mock
  */
 export const createMockGameStateStore = () => {
   const mockGameState: Partial<GameState> = {
@@ -263,13 +263,13 @@ export const createMockGameStateStore = () => {
   };
 };
 
-// ===== テストデータフィクスチャ =====
+// ===== Test Data Fixtures =====
 
 /**
- * 標準的なテストデータセット
+ * Standard test data set
  */
 export const createTestFixtures = () => ({
-  // ハイスコアデータ
+  // High score data
   highScores: [
     { id: '1', score: 50000, level: 10, lines: 80, date: Date.now() },
     { id: '2', score: 40000, level: 8, lines: 60, date: Date.now() },
@@ -278,7 +278,7 @@ export const createTestFixtures = () => ({
     { id: '5', score: 10000, level: 2, lines: 10, date: Date.now() },
   ] as HighScore[],
 
-  // 統計データ
+  // Statistics data
   statistics: {
     totalGames: 15,
     totalScore: 125000,
@@ -290,7 +290,7 @@ export const createTestFixtures = () => ({
     tetrisCount: 15,
   } as GameStatistics,
 
-  // テーマ設定
+  // Theme settings
   themeConfig: {
     name: 'cyberpunk',
     colors: {
@@ -312,7 +312,7 @@ export const createTestFixtures = () => ({
     },
   } as ThemeConfig,
 
-  // ゲーム状態
+  // Game state
   gameState: {
     board: Array(20)
       .fill(null)
@@ -328,10 +328,10 @@ export const createTestFixtures = () => ({
   } as Partial<GameState>,
 });
 
-// ===== ユーティリティ関数 =====
+// ===== Utility Functions =====
 
 /**
- * 非同期テストのセットアップヘルパー
+ * Async test setup helper
  */
 export const setupAsyncTest = (timeout: number = 100) => {
   return new Promise<void>((resolve) => {
@@ -340,7 +340,7 @@ export const setupAsyncTest = (timeout: number = 100) => {
 };
 
 /**
- * エラーテスト用ヘルパー
+ * Error test helper
  */
 export const expectToThrow = async (
   asyncFn: () => Promise<unknown>,
@@ -368,7 +368,7 @@ export const expectToThrow = async (
 };
 
 /**
- * パフォーマンステスト用ヘルパー
+ * Performance test helper
  */
 export const measurePerformance = async <T>(
   fn: () => Promise<T> | T,

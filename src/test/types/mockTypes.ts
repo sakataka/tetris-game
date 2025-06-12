@@ -1,14 +1,14 @@
 /**
- * テスト用の型安全なモック定義
+ * Type-safe mock definitions for testing
  */
 
 import { SoundKey } from '../../types/tetris';
 import { Mock } from 'vitest';
 
-// 音声再生関数の型安全なモック
+// Type-safe mock for audio playback function
 export type MockPlaySound = Mock<(soundKey: SoundKey) => void>;
 
-// ストア状態更新用の型安全なモック
+// Type-safe mock for store state updates
 export interface MockStoreActions {
   setState: <T extends Record<string, unknown>>(newState: Partial<T>) => void;
   addHighScore: Mock<
@@ -17,7 +17,7 @@ export interface MockStoreActions {
   updateStatistics: Mock<(stats: Record<string, unknown>) => void>;
 }
 
-// ゲーム状態の部分型（テスト用）
+// Partial game state type (for testing)
 export interface PartialGameState {
   score?: number;
   level?: number;
@@ -26,7 +26,7 @@ export interface PartialGameState {
   isPaused?: boolean;
 }
 
-// ハイスコア型の厳密定義
+// Strict high score type definition
 export interface StrictHighScore {
   readonly id: string;
   readonly score: number;
@@ -35,7 +35,7 @@ export interface StrictHighScore {
   readonly date: number;
 }
 
-// 統計データの型安全な定義
+// Type-safe statistics data definition
 export interface StrictStatistics {
   readonly totalGames: number;
   readonly totalLines: number;
@@ -47,16 +47,16 @@ export interface StrictStatistics {
   readonly tetrisCount: number;
 }
 
-// モックストア状態の型定義
+// Mock store state type definition
 export interface MockStoreState {
   highScores: readonly StrictHighScore[];
   statistics: StrictStatistics;
 }
 
-// テスト用ユーティリティ型
+// Test utility types
 export type RequiredKeys<T, K extends keyof T> = T & Required<Pick<T, K>>;
 export type PartialExcept<T, K extends keyof T> = Partial<T> & Pick<T, K>;
 
-// イベントハンドラーの型安全な定義
+// Type-safe event handler definitions
 export type MockEventHandler<T = unknown> = Mock<(event: T) => void>;
 export type MockAsyncHandler<T = unknown, R = unknown> = Mock<(event: T) => Promise<R>>;

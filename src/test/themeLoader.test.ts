@@ -1,7 +1,7 @@
 /**
- * JSONベーステーマローダーのテスト
+ * JSON-based theme loader tests
  *
- * JSON読み込み、型安全性検証、キャッシュ機能、パフォーマンスのテスト
+ * Tests for JSON loading, type safety validation, cache functionality, and performance
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
@@ -13,18 +13,18 @@ import {
 } from '../utils/ui/themeLoader';
 import type { ThemeVariant, ThemeConfig } from '../types/tetris';
 
-describe('ThemeLoader - JSONベーステーマシステム', () => {
+describe('ThemeLoader - JSON-based theme system', () => {
   beforeEach(() => {
-    // 各テスト前にキャッシュをクリア
+    // Clear cache before each test
     themeCache.clearCache();
   });
 
   afterEach(() => {
-    // テスト後のクリーンアップ
+    // Post-test cleanup
     themeCache.clearCache();
   });
 
-  describe('JSON読み込み機能', () => {
+  describe('JSON loading functionality', () => {
     it('should load cyberpunk theme from JSON', async () => {
       const theme = await getThemePresetAsync('cyberpunk');
 

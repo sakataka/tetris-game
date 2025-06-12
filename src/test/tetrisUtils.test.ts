@@ -43,7 +43,7 @@ describe('tetrisUtils', () => {
       const tetrominoes = Array.from({ length: 20 }, () => getRandomTetromino().type);
       const uniqueTypes = new Set(tetrominoes);
 
-      // 20回の試行で少なくとも2種類は出るはず
+      // Should get at least 2 different types in 20 attempts
       expect(uniqueTypes.size).toBeGreaterThan(1);
     });
   });

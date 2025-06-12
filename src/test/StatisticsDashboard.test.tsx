@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { GameStatistics, HighScore } from '../types/tetris';
 
-// 統計ダッシュボードの型定義（まだ実装されていない）
+// Statistics dashboard type definition (not yet implemented)
 interface EnhancedStatistics extends GameStatistics {
   readonly efficiency: number; // lines per minute
   readonly consistency: number; // score variance percentage
@@ -26,7 +26,7 @@ const STATISTICS_PERIODS: StatisticsPeriod[] = [
   { label: 'All Time', days: 0 },
 ];
 
-// モックデータ
+// Mock data
 const mockStatistics: EnhancedStatistics = {
   totalGames: 150,
   totalLines: 3500,
@@ -52,7 +52,7 @@ const mockHighScores: HighScore[] = [
   { id: '3', score: 32000, level: 8, lines: 68, date: Date.now() - 259200000 },
 ];
 
-// StatisticsDashboardコンポーネント（まだ実装されていない）をモック
+// Mock the StatisticsDashboard component (not yet implemented)
 const MockStatisticsDashboard = ({
   statistics,
   highScores,
@@ -84,7 +84,7 @@ const MockStatisticsDashboard = ({
         </select>
       </div>
 
-      {/* 主要統計 */}
+      {/* Main statistics */}
       <div className='grid grid-cols-2 md:grid-cols-4 gap-4' data-testid='main-stats'>
         <div className='hologram-cyan p-4 rounded neon-border-cyan'>
           <div className='text-sm text-gray-400'>Total Games</div>
@@ -113,7 +113,7 @@ const MockStatisticsDashboard = ({
 
       {showDetailedView && (
         <>
-          {/* 効率指標 */}
+          {/* Efficiency metrics */}
           <div
             className='hologram-yellow neon-border-yellow p-4 rounded'
             data-testid='efficiency-stats'
@@ -149,7 +149,7 @@ const MockStatisticsDashboard = ({
             </div>
           </div>
 
-          {/* プレイ履歴概要 */}
+          {/* Play history summary */}
           <div className='hologram-cyan neon-border-cyan p-4 rounded' data-testid='play-history'>
             <h3 className='text-lg font-bold text-cyan-400 mb-3'>📅 Play History</h3>
             <div className='grid grid-cols-2 gap-3 text-sm'>
@@ -178,7 +178,7 @@ const MockStatisticsDashboard = ({
             </div>
           </div>
 
-          {/* 最近のハイスコア */}
+          {/* Recent high scores */}
           <div
             className='hologram-purple neon-border-purple p-4 rounded'
             data-testid='recent-achievements'
@@ -202,7 +202,7 @@ const MockStatisticsDashboard = ({
         </>
       )}
 
-      {/* 空の状態 */}
+      {/* Empty state */}
       {statistics.totalGames === 0 && (
         <div className='text-center py-8' data-testid='empty-state'>
           <div className='text-gray-500 text-lg'>No statistics available</div>
@@ -213,13 +213,13 @@ const MockStatisticsDashboard = ({
   );
 };
 
-describe('StatisticsDashboard コンポーネント', () => {
+describe('StatisticsDashboard component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  describe('基本表示機能', () => {
-    it('統計ダッシュボードを正しく表示する', () => {
+  describe('Basic display functionality', () => {
+    it('displays statistics dashboard correctly', () => {
       render(<MockStatisticsDashboard statistics={mockStatistics} highScores={mockHighScores} />);
 
       expect(screen.getByTestId('statistics-dashboard')).toBeInTheDocument();
@@ -296,7 +296,7 @@ describe('StatisticsDashboard コンポーネント', () => {
       const selector = screen.getByTestId('period-selector');
       expect(selector).toHaveValue('All Time');
 
-      // 期間変更のテストは実装時に追加
+      // Period change tests will be added during implementation
     });
 
     it('全ての期間オプションが利用可能', () => {
@@ -378,8 +378,8 @@ describe('StatisticsDashboard コンポーネント', () => {
     it('時間を適切な形式で表示する', () => {
       const timeStats: EnhancedStatistics = {
         ...mockStatistics,
-        playTime: 7323, // 2時間2分3秒
-        longestSession: 3665, // 1時間1分5秒
+        playTime: 7323, // 2 hours 2 minutes 3 seconds
+        longestSession: 3665, // 1 hour 1 minute 5 seconds
       };
 
       render(<MockStatisticsDashboard statistics={timeStats} highScores={mockHighScores} />);
@@ -392,19 +392,19 @@ describe('StatisticsDashboard コンポーネント', () => {
   });
 });
 
-describe('統計計算ユーティリティ（予定）', () => {
+describe('Statistics calculation utilities (planned)', () => {
   it('期間フィルタリングされた統計を計算できる', () => {
-    // この機能は後で実装予定
+    // This feature is planned for later implementation
     expect(true).toBe(true);
   });
 
   it('効率指標を正しく計算できる', () => {
-    // この機能は後で実装予定
+    // This feature is planned for later implementation
     expect(true).toBe(true);
   });
 
   it('一貫性スコアを計算できる', () => {
-    // この機能は後で実装予定
+    // This feature is planned for later implementation
     expect(true).toBe(true);
   });
 });

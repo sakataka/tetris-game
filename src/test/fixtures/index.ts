@@ -1,11 +1,11 @@
 /**
- * テストフィクスチャ統合エクスポート
+ * Test fixtures integration export
  *
- * 全てのモックファクトリとテストユーティリティを
- * 統一インターフェースで提供
+ * Provides all mock factories and test utilities
+ * through a unified interface
  */
 
-// モックファクトリ
+// Mock factories
 export {
   createMockAudioSystem,
   createMockAudioManager,
@@ -19,5 +19,5 @@ export {
   measurePerformance,
 } from './mockFactory';
 
-// 共通テストユーティリティ
+// Common test utilities
 export * from './testUtils';

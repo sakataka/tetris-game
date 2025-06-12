@@ -1,15 +1,15 @@
 /**
- * ゲームループ統合テスト
+ * Game loop integration tests
  *
- * ゲーム核心機能の統合動作を検証し、
- * ピース操作・自動落下・ライン消去の基本フローを保証する
+ * Verifies integrated operation of core game functionality
+ * and ensures basic flow of piece manipulation, automatic drop, and line clearing
  */
 
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useGameLoop } from '../hooks/useGameLoop';
 
-// 依存モジュールのモック
+// Mock dependent modules
 vi.mock('../hooks/useKeyboardInput', () => ({
   useKeyboardInput: vi.fn(),
 }));
@@ -22,7 +22,7 @@ vi.mock('../hooks/useDropTimeCalculator', () => ({
   useDropTimeCalculator: vi.fn(),
 }));
 
-describe('useGameLoop - ゲーム統合テスト', () => {
+describe('useGameLoop - Game integration tests', () => {
   let mockActions: {
     movePiece: ReturnType<typeof vi.fn>;
     rotatePieceClockwise: ReturnType<typeof vi.fn>;
@@ -40,7 +40,7 @@ describe('useGameLoop - ゲーム統合テスト', () => {
   beforeEach(async () => {
     vi.clearAllMocks();
 
-    // アクション関数のモック
+    // Mock action functions
     mockActions = {
       movePiece: vi.fn(),
       rotatePieceClockwise: vi.fn(),
