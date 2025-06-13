@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Production-ready cyberpunk-themed Tetris game built with Next.js 15, TypeScript, and Tailwind CSS. Features comprehensive state management, audio system with fallback strategies, and particle effects.
 
-**Tech Stack**: Next.js 15.3.3 + React 19 + TypeScript 5 + Zustand 5 + Tailwind CSS v4
+**Tech Stack**: Next.js 15.3.3 + React 19 + TypeScript 5 + Zustand 5 + Tailwind CSS 4.1.10
 
 ## Environment Setup
 
@@ -22,6 +22,13 @@ NEXT_PUBLIC_MAX_PARTICLES=200           # Performance tuning
 NEXT_PUBLIC_TARGET_FPS=60               # Frame rate target
 NEXT_PUBLIC_DEFAULT_LEVEL=1             # Starting difficulty
 NEXT_PUBLIC_DEBUG_PERFORMANCE=false     # Performance debugging
+NEXT_PUBLIC_PARTICLE_POOL_SIZE=150      # Particle object pool size
+NEXT_PUBLIC_DEFAULT_VOLUME=0.5          # Default audio volume
+NEXT_PUBLIC_AUDIO_PRELOAD=true          # Audio preloading
+NEXT_PUBLIC_GHOST_PIECE_ENABLED=true    # Ghost piece preview
+NEXT_PUBLIC_AUTO_SAVE_ENABLED=true      # Auto-save game state
+NEXT_PUBLIC_SHOW_FPS=false              # FPS counter display
+NEXT_PUBLIC_SHOW_DEBUG_INFO=false       # Debug info overlay
 ```
 
 **Development Tools**: Uses Turbopack for fast development, Husky for pre-commit hooks
@@ -76,6 +83,52 @@ TetrisGame (Entry Point)
 2. **Strategy Pattern**: Audio system with WebAudio → HTMLAudio → Silent fallback
 3. **Service Pattern**: `StatisticsService` for centralized calculations
 4. **MVC Pattern**: `BoardRenderer` separates rendering logic from UI
+5. **Controller Pattern**: Specialized controllers compose through render props
+
+### Controller Architecture
+
+The game uses a layered controller pattern for clean separation of concerns:
+
+1. **GameStateController**: Core game logic and state management
+
+   - Handles piece movement, rotation, and collision detection
+   - Manages game lifecycle (start, pause, game over)
+   - Integrates with gameStateStore
+
+2. **AudioController**: Audio system management
+
+   - Provides unified audio API across strategies
+   - Handles audio initialization and fallback
+   - Manages volume and mute states
+
+3. **EventController**: Event handling and propagation
+
+   - Centralizes game event management
+   - Provides hooks for game lifecycle events
+   - Manages event subscriptions
+
+4. **DeviceController**: Device detection and adaptation
+   - Detects mobile vs desktop environments
+   - Provides device-specific configurations
+   - Manages responsive behavior
+
+Controllers compose through render props, allowing clean API aggregation:
+
+```typescript
+<EventController>
+  {(eventAPI) => (
+    <AudioController>
+      {(audioAPI) => (
+        <GameStateController>
+          {(gameAPI) =>
+            // Combined API available here
+          }
+        </GameStateController>
+      )}
+    </AudioController>
+  )}
+</EventController>
+```
 
 ## State Management (Zustand)
 
@@ -86,6 +139,10 @@ TetrisGame (Entry Point)
 - **statisticsStore**: High scores and gameplay metrics
 - **themeStore**: Theme management with 5 presets + custom colors
 - **accessibilityStore**: WCAG-compliant features (3 sub-stores)
+- **errorStore**: Error tracking with categorization, statistics, and UI integration
+- **sessionStore**: Unified session management with automatic timeout (30min)
+- **languageStore**: i18n language state management with persistence
+- **localeStore**: Locale-specific settings (date format, RTL support)
 
 ### Store Usage Pattern
 
@@ -106,6 +163,14 @@ export const useSetGameState = () =>
 - **SilentStrategy**: Silent mode fallback
 - Auto-detection and graceful degradation
 
+#### Decomposed Audio Hooks
+
+- **useAudioStrategy**: Strategy selection and switching logic with retry mechanisms
+- **useAudioPlayer**: Clean playback interface with throttling
+- **useAudioState**: Volume and mute state management
+- **useAudioPreloader**: Audio file preloading with progress tracking
+- **useSounds**: Legacy compatibility wrapper combining all audio hooks
+
 ### Particle System
 
 - **ParticlePool**: Object pooling with 80%+ reuse rate
@@ -124,9 +189,43 @@ export const useSetGameState = () =>
 
 - **Logger**: Environment-aware unified logging with structured context
 - **Log Levels**: ERROR, WARN, INFO, DEBUG (development only)
-- **Game Helpers**: `log.audio()`, `log.animation()`, `log.game()`, `log.performance()`
+- **Game Helpers**: `log.audio()`, `log.animation()`, `log.game()`, `log.performance()`, `log.config()`
 - **Production Mode**: Automatic debug log suppression for clean console output
 - **Structured Context**: Component identification and metadata attachment
+- **Format**: ISO timestamp + level + [component](action) + message
+
+### Timeout Management System
+
+- **TimeoutManager**: Unified timeout management using AnimationManager
+- **Features**:
+  - Animation-based timeouts for consistency with game loop
+  - Support for long-duration timeouts (session management)
+  - Automatic cleanup and memory management
+  - Debug logging for timeout tracking
+- **API**: `unifiedSetTimeout()` and `unifiedClearTimeout()`
+
+### Error Handling System
+
+- **ErrorStore**: Centralized error tracking and management
+- **Error Categories**: game, audio, storage, network, ui, validation, system
+- **Error Levels**: info, warning, error, critical
+- **Features**:
+  - Automatic error statistics and aggregation
+  - UI integration with ErrorNotification component
+  - Error history with configurable retention
+  - Error filtering by category and level
+- **ErrorBoundary Hierarchy**: Page-level and component-level error isolation
+
+### Session Management
+
+- **SessionStore**: Unified session tracking replacing legacy SessionManager
+- **Features**:
+  - Automatic session timeout (30 minutes)
+  - Play time tracking and statistics
+  - Game count per session
+  - localStorage persistence
+  - Window focus/blur handling
+- **Statistics**: Total play time, average session duration, games per session
 
 ## UI Components
 
@@ -158,14 +257,35 @@ export const useSetGameState = () =>
 - **useHighScoreManager**: Auto-detection on game end
 - **useSessionTrackingV2**: Play time and session management
 - **useThemeManager**: Dynamic CSS variable updates
+- **useErrorActions**: Error management and UI integration
+- **useSessionStore**: Unified session management with localStorage persistence
 
 ## Testing Strategy
 
+- **Test Framework**: Vitest with React Testing Library
+- **Environment**: JSDOM for browser API simulation
 - **Unit Tests**: Pure functions (tetrisUtils, statisticsUtils)
 - **Component Tests**: React Testing Library with JSDOM
 - **Integration Tests**: Zustand store testing with mock scenarios
 - **Performance Tests**: Memory and rendering optimization validation
 - **Coverage**: 272 tests, 100% passing with Vitest
+
+### Vitest Configuration
+
+```typescript
+// vitest.config.ts
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.ts'],
+    globals: true,
+    coverage: {
+      reporter: ['text', 'json', 'html', 'cobertura'],
+    },
+  },
+});
+```
 
 ```bash
 # Run specific test patterns
@@ -204,10 +324,27 @@ pnpm test --ui             # Run with Vitest UI
 
 ## Internationalization
 
-- **i18next**: Full EN/JA support
+- **i18next**: Full EN/JA support with React integration
 - **Dynamic Loading**: Browser language detection
 - **Component Integration**: All UI text internationalized
 - **Accessibility**: ARIA labels and announcements
+
+### Dual Store Architecture
+
+The i18n system uses two complementary stores:
+
+1. **languageStore**: Primary i18n state management
+
+   - Manages current language selection
+   - Integrates with i18next for translations
+   - Persists language preference to localStorage
+   - Handles initialization and language switching
+
+2. **localeStore**: Locale-specific configurations
+   - Date format settings per locale
+   - RTL language support (prepared for future expansion)
+   - HTML lang attribute management
+   - Browser language detection with fallback
 
 ## Code Quality & Linting
 
@@ -232,6 +369,28 @@ pnpm lint:fix     # Auto-fix with both linters
 - **Pre-commit**: Oxlint via lint-staged (fast commits)
 - **CI/CD**: Oxlint in pipeline (faster builds)
 - **Comprehensive**: ESLint available when needed
+- **ESLint Enhancement**: SonarJS plugin for code quality (cognitive complexity, duplications)
+
+## Build Configuration
+
+### Next.js Optimization
+
+- **Bundle Analyzer**: Integrated for size analysis (`pnpm analyze`)
+- **Compiler Options**: Console.log removal in production (keeps warn/error)
+- **Package Optimization**: Optimized imports for zustand, immer, react
+- **Security Headers**: X-Content-Type-Options, X-Frame-Options, X-XSS-Protection
+- **Image Optimization**: AVIF/WebP formats with responsive sizes
+
+### TypeScript Configuration
+
+- **Strict Mode**: Enhanced with additional strict checks
+- **Compiler Options**:
+  - `noUnusedLocals`: true
+  - `noUnusedParameters`: true
+  - `exactOptionalPropertyTypes`: true
+  - `noUncheckedIndexedAccess`: true
+  - `noPropertyAccessFromIndexSignature`: true
+  - `noImplicitOverride`: true
 
 ## Important Notes
 
