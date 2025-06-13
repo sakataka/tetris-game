@@ -41,13 +41,13 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
   // Desktop Layout
   if (!isMobile) {
     return (
-      <div className='min-h-dvh bg-gradient-to-br from-gray-900 via-black to-gray-800 relative overflow-hidden ultra-compact-container'>
+      <div className='min-h-dvh bg-gradient-to-br from-gray-900 via-black to-gray-800 relative overflow-hidden'>
         {/* Background effects */}
         <div className='absolute inset-0 bg-grid-pattern opacity-5' />
         <div className='absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/50' />
 
-        <div className='relative z-10 h-dvh flex items-center justify-center px-2 py-0'>
-          <div className='grid grid-cols-[auto_320px] gap-4 items-stretch max-h-[calc(100vh-1rem)]'>
+        <div className='relative z-10 h-dvh flex items-center justify-center px-4 py-4'>
+          <div className='grid grid-cols-[minmax(400px,auto)_350px] gap-6 items-stretch max-h-[calc(100vh-2rem)] max-w-7xl'>
             {/* Game Board */}
             <div className='flex items-center'>
               <ErrorBoundary level='component'>
@@ -90,7 +90,7 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
 
   // Mobile Layout
   return (
-    <div className='min-h-dvh bg-gradient-to-br from-gray-900 via-black to-gray-800 relative overflow-hidden ultra-compact-container'>
+    <div className='min-h-dvh bg-gradient-to-br from-gray-900 via-black to-gray-800 relative overflow-hidden'>
       {/* Background effects */}
       <div className='absolute inset-0 bg-grid-pattern opacity-5' />
       <div className='absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/50' />

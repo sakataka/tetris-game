@@ -71,7 +71,7 @@ const TetrisBoard = memo(function TetrisBoard({
   }, [boardRenderer, renderEffects]);
 
   return (
-    <div className='relative'>
+    <div className='relative min-w-[280px] min-h-[560px] md:min-w-[360px] md:min-h-[720px] lg:min-w-[400px] lg:min-h-[800px]'>
       <div className={boardContainerClassName} style={boardContainerStyle}>
         {/* Inner glow effect */}
         <div className='absolute inset-0 bg-gradient-to-br from-cyan-400/10 via-transparent to-purple-400/10 pointer-events-none'></div>

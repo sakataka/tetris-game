@@ -32,7 +32,7 @@ export class StyleCalculator implements IStyleCalculator {
   constructor(private theme: BoardStyleTheme = DEFAULT_CYBERPUNK_THEME) {}
 
   calculateCellClassName(cell: DisplayCellType, context: CellRenderContext): string {
-    let baseClassName = 'md:w-7 md:h-7 w-4 h-4 relative';
+    let baseClassName = 'md:w-8 md:h-8 lg:w-9 lg:h-9 w-6 h-6 relative';
 
     // Apply base style based on cell type
     if (!cell) {
