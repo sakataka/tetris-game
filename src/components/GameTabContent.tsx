@@ -1,6 +1,7 @@
 'use client';
 
 import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Tetromino } from '../types/tetris';
 import CombinedStatsNextPanel from './CombinedStatsNextPanel';
 import ControlsPanel from './ControlsPanel';
@@ -33,6 +34,7 @@ const GameTabContent = memo(function GameTabContent({
   onTogglePause,
   className = '',
 }: GameTabContentProps) {
+  const { t } = useTranslation();
   const highScores = useHighScores();
 
   return (
@@ -67,7 +69,7 @@ const GameTabContent = memo(function GameTabContent({
         <summary
           className={`cursor-pointer text-cyan-400 hover:text-cyan-300 ${TYPOGRAPHY.BODY_TEXT}`}
         >
-          Score Reference
+          {t('panels.scoreReference')}
         </summary>
         <ScoringPanel size='xs' />
       </details>

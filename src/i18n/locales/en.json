@@ -62,7 +62,8 @@
     "tapToUnlock": "Tap to unlock audio"
   },
   "panels": {
-    "scoreData": "Score Data"
+    "scoreData": "Score Data",
+    "scoreReference": "Score Reference"
   },
   "themes": {
     "cyberpunk": "Cyberpunk",
@@ -219,8 +220,17 @@
     "sectionDisplayError": "An error occurred while displaying this section",
     "retry": "Retry",
     "retryWithCount": "Retry ({{count}} attempts remaining)",
+    "retryUpToTimes": "Retry (up to {{count}} times)",
+    "returnToHome": "Return to Home",
     "reloadPage": "Reload Page",
     "backToHome": "Back to Home",
-    "errorId": "Error ID"
+    "errorId": "Error ID",
+    "gameProcessingError": "An error occurred during game processing",
+    "audioPlaybackError": "Failed to play audio",
+    "dataSaveError": "Failed to save data",
+    "networkError": "A network error occurred",
+    "displayError": "An error occurred in screen display",
+    "validationError": "Input data is incorrect",
+    "systemErrorReload": "A system error occurred. Please reload the page"
   }
 }

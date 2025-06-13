@@ -62,7 +62,8 @@
     "tapToUnlock": "タップして音声をアンロック"
   },
   "panels": {
-    "scoreData": "スコアデータ"
+    "scoreData": "スコアデータ",
+    "scoreReference": "スコア参考"
   },
   "themes": {
     "cyberpunk": "サイバーパンク",
@@ -222,8 +223,17 @@
     "sectionDisplayError": "この部分の表示中にエラーが発生しました",
     "retry": "再試行",
     "retryWithCount": "再試行 ({{count}}回まで)",
+    "retryUpToTimes": "再試行 (最大{{count}}回)",
+    "returnToHome": "ホームに戻る",
     "reloadPage": "ページを再読み込み",
     "backToHome": "ホームに戻る",
-    "errorId": "エラーID"
+    "errorId": "エラーID",
+    "gameProcessingError": "ゲーム処理中にエラーが発生しました",
+    "audioPlaybackError": "音声の再生に失敗しました",
+    "dataSaveError": "データの保存に失敗しました",
+    "networkError": "ネットワークエラーが発生しました",
+    "displayError": "画面表示でエラーが発生しました",
+    "validationError": "入力データが正しくありません",
+    "systemErrorReload": "システムエラーが発生しました。ページを再読み込みしてください"
   }
 }

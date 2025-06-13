@@ -1,6 +1,7 @@
 'use client';
 
 import React, { Component, ReactNode, ErrorInfo } from 'react';
+import i18next from 'i18next';
 import { UIError } from '../types/errors';
 import { errorHandler } from '../utils/data';
 import { DEFAULT_VALUES, GAME_TIMING } from '../constants';
@@ -62,7 +63,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
       {
         recoverable: this.state.retryCount < this.maxRetries,
         retryable: true,
-        userMessage: 'An error occurred while displaying the component',
+        userMessage: i18next.t('errors.componentRenderError'),
         cause: error,
       }
     );
@@ -138,8 +139,10 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         <div className='text-center text-white p-8 max-w-md mx-auto'>
           <div className='mb-6'>
             <div className='text-6xl mb-4'>💥</div>
-            <h1 className='text-3xl font-bold mb-2 text-red-400'>System Error</h1>
-            <p className='text-gray-300 mb-4'>We apologize. An unexpected error has occurred.</p>
+            <h1 className='text-3xl font-bold mb-2 text-red-400'>
+              {i18next.t('errors.systemError')}
+            </h1>
+            <p className='text-gray-300 mb-4'>{i18next.t('errors.unexpectedError')}</p>
           </div>
 
           <div className='space-y-4'>
@@ -149,7 +152,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                 className='w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-400 hover:to-purple-400 
                           text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105'
               >
-                Retry (up to {this.maxRetries - retryCount} times)
+                {i18next.t('errors.retryUpToTimes', { count: this.maxRetries - retryCount })}
               </button>
             ) : (
               <button
@@ -157,7 +160,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                 className='w-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-400 hover:to-pink-400 
                           text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105'
               >
-                Reload Page
+                {i18next.t('errors.reloadPage')}
               </button>
             )}
 
@@ -165,11 +168,13 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
               onClick={() => (window.location.href = '/')}
               className='w-full bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-lg transition-colors'
             >
-              Return to Home
+              {i18next.t('errors.returnToHome')}
             </button>
           </div>
 
-          <div className='mt-6 text-xs text-gray-400'>Error ID: {this.state.errorId}</div>
+          <div className='mt-6 text-xs text-gray-400'>
+            {i18next.t('errors.errorId')}: {this.state.errorId}
+          </div>
         </div>
       </div>
     );
@@ -181,10 +186,10 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     return (
       <div className='hologram neon-border p-6 rounded-lg text-center'>
         <div className='text-yellow-400 text-4xl mb-4'>⚠️</div>
-        <h3 className='text-lg font-bold text-yellow-400 mb-2'>Section Error</h3>
-        <p className='text-gray-300 text-sm mb-4'>
-          An error occurred while displaying this section
-        </p>
+        <h3 className='text-lg font-bold text-yellow-400 mb-2'>
+          {i18next.t('errors.sectionError')}
+        </h3>
+        <p className='text-gray-300 text-sm mb-4'>{i18next.t('errors.sectionDisplayError')}</p>
 
         {retryCount < this.maxRetries && (
           <button
@@ -192,7 +197,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
             className='bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 
                       text-white font-bold py-2 px-4 rounded transition-all duration-300'
           >
-            Retry
+            {i18next.t('errors.retry')}
           </button>
         )}
       </div>
@@ -203,13 +208,13 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     return (
       <div className='bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-center'>
         <div className='text-red-400 text-2xl mb-2'>🔧</div>
-        <p className='text-red-300 text-sm mb-2'>Component Error</p>
+        <p className='text-red-300 text-sm mb-2'>{i18next.t('errors.componentError')}</p>
         {this.state.retryCount < this.maxRetries && (
           <button
             onClick={this.handleRetry}
             className='bg-red-500 hover:bg-red-400 text-white text-xs py-1 px-3 rounded transition-colors'
           >
-            Retry
+            {i18next.t('errors.retry')}
           </button>
         )}
       </div>

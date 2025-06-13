@@ -2,6 +2,8 @@
  * Type definitions and custom error classes for error handling within the application
  */
 
+import i18next from 'i18next';
+
 // Error level definitions
 export type ErrorLevel = 'info' | 'warning' | 'error' | 'critical';
 
@@ -140,7 +142,7 @@ export class GameError extends BaseAppError {
   ) {
     super(message, 'error', 'game', context, {
       recoverable: true,
-      userMessage: 'An error occurred during game processing',
+      userMessage: i18next.t('errors.gameProcessingError'),
       ...options,
     });
   }
@@ -161,7 +163,7 @@ export class AudioError extends BaseAppError {
     super(message, 'warning', 'audio', context, {
       recoverable: true,
       retryable: true,
-      userMessage: 'Failed to play audio',
+      userMessage: i18next.t('errors.audioPlaybackError'),
       ...options,
     });
   }
@@ -182,7 +184,7 @@ export class StorageError extends BaseAppError {
     super(message, 'warning', 'storage', context, {
       recoverable: true,
       retryable: false,
-      userMessage: 'Failed to save data',
+      userMessage: i18next.t('errors.dataSaveError'),
       ...options,
     });
   }
@@ -203,7 +205,7 @@ export class NetworkError extends BaseAppError {
     super(message, 'error', 'network', context, {
       recoverable: true,
       retryable: true,
-      userMessage: 'A network error occurred',
+      userMessage: i18next.t('errors.networkError'),
       ...options,
     });
   }
@@ -224,7 +226,7 @@ export class UIError extends BaseAppError {
     super(message, 'warning', 'ui', context, {
       recoverable: true,
       retryable: false,
-      userMessage: 'An error occurred in screen display',
+      userMessage: i18next.t('errors.displayError'),
       ...options,
     });
   }
@@ -245,7 +247,7 @@ export class ValidationError extends BaseAppError {
     super(message, 'warning', 'validation', context, {
       recoverable: true,
       retryable: false,
-      userMessage: 'Input data is incorrect',
+      userMessage: i18next.t('errors.validationError'),
       ...options,
     });
   }
@@ -266,7 +268,7 @@ export class SystemError extends BaseAppError {
     super(message, 'critical', 'system', context, {
       recoverable: false,
       retryable: false,
-      userMessage: 'A system error occurred. Please reload the page',
+      userMessage: i18next.t('errors.systemErrorReload'),
       ...options,
     });
   }
