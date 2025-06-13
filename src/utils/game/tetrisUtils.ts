@@ -17,7 +17,17 @@ export function createEmptyBoard(): (string | null)[][] {
     .map(() => Array(BOARD_WIDTH).fill(null));
 }
 
-export function getRandomTetromino(): Tetromino {
+export function getRandomTetromino(debugMode = false): Tetromino {
+  // In debug mode, always return I-piece for easy line clearing
+  if (debugMode) {
+    return {
+      type: 'I',
+      shape: TETROMINO_SHAPES['I'],
+      position: { x: Math.floor(BOARD_WIDTH / 2) - 1, y: 0 },
+      color: TETROMINO_COLORS['I'],
+    };
+  }
+
   const types: TetrominoType[] = ['I', 'O', 'T', 'S', 'Z', 'J', 'L'];
   const type = types[Math.floor(Math.random() * types.length)];
 

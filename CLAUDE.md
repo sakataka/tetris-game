@@ -146,24 +146,6 @@ const isHydrated = use(getHydrationPromise());
 - Reduced bundle size through intelligent optimization
 - Better memory usage patterns
 
-### Migration Benefits
-
-**Before React 19.1:**
-
-```typescript
-// Manual optimization required
-const memoizedValue = useMemo(() => expensiveCalculation(props), [props]);
-const handleClick = useCallback(() => doSomething(), [dependency]);
-```
-
-**After React 19.1:**
-
-```typescript
-// React Compiler handles optimization automatically
-const value = expensiveCalculation(props);
-const handleClick = () => doSomething();
-```
-
 **Performance Impact:**
 
 - Bundle size: Main page 43.3 kB (First Load JS: 176 kB) - optimized by compiler
@@ -171,18 +153,6 @@ const handleClick = () => doSomething();
 - Runtime: Better performance through intelligent memoization
 - Memory: More efficient with compiler-managed optimization
 - Tests: 343 tests passing with improved performance
-
-**Dependencies Updated:**
-
-```json
-{
-  "react": "^19.1.0",
-  "react-dom": "^19.1.0",
-  "@types/react": "^19.1.8",
-  "@types/react-dom": "^19.1.6",
-  "babel-plugin-react-compiler": "19.1.0-rc.2"
-}
-```
 
 ## State Management (Zustand)
 
@@ -323,26 +293,11 @@ The project leverages Tailwind CSS v4.1's enhanced `@theme inline` directive for
 
 **3. Container Queries Support**
 
-```css
-@container (min-width: 768px) {
-  .tablet-layout {
-    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
-  }
-}
-```
-
 - Component-based responsive design independent of viewport
 - Better encapsulation for modular components
 - Future-proof layout patterns
 
 **4. Modern Viewport Units**
-
-```css
-.full-viewport {
-  height: var(--vh-dynamic); /* 100dvh */
-  min-height: var(--vh-small); /* 100svh */
-}
-```
 
 - `dvh` (dynamic viewport height) for mobile-first design
 - `svh` (small viewport height) for consistent minimum heights
@@ -376,21 +331,6 @@ The project leverages Tailwind CSS v4.1's enhanced `@theme inline` directive for
 - **Coverage**: 343 tests, 100% passing with Vitest
 
 ### Vitest Configuration
-
-```typescript
-// vitest.config.ts
-export default defineConfig({
-  plugins: [react()],
-  test: {
-    environment: 'jsdom',
-    setupFiles: ['./src/test/setup.ts'],
-    globals: true,
-    coverage: {
-      reporter: ['text', 'json', 'html', 'cobertura'],
-    },
-  },
-});
-```
 
 ```bash
 # Run specific test patterns
@@ -587,39 +527,6 @@ experimental: {
 - Over-optimize code that the compiler handles better
 - Use complex dependency arrays for simple computations
 - Assume manual optimization is always faster
-
-### Debugging Common Issues
-
-**Audio Problems:**
-
-```bash
-# Check audio strategy in browser console
-log.audio("Current strategy:", audioStrategy.currentStrategy)
-# Verify fallback chain: WebAudio → HTMLAudio → Silent
-```
-
-**Performance Issues:**
-
-```bash
-# Enable performance debugging
-NEXT_PUBLIC_DEBUG_PERFORMANCE=true pnpm dev
-# Check AnimationManager stats in console
-log.performance("FPS:", animationManager.getFPS())
-```
-
-**State Management Issues:**
-
-- Use Zustand DevTools browser extension
-- Check individual selectors to prevent object regeneration
-- Verify store subscription patterns
-
-**Build Issues:**
-
-```bash
-pnpm build              # Check for build errors
-pnpm lint:full          # Comprehensive linting
-pnpm tsc --noEmit       # TypeScript validation
-```
 
 ## Future Feature Roadmap
 

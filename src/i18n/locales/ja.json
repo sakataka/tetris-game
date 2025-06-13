@@ -51,7 +51,10 @@
     "loaded": "読み込み済み",
     "playing": "再生中",
     "fallback": "フォールバック",
-    "silentModeActive": "サイレントモード有効"
+    "silentModeActive": "サイレントモード有効",
+    "gameMode": "ゲームモード",
+    "debugMode": "デバッグモード",
+    "debugModeDescription": "I字ピース（長い棒）のみが出現し、スコアは記録されません。ライン消去のテストに最適です。"
   },
   "audio": {
     "webAudioApi": "Web Audio API",

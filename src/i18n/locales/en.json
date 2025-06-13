@@ -51,7 +51,10 @@
     "loaded": "Loaded",
     "playing": "Playing",
     "fallback": "Fallback",
-    "silentModeActive": "Silent Mode Active"
+    "silentModeActive": "Silent Mode Active",
+    "gameMode": "Game Mode",
+    "debugMode": "Debug Mode",
+    "debugModeDescription": "Only I-pieces (straight line) will appear, and no score will be recorded. Perfect for testing line clears."
   },
   "audio": {
     "webAudioApi": "Web Audio API",

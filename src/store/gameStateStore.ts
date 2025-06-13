@@ -10,23 +10,30 @@ import {
   checkGameOver,
   updateGameStateWithPiece,
 } from '../utils/game';
+import { useSettingsStore } from './settingsStore';
+
+// Helper function to create initial game state with debug mode consideration
+const createInitialGameState = (): GameState => {
+  const isDebugMode = useSettingsStore.getState().settings.gameMode === 'debug';
+  return {
+    board: createEmptyBoard(),
+    currentPiece: getRandomTetromino(isDebugMode),
+    nextPiece: getRandomTetromino(isDebugMode),
+    score: 0,
+    level: 1,
+    lines: 0,
+    gameOver: false,
+    isPaused: false,
+    lineEffect: {
+      flashingLines: [],
+      shaking: false,
+      particles: [],
+    },
+  };
+};
 
 // Initial game state
-const INITIAL_GAME_STATE: GameState = {
-  board: createEmptyBoard(),
-  currentPiece: getRandomTetromino(),
-  nextPiece: getRandomTetromino(),
-  score: 0,
-  level: 1,
-  lines: 0,
-  gameOver: false,
-  isPaused: false,
-  lineEffect: {
-    flashingLines: [],
-    shaking: false,
-    particles: [],
-  },
-};
+const INITIAL_GAME_STATE: GameState = createInitialGameState();
 
 interface GameStateStore {
   // State
@@ -79,24 +86,27 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
     })),
 
   resetGame: () =>
-    set(() => ({
-      gameState: {
-        board: createEmptyBoard(),
-        currentPiece: getRandomTetromino(),
-        nextPiece: getRandomTetromino(),
-        score: 0,
-        level: 1,
-        lines: 0,
-        gameOver: false,
-        isPaused: false,
-        lineEffect: {
-          flashingLines: [],
-          shaking: false,
-          particles: [],
+    set(() => {
+      const isDebugMode = useSettingsStore.getState().settings.gameMode === 'debug';
+      return {
+        gameState: {
+          board: createEmptyBoard(),
+          currentPiece: getRandomTetromino(isDebugMode),
+          nextPiece: getRandomTetromino(isDebugMode),
+          score: 0,
+          level: 1,
+          lines: 0,
+          gameOver: false,
+          isPaused: false,
+          lineEffect: {
+            flashingLines: [],
+            shaking: false,
+            particles: [],
+          },
         },
-      },
-      dropTime: INITIAL_DROP_TIME,
-    })),
+        dropTime: INITIAL_DROP_TIME,
+      };
+    }),
 
   togglePause: () =>
     set((state) => ({
@@ -130,6 +140,9 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
 
   calculatePiecePlacementState: (piece, bonusPoints = 0, playSound) =>
     set((state) => {
+      // Check debug mode
+      const isDebugMode = useSettingsStore.getState().settings.gameMode === 'debug';
+
       // 0. Play piece landing sound (before line clear sound)
       if (playSound) {
         if (bonusPoints > 0) {
@@ -144,12 +157,13 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
       // 1. Line clearing processing
       const lineClearResult = processLineClear(state.gameState.board, piece);
 
-      // 2. Score calculation
+      // 2. Score calculation (with debug mode)
       const scoreResult = calculateScoreIncrease(
         state.gameState.score,
         state.gameState.lines,
         lineClearResult.linesCleared,
-        bonusPoints
+        bonusPoints,
+        isDebugMode
       );
 
       // 3. Create line clear effects
@@ -169,13 +183,14 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
         playSound
       );
 
-      // 5. Final game state update
+      // 5. Final game state update (with debug mode)
       const newGameState = updateGameStateWithPiece(
         state.gameState,
         lineClearResult,
         scoreResult,
         lineEffect,
-        gameOverResult
+        gameOverResult,
+        isDebugMode
       );
 
       return {

@@ -1,7 +1,7 @@
 // Type definitions for basic game elements
 export type TetrominoType = 'I' | 'O' | 'T' | 'S' | 'Z' | 'J' | 'L';
 export type ThemeVariant = 'cyberpunk' | 'classic' | 'retro' | 'minimal' | 'neon';
-export type GameMode = 'single' | 'versus' | 'cooperative';
+export type GameMode = 'single' | 'versus' | 'cooperative' | 'debug';
 export type DifficultyLevel = 'easy' | 'normal' | 'hard' | 'extreme';
 
 // Type definitions for accessibility features

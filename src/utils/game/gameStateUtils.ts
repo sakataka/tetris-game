@@ -39,23 +39,27 @@ export function calculateScoreIncrease(
   currentScore: number,
   currentLines: number,
   linesCleared: number,
-  bonusPoints: number = 0
+  bonusPoints: number = 0,
+  debugMode: boolean = false
 ): ScoreCalculationResult {
   const newLines = currentLines + linesCleared;
   const newLevel = Math.floor(newLines / 10) + 1;
-  const newScore =
-    currentScore +
-    (linesCleared === 1
-      ? SCORES.SINGLE
-      : linesCleared === 2
-        ? SCORES.DOUBLE
-        : linesCleared === 3
-          ? SCORES.TRIPLE
-          : linesCleared === 4
-            ? SCORES.TETRIS
-            : 0) *
-      newLevel +
-    bonusPoints;
+
+  // In debug mode, don't increase score
+  const newScore = debugMode
+    ? currentScore
+    : currentScore +
+      (linesCleared === 1
+        ? SCORES.SINGLE
+        : linesCleared === 2
+          ? SCORES.DOUBLE
+          : linesCleared === 3
+            ? SCORES.TRIPLE
+            : linesCleared === 4
+              ? SCORES.TETRIS
+              : 0) *
+        newLevel +
+      bonusPoints;
 
   return {
     newScore,
@@ -143,9 +147,10 @@ export function updateGameStateWithPiece(
   lineClearResult: LineClearResult,
   scoreResult: ScoreCalculationResult,
   lineEffect: LineEffectResult,
-  gameOverResult: GameOverCheckResult
+  gameOverResult: GameOverCheckResult,
+  debugMode: boolean = false
 ): GameState {
-  const nextPiece = getRandomTetromino();
+  const nextPiece = getRandomTetromino(debugMode);
 
   // Case when game is over
   if (gameOverResult.isGameOver) {
