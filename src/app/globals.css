@@ -48,67 +48,150 @@
 }
 
 @theme inline {
-  /* Base colors */
+  /* ===== ENHANCED COLOR SYSTEM ===== */
+  /* Base semantic colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  /* Cyberpunk color palette integration */
+  /* Enhanced cyberpunk palette with full spectrum */
   --color-cyber-cyan: #00ffff;
   --color-cyber-purple: #ff00ff;
   --color-cyber-yellow: #ffff00;
   --color-cyber-green: #00ff00;
   --color-cyber-red: #ff0040;
   --color-cyber-blue: #0080ff;
+  --color-cyber-orange: #ff8000;
+  --color-cyber-pink: #ff4080;
+  --color-cyber-teal: #40ff80;
+  --color-cyber-violet: #8040ff;
 
-  /* Define colors in Tailwind's color palette structure */
-  --color-cyber: {
-    cyan: #00ffff;
-    purple: #ff00ff;
-    yellow: #ffff00;
-    green: #00ff00;
-    red: #ff0040;
-    blue: #0080ff;
-  };
+  /* Full transparency scale using color-mix() - v4.1 optimized */
+  --color-cyber-cyan-5: color-mix(in oklch, var(--color-cyber-cyan) 5%, transparent);
+  --color-cyber-cyan-10: color-mix(in oklch, var(--color-cyber-cyan) 10%, transparent);
+  --color-cyber-cyan-20: color-mix(in oklch, var(--color-cyber-cyan) 20%, transparent);
+  --color-cyber-cyan-30: color-mix(in oklch, var(--color-cyber-cyan) 30%, transparent);
+  --color-cyber-cyan-40: color-mix(in oklch, var(--color-cyber-cyan) 40%, transparent);
+  --color-cyber-cyan-50: color-mix(in oklch, var(--color-cyber-cyan) 50%, transparent);
+  --color-cyber-cyan-60: color-mix(in oklch, var(--color-cyber-cyan) 60%, transparent);
+  --color-cyber-cyan-70: color-mix(in oklch, var(--color-cyber-cyan) 70%, transparent);
+  --color-cyber-cyan-80: color-mix(in oklch, var(--color-cyber-cyan) 80%, transparent);
+  --color-cyber-cyan-90: color-mix(in oklch, var(--color-cyber-cyan) 90%, transparent);
 
-  /* Transparency variants using color-mix */
-  --color-cyber-cyan-10: color-mix(in srgb, var(--color-cyber-cyan) 10%, transparent);
-  --color-cyber-cyan-20: color-mix(in srgb, var(--color-cyber-cyan) 20%, transparent);
-  --color-cyber-cyan-30: color-mix(in srgb, var(--color-cyber-cyan) 30%, transparent);
-  --color-cyber-cyan-60: color-mix(in srgb, var(--color-cyber-cyan) 60%, transparent);
-  --color-cyber-purple-10: color-mix(in srgb, var(--color-cyber-purple) 10%, transparent);
-  --color-cyber-purple-20: color-mix(in srgb, var(--color-cyber-purple) 20%, transparent);
-  --color-cyber-purple-30: color-mix(in srgb, var(--color-cyber-purple) 30%, transparent);
-  --color-cyber-yellow-10: color-mix(in srgb, var(--color-cyber-yellow) 10%, transparent);
-  --color-cyber-yellow-20: color-mix(in srgb, var(--color-cyber-yellow) 20%, transparent);
+  --color-cyber-purple-5: color-mix(in oklch, var(--color-cyber-purple) 5%, transparent);
+  --color-cyber-purple-10: color-mix(in oklch, var(--color-cyber-purple) 10%, transparent);
+  --color-cyber-purple-20: color-mix(in oklch, var(--color-cyber-purple) 20%, transparent);
+  --color-cyber-purple-30: color-mix(in oklch, var(--color-cyber-purple) 30%, transparent);
+  --color-cyber-purple-50: color-mix(in oklch, var(--color-cyber-purple) 50%, transparent);
 
-  /* Effect blur values */
+  --color-cyber-yellow-5: color-mix(in oklch, var(--color-cyber-yellow) 5%, transparent);
+  --color-cyber-yellow-10: color-mix(in oklch, var(--color-cyber-yellow) 10%, transparent);
+  --color-cyber-yellow-20: color-mix(in oklch, var(--color-cyber-yellow) 20%, transparent);
+  --color-cyber-yellow-30: color-mix(in oklch, var(--color-cyber-yellow) 30%, transparent);
+
+  /* ===== RESPONSIVE SYSTEM ===== */
+  /* Fluid typography using clamp() */
+  --font-size-xs: clamp(0.75rem, 2vw, 0.875rem);
+  --font-size-sm: clamp(0.875rem, 2.2vw, 1rem);
+  --font-size-base: clamp(0.875rem, 2.5vw, 1.125rem);
+  --font-size-lg: clamp(1rem, 3vw, 1.25rem);
+  --font-size-xl: clamp(1.125rem, 3.5vw, 1.5rem);
+  --font-size-2xl: clamp(1.25rem, 4vw, 1.875rem);
+  --font-size-3xl: clamp(1.5rem, 5vw, 2.25rem);
+
+  /* Dynamic spacing using clamp() and logical properties */
+  --spacing-fluid-xs: clamp(0.25rem, 1vw, 0.5rem);
+  --spacing-fluid-sm: clamp(0.5rem, 1.5vw, 0.75rem);
+  --spacing-fluid-md: clamp(0.75rem, 2vw, 1.5rem);
+  --spacing-fluid-lg: clamp(1rem, 3vw, 2rem);
+  --spacing-fluid-xl: clamp(1.5rem, 4vw, 3rem);
+
+  /* ===== ADVANCED EFFECTS ===== */
+  /* Enhanced blur system with performance optimization */
+  --blur-neon-xs: 2px;
   --blur-neon-sm: 4px;
   --blur-neon-md: 8px;
   --blur-neon-lg: 12px;
   --blur-neon-xl: 16px;
+  --blur-neon-2xl: 24px;
 
-  /* Fonts */
+  /* Modern shadow system using oklch color space */
+  --shadow-neon-sm: 0 0 var(--blur-neon-sm) color-mix(in oklch, var(--color-cyber-cyan) 80%, transparent);
+  --shadow-neon-md: 0 0 var(--blur-neon-md) color-mix(in oklch, var(--color-cyber-cyan) 60%, transparent);
+  --shadow-neon-lg: 0 0 var(--blur-neon-lg) color-mix(in oklch, var(--color-cyber-cyan) 40%, transparent);
+  --shadow-neon-xl: 0 0 var(--blur-neon-xl) color-mix(in oklch, var(--color-cyber-cyan) 30%, transparent);
+
+  /* ===== FONTS & TYPOGRAPHY ===== */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-cyber: 'Orbitron', 'Courier New', monospace;
 
-  /* Spacing system */
-  --spacing-ultra-tight: 0.125rem;
-  --spacing-tight: 0.25rem;
-  --spacing-compact: 0.5rem;
+  /* Advanced font features */
+  --font-feature-settings: 'liga' 1, 'kern' 1, 'calt' 1;
+  --font-optical-sizing: auto;
 
-  /* Animation durations */
+  /* ===== LAYOUT SYSTEM ===== */
+  /* Container queries compatible sizes */
+  --container-xs: 20rem; /* 320px */
+  --container-sm: 24rem; /* 384px */
+  --container-md: 28rem; /* 448px */
+  --container-lg: 32rem; /* 512px */
+  --container-xl: 36rem; /* 576px */
+
+  /* Modern viewport units */
+  --vh-small: 100svh;
+  --vh-large: 100lvh;
+  --vh-dynamic: 100dvh;
+
+  /* ===== ANIMATION SYSTEM ===== */
+  /* Enhanced timing functions */
+  --duration-instant: 0s;
   --duration-fast: 0.1s;
   --duration-normal: 0.3s;
   --duration-slow: 0.5s;
+  --duration-slower: 0.75s;
+  --duration-slowest: 1s;
+
+  /* Modern easing functions */
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-swift: cubic-bezier(0.4, 0, 0.6, 1);
+  --ease-linear: linear;
+
+  /* ===== PERFORMANCE OPTIMIZATIONS ===== */
+  /* Hardware acceleration hints */
+  --gpu-layer: translateZ(0);
+  --will-change-transform: transform;
+  --will-change-opacity: opacity;
+  --will-change-auto: auto;
+
+  /* Containment optimizations */
+  --contain-layout: layout;
+  --contain-style: style;
+  --contain-paint: paint;
+  --contain-strict: strict;
+  --contain-content: content;
 }
 
 body {
-  background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+  /* Enhanced background with modern gradient syntax */
+  background: linear-gradient(135deg in oklch, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
   color: var(--foreground);
-  font-family: 'Orbitron', 'Courier New', monospace;
-  min-height: 100vh;
+  font-family: var(--font-cyber);
+  font-feature-settings: var(--font-feature-settings);
+  font-optical-sizing: var(--font-optical-sizing);
+
+  /* Modern viewport units for better mobile support */
+  min-height: var(--vh-dynamic);
   overflow-x: hidden;
+
+  /* Performance optimizations */
+  contain: var(--contain-layout) var(--contain-style);
+  will-change: var(--will-change-auto);
+
+  /* Enhanced text rendering */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* ネオングロー効果 */
@@ -505,18 +588,254 @@ body {
   touch-action: manipulation;
 }
 
-/* Container query based responsive design */
+/* ===== ADVANCED CONTAINER QUERIES ===== */
 @container (min-width: 768px) {
   .tablet-optimized {
     font-size: clamp(0.875rem, 1.8cqw, 1rem);
     line-height: 1.4;
   }
+
+  .tablet-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+    gap: clamp(1rem, 2cqw, 2rem);
+  }
 }
 
-/* Accessibility and reduced motion improvements */
-@media (prefers-reduced-motion: no-preference) {
-  .enhanced-animations {
-    animation-timeline: view();
-    animation-range: entry 0% cover 30%;
+@container (min-width: 1024px) {
+  .desktop-optimized {
+    font-size: clamp(1rem, 1.5cqw, 1.125rem);
+    line-height: 1.5;
+  }
+
+  .desktop-layout {
+    grid-template-columns: repeat(auto-fit, minmax(min(350px, 100%), 1fr));
+    gap: clamp(1.5rem, 2.5cqw, 3rem);
+  }
+}
+
+/* ===== MODERN CSS FEATURES ===== */
+
+/* CSS Layers for style organization */
+@layer base, components, utilities, animations;
+
+@layer base {
+  /* Enhanced accessibility with modern features */
+  @media (prefers-reduced-motion: no-preference) {
+    .enhanced-animations {
+      animation-timeline: view();
+      animation-range: entry 0% cover 30%;
+    }
+
+    .scroll-driven-animation {
+      animation: scroll-fade linear;
+      animation-timeline: scroll(root);
+      animation-range: 0% 100%;
+    }
+  }
+
+  /* Enhanced viewport stability */
+  .full-viewport {
+    height: var(--vh-dynamic);
+    min-height: var(--vh-small);
+  }
+
+  /* Modern focus management */
+  .focus-visible:focus-visible {
+    outline: 2px solid var(--color-cyber-cyan);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  /* Enhanced particle system with modern CSS */
+  .particle-modern {
+    /* Hardware acceleration and containment */
+    will-change: var(--will-change-transform), var(--will-change-opacity);
+    contain: var(--contain-strict);
+    transform: var(--gpu-layer);
+
+    /* Modern color mixing */
+    background: radial-gradient(
+      circle,
+      color-mix(in oklch, var(--color-cyber-cyan) 90%, transparent) 0%,
+      color-mix(in oklch, var(--color-cyber-cyan) 20%, transparent) 70%,
+      transparent 100%
+    );
+
+    /* Dynamic shadow system */
+    box-shadow: var(--shadow-neon-md);
+    filter: blur(0.5px) brightness(1.1) saturate(1.2);
+  }
+
+  /* Modern glass morphism effects */
+  .glass-panel {
+    background: color-mix(in oklch, var(--color-cyber-cyan-5) 80%, var(--color-cyber-purple-5) 20%);
+    backdrop-filter: blur(16px) saturate(180%) brightness(110%);
+    border: 1px solid color-mix(in oklch, var(--color-cyber-cyan) 30%, transparent);
+    border-radius: clamp(8px, 1cqw, 16px);
+  }
+
+  /* Enhanced neon border with modern techniques */
+  .neon-border-modern {
+    position: relative;
+    border: 1px solid transparent;
+    background:
+      linear-gradient(var(--color-background), var(--color-background)) padding-box,
+      linear-gradient(45deg, var(--color-cyber-cyan), var(--color-cyber-purple), var(--color-cyber-yellow)) border-box;
+    border-radius: clamp(4px, 0.5cqw, 8px);
+  }
+
+  /* Advanced button with haptic feedback simulation */
+  .cyber-button {
+    position: relative;
+    background: linear-gradient(
+      135deg,
+      color-mix(in oklch, var(--color-cyber-cyan) 20%, transparent),
+      color-mix(in oklch, var(--color-cyber-purple) 20%, transparent)
+    );
+    border: 1px solid color-mix(in oklch, var(--color-cyber-cyan) 50%, transparent);
+    border-radius: clamp(4px, 0.5cqw, 8px);
+    padding-inline: var(--spacing-fluid-md);
+    padding-block: var(--spacing-fluid-sm);
+
+    /* Modern interaction */
+    transition: all var(--duration-fast) var(--ease-smooth);
+
+    /* Touch optimization */
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .cyber-button:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      var(--shadow-neon-md),
+      0 4px 12px color-mix(in oklch, var(--color-cyber-cyan) 25%, transparent);
+  }
+
+  .cyber-button:active {
+    transform: translateY(0);
+    transition-duration: var(--duration-instant);
+  }
+}
+
+@layer utilities {
+  /* Modern utility classes */
+  .text-fluid-xs {
+    font-size: var(--font-size-xs);
+  }
+  .text-fluid-sm {
+    font-size: var(--font-size-sm);
+  }
+  .text-fluid-base {
+    font-size: var(--font-size-base);
+  }
+  .text-fluid-lg {
+    font-size: var(--font-size-lg);
+  }
+  .text-fluid-xl {
+    font-size: var(--font-size-xl);
+  }
+  .text-fluid-2xl {
+    font-size: var(--font-size-2xl);
+  }
+  .text-fluid-3xl {
+    font-size: var(--font-size-3xl);
+  }
+
+  .p-fluid-xs {
+    padding: var(--spacing-fluid-xs);
+  }
+  .p-fluid-sm {
+    padding: var(--spacing-fluid-sm);
+  }
+  .p-fluid-md {
+    padding: var(--spacing-fluid-md);
+  }
+  .p-fluid-lg {
+    padding: var(--spacing-fluid-lg);
+  }
+  .p-fluid-xl {
+    padding: var(--spacing-fluid-xl);
+  }
+
+  /* Logical properties utilities */
+  .p-inline-fluid-sm {
+    padding-inline: var(--spacing-fluid-sm);
+  }
+  .p-inline-fluid-md {
+    padding-inline: var(--spacing-fluid-md);
+  }
+  .p-block-fluid-sm {
+    padding-block: var(--spacing-fluid-sm);
+  }
+  .p-block-fluid-md {
+    padding-block: var(--spacing-fluid-md);
+  }
+
+  /* Performance utilities */
+  .gpu-accelerated {
+    will-change: var(--will-change-transform);
+    transform: var(--gpu-layer);
+  }
+
+  .contain-strict {
+    contain: var(--contain-strict);
+  }
+  .contain-layout {
+    contain: var(--contain-layout);
+  }
+  .contain-style {
+    contain: var(--contain-style);
+  }
+  .contain-paint {
+    contain: var(--contain-paint);
+  }
+}
+
+@layer animations {
+  /* Modern scroll-driven animations */
+  @keyframes scroll-fade {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Enhanced particle animations with modern timing */
+  @keyframes particle-flow {
+    0% {
+      transform: translate3d(0, 0, 0) scale(0.8) rotate(0deg);
+      opacity: 0;
+      filter: brightness(0.8) blur(2px);
+    }
+    50% {
+      transform: translate3d(0, -50px, 0) scale(1.1) rotate(180deg);
+      opacity: 1;
+      filter: brightness(1.3) blur(0px);
+    }
+    100% {
+      transform: translate3d(0, -100px, 0) scale(0.9) rotate(360deg);
+      opacity: 0;
+      filter: brightness(0.6) blur(1px);
+    }
+  }
+
+  /* Responsive animation with container queries */
+  .particle-flowing {
+    animation: particle-flow var(--duration-slow) var(--ease-smooth) infinite;
+  }
+
+  @container (min-width: 768px) {
+    .particle-flowing {
+      animation-duration: var(--duration-normal);
+    }
   }
 }
