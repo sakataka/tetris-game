@@ -7,7 +7,7 @@
   --accent-secondary: #ff00ff;
   --accent-tertiary: #ffff00;
 
-  /* サイバーパンクカラーパレット */
+  /* Cyberpunk color palette */
   --cyber-cyan: #00ffff;
   --cyber-purple: #ff00ff;
   --cyber-yellow: #ffff00;
@@ -32,12 +32,12 @@
   --neon-blur-lg: var(--blur-neon-lg);
   --neon-blur-xl: var(--blur-neon-xl);
 
-  /* パーティクル設定 */
+  /* Particle configuration */
   --particle-gravity: 0.2;
   --particle-max-y: 500;
   --particle-life-max: 60;
 
-  /* ホログラム背景 */
+  /* Hologram background */
   --hologram-bg: linear-gradient(
     45deg,
     var(--cyber-cyan-10) 0%,
@@ -194,7 +194,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ネオングロー効果 */
+/* Neon glow effect */
 @keyframes neonGlow {
   0%,
   100% {
@@ -205,7 +205,7 @@ body {
   }
 }
 
-/* パルス効果 */
+/* Pulse effect */
 @keyframes pulse {
   0%,
   100% {
@@ -216,7 +216,7 @@ body {
   }
 }
 
-/* グリッド背景 */
+/* Grid background */
 .grid-background {
   background-image:
     linear-gradient(var(--cyber-cyan-10) 1px, transparent 1px),
@@ -224,14 +224,14 @@ body {
   background-size: 50px 50px;
 }
 
-/* ホログラム効果 */
+/* Hologram effect */
 .hologram {
   background: var(--hologram-bg);
   backdrop-filter: blur(10px);
   border: var(--hologram-border);
 }
 
-/* ネオンボーダー */
+/* Neon border */
 .neon-border {
   border: 2px solid var(--cyber-cyan);
   box-shadow:
@@ -239,7 +239,7 @@ body {
     inset 0 0 var(--neon-blur-md) var(--cyber-cyan-10);
 }
 
-/* ネオンボーダーのバリエーション */
+/* Neon border variations */
 .neon-border-purple {
   border: 2px solid var(--cyber-purple);
   box-shadow:
@@ -254,7 +254,7 @@ body {
     inset 0 0 var(--neon-blur-md) var(--cyber-yellow-10);
 }
 
-/* ホログラム背景のバリエーション */
+/* Hologram background variations */
 .hologram-cyan {
   background: linear-gradient(45deg, var(--cyber-cyan-10) 0%, transparent 50%, var(--cyber-purple-10) 100%);
   backdrop-filter: blur(10px);
@@ -273,7 +273,7 @@ body {
   border: 1px solid var(--cyber-yellow-20);
 }
 
-/* 浮遊アニメーション */
+/* Floating animation */
 @keyframes float {
   0%,
   100% {
@@ -288,7 +288,7 @@ body {
   animation: float 3s ease-in-out infinite;
 }
 
-/* パーティクルアニメーション */
+/* Particle animation */
 @keyframes particle-sparkle {
   0% {
     filter: brightness(1) saturate(1) hue-rotate(0deg);
@@ -413,7 +413,7 @@ body {
   }
 }
 
-/* テーマ用CSS変数 */
+/* CSS variables for themes */
 .theme-classic {
   --background: #f5f5f5;
   --foreground: #333333;
@@ -479,16 +479,16 @@ body {
   }
 }
 
-/* レガシーパーティクルクラス（後方互換性） */
+/* Legacy particle class (backward compatibility) */
 .particle-enhanced {
   will-change: transform, opacity;
 }
 
 /* =========================================
-   レスポンシブデザインシステム強化
+   Enhanced Responsive Design System
    ========================================= */
 
-/* ゲームエフェクト用グラデーション */
+/* Game effect gradients */
 .game-board-glow {
   background: linear-gradient(90deg, var(--cyber-cyan-10) 0%, var(--cyber-purple-10) 50%, var(--cyber-yellow-10) 100%);
 }
@@ -541,7 +541,7 @@ body {
   padding-block: clamp(1rem, 3vh, 2rem);
 }
 
-/* レスポンシブグリッドシステム */
+/* Responsive grid system */
 .responsive-grid-stats {
   @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4;
 }
@@ -550,7 +550,7 @@ body {
   @apply grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-4 lg:gap-6;
 }
 
-/* タッチターゲット最適化 */
+/* Touch target optimization */
 .touch-target {
   min-width: 44px;
   min-height: 44px;
@@ -560,7 +560,7 @@ body {
   -webkit-user-select: none;
 }
 
-/* レスポンシブエフェクトブラー */
+/* Responsive effect blur */
 .responsive-blur-effect {
   @apply blur-sm md:blur-md lg:blur-lg;
 }
