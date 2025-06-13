@@ -403,17 +403,15 @@ The i18n system uses two complementary stores:
 
 ### Oxlint Integration (Rust-based, 50-100x faster)
 
-- **Primary Linter**: Oxlint 1.0 with 500+ rules
-- **Performance**: 7-8ms execution time vs ESLint's 1.4s
-- **Memory Usage**: 78MB vs ESLint's 416MB (5.3x less)
+- **Linter**: Oxlint 1.0 with 500+ rules (ESLint removed for performance)
+- **Performance**: 7-8ms execution time
+- **Memory Usage**: 78MB (5.3x less than ESLint)
 - **Configuration**: `.oxlintrc.json` with Next.js/React/TypeScript plugins
 
 ```bash
-pnpm lint         # Oxlint only (daily development)
+pnpm lint         # Run Oxlint
 pnpm lint:oxlint  # Oxlint explicit execution
-pnpm lint:eslint  # ESLint only (when needed)
-pnpm lint:full    # Both linters (comprehensive check)
-pnpm lint:fix     # Auto-fix with both linters
+pnpm lint:fix     # Auto-fix with Oxlint
 ```
 
 ### Linting Strategy
@@ -421,8 +419,7 @@ pnpm lint:fix     # Auto-fix with both linters
 - **Development**: Oxlint for instant feedback
 - **Pre-commit**: Oxlint via lint-staged (fast commits)
 - **CI/CD**: Oxlint in pipeline (faster builds)
-- **Comprehensive**: ESLint available when needed
-- **ESLint Enhancement**: SonarJS plugin for code quality (cognitive complexity, duplications)
+- **Code Quality**: Comprehensive rule set covering TypeScript, React, and Next.js best practices
 
 ## Build Configuration
 
@@ -495,7 +492,7 @@ experimental: {
 - Package manager: pnpm (required)
 - React version: 19.1.0 with React Compiler enabled
 - Comments and commits: English only
-- Linting: Oxlint primary, ESLint secondary
+- Linting: Oxlint only (ESLint removed for performance)
 - Build before commit: Always run `pnpm build`
 - Git hooks: Pre-commit checks via Husky
 - Performance: Let React Compiler handle optimization automatically
