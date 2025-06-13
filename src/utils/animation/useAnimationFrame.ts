@@ -86,9 +86,9 @@ export function useAnimationFrame(
         stopAnimation();
       }
     };
-    // Suppress ESLint warning (intentional design)
+    // Complex expression in deps array is intentional for dynamic dependencies
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [...deps]);
+  }, [startAnimation, stopAnimation, ...deps]);
 
   // Cleanup on component unmount
   useEffect(() => {
@@ -155,8 +155,9 @@ export function useTimerAnimation(
   // Reset accumulated time when dependency array changes in useEffect
   useEffect(() => {
     accumulatedTimeRef.current = 0;
+    // Complex expression in deps array is intentional for dynamic dependencies
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, deps);
+  }, [interval, ...deps]);
 
   return useAnimationFrame(
     (deltaTime) => {

@@ -221,8 +221,7 @@ export function useTheme({
   // Check if theme is dark mode
   const isDarkMode = useCallback(() => {
     return ['cyberpunk', 'neon'].includes(themeState.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [themeState.current]);
+  }, [themeState]);
 
   // Get effective contrast ratio
   const getEffectiveContrast = useCallback(() => {

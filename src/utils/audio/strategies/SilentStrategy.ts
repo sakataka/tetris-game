@@ -35,7 +35,6 @@ export class SilentStrategy extends AudioStrategy {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   stopSound(_soundKey: SoundKey): void {
     // No-op: nothing to stop in silent mode
     if (this.activeSounds > 0) {

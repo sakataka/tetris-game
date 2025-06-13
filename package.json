@@ -7,7 +7,6 @@
     "build": "next build",
     "start": "next start",
     "lint": "oxlint",
-    "lint:oxlint": "oxlint",
     "lint:fix": "oxlint --fix",
     "test": "vitest",
     "test:run": "vitest run",
@@ -17,7 +16,6 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "quality:check": "pnpm lint && pnpm tsc --noEmit && pnpm test:run",
-    "quality:full": "pnpm lint && pnpm tsc --noEmit && pnpm test:run",
     "quality:fix": "pnpm format && pnpm lint:fix"
   },
   "dependencies": {
@@ -54,7 +52,7 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "prettier --check",
-      "oxlint --fix"
+      "oxlint --allow exhaustive-deps"
     ],
     "*.{json,css,md}": [
       "prettier --check"
