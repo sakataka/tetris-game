@@ -20,7 +20,7 @@ const VirtualControls = memo(function VirtualControls({
   unlockAudio,
 }: VirtualControlsProps) {
   const { t } = useTranslation();
-  
+
   // Event handlers (React Compiler will optimize these)
   const handleTouchStart = (action: () => void) => (e: React.TouchEvent) => {
     e.preventDefault();

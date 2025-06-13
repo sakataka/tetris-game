@@ -18,7 +18,7 @@ function getHydrationPromise() {
     // SSR: immediately resolved
     return Promise.resolve(false);
   }
-  
+
   if (!hydrationPromise) {
     // Client: create promise that resolves after hydration
     hydrationPromise = new Promise<boolean>((resolve) => {
@@ -26,7 +26,7 @@ function getHydrationPromise() {
       queueMicrotask(() => resolve(true));
     });
   }
-  
+
   return hydrationPromise;
 }
 

@@ -118,11 +118,7 @@ const ParticleEffect = memo(function ParticleEffect({
       const fpsInfo = globalFpsController.getFpsInfo();
 
       // Switch to canvas for better performance
-      if (
-        fpsInfo.performanceLevel === 'poor' &&
-        currentRenderer === 'dom' &&
-        particleCount > 15
-      ) {
+      if (fpsInfo.performanceLevel === 'poor' && currentRenderer === 'dom' && particleCount > 15) {
         setCurrentRenderer('canvas');
       }
       // Switch back to DOM when performance is good and particle count is low
@@ -183,11 +179,10 @@ const ParticleEffect = memo(function ParticleEffect({
   const selectedRenderer = forceRenderer !== 'auto' ? forceRenderer : currentRenderer;
 
   // Particle list for DOM renderer (React Compiler will optimize)
-  const particleElements = selectedRenderer === 'canvas' 
-    ? null 
-    : lineEffect.particles.map((particle) => (
-        <Particle key={particle.id} particle={particle} />
-      ));
+  const particleElements =
+    selectedRenderer === 'canvas'
+      ? null
+      : lineEffect.particles.map((particle) => <Particle key={particle.id} particle={particle} />);
 
   // Development-only performance optimization logging with enhanced metrics
   useEffect(() => {
