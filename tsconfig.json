@@ -1,13 +1,27 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "ES2024",
+    "lib": [
+      "ES2024",
+      "ES2024.ArrayBuffer",
+      "ES2024.Collection",
+      "ES2024.Object",
+      "ES2024.Promise",
+      "ES2024.String",
+      "ES2024.RegExp",
+      "ES2024.SharedMemory",
+      "DOM",
+      "DOM.Iterable",
+      "WebWorker",
+      "WebWorker.ImportScripts"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "module": "esnext",
+    "allowSyntheticDefaultImports": true,
+    "module": "ESNext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -29,6 +43,17 @@
     "strictPropertyInitialization": true,
     "noPropertyAccessFromIndexSignature": true, // Enhanced: Explicit property access
     "noImplicitOverride": true, // Enhanced: Explicit override keyword
+
+    // ES2024 and modern JavaScript features
+    "useDefineForClassFields": true, // ES2022+ class field behavior
+    "allowImportingTsExtensions": false, // Keep false for Next.js compatibility
+    "allowArbitraryExtensions": false,
+    "verbatimModuleSyntax": false, // Allow optimized imports
+
+    // Performance optimizations
+    "assumeChangesOnlyAffectDirectDependencies": true, // Faster incremental builds
+    "disableSourceOfProjectReferenceRedirect": false,
+    "disableSolutionSearching": false,
     "plugins": [
       {
         "name": "next"

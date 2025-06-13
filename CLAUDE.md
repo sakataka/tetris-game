@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Production-ready cyberpunk-themed Tetris game built with Next.js 15, TypeScript, and Tailwind CSS. Features comprehensive state management, audio system with fallback strategies, and particle effects.
 
-**Tech Stack**: Next.js 15.3.3 + React 19.1.0 + TypeScript 5 + Zustand 5 + Tailwind CSS 4.1.10 (with React Compiler & modern CSS features)
+**Tech Stack**: Next.js 15.3.3 + React 19.1.0 + TypeScript 5 (ES2024) + Zustand 5 + Tailwind CSS 4.1.10 (with React Compiler & modern CSS features)
 
 ## Environment Setup
 
@@ -527,14 +527,28 @@ experimental: {
 
 ### TypeScript Configuration
 
+- **ES2024 Target**: Modern JavaScript features and APIs
 - **Strict Mode**: Enhanced with additional strict checks
 - **Compiler Options**:
+  - `target`: "ES2024" - Latest JavaScript features
+  - `lib`: ES2024 comprehensive library support (ArrayBuffer, Collection, Object, Promise, String, RegExp, SharedMemory)
   - `noUnusedLocals`: true
   - `noUnusedParameters`: true
   - `exactOptionalPropertyTypes`: true
   - `noUncheckedIndexedAccess`: true
   - `noPropertyAccessFromIndexSignature`: true
   - `noImplicitOverride`: true
+  - `useDefineForClassFields`: true - ES2022+ class field behavior
+  - `assumeChangesOnlyAffectDirectDependencies`: true - Faster incremental builds
+
+**ES2024 Features Available:**
+
+- Modern Array and Object methods
+- Advanced Promise handling
+- Enhanced String manipulation APIs
+- Improved Regular Expression features
+- SharedArrayBuffer and advanced ArrayBuffer operations
+- Latest Collection (Set/Map) enhancements
 
 ## Important Notes
 
