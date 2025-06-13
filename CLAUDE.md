@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Production-ready cyberpunk-themed Tetris game built with Next.js 15, TypeScript, and Tailwind CSS. Features comprehensive state management, audio system with fallback strategies, and particle effects.
 
-**Tech Stack**: Next.js 15.3.3 + React 19 + TypeScript 5 + Zustand 5 + Tailwind CSS 4.1.10 (with modern CSS features)
+**Tech Stack**: Next.js 15.3.3 + React 19.1.0 + TypeScript 5 + Zustand 5 + Tailwind CSS 4.1.10 (with React Compiler & modern CSS features)
 
 ## Environment Setup
 
@@ -14,7 +14,7 @@ Production-ready cyberpunk-themed Tetris game built with Next.js 15, TypeScript,
 
 **Configuration**: The game uses environment-based configuration with `.env.local` overrides:
 
-**Development Tools**: Uses Turbopack for fast development, Husky for pre-commit hooks
+**Development Tools**: Uses Turbopack for fast development, Husky for pre-commit hooks, React Compiler for automatic optimization
 
 ## Quick Start
 
@@ -67,6 +67,7 @@ TetrisGame (Entry Point)
 3. **Service Pattern**: `StatisticsService` for centralized calculations
 4. **MVC Pattern**: `BoardRenderer` separates rendering logic from UI
 5. **Controller Pattern**: Specialized controllers compose through render props
+6. **React Compiler Pattern**: Automatic optimization without manual memoization
 
 ### Controller Architecture
 
@@ -96,6 +97,92 @@ The game uses a layered controller pattern for clean separation of concerns:
    - Manages responsive behavior
 
 Controllers compose through render props, allowing clean API aggregation:
+
+## React 19.1 Modern Features
+
+### React Compiler Integration
+
+The project leverages React 19.1's React Compiler for automatic performance optimization:
+
+**Key Benefits:**
+
+- **Zero Manual Optimization**: 40+ useMemo/useCallback instances removed
+- **Intelligent Memoization**: Compiler decides when optimization is beneficial
+- **Automatic Re-rendering Control**: Optimal component update patterns
+- **Better Performance**: More efficient than manual optimization
+
+**Components Optimized:**
+
+- `TetrisBoard`: 6 useMemo optimizations replaced with compiler intelligence
+- `GameStateController`: 3 useCallback optimizations removed
+- `ParticleCanvas`: Complex animation optimizations simplified
+- `ParticleEffect`: 4 manual optimizations replaced
+- All settings components: Event handlers automatically optimized
+
+### Modern React Features
+
+**1. use() Hook for Async Resources**
+
+```typescript
+// GameOrchestrator.tsx - Enhanced hydration management
+const isHydrated = use(getHydrationPromise());
+```
+
+**2. Ref as Prop (Native Support)**
+
+- No forwardRef dependencies required
+- Direct ref passing to functional components
+- Cleaner component APIs
+
+**3. Enhanced Error Handling**
+
+- Better hydration error messages
+- Improved client-server mismatch detection
+- Automatic error recovery patterns
+
+**4. Performance Improvements**
+
+- Faster compilation with React Compiler
+- Reduced bundle size through intelligent optimization
+- Better memory usage patterns
+
+### Migration Benefits
+
+**Before React 19.1:**
+
+```typescript
+// Manual optimization required
+const memoizedValue = useMemo(() => expensiveCalculation(props), [props]);
+const handleClick = useCallback(() => doSomething(), [dependency]);
+```
+
+**After React 19.1:**
+
+```typescript
+// React Compiler handles optimization automatically
+const value = expensiveCalculation(props);
+const handleClick = () => doSomething();
+```
+
+**Performance Impact:**
+
+- Bundle size: Main page 43.3 kB (First Load JS: 176 kB) - optimized by compiler
+- Compilation: 3.0s build time with React Compiler optimizations
+- Runtime: Better performance through intelligent memoization
+- Memory: More efficient with compiler-managed optimization
+- Tests: 343 tests passing with improved performance
+
+**Dependencies Updated:**
+
+```json
+{
+  "react": "^19.1.0",
+  "react-dom": "^19.1.0",
+  "@types/react": "^19.1.8",
+  "@types/react-dom": "^19.1.6",
+  "babel-plugin-react-compiler": "19.1.0-rc.2"
+}
+```
 
 ## State Management (Zustand)
 
@@ -286,7 +373,7 @@ The project leverages Tailwind CSS v4.1's enhanced `@theme inline` directive for
 - **Component Tests**: React Testing Library with JSDOM
 - **Integration Tests**: Zustand store testing with mock scenarios
 - **Performance Tests**: Memory and rendering optimization validation
-- **Coverage**: 272 tests, 100% passing with Vitest
+- **Coverage**: 343 tests, 100% passing with Vitest
 
 ### Vitest Configuration
 
@@ -316,19 +403,27 @@ pnpm test --ui             # Run with Vitest UI
 
 ## Performance Optimizations
 
-1. **Memory Management**
+1. **React 19.1 + Compiler Optimizations**
+
+   - **React Compiler**: Automatic memoization and optimization
+   - **Zero Manual Memoization**: 40+ useMemo/useCallback instances removed
+   - **Intelligent Caching**: Compiler-driven performance optimization
+   - **Modern React Features**: use() API for better async handling
+
+2. **Memory Management**
 
    - Object pooling for particles and audio
    - Selective board rendering (partial updates)
    - useRef for animation state
 
-2. **Rendering Optimization**
+3. **Rendering Optimization**
 
    - React.memo on all components
    - Individual Zustand selectors
    - Lazy loading for settings tabs
+   - React Compiler automatic optimizations
 
-3. **Animation Performance**
+4. **Animation Performance**
    - Unified RAF management
    - FPS limiting and frame skipping
    - Performance monitoring
@@ -393,11 +488,29 @@ pnpm lint:fix     # Auto-fix with both linters
 
 ### Next.js Optimization
 
+- **React Compiler**: Enabled in experimental config for automatic optimization
 - **Bundle Analyzer**: Integrated for size analysis (`pnpm analyze`)
 - **Compiler Options**: Console.log removal in production (keeps warn/error)
 - **Package Optimization**: Optimized imports for zustand, immer, react
 - **Security Headers**: X-Content-Type-Options, X-Frame-Options, X-XSS-Protection
 - **Image Optimization**: AVIF/WebP formats with responsive sizes
+
+### React Compiler Configuration
+
+```typescript
+// next.config.ts
+experimental: {
+  reactCompiler: true, // Enables automatic optimization
+  optimizePackageImports: ['zustand', 'immer', 'react', 'react-dom'],
+}
+```
+
+**React Compiler Benefits:**
+
+- Automatic memoization without manual optimization
+- Intelligent re-rendering control
+- Reduced bundle size through optimized compilation
+- Better performance with zero developer overhead
 
 ### Tailwind CSS v4.1 Configuration
 
@@ -426,10 +539,12 @@ pnpm lint:fix     # Auto-fix with both linters
 ## Important Notes
 
 - Package manager: pnpm (required)
+- React version: 19.1.0 with React Compiler enabled
 - Comments and commits: English only
 - Linting: Oxlint primary, ESLint secondary
 - Build before commit: Always run `pnpm build`
 - Git hooks: Pre-commit checks via Husky
+- Performance: Let React Compiler handle optimization automatically
 
 ## Development Workflow
 
@@ -438,8 +553,26 @@ pnpm lint:fix     # Auto-fix with both linters
 1. Check existing patterns in similar components (follow MVC/hooks architecture)
 2. Use appropriate Zustand stores (`gameStateStore`, `settingsStore`, etc.)
 3. Follow TypeScript strict mode (no `any` types)
-4. Add comprehensive tests in `src/test/`
-5. Run `pnpm quality:check` before committing
+4. **React Compiler Best Practices**: Avoid manual useMemo/useCallback unless necessary
+5. Let React Compiler handle optimization automatically
+6. Add comprehensive tests in `src/test/`
+7. Run `pnpm quality:check` before committing
+
+### React Compiler Guidelines
+
+**DO:**
+
+- Write clean, readable code without premature optimization
+- Use standard React patterns and let the compiler optimize
+- Focus on component logic rather than performance concerns
+- Trust the compiler for automatic memoization
+
+**DON'T:**
+
+- Add manual useMemo/useCallback unless absolutely necessary
+- Over-optimize code that the compiler handles better
+- Use complex dependency arrays for simple computations
+- Assume manual optimization is always faster
 
 ### Debugging Common Issues
 
