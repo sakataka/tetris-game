@@ -351,7 +351,7 @@ describe('useAudio - Unified Audio Management', () => {
       await new Promise((resolve) => setTimeout(resolve, 50));
     });
 
-    const initialStrategy = result.current.strategy;
+    const _initialStrategy = result.current.strategy;
 
     await act(async () => {
       result.current.switchStrategy('htmlaudio');

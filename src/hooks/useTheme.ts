@@ -16,7 +16,7 @@ interface UseThemeProps {
 
 /**
  * Unified theme management hook
- * 
+ *
  * Consolidates all theme-related functionality:
  * - Theme state management and persistence
  * - CSS application to DOM
@@ -31,7 +31,7 @@ export function useTheme({
   setAccessibilityOptions,
 }: UseThemeProps) {
   // ===== Storage Operations =====
-  
+
   const saveThemeState = useCallback((themeStateToSave: ThemeState): void => {
     if (typeof window === 'undefined') return;
 
@@ -76,31 +76,31 @@ export function useTheme({
   }, []);
 
   // ===== Accessibility Processing =====
-  
+
   // Process theme config with accessibility filters
   const { processedConfig } = useAccessibilityFilters(themeState.config, themeState.accessibility);
 
   // ===== Theme Application =====
-  
+
   // Apply theme configuration to DOM
   useEffect(() => {
     initializeTheme(processedConfig);
   }, [processedConfig]);
 
   // ===== System Preferences Monitoring =====
-  
+
   // Monitor system preferences and update accessibility settings
   useSystemPreferences(themeState.accessibility, setAccessibilityOptions);
 
   // ===== Auto-save Theme State =====
-  
+
   // Auto-save theme state when it changes
   useEffect(() => {
     saveThemeState(themeState);
   }, [themeState, saveThemeState]);
 
   // ===== Theme Management Functions =====
-  
+
   // Change theme variant
   const changeTheme = useCallback(
     (newTheme: ThemeVariant) => {
@@ -139,7 +139,7 @@ export function useTheme({
         ...currentColors,
         ...customColors,
       };
-      
+
       // Filter out undefined values to maintain type safety
       const filteredColors: Record<string, string> = {};
       Object.entries(mergedColors).forEach(([key, value]) => {
@@ -147,7 +147,7 @@ export function useTheme({
           filteredColors[key] = value;
         }
       });
-      
+
       // Type-safe update using conditional assignment
       if (Object.keys(filteredColors).length > 0) {
         updateThemeState({
@@ -173,7 +173,7 @@ export function useTheme({
   }, [setTheme, updateThemeState]);
 
   // ===== Storage Management Functions =====
-  
+
   // Load theme from storage
   const loadThemeFromStorage = useCallback(() => {
     const savedState = loadThemeState();
@@ -212,7 +212,7 @@ export function useTheme({
   );
 
   // ===== Theme Utilities =====
-  
+
   // Get current theme colors
   const getCurrentThemeColors = useCallback(() => {
     return processedConfig.colors;
@@ -221,6 +221,7 @@ export function useTheme({
   // Check if theme is dark mode
   const isDarkMode = useCallback(() => {
     return ['cyberpunk', 'neon'].includes(themeState.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [themeState.current]);
 
   // Get effective contrast ratio
@@ -236,7 +237,7 @@ export function useTheme({
   }, [themeState.animations, themeState.accessibility.reducedMotion]);
 
   // ===== Return API =====
-  
+
   return {
     // Current theme state
     currentTheme: themeState.current,
@@ -246,7 +247,7 @@ export function useTheme({
     effectIntensity: themeState.effectIntensity,
     animations: themeState.animations,
     customColors: themeState.customColors,
-    
+
     // Theme management
     changeTheme,
     updateAccessibility,
@@ -254,7 +255,7 @@ export function useTheme({
     toggleAnimations,
     updateCustomColors,
     resetTheme,
-    
+
     // Storage operations
     saveThemeState,
     loadThemeState,
@@ -262,13 +263,13 @@ export function useTheme({
     loadThemeFromStorage,
     exportThemeConfig,
     importThemeConfig,
-    
+
     // Theme utilities
     getCurrentThemeColors,
     isDarkMode,
     getEffectiveContrast,
     areAnimationsEnabled,
-    
+
     // Backward compatibility
     applyTheme: (config: ThemeConfig) => initializeTheme(config),
   };
