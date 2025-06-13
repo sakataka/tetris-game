@@ -2,18 +2,11 @@
 
 import { useEffect, useRef, memo, useState } from 'react';
 import { LineEffectState } from '../types/tetris';
-import { PARTICLE_GRAVITY, PARTICLE_MAX_Y } from '../constants';
-import {
-  particlePool,
-  CanvasRenderer,
-  FpsController,
-  performanceMonitor,
-} from '../utils/performance';
+import { CanvasRenderer, performanceMonitor } from '../utils/performance';
 import { log } from '../utils/logging';
 
 interface ParticleCanvasProps {
   lineEffect: LineEffectState;
-  onParticleUpdate: (particles: LineEffectState['particles']) => void;
   width?: number;
   height?: number;
   enablePerformanceMode?: boolean;
@@ -22,7 +15,6 @@ interface ParticleCanvasProps {
 
 const ParticleCanvas = memo(function ParticleCanvas({
   lineEffect,
-  onParticleUpdate,
   width = 400,
   height = 600,
   enablePerformanceMode = true,
@@ -30,9 +22,7 @@ const ParticleCanvas = memo(function ParticleCanvas({
 }: ParticleCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rendererRef = useRef<CanvasRenderer | null>(null);
-  const fpsControllerRef = useRef<FpsController | null>(null);
-  const animationRef = useRef<number | undefined>(undefined);
-  const [renderStats, setRenderStats] = useState({ fps: 0, particleCount: 0 });
+  const [renderStats, setRenderStats] = useState({ particleCount: 0 });
 
   // Canvas and renderer initialization
   useEffect(() => {
@@ -58,136 +48,32 @@ const ParticleCanvas = memo(function ParticleCanvas({
       clearStrategy: enablePerformanceMode ? 'selective' : 'full',
     });
 
-    // Initialize FPS controller
-    fpsControllerRef.current = new FpsController({
-      targetFps: enablePerformanceMode ? 45 : 60,
-      minFps: 30,
-      adaptiveMode: true,
-    });
-
     return () => {
       rendererRef.current?.dispose();
     };
   }, [width, height, enablePerformanceMode, maxParticles]);
 
-  // Particle physics update (React Compiler will optimize this)
-  const updateParticlePhysics = (particles: LineEffectState['particles']) => {
-    const updatedParticles: LineEffectState['particles'] = [];
-    const expiredParticles: LineEffectState['particles'] = [];
-
-    for (let i = 0; i < particles.length; i++) {
-      const particle = particles[i];
-      if (!particle) continue;
-
-      // Update particle physics
-      const updatedParticle = {
-        ...particle,
-        x: particle.x + particle.vx,
-        y: particle.y + particle.vy,
-        vy: particle.vy + PARTICLE_GRAVITY,
-        life: particle.life - 1,
-      };
-
-      if (updatedParticle.life > 0 && updatedParticle.y < PARTICLE_MAX_Y) {
-        updatedParticles.push(updatedParticle);
-      } else {
-        expiredParticles.push(particle);
-      }
-    }
-
-    // Return expired particles to pool
-    if (expiredParticles.length > 0) {
-      particlePool.releaseParticles(expiredParticles);
-    }
-
-    return updatedParticles;
-  };
-
-  // Animation loop with FPS control (React Compiler will optimize this)
-  const animate = () => {
-    const renderer = rendererRef.current;
-    const fpsController = fpsControllerRef.current;
-
-    if (!renderer || !fpsController) return;
-
-    const frameCallback = (frameInfo: {
-      shouldRender: boolean;
-      actualFps: number;
-      timestamp: number;
-    }) => {
-      if (!frameInfo.shouldRender) {
-        // Skip this frame but continue animation
-        if (lineEffect.particles.length > 0) {
-          animationRef.current = requestAnimationFrame(
-            fpsController.createFrameLimiter(frameCallback)
-          );
-        }
-        return;
-      }
-
-      // Start performance monitoring
-      if (enablePerformanceMode) {
-        performanceMonitor.startFrame();
-      }
-
-      // Update particle physics
-      const updatedParticles = updateParticlePhysics(lineEffect.particles);
-
-      // Clear and render
-      renderer.clearCanvas(width, height);
-      renderer.renderParticles(updatedParticles);
-
-      // Update parent component
-      onParticleUpdate(updatedParticles);
-
-      // End performance monitoring
-      if (enablePerformanceMode) {
-        performanceMonitor.endFrame(updatedParticles.length);
-        setRenderStats({ fps: frameInfo.actualFps, particleCount: updatedParticles.length });
-      }
-
-      // Continue animation if particles remain
-      if (updatedParticles.length > 0) {
-        animationRef.current = requestAnimationFrame(
-          fpsController.createFrameLimiter(frameCallback)
-        );
-      } else {
-        animationRef.current = undefined;
-      }
-    };
-
-    animationRef.current = requestAnimationFrame(fpsController.createFrameLimiter(frameCallback));
-  };
-
+  // Render particles when they change (no physics update - just rendering)
   useEffect(() => {
-    if (lineEffect.particles.length === 0) {
-      // Stop animation when no particles
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-        animationRef.current = undefined;
-      }
+    const renderer = rendererRef.current;
+    if (!renderer) return;
 
-      // Clear canvas
-      const renderer = rendererRef.current;
-      if (renderer) {
-        renderer.clearCanvas(width, height);
-      }
-      return;
+    // Start performance monitoring
+    if (enablePerformanceMode) {
+      performanceMonitor.startFrame();
     }
 
-    // Start animation if not already running
-    if (!animationRef.current) {
-      animate();
+    // Clear and render current particles
+    renderer.clearCanvas(width, height);
+    renderer.renderParticles(lineEffect.particles);
+
+    // End performance monitoring and update stats
+    if (enablePerformanceMode) {
+      performanceMonitor.endFrame(lineEffect.particles.length);
     }
 
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-        animationRef.current = undefined;
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- React Compiler handles animate optimization
-  }, [lineEffect.particles.length, width, height]);
+    setRenderStats({ particleCount: lineEffect.particles.length });
+  }, [lineEffect.particles, width, height, enablePerformanceMode]);
 
   // Performance monitoring display (development only)
   const shouldShowStats = process.env.NODE_ENV === 'development' && enablePerformanceMode;
@@ -195,8 +81,8 @@ const ParticleCanvas = memo(function ParticleCanvas({
   useEffect(() => {
     if (shouldShowStats && renderStats.particleCount > 0) {
       log.performance(
-        `Canvas Renderer - FPS: ${renderStats.fps}, Particles: ${renderStats.particleCount}`,
-        renderStats.fps,
+        `Canvas Renderer - Particles: ${renderStats.particleCount}`,
+        renderStats.particleCount,
         {
           component: 'ParticleCanvas',
           metadata: {
@@ -217,7 +103,7 @@ const ParticleCanvas = memo(function ParticleCanvas({
       />
       {shouldShowStats && (
         <div className='absolute top-2 right-2 text-xs text-green-400 bg-black/50 p-1 rounded font-mono'>
-          FPS: {renderStats.fps} | Particles: {renderStats.particleCount}
+          Particles: {renderStats.particleCount}
         </div>
       )}
     </>

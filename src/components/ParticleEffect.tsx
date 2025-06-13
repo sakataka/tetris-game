@@ -220,7 +220,6 @@ const ParticleEffect = memo(function ParticleEffect({
       {selectedRenderer === 'canvas' ? (
         <ParticleCanvas
           lineEffect={lineEffect}
-          onParticleUpdate={onParticleUpdate}
           width={400}
           height={600}
           enablePerformanceMode={performanceMode}
