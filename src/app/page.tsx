@@ -7,16 +7,13 @@ export default function Home() {
     <div className='min-h-screen grid-background flex items-center justify-center relative overflow-hidden'>
       {/* Main content */}
       <div className='text-center relative z-10 px-4'>
-        <div className='mb-8 md:mb-12'>
+        <div className='mb-4 md:mb-6'>
           <h1 className='text-4xl md:text-6xl font-bold text-white mb-2 relative'>
             <span className='bg-gradient-to-r from-cyan-400 via-purple-400 to-yellow-400 bg-clip-text text-transparent'>
               TETRIS
             </span>
             <div className='absolute -inset-1 bg-gradient-to-r from-cyan-400 via-purple-400 to-yellow-400 rounded-lg blur opacity-25'></div>
           </h1>
-          <div className='text-cyan-400 text-base md:text-lg font-mono tracking-wider'>
-            CYBER EDITION
-          </div>
         </div>
 
         <div className='float-animation'>
