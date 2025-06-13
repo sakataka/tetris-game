@@ -1,6 +1,12 @@
 import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import type { SoundKey } from '../types/tetris';
-import { playWithFallback, preloadAudioSmart, getAudioPreloadProgress, audioManager, getFallbackStatus } from '../utils/audio';
+import {
+  playWithFallback,
+  preloadAudioSmart,
+  getAudioPreloadProgress,
+  audioManager,
+  getFallbackStatus,
+} from '../utils/audio';
 import { log } from '../utils/logging/logger';
 
 export type AudioStrategyType = 'webaudio' | 'htmlaudio' | 'silent';
@@ -51,7 +57,7 @@ interface PlayOptions {
 
 /**
  * Unified audio management hook
- * 
+ *
  * Combines all audio functionality into a single, comprehensive hook:
  * - Strategy selection and switching (Web Audio → HTML Audio → Silent)
  * - Volume and mute state management
@@ -230,7 +236,10 @@ export function useAudio({
   );
 
   const initializeStrategy = useCallback(
-    async (strategy: AudioStrategyType = useWebAudio ? 'webaudio' : 'htmlaudio', forceRetry: boolean = false) => {
+    async (
+      strategy: AudioStrategyType = useWebAudio ? 'webaudio' : 'htmlaudio',
+      forceRetry: boolean = false
+    ) => {
       // Early return if initialization should be skipped
       if (shouldSkipInitialization(forceRetry)) {
         return;
@@ -278,7 +287,13 @@ export function useAudio({
         });
       }
     },
-    [useWebAudio, detectWebAudioSupport, shouldSkipInitialization, selectFinalStrategy, strategyState.initializationError]
+    [
+      useWebAudio,
+      detectWebAudioSupport,
+      shouldSkipInitialization,
+      selectFinalStrategy,
+      strategyState.initializationError,
+    ]
   );
 
   // Switch to a different strategy
@@ -562,7 +577,9 @@ export function useAudio({
   const playWebAudio = useCallback(
     async (soundKey: SoundKey, options: PlayOptions = {}) => {
       try {
-        log.audio(`Playing sound via Web Audio: ${soundKey}, volume: ${options.volume ?? volumeState.volume}`);
+        log.audio(
+          `Playing sound via Web Audio: ${soundKey}, volume: ${options.volume ?? volumeState.volume}`
+        );
         await playWithFallback(soundKey, {
           volume: options.volume ?? volumeState.volume,
         });
@@ -604,7 +621,9 @@ export function useAudio({
         audio.loop = options.loop ?? false;
         audio.playbackRate = options.playbackRate ?? 1.0;
 
-        log.audio(`Playing HTML Audio: ${soundKey}, volume: ${finalVolume}, muted: ${volumeState.isMuted}`);
+        log.audio(
+          `Playing HTML Audio: ${soundKey}, volume: ${finalVolume}, muted: ${volumeState.isMuted}`
+        );
         await audio.play();
         log.audio(`HTML Audio playback successful: ${soundKey}`);
       } catch (error) {
@@ -622,7 +641,9 @@ export function useAudio({
   // Main play function with throttling and strategy handling
   const playSound = useCallback(
     async (soundKey: SoundKey, options: PlayOptions = {}) => {
-      log.audio(`playSound called: ${soundKey}, strategy: ${strategyState.currentStrategy}, muted: ${volumeState.isMuted}`);
+      log.audio(
+        `playSound called: ${soundKey}, strategy: ${strategyState.currentStrategy}, muted: ${volumeState.isMuted}`
+      );
 
       // Early return for silent mode or muted state
       if (strategyState.currentStrategy === 'silent') {
@@ -763,7 +784,13 @@ export function useAudio({
       resetPreload();
       preloadAudio();
     }
-  }, [strategyState.currentStrategy, strategyState.isInitialized, autoPreload, resetPreload, preloadAudio]);
+  }, [
+    strategyState.currentStrategy,
+    strategyState.isInitialized,
+    autoPreload,
+    resetPreload,
+    preloadAudio,
+  ]);
 
   // Update progress when load state changes
   useEffect(() => {
@@ -779,7 +806,13 @@ export function useAudio({
       syncVolumeToSystem(volumeState.volume);
       syncMuteToSystem(false);
     }
-  }, [strategyState.currentStrategy, volumeState.volume, volumeState.isMuted, syncVolumeToSystem, syncMuteToSystem]);
+  }, [
+    strategyState.currentStrategy,
+    volumeState.volume,
+    volumeState.isMuted,
+    syncVolumeToSystem,
+    syncMuteToSystem,
+  ]);
 
   // ===== Legacy Compatibility Functions =====
   const unlockAudio = useCallback(async () => {
@@ -827,7 +860,8 @@ export function useAudio({
     isPreloadComplete: progress.isComplete,
     isPreloading: progress.isLoading,
     hasPreloadErrors: progress.failedSounds > 0,
-    preloadSuccessRate: progress.totalSounds > 0 ? (progress.loadedSounds / progress.totalSounds) * 100 : 0,
+    preloadSuccessRate:
+      progress.totalSounds > 0 ? (progress.loadedSounds / progress.totalSounds) * 100 : 0,
     preloadAudio,
     resetPreload,
 
@@ -840,7 +874,7 @@ export function useAudio({
     canPlayAudio: strategyState.currentStrategy !== 'silent' && !volumeState.isMuted,
     getPlayStats,
     isAudible: !volumeState.isMuted && volumeState.volume > 0,
-    getEffectiveVolume: () => volumeState.isMuted ? 0 : volumeState.volume,
+    getEffectiveVolume: () => (volumeState.isMuted ? 0 : volumeState.volume),
     getVolumePercentage: () => Math.round(volumeState.volume * 100),
 
     // Progress information
@@ -869,7 +903,8 @@ export function useAudio({
     // Debug and recovery features
     hasInitializationError: strategyState.initializationError !== null,
     initializationError: strategyState.initializationError,
-    canRetryInitialization: !strategyState.isInitialized || strategyState.initializationError !== null,
+    canRetryInitialization:
+      !strategyState.isInitialized || strategyState.initializationError !== null,
     retryAudioInitialization: retryInitialization,
 
     // System status

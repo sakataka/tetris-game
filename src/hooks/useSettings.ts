@@ -51,7 +51,7 @@ const STORAGE_KEY = 'tetris-game-settings';
 
 /**
  * Unified settings management hook
- * 
+ *
  * Consolidates all settings-related functionality:
  * - State management with React state
  * - localStorage persistence with error handling
@@ -62,7 +62,7 @@ const STORAGE_KEY = 'tetris-game-settings';
  */
 export function useSettings() {
   // ===== Storage Operations =====
-  
+
   const saveSettings = useCallback((settings: GameSettings): void => {
     if (typeof window === 'undefined') return;
 
@@ -116,7 +116,7 @@ export function useSettings() {
   }, []);
 
   // ===== State Management =====
-  
+
   // Initialize settings from storage or defaults
   const initialSettings = loadSettings() || DEFAULT_SETTINGS;
   const [settings, setSettings] = useState<GameSettings>(initialSettings);
@@ -139,7 +139,7 @@ export function useSettings() {
   }, [saveSettings]);
 
   // ===== Cross-tab Synchronization =====
-  
+
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
@@ -170,7 +170,7 @@ export function useSettings() {
   }, []);
 
   // ===== Key Bindings Management =====
-  
+
   const updateKeyBinding = useCallback(
     (action: keyof KeyBindings, newKeys: string[]) => {
       updateSettings({
@@ -202,8 +202,9 @@ export function useSettings() {
   const removeKeyBinding = useCallback(
     (action: keyof KeyBindings, keyToRemove: string) => {
       const currentKeys = settings.keyBindings[action];
-      const filteredKeys = currentKeys.filter(key => key !== keyToRemove);
-      if (filteredKeys.length > 0) { // Ensure at least one key remains
+      const filteredKeys = currentKeys.filter((key) => key !== keyToRemove);
+      if (filteredKeys.length > 0) {
+        // Ensure at least one key remains
         updateKeyBinding(action, filteredKeys);
       }
     },
@@ -211,7 +212,7 @@ export function useSettings() {
   );
 
   // ===== Audio Controls =====
-  
+
   const setVolume = useCallback(
     (volume: number) => {
       const clampedVolume = Math.max(0, Math.min(1, volume));
@@ -236,7 +237,7 @@ export function useSettings() {
   }, [settings.isMuted, updateSettings]);
 
   // ===== Theme Management =====
-  
+
   const setTheme = useCallback(
     (theme: GameSettings['theme']) => {
       updateSettings({ theme });
@@ -245,7 +246,7 @@ export function useSettings() {
   );
 
   // ===== Visual Settings =====
-  
+
   const toggleGhost = useCallback(() => {
     updateSettings({ showGhost: !settings.showGhost });
   }, [settings.showGhost, updateSettings]);
@@ -255,10 +256,10 @@ export function useSettings() {
   }, [settings.showParticles, updateSettings]);
 
   // ===== Utility Functions =====
-  
+
   const isKeyBound = useCallback(
     (key: string): boolean => {
-      return Object.values(settings.keyBindings).some(keys => keys.includes(key));
+      return Object.values(settings.keyBindings).some((keys) => keys.includes(key));
     },
     [settings.keyBindings]
   );
@@ -313,15 +314,15 @@ export function useSettings() {
   );
 
   // ===== Return API =====
-  
+
   return {
     // Current settings
     settings,
-    
+
     // General settings management
     updateSettings,
     resetSettings: resetToDefaults,
-    
+
     // Key bindings
     updateKeyBinding,
     resetKeyBindings,
@@ -329,31 +330,31 @@ export function useSettings() {
     removeKeyBinding,
     isKeyBound,
     getActionForKey,
-    
+
     // Audio controls
     setVolume,
     toggleAudio,
     setMuted,
     toggleMute,
     getEffectiveVolume,
-    
+
     // Theme management
     setTheme,
-    
+
     // Visual settings
     toggleGhost,
     toggleParticles,
-    
+
     // Storage operations
     saveSettings,
     loadSettings,
     clearSettings,
     exportSettings,
     importSettings,
-    
+
     // Constants
     DEFAULT_SETTINGS,
-    
+
     // Backward compatibility (legacy API)
     resetToDefaults,
   };
@@ -376,4 +377,3 @@ export const useResetSettings = () => {
   const settingsApi = useSettings();
   return settingsApi.resetSettings;
 };
-

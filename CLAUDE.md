@@ -625,11 +625,6 @@ pnpm tsc --noEmit       # TypeScript validation
 
 The current architecture is designed to support future expansion with minimal refactoring. Key architectural foundations include:
 
-- **Multiplayer-Ready**: State sync patterns via Zustand stores and centralized game logic
-- **Plugin Architecture**: Modular component design with clear interfaces and dependency injection
-- **Extensible Game Logic**: Configurable game modes through gameStateStore extensions
-- **PWA Conversion Ready**: Service worker structure and offline-first design patterns
-
 ### 🟢 High Priority Features (1-3 months)
 
 1. **Custom Control Schemes**

@@ -10,7 +10,7 @@ import {
 
 /**
  * Unified session tracking hook
- * 
+ *
  * Consolidates session management functionality:
  * - Session lifecycle management
  * - Game tracking within sessions
@@ -49,7 +49,7 @@ export function useSession() {
       : 0,
 
     gameCountInCurrentSession: currentSession?.gameCount ?? 0,
-    
+
     // Utility functions
     hasActiveSession: !!currentSession && isSessionActive,
     sessionStartTime: currentSession?.startTime ?? null,
@@ -67,7 +67,7 @@ export function useSession() {
  */
 export function useSessionTracking() {
   const session = useSession();
-  
+
   return {
     currentSession: session.currentSession,
     playSessions: [], // Legacy field, no longer used
