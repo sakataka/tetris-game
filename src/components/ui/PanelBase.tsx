@@ -63,7 +63,7 @@ const THEME_CONFIGS: Record<
   },
 };
 
-// Size configurations for responsive padding
+// Modern size configurations using responsive utilities
 const SIZE_CONFIGS: Record<
   'xs' | 'sm' | 'md' | 'lg',
   {
@@ -73,23 +73,23 @@ const SIZE_CONFIGS: Record<
   }
 > = {
   xs: {
-    padding: 'p-1.5',
-    titleSize: 'text-sm',
+    padding: 'responsive-spacing-xs',
+    titleSize: 'responsive-text-xs',
     titleSpacing: 'mb-1',
   },
   sm: {
-    padding: 'p-2 md:p-3',
-    titleSize: 'text-sm md:text-base',
+    padding: 'responsive-spacing-sm',
+    titleSize: 'responsive-text-sm',
     titleSpacing: 'mb-1 md:mb-2',
   },
   md: {
-    padding: 'p-3 md:p-4',
-    titleSize: 'text-base md:text-lg',
+    padding: 'responsive-spacing-md',
+    titleSize: 'responsive-text-base',
     titleSpacing: 'mb-2 md:mb-3',
   },
   lg: {
-    padding: 'p-4 md:p-6',
-    titleSize: 'text-lg md:text-xl',
+    padding: 'responsive-spacing-lg',
+    titleSize: 'responsive-text-lg',
     titleSpacing: 'mb-3 md:mb-4',
   },
 };

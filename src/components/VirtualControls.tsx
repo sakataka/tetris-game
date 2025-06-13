@@ -56,9 +56,9 @@ const VirtualControls = memo(function VirtualControls({
             className={`absolute left-1/2 -translate-x-1/2 -translate-y-full mb-1
                       ${UI_SIZES.VIRTUAL_BUTTON.STANDARD} rounded-lg bg-gradient-to-r from-purple-500 to-pink-500
                       hover:from-purple-400 hover:to-pink-400 active:scale-95
-                      border border-purple-400/50 shadow-[0_0_15px_rgba(147,51,234,0.5)]
+                      border border-purple-400/50 shadow-[0_0_15px_rgb(147_51_234/50%)]
                       flex items-center justify-center text-white font-bold text-sm
-                      touch-manipulation select-none`}
+                      mobile-touch-zone select-none`}
             aria-label={t('controls.rotate')}
           >
             ↻
@@ -71,9 +71,9 @@ const VirtualControls = memo(function VirtualControls({
               onTouchStart={handleTouchStart(moveHandlers.left)}
               className={`${UI_SIZES.VIRTUAL_BUTTON.STANDARD} rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500
                         hover:from-cyan-400 hover:to-blue-400 active:scale-95
-                        border border-cyan-400/50 shadow-[0_0_15px_rgba(6,182,212,0.5)]
+                        border border-cyan-400/50 shadow-[0_0_15px_rgb(6_182_212/50%)]
                         flex items-center justify-center text-white font-bold text-sm
-                        touch-manipulation select-none`}
+                        mobile-touch-zone select-none`}
               aria-label={t('controls.moveLeft')}
             >
               ←
@@ -84,9 +84,9 @@ const VirtualControls = memo(function VirtualControls({
               onTouchStart={handleTouchStart(moveHandlers.down)}
               className={`${UI_SIZES.VIRTUAL_BUTTON.STANDARD} rounded-lg bg-gradient-to-r from-yellow-500 to-orange-500
                         hover:from-yellow-400 hover:to-orange-400 active:scale-95
-                        border border-yellow-400/50 shadow-[0_0_15px_rgba(245,158,11,0.5)]
+                        border border-yellow-400/50 shadow-[0_0_15px_rgb(245_158_11/50%)]
                         flex items-center justify-center text-white font-bold text-sm
-                        touch-manipulation select-none`}
+                        mobile-touch-zone select-none`}
               aria-label={t('controls.moveDown')}
             >
               ↓
@@ -97,9 +97,9 @@ const VirtualControls = memo(function VirtualControls({
               onTouchStart={handleTouchStart(moveHandlers.right)}
               className={`${UI_SIZES.VIRTUAL_BUTTON.STANDARD} rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500
                         hover:from-cyan-400 hover:to-blue-400 active:scale-95
-                        border border-cyan-400/50 shadow-[0_0_15px_rgba(6,182,212,0.5)]
+                        border border-cyan-400/50 shadow-[0_0_15px_rgb(6_182_212/50%)]
                         flex items-center justify-center text-white font-bold text-sm
-                        touch-manipulation select-none`}
+                        mobile-touch-zone select-none`}
               aria-label={t('controls.moveRight')}
             >
               →
@@ -112,9 +112,9 @@ const VirtualControls = memo(function VirtualControls({
           onTouchStart={handleTouchStart(onHardDrop)}
           className={`${UI_SIZES.VIRTUAL_BUTTON.LARGE} rounded-lg bg-gradient-to-r from-red-500 to-pink-500
                     hover:from-red-400 hover:to-pink-400 active:scale-95
-                    border border-red-400/50 shadow-[0_0_20px_rgba(239,68,68,0.6)]
+                    border border-red-400/50 shadow-[0_0_20px_rgb(239_68_68/60%)]
                     flex flex-col items-center justify-center text-white font-bold
-                    touch-manipulation select-none`}
+                    mobile-touch-zone select-none`}
           aria-label={t('controls.hardDrop')}
         >
           <div className='text-sm'>⚡</div>

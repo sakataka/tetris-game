@@ -15,22 +15,22 @@
   --cyber-red: #ff0040;
   --cyber-blue: #0080ff;
 
-  /* 透明度バリエーション */
-  --cyber-cyan-10: rgba(0, 255, 255, 0.1);
-  --cyber-cyan-20: rgba(0, 255, 255, 0.2);
-  --cyber-cyan-30: rgba(0, 255, 255, 0.3);
-  --cyber-cyan-60: rgba(0, 255, 255, 0.6);
-  --cyber-purple-10: rgba(255, 0, 255, 0.1);
-  --cyber-purple-20: rgba(255, 0, 255, 0.2);
-  --cyber-purple-30: rgba(255, 0, 255, 0.3);
-  --cyber-yellow-10: rgba(255, 255, 0, 0.1);
-  --cyber-yellow-20: rgba(255, 255, 0, 0.2);
+  /* Legacy transparency variants - use @theme variants above */
+  --cyber-cyan-10: var(--color-cyber-cyan-10);
+  --cyber-cyan-20: var(--color-cyber-cyan-20);
+  --cyber-cyan-30: var(--color-cyber-cyan-30);
+  --cyber-cyan-60: var(--color-cyber-cyan-60);
+  --cyber-purple-10: var(--color-cyber-purple-10);
+  --cyber-purple-20: var(--color-cyber-purple-20);
+  --cyber-purple-30: var(--color-cyber-purple-30);
+  --cyber-yellow-10: var(--color-cyber-yellow-10);
+  --cyber-yellow-20: var(--color-cyber-yellow-20);
 
-  /* エフェクト値 */
-  --neon-blur-sm: 4px;
-  --neon-blur-md: 8px;
-  --neon-blur-lg: 12px;
-  --neon-blur-xl: 16px;
+  /* Legacy effect values - use @theme variants above */
+  --neon-blur-sm: var(--blur-neon-sm);
+  --neon-blur-md: var(--blur-neon-md);
+  --neon-blur-lg: var(--blur-neon-lg);
+  --neon-blur-xl: var(--blur-neon-xl);
 
   /* パーティクル設定 */
   --particle-gravity: 0.2;
@@ -48,10 +48,59 @@
 }
 
 @theme inline {
+  /* Base colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  /* Cyberpunk color palette integration */
+  --color-cyber-cyan: #00ffff;
+  --color-cyber-purple: #ff00ff;
+  --color-cyber-yellow: #ffff00;
+  --color-cyber-green: #00ff00;
+  --color-cyber-red: #ff0040;
+  --color-cyber-blue: #0080ff;
+
+  /* Define colors in Tailwind's color palette structure */
+  --color-cyber: {
+    cyan: #00ffff;
+    purple: #ff00ff;
+    yellow: #ffff00;
+    green: #00ff00;
+    red: #ff0040;
+    blue: #0080ff;
+  };
+
+  /* Transparency variants using color-mix */
+  --color-cyber-cyan-10: color-mix(in srgb, var(--color-cyber-cyan) 10%, transparent);
+  --color-cyber-cyan-20: color-mix(in srgb, var(--color-cyber-cyan) 20%, transparent);
+  --color-cyber-cyan-30: color-mix(in srgb, var(--color-cyber-cyan) 30%, transparent);
+  --color-cyber-cyan-60: color-mix(in srgb, var(--color-cyber-cyan) 60%, transparent);
+  --color-cyber-purple-10: color-mix(in srgb, var(--color-cyber-purple) 10%, transparent);
+  --color-cyber-purple-20: color-mix(in srgb, var(--color-cyber-purple) 20%, transparent);
+  --color-cyber-purple-30: color-mix(in srgb, var(--color-cyber-purple) 30%, transparent);
+  --color-cyber-yellow-10: color-mix(in srgb, var(--color-cyber-yellow) 10%, transparent);
+  --color-cyber-yellow-20: color-mix(in srgb, var(--color-cyber-yellow) 20%, transparent);
+
+  /* Effect blur values */
+  --blur-neon-sm: 4px;
+  --blur-neon-md: 8px;
+  --blur-neon-lg: 12px;
+  --blur-neon-xl: 16px;
+
+  /* Fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-cyber: 'Orbitron', 'Courier New', monospace;
+
+  /* Spacing system */
+  --spacing-ultra-tight: 0.125rem;
+  --spacing-tight: 0.25rem;
+  --spacing-compact: 0.5rem;
+
+  /* Animation durations */
+  --duration-fast: 0.1s;
+  --duration-normal: 0.3s;
+  --duration-slow: 0.5s;
 }
 
 body {
@@ -227,7 +276,7 @@ body {
   overflow: hidden;
 }
 
-/* Reduced motion support */
+/* Enhanced accessibility and reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   *,
   ::before,
@@ -239,6 +288,13 @@ body {
     scroll-behavior: auto !important;
     transition-duration: 0s !important;
     transition-delay: 0s !important;
+  }
+
+  /* Disable particle animations for reduced motion */
+  .particle-optimized,
+  .particle-enhanced {
+    animation: none !important;
+    transform: none !important;
   }
 }
 
@@ -252,6 +308,26 @@ body {
   scroll-behavior: auto !important;
   transition-duration: 0s !important;
   transition-delay: 0s !important;
+}
+
+/* Performance optimizations */
+@media (prefers-reduced-data: reduce) {
+  .particle-optimized {
+    box-shadow: none;
+    background: var(--particle-color, var(--color-cyber-cyan));
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .hologram,
+  .hologram-cyan,
+  .hologram-purple,
+  .hologram-yellow {
+    border-width: 2px;
+    backdrop-filter: none;
+    background: color-mix(in srgb, currentColor 10%, transparent);
+  }
 }
 
 /* テーマ用CSS変数 */
@@ -287,23 +363,27 @@ body {
   --accent-tertiary: #8000ff;
 }
 
-/* パフォーマンス最適化されたパーティクルスタイル */
+/* Performance optimized particle styles with v4 features */
 .particle-optimized {
+  /* Hardware acceleration */
   will-change: transform, opacity;
-  transform-origin: center;
-  background: radial-gradient(circle, var(--particle-color) 0%, transparent 70%);
-  box-shadow:
-    0 0 calc(4px + var(--particle-scale) * 2px) var(--particle-color),
-    0 0 calc(8px + var(--particle-scale) * 4px) color-mix(in srgb, var(--particle-color) 25%, transparent),
-    0 0 calc(12px + var(--particle-scale) * 6px) color-mix(in srgb, var(--particle-color) 12%, transparent);
-
-  /* GPU加速を有効化 */
   transform: translateZ(0);
   backface-visibility: hidden;
-  perspective: 1000px;
+  contain: layout style paint;
 
-  /* アニメーションパフォーマンス最適化 */
-  animation: particle-float 1s ease-out infinite;
+  /* Modern gradient with CSS variables */
+  background: radial-gradient(circle, var(--particle-color, var(--color-cyber-cyan)) 0%, transparent 70%);
+
+  /* Enhanced shadow system using color-mix */
+  box-shadow:
+    0 0 calc(4px + var(--particle-scale, 1) * 2px) var(--particle-color, var(--color-cyber-cyan)),
+    0 0 calc(8px + var(--particle-scale, 1) * 4px)
+      color-mix(in srgb, var(--particle-color, var(--color-cyber-cyan)) 25%, transparent),
+    0 0 calc(12px + var(--particle-scale, 1) * 6px)
+      color-mix(in srgb, var(--particle-color, var(--color-cyber-cyan)) 12%, transparent);
+
+  /* Optimized animation with GPU layers */
+  animation: particle-float var(--duration-normal, 1s) ease-out infinite;
 }
 
 @keyframes particle-float {
@@ -338,35 +418,44 @@ body {
   background: linear-gradient(90deg, var(--cyber-cyan) 0%, var(--cyber-purple) 50%, var(--cyber-yellow) 100%);
 }
 
-/* レスポンシブタイポグラフィユーティリティ */
+/* Modern responsive typography utilities with CSS clamp */
 .responsive-text-xs {
-  @apply text-xs sm:text-sm;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
+  line-height: 1.4;
 }
 .responsive-text-sm {
-  @apply text-sm md:text-base;
+  font-size: clamp(0.875rem, 2.2vw, 1rem);
+  line-height: 1.5;
 }
 .responsive-text-base {
-  @apply text-sm md:text-base lg:text-lg;
+  font-size: clamp(0.875rem, 2.5vw, 1.125rem);
+  line-height: 1.6;
 }
 .responsive-text-lg {
-  @apply text-base md:text-lg lg:text-xl;
+  font-size: clamp(1rem, 3vw, 1.25rem);
+  line-height: 1.6;
 }
 .responsive-text-xl {
-  @apply text-lg md:text-xl lg:text-2xl;
+  font-size: clamp(1.125rem, 3.5vw, 1.5rem);
+  line-height: 1.7;
 }
 
-/* モバイル最適化スペーシング */
+/* Modern responsive spacing with logical properties */
 .responsive-spacing-xs {
-  @apply p-1 sm:p-2;
+  padding-inline: clamp(0.25rem, 1vw, 0.5rem);
+  padding-block: clamp(0.25rem, 1vh, 0.5rem);
 }
 .responsive-spacing-sm {
-  @apply p-2 md:p-3;
+  padding-inline: clamp(0.5rem, 1.5vw, 0.75rem);
+  padding-block: clamp(0.5rem, 1.5vh, 0.75rem);
 }
 .responsive-spacing-md {
-  @apply p-3 md:p-4 lg:p-6;
+  padding-inline: clamp(0.75rem, 2vw, 1.5rem);
+  padding-block: clamp(0.75rem, 2vh, 1.5rem);
 }
 .responsive-spacing-lg {
-  @apply p-4 md:p-6 lg:p-8;
+  padding-inline: clamp(1rem, 3vw, 2rem);
+  padding-block: clamp(1rem, 3vh, 2rem);
 }
 
 /* レスポンシブグリッドシステム */
@@ -393,24 +482,41 @@ body {
   @apply blur-sm md:blur-md lg:blur-lg;
 }
 
-/* モバイル固有の最適化 */
-@media (max-width: 767px) {
-  .mobile-optimized {
-    font-size: clamp(0.75rem, 2.5vw, 0.875rem);
-    line-height: 1.3;
-    letter-spacing: 0.01em;
-  }
+/* Modern viewport units and container queries */
+.ultra-compact-container {
+  /* Use small viewport units for better mobile support */
+  max-height: 100svh;
+  min-height: 100dvh;
+  overflow: hidden;
+  container-type: inline-size;
+}
 
-  .mobile-touch-zone {
-    padding: 12px;
-    margin: 4px;
+.mobile-optimized {
+  font-size: clamp(0.75rem, 2.5cqw, 0.875rem);
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+}
+
+.mobile-touch-zone {
+  /* Enhanced touch targets with modern spacing */
+  padding-inline: max(12px, 1cqw);
+  padding-block: max(12px, 1cqh);
+  margin: max(4px, 0.5cqw);
+  touch-action: manipulation;
+}
+
+/* Container query based responsive design */
+@container (min-width: 768px) {
+  .tablet-optimized {
+    font-size: clamp(0.875rem, 1.8cqw, 1rem);
+    line-height: 1.4;
   }
 }
 
-/* タブレット向け調整 */
-@media (min-width: 768px) and (max-width: 1023px) {
-  .tablet-optimized {
-    font-size: clamp(0.875rem, 1.8vw, 1rem);
-    line-height: 1.4;
+/* Accessibility and reduced motion improvements */
+@media (prefers-reduced-motion: no-preference) {
+  .enhanced-animations {
+    animation-timeline: view();
+    animation-range: entry 0% cover 30%;
   }
 }
