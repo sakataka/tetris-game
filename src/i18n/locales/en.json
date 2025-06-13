@@ -14,7 +14,8 @@
     "restart": "Restart",
     "finalScore": "Final Score: {{score}}",
     "newHighScore": "New High Score!",
-    "congratulations": "Congratulations!"
+    "congratulations": "Congratulations!",
+    "levelPrefix": "Lv"
   },
   "controls": {
     "title": "Controls",
@@ -28,7 +29,13 @@
     "touchControls": "Touch Controls",
     "tap": "Tap",
     "enabled": "Enabled",
-    "disabled": "Disabled"
+    "disabled": "Disabled",
+    "spaceKey": "SPACE",
+    "leftRightArrows": "←→",
+    "downArrow": "↓",
+    "upArrow": "↑",
+    "pKey": "P",
+    "rKey": "R"
   },
   "settings": {
     "title": "Settings",
@@ -96,6 +103,8 @@
     "totalGames": "Total Games",
     "noHighScores": "No high scores yet",
     "noStatistics": "No statistics available",
+    "never": "Never",
+    "allTime": "All Time",
     "period": {
       "all": "All Time",
       "today": "Today",
@@ -155,7 +164,9 @@
     "tetris": "Tetris",
     "combo": "Combo",
     "bonus": "Bonus",
-    "hardDrop": "Hard Drop"
+    "hardDrop": "Hard Drop",
+    "level": "LV",
+    "distance": "DIST"
   },
   "colorPalette": {
     "title": "Color Palette Settings",

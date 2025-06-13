@@ -53,7 +53,10 @@ const HighScoreDisplay = memo(function HighScoreDisplay({
                 >
                   {score.score.toLocaleString()}
                 </div>
-                <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400`}>Lv{score.level}</div>
+                <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400`}>
+                  {t('game.levelPrefix')}
+                  {score.level}
+                </div>
               </div>
             </div>
 

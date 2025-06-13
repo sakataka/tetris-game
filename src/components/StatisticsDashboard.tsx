@@ -18,14 +18,14 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
   baseStatistics,
   sessions = [],
   highScores,
-  selectedPeriod = 'All Time',
+  selectedPeriod,
   onPeriodChange = () => {},
   showDetailedView = true,
 }) => {
   const { t } = useTranslation();
 
   // Calculate enhanced statistics using StatisticsService (React Compiler will optimize)
-  const period = StatisticsService.validatePeriod(selectedPeriod);
+  const period = StatisticsService.validatePeriod(selectedPeriod || t('statistics.allTime'));
   const statistics: EnhancedStatistics = StatisticsService.calculatePeriodStatistics(
     baseStatistics,
     sessions,
@@ -192,7 +192,7 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
                 <span className={`text-yellow-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
                   {statistics.lastPlayDate > 0
                     ? `${Math.floor((Date.now() - statistics.lastPlayDate) / 3600000)}h ago`
-                    : 'Never'}
+                    : t('statistics.never')}
                 </span>
               </div>
             </div>

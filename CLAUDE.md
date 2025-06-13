@@ -401,13 +401,6 @@ The i18n system uses two complementary stores:
 
 ## Code Quality & Linting
 
-### Oxlint Integration (Rust-based, 50-100x faster)
-
-- **Linter**: Oxlint 1.0 with 500+ rules (ESLint removed for performance)
-- **Performance**: 7-8ms execution time (50-100x faster than ESLint)
-- **Memory Usage**: 78MB (5.3x less than ESLint)
-- **Configuration**: `.oxlintrc.json` with Next.js/React/TypeScript plugins
-
 ```bash
 pnpm lint         # Run Oxlint
 pnpm lint:fix     # Auto-fix with Oxlint

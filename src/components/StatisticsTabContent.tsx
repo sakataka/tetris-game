@@ -35,6 +35,7 @@ const StatisticsTabContent = memo(function StatisticsTabContent({
           baseStatistics={statistics}
           sessions={sessions}
           highScores={highScores}
+          selectedPeriod={t('statistics.allTime')}
           showDetailedView={true}
         />
       </Suspense>

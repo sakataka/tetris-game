@@ -14,7 +14,8 @@
     "restart": "リスタート",
     "finalScore": "最終スコア: {{score}}",
     "newHighScore": "新記録達成！",
-    "congratulations": "おめでとうございます！"
+    "congratulations": "おめでとうございます！",
+    "levelPrefix": "Lv"
   },
   "controls": {
     "title": "操作方法",
@@ -28,7 +29,13 @@
     "touchControls": "タッチ操作",
     "tap": "タップ",
     "enabled": "有効",
-    "disabled": "無効"
+    "disabled": "無効",
+    "spaceKey": "スペース",
+    "leftRightArrows": "←→",
+    "downArrow": "↓",
+    "upArrow": "↑",
+    "pKey": "P",
+    "rKey": "R"
   },
   "settings": {
     "title": "設定",
@@ -96,6 +103,8 @@
     "totalGames": "総ゲーム数",
     "noHighScores": "ハイスコアはまだありません",
     "noStatistics": "統計データがありません",
+    "never": "未プレイ",
+    "allTime": "全期間",
     "period": {
       "all": "全期間",
       "alltime": "全期間",
@@ -158,7 +167,9 @@
     "tetris": "テトリス",
     "combo": "コンボ",
     "bonus": "ボーナス",
-    "hardDrop": "ハードドロップ"
+    "hardDrop": "ハードドロップ",
+    "level": "レベル",
+    "distance": "距離"
   },
   "colorPalette": {
     "title": "カラーパレット設定",
