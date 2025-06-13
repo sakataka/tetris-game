@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, memo, useCallback, useState } from 'react';
+import { useEffect, useRef, memo, useState } from 'react';
 import { LineEffectState } from '../types/tetris';
 import { PARTICLE_GRAVITY, PARTICLE_MAX_Y } from '../constants';
 import {
@@ -70,8 +70,8 @@ const ParticleCanvas = memo(function ParticleCanvas({
     };
   }, [width, height, enablePerformanceMode, maxParticles]);
 
-  // Optimized particle physics update
-  const updateParticlePhysics = useCallback((particles: LineEffectState['particles']) => {
+  // Particle physics update (React Compiler will optimize this)
+  const updateParticlePhysics = (particles: LineEffectState['particles']) => {
     const updatedParticles: LineEffectState['particles'] = [];
     const expiredParticles: LineEffectState['particles'] = [];
 
@@ -101,10 +101,10 @@ const ParticleCanvas = memo(function ParticleCanvas({
     }
 
     return updatedParticles;
-  }, []);
+  };
 
-  // Optimized animation loop with FPS control
-  const animate = useCallback(() => {
+  // Animation loop with FPS control (React Compiler will optimize this)
+  const animate = () => {
     const renderer = rendererRef.current;
     const fpsController = fpsControllerRef.current;
 
@@ -157,14 +157,7 @@ const ParticleCanvas = memo(function ParticleCanvas({
     };
 
     animationRef.current = requestAnimationFrame(fpsController.createFrameLimiter(frameCallback));
-  }, [
-    lineEffect.particles,
-    onParticleUpdate,
-    updateParticlePhysics,
-    width,
-    height,
-    enablePerformanceMode,
-  ]);
+  };
 
   useEffect(() => {
     if (lineEffect.particles.length === 0) {
@@ -193,7 +186,7 @@ const ParticleCanvas = memo(function ParticleCanvas({
         animationRef.current = undefined;
       }
     };
-  }, [lineEffect.particles.length, animate, width, height]);
+  }, [lineEffect.particles.length, width, height]); // Remove animate from deps as React Compiler will handle it
 
   // Performance monitoring display (development only)
   const shouldShowStats = process.env.NODE_ENV === 'development' && enablePerformanceMode;

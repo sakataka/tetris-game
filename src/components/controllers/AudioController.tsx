@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import type { SoundKey } from '../../types/tetris';
 import { useSounds } from '../../hooks/useSounds';
 import { useSettings, useUpdateSettings } from '../../store/settingsStore';
@@ -78,94 +78,74 @@ export function AudioController({ children }: AudioControllerProps) {
     initialMuted: settings.isMuted,
   });
 
-  // Stabilized playSound function for external use
-  const stablePlaySound = useCallback((soundType: SoundKey) => {
-    playSound(soundType);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
   // Initialize sounds on mount
   useEffect(() => {
     initializeSounds();
   }, [initializeSounds]);
 
-  // Event handlers
-  const handleVolumeChange = useCallback(
-    (newVolume: number) => {
-      updateSettings({ volume: newVolume });
-      setVolumeLevel(newVolume);
-    },
-    [updateSettings, setVolumeLevel]
-  );
+  // Event handlers (React Compiler will optimize these)
+  const handleVolumeChange = (newVolume: number) => {
+    updateSettings({ volume: newVolume });
+    setVolumeLevel(newVolume);
+  };
 
-  const handleToggleMute = useCallback(() => {
+  const handleToggleMute = () => {
     updateSettings({ isMuted: !settings.isMuted });
     toggleMute();
-  }, [updateSettings, settings.isMuted, toggleMute]);
+  };
 
-  // Audio system status computation
-  const enhancedAudioSystemStatus = useMemo(() => {
-    const fallbackStatus = getFallbackStatus();
-    const detailedState = getDetailedAudioState();
-    const preloadProgress = getPreloadProgress();
+  // Audio system status computation (React Compiler will optimize this)
+  const fallbackStatus = getFallbackStatus();
+  const detailedState = getDetailedAudioState();
+  const preloadProgress = getPreloadProgress();
 
-    const result: AudioSystemAPI['audioSystemStatus'] = {
-      isWebAudioEnabled,
-      strategy: audioSystemStatus.strategy,
-      initialized: audioSystemStatus.initialized,
-      hasError: hasInitializationError,
-      canRetry: canRetryInitialization,
-    };
-
-    if (preloadProgress) {
-      result.preloadProgress = preloadProgress;
-    }
-
-    if (fallbackStatus) {
-      result.fallbackStatus = {
-        currentLevel: fallbackStatus.currentLevel,
-        availableLevels: fallbackStatus.availableLevels,
-        silentMode: fallbackStatus.silentMode,
-      };
-    }
-
-    if (detailedState) {
-      // Type-safe property access for backward compatibility
-      const hasProgressData =
-        detailedState && typeof detailedState === 'object' && detailedState !== null;
-      const progressData = hasProgressData
-        ? (detailedState as unknown as Record<string, unknown>)
-        : {};
-
-      result.detailedState = {
-        initialized: Boolean(hasProgressData && 'totalSounds' in progressData),
-        suspended: Boolean(
-          hasProgressData && 'isLoading' in progressData && progressData['isLoading']
-        ),
-        loadedSounds: Array.isArray(progressData['loadedSounds'])
-          ? (progressData['loadedSounds'] as string[])
-          : [],
-        activeSounds:
-          typeof progressData['totalSounds'] === 'number' ? progressData['totalSounds'] : 0,
-      };
-    }
-
-    return result;
-  }, [
+  const enhancedAudioSystemStatus: AudioSystemAPI['audioSystemStatus'] = {
     isWebAudioEnabled,
-    audioSystemStatus,
-    hasInitializationError,
-    canRetryInitialization,
-    getPreloadProgress,
-    getFallbackStatus,
-    getDetailedAudioState,
-  ]);
+    strategy: audioSystemStatus.strategy,
+    initialized: audioSystemStatus.initialized,
+    hasError: hasInitializationError,
+    canRetry: canRetryInitialization,
+  };
+
+  if (preloadProgress) {
+    enhancedAudioSystemStatus.preloadProgress = preloadProgress;
+  }
+
+  if (fallbackStatus) {
+    enhancedAudioSystemStatus.fallbackStatus = {
+      currentLevel: fallbackStatus.currentLevel,
+      availableLevels: fallbackStatus.availableLevels,
+      silentMode: fallbackStatus.silentMode,
+    };
+  }
+
+  if (detailedState) {
+    // Type-safe property access for backward compatibility
+    const hasProgressData =
+      detailedState && typeof detailedState === 'object' && detailedState !== null;
+    const progressData = hasProgressData
+      ? (detailedState as unknown as Record<string, unknown>)
+      : {};
+
+    enhancedAudioSystemStatus.detailedState = {
+      initialized: Boolean(hasProgressData && 'totalSounds' in progressData),
+      suspended: Boolean(
+        hasProgressData && 'isLoading' in progressData && progressData['isLoading']
+      ),
+      loadedSounds: Array.isArray(progressData['loadedSounds'])
+        ? (progressData['loadedSounds'] as string[])
+        : [],
+      activeSounds:
+        typeof progressData['totalSounds'] === 'number' ? progressData['totalSounds'] : 0,
+    };
+  }
 
   // Construct API object
   const audioSystemAPI: AudioSystemAPI = {
     isMuted,
     volume,
     audioSystemStatus: enhancedAudioSystemStatus,
-    playSound: stablePlaySound,
+    playSound, // Direct reference, React Compiler will optimize
     onVolumeChange: handleVolumeChange,
     onToggleMute: handleToggleMute,
     unlockAudio,

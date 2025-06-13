@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ColorPalette } from '../types/tetris';
 
@@ -20,25 +20,23 @@ interface ColorInputProps {
 function ColorInput({ label, value, onChange, description }: ColorInputProps) {
   const [inputValue, setInputValue] = useState(value);
 
-  const handleChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const newValue = event.target.value;
-      setInputValue(newValue);
+  // Event handlers (React Compiler will optimize these)
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value;
+    setInputValue(newValue);
 
-      // Check if it's a valid hex color
-      if (/^#[0-9A-F]{6}$/i.test(newValue)) {
-        onChange(newValue);
-      }
-    },
-    [onChange]
-  );
+    // Check if it's a valid hex color
+    if (/^#[0-9A-F]{6}$/i.test(newValue)) {
+      onChange(newValue);
+    }
+  };
 
-  const handleBlur = useCallback(() => {
+  const handleBlur = () => {
     // Correct to valid value when focus is lost
     if (!/^#[0-9A-F]{6}$/i.test(inputValue)) {
       setInputValue(value);
     }
-  }, [inputValue, value]);
+  };
 
   return (
     <div className='color-input mb-3'>
@@ -78,12 +76,10 @@ export default function ColorPaletteEditor({
   const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const handleColorChange = useCallback(
-    (key: keyof ColorPalette, value: string) => {
-      onColorsChange({ [key]: value });
-    },
-    [onColorsChange]
-  );
+  // Event handler (React Compiler will optimize this)
+  const handleColorChange = (key: keyof ColorPalette, value: string) => {
+    onColorsChange({ [key]: value });
+  };
 
   const colorFields: Array<{
     key: keyof ColorPalette;
@@ -122,7 +118,7 @@ export default function ColorPaletteEditor({
     },
   ];
 
-  const resetToDefaults = useCallback(() => {
+  const resetToDefaults = () => {
     const defaultColors: ColorPalette = {
       primary: '#00ffff',
       secondary: '#ff00ff',
@@ -132,7 +128,7 @@ export default function ColorPaletteEditor({
       accent: '#00ff00',
     };
     onColorsChange(defaultColors);
-  }, [onColorsChange]);
+  };
 
   return (
     <div className={`color-palette-editor ${className}`}>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import React from 'react';
 import { useSessionTrackingV2 } from '../../hooks/useSessionTrackingV2';
 
 export interface EventSystemAPI {
@@ -23,14 +23,14 @@ export function EventController({ children }: EventControllerProps) {
   // Session tracking integration
   const { onGameStart, endSession } = useSessionTrackingV2();
 
-  // Stabilized event handlers
-  const handleGameStart = useCallback(() => {
+  // Event handlers (React Compiler will optimize these)
+  const handleGameStart = () => {
     onGameStart();
-  }, [onGameStart]);
+  };
 
-  const handleEndSession = useCallback(() => {
+  const handleEndSession = () => {
     endSession();
-  }, [endSession]);
+  };
 
   // Construct API object
   const eventSystemAPI: EventSystemAPI = {

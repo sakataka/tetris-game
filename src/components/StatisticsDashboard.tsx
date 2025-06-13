@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { HighScore, GameStatistics } from '../types/tetris';
 import { StatisticsService, STATISTICS_PERIODS } from '../utils/data/StatisticsService';
@@ -24,23 +24,19 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  // Calculate enhanced statistics using StatisticsService
-  const statistics = useMemo((): EnhancedStatistics => {
-    const period = StatisticsService.validatePeriod(selectedPeriod);
-    return StatisticsService.calculatePeriodStatistics(
-      baseStatistics,
-      sessions,
-      highScores,
-      period
-    );
-  }, [baseStatistics, sessions, highScores, selectedPeriod]);
+  // Calculate enhanced statistics using StatisticsService (React Compiler will optimize)
+  const period = StatisticsService.validatePeriod(selectedPeriod);
+  const statistics: EnhancedStatistics = StatisticsService.calculatePeriodStatistics(
+    baseStatistics,
+    sessions,
+    highScores,
+    period
+  );
 
-  // Calculate advanced metrics for detailed view
-  const advancedMetrics = useMemo(() => {
-    if (!showDetailedView) return null;
-    const period = StatisticsService.validatePeriod(selectedPeriod);
-    return StatisticsService.calculateAdvancedMetrics(sessions, period);
-  }, [sessions, selectedPeriod, showDetailedView]);
+  // Calculate advanced metrics for detailed view (React Compiler will optimize)
+  const advancedMetrics = showDetailedView
+    ? StatisticsService.calculateAdvancedMetrics(sessions, period)
+    : null;
   return (
     <div
       data-testid='statistics-dashboard'

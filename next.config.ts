@@ -25,6 +25,8 @@ const nextConfig: NextConfig = {
   experimental: {
     // Package import optimization
     optimizePackageImports: ['zustand', 'immer', 'react', 'react-dom'],
+    // React Compiler (React 19 feature for automatic optimization)
+    reactCompiler: true,
   },
 
   // Image optimization settings

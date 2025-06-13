@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ThemeVariant } from '../types/tetris';
 import { THEME_PRESETS } from '../utils/ui';
@@ -17,12 +17,9 @@ export default function ThemeSelector({
   className = '',
 }: ThemeSelectorProps) {
   const { t } = useTranslation();
-  const handleThemeChange = useCallback(
-    (event: React.ChangeEvent<HTMLSelectElement>) => {
-      onThemeChange(event.target.value as ThemeVariant);
-    },
-    [onThemeChange]
-  );
+  const handleThemeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    onThemeChange(event.target.value as ThemeVariant);
+  };
 
   const themes = Object.entries(THEME_PRESETS);
 

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { memo, useCallback, useMemo } from 'react';
+import React, { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { UI_SIZES } from '../constants';
 
@@ -20,28 +20,23 @@ const VirtualControls = memo(function VirtualControls({
   unlockAudio,
 }: VirtualControlsProps) {
   const { t } = useTranslation();
-  // Memoize handleTouchStart with useCallback
-  const handleTouchStart = useCallback(
-    (action: () => void) => (e: React.TouchEvent) => {
-      e.preventDefault();
-      // Unlock audio on first touch
-      if (unlockAudio) {
-        unlockAudio();
-      }
-      action();
-    },
-    [unlockAudio]
-  );
+  
+  // Event handlers (React Compiler will optimize these)
+  const handleTouchStart = (action: () => void) => (e: React.TouchEvent) => {
+    e.preventDefault();
+    // Unlock audio on first touch
+    if (unlockAudio) {
+      unlockAudio();
+    }
+    action();
+  };
 
-  // Memoize move handlers with useMemo
-  const moveHandlers = useMemo(
-    () => ({
-      left: () => onMove({ x: -1, y: 0 }),
-      right: () => onMove({ x: 1, y: 0 }),
-      down: () => onMove({ x: 0, y: 1 }),
-    }),
-    [onMove]
-  );
+  // Move handlers (React Compiler will optimize these)
+  const moveHandlers = {
+    left: () => onMove({ x: -1, y: 0 }),
+    right: () => onMove({ x: 1, y: 0 }),
+    down: () => onMove({ x: 0, y: 1 }),
+  };
 
   if (!isVisible) return null;
 

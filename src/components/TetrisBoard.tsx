@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import { Tetromino, LineEffectState } from '../types/tetris';
 import { BoardRendererFactory } from '../utils/game/boardRenderer';
 import { BoardRenderState, RenderEffects, DEFAULT_RENDERING_OPTIONS } from '../types/rendering';
@@ -25,50 +25,33 @@ const TetrisBoard = memo(function TetrisBoard({
   lineEffect,
   onParticleUpdate,
 }: TetrisBoardProps) {
-  // Create board renderer instance (memoized for performance)
-  const boardRenderer = useMemo(() => {
-    return BoardRendererFactory.createRenderer();
-  }, []);
+  // Create board renderer instance (React Compiler will optimize this)
+  const boardRenderer = BoardRendererFactory.createRenderer();
 
-  // Prepare render state and effects
-  const renderState = useMemo(
-    (): BoardRenderState => ({
-      board,
-      currentPiece,
-      gameOver,
-      isPaused,
-      lineEffect,
-    }),
-    [board, currentPiece, gameOver, isPaused, lineEffect]
-  );
+  // Prepare render state and effects (React Compiler will optimize these)
+  const renderState: BoardRenderState = {
+    board,
+    currentPiece,
+    gameOver,
+    isPaused,
+    lineEffect,
+  };
 
-  const renderEffects = useMemo(
-    (): RenderEffects => ({
-      flashingLines: new Set(lineEffect.flashingLines),
-      shaking: lineEffect.shaking,
-      particles: lineEffect.particles,
-    }),
-    [lineEffect.flashingLines, lineEffect.shaking, lineEffect.particles]
-  );
+  const renderEffects: RenderEffects = {
+    flashingLines: new Set(lineEffect.flashingLines),
+    shaking: lineEffect.shaking,
+    particles: lineEffect.particles,
+  };
 
   // Generate display board using BoardRenderer
-  const displayBoard = useMemo(() => {
-    return boardRenderer.renderBoard(renderState, DEFAULT_RENDERING_OPTIONS);
-  }, [boardRenderer, renderState]);
+  const displayBoard = boardRenderer.renderBoard(renderState, DEFAULT_RENDERING_OPTIONS);
 
   // Calculate styles for all cells using BoardRenderer
-  const cellStyles = useMemo(() => {
-    return boardRenderer.renderDisplayBoard(displayBoard, renderEffects);
-  }, [boardRenderer, displayBoard, renderEffects]);
+  const cellStyles = boardRenderer.renderDisplayBoard(displayBoard, renderEffects);
 
   // Get board container styles from renderer
-  const boardContainerStyle = useMemo(() => {
-    return boardRenderer.getBoardContainerStyle(renderEffects);
-  }, [boardRenderer, renderEffects]);
-
-  const boardContainerClassName = useMemo(() => {
-    return boardRenderer.getBoardContainerClassName(renderEffects);
-  }, [boardRenderer, renderEffects]);
+  const boardContainerStyle = boardRenderer.getBoardContainerStyle(renderEffects);
+  const boardContainerClassName = boardRenderer.getBoardContainerClassName(renderEffects);
 
   return (
     <div className='relative min-w-[280px] min-h-[560px] md:min-w-[360px] md:min-h-[720px] lg:min-w-[400px] lg:min-h-[800px]'>

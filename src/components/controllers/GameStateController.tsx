@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import type { GameState, SoundKey, LineEffectState, Tetromino } from '../../types/tetris';
 import { useGameControls } from '../../hooks/useGameControls';
 import { useGameLoop } from '../../hooks/useGameLoop';
@@ -135,23 +135,21 @@ export function GameStateController({
     updateLineEffect,
   ]);
 
-  // Piece control actions
-  const pieceControlActions = useMemo(() => {
-    return {
-      onPieceMove: (state: GameState, newPosition: { x: number; y: number }) => {
-        movePieceToPosition(newPosition);
-        return state; // Zustand integration handles state update
-      },
-      onPieceLand: (state: GameState, piece: Tetromino, bonusPoints?: number) => {
-        calculatePiecePlacementState(piece, bonusPoints, playSound);
-        return state; // Zustand integration handles state update
-      },
-      onPieceRotate: (state: GameState, rotatedPiece: Tetromino) => {
-        rotatePieceTo(rotatedPiece);
-        return state; // Zustand integration handles state update
-      },
-    };
-  }, [movePieceToPosition, rotatePieceTo, calculatePiecePlacementState, playSound]);
+  // Piece control actions (React Compiler will optimize this)
+  const pieceControlActions = {
+    onPieceMove: (state: GameState, newPosition: { x: number; y: number }) => {
+      movePieceToPosition(newPosition);
+      return state; // Zustand integration handles state update
+    },
+    onPieceLand: (state: GameState, piece: Tetromino, bonusPoints?: number) => {
+      calculatePiecePlacementState(piece, bonusPoints, playSound);
+      return state; // Zustand integration handles state update
+    },
+    onPieceRotate: (state: GameState, rotatedPiece: Tetromino) => {
+      rotatePieceTo(rotatedPiece);
+      return state; // Zustand integration handles state update
+    },
+  };
 
   // High score and session management
   useHighScoreManager({
@@ -192,22 +190,19 @@ export function GameStateController({
     onDropTimeChange: setDropTime,
   });
 
-  // Event handlers
-  const handleReset = useCallback(() => {
+  // Event handlers (React Compiler will optimize these)
+  const handleReset = () => {
     onGameStart();
     resetGame();
-  }, [onGameStart, resetGame]);
+  };
 
-  const handleTogglePause = useCallback(() => {
+  const handleTogglePause = () => {
     togglePause();
-  }, [togglePause]);
+  };
 
-  const handleParticleUpdate = useCallback(
-    (particles: LineEffectState['particles']) => {
-      updateParticles(particles);
-    },
-    [updateParticles]
-  );
+  const handleParticleUpdate = (particles: LineEffectState['particles']) => {
+    updateParticles(particles);
+  };
 
   // Construct API object
   const gameStateAPI: GameStateAPI = {

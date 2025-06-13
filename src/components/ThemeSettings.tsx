@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ThemeSelectorMemo } from './ThemeSelector';
 import { ColorPaletteEditorMemo } from './ColorPaletteEditor';
@@ -59,12 +59,10 @@ export default function ThemeSettings({
     'theme'
   );
 
-  const handleEffectIntensityChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      onEffectIntensityChange(parseFloat(event.target.value));
-    },
-    [onEffectIntensityChange]
-  );
+  // Event handler (React Compiler will optimize this)
+  const handleEffectIntensityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onEffectIntensityChange(parseFloat(event.target.value));
+  };
 
   const tabs = [
     { id: 'theme', label: t('themes.preview'), icon: '🎨' },

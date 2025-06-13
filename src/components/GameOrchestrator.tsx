@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, use } from 'react';
 import { useInitializeLanguage } from '../store/languageStore';
 import { useMobileDetection } from '../hooks/useMobileDetection';
 import LoadingMessage from './LoadingMessage';
@@ -8,6 +8,26 @@ import '../i18n'; // Initialize i18n
 
 interface GameOrchestratorProps {
   children: React.ReactNode;
+}
+
+// Create a promise for hydration status
+let hydrationPromise: Promise<boolean> | null = null;
+
+function getHydrationPromise() {
+  if (typeof window === 'undefined') {
+    // SSR: immediately resolved
+    return Promise.resolve(false);
+  }
+  
+  if (!hydrationPromise) {
+    // Client: create promise that resolves after hydration
+    hydrationPromise = new Promise<boolean>((resolve) => {
+      // Use queueMicrotask for immediate resolution after current execution
+      queueMicrotask(() => resolve(true));
+    });
+  }
+  
+  return hydrationPromise;
 }
 
 /**
@@ -21,16 +41,13 @@ export default function GameOrchestrator({ children }: GameOrchestratorProps) {
   // Language initialization
   const initializeLanguage = useInitializeLanguage();
 
-  // SSR hydration handling
-  const [isHydrated, setIsHydrated] = useState(false);
+  // Using React 19's use() hook for hydration status
+  const isHydrated = use(getHydrationPromise());
 
   useEffect(() => {
-    // Simple hydration check
-    setIsHydrated(true);
     // Initialize language once on mount
     initializeLanguage();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Intentionally empty to run only once on mount
+  }, [initializeLanguage]); // Include initializeLanguage dependency
 
   // Show loading until hydration is complete
   if (!isHydrated) {

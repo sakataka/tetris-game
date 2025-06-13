@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ColorBlindnessType, ContrastLevel, AnimationIntensity } from '../types/tetris';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
@@ -28,38 +28,30 @@ export default function AccessibilitySettings({
   className = '',
 }: AccessibilitySettingsProps) {
   const { t } = useTranslation();
-  const handleColorBlindnessChange = useCallback(
-    (event: React.ChangeEvent<HTMLSelectElement>) => {
-      onSettingsChange({ colorBlindnessType: event.target.value as ColorBlindnessType });
-    },
-    [onSettingsChange]
-  );
+  // Event handlers (React Compiler will optimize these)
+  const handleColorBlindnessChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    onSettingsChange({ colorBlindnessType: event.target.value as ColorBlindnessType });
+  };
 
-  const handleContrastChange = useCallback(
-    (event: React.ChangeEvent<HTMLSelectElement>) => {
-      onSettingsChange({ contrast: event.target.value as ContrastLevel });
-    },
-    [onSettingsChange]
-  );
+  const handleContrastChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    onSettingsChange({ contrast: event.target.value as ContrastLevel });
+  };
 
-  const handleAnimationChange = useCallback(
-    (event: React.ChangeEvent<HTMLSelectElement>) => {
-      const newIntensity = event.target.value as AnimationIntensity;
-      onSettingsChange({
-        animationIntensity: newIntensity,
-        reducedMotion: newIntensity === 'none' || newIntensity === 'reduced',
-      });
-    },
-    [onSettingsChange]
-  );
+  const handleAnimationChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const newIntensity = event.target.value as AnimationIntensity;
+    onSettingsChange({
+      animationIntensity: newIntensity,
+      reducedMotion: newIntensity === 'none' || newIntensity === 'reduced',
+    });
+  };
 
-  const handleReducedMotionToggle = useCallback(() => {
+  const handleReducedMotionToggle = () => {
     const newReducedMotion = !reducedMotion;
     onSettingsChange({
       reducedMotion: newReducedMotion,
       animationIntensity: newReducedMotion ? 'reduced' : 'normal',
     });
-  }, [reducedMotion, onSettingsChange]);
+  };
 
   const colorBlindnessOptions = [
     { value: 'none', label: t('accessibility.none') },
