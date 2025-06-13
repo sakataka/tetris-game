@@ -1,26 +1,26 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import type { GameState, SoundKey, LineEffectState, Tetromino } from '../../types/tetris';
+import { EFFECTS } from '../../constants/layout';
 import { useGameControls } from '../../hooks/useGameControls';
 import { useGameLoop } from '../../hooks/useGameLoop';
 import { useHighScoreManager } from '../../hooks/useHighScoreManager';
 import { useSession } from '../../hooks/useSession';
-import { animationManager } from '../../utils/animation/animationManager';
 import {
-  useGameState,
-  useDropTime,
-  useUpdateParticles,
-  useResetGame,
-  useTogglePause,
-  useSetDropTime,
-  useUpdateLineEffect,
   useCalculatePiecePlacementState,
-  useMovePieceToPosition,
-  useRotatePieceTo,
   useClearLineEffect,
+  useDropTime,
+  useGameState,
+  useMovePieceToPosition,
+  useResetGame,
+  useRotatePieceTo,
+  useSetDropTime,
+  useTogglePause,
+  useUpdateLineEffect,
+  useUpdateParticles,
 } from '../../store/gameStateStore';
-import { EFFECTS } from '../../constants/layout';
+import type { GameState, LineEffectState, SoundKey, Tetromino } from '../../types/tetris';
+import { animationManager } from '../../utils/animation/animationManager';
 
 export interface GameStateAPI {
   gameState: GameState;

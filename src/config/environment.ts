@@ -5,7 +5,7 @@
  */
 
 // Environment validation helper
-function getEnvBoolean(key: string, defaultValue: boolean = false): boolean {
+function getEnvBoolean(key: string, defaultValue = false): boolean {
   const value = process.env[key];
   if (value === undefined) return defaultValue;
   return value.toLowerCase() === 'true';
@@ -14,8 +14,8 @@ function getEnvBoolean(key: string, defaultValue: boolean = false): boolean {
 function getEnvNumber(key: string, defaultValue: number): number {
   const value = process.env[key];
   if (value === undefined) return defaultValue;
-  const parsed = parseInt(value, 10);
-  return isNaN(parsed) ? defaultValue : parsed;
+  const parsed = Number.parseInt(value, 10);
+  return Number.isNaN(parsed) ? defaultValue : parsed;
 }
 
 function getEnvString(key: string, defaultValue: string): string {

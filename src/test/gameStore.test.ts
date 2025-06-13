@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { HighScore, GameStatistics } from '../types/tetris';
+import { beforeEach, describe, expect, it } from 'vitest';
+import type { GameStatistics, HighScore } from '../types/tetris';
 
 // Type-safe store state type definition
 interface TestStoreState {

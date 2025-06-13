@@ -1,9 +1,9 @@
 import { useCallback, useEffect } from 'react';
-import { initializeTheme } from '../utils/ui';
+import type { ThemeConfig, ThemeState, ThemeVariant } from '../types/tetris';
 import { log } from '../utils/logging';
+import { initializeTheme } from '../utils/ui';
 import { useAccessibilityFilters } from './useAccessibilityFilters';
 import { useSystemPreferences } from './useSystemPreferences';
-import type { ThemeVariant, ThemeState, ThemeConfig } from '../types/tetris';
 
 const STORAGE_KEY = 'tetris-theme-state';
 

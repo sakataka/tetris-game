@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
-import { useKeyboardInput } from './useKeyboardInput';
 import { useAnimationTimer } from './useAnimationTimer';
 import { useDropTimeCalculator } from './useDropTimeCalculator';
+import { useKeyboardInput } from './useKeyboardInput';
 
 interface GameActions {
   movePiece: (dir: { x: number; y: number }) => void;

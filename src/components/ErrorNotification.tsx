@@ -2,9 +2,9 @@
 
 import { memo, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ErrorLevel, ErrorInfo } from '../types/errors';
+import type { ErrorInfo, ErrorLevel } from '../types/errors';
+import { ANIMATION_PRESETS, useTimerAnimation } from '../utils/animation';
 import { errorHandler } from '../utils/data';
-import { useTimerAnimation, ANIMATION_PRESETS } from '../utils/animation';
 
 interface ErrorNotificationProps {
   position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top-center';

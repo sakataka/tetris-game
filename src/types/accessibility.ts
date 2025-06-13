@@ -5,7 +5,7 @@
  * Separated from store implementations for better maintainability.
  */
 
-import { ColorBlindnessType, ContrastLevel } from './tetris';
+import type { ColorBlindnessType, ContrastLevel } from './tetris';
 
 // Core accessibility enums and levels
 export type AccessibilityLevel = 'minimal' | 'standard' | 'enhanced' | 'maximum';

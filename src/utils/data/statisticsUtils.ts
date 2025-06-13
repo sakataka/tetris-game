@@ -1,4 +1,4 @@
-import { HighScore, GameStatistics } from '../../types/tetris';
+import type { GameStatistics, HighScore } from '../../types/tetris';
 
 // Extended statistics type definition
 export interface EnhancedStatistics extends GameStatistics {
@@ -81,8 +81,7 @@ export function calculateConsistency(scores: number[]): number {
   if (scores.length === 0) return 0;
 
   const average = scores.reduce((sum, score) => sum + score, 0) / scores.length;
-  const variance =
-    scores.reduce((sum, score) => sum + Math.pow(score - average, 2), 0) / scores.length;
+  const variance = scores.reduce((sum, score) => sum + (score - average) ** 2, 0) / scores.length;
   const standardDeviation = Math.sqrt(variance);
 
   if (average === 0) return 0;
@@ -110,7 +109,7 @@ export function findFavoriteLevel(sessions: GameSession[]): number {
 
   const mostCommonLevel = Object.entries(levelCounts).sort(([, a], [, b]) => b - a)[0];
 
-  return mostCommonLevel ? parseInt(mostCommonLevel[0]) : 1;
+  return mostCommonLevel ? Number.parseInt(mostCommonLevel[0]) : 1;
 }
 
 /**

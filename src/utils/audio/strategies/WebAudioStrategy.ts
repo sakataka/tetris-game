@@ -5,8 +5,8 @@
 
 import type { SoundKey } from '../../../types/tetris';
 import { AudioError, handleError } from '../../data/errorHandler';
-import { AudioStrategy, type SoundConfig, type AudioState } from './AudioStrategy';
 import { log } from '../../logging/logger';
+import { type AudioState, AudioStrategy, type SoundConfig } from './AudioStrategy';
 
 interface AudioContextState {
   context: AudioContext | null;

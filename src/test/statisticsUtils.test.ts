@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { GameStatistics } from '../types/tetris';
+import { describe, expect, it } from 'vitest';
+import type { GameStatistics } from '../types/tetris';
 
 // Types imported when needed in actual implementations
 // import { HighScore, EnhancedStatistics } from '../utils/statisticsUtils';
@@ -90,7 +90,7 @@ describe('statisticsUtils', () => {
 
     it('should return 0 when play time is 0', () => {
       const efficiency = 0 / 0;
-      expect(isNaN(efficiency) || efficiency === 0).toBe(true);
+      expect(Number.isNaN(efficiency) || efficiency === 0).toBe(true);
     });
   });
 
@@ -100,7 +100,7 @@ describe('statisticsUtils', () => {
       const scores = [15000, 22000, 18000, 28000, 35000];
       const average = scores.reduce((sum, score) => sum + score, 0) / scores.length;
       const variance =
-        scores.reduce((sum, score) => sum + Math.pow(score - average, 2), 0) / scores.length;
+        scores.reduce((sum, score) => sum + (score - average) ** 2, 0) / scores.length;
       const standardDeviation = Math.sqrt(variance);
       const consistency = Math.max(0, 100 - (standardDeviation / average) * 100);
 
@@ -121,7 +121,7 @@ describe('statisticsUtils', () => {
         {} as Record<number, number>
       );
 
-      const favoriteLevel = parseInt(
+      const favoriteLevel = Number.parseInt(
         Object.entries(levelCounts).sort(([, a], [, b]) => b - a)[0]?.[0] ?? '1'
       );
 

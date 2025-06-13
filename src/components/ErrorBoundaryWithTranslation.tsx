@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import ErrorBoundary, { withErrorBoundary, useErrorBoundary } from './ErrorBoundary';
 import { useTranslation } from 'react-i18next';
+import ErrorBoundary, { withErrorBoundary, useErrorBoundary } from './ErrorBoundary';
 
 // Wrapper component that provides translations to ErrorBoundary
 interface ErrorBoundaryWithTranslationProps {
@@ -77,7 +77,8 @@ export default function ErrorBoundaryWithTranslation({
             </div>
           </div>
         );
-      } else if (level === 'section') {
+      }
+      if (level === 'section') {
         return (
           <div className='hologram neon-border p-6 rounded-lg text-center'>
             <div className='text-yellow-400 text-4xl mb-4'>⚠️</div>
@@ -95,22 +96,21 @@ export default function ErrorBoundaryWithTranslation({
             )}
           </div>
         );
-      } else {
-        return (
-          <div className='bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-center'>
-            <div className='text-red-400 text-2xl mb-2'>🔧</div>
-            <p className='text-red-300 text-sm mb-2'>{t('errors.componentError')}</p>
-            {retryCount < maxRetries && (
-              <button
-                onClick={resetError}
-                className='bg-red-500 hover:bg-red-400 text-white text-xs py-1 px-3 rounded transition-colors'
-              >
-                {t('errors.retry')}
-              </button>
-            )}
-          </div>
-        );
       }
+      return (
+        <div className='bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-center'>
+          <div className='text-red-400 text-2xl mb-2'>🔧</div>
+          <p className='text-red-300 text-sm mb-2'>{t('errors.componentError')}</p>
+          {retryCount < maxRetries && (
+            <button
+              onClick={resetError}
+              className='bg-red-500 hover:bg-red-400 text-white text-xs py-1 px-3 rounded transition-colors'
+            >
+              {t('errors.retry')}
+            </button>
+          )}
+        </div>
+      );
     };
 
     FallbackComponent.displayName = 'ErrorFallback';

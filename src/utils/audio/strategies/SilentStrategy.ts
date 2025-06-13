@@ -4,11 +4,11 @@
  */
 
 import type { SoundKey } from '../../../types/tetris';
-import { AudioStrategy, type SoundConfig, type AudioState } from './AudioStrategy';
+import { type AudioState, AudioStrategy, type SoundConfig } from './AudioStrategy';
 
 export class SilentStrategy extends AudioStrategy {
-  private initialized: boolean = false;
-  private activeSounds: number = 0;
+  private initialized = false;
+  private activeSounds = 0;
 
   canPlayAudio(): boolean {
     return true; // Silent strategy always works

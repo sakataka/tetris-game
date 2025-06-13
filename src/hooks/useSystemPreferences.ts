@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { log } from '../utils/logging';
 import type { ThemeState } from '../types/tetris';
+import { log } from '../utils/logging';
 
 export interface SystemPreferencesAPI {
   // This hook only provides side effects, no return API needed

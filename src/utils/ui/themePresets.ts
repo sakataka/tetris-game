@@ -1,9 +1,9 @@
-import {
-  ThemeConfig,
-  ColorPalette,
-  ThemeVariant,
+import type {
   ColorBlindnessType,
+  ColorPalette,
   ContrastLevel,
+  ThemeConfig,
+  ThemeVariant,
 } from '../../types/tetris';
 import { ColorConverter } from './colorConverter';
 

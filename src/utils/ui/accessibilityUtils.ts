@@ -4,7 +4,7 @@
  * CSS variable application, system settings detection, WCAG compliance checks
  */
 
-import {
+import type {
   AccessibilityState,
   AnimationIntensity,
   FontSizeLevel,

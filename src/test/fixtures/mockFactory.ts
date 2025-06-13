@@ -5,8 +5,8 @@
  * reusable mock generation utilities
  */
 
-import { vi, expect } from 'vitest';
-import type { GameState, HighScore, GameStatistics, ThemeConfig } from '../../types/tetris';
+import { expect, vi } from 'vitest';
+import type { GameState, GameStatistics, HighScore, ThemeConfig } from '../../types/tetris';
 import { log } from '../../utils/logging';
 
 // ===== Audio System Mocks =====
@@ -333,7 +333,7 @@ export const createTestFixtures = () => ({
 /**
  * Async test setup helper
  */
-export const setupAsyncTest = (timeout: number = 100) => {
+export const setupAsyncTest = (timeout = 100) => {
   return new Promise<void>((resolve) => {
     setTimeout(resolve, timeout);
   });
@@ -372,7 +372,7 @@ export const expectToThrow = async (
  */
 export const measurePerformance = async <T>(
   fn: () => Promise<T> | T,
-  label: string = 'operation'
+  label = 'operation'
 ): Promise<{ result: T; duration: number }> => {
   const start = performance.now();
   const result = await fn();

@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect } from 'react';
-import type { SoundKey } from '../../types/tetris';
 import { useAudio } from '../../hooks/useAudio';
 import { useSettings, useUpdateSettings } from '../../store/settingsStore';
+import type { SoundKey } from '../../types/tetris';
 
 export interface AudioSystemAPI {
   isMuted: boolean;

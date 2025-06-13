@@ -5,7 +5,7 @@
  * performs runtime validation while ensuring type safety
  */
 
-import { ThemeConfig, ThemeVariant, ColorBlindnessType } from '../../types/tetris';
+import type { ColorBlindnessType, ThemeConfig, ThemeVariant } from '../../types/tetris';
 import { log } from '../logging';
 
 // Type definitions for JSON schema validation

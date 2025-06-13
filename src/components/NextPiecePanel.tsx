@@ -2,9 +2,9 @@
 
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Tetromino } from '../types/tetris';
-import PanelBase from './ui/PanelBase';
 import { GAME_UI_SIZES } from '../constants/layout';
+import type { Tetromino } from '../types/tetris';
+import PanelBase from './ui/PanelBase';
 
 interface NextPiecePanelProps {
   nextPiece: Tetromino | null;
@@ -36,15 +36,13 @@ const NextPiecePanel = memo(function NextPiecePanel({
                     backgroundColor: cell ? nextPiece.color : 'transparent',
                   }}
                 >
-                  {cell === 1 && (
-                    <div className='absolute inset-0 bg-current opacity-20 blur-sm'></div>
-                  )}
+                  {cell === 1 && <div className='absolute inset-0 bg-current opacity-20 blur-sm' />}
                 </div>
               ))}
             </div>
           ))
         ) : (
-          <div className={`${containerSize} bg-gray-700/50 rounded border border-gray-500`}></div>
+          <div className={`${containerSize} bg-gray-700/50 rounded border border-gray-500`} />
         )}
       </div>
     </PanelBase>

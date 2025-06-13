@@ -1,14 +1,14 @@
-import { Tetromino, TetrominoType, Particle } from '../../types/tetris';
 import {
-  TETROMINO_SHAPES,
-  TETROMINO_COLORS,
-  BOARD_WIDTH,
   BOARD_HEIGHT,
+  BOARD_WIDTH,
+  GAME_PHYSICS,
   PARTICLES_PER_CELL,
   PARTICLE_LIFE_DURATION,
-  GAME_PHYSICS,
   PARTICLE_SYSTEM,
+  TETROMINO_COLORS,
+  TETROMINO_SHAPES,
 } from '../../constants';
+import type { Particle, Tetromino, TetrominoType } from '../../types/tetris';
 import { particlePool } from '../performance/particlePool';
 
 export function createEmptyBoard(): (string | null)[][] {
@@ -22,9 +22,9 @@ export function getRandomTetromino(debugMode = false): Tetromino {
   if (debugMode) {
     return {
       type: 'I',
-      shape: TETROMINO_SHAPES['I'],
+      shape: TETROMINO_SHAPES.I,
       position: { x: Math.floor(BOARD_WIDTH / 2) - 1, y: 0 },
-      color: TETROMINO_COLORS['I'],
+      color: TETROMINO_COLORS.I,
     };
   }
 
@@ -190,7 +190,7 @@ export function clearLines(board: (string | null)[][]): {
   // Identify complete lines
   for (let y = 0; y < BOARD_HEIGHT; y++) {
     const row = board[y];
-    if (row && row.every((cell) => cell !== null)) {
+    if (row?.every((cell) => cell !== null)) {
       linesToClear.push(y);
     }
   }

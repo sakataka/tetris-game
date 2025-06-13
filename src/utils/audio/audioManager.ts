@@ -5,22 +5,22 @@
 
 import type { SoundKey } from '../../types/tetris';
 import { AudioError, handleError } from '../data/errorHandler';
+import { log } from '../logging';
 import {
-  AudioStrategy,
-  WebAudioStrategy,
+  type AudioState,
+  type AudioStrategy,
   HTMLAudioStrategy,
   SilentStrategy,
   type SoundConfig,
-  type AudioState,
+  WebAudioStrategy,
 } from './strategies';
-import { log } from '../logging';
 
 export class AudioManagerV2 {
   private static instance: AudioManagerV2 | null = null;
   private currentStrategy: AudioStrategy;
   private strategies: AudioStrategy[] = [];
-  private strategyIndex: number = 0;
-  private initialized: boolean = false;
+  private strategyIndex = 0;
+  private initialized = false;
 
   private constructor() {
     this.initializeStrategies();
@@ -76,9 +76,6 @@ export class AudioManagerV2 {
           { recoverable: true, retryable: false }
         );
         handleError(audioError);
-
-        // Continue to next strategy
-        continue;
       }
     }
 

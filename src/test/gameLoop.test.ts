@@ -5,8 +5,8 @@
  * and ensures basic flow of piece manipulation, automatic drop, and line clearing
  */
 
-import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useGameLoop } from '../hooks/useGameLoop';
 
 // Mock dependent modules

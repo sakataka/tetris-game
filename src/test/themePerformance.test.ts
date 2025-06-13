@@ -4,11 +4,11 @@
  * Compare performance and memory usage between existing TypeScript implementation vs JSON implementation
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { getThemePreset as getLegacyTheme } from '../utils/ui/themePresets';
-import { getThemePresetAsync as getJsonTheme, themeCache } from '../utils/ui/themeLoader';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { ThemeVariant } from '../types/tetris';
 import { log } from '../utils/logging';
+import { getThemePresetAsync as getJsonTheme, themeCache } from '../utils/ui/themeLoader';
+import { getThemePreset as getLegacyTheme } from '../utils/ui/themePresets';
 
 describe('Theme System Performance Comparison', () => {
   beforeEach(() => {
@@ -163,10 +163,10 @@ describe('Theme System Performance Comparison', () => {
       const jsonEndTime = performance.now();
       const jsonModuleTime = jsonEndTime - jsonStartTime;
 
-      log.performance(`Legacy module load`, legacyModuleTime, {
+      log.performance('Legacy module load', legacyModuleTime, {
         component: 'ThemePerformanceTest',
       });
-      log.performance(`JSON module load`, jsonModuleTime, { component: 'ThemePerformanceTest' });
+      log.performance('JSON module load', jsonModuleTime, { component: 'ThemePerformanceTest' });
 
       expect(legacyModule).toBeDefined();
       expect(jsonModule).toBeDefined();
@@ -189,10 +189,10 @@ describe('Theme System Performance Comparison', () => {
       const jsonEndTime = performance.now();
       const jsonFirstAccess = jsonEndTime - jsonStartTime;
 
-      log.performance(`Legacy first access`, legacyFirstAccess, {
+      log.performance('Legacy first access', legacyFirstAccess, {
         component: 'ThemePerformanceTest',
       });
-      log.performance(`JSON first access`, jsonFirstAccess, { component: 'ThemePerformanceTest' });
+      log.performance('JSON first access', jsonFirstAccess, { component: 'ThemePerformanceTest' });
 
       expect(legacyTheme).toBeDefined();
       expect(jsonTheme).toBeDefined();
@@ -260,7 +260,7 @@ describe('Theme System Performance Comparison', () => {
       log.performance(`Cache access time for ${accessCount} requests`, cacheAccessTime, {
         component: 'ThemePerformanceTest',
       });
-      log.performance(`Average access time`, averageAccessTime, {
+      log.performance('Average access time', averageAccessTime, {
         component: 'ThemePerformanceTest',
       });
 
@@ -341,10 +341,10 @@ describe('Theme System Performance Comparison', () => {
       const jsonEndTime = performance.now();
       const jsonSwitchTime = jsonEndTime - jsonStartTime;
 
-      log.performance(`Legacy theme switching`, legacySwitchTime, {
+      log.performance('Legacy theme switching', legacySwitchTime, {
         component: 'ThemePerformanceTest',
       });
-      log.performance(`JSON theme switching`, jsonSwitchTime, {
+      log.performance('JSON theme switching', jsonSwitchTime, {
         component: 'ThemePerformanceTest',
       });
 
@@ -369,7 +369,7 @@ describe('Theme System Performance Comparison', () => {
       const endTime = performance.now();
       const startupTime = endTime - startTime;
 
-      log.performance(`Application startup with theme preloading`, startupTime, {
+      log.performance('Application startup with theme preloading', startupTime, {
         component: 'ThemePerformanceTest',
       });
 

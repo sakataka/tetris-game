@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, ReactNode } from 'react';
+import { type ReactNode, memo } from 'react';
 import { cn } from '../../utils/ui';
 
 /**

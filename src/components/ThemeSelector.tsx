@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ThemeVariant } from '../types/tetris';
+import type { ThemeVariant } from '../types/tetris';
 import { THEME_PRESETS } from '../utils/ui';
 
 interface ThemeSelectorProps {

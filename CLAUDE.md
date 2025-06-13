@@ -37,7 +37,7 @@ pnpm test:coverage      # Run tests with coverage report
 pnpm lint               # Oxlint validation (7-8ms execution)
 pnpm lint:full          # Oxlint + ESLint comprehensive check
 pnpm lint:fix           # Auto-fix issues with both linters
-pnpm format             # Format code with Prettier
+pnpm format             # Format code with Biome
 pnpm quality:check      # Full quality pipeline (lint + typecheck + test)
 
 # Analysis
@@ -401,17 +401,39 @@ The i18n system uses two complementary stores:
 
 ## Code Quality & Linting
 
+### Biome Integration (All-in-one Code Quality Tool)
+
+- **Primary Formatter & Secondary Linter**: Biome 1.9.4 for formatting and additional linting
+- **Performance**: 25x faster than Prettier, unified toolchain
+- **Features**: Combined formatting, linting, and import sorting
+- **Configuration**: `biome.json` with Next.js/React/TypeScript optimization
+
 ```bash
-pnpm lint         # Run Oxlint
+pnpm format         # Biome formatting (daily development)
+pnpm format:check   # Biome format validation
+pnpm biome:check    # Biome comprehensive check (format + lint + imports)
+pnpm biome:check-dry # Biome check without applying fixes
+```
+
+### Oxlint Integration (Rust-based, Primary Linter)
+
+- **Primary Linter**: Oxlint 1.0 with 500+ rules for strict code quality
+- **Performance**: 7-8ms execution time vs ESLint's 1.4s
+- **Memory Usage**: 78MB vs ESLint's 416MB (5.3x less)
+- **Configuration**: `.oxlintrc.json` with Next.js/React/TypeScript plugins
+
+```bash
+pnpm lint         # Oxlint only (daily development)
 pnpm lint:fix     # Auto-fix with Oxlint
 ```
 
-### Linting Strategy
+### Linting & Formatting Strategy
 
-- **Development**: Oxlint for instant feedback
-- **Pre-commit**: Oxlint via lint-staged (fast commits)
-- **CI/CD**: Oxlint in pipeline (faster builds)
-- **Code Quality**: Comprehensive rule set covering TypeScript, React, and Next.js best practices
+- **Development**: Biome for formatting + Oxlint for linting (instant feedback)
+- **Pre-commit**: Biome format check + Biome lint + Oxlint via lint-staged
+- **CI/CD**: Biome + Oxlint in pipeline (faster builds)
+- **Unified Configuration**: Single `biome.json` for formatting, linting, and import organization
+- **Migration**: Successfully migrated from Prettier to Biome with automatic configuration conversion
 
 ## Build Configuration
 

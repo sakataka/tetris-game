@@ -5,8 +5,8 @@
  * and prevents game-breaking bugs
  */
 
-import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { renderHook } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useGameTimer } from '../hooks/useGameTimer';
 
 // Simple AnimationManager mock

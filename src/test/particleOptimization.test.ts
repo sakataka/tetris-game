@@ -3,11 +3,11 @@
  * Validates enhanced performance optimizations and new features
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { particlePool } from '../utils/performance/particlePool';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { Particle } from '../types/tetris';
 import { CanvasRenderer } from '../utils/performance/canvasRenderer';
 import { FpsController } from '../utils/performance/fpsController';
-import { Particle } from '../types/tetris';
+import { particlePool } from '../utils/performance/particlePool';
 
 describe('Particle Pool Optimization', () => {
   beforeEach(() => {

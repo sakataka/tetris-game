@@ -2,8 +2,8 @@
  * Type-safe mock definitions for testing
  */
 
-import { SoundKey } from '../../types/tetris';
-import { Mock } from 'vitest';
+import type { Mock } from 'vitest';
+import type { SoundKey } from '../../types/tetris';
 
 // Type-safe mock for audio playback function
 export type MockPlaySound = Mock<(soundKey: SoundKey) => void>;

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
 import i18n from '../i18n';
 import type { SupportedLanguage } from '../i18n';
 import { defaultLanguage } from '../i18n';

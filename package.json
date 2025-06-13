@@ -13,8 +13,10 @@
     "test:coverage": "vitest run --coverage",
     "prepare": "husky",
     "analyze": "ANALYZE=true pnpm build",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "biome:check": "biome check --apply .",
+    "biome:check-dry": "biome check .",
     "quality:check": "pnpm lint && pnpm tsc --noEmit && pnpm test:run",
     "quality:fix": "pnpm format && pnpm lint:fix"
   },
@@ -29,6 +31,7 @@
     "zustand": "^5.0.5"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
     "@next/bundle-analyzer": "^15.3.3",
     "@tailwindcss/postcss": "^4.1.10",
     "@testing-library/jest-dom": "^6.6.3",
@@ -44,18 +47,12 @@
     "jsdom": "^26.1.0",
     "lint-staged": "^16.1.0",
     "oxlint": "^1.1.0",
-    "prettier": "^3.5.3",
     "tailwindcss": "^4.1.10",
     "typescript": "^5",
     "vitest": "^3.2.3"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "prettier --check",
-      "oxlint --allow exhaustive-deps"
-    ],
-    "*.{json,css,md}": [
-      "prettier --check"
-    ]
+    "*.{js,jsx,ts,tsx}": ["biome format", "oxlint --allow exhaustive-deps"],
+    "*.{json,css}": ["biome format"]
   }
 }

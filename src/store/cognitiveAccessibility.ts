@@ -10,11 +10,11 @@
  */
 
 import { create } from 'zustand';
-import { persist, PersistOptions } from 'zustand/middleware';
+import { type PersistOptions, persist } from 'zustand/middleware';
 import {
-  CognitiveAccessibilityState,
-  CognitiveAccessibilityActions,
-  CognitiveAssistance,
+  type CognitiveAccessibilityActions,
+  type CognitiveAccessibilityState,
+  type CognitiveAssistance,
   DEFAULT_COGNITIVE_ACCESSIBILITY,
 } from '../types/accessibility';
 

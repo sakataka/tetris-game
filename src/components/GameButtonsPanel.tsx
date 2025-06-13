@@ -39,7 +39,7 @@ const GameButtonsPanel = memo(function GameButtonsPanel({
                    shadow-[0_0_20px_rgba(0,255,255,0.3)] hover:shadow-[0_0_30px_rgba(0,255,255,0.5)]
                    border border-cyan-400/50 relative overflow-hidden`}
       >
-        <div className='absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-blue-400/20 blur-sm'></div>
+        <div className='absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-blue-400/20 blur-sm' />
         <span className={`relative font-mono ${textSize}`}>
           {isPaused ? t('game.resume') : t('game.pause')}
         </span>
@@ -52,7 +52,7 @@ const GameButtonsPanel = memo(function GameButtonsPanel({
                    hover:scale-105 shadow-[0_0_20px_rgba(255,0,0,0.3)] hover:shadow-[0_0_30px_rgba(255,0,0,0.5)]
                    border border-red-400/50 relative overflow-hidden`}
       >
-        <div className='absolute inset-0 bg-gradient-to-r from-red-400/20 to-pink-400/20 blur-sm'></div>
+        <div className='absolute inset-0 bg-gradient-to-r from-red-400/20 to-pink-400/20 blur-sm' />
         <span className={`relative font-mono ${textSize}`}>{t('buttons.reset')}</span>
       </button>
     </div>

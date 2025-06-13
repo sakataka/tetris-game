@@ -6,7 +6,7 @@
  * - useHighScoreUtils: high score utility functions and manual operations
  */
 
-import { GameState, SoundKey } from '../types/tetris';
+import type { GameState, SoundKey } from '../types/tetris';
 import { useGameEndDetection } from './useGameEndDetection';
 import { useHighScoreUtils } from './useHighScoreUtils';
 

@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { HighScore } from '../types/tetris';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { HighScore } from '../types/tetris';
 
 // Mock data
 const mockHighScores: HighScore[] = [

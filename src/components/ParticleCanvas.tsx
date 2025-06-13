@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useRef, memo, useState } from 'react';
-import { LineEffectState } from '../types/tetris';
-import { CanvasRenderer, performanceMonitor } from '../utils/performance';
+import { memo, useEffect, useRef, useState } from 'react';
+import type { LineEffectState } from '../types/tetris';
 import { log } from '../utils/logging';
+import { CanvasRenderer, performanceMonitor } from '../utils/performance';
 
 interface ParticleCanvasProps {
   lineEffect: LineEffectState;

@@ -4,9 +4,9 @@
  * Helper functions for configuration management and validation
  */
 
-import { GameConfiguration } from './gameConfig';
-import { ENV_CONFIG } from './environment';
 import { logger } from '../utils/logging/logger';
+import { ENV_CONFIG } from './environment';
+import type { GameConfiguration } from './gameConfig';
 
 // Configuration comparison utilities
 export function compareConfigurations(
@@ -63,7 +63,7 @@ export interface ConfigurationBackup {
 
 export function createConfigurationBackup(
   config: GameConfiguration,
-  version: string = '1.0.0'
+  version = '1.0.0'
 ): ConfigurationBackup {
   return {
     config: JSON.parse(JSON.stringify(config)), // Deep clone
@@ -258,11 +258,7 @@ export function getConfigurationDiff(
   const diff: Record<string, { before: unknown; after: unknown }> = {};
 
   // Helper function to recursively find differences
-  function findDiffs(
-    obj1: Record<string, unknown>,
-    obj2: Record<string, unknown>,
-    path: string = ''
-  ) {
+  function findDiffs(obj1: Record<string, unknown>, obj2: Record<string, unknown>, path = '') {
     Object.keys(obj1).forEach((key) => {
       const currentPath = path ? `${path}.${key}` : key;
       const val1 = obj1[key];

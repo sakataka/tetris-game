@@ -1,10 +1,10 @@
 'use client';
 
-import React, { Component, ReactNode, ErrorInfo } from 'react';
 import i18next from 'i18next';
+import React, { Component, type ReactNode, type ErrorInfo } from 'react';
+import { DEFAULT_VALUES, GAME_TIMING } from '../constants';
 import { UIError } from '../types/errors';
 import { errorHandler } from '../utils/data';
-import { DEFAULT_VALUES, GAME_TIMING } from '../constants';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -124,11 +124,11 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     // Display based on error level
     if (level === 'page') {
       return this.renderPageError();
-    } else if (level === 'section') {
-      return this.renderSectionError();
-    } else {
-      return this.renderComponentError();
     }
+    if (level === 'section') {
+      return this.renderSectionError();
+    }
+    return this.renderComponentError();
   }
 
   private renderPageError() {

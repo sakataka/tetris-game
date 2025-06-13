@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { GameStatistics, HighScore } from '../types/tetris';
+import type { GameStatistics, HighScore } from '../types/tetris';
 
 // Default statistics values
 const DEFAULT_STATISTICS: GameStatistics = {

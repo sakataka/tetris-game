@@ -9,13 +9,13 @@
  */
 
 import { create } from 'zustand';
-import { persist, PersistOptions } from 'zustand/middleware';
+import { type PersistOptions, persist } from 'zustand/middleware';
 import {
-  InputAccessibilityState,
-  InputAccessibilityActions,
-  KeyboardNavigation,
-  FeedbackSettings,
   DEFAULT_INPUT_ACCESSIBILITY,
+  type FeedbackSettings,
+  type InputAccessibilityActions,
+  type InputAccessibilityState,
+  type KeyboardNavigation,
 } from '../types/accessibility';
 
 // Input accessibility store interface

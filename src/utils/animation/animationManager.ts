@@ -5,11 +5,11 @@
  * providing a centralized animation manager that improves performance and maintainability
  */
 
-import { handleError } from '../data/errorHandler';
-import { SystemError } from '../../types/errors';
-import { log } from '../logging';
 import { PERFORMANCE_LIMITS } from '../../constants/performance';
 import { INTERVALS } from '../../constants/timing';
+import { SystemError } from '../../types/errors';
+import { handleError } from '../data/errorHandler';
+import { log } from '../logging';
 
 export interface AnimationOptions {
   /** Target FPS (default: 60) */
@@ -91,7 +91,7 @@ export class AnimationManager {
         fps: options.fps ?? this.globalFPSLimit,
         priority: options.priority ?? 'normal',
         autoStop: {
-          maxDuration: options.autoStop?.maxDuration ?? Infinity,
+          maxDuration: options.autoStop?.maxDuration ?? Number.POSITIVE_INFINITY,
           condition: options.autoStop?.condition ?? (() => false),
         },
       };
@@ -124,7 +124,7 @@ export class AnimationManager {
         if (animation.lastFrameTime === 0 || deltaTime >= targetInterval) {
           // Auto-stop condition check
           const elapsed = currentTime - animation.startTime;
-          const maxDuration = fullOptions.autoStop.maxDuration ?? Infinity;
+          const maxDuration = fullOptions.autoStop.maxDuration ?? Number.POSITIVE_INFINITY;
           if (elapsed >= maxDuration || fullOptions.autoStop.condition?.()) {
             this.unregisterAnimation(id);
             return;

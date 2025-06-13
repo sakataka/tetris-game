@@ -1,11 +1,11 @@
 'use client';
 
 import { memo } from 'react';
+import ErrorBoundary from './ErrorBoundary';
+import GameInfo from './GameInfo';
 import type { GameControllerAPI } from './GameLogicController';
 import TetrisBoard from './TetrisBoard';
-import GameInfo from './GameInfo';
 import VirtualControls from './VirtualControls';
-import ErrorBoundary from './ErrorBoundary';
 
 interface GameLayoutManagerProps {
   api: GameControllerAPI;

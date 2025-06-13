@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { HighScore, GameStatistics } from '../types/tetris';
-import { StatisticsService, STATISTICS_PERIODS } from '../utils/data/StatisticsService';
-import { EnhancedStatistics, GameSession } from '../utils/data/statisticsUtils';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
+import type { GameStatistics, HighScore } from '../types/tetris';
+import { STATISTICS_PERIODS, StatisticsService } from '../utils/data/StatisticsService';
+import type { EnhancedStatistics, GameSession } from '../utils/data/statisticsUtils';
 
 interface StatisticsDashboardProps {
   baseStatistics: GameStatistics;
@@ -181,9 +181,10 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
                 <span className='text-gray-400'>{t('statistics.efficiency')}: </span>
                 <span className={`text-cyan-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
                   {advancedMetrics
-                    ? (advancedMetrics.improvementTrend > 0 ? '+' : '') +
-                      advancedMetrics.improvementTrend.toFixed(1) +
-                      '%'
+                    ? `${
+                        (advancedMetrics.improvementTrend > 0 ? '+' : '') +
+                        advancedMetrics.improvementTrend.toFixed(1)
+                      }%`
                     : '0.0%'}
                 </span>
               </div>
@@ -227,11 +228,11 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
 
                       if (daysAgo > 0) {
                         return t('statistics.daysAgo', { count: daysAgo });
-                      } else if (hoursAgo > 0) {
-                        return t('statistics.hoursAgo', { count: hoursAgo });
-                      } else {
-                        return t('statistics.hoursAgo', { count: 1 });
                       }
+                      if (hoursAgo > 0) {
+                        return t('statistics.hoursAgo', { count: hoursAgo });
+                      }
+                      return t('statistics.hoursAgo', { count: 1 });
                     })()}
                   </span>
                 </div>

@@ -2,9 +2,9 @@
 
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Tetromino } from '../types/tetris';
-import PanelBase from './ui/PanelBase';
 import { GAME_UI_SIZES, SPACING, TYPOGRAPHY } from '../constants/layout';
+import type { Tetromino } from '../types/tetris';
+import PanelBase from './ui/PanelBase';
 
 interface CombinedStatsNextPanelProps {
   score: number;
@@ -77,16 +77,14 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
                       }}
                     >
                       {cell === 1 && (
-                        <div className='absolute inset-0 bg-current opacity-20 blur-sm'></div>
+                        <div className='absolute inset-0 bg-current opacity-20 blur-sm' />
                       )}
                     </div>
                   ))}
                 </div>
               ))
             ) : (
-              <div
-                className={`${containerSize} bg-gray-700/50 rounded border border-gray-500`}
-              ></div>
+              <div className={`${containerSize} bg-gray-700/50 rounded border border-gray-500`} />
             )}
           </div>
         </div>

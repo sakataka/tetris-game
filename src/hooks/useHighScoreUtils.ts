@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
-import { useStatisticsStore, useAddHighScore } from '../store/statisticsStore';
-import type { HighScore, GameStatistics } from '../types/tetris';
-import { isHighScore, getHighScoreRank, createHighScoreEntry } from '../utils/game';
+import { useAddHighScore, useStatisticsStore } from '../store/statisticsStore';
+import type { GameStatistics, HighScore } from '../types/tetris';
+import { createHighScoreEntry, getHighScoreRank, isHighScore } from '../utils/game';
 
 export interface HighScoreUtilsAPI {
   // High score determination functions

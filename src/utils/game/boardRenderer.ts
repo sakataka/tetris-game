@@ -5,24 +5,24 @@
  * Handles board display calculations, piece rendering, and style computations.
  */
 
-import { Tetromino } from '../../types/tetris';
 import {
-  BoardRenderState,
-  DisplayBoard,
-  DisplayCellType,
-  CellStyle,
-  CellRenderContext,
-  RenderEffects,
-  BoardRendererConfig,
-  BoardStyleTheme,
-  RenderingOptions,
-  IBoardRenderer,
-  IStyleCalculator,
+  type BoardRenderState,
+  type BoardRendererConfig,
+  type BoardStyleTheme,
+  type CellRenderContext,
+  type CellStyle,
   DEFAULT_BOARD_CONFIG,
-  DEFAULT_RENDERING_OPTIONS,
   DEFAULT_CYBERPUNK_THEME,
+  DEFAULT_RENDERING_OPTIONS,
+  type DisplayBoard,
+  type DisplayCellType,
+  type IBoardRenderer,
+  type IStyleCalculator,
+  type RenderEffects,
   RenderError,
+  type RenderingOptions,
 } from '../../types/rendering';
+import type { Tetromino } from '../../types/tetris';
 import { getDropPosition } from './tetrisUtils';
 
 /**
@@ -322,10 +322,7 @@ export class BoardRendererFactory {
   /**
    * Create accessibility-optimized renderer
    */
-  static createAccessibilityRenderer(
-    highContrast: boolean = false,
-    reducedMotion: boolean = false
-  ): IBoardRenderer {
+  static createAccessibilityRenderer(highContrast = false, reducedMotion = false): IBoardRenderer {
     const accessibilityTheme: BoardStyleTheme = {
       ...DEFAULT_CYBERPUNK_THEME,
       empty: highContrast ? 'bg-black border-2 border-white' : DEFAULT_CYBERPUNK_THEME.empty,

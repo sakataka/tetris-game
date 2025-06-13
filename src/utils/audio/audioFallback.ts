@@ -3,7 +3,7 @@
  * Progressive fallback, error recovery, and alternative methods
  */
 
-import { SoundKey } from '../../types/tetris';
+import type { SoundKey } from '../../types/tetris';
 import { AudioError, handleError } from '../data/errorHandler';
 import { log } from '../logging';
 
@@ -34,7 +34,7 @@ class AudioFallbackManager {
   private static instance: AudioFallbackManager | null = null;
 
   private fallbackLevels: FallbackLevel[] = [];
-  private currentLevel: number = 0;
+  private currentLevel = 0;
   private capabilities: AudioCapabilities | null = null;
   private config: FallbackConfig = {
     enableFallback: true,

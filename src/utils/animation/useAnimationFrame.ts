@@ -5,8 +5,8 @@
  * Replaces traditional scattered requestAnimationFrame usage
  */
 
-import { useEffect, useCallback, useRef } from 'react';
-import { animationManager, AnimationOptions } from './animationManager';
+import { useCallback, useEffect, useRef } from 'react';
+import { type AnimationOptions, animationManager } from './animationManager';
 
 /**
  * Configuration options for unified animation hook

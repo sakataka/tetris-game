@@ -4,9 +4,9 @@
  * Tests for error store initialization component functionality
  */
 
-import React from 'react';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render } from '@testing-library/react';
+import React from 'react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Mock the integration function before importing
 vi.mock('../store/errorStore', () => ({

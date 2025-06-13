@@ -1,12 +1,12 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import {
-  ErrorInfo,
-  ErrorLevel,
-  ErrorCategory,
-  ErrorStats,
-  ErrorReportConfig,
   DEFAULT_ERROR_CONFIG,
+  type ErrorCategory,
+  type ErrorInfo,
+  type ErrorLevel,
+  type ErrorReportConfig,
+  type ErrorStats,
 } from '../types/errors';
 
 // Error store state type definitions
@@ -122,7 +122,7 @@ export const useErrorStore = create<ErrorState>()(
           };
 
           if (state.selectedErrorId === errorId) {
-            delete updates.selectedErrorId;
+            updates.selectedErrorId = null as any;
           }
 
           return updates;
@@ -182,7 +182,7 @@ export const useErrorStore = create<ErrorState>()(
         return get().errors.filter((error) => error.category === category);
       },
 
-      getRecentErrors: (count: number = 5) => {
+      getRecentErrors: (count = 5) => {
         return get().errors.slice(-count).reverse();
       },
 
@@ -212,7 +212,7 @@ export const useErrorStore = create<ErrorState>()(
           state.errors = [];
           state.stats = INITIAL_STATS;
           state.showErrorPanel = false;
-          delete state.selectedErrorId;
+          state.selectedErrorId = null as any;
         }
       },
     }

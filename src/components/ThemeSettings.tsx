@@ -2,17 +2,17 @@
 
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ThemeSelectorMemo } from './ThemeSelector';
-import { ColorPaletteEditorMemo } from './ColorPaletteEditor';
-import { AccessibilitySettingsMemo } from './AccessibilitySettings';
-import {
-  ThemeVariant,
-  ColorPalette,
-  ColorBlindnessType,
-  ContrastLevel,
-  AnimationIntensity,
-} from '../types/tetris';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
+import type {
+  AnimationIntensity,
+  ColorBlindnessType,
+  ColorPalette,
+  ContrastLevel,
+  ThemeVariant,
+} from '../types/tetris';
+import { AccessibilitySettingsMemo } from './AccessibilitySettings';
+import { ColorPaletteEditorMemo } from './ColorPaletteEditor';
+import { ThemeSelectorMemo } from './ThemeSelector';
 
 interface ThemeSettingsProps {
   currentTheme: ThemeVariant;
@@ -61,7 +61,7 @@ export default function ThemeSettings({
 
   // Event handler (React Compiler will optimize this)
   const handleEffectIntensityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onEffectIntensityChange(parseFloat(event.target.value));
+    onEffectIntensityChange(Number.parseFloat(event.target.value));
   };
 
   const tabs = [

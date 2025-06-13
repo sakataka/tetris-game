@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import { GameState, Tetromino, SoundKey } from '../types/tetris';
 import { SCORES } from '../constants';
+import type { GameState, SoundKey, Tetromino } from '../types/tetris';
 import { isValidPosition, rotatePiece } from '../utils/game';
 
 interface PieceControlActions {

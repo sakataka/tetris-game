@@ -2,14 +2,14 @@
 
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Tetromino } from '../types/tetris';
+import { SPACING, TYPOGRAPHY } from '../constants/layout';
+import { useHighScores } from '../store/statisticsStore';
+import type { Tetromino } from '../types/tetris';
 import CombinedStatsNextPanel from './CombinedStatsNextPanel';
 import ControlsPanel from './ControlsPanel';
 import GameButtonsPanel from './GameButtonsPanel';
-import ScoringPanel from './ScoringPanel';
 import HighScoreDisplay from './HighScoreDisplay';
-import { useHighScores } from '../store/statisticsStore';
-import { SPACING, TYPOGRAPHY } from '../constants/layout';
+import ScoringPanel from './ScoringPanel';
 
 interface GameTabContentProps {
   score: number;

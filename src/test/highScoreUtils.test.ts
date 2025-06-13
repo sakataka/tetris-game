@@ -1,16 +1,16 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
+import type { HighScore } from '../types/tetris';
 import {
-  isHighScore,
-  getHighScoreRank,
-  getHighScoreMessage,
-  generateHighScoreId,
-  createHighScoreEntry,
-  validateHighScore,
-  sortHighScores,
-  validatePlayerName,
   calculateHighScoreStats,
+  createHighScoreEntry,
+  generateHighScoreId,
+  getHighScoreMessage,
+  getHighScoreRank,
+  isHighScore,
+  sortHighScores,
+  validateHighScore,
+  validatePlayerName,
 } from '../utils/game/highScoreUtils';
-import { HighScore } from '../types/tetris';
 
 const mockHighScores: HighScore[] = [
   { id: '1', score: 50000, level: 10, lines: 80, date: Date.now() },

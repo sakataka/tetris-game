@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useSettings } from '../hooks/useSettings';
-import { createMockDOMEnvironment, clearTestStorage } from './fixtures';
+import { clearTestStorage, createMockDOMEnvironment } from './fixtures';
 
 // Setup DOM environment mock
 const domMocks = createMockDOMEnvironment();

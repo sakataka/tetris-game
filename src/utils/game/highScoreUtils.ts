@@ -1,4 +1,4 @@
-import { HighScore } from '../../types/tetris';
+import type { HighScore } from '../../types/tetris';
 
 /**
  * Determine if the specified score qualifies for the high score list
@@ -6,7 +6,7 @@ import { HighScore } from '../../types/tetris';
 export function isHighScore(
   score: number,
   currentHighScores: readonly HighScore[],
-  maxScores: number = 10
+  maxScores = 10
 ): boolean {
   if (currentHighScores.length < maxScores) {
     return true;
@@ -22,7 +22,7 @@ export function isHighScore(
 export function getHighScoreRank(
   score: number,
   currentHighScores: readonly HighScore[],
-  maxScores: number = 10
+  maxScores = 10
 ): number | null {
   if (!isHighScore(score, currentHighScores, maxScores)) {
     return null;

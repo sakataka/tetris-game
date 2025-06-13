@@ -5,7 +5,7 @@
  */
 
 import { expect } from 'vitest';
-import type { HighScore, GameStatistics } from '../../types/tetris';
+import type { GameStatistics, HighScore } from '../../types/tetris';
 
 // ===== Assertion Helpers =====
 

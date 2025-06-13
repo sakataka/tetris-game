@@ -1,11 +1,11 @@
-import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { SoundKey } from '../types/tetris';
 import {
+  audioManager,
+  getAudioPreloadProgress,
+  getFallbackStatus,
   playWithFallback,
   preloadAudioSmart,
-  getAudioPreloadProgress,
-  audioManager,
-  getFallbackStatus,
 } from '../utils/audio';
 import { log } from '../utils/logging/logger';
 
@@ -238,7 +238,7 @@ export function useAudio({
   const initializeStrategy = useCallback(
     async (
       strategy: AudioStrategyType = useWebAudio ? 'webaudio' : 'htmlaudio',
-      forceRetry: boolean = false
+      forceRetry = false
     ) => {
       // Early return if initialization should be skipped
       if (shouldSkipInitialization(forceRetry)) {
@@ -647,12 +647,12 @@ export function useAudio({
 
       // Early return for silent mode or muted state
       if (strategyState.currentStrategy === 'silent') {
-        log.audio(`Skipping playback - silent mode`);
+        log.audio('Skipping playback - silent mode');
         return;
       }
 
       if (volumeState.isMuted) {
-        log.audio(`Skipping playback - muted`);
+        log.audio('Skipping playback - muted');
         return;
       }
 

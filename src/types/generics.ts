@@ -62,8 +62,9 @@ export type ObjectValues<T> = T extends object ? T[keyof T] : never;
 export type ObjectEntries<T> = T extends object ? [keyof T, T[keyof T]][] : never;
 
 // Discriminated union helpers
-export type DiscriminateUnion<T, K extends keyof T, V extends T[K]> =
-  T extends Record<K, V> ? T : never;
+export type DiscriminateUnion<T, K extends keyof T, V extends T[K]> = T extends Record<K, V>
+  ? T
+  : never;
 
 // Type guard helpers
 export type TypeGuard<T> = (value: unknown) => value is T;

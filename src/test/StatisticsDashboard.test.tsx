@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { GameStatistics, HighScore } from '../types/tetris';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { GameStatistics, HighScore } from '../types/tetris';
 
 // Statistics dashboard type definition (not yet implemented)
 interface EnhancedStatistics extends GameStatistics {

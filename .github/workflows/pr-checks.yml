@@ -93,11 +93,8 @@ jobs:
       - name: 🔍 Run Oxlint
         run: pnpm lint
 
-      - name: 💅 Check Prettier formatting
-        uses: creyD/prettier_action@v4.3
-        with:
-          dry: true
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: 💅 Check Biome formatting
+        run: pnpm format:check
 
   test-summary:
     name: Test Summary

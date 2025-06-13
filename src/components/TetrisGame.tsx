@@ -1,9 +1,9 @@
 'use client';
 
-import GameOrchestrator from './GameOrchestrator';
-import GameLogicController from './GameLogicController';
-import GameLayoutManager from './GameLayoutManager';
 import ErrorBoundary from './ErrorBoundary';
+import GameLayoutManager from './GameLayoutManager';
+import GameLogicController from './GameLogicController';
+import GameOrchestrator from './GameOrchestrator';
 
 /**
  * TetrisGame is the main entry point component, now refactored into a clean architecture:

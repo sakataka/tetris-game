@@ -3,13 +3,13 @@
  * Implements efficient drawing patterns with minimal state changes and object allocation
  */
 
-import { Particle } from '../../types/tetris';
 import {
   PARTICLE_LIFE_DURATION,
+  PARTICLE_OPACITY_MULTIPLIER,
   PARTICLE_SCALE_BASE,
   PARTICLE_SCALE_MULTIPLIER,
-  PARTICLE_OPACITY_MULTIPLIER,
 } from '../../constants';
+import type { Particle } from '../../types/tetris';
 
 interface CanvasRendererConfig {
   enableShadows?: boolean;
@@ -61,8 +61,8 @@ export class CanvasRenderer {
 
     const gradient = this.ctx.createRadialGradient(0, 0, 0, 0, 0, size);
     gradient.addColorStop(0, color);
-    gradient.addColorStop(0.3, color + 'CC');
-    gradient.addColorStop(0.7, color + '44');
+    gradient.addColorStop(0.3, `${color}CC`);
+    gradient.addColorStop(0.7, `${color}44`);
     gradient.addColorStop(1, 'transparent');
 
     // Limit cache size to prevent memory leaks

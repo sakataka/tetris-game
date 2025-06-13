@@ -1,12 +1,12 @@
-import {
-  ThemeConfig,
-  ColorPalette,
-  ThemeVariant,
+import type {
   ColorBlindnessType,
+  ColorPalette,
   ContrastLevel,
+  ThemeConfig,
+  ThemeVariant,
 } from '../../types/tetris';
-import { COLOR_BLIND_PALETTES, getThemePreset } from './themePresets';
 import { ColorConverter } from './colorConverter';
+import { COLOR_BLIND_PALETTES, getThemePreset } from './themePresets';
 
 /**
  * Apply theme configuration to CSS variables
@@ -40,9 +40,10 @@ export function applyThemeToCSS(config: ThemeConfig): void {
   root.style.setProperty('--neon-blur-xl', `${config.effects.blur * 2}px`);
 
   // Dynamically generate hologram background
-  const hologramBg = `linear-gradient(45deg, var(--cyber-cyan-10) 0%, var(--cyber-purple-10) 50%, var(--cyber-yellow-10) 100%)`;
+  const hologramBg =
+    'linear-gradient(45deg, var(--cyber-cyan-10) 0%, var(--cyber-purple-10) 50%, var(--cyber-yellow-10) 100%)';
   root.style.setProperty('--hologram-bg', hologramBg);
-  root.style.setProperty('--hologram-border', `1px solid var(--cyber-cyan-30)`);
+  root.style.setProperty('--hologram-border', '1px solid var(--cyber-cyan-30)');
 }
 
 /**

@@ -4,8 +4,8 @@
  * Tests for unified error management system
  */
 
-import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { act } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ErrorInfo } from '../types/errors';
 
 // Import the actual store

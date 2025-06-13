@@ -52,7 +52,7 @@ export const ANIMATION_BEST_PRACTICES = {
   /**
    * Animation settings for UI effects
    */
-  uiEffect: (maxDuration: number = 5000) => ({
+  uiEffect: (maxDuration = 5000) => ({
     ...ANIMATION_PRESETS.UI_ANIMATION,
     autoStop: { maxDuration },
   }),
@@ -60,7 +60,7 @@ export const ANIMATION_BEST_PRACTICES = {
   /**
    * Animation settings for particles
    */
-  particleEffect: (maxDuration: number = 10000) => ({
+  particleEffect: (maxDuration = 10000) => ({
     ...ANIMATION_PRESETS.PARTICLE_EFFECT,
     autoStop: { maxDuration },
   }),

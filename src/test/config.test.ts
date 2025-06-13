@@ -4,22 +4,22 @@
  * Test suite for the unified configuration management system
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import {
   ENV_CONFIG,
-  validateEnvironmentConfig,
-  createGameConfig,
-  validateGameConfig,
-  mergeGameConfig,
   type GameConfiguration,
+  createGameConfig,
+  mergeGameConfig,
+  validateEnvironmentConfig,
+  validateGameConfig,
 } from '../config';
 import {
   compareConfigurations,
   createConfigurationBackup,
-  restoreConfigurationFromBackup,
   exportConfiguration,
   importConfiguration,
   optimizeConfigurationForDevice,
+  restoreConfigurationFromBackup,
 } from '../config/utils';
 
 describe('Environment Configuration', () => {

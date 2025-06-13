@@ -2,9 +2,9 @@
 
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useCurrentLanguage, useSetLanguage } from '../store/languageStore';
-import { supportedLanguages, languageNames, type SupportedLanguage } from '../i18n';
 import { TYPOGRAPHY } from '../constants/layout';
+import { type SupportedLanguage, languageNames, supportedLanguages } from '../i18n';
+import { useCurrentLanguage, useSetLanguage } from '../store/languageStore';
 
 interface LanguageSelectorProps {
   className?: string;

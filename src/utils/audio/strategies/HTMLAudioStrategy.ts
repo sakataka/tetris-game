@@ -3,10 +3,10 @@
  * Cross-browser compatible audio implementation
  */
 
+import { GAME_TIMING } from '../../../constants/timing';
 import type { SoundKey } from '../../../types/tetris';
 import { AudioError, handleError } from '../../data/errorHandler';
-import { AudioStrategy, type SoundConfig, type AudioState } from './AudioStrategy';
-import { GAME_TIMING } from '../../../constants/timing';
+import { type AudioState, AudioStrategy, type SoundConfig } from './AudioStrategy';
 
 interface HTMLAudioElement extends globalThis.HTMLAudioElement {
   volume: number;
@@ -23,7 +23,7 @@ export class HTMLAudioStrategy extends AudioStrategy {
   private audioElements: Map<SoundKey, HTMLAudioElement[]> = new Map();
   private activeSounds: Map<string, ActiveHTMLSound> = new Map();
   private loadedSounds: Set<SoundKey> = new Set();
-  private initialized: boolean = false;
+  private initialized = false;
 
   canPlayAudio(): boolean {
     if (typeof window === 'undefined') return false;

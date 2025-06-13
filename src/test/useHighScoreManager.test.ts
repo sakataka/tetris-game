@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useHighScoreManager } from '../hooks/useHighScoreManager';
-import { GameState } from '../types/tetris';
+import type { GameState } from '../types/tetris';
 import { createTestFixtures } from './fixtures';
 
 // Create test fixtures and mocks

@@ -38,25 +38,25 @@ export class ColorConverter {
    */
   static hexToRgb(hex: string): RGB | null {
     // Check cache first
-    if (this.hexToRgbCache.has(hex)) {
-      return this.hexToRgbCache.get(hex)!;
+    if (ColorConverter.hexToRgbCache.has(hex)) {
+      return ColorConverter.hexToRgbCache.get(hex)!;
     }
 
     // Remove # if present and validate
     const cleanHex = hex.replace('#', '');
     if (!/^[a-f\d]{6}$/i.test(cleanHex)) {
-      this.hexToRgbCache.set(hex, null);
+      ColorConverter.hexToRgbCache.set(hex, null);
       return null;
     }
 
     const result: RGB = {
-      r: parseInt(cleanHex.slice(0, 2), 16),
-      g: parseInt(cleanHex.slice(2, 4), 16),
-      b: parseInt(cleanHex.slice(4, 6), 16),
+      r: Number.parseInt(cleanHex.slice(0, 2), 16),
+      g: Number.parseInt(cleanHex.slice(2, 4), 16),
+      b: Number.parseInt(cleanHex.slice(4, 6), 16),
     };
 
     // Cache the result
-    this.hexToRgbCache.set(hex, result);
+    ColorConverter.hexToRgbCache.set(hex, result);
     return result;
   }
 
@@ -69,8 +69,8 @@ export class ColorConverter {
     const cacheKey = `${rgb.r},${rgb.g},${rgb.b}`;
 
     // Check cache first
-    if (this.rgbToHexCache.has(cacheKey)) {
-      return this.rgbToHexCache.get(cacheKey)!;
+    if (ColorConverter.rgbToHexCache.has(cacheKey)) {
+      return ColorConverter.rgbToHexCache.get(cacheKey)!;
     }
 
     // Clamp values to valid range
@@ -81,7 +81,7 @@ export class ColorConverter {
     const hex = `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
 
     // Cache the result
-    this.rgbToHexCache.set(cacheKey, hex);
+    ColorConverter.rgbToHexCache.set(cacheKey, hex);
     return hex;
   }
 
@@ -168,7 +168,7 @@ export class ColorConverter {
    * @returns Adjusted hex color string
    */
   static adjustBrightness(color: string, factor: number): string {
-    const rgb = this.hexToRgb(color);
+    const rgb = ColorConverter.hexToRgb(color);
     if (!rgb) return color;
 
     const adjustedRgb: RGB = {
@@ -177,7 +177,7 @@ export class ColorConverter {
       b: Math.max(0, Math.min(255, Math.round(rgb.b * factor))),
     };
 
-    return this.rgbToHex(adjustedRgb);
+    return ColorConverter.rgbToHex(adjustedRgb);
   }
 
   /**
@@ -187,7 +187,7 @@ export class ColorConverter {
    * @returns Adjusted hex color string
    */
   static adjustContrast(color: string, factor: number): string {
-    const rgb = this.hexToRgb(color);
+    const rgb = ColorConverter.hexToRgb(color);
     if (!rgb) return color;
 
     const adjustValue = (value: number): number => {
@@ -202,7 +202,7 @@ export class ColorConverter {
       b: adjustValue(rgb.b),
     };
 
-    return this.rgbToHex(adjustedRgb);
+    return ColorConverter.rgbToHex(adjustedRgb);
   }
 
   /**
@@ -212,17 +212,17 @@ export class ColorConverter {
    * @returns Adjusted hex color string
    */
   static adjustSaturation(color: string, factor: number): string {
-    const rgb = this.hexToRgb(color);
+    const rgb = ColorConverter.hexToRgb(color);
     if (!rgb) return color;
 
-    const hsl = this.rgbToHsl(rgb);
+    const hsl = ColorConverter.rgbToHsl(rgb);
     const adjustedHsl: HSL = {
       ...hsl,
       s: Math.max(0, Math.min(100, hsl.s * factor)),
     };
 
-    const adjustedRgb = this.hslToRgb(adjustedHsl);
-    return this.rgbToHex(adjustedRgb);
+    const adjustedRgb = ColorConverter.hslToRgb(adjustedHsl);
+    return ColorConverter.rgbToHex(adjustedRgb);
   }
 
   /**
@@ -232,7 +232,7 @@ export class ColorConverter {
    * @returns Record of transparency variations
    */
   static generateTransparencies(color: string, levels: readonly number[]): Record<string, string> {
-    const rgb = this.hexToRgb(color);
+    const rgb = ColorConverter.hexToRgb(color);
     if (!rgb) return {};
 
     const transparencies: Record<string, string> = {};
@@ -252,7 +252,7 @@ export class ColorConverter {
    * @returns RGBA color string
    */
   static toRgba(color: string, alpha: number): string {
-    const rgb = this.hexToRgb(color);
+    const rgb = ColorConverter.hexToRgb(color);
     if (!rgb) return color;
 
     const clampedAlpha = Math.max(0, Math.min(1, alpha));
@@ -267,8 +267,8 @@ export class ColorConverter {
    * @returns Mixed hex color string
    */
   static mix(color1: string, color2: string, ratio: number): string {
-    const rgb1 = this.hexToRgb(color1);
-    const rgb2 = this.hexToRgb(color2);
+    const rgb1 = ColorConverter.hexToRgb(color1);
+    const rgb2 = ColorConverter.hexToRgb(color2);
 
     if (!rgb1 || !rgb2) return color1;
 
@@ -279,7 +279,7 @@ export class ColorConverter {
       b: Math.round(rgb1.b + (rgb2.b - rgb1.b) * clampedRatio),
     };
 
-    return this.rgbToHex(mixedRgb);
+    return ColorConverter.rgbToHex(mixedRgb);
   }
 
   /**
@@ -288,14 +288,12 @@ export class ColorConverter {
    * @returns Relative luminance (0-1)
    */
   static getRelativeLuminance(color: string): number {
-    const rgb = this.hexToRgb(color);
+    const rgb = ColorConverter.hexToRgb(color);
     if (!rgb) return 0;
 
     const srgbToLinear = (value: number): number => {
       const normalized = value / 255;
-      return normalized <= 0.03928
-        ? normalized / 12.92
-        : Math.pow((normalized + 0.055) / 1.055, 2.4);
+      return normalized <= 0.03928 ? normalized / 12.92 : ((normalized + 0.055) / 1.055) ** 2.4;
     };
 
     const r = srgbToLinear(rgb.r);
@@ -312,8 +310,8 @@ export class ColorConverter {
    * @returns Contrast ratio (1-21)
    */
   static getContrastRatio(color1: string, color2: string): number {
-    const lum1 = this.getRelativeLuminance(color1);
-    const lum2 = this.getRelativeLuminance(color2);
+    const lum1 = ColorConverter.getRelativeLuminance(color1);
+    const lum2 = ColorConverter.getRelativeLuminance(color2);
 
     const lighter = Math.max(lum1, lum2);
     const darker = Math.min(lum1, lum2);
@@ -333,9 +331,9 @@ export class ColorConverter {
     foreground: string,
     background: string,
     level: 'AA' | 'AAA' = 'AA',
-    isLargeText: boolean = false
+    isLargeText = false
   ): boolean {
-    const ratio = this.getContrastRatio(foreground, background);
+    const ratio = ColorConverter.getContrastRatio(foreground, background);
 
     if (level === 'AAA') {
       return isLargeText ? ratio >= 4.5 : ratio >= 7;
@@ -348,8 +346,8 @@ export class ColorConverter {
    * Clear all caches (useful for memory management)
    */
   static clearCache(): void {
-    this.hexToRgbCache.clear();
-    this.rgbToHexCache.clear();
+    ColorConverter.hexToRgbCache.clear();
+    ColorConverter.rgbToHexCache.clear();
   }
 
   /**
@@ -357,8 +355,8 @@ export class ColorConverter {
    */
   static getCacheStats(): { hexToRgbSize: number; rgbToHexSize: number } {
     return {
-      hexToRgbSize: this.hexToRgbCache.size,
-      rgbToHexSize: this.rgbToHexCache.size,
+      hexToRgbSize: ColorConverter.hexToRgbCache.size,
+      rgbToHexSize: ColorConverter.rgbToHexCache.size,
     };
   }
 }

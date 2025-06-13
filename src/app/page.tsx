@@ -12,7 +12,7 @@ export default function Home() {
             <span className='bg-gradient-to-r from-cyan-400 via-purple-400 to-yellow-400 bg-clip-text text-transparent'>
               TETRIS
             </span>
-            <div className='absolute -inset-1 bg-gradient-to-r from-cyan-400 via-purple-400 to-yellow-400 rounded-lg blur opacity-25'></div>
+            <div className='absolute -inset-1 bg-gradient-to-r from-cyan-400 via-purple-400 to-yellow-400 rounded-lg blur opacity-25' />
           </h1>
         </div>
 
@@ -22,15 +22,15 @@ export default function Home() {
       </div>
 
       {/* Background effects */}
-      <div className='absolute top-10 left-10 w-32 h-32 bg-cyan-400 rounded-full opacity-10 blur-3xl animate-pulse'></div>
+      <div className='absolute top-10 left-10 w-32 h-32 bg-cyan-400 rounded-full opacity-10 blur-3xl animate-pulse' />
       <div
         className='absolute bottom-10 right-10 w-40 h-40 bg-purple-400 rounded-full opacity-10 blur-3xl animate-pulse'
         style={{ animationDelay: '1s' }}
-      ></div>
+      />
       <div
         className='absolute top-1/2 left-1/4 w-20 h-20 bg-yellow-400 rounded-full opacity-10 blur-2xl animate-pulse'
         style={{ animationDelay: '2s' }}
-      ></div>
+      />
     </div>
   );
 }

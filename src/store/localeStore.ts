@@ -1,6 +1,6 @@
+import { useEffect, useRef } from 'react';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { useRef, useEffect } from 'react';
 import { I18N_CONFIG, type SupportedLocale } from '../constants';
 import { log } from '../utils/logging';
 

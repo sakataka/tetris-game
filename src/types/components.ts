@@ -4,20 +4,20 @@
  * Type-safe prop definitions for all components with proper constraints
  */
 
-import { ReactNode, CSSProperties } from 'react';
-import {
-  GameState,
-  GameSettings,
-  ThemeConfig,
-  HighScore,
-  GameStatistics,
-  SoundKey,
-  VirtualControl,
+import type { CSSProperties, ReactNode } from 'react';
+import type { GameKeyHandler, GameTouchHandler } from './events';
+import type {
   AnimationIntensity,
+  GameSettings,
+  GameState,
+  GameStatistics,
+  HighScore,
   PlayerId,
   SessionId,
+  SoundKey,
+  ThemeConfig,
+  VirtualControl,
 } from './tetris';
-import { GameKeyHandler, GameTouchHandler } from './events';
 
 // Base component props
 export interface BaseComponentProps {

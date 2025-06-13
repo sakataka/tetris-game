@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { GameSettings, ThemeVariant } from '../types/tetris';
+import type { GameSettings, ThemeVariant } from '../types/tetris';
 
 // Default settings values
 const DEFAULT_SETTINGS: GameSettings = {

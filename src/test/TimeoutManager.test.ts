@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { TimeoutManager, timeoutManager } from '../utils/timing/TimeoutManager';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { animationManager } from '../utils/animation/animationManager';
+import { TimeoutManager, timeoutManager } from '../utils/timing/TimeoutManager';
 
 // Mock AnimationManager
 vi.mock('../utils/animation/animationManager', () => ({

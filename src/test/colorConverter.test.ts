@@ -2,7 +2,7 @@
  * ColorConverter utility tests
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { ColorConverter } from '../utils/ui/colorConverter';
 
 describe('ColorConverter', () => {
@@ -88,7 +88,7 @@ describe('ColorConverter', () => {
 
       expect(brighterRgb).not.toBeNull();
       expect(originalRgb).not.toBeNull();
-      expect(brighterRgb!.r).toBeGreaterThan(originalRgb!.r);
+      expect(brighterRgb?.r).toBeGreaterThan(originalRgb?.r ?? 0);
     });
 
     it('should darken colors correctly', () => {
@@ -99,7 +99,7 @@ describe('ColorConverter', () => {
 
       expect(darkerRgb).not.toBeNull();
       expect(originalRgb).not.toBeNull();
-      expect(darkerRgb!.r).toBeLessThan(originalRgb!.r);
+      expect(darkerRgb?.r).toBeLessThan(originalRgb?.r ?? 255);
     });
 
     it('should clamp values to valid range', () => {
@@ -129,7 +129,7 @@ describe('ColorConverter', () => {
       const adjustedRgb = ColorConverter.hexToRgb(contrastAdjusted);
       expect(originalRgb).not.toBeNull();
       expect(adjustedRgb).not.toBeNull();
-      expect(adjustedRgb!.r).not.toBe(originalRgb!.r);
+      expect(adjustedRgb?.r).not.toBe(originalRgb?.r);
     });
 
     it('should decrease contrast correctly', () => {
@@ -141,7 +141,7 @@ describe('ColorConverter', () => {
       expect(lowContrastRgb).not.toBeNull();
       expect(originalRgb).not.toBeNull();
       // Lower contrast should move closer to middle gray
-      expect(lowContrastRgb!.r).toBeGreaterThan(originalRgb!.r);
+      expect(lowContrastRgb?.r).toBeGreaterThan(originalRgb?.r ?? 0);
     });
   });
 
@@ -269,8 +269,8 @@ describe('ColorConverter', () => {
       // Full desaturation should create gray
       const gray = ColorConverter.adjustSaturation(red, 0);
       const grayRgb = ColorConverter.hexToRgb(gray);
-      expect(grayRgb!.r).toBe(grayRgb!.g);
-      expect(grayRgb!.g).toBe(grayRgb!.b);
+      expect(grayRgb?.r).toBe(grayRgb?.g);
+      expect(grayRgb?.g).toBe(grayRgb?.b);
     });
 
     it('should handle invalid colors gracefully', () => {

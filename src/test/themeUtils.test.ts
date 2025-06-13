@@ -4,10 +4,10 @@
  * Tests automatic CSS variable generation and cache functionality
  */
 
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { applyThemeToCSS, createCustomTheme, applyAnimationSettings } from '../utils/ui/themeUtils';
-import { getThemePreset } from '../utils/ui/themePresets';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ThemeConfig } from '../types/tetris';
+import { getThemePreset } from '../utils/ui/themePresets';
+import { applyAnimationSettings, applyThemeToCSS, createCustomTheme } from '../utils/ui/themeUtils';
 
 // DOM environment mock
 const mockDocumentElement = {

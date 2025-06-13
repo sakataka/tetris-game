@@ -4,14 +4,14 @@
  * Tests for JSON loading, type safety validation, cache functionality, and performance
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import type { ThemeConfig, ThemeVariant } from '../types/tetris';
 import {
-  themeCache,
-  getThemePresetAsync,
   getAllThemePresetsAsync,
+  getThemePresetAsync,
   getThemePresetSync,
+  themeCache,
 } from '../utils/ui/themeLoader';
-import type { ThemeVariant, ThemeConfig } from '../types/tetris';
 
 describe('ThemeLoader - JSON-based theme system', () => {
   beforeEach(() => {

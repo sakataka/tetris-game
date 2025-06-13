@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ColorBlindnessType, ContrastLevel, AnimationIntensity } from '../types/tetris';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
+import type { AnimationIntensity, ColorBlindnessType, ContrastLevel } from '../types/tetris';
 
 interface AccessibilitySettingsProps {
   colorBlindnessType: ColorBlindnessType;

@@ -5,7 +5,7 @@
  * style calculations, and rendering configuration.
  */
 
-import { Tetromino, LineEffectState } from './tetris';
+import type { LineEffectState, Tetromino } from './tetris';
 
 // Display cell types for rendering
 export type DisplayCellType = string | null | 'ghost';

@@ -4,7 +4,7 @@
  * Tests for unified animation management system
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Mock error handler first
 vi.mock('../utils/data/errorHandler', () => ({

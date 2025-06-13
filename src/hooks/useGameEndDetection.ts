@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { useStatisticsStore, useAddHighScore, useUpdateStatistics } from '../store/statisticsStore';
-import { GameState, SoundKey } from '../types/tetris';
+import { useAddHighScore, useStatisticsStore, useUpdateStatistics } from '../store/statisticsStore';
+import type { GameState, SoundKey } from '../types/tetris';
 import {
-  isHighScore,
-  getHighScoreRank,
-  getHighScoreMessage,
   createHighScoreEntry,
+  getHighScoreMessage,
+  getHighScoreRank,
+  isHighScore,
 } from '../utils/game';
 
 interface HighScoreResult {

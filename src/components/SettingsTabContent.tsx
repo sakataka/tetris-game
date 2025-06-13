@@ -1,11 +1,11 @@
 'use client';
 
-import { memo, Suspense } from 'react';
+import { Suspense, memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import LanguageSelector from './LanguageSelector';
-import AudioPanel from './AudioPanel';
-import { GameSettings } from '../types/tetris';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
+import type { GameSettings } from '../types/tetris';
+import AudioPanel from './AudioPanel';
+import LanguageSelector from './LanguageSelector';
 
 interface SettingsTabContentProps {
   isMuted: boolean;

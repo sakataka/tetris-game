@@ -1,10 +1,10 @@
 import { create } from 'zustand';
-import {
+import type {
+  ColorBlindnessType,
+  ColorPalette,
+  ContrastLevel,
   ThemeState,
   ThemeVariant,
-  ColorPalette,
-  ColorBlindnessType,
-  ContrastLevel,
 } from '../types/tetris';
 import { getThemePreset } from '../utils/ui/themePresets';
 

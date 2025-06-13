@@ -4,8 +4,8 @@
  * Unified configuration management with environment-based overrides
  */
 
+import { DEFAULT_VALUES, GAME_TIMING, PERFORMANCE_LIMITS, PREVIEW_PIECES } from '../constants';
 import { ENV_CONFIG } from './environment';
-import { PERFORMANCE_LIMITS, GAME_TIMING, DEFAULT_VALUES, PREVIEW_PIECES } from '../constants';
 
 // Configuration interfaces
 export interface GamePerformanceConfig {
@@ -176,7 +176,6 @@ export function createGameConfig(environment?: string): GameConfiguration {
       return createProductionConfig();
     case 'test':
       return createTestConfig();
-    case 'development':
     default:
       return createDevelopmentConfig();
   }

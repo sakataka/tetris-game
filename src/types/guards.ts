@@ -5,22 +5,22 @@
  * and ensure type safety at runtime boundaries.
  */
 
-import {
+import type {
+  AnimationIntensity,
+  Board,
+  ColorPalette,
+  DifficultyLevel,
+  GameSettings,
   GameState,
+  HighScore,
+  KeyBinding,
+  Position,
+  SoundKey,
   Tetromino,
   TetrominoType,
-  Board,
-  Position,
-  GameSettings,
-  HighScore,
   ThemeConfig,
-  ColorPalette,
-  SoundKey,
-  VolumeLevel,
-  KeyBinding,
-  DifficultyLevel,
   ThemeVariant,
-  AnimationIntensity,
+  VolumeLevel,
 } from './tetris';
 
 // Tetromino type guards

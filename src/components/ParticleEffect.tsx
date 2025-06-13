@@ -1,20 +1,20 @@
 'use client';
 
-import { useEffect, useRef, memo, useState } from 'react';
-import { LineEffectState } from '../types/tetris';
+import { memo, useEffect, useRef, useState } from 'react';
+import { useFeatureFlags, usePerformanceConfig } from '../config';
 import {
   PARTICLE_GRAVITY,
-  PARTICLE_MAX_Y,
   PARTICLE_LIFE_DURATION,
+  PARTICLE_MAX_Y,
+  PARTICLE_OPACITY_MULTIPLIER,
   PARTICLE_SCALE_BASE,
   PARTICLE_SCALE_MULTIPLIER,
-  PARTICLE_OPACITY_MULTIPLIER,
 } from '../constants';
-import { particlePool, performanceMonitor, globalFpsController } from '../utils/performance';
-import { useConditionalAnimation, ANIMATION_PRESETS } from '../utils/animation';
-import ParticleCanvas from './ParticleCanvas';
+import type { LineEffectState } from '../types/tetris';
+import { ANIMATION_PRESETS, useConditionalAnimation } from '../utils/animation';
 import { log } from '../utils/logging';
-import { useFeatureFlags, usePerformanceConfig } from '../config';
+import { globalFpsController, particlePool, performanceMonitor } from '../utils/performance';
+import ParticleCanvas from './ParticleCanvas';
 
 interface ParticleEffectProps {
   lineEffect: LineEffectState;

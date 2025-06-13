@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import {
   useCurrentSession,
+  useEndSession,
   useIsSessionActive,
+  useOnGameStart,
   useSessionStats,
   useStartSession,
-  useEndSession,
-  useOnGameStart,
 } from '../store/sessionStore';
 
 /**

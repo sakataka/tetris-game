@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, use } from 'react';
-import { useInitializeLanguage } from '../store/languageStore';
+import { use, useEffect } from 'react';
 import { useMobileDetection } from '../hooks/useMobileDetection';
+import { useInitializeLanguage } from '../store/languageStore';
 import LoadingMessage from './LoadingMessage';
 import '../i18n'; // Initialize i18n
 

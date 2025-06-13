@@ -2,14 +2,14 @@
 
 import { useSettings, useUpdateSettings } from '../store/settingsStore';
 import {
-  GameStateController,
   AudioController,
-  EventController,
-  DeviceController,
-  type GameStateAPI,
   type AudioSystemAPI,
-  type EventSystemAPI,
+  DeviceController,
   type DeviceSystemAPI,
+  EventController,
+  type EventSystemAPI,
+  type GameStateAPI,
+  GameStateController,
 } from './controllers';
 
 // Combined API interface that will be passed to children

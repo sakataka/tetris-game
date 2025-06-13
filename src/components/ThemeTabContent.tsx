@@ -1,16 +1,16 @@
 'use client';
 
 import { memo } from 'react';
-import { ThemeSettingsMemo } from './ThemeSettings';
-import {
-  useTheme,
-  useSetTheme,
-  useSetCustomColors,
-  useSetAccessibilityOptions,
-  useUpdateThemeState,
-  useResetThemeToDefault,
-} from '../store/themeStore';
 import { useTheme as useThemeManager } from '../hooks/useTheme';
+import {
+  useResetThemeToDefault,
+  useSetAccessibilityOptions,
+  useSetCustomColors,
+  useSetTheme,
+  useTheme,
+  useUpdateThemeState,
+} from '../store/themeStore';
+import { ThemeSettingsMemo } from './ThemeSettings';
 
 interface ThemeTabContentProps {
   className?: string;

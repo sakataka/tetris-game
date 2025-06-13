@@ -5,8 +5,13 @@
  * following Single Responsibility Principle and Service pattern.
  */
 
-import { HighScore, GameStatistics } from '../../types/tetris';
-import { EnhancedStatistics, GameSession, SessionGame, StatisticsPeriod } from './statisticsUtils';
+import type { GameStatistics, HighScore } from '../../types/tetris';
+import type {
+  EnhancedStatistics,
+  GameSession,
+  SessionGame,
+  StatisticsPeriod,
+} from './statisticsUtils';
 
 // Period filtering configuration
 export const STATISTICS_PERIODS: StatisticsPeriod[] = [
@@ -32,21 +37,21 @@ export class PeriodFilter {
   ): readonly HighScore[] {
     if (period.days === 0) return highScores;
 
-    const startTime = this.getPeriodStartTime(period.days);
+    const startTime = PeriodFilter.getPeriodStartTime(period.days);
     return highScores.filter((score) => score.date >= startTime);
   }
 
   static filterSessionsByPeriod(sessions: GameSession[], period: StatisticsPeriod): GameSession[] {
     if (period.days === 0) return sessions;
 
-    const startTime = this.getPeriodStartTime(period.days);
+    const startTime = PeriodFilter.getPeriodStartTime(period.days);
     return sessions.filter((session) => session.startTime >= startTime);
   }
 
   static filterGamesByPeriod(games: SessionGame[], period: StatisticsPeriod): SessionGame[] {
     if (period.days === 0) return games;
 
-    const startTime = this.getPeriodStartTime(period.days);
+    const startTime = PeriodFilter.getPeriodStartTime(period.days);
     return games.filter((game) => game.timestamp >= startTime);
   }
 
@@ -82,8 +87,7 @@ export class StatisticsCalculator {
     if (scores.length <= 1) return 100;
 
     const average = scores.reduce((sum, score) => sum + score, 0) / scores.length;
-    const variance =
-      scores.reduce((sum, score) => sum + Math.pow(score - average, 2), 0) / scores.length;
+    const variance = scores.reduce((sum, score) => sum + (score - average) ** 2, 0) / scores.length;
     const standardDeviation = Math.sqrt(variance);
 
     if (average === 0) return 100;
@@ -106,10 +110,10 @@ export class StatisticsCalculator {
       {} as Record<number, number>
     );
 
-    return parseInt(
+    return Number.parseInt(
       Object.keys(levelCounts).reduce((a, b) => {
-        const countA = levelCounts[parseInt(a)];
-        const countB = levelCounts[parseInt(b)];
+        const countA = levelCounts[Number.parseInt(a)];
+        const countB = levelCounts[Number.parseInt(b)];
         if (countA === undefined || countB === undefined) return a;
         return countA > countB ? a : b;
       })
@@ -247,7 +251,11 @@ export class StatisticsService {
       tetrisCount: allGames.reduce((sum, game) => sum + game.tetrisCount, 0),
     };
 
-    return this.calculateEnhancedStatistics(periodBaseStats, filteredSessions, filteredHighScores);
+    return StatisticsService.calculateEnhancedStatistics(
+      periodBaseStats,
+      filteredSessions,
+      filteredHighScores
+    );
   }
 
   /**
@@ -277,7 +285,7 @@ export class StatisticsService {
     improvementTrend: number;
   } {
     const actualPeriod = period ||
-      STATISTICS_PERIODS[3] || { days: Infinity, label: 'All Time', key: 'all' };
+      STATISTICS_PERIODS[3] || { days: Number.POSITIVE_INFINITY, label: 'All Time', key: 'all' };
     const filteredSessions = PeriodFilter.filterSessionsByPeriod(sessions, actualPeriod);
 
     const tetrisRate = StatisticsCalculator.calculateTetrisRate(filteredSessions);
@@ -288,7 +296,7 @@ export class StatisticsService {
       filteredSessions.length > 0 ? allGames.length / filteredSessions.length : 0;
 
     // Calculate improvement trend (simplified)
-    const improvementTrend = this.calculateImprovementTrend(allGames);
+    const improvementTrend = StatisticsService.calculateImprovementTrend(allGames);
 
     return {
       tetrisRate: Math.round(tetrisRate * 100) / 100,

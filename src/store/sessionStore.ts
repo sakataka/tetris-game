@@ -8,7 +8,7 @@
 
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
-import { PlaySession, GameError } from '../types/tetris';
+import type { GameError, PlaySession } from '../types/tetris';
 
 const SESSION_STORAGE_KEY = 'tetris-play-sessions';
 const CURRENT_SESSION_KEY = 'tetris-current-session';
@@ -320,7 +320,7 @@ export const useSessionStore = create<SessionStore>()(
 
         if (sessionId) {
           const session = playSessions.find((s) => s.id === sessionId);
-          if (session && session.endTime) {
+          if (session?.endTime) {
             return (session.endTime - session.startTime) / 1000; // seconds
           }
         }

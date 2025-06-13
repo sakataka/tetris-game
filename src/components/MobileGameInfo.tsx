@@ -2,9 +2,9 @@
 
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Tetromino } from '../types/tetris';
-import NextPiecePanel from './NextPiecePanel';
+import type { Tetromino } from '../types/tetris';
 import GameButtonsPanel from './GameButtonsPanel';
+import NextPiecePanel from './NextPiecePanel';
 
 interface MobileGameInfoProps {
   score: number;

@@ -1,11 +1,11 @@
-import { GameState, Tetromino, SoundKey, LineEffectState } from '../../types/tetris';
 import { SCORES } from '../../constants';
+import type { GameState, LineEffectState, SoundKey, Tetromino } from '../../types/tetris';
 import {
-  placePiece,
   clearLines,
   createParticles,
-  isValidPosition,
   getRandomTetromino,
+  isValidPosition,
+  placePiece,
 } from './tetrisUtils';
 
 interface ScoreCalculationResult {
@@ -39,8 +39,8 @@ export function calculateScoreIncrease(
   currentScore: number,
   currentLines: number,
   linesCleared: number,
-  bonusPoints: number = 0,
-  debugMode: boolean = false
+  bonusPoints = 0,
+  debugMode = false
 ): ScoreCalculationResult {
   const newLines = currentLines + linesCleared;
   const newLevel = Math.floor(newLines / 10) + 1;
@@ -148,7 +148,7 @@ export function updateGameStateWithPiece(
   scoreResult: ScoreCalculationResult,
   lineEffect: LineEffectResult,
   gameOverResult: GameOverCheckResult,
-  debugMode: boolean = false
+  debugMode = false
 ): GameState {
   const nextPiece = getRandomTetromino(debugMode);
 

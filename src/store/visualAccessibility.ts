@@ -9,16 +9,16 @@
  */
 
 import { create } from 'zustand';
-import { persist, PersistOptions } from 'zustand/middleware';
+import { type PersistOptions, persist } from 'zustand/middleware';
 import {
-  VisualAccessibilityState,
-  VisualAccessibilityActions,
-  VisualAssistance,
+  type AnimationIntensity,
   DEFAULT_VISUAL_ACCESSIBILITY,
-  AnimationIntensity,
-  FontSizeLevel,
+  type FontSizeLevel,
+  type VisualAccessibilityActions,
+  type VisualAccessibilityState,
+  type VisualAssistance,
 } from '../types/accessibility';
-import { ColorBlindnessType, ContrastLevel } from '../types/tetris';
+import type { ColorBlindnessType, ContrastLevel } from '../types/tetris';
 
 // System preference detection for visual settings
 function detectSystemVisualPreferences(): Partial<VisualAccessibilityState> {

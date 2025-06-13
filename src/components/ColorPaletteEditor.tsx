@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ColorPalette } from '../types/tetris';
+import type { ColorPalette } from '../types/tetris';
 
 interface ColorPaletteEditorProps {
   colors: ColorPalette;

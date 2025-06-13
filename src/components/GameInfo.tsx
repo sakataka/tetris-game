@@ -1,12 +1,12 @@
 'use client';
 
-import { memo, useState, lazy, Suspense } from 'react';
+import { Suspense, lazy, memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Tetromino } from '../types/tetris';
-import TabNavigation, { TabType } from './TabNavigation';
+import type { Tetromino } from '../types/tetris';
 import GameTabContent from './GameTabContent';
-import StatisticsTabContent from './StatisticsTabContent';
 import MobileGameInfo from './MobileGameInfo';
+import StatisticsTabContent from './StatisticsTabContent';
+import TabNavigation, { type TabType } from './TabNavigation';
 // Heavy component lazy loading
 const ThemeTabContent = lazy(() => import('./ThemeTabContent'));
 const SettingsTabContent = lazy(() => import('./SettingsTabContent'));

@@ -2,9 +2,9 @@
 
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { HighScore } from '../types/tetris';
-import PanelBase from './ui/PanelBase';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
+import type { HighScore } from '../types/tetris';
+import PanelBase from './ui/PanelBase';
 
 interface HighScoreDisplayProps {
   highScores: readonly HighScore[];

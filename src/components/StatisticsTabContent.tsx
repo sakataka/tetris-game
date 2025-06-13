@@ -1,12 +1,12 @@
 'use client';
 
-import { memo, lazy, Suspense } from 'react';
+import { Suspense, lazy, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // Dynamically import statistics dashboard
 const StatisticsDashboard = lazy(() => import('./StatisticsDashboard'));
 import { useHighScores, useStatistics } from '../store/statisticsStore';
-import { GameSession } from '../utils/data/statisticsUtils';
+import type { GameSession } from '../utils/data/statisticsUtils';
 
 interface StatisticsTabContentProps {
   className?: string;

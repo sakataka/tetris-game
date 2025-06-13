@@ -2,8 +2,8 @@
 
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import PanelBase from './ui/PanelBase';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
+import PanelBase from './ui/PanelBase';
 
 interface ControlsPanelProps {
   size?: 'xs' | 'sm' | 'md' | 'lg';

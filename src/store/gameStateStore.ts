@@ -1,13 +1,13 @@
 import { create } from 'zustand';
-import { GameState, LineEffectState, Particle, Tetromino, SoundKey } from '../types/tetris';
 import { INITIAL_DROP_TIME } from '../constants';
+import type { GameState, LineEffectState, Particle, SoundKey, Tetromino } from '../types/tetris';
 import {
-  createEmptyBoard,
-  getRandomTetromino,
   calculateScoreIncrease,
-  processLineClear,
-  createLineEffects,
   checkGameOver,
+  createEmptyBoard,
+  createLineEffects,
+  getRandomTetromino,
+  processLineClear,
   updateGameStateWithPiece,
 } from '../utils/game';
 import { useSettingsStore } from './settingsStore';
@@ -138,14 +138,14 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
       },
     })),
 
-  calculatePiecePlacementState: (piece, bonusPoints = 0, playSound) =>
+  calculatePiecePlacementState: (piece, bonusPoints, playSound) =>
     set((state) => {
       // Check debug mode
       const isDebugMode = useSettingsStore.getState().settings.gameMode === 'debug';
 
       // 0. Play piece landing sound (before line clear sound)
       if (playSound) {
-        if (bonusPoints > 0) {
+        if (bonusPoints && bonusPoints > 0) {
           // Hard drop sound when bonus points are present
           playSound('hardDrop');
         } else {

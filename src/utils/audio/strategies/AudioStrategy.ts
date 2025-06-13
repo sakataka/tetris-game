@@ -23,8 +23,8 @@ export interface AudioState {
 }
 
 export abstract class AudioStrategy {
-  protected masterVolume: number = 0.5;
-  protected isMuted: boolean = false;
+  protected masterVolume = 0.5;
+  protected isMuted = false;
 
   // Sound file path definitions
   protected readonly soundFiles: Record<SoundKey, string> = {

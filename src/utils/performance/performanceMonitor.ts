@@ -37,7 +37,7 @@ class PerformanceMonitor {
     this.renderStartTime = performance.now();
   }
 
-  endFrame(particleCount: number = 0): PerformanceMetrics {
+  endFrame(particleCount = 0): PerformanceMetrics {
     const now = performance.now();
     const renderTime = now - this.renderStartTime;
 
@@ -112,7 +112,7 @@ class PerformanceMonitor {
     };
 
     if (metrics.memoryUsage !== undefined) {
-      (logData as typeof logData & { Memory: string })['Memory'] = `${metrics.memoryUsage}MB`;
+      (logData as typeof logData & { Memory: string }).Memory = `${metrics.memoryUsage}MB`;
     }
 
     console.group('🚀 Performance Metrics');

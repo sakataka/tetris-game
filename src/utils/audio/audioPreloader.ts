@@ -3,9 +3,9 @@
  * Features priority-based loading, network-aware strategies, and memory optimization
  */
 
-import { SoundKey } from '../../types/tetris';
-import { audioManager } from './audioManager';
+import type { SoundKey } from '../../types/tetris';
 import { AudioError, handleError } from '../data/errorHandler';
+import { audioManager } from './audioManager';
 
 interface PreloadStrategy {
   priority: 'immediate' | 'high' | 'normal' | 'lazy';
@@ -34,7 +34,7 @@ class AudioPreloader {
   private preloadProgress: Map<SoundKey, 'pending' | 'loading' | 'loaded' | 'failed'> = new Map();
   private loadTimestamps: Map<SoundKey, number> = new Map();
   private retryCounters: Map<SoundKey, number> = new Map();
-  private memoryUsage: number = 0;
+  private memoryUsage = 0;
 
   // Audio file priority definitions based on gameplay frequency
   private readonly soundPriorities: SoundPriority[] = [
@@ -116,7 +116,7 @@ class AudioPreloader {
   private async preloadSingleSound(
     soundPriority: SoundPriority,
     config: PreloadStrategy,
-    delay: number = 0
+    delay = 0
   ): Promise<void> {
     const { soundKey } = soundPriority;
 
@@ -178,7 +178,7 @@ class AudioPreloader {
         }
 
         // Exponential backoff retry strategy
-        const backoffDelay = Math.pow(2, currentRetry - 1) * 1000;
+        const backoffDelay = 2 ** (currentRetry - 1) * 1000;
         await new Promise((resolve) => setTimeout(resolve, backoffDelay));
       }
     }

@@ -11,19 +11,19 @@
  */
 
 import { create } from 'zustand';
-import { persist, PersistOptions } from 'zustand/middleware';
+import { type PersistOptions, persist } from 'zustand/middleware';
 import {
-  AccessibilityLevel,
-  AccessibilityState,
   ACCESSIBILITY_PRESETS,
+  type AccessibilityLevel,
+  type AccessibilityState,
 } from '../types/accessibility';
 
-import { useVisualAccessibilityStore, useVisualAccessibilityState } from './visualAccessibility';
 import {
-  useCognitiveAccessibilityStore,
   useCognitiveAccessibilityState,
+  useCognitiveAccessibilityStore,
 } from './cognitiveAccessibility';
-import { useInputAccessibilityStore, useInputAccessibilityState } from './inputAccessibility';
+import { useInputAccessibilityState, useInputAccessibilityStore } from './inputAccessibility';
+import { useVisualAccessibilityState, useVisualAccessibilityStore } from './visualAccessibility';
 
 // Orchestrator store interface - manages accessibility level and coordinates stores
 interface AccessibilityOrchestratorStore {
