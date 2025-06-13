@@ -186,7 +186,8 @@ const ParticleCanvas = memo(function ParticleCanvas({
         animationRef.current = undefined;
       }
     };
-  }, [lineEffect.particles.length, width, height]); // Remove animate from deps as React Compiler will handle it
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- React Compiler handles animate optimization
+  }, [lineEffect.particles.length, width, height]);
 
   // Performance monitoring display (development only)
   const shouldShowStats = process.env.NODE_ENV === 'development' && enablePerformanceMode;
