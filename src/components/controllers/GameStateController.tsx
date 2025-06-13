@@ -5,7 +5,7 @@ import type { GameState, SoundKey, LineEffectState, Tetromino } from '../../type
 import { useGameControls } from '../../hooks/useGameControls';
 import { useGameLoop } from '../../hooks/useGameLoop';
 import { useHighScoreManager } from '../../hooks/useHighScoreManager';
-import { useSessionTrackingV2 } from '../../hooks/useSessionTrackingV2';
+import { useSession } from '../../hooks/useSession';
 import { animationManager } from '../../utils/animation/animationManager';
 import {
   useGameState,
@@ -156,7 +156,7 @@ export function GameStateController({
     gameState,
     playSound,
   });
-  const { endSession } = useSessionTrackingV2();
+  const { endSession } = useSession();
 
   // Monitor game over state to end session
   useEffect(() => {

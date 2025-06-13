@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useSessionTrackingV2 } from '../../hooks/useSessionTrackingV2';
+import { useSession } from '../../hooks/useSession';
 
 export interface EventSystemAPI {
   onGameStart: () => void;
@@ -21,7 +21,7 @@ interface EventControllerProps {
  */
 export function EventController({ children }: EventControllerProps) {
   // Session tracking integration
-  const { onGameStart, endSession } = useSessionTrackingV2();
+  const { onGameStart, endSession } = useSession();
 
   // Event handlers (React Compiler will optimize these)
   const handleGameStart = () => {

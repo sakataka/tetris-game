@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import type { GameSettings } from './useSettingsStorage';
+import type { GameSettings } from './useSettings';
 
 export interface KeyBindingsAPI {
   updateKeyBinding: (action: keyof GameSettings['keyBindings'], keys: string[]) => void;

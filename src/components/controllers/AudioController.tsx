@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import type { SoundKey } from '../../types/tetris';
-import { useSounds } from '../../hooks/useSounds';
+import { useAudio } from '../../hooks/useAudio';
 import { useSettings, useUpdateSettings } from '../../store/settingsStore';
 
 export interface AudioSystemAPI {
@@ -73,7 +73,7 @@ export function AudioController({ children }: AudioControllerProps) {
     hasInitializationError,
     canRetryInitialization,
     retryAudioInitialization,
-  } = useSounds({
+  } = useAudio({
     initialVolume: settings.volume,
     initialMuted: settings.isMuted,
   });

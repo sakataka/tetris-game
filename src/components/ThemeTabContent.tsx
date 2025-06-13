@@ -10,7 +10,7 @@ import {
   useUpdateThemeState,
   useResetThemeToDefault,
 } from '../store/themeStore';
-import { useThemeManager } from '../hooks/useThemeManager';
+import { useTheme as useThemeManager } from '../hooks/useTheme';
 
 interface ThemeTabContentProps {
   className?: string;
