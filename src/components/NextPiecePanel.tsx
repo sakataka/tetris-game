@@ -4,7 +4,7 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GAME_UI_SIZES } from '../constants/layout';
 import type { Tetromino } from '../types/tetris';
-import PanelBase from './ui/PanelBase';
+import CyberCard from './ui/CyberCard';
 
 interface NextPiecePanelProps {
   nextPiece: Tetromino | null;
@@ -21,7 +21,7 @@ const NextPiecePanel = memo(function NextPiecePanel({
   const containerSize = size === 'sm' ? 'w-12 h-12' : GAME_UI_SIZES.NEXT_PIECE.CONTAINER;
 
   return (
-    <PanelBase title={t('game.nextPiece').toUpperCase()} theme='purple' size={size}>
+    <CyberCard title={t('game.nextPiece').toUpperCase()} theme='purple' size={size}>
       <div className='grid gap-0 w-fit mx-auto p-2 bg-black/30 rounded-lg border border-purple-400/30'>
         {nextPiece ? (
           nextPiece.shape.map((row, y) => (
@@ -45,7 +45,7 @@ const NextPiecePanel = memo(function NextPiecePanel({
           <div className={`${containerSize} bg-gray-700/50 rounded border border-gray-500`} />
         )}
       </div>
-    </PanelBase>
+    </CyberCard>
   );
 });
 

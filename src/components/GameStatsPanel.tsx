@@ -2,7 +2,7 @@
 
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import PanelBase from './ui/PanelBase';
+import CyberCard from './ui/CyberCard';
 
 interface GameStatsPanelProps {
   score: number;
@@ -20,7 +20,7 @@ const GameStatsPanel = memo(function GameStatsPanel({
   const { t } = useTranslation();
 
   return (
-    <PanelBase title={t('panels.scoreData').toUpperCase()} theme='cyan' size={size}>
+    <CyberCard title={t('panels.scoreData').toUpperCase()} theme='cyan' size={size}>
       <div className='space-y-1'>
         <div className='flex justify-between items-center'>
           <span className='text-gray-300 text-xs'>{t('game.score')}</span>
@@ -37,7 +37,7 @@ const GameStatsPanel = memo(function GameStatsPanel({
           <span className='font-mono text-sm text-blue-400 font-bold'>{lines}</span>
         </div>
       </div>
-    </PanelBase>
+    </CyberCard>
   );
 });
 

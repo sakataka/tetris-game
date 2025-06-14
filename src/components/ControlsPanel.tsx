@@ -3,7 +3,7 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
-import PanelBase from './ui/PanelBase';
+import CyberCard from './ui/CyberCard';
 
 interface ControlsPanelProps {
   size?: 'xs' | 'sm' | 'md' | 'lg';
@@ -13,7 +13,7 @@ const ControlsPanel = memo(function ControlsPanel({ size = 'md' }: ControlsPanel
   const { t } = useTranslation();
 
   return (
-    <PanelBase title={t('controls.title').toUpperCase()} theme='green' size={size}>
+    <CyberCard title={t('controls.title').toUpperCase()} theme='green' size={size}>
       <div className={`${SPACING.PANEL_INTERNAL} ${TYPOGRAPHY.BODY_TEXT}`}>
         <div className='flex justify-between items-center'>
           <span className='text-gray-300'>
@@ -54,7 +54,7 @@ const ControlsPanel = memo(function ControlsPanel({ size = 'md' }: ControlsPanel
           </span>
         </div>
       </div>
-    </PanelBase>
+    </CyberCard>
   );
 });
 

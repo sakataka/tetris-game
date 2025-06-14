@@ -247,6 +247,11 @@ body {
   box-shadow: 0 0 var(--neon-blur-md) var(--cyber-yellow), inset 0 0 var(--neon-blur-md) var(--cyber-yellow-10);
 }
 
+.neon-border-red {
+  border: 2px solid var(--cyber-red);
+  box-shadow: 0 0 var(--neon-blur-md) var(--cyber-red), inset 0 0 var(--neon-blur-md) var(--cyber-red-10);
+}
+
 /* Hologram background variations */
 .hologram-cyan {
   background: linear-gradient(45deg, var(--cyber-cyan-10) 0%, transparent 50%, var(--cyber-purple-10) 100%);
@@ -264,6 +269,12 @@ body {
   background: linear-gradient(45deg, var(--cyber-yellow-10) 0%, transparent 50%, var(--cyber-cyan-10) 100%);
   backdrop-filter: blur(10px);
   border: 1px solid var(--cyber-yellow-20);
+}
+
+.hologram-red {
+  background: linear-gradient(45deg, var(--cyber-red-10) 0%, transparent 50%, var(--cyber-purple-10) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--cyber-red-20);
 }
 
 /* Floating animation */

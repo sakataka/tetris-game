@@ -4,7 +4,7 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
 import type { HighScore } from '../types/tetris';
-import PanelBase from './ui/PanelBase';
+import CyberCard from './ui/CyberCard';
 
 interface HighScoreDisplayProps {
   highScores: readonly HighScore[];
@@ -25,7 +25,7 @@ const HighScoreDisplay = memo(function HighScoreDisplay({
   const displayScores = highScores.slice(0, maxDisplay);
 
   return (
-    <PanelBase
+    <CyberCard
       title={`🏆 ${t('statistics.highScores')}`}
       theme='cyan'
       size={size}
@@ -79,7 +79,7 @@ const HighScoreDisplay = memo(function HighScoreDisplay({
           </div>
         )}
       </div>
-    </PanelBase>
+    </CyberCard>
   );
 });
 

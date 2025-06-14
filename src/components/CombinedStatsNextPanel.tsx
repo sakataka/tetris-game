@@ -4,7 +4,7 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GAME_UI_SIZES, SPACING, TYPOGRAPHY } from '../constants/layout';
 import type { Tetromino } from '../types/tetris';
-import PanelBase from './ui/PanelBase';
+import CyberCard from './ui/CyberCard';
 
 interface CombinedStatsNextPanelProps {
   score: number;
@@ -29,7 +29,7 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
     size === 'xs' ? 'w-8 h-8' : size === 'sm' ? 'w-12 h-12' : GAME_UI_SIZES.NEXT_PIECE.CONTAINER;
 
   return (
-    <PanelBase
+    <CyberCard
       title={`${t('panels.scoreData')} & ${t('game.nextPiece')}`.toUpperCase()}
       theme='cyan'
       size={size}
@@ -89,7 +89,7 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
           </div>
         </div>
       </div>
-    </PanelBase>
+    </CyberCard>
   );
 });
 

@@ -3,7 +3,7 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
-import PanelBase from './ui/PanelBase';
+import CyberCard from './ui/CyberCard';
 
 interface ScoringPanelProps {
   size?: 'xs' | 'sm' | 'md' | 'lg';
@@ -13,7 +13,7 @@ const ScoringPanel = memo(function ScoringPanel({ size = 'md' }: ScoringPanelPro
   const { t } = useTranslation();
 
   return (
-    <PanelBase title={t('scoring.title', 'SCORING').toUpperCase()} theme='yellow' size={size}>
+    <CyberCard title={t('scoring.title', 'SCORING').toUpperCase()} theme='yellow' size={size}>
       <div className={`${SPACING.PANEL_INTERNAL} ${TYPOGRAPHY.BODY_TEXT}`}>
         <div className='flex justify-between items-center text-gray-300'>
           <span>{t('scoring.single').toUpperCase()}</span>
@@ -36,7 +36,7 @@ const ScoringPanel = memo(function ScoringPanel({ size = 'md' }: ScoringPanelPro
           <span className='font-mono text-purple-400'>{t('scoring.distance')} × 2</span>
         </div>
       </div>
-    </PanelBase>
+    </CyberCard>
   );
 });
 
