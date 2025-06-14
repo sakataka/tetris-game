@@ -188,13 +188,6 @@ const isHydrated = use(getHydrationPromise());
 
 ### Store Usage Pattern
 
-```typescript
-// Individual selectors prevent object regeneration
-export const useGameState = () => useGameStateStore((state) => state.gameState);
-export const useSetGameState = () =>
-  useGameStateStore((state) => state.setGameState);
-```
-
 ## Key Systems
 
 ### Audio System (Strategy Pattern)
@@ -786,39 +779,6 @@ The current architecture is designed to support future expansion with minimal re
 | Performance Profiler              | Low        | Medium               | Good             | 🔴 Low    |
 | Accessibility Enhancements        | Medium     | Medium               | Good             | 🔴 Low    |
 
-### Technical Preparation Checklist
-
-Before implementing major features:
-
-1. **Backend Infrastructure** (for multiplayer/social)
-
-   - WebSocket server setup
-   - Database design (PostgreSQL/Redis)
-   - Authentication system (JWT/OAuth)
-   - CDN for replay storage
-
-2. **Performance Optimizations**
-
-   - Code splitting for feature modules
-   - Web Workers for AI calculations
-   - IndexedDB for large data storage
-   - WebAssembly for critical paths
-
-3. **Testing Infrastructure**
-
-   - E2E tests for multiplayer
-   - Load testing for concurrent users
-   - AI behavior testing framework
-   - Replay validation tests
-
-4. **Security Measures**
-   - Input validation for multiplayer
-   - Anti-cheat systems
-   - Rate limiting
-   - Content moderation tools
-
----
-
 ## 📚 Essential Documentation
 
 For all React development in this project, refer to:
@@ -846,11 +806,3 @@ The development guidelines are comprehensive but may not cover every edge case. 
 - Significant performance degradation
 - Development blockages
 - Conflicts with framework requirements
-
-**Do not work around the issue independently.** Instead:
-
-1. Document the specific conflict
-2. Explain what you were trying to implement
-3. Ask the user for guidance on how to proceed
-
-This ensures the guidelines remain accurate and the project maintains consistency while adapting to real-world development needs.

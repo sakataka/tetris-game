@@ -1,5 +1,6 @@
 'use client';
 
+import { cn } from '@/utils/ui/cn';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TYPOGRAPHY } from '../constants/layout';
@@ -30,7 +31,7 @@ const LanguageSelector = memo(function LanguageSelector({
       {showLabel && (
         <label
           htmlFor='language-select'
-          className={`${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} text-gray-300`}
+          className={cn(TYPOGRAPHY.BODY_TEXT, TYPOGRAPHY.BODY_WEIGHT, 'text-cyber-cyan')}
         >
           {t('settings.language')}:
         </label>
@@ -38,22 +39,24 @@ const LanguageSelector = memo(function LanguageSelector({
       <Select value={currentLanguage} onValueChange={handleLanguageChange}>
         <SelectTrigger
           id='language-select'
-          className={`
-            w-[180px] bg-gray-800 border-gray-600 ${TYPOGRAPHY.BODY_TEXT}
-            text-gray-100 hover:border-cyber-cyan transition-colors
-            focus:ring-cyber-cyan focus:border-transparent
-            [&>span]:text-gray-100
-          `}
+          className={cn(
+            'w-[180px] bg-cyber-cyan-10 border-cyber-cyan-30 text-cyber-cyan',
+            'hover:bg-cyber-cyan-20 hover:border-cyber-cyan transition-colors',
+            'focus:ring-cyber-cyan focus:border-cyber-cyan',
+            'data-[state=open]:border-cyber-cyan',
+            '[&>span]:text-cyber-cyan',
+            TYPOGRAPHY.BODY_TEXT
+          )}
           aria-label={t('aria.changeLanguage')}
         >
           <SelectValue />
         </SelectTrigger>
-        <SelectContent className='bg-gray-800 border-gray-600'>
+        <SelectContent className='bg-background border-cyber-cyan-30'>
           {supportedLanguages.map((lang) => (
             <SelectItem
               key={lang}
               value={lang}
-              className='text-gray-100 hover:bg-gray-700 focus:bg-gray-700 focus:text-cyber-cyan'
+              className='text-foreground hover:bg-cyber-cyan-20 focus:bg-cyber-cyan-20 focus:text-cyber-cyan'
             >
               {languageNames[lang]}
             </SelectItem>

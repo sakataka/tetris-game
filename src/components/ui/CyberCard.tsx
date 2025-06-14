@@ -1,8 +1,8 @@
 'use client';
 
-import type { ReactNode } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/utils/ui/cn';
+import type { ReactNode } from 'react';
 
 /**
  * Cyberpunk-themed Card component based on shadcn/ui Card

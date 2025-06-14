@@ -5,9 +5,9 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
 import type { AnimationIntensity, ColorBlindnessType, ContrastLevel } from '../types/tetris';
+import { Label } from './ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Switch } from './ui/switch';
-import { Label } from './ui/label';
 
 interface AccessibilitySettingsProps {
   colorBlindnessType: ColorBlindnessType;
@@ -97,10 +97,12 @@ export default function AccessibilitySettings({
           <Select value={colorBlindnessType} onValueChange={handleColorBlindnessChange}>
             <SelectTrigger
               id='color-blindness-select'
-              className='w-full p-3 rounded-lg bg-cyber-cyan-10 border border-cyber-cyan-30 
-                         text-foreground focus:outline-none focus:ring-2 focus:ring-cyber-cyan
-                         hover:bg-cyber-cyan-20 transition-colors
-                         [&>span]:text-foreground'
+              className={cn(
+                'w-full bg-cyber-cyan-10 border-cyber-cyan-30 text-foreground',
+                'hover:bg-cyber-cyan-20 focus:ring-cyber-cyan focus:border-cyber-cyan',
+                'data-[state=open]:border-cyber-cyan transition-colors',
+                '[&>span]:text-foreground'
+              )}
             >
               <SelectValue />
             </SelectTrigger>
@@ -132,10 +134,12 @@ export default function AccessibilitySettings({
           <Select value={contrast} onValueChange={handleContrastChange}>
             <SelectTrigger
               id='contrast-select'
-              className='w-full p-3 rounded-lg bg-cyber-cyan-10 border border-cyber-cyan-30 
-                         text-foreground focus:outline-none focus:ring-2 focus:ring-cyber-cyan
-                         hover:bg-cyber-cyan-20 transition-colors
-                         [&>span]:text-foreground'
+              className={cn(
+                'w-full bg-cyber-cyan-10 border-cyber-cyan-30 text-foreground',
+                'hover:bg-cyber-cyan-20 focus:ring-cyber-cyan focus:border-cyber-cyan',
+                'data-[state=open]:border-cyber-cyan transition-colors',
+                '[&>span]:text-foreground'
+              )}
             >
               <SelectValue />
             </SelectTrigger>
@@ -167,10 +171,12 @@ export default function AccessibilitySettings({
           <Select value={animationIntensity} onValueChange={handleAnimationChange}>
             <SelectTrigger
               id='animation-intensity-select'
-              className='w-full p-3 rounded-lg bg-cyber-cyan-10 border border-cyber-cyan-30 
-                         text-foreground focus:outline-none focus:ring-2 focus:ring-cyber-cyan
-                         hover:bg-cyber-cyan-20 transition-colors
-                         [&>span]:text-foreground'
+              className={cn(
+                'w-full bg-cyber-cyan-10 border-cyber-cyan-30 text-foreground',
+                'hover:bg-cyber-cyan-20 focus:ring-cyber-cyan focus:border-cyber-cyan',
+                'data-[state=open]:border-cyber-cyan transition-colors',
+                '[&>span]:text-foreground'
+              )}
             >
               <SelectValue />
             </SelectTrigger>

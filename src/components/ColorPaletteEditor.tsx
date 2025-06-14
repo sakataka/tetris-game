@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import type { ColorPalette } from '../types/tetris';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/utils/ui/cn';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { ColorPalette } from '../types/tetris';
 
 interface ColorPaletteEditorProps {
   colors: ColorPalette;
@@ -49,17 +49,24 @@ function ColorInput({ label, value, onChange, description }: ColorInputProps) {
         {label}
       </Label>
       <div className='flex gap-2 items-center'>
-        <input
-          id={colorInputId}
-          type='color'
-          value={value}
-          onChange={(e) => {
-            setInputValue(e.target.value);
-            onChange(e.target.value);
-          }}
-          className='w-10 h-10 rounded border border-cyber-cyan-30 cursor-pointer
-                     hover:border-cyber-cyan transition-colors'
-        />
+        <div className='relative'>
+          <input
+            id={colorInputId}
+            type='color'
+            value={value}
+            onChange={(e) => {
+              setInputValue(e.target.value);
+              onChange(e.target.value);
+            }}
+            className={cn(
+              'w-10 h-10 rounded-md border-2 border-cyber-cyan-30 cursor-pointer',
+              'hover:border-cyber-cyan transition-colors duration-200',
+              'focus:outline-none focus:ring-2 focus:ring-cyber-cyan focus:border-cyber-cyan',
+              'disabled:cursor-not-allowed disabled:opacity-50'
+            )}
+            aria-describedby={`${colorInputId}-description`}
+          />
+        </div>
         <Input
           type='text'
           value={inputValue}
@@ -74,7 +81,11 @@ function ColorInput({ label, value, onChange, description }: ColorInputProps) {
           )}
         />
       </div>
-      {description && <p className='text-xs text-cyber-purple mt-1'>{description}</p>}
+      {description && (
+        <p id={`${colorInputId}-description`} className='text-xs text-cyber-purple mt-1'>
+          {description}
+        </p>
+      )}
     </div>
   );
 }

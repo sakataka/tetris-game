@@ -1,5 +1,11 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Slider } from '@/components/ui/slider';
+import { Switch } from '@/components/ui/switch';
+import { cn } from '@/utils/ui/cn';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
@@ -13,12 +19,6 @@ import type {
 import { AccessibilitySettingsMemo } from './AccessibilitySettings';
 import { ColorPaletteEditorMemo } from './ColorPaletteEditor';
 import { ThemeSelectorMemo } from './ThemeSelector';
-import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { Slider } from '@/components/ui/slider';
-import { Label } from '@/components/ui/label';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { cn } from '@/utils/ui/cn';
 
 interface ThemeSettingsProps {
   currentTheme: ThemeVariant;

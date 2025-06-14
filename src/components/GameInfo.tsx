@@ -1,13 +1,13 @@
 'use client';
 
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Suspense, lazy, memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Tetromino } from '../types/tetris';
 import GameTabContent from './GameTabContent';
 import MobileGameInfo from './MobileGameInfo';
 import StatisticsTabContent from './StatisticsTabContent';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { ScrollArea } from '@/components/ui/scroll-area';
 
 export type TabType = 'game' | 'stats' | 'theme' | 'settings';
 // Heavy component lazy loading

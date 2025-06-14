@@ -1,3 +1,4 @@
+import { cn } from '@/utils/ui/cn';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
@@ -5,7 +6,7 @@ import type { GameStatistics, HighScore } from '../types/tetris';
 import { STATISTICS_PERIODS, StatisticsService } from '../utils/data/StatisticsService';
 import type { EnhancedStatistics, GameSession } from '../utils/data/statisticsUtils';
 import { Badge } from './ui/badge';
-import { cn } from '@/utils/ui/cn';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 interface StatisticsDashboardProps {
   baseStatistics: GameStatistics;
@@ -48,18 +49,30 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
         <h2 className={`${TYPOGRAPHY.PANEL_TITLE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyber-purple`}>
           📊 {t('statistics.title')}
         </h2>
-        <select
-          value={selectedPeriod}
-          onChange={(e) => onPeriodChange(e.target.value)}
-          className={`bg-gray-800 text-cyan-400 border border-cyan-400 rounded px-2 py-0.5 ${TYPOGRAPHY.SMALL_LABEL}`}
-          data-testid='period-selector'
-        >
-          {STATISTICS_PERIODS.map((period) => (
-            <option key={period.label} value={period.label}>
-              {t(`statistics.period.${period.label.toLowerCase().replace(/\s+/g, '')}`)}
-            </option>
-          ))}
-        </select>
+        <Select value={selectedPeriod || ''} onValueChange={onPeriodChange}>
+          <SelectTrigger
+            className={cn(
+              'w-[140px] bg-cyber-purple-10 border-cyber-purple-30 text-cyber-purple',
+              'hover:bg-cyber-purple-20 focus:ring-cyber-purple focus:border-cyber-purple',
+              'data-[state=open]:border-cyber-purple',
+              TYPOGRAPHY.SMALL_LABEL
+            )}
+            data-testid='period-selector'
+          >
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent className='bg-background border-cyber-purple-30'>
+            {STATISTICS_PERIODS.map((period) => (
+              <SelectItem
+                key={period.label}
+                value={period.label}
+                className='text-foreground hover:bg-cyber-purple-20 focus:bg-cyber-purple-20 focus:text-cyber-purple'
+              >
+                {t(`statistics.period.${period.label.toLowerCase().replace(/\s+/g, '')}`)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Main statistics */}

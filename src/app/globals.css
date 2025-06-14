@@ -216,12 +216,7 @@ body {
   }
 }
 
-/* Grid background */
-.grid-background {
-  background-image: linear-gradient(var(--cyber-cyan-10) 1px, transparent 1px),
-    linear-gradient(90deg, var(--cyber-cyan-10) 1px, transparent 1px);
-  background-size: 50px 50px;
-}
+/* Grid background - NOTE: Currently unused but kept for future features */
 
 /* Hologram effect */
 .hologram {
@@ -277,20 +272,7 @@ body {
   border: 1px solid var(--cyber-red-20);
 }
 
-/* Floating animation */
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-.float-animation {
-  animation: float 3s ease-in-out infinite;
-}
+/* Floating animation - NOTE: Currently unused but kept for future particle effects */
 
 /* Particle animation */
 @keyframes particle-sparkle {
@@ -308,9 +290,7 @@ body {
   }
 }
 
-.particle-enhanced {
-  animation: particle-sparkle 0.8s ease-in-out infinite;
-}
+/* Legacy particle-enhanced class - replaced by particle-optimized */
 
 /* Responsive text utilities */
 .text-2xs {
@@ -318,24 +298,7 @@ body {
   line-height: 0.875rem; /* 14px */
 }
 
-/* Responsive grid for statistics */
-.responsive-grid-stats {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.5rem;
-}
-
-@media (min-width: 640px) {
-  .responsive-grid-stats {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .responsive-grid-stats {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
+/* Responsive grid utilities - NOTE: Replaced by Tailwind grid classes but kept for reference */
 
 /* Compact text sizes for panels */
 .text-compact-xs {
@@ -482,10 +445,7 @@ body {
   }
 }
 
-/* Legacy particle class (backward compatibility) */
-.particle-enhanced {
-  will-change: transform, opacity;
-}
+/* Legacy particle class - NOTE: Replaced by particle-optimized with better performance */
 
 /* =========================================
    Enhanced Responsive Design System
@@ -544,14 +504,7 @@ body {
   padding-block: clamp(1rem, 3vh, 2rem);
 }
 
-/* Responsive grid system */
-.responsive-grid-stats {
-  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4;
-}
-
-.responsive-grid-dashboard {
-  @apply grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-4 lg:gap-6;
-}
+/* Responsive grid system - NOTE: Use Tailwind classes directly instead */
 
 /* Touch target optimization */
 .touch-target {
