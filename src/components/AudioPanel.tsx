@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { GAME_UI_SIZES, SPACING, TYPOGRAPHY, UI_SIZES } from '../constants/layout';
 import type { GameSettings } from '../types/tetris';
 import CyberCard from './ui/CyberCard';
-import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
+import { Switch } from '@/components/ui/switch';
 import { cn } from '@/utils/ui/cn';
 
 interface AudioPanelProps {
@@ -56,44 +56,36 @@ const AudioPanel = memo(function AudioPanel({
           </div>
         </div>
         <div className='flex justify-between items-center'>
-          <span className={`text-gray-300 ${TYPOGRAPHY.BODY_TEXT}`}>{t('settings.mute')}</span>
-          <Button
-            variant='outline'
-            size='sm'
-            onClick={onToggleMute}
+          <label htmlFor='mute-switch' className={`text-gray-300 ${TYPOGRAPHY.BODY_TEXT}`}>
+            {t('settings.mute')}
+          </label>
+          <Switch
+            id='mute-switch'
+            checked={!isMuted}
+            onCheckedChange={() => onToggleMute()}
             className={cn(
-              'font-mono',
-              TYPOGRAPHY.BUTTON_TEXT,
-              isMuted
-                ? 'border-red-400/50 text-red-400 hover:bg-red-500/20'
-                : 'border-green-400/50 text-green-400 hover:bg-green-500/20'
+              'data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-gray-600',
+              'border-2 data-[state=checked]:border-green-400 data-[state=unchecked]:border-gray-500'
             )}
-          >
-            {isMuted ? t('common.off').toUpperCase() : t('common.on').toUpperCase()}
-          </Button>
+            aria-label={t('settings.mute')}
+          />
         </div>
         <div className='flex justify-between items-center'>
-          <span className={`text-gray-300 ${TYPOGRAPHY.BODY_TEXT}`}>
+          <label htmlFor='virtual-controls-switch' className={`text-gray-300 ${TYPOGRAPHY.BODY_TEXT}`}>
             {t('settings.virtualControls')}
-          </span>
-          <Button
-            variant='outline'
-            size='sm'
-            onClick={() =>
-              onUpdateSettings({ virtualControlsEnabled: !settings.virtualControlsEnabled })
+          </label>
+          <Switch
+            id='virtual-controls-switch'
+            checked={settings.virtualControlsEnabled}
+            onCheckedChange={(checked) =>
+              onUpdateSettings({ virtualControlsEnabled: checked })
             }
             className={cn(
-              'font-mono',
-              TYPOGRAPHY.BUTTON_TEXT,
-              settings.virtualControlsEnabled
-                ? 'border-green-400/50 text-green-400 hover:bg-green-500/20'
-                : 'border-gray-400/50 text-gray-400 hover:bg-gray-500/20'
+              'data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-gray-600',
+              'border-2 data-[state=checked]:border-green-400 data-[state=unchecked]:border-gray-500'
             )}
-          >
-            {settings.virtualControlsEnabled
-              ? t('common.on').toUpperCase()
-              : t('common.off').toUpperCase()}
-          </Button>
+            aria-label={t('settings.virtualControls')}
+          />
         </div>
       </div>
     </CyberCard>

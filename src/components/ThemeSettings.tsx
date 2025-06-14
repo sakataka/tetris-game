@@ -14,6 +14,8 @@ import { AccessibilitySettingsMemo } from './AccessibilitySettings';
 import { ColorPaletteEditorMemo } from './ColorPaletteEditor';
 import { ThemeSelectorMemo } from './ThemeSelector';
 import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { Slider } from '@/components/ui/slider';
 import { cn } from '@/utils/ui/cn';
 
 interface ThemeSettingsProps {
@@ -62,8 +64,8 @@ export default function ThemeSettings({
   );
 
   // Event handler (React Compiler will optimize this)
-  const handleEffectIntensityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onEffectIntensityChange(Number.parseFloat(event.target.value));
+  const handleEffectIntensityChange = (value: number[]) => {
+    onEffectIntensityChange(value[0] ?? 1);
   };
 
   const tabs = [
@@ -146,19 +148,20 @@ export default function ThemeSettings({
               >
                 {t('colorPalette.advancedSettings')}: {(effectIntensity * 100).toFixed(0)}%
               </label>
-              <input
+              <Slider
                 id='effect-intensity-range'
-                type='range'
-                min='0'
-                max='2'
-                step='0.1'
-                value={effectIntensity}
-                onChange={handleEffectIntensityChange}
-                className='w-full h-2 rounded-lg appearance-none cursor-pointer
-                           bg-cyber-cyan-20 slider-thumb'
-                style={{
-                  background: `linear-gradient(to right, var(--cyber-cyan) 0%, var(--cyber-cyan) ${effectIntensity * 50}%, var(--cyber-cyan-20) ${effectIntensity * 50}%, var(--cyber-cyan-20) 100%)`,
-                }}
+                value={[effectIntensity]}
+                onValueChange={handleEffectIntensityChange}
+                min={0}
+                max={2}
+                step={0.1}
+                className={cn(
+                  'w-full',
+                  '[&>span[data-slot=slider-track]]:bg-cyber-cyan-20',
+                  '[&>span[data-slot=slider-range]]:bg-cyber-cyan',
+                  '[&>span[data-slot=slider-thumb]]:border-cyber-cyan [&>span[data-slot=slider-thumb]]:bg-cyber-cyan',
+                  '[&>span[data-slot=slider-thumb]]:shadow-[0_0_10px_rgba(0,255,255,0.5)]'
+                )}
               />
               <div
                 className={`flex justify-between ${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple mt-0.5`}
@@ -174,14 +177,18 @@ export default function ThemeSettings({
 
             {/* Animation enable/disable */}
             <div>
-              <label className='flex items-center space-x-3 cursor-pointer'>
-                <input
-                  type='checkbox'
+              <div className='flex items-center space-x-3'>
+                <Switch
+                  id='animations-switch'
                   checked={animations}
-                  onChange={onAnimationsToggle}
-                  className='w-4 h-4 accent-cyber-cyan rounded focus:ring-2 focus:ring-cyber-cyan'
+                  onCheckedChange={() => onAnimationsToggle()}
+                  className={cn(
+                    'data-[state=checked]:bg-cyber-cyan data-[state=unchecked]:bg-gray-600',
+                    'border-2 data-[state=checked]:border-cyber-cyan data-[state=unchecked]:border-gray-500'
+                  )}
+                  aria-label={t('accessibility.fullAnimation')}
                 />
-                <div>
+                <label htmlFor='animations-switch' className='cursor-pointer'>
                   <span
                     className={`${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} text-cyber-cyan`}
                   >
@@ -190,8 +197,8 @@ export default function ThemeSettings({
                   <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple`}>
                     {t('accessibility.fullAnimation')}
                   </p>
-                </div>
-              </label>
+                </label>
+              </div>
             </div>
 
             {/* Effect preview */}
@@ -230,34 +237,3 @@ export default function ThemeSettings({
 }
 
 export const ThemeSettingsMemo = React.memo(ThemeSettings);
-
-/* Custom slider styles */
-const sliderStyles = `
-.slider-thumb::-webkit-slider-thumb {
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: var(--cyber-cyan);
-  cursor: pointer;
-  border: 2px solid var(--background);
-  box-shadow: 0 0 6px var(--cyber-cyan);
-}
-
-.slider-thumb::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: var(--cyber-cyan);
-  cursor: pointer;
-  border: 2px solid var(--background);
-  box-shadow: 0 0 6px var(--cyber-cyan);
-}
-`;
-
-// Dynamically inject styles
-if (typeof document !== 'undefined') {
-  const styleElement = document.createElement('style');
-  styleElement.textContent = sliderStyles;
-  document.head.appendChild(styleElement);
-}

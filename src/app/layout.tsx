@@ -2,9 +2,10 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import ErrorBoundaryWithTranslation from '../components/ErrorBoundaryWithTranslation';
-import ErrorNotification from '../components/ErrorNotification';
+import ErrorToastAdapter from '../components/ErrorToastAdapter';
 import ErrorStoreInitializer from '../components/ErrorStoreInitializer';
 import I18nProvider from '../components/I18nProvider';
+import { Toaster } from '../components/ui/sonner';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -33,7 +34,8 @@ export default function RootLayout({
           <ErrorBoundaryWithTranslation level='page'>
             <ErrorStoreInitializer />
             {children}
-            <ErrorNotification position='top-right' maxNotifications={3} />
+            <ErrorToastAdapter />
+            <Toaster />
           </ErrorBoundaryWithTranslation>
         </I18nProvider>
       </body>

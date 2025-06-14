@@ -8,8 +8,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 👉 **[React 19.1 + React Compiler Development Guidelines](./docs/REACT_DEVELOPMENT_GUIDELINES.md)**
 
-This development guideline is a **practical guide** based on comprehensive analysis of 101 React TIPs and real implementation experience in this project.
-
 ### 📋 Required Checklist
 
 When implementing new components or features, always verify the following:
@@ -20,34 +18,6 @@ When implementing new components or features, always verify the following:
 - **🛡️ TypeScript Strict Mode**: Ensure type safety
 - **🧪 Testing Strategy**: Implement tests with React Testing Library + Vitest
 - **📁 File Organization**: Use Co-location pattern and Named Exports
-
-### ⚠️ Pre-Development Reading
-
-1. **Appendix 101 TIPS Evaluation**: Check adoption/rejection decisions for each TIP
-2. **Implementation Examples**: Reference project-specific code examples
-3. **Do's & Don'ts Matrix**: Review patterns to avoid before starting
-
-### 🤝 When Guidelines Conflict with Implementation
-
-**If you encounter conflicts between the development guidelines and practical implementation:**
-
-- **Errors occur** when following the guidelines
-- **Performance issues** arise from guideline adherence
-- **Development becomes blocked** due to guideline constraints
-- **Guidelines seem outdated** for a specific use case
-
-**→ ALWAYS ask the user for guidance and clarification**
-
-Do not deviate from the guidelines without explicit user approval. Explain:
-
-1. What guideline you were following
-2. What specific issue occurred
-3. What alternative approach you're considering
-4. Request permission to proceed with the alternative
-
-The guidelines are living documents that may need updates based on real-world implementation experience.
-
----
 
 ## Project Overview
 

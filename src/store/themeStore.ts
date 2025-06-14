@@ -105,6 +105,7 @@ export const useThemeStore = create<ThemeStore>()((set) => ({
 
 // Selector hooks for optimized access
 export const useTheme = () => useThemeStore((state) => state.theme);
+export const useCurrentTheme = () => useThemeStore((state) => state.theme.current);
 export const useThemeConfig = () => useThemeStore((state) => state.theme.config);
 export const useThemeAccessibility = () => useThemeStore((state) => state.theme.accessibility);
 

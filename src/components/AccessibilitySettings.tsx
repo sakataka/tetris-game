@@ -4,6 +4,15 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
 import type { AnimationIntensity, ColorBlindnessType, ContrastLevel } from '../types/tetris';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from './ui/select';
+import { Switch } from './ui/switch';
+import { cn } from '@/utils/ui/cn';
 
 interface AccessibilitySettingsProps {
   colorBlindnessType: ColorBlindnessType;
@@ -29,16 +38,16 @@ export default function AccessibilitySettings({
 }: AccessibilitySettingsProps) {
   const { t } = useTranslation();
   // Event handlers (React Compiler will optimize these)
-  const handleColorBlindnessChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    onSettingsChange({ colorBlindnessType: event.target.value as ColorBlindnessType });
+  const handleColorBlindnessChange = (value: string) => {
+    onSettingsChange({ colorBlindnessType: value as ColorBlindnessType });
   };
 
-  const handleContrastChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    onSettingsChange({ contrast: event.target.value as ContrastLevel });
+  const handleContrastChange = (value: string) => {
+    onSettingsChange({ contrast: value as ContrastLevel });
   };
 
-  const handleAnimationChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newIntensity = event.target.value as AnimationIntensity;
+  const handleAnimationChange = (value: string) => {
+    const newIntensity = value as AnimationIntensity;
     onSettingsChange({
       animationIntensity: newIntensity,
       reducedMotion: newIntensity === 'none' || newIntensity === 'reduced',
@@ -90,24 +99,28 @@ export default function AccessibilitySettings({
           >
             {t('accessibility.colorVisionSupport')}
           </label>
-          <select
-            id='color-blindness-select'
-            value={colorBlindnessType}
-            onChange={handleColorBlindnessChange}
-            className='w-full p-3 rounded-lg bg-cyber-cyan-10 border border-cyber-cyan-30 
-                       text-foreground focus:outline-none focus:ring-2 focus:ring-cyber-cyan
-                       hover:bg-cyber-cyan-20 transition-colors'
-          >
-            {colorBlindnessOptions.map((option) => (
-              <option
-                key={option.value}
-                value={option.value}
-                className='bg-background text-foreground'
-              >
-                {option.label}
-              </option>
-            ))}
-          </select>
+          <Select value={colorBlindnessType} onValueChange={handleColorBlindnessChange}>
+            <SelectTrigger
+              id='color-blindness-select'
+              className='w-full p-3 rounded-lg bg-cyber-cyan-10 border border-cyber-cyan-30 
+                         text-foreground focus:outline-none focus:ring-2 focus:ring-cyber-cyan
+                         hover:bg-cyber-cyan-20 transition-colors
+                         [&>span]:text-foreground'
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className='bg-background border-cyber-cyan-30'>
+              {colorBlindnessOptions.map((option) => (
+                <SelectItem
+                  key={option.value}
+                  value={option.value}
+                  className='text-foreground hover:bg-cyber-cyan-20 focus:bg-cyber-cyan-20 focus:text-cyber-cyan'
+                >
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple mt-1`}>
             {t('accessibility.colorVisionSupportDescription')}
           </p>
@@ -121,24 +134,28 @@ export default function AccessibilitySettings({
           >
             {t('accessibility.contrast')}
           </label>
-          <select
-            id='contrast-select'
-            value={contrast}
-            onChange={handleContrastChange}
-            className='w-full p-3 rounded-lg bg-cyber-cyan-10 border border-cyber-cyan-30 
-                       text-foreground focus:outline-none focus:ring-2 focus:ring-cyber-cyan
-                       hover:bg-cyber-cyan-20 transition-colors'
-          >
-            {contrastOptions.map((option) => (
-              <option
-                key={option.value}
-                value={option.value}
-                className='bg-background text-foreground'
-              >
-                {option.label}
-              </option>
-            ))}
-          </select>
+          <Select value={contrast} onValueChange={handleContrastChange}>
+            <SelectTrigger
+              id='contrast-select'
+              className='w-full p-3 rounded-lg bg-cyber-cyan-10 border border-cyber-cyan-30 
+                         text-foreground focus:outline-none focus:ring-2 focus:ring-cyber-cyan
+                         hover:bg-cyber-cyan-20 transition-colors
+                         [&>span]:text-foreground'
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className='bg-background border-cyber-cyan-30'>
+              {contrastOptions.map((option) => (
+                <SelectItem
+                  key={option.value}
+                  value={option.value}
+                  className='text-foreground hover:bg-cyber-cyan-20 focus:bg-cyber-cyan-20 focus:text-cyber-cyan'
+                >
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple mt-1`}>
             {t('accessibility.contrastDescription')}
           </p>
@@ -152,24 +169,28 @@ export default function AccessibilitySettings({
           >
             {t('accessibility.animationIntensity')}
           </label>
-          <select
-            id='animation-intensity-select'
-            value={animationIntensity}
-            onChange={handleAnimationChange}
-            className='w-full p-3 rounded-lg bg-cyber-cyan-10 border border-cyber-cyan-30 
-                       text-foreground focus:outline-none focus:ring-2 focus:ring-cyber-cyan
-                       hover:bg-cyber-cyan-20 transition-colors'
-          >
-            {animationOptions.map((option) => (
-              <option
-                key={option.value}
-                value={option.value}
-                className='bg-background text-foreground'
-              >
-                {option.label}
-              </option>
-            ))}
-          </select>
+          <Select value={animationIntensity} onValueChange={handleAnimationChange}>
+            <SelectTrigger
+              id='animation-intensity-select'
+              className='w-full p-3 rounded-lg bg-cyber-cyan-10 border border-cyber-cyan-30 
+                         text-foreground focus:outline-none focus:ring-2 focus:ring-cyber-cyan
+                         hover:bg-cyber-cyan-20 transition-colors
+                         [&>span]:text-foreground'
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className='bg-background border-cyber-cyan-30'>
+              {animationOptions.map((option) => (
+                <SelectItem
+                  key={option.value}
+                  value={option.value}
+                  className='text-foreground hover:bg-cyber-cyan-20 focus:bg-cyber-cyan-20 focus:text-cyber-cyan'
+                >
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple mt-1`}>
             {t('accessibility.animationIntensityDescription')}
           </p>
@@ -177,22 +198,26 @@ export default function AccessibilitySettings({
 
         {/* Motion Sensitivity */}
         <div>
-          <label className='flex items-center space-x-3 cursor-pointer'>
-            <input
-              type='checkbox'
+          <div className='flex items-center space-x-3'>
+            <Switch
+              id='reduced-motion-switch'
               checked={reducedMotion}
-              onChange={handleReducedMotionToggle}
-              className='w-4 h-4 accent-cyber-cyan rounded focus:ring-2 focus:ring-cyber-cyan'
+              onCheckedChange={() => handleReducedMotionToggle()}
+              className={cn(
+                'data-[state=checked]:bg-cyber-cyan data-[state=unchecked]:bg-gray-600',
+                'border-2 data-[state=checked]:border-cyber-cyan data-[state=unchecked]:border-gray-500'
+              )}
+              aria-label={t('settings.reducedMotion')}
             />
-            <div>
+            <label htmlFor='reduced-motion-switch' className='cursor-pointer'>
               <span className={`${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} text-cyber-cyan`}>
                 {t('settings.reducedMotion')}
               </span>
               <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple`}>
                 {t('accessibility.animationIntensityDescription')}
               </p>
-            </div>
-          </label>
+            </label>
+          </div>
         </div>
 
         {/* Preview area */}
