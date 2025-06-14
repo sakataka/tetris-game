@@ -1,8 +1,7 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 2,
   "buildCommand": "pnpm build",
   "outputDirectory": "build/client",
-
   "functions": {
     "build/server/index.js": {
       "runtime": "nodejs20.x",
@@ -79,10 +78,10 @@
     }
   ],
 
-  "rewrites": [
+  "routes": [
     {
-      "source": "/((?!api/).*)",
-      "destination": "/build/server/index.js"
+      "src": "/(.*)",
+      "dest": "/build/server/index.js"
     }
   ],
 
@@ -95,7 +94,7 @@
     "env": {
       "NODE_ENV": "production",
       "VITE_APP_ENV": "production",
-      "GENERATE_SOURCEMAP": "true"
+      "GENERATE_SOURCEMAP": "false"
     }
   },
 
