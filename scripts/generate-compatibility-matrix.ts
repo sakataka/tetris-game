@@ -12,7 +12,7 @@ interface TestResult {
   testName: string;
   status: 'passed' | 'failed' | 'skipped';
   duration: number;
-  error?: string;
+  error?: string | undefined;
 }
 
 interface CompatibilityResult {
@@ -77,23 +77,27 @@ export class CompatibilityMatrixGenerator {
   /**
    * テスト結果のパース
    */
-  private parseTestResults(suites: Array<Record<string, any>>): void {
+  private parseTestResults(suites: Record<string, unknown>[]): void {
     for (const suite of suites) {
-      if (suite['suites']) {
-        this.parseTestResults(suite['suites']);
+      if (suite['suites'] && Array.isArray(suite['suites'])) {
+        this.parseTestResults(suite['suites'] as Record<string, unknown>[]);
       }
 
-      if (suite['specs']) {
-        for (const spec of suite['specs']) {
-          for (const test of spec.tests) {
-            for (const result of test.results) {
-              this.testResults.push({
-                projectName: result.projectName || 'unknown',
-                testName: spec.title,
-                status: result.status as 'passed' | 'failed' | 'skipped',
-                duration: result.duration || 0,
-                error: result.error?.message,
-              });
+      if (suite['specs'] && Array.isArray(suite['specs'])) {
+        for (const spec of suite['specs'] as Record<string, unknown>[]) {
+          if (spec['tests'] && Array.isArray(spec['tests'])) {
+            for (const test of spec['tests'] as Record<string, unknown>[]) {
+              if (test['results'] && Array.isArray(test['results'])) {
+                for (const result of test['results'] as Record<string, unknown>[]) {
+                  this.testResults.push({
+                    projectName: (result['projectName'] as string) || 'unknown',
+                    testName: spec['title'] as string,
+                    status: result['status'] as 'passed' | 'failed' | 'skipped',
+                    duration: (result['duration'] as number) || 0,
+                    error: (result['error'] as { message?: string })?.message,
+                  });
+                }
+              }
             }
           }
         }

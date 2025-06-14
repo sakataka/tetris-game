@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import './types/browser-api';
 
 /**
  * パフォーマンスベンチマーク
@@ -158,7 +159,7 @@ test.describe('Performance Benchmark', () => {
         finalMemory: number;
         garbageCollected: number;
       }>((resolve) => {
-        const memory = (performance as any).memory;
+        const memory = performance.memory;
         if (!memory) {
           resolve({ initialMemory: 0, peakMemory: 0, finalMemory: 0, garbageCollected: 0 });
           return;
@@ -168,7 +169,7 @@ test.describe('Performance Benchmark', () => {
         let peakMemory = initialMemory;
 
         // メモリ集約的な操作のシミュレーション
-        const bigObjects: any[] = [];
+        const bigObjects: Array<{ id: number; data: string[]; timestamp: number }> = [];
 
         for (let i = 0; i < 1000; i++) {
           bigObjects.push({
@@ -347,7 +348,7 @@ test.describe('Performance Benchmark', () => {
           },
           hardware: {
             cores: navigator.hardwareConcurrency,
-            memory: (navigator as any).deviceMemory,
+            memory: navigator.deviceMemory,
           },
         },
         baselines,
@@ -382,7 +383,7 @@ test.describe('Performance Benchmark', () => {
 
     // レポートの保存（実際の実装では外部ファイルに保存）
     await page.evaluate((report) => {
-      (window as any).__performanceBaselineReport = report;
+      window.__performanceBaselineReport = report;
     }, baselineReport);
   });
 });

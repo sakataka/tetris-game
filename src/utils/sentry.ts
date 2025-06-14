@@ -11,7 +11,7 @@ export interface SentryConfig {
   environment: 'development' | 'staging' | 'production';
   tracesSampleRate: number;
   profilesSampleRate: number;
-  integrations?: any[];
+  integrations?: Parameters<typeof Sentry.init>[0]['integrations'];
   beforeSend?: (event: Sentry.ErrorEvent, hint: Sentry.EventHint) => Sentry.ErrorEvent | null;
 }
 
@@ -30,7 +30,8 @@ export function initSentry(config?: Partial<SentryConfig>): void {
 
   const defaultConfig = {
     dsn,
-    environment: (process.env['NODE_ENV'] as 'development' | 'staging' | 'production') || 'production',
+    environment:
+      (process.env['NODE_ENV'] as 'development' | 'staging' | 'production') || 'production',
     tracesSampleRate: Number.parseFloat(process.env['VITE_SENTRY_TRACES_SAMPLE_RATE'] || '0.1'),
     integrations: [Sentry.browserTracingIntegration()],
     beforeSend: (event: Sentry.ErrorEvent, _hint: Sentry.EventHint) => {
@@ -58,7 +59,19 @@ export function initSentry(config?: Partial<SentryConfig>): void {
 
   const finalConfig = { ...defaultConfig, ...config };
 
-  Sentry.init(finalConfig);
+  // Create Sentry config with proper typing
+  const sentryConfig = {
+    dsn: finalConfig.dsn,
+    environment: finalConfig.environment,
+    tracesSampleRate: finalConfig.tracesSampleRate,
+    beforeSend: finalConfig.beforeSend,
+    ...(finalConfig.profilesSampleRate !== undefined && {
+      profilesSampleRate: finalConfig.profilesSampleRate,
+    }),
+    ...(finalConfig.integrations && { integrations: finalConfig.integrations }),
+  };
+
+  Sentry.init(sentryConfig);
 
   console.log('🔍 Sentry initialized for production monitoring');
 }
@@ -70,7 +83,7 @@ export const GameSentry = {
   /**
    * ゲームエラーの記録
    */
-  captureGameError: (error: Error, context?: Record<string, any>) => {
+  captureGameError: (error: Error, context?: Record<string, unknown>) => {
     Sentry.withScope((scope) => {
       scope.setTag('category', 'game');
       if (context) {
@@ -94,7 +107,7 @@ export const GameSentry = {
   /**
    * パフォーマンス問題の記録
    */
-  capturePerformanceIssue: (message: string, context?: Record<string, any>) => {
+  capturePerformanceIssue: (message: string, context?: Record<string, unknown>) => {
     Sentry.withScope((scope) => {
       scope.setTag('category', 'performance');
       if (context) {
@@ -136,7 +149,10 @@ export const GameSentry = {
           span?.setStatus({ code: 1, message: 'ok' }); // OK
           return result;
         } catch (error) {
-          span?.setStatus({ code: 2, message: error instanceof Error ? error.message : String(error) }); // ERROR
+          span?.setStatus({
+            code: 2,
+            message: error instanceof Error ? error.message : String(error),
+          }); // ERROR
           throw error;
         }
       }

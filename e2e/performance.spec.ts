@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import './types/browser-api';
 
 test.describe('Performance Tests', () => {
   test.beforeEach(async ({ page }) => {
@@ -55,7 +56,7 @@ test.describe('Performance Tests', () => {
         const observer = new PerformanceObserver((list) => {
           const entries = list.getEntries();
           for (const entry of entries) {
-            const layoutShiftEntry = entry as any;
+            const layoutShiftEntry = entry as LayoutShiftEntry;
             if (!layoutShiftEntry.hadRecentInput) {
               clsValue += layoutShiftEntry.value;
             }
@@ -91,7 +92,7 @@ test.describe('Performance Tests', () => {
   test('should maintain responsive performance during gameplay', async ({ page }) => {
     // ゲーム開始時のメモリ使用量
     const initialMemory = await page.evaluate(() => {
-      return (performance as any).memory?.usedJSHeapSize || 0;
+      return performance.memory?.usedJSHeapSize || 0;
     });
 
     // 60秒間の連続ゲームプレイシミュレーション
@@ -121,7 +122,7 @@ test.describe('Performance Tests', () => {
 
     // 最終メモリ使用量
     const finalMemory = await page.evaluate(() => {
-      return (performance as any).memory?.usedJSHeapSize || 0;
+      return performance.memory?.usedJSHeapSize || 0;
     });
 
     // パフォーマンス検証

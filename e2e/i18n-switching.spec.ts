@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import './types/browser-api';
 
 test.describe('Internationalization (i18n)', () => {
   test.beforeEach(async ({ page }) => {
@@ -198,7 +199,7 @@ test.describe('Internationalization (i18n)', () => {
 
       // Ensure no JavaScript errors occurred
       const errors = await page.evaluate(() => {
-        return (window as any).__playwright_errors || [];
+        return window.__playwright_errors || [];
       });
       expect(errors.length).toBe(0);
     }

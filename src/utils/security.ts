@@ -243,7 +243,7 @@ export function logSecurityEvent(
     userAgent?: string;
     url?: string;
     timestamp?: number;
-    [key: string]: any;
+    [key: string]: unknown;
   }
 ): void {
   const logData = {

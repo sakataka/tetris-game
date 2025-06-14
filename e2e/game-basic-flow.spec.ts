@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import './types/browser-api';
 
 test.describe('Basic Game Flow', () => {
   test.beforeEach(async ({ page }) => {
@@ -106,11 +107,11 @@ test.describe('Basic Game Flow', () => {
 
       // Should not have any console errors
       const logs = await page.evaluate(() => {
-        return (window as any).__playwright_logs || [];
+        return window.__playwright_logs || [];
       });
 
       // Check for critical errors (you can customize this based on your error handling)
-      const errors = logs.filter((log: any) => log.type === 'error');
+      const errors = logs.filter((log) => log.type === 'error');
       expect(errors.length).toBe(0);
     }
 
@@ -125,7 +126,7 @@ test.describe('Basic Game Flow', () => {
 
     // Get initial memory usage
     const initialMemory = await page.evaluate(() => {
-      return (performance as any).memory?.usedJSHeapSize || 0;
+      return performance.memory?.usedJSHeapSize || 0;
     });
 
     // Simulate continuous gameplay for 30 seconds
@@ -146,7 +147,7 @@ test.describe('Basic Game Flow', () => {
 
     // Check final memory usage
     const finalMemory = await page.evaluate(() => {
-      return (performance as any).memory?.usedJSHeapSize || 0;
+      return performance.memory?.usedJSHeapSize || 0;
     });
 
     if (initialMemory > 0 && finalMemory > 0) {

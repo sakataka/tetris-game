@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import './types/browser-api';
 
 // モバイルデバイス互換性テスト
 test.describe('Mobile Device Compatibility', () => {
@@ -269,7 +270,7 @@ test.describe('Mobile Device Compatibility', () => {
       test(`should handle memory limitations on ${device.name}`, async ({ page }) => {
         // メモリ使用量の測定
         const initialMemory = await page.evaluate(() => {
-          return (performance as any).memory?.usedJSHeapSize || 0;
+          return performance.memory?.usedJSHeapSize || 0;
         });
 
         // メモリ集約的な操作のシミュレーション
@@ -287,13 +288,13 @@ test.describe('Mobile Device Compatibility', () => {
           bigArray.length = 0;
 
           // ガベージコレクションの提案
-          if ((window as any).gc) {
-            (window as any).gc();
+          if (window.gc) {
+            window.gc();
           }
         });
 
         const finalMemory = await page.evaluate(() => {
-          return (performance as any).memory?.usedJSHeapSize || 0;
+          return performance.memory?.usedJSHeapSize || 0;
         });
 
         if (initialMemory > 0 && finalMemory > 0) {

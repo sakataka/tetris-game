@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import './types/browser-api';
 
 // ブラウザ互換性テスト
 test.describe('Cross-Browser Compatibility', () => {
@@ -31,10 +32,10 @@ test.describe('Cross-Browser Compatibility', () => {
         try {
           // Array.prototype.toSpliced (ES2023)
           const arr = [1, 2, 3];
-          const result = (arr as any).toSpliced(1, 1, 'replaced');
+          const result = arr.toSpliced?.(1, 1, 999) || [];
 
           // Object.groupBy (ES2024提案)
-          const supported = typeof (Array.prototype as any).toSpliced === 'function';
+          const supported = typeof Array.prototype.toSpliced === 'function';
 
           return { modernJs: supported, toSpliced: result.length === 3 };
         } catch {
@@ -190,7 +191,7 @@ test.describe('Cross-Browser Compatibility', () => {
     test('should handle audio context consistently', async ({ page }) => {
       const audioSupport = await page.evaluate(() => {
         try {
-          const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
           const ctx = new AudioContext();
           ctx.close();
           return {
@@ -328,7 +329,7 @@ test.describe('Cross-Browser Compatibility', () => {
           const end = performance.now();
           const renderTime = end - start;
 
-          const memoryUsage = (performance as any).memory?.usedJSHeapSize || 0;
+          const memoryUsage = performance.memory?.usedJSHeapSize || 0;
 
           resolve({
             browserName: navigator.userAgent,
