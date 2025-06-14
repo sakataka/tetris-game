@@ -86,8 +86,7 @@ const ParticleEffect = memo(function ParticleEffect({
     const updated: LineEffectState['particles'] = [];
     const expired: LineEffectState['particles'] = [];
 
-    for (let i = 0; i < particles.length; i++) {
-      const particle = particles[i];
+    for (const particle of particles) {
       if (!particle) continue;
 
       const updatedParticle = {

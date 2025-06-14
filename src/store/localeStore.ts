@@ -77,24 +77,25 @@ export const useLocaleStore = create<LocaleState>()(
       ...DEFAULT_LOCALE_STATE,
 
       setLanguage: (language: SupportedLocale) => {
+        let validLanguage = language;
         if (!get().isLanguageSupported(language)) {
           log.warn(
             `Unsupported language: ${language}. Falling back to ${I18N_CONFIG.DEFAULT_LOCALE}`,
             { component: 'LocaleStore' }
           );
-          language = I18N_CONFIG.DEFAULT_LOCALE;
+          validLanguage = I18N_CONFIG.DEFAULT_LOCALE;
         }
 
         set({
-          currentLanguage: language,
-          dateFormat: getDateFormatForLanguage(language),
-          isRTL: isRTLLanguage(language),
+          currentLanguage: validLanguage,
+          dateFormat: getDateFormatForLanguage(validLanguage),
+          isRTL: isRTLLanguage(validLanguage),
         });
 
         // Update HTML lang attribute
         if (typeof document !== 'undefined') {
-          document.documentElement.lang = language;
-          document.documentElement.dir = isRTLLanguage(language) ? 'rtl' : 'ltr';
+          document.documentElement.lang = validLanguage;
+          document.documentElement.dir = isRTLLanguage(validLanguage) ? 'rtl' : 'ltr';
         }
       },
 

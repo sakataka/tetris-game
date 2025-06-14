@@ -82,7 +82,7 @@ export type StrictKeyValuePair<T extends Record<string, unknown>> = {
 // Type-safe enum alternative
 export const createEnum = <T extends Record<string, string | number>>(
   obj: T
-): Readonly<T> & { readonly values: ReadonlyArray<T[keyof T]> } => {
+): Readonly<T> & { readonly values: readonly T[keyof T][] } => {
   const values = Object.values(obj) as T[keyof T][];
   return Object.freeze({
     ...obj,

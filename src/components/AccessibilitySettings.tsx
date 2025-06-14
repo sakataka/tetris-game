@@ -85,11 +85,13 @@ export default function AccessibilitySettings({
         {/* Color blindness support */}
         <div>
           <label
+            htmlFor='color-blindness-select'
             className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-cyber-cyan`}
           >
             {t('accessibility.colorVisionSupport')}
           </label>
           <select
+            id='color-blindness-select'
             value={colorBlindnessType}
             onChange={handleColorBlindnessChange}
             className='w-full p-3 rounded-lg bg-cyber-cyan-10 border border-cyber-cyan-30 
@@ -114,11 +116,13 @@ export default function AccessibilitySettings({
         {/* Contrast settings */}
         <div>
           <label
+            htmlFor='contrast-select'
             className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-cyber-cyan`}
           >
             {t('accessibility.contrast')}
           </label>
           <select
+            id='contrast-select'
             value={contrast}
             onChange={handleContrastChange}
             className='w-full p-3 rounded-lg bg-cyber-cyan-10 border border-cyber-cyan-30 
@@ -143,11 +147,13 @@ export default function AccessibilitySettings({
         {/* Animation intensity */}
         <div>
           <label
+            htmlFor='animation-intensity-select'
             className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-cyber-cyan`}
           >
             {t('accessibility.animationIntensity')}
           </label>
           <select
+            id='animation-intensity-select'
             value={animationIntensity}
             onChange={handleAnimationChange}
             className='w-full p-3 rounded-lg bg-cyber-cyan-10 border border-cyber-cyan-30 

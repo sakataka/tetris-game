@@ -22,7 +22,7 @@ export interface ErrorState {
 
   // UI state
   showErrorPanel: boolean;
-  selectedErrorId?: string;
+  selectedErrorId?: string | undefined;
 
   // Actions
   addError: (error: ErrorInfo) => void;
@@ -122,7 +122,7 @@ export const useErrorStore = create<ErrorState>()(
           };
 
           if (state.selectedErrorId === errorId) {
-            delete updates.selectedErrorId;
+            updates.selectedErrorId = undefined;
           }
 
           return updates;
@@ -212,7 +212,7 @@ export const useErrorStore = create<ErrorState>()(
           state.errors = [];
           state.stats = INITIAL_STATS;
           state.showErrorPanel = false;
-          delete state.selectedErrorId;
+          state.selectedErrorId = undefined;
         }
       },
     }

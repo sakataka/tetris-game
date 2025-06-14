@@ -74,7 +74,9 @@ describe('tetrisUtils', () => {
     it('should return false for position with collision', () => {
       const board = createEmptyBoard();
       // Place something on the board
-      board[1]![4] = '#ff0000';
+      if (board[1]) {
+        board[1][4] = '#ff0000';
+      }
 
       const tetromino = {
         type: 'I' as const,

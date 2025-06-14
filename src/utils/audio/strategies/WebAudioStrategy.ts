@@ -218,7 +218,10 @@ export class WebAudioStrategy extends AudioStrategy {
 
     if (this.loadingPromises.has(soundKey)) {
       try {
-        this.audioBuffers[soundKey] = await this.loadingPromises.get(soundKey)!;
+        const loadingPromise = this.loadingPromises.get(soundKey);
+        if (loadingPromise) {
+          this.audioBuffers[soundKey] = await loadingPromise;
+        }
       } catch {
         // Error already handled
       }

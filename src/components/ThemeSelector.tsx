@@ -25,10 +25,11 @@ export default function ThemeSelector({
 
   return (
     <div className={`theme-selector ${className}`}>
-      <label className='block text-sm font-medium mb-2 text-cyber-cyan'>
+      <label htmlFor='theme-selector' className='block text-sm font-medium mb-2 text-cyber-cyan'>
         {t('themes.preview')}
       </label>
       <select
+        id='theme-selector'
         value={currentTheme}
         onChange={handleThemeChange}
         className='w-full p-3 rounded-lg bg-cyber-cyan-10 border border-cyber-cyan-30 

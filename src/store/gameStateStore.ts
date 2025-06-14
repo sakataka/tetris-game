@@ -176,9 +176,12 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
       );
 
       // 4. Game over determination
+      if (!state.gameState.nextPiece) {
+        throw new Error('Next piece is null during line clear processing');
+      }
       const gameOverResult = checkGameOver(
         lineClearResult.newBoard,
-        state.gameState.nextPiece!,
+        state.gameState.nextPiece,
         state.gameState,
         playSound
       );

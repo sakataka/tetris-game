@@ -62,7 +62,7 @@ export interface Position {
 // Immutable Tetromino definition (shape data is read-only)
 export interface Tetromino {
   readonly type: TetrominoType;
-  readonly shape: ReadonlyArray<ReadonlyArray<number>>;
+  readonly shape: readonly (readonly number[])[];
   readonly position: Position;
   readonly color: string;
 }
@@ -80,7 +80,7 @@ export interface Particle {
 
 // Line effect state (particle array is mutable)
 export interface LineEffectState {
-  readonly flashingLines: ReadonlyArray<number>;
+  readonly flashingLines: readonly number[];
   readonly shaking: boolean;
   particles: Particle[]; // Mutable for animation updates
 }

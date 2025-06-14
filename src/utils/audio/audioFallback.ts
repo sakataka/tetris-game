@@ -366,7 +366,10 @@ class AudioFallbackManager {
       this.audioInstances.set(levelKey, new Map());
     }
 
-    const instances = this.audioInstances.get(levelKey)!;
+    const instances = this.audioInstances.get(levelKey);
+    if (!instances) {
+      throw new Error(`Failed to get audio instances for level: ${levelKey}`);
+    }
     let audio = instances.get(soundKey) as HTMLAudioElement | undefined;
 
     if (!audio) {

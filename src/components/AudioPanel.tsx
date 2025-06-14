@@ -50,6 +50,7 @@ const AudioPanel = memo(function AudioPanel({
         <div className='flex justify-between items-center'>
           <span className={`text-gray-300 ${TYPOGRAPHY.BODY_TEXT}`}>{t('settings.mute')}</span>
           <button
+            type='button'
             onClick={onToggleMute}
             className={`px-3 py-1 rounded font-mono ${TYPOGRAPHY.BUTTON_TEXT} transition-all duration-300 ${
               isMuted
@@ -65,6 +66,7 @@ const AudioPanel = memo(function AudioPanel({
             {t('settings.virtualControls')}
           </span>
           <button
+            type='button'
             onClick={() =>
               onUpdateSettings({ virtualControlsEnabled: !settings.virtualControlsEnabled })
             }

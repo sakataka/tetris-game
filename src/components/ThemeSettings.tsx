@@ -79,6 +79,7 @@ export default function ThemeSettings({
       >
         {tabs.map((tab) => (
           <button
+            type='button'
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`flex-1 min-w-0 px-2 py-1 rounded-md ${TYPOGRAPHY.BUTTON_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} transition-colors
@@ -102,6 +103,7 @@ export default function ThemeSettings({
 
             <div className='flex gap-2'>
               <button
+                type='button'
                 onClick={onResetToDefault}
                 className={`px-4 py-2 rounded bg-cyber-red-20 border border-cyber-red-30
                            text-cyber-red hover:bg-cyber-red-30 transition-colors ${TYPOGRAPHY.BUTTON_TEXT}`}
@@ -131,11 +133,13 @@ export default function ThemeSettings({
             {/* Effect intensity */}
             <div>
               <label
+                htmlFor='effect-intensity-range'
                 className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-cyber-cyan`}
               >
                 {t('colorPalette.advancedSettings')}: {(effectIntensity * 100).toFixed(0)}%
               </label>
               <input
+                id='effect-intensity-range'
                 type='range'
                 min='0'
                 max='2'

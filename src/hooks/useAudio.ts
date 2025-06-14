@@ -795,7 +795,7 @@ export function useAudio({
   // Update progress when load state changes
   useEffect(() => {
     updateProgress();
-  }, [loadState, updateProgress]);
+  }, [updateProgress]);
 
   // Sync state to system when strategy changes
   useEffect(() => {
@@ -806,13 +806,7 @@ export function useAudio({
       syncVolumeToSystem(volumeState.volume);
       syncMuteToSystem(false);
     }
-  }, [
-    strategyState.currentStrategy,
-    volumeState.volume,
-    volumeState.isMuted,
-    syncVolumeToSystem,
-    syncMuteToSystem,
-  ]);
+  }, [volumeState.volume, volumeState.isMuted, syncVolumeToSystem, syncMuteToSystem]);
 
   // ===== Legacy Compatibility Functions =====
   const unlockAudio = useCallback(async () => {

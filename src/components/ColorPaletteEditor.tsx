@@ -19,6 +19,7 @@ interface ColorInputProps {
 
 function ColorInput({ label, value, onChange, description }: ColorInputProps) {
   const [inputValue, setInputValue] = useState(value);
+  const colorInputId = `color-input-${label.toLowerCase().replace(/\s+/g, '-')}`;
 
   // Event handlers (React Compiler will optimize these)
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,9 +41,12 @@ function ColorInput({ label, value, onChange, description }: ColorInputProps) {
 
   return (
     <div className='color-input mb-3'>
-      <label className='block text-sm font-medium mb-1 text-cyber-cyan'>{label}</label>
+      <label htmlFor={colorInputId} className='block text-sm font-medium mb-1 text-cyber-cyan'>
+        {label}
+      </label>
       <div className='flex gap-2 items-center'>
         <input
+          id={colorInputId}
           type='color'
           value={value}
           onChange={(e) => {
@@ -135,6 +139,7 @@ export default function ColorPaletteEditor({
       <div className='flex items-center justify-between mb-3'>
         <h3 className='text-lg font-bold text-cyber-cyan'>{t('colorPalette.title')}</h3>
         <button
+          type='button'
           onClick={() => setIsExpanded(!isExpanded)}
           className='px-3 py-1 rounded bg-cyber-purple-20 border border-cyber-purple-30
                      text-cyber-purple hover:bg-cyber-purple-30 transition-colors text-sm'
@@ -176,6 +181,7 @@ export default function ColorPaletteEditor({
 
           <div className='flex gap-2 mt-4'>
             <button
+              type='button'
               onClick={resetToDefaults}
               className='px-4 py-2 rounded bg-cyber-yellow-20 border border-cyber-yellow-30
                          text-cyber-yellow hover:bg-cyber-yellow-30 transition-colors text-sm'

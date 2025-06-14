@@ -157,7 +157,7 @@ export function useTimerAnimation(
     accumulatedTimeRef.current = 0;
     // Complex expression in deps array is intentional for dynamic dependencies
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [interval, ...deps]);
+  }, [...deps]);
 
   return useAnimationFrame(
     (deltaTime) => {
@@ -168,7 +168,7 @@ export function useTimerAnimation(
       if (accumulatedTimeRef.current >= interval) {
         callback();
         // Retain remaining time for next execution (improved accuracy)
-        accumulatedTimeRef.current = accumulatedTimeRef.current % interval;
+        accumulatedTimeRef.current %= interval;
       }
     },
     deps,

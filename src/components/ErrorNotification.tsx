@@ -165,11 +165,13 @@ const ErrorNotification = memo(function ErrorNotification({
 
               {/* Close button */}
               <button
+                type='button'
                 onClick={() => dismissNotification(notification.id)}
                 className='flex-shrink-0 text-current opacity-50 hover:opacity-100 transition-opacity p-1 rounded hover:bg-current/10'
                 aria-label={t('notifications.close')}
               >
                 <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                  <title>{t('notifications.close')}</title>
                   <path
                     strokeLinecap='round'
                     strokeLinejoin='round'
@@ -191,6 +193,7 @@ const ErrorNotification = memo(function ErrorNotification({
       {/* Clear all button (when multiple notifications exist) */}
       {notifications.length > 1 && (
         <button
+          type='button'
           onClick={() => {
             notifications.forEach((n) => errorHandler.resolveError(n.id));
             setNotifications([]);

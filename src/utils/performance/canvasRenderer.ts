@@ -56,7 +56,10 @@ export class CanvasRenderer {
     const key = `${color}_${Math.floor(size)}`;
 
     if (this.gradientCache.has(key)) {
-      return this.gradientCache.get(key)!;
+      const cached = this.gradientCache.get(key);
+      if (cached !== undefined) {
+        return cached;
+      }
     }
 
     const gradient = this.ctx.createRadialGradient(0, 0, 0, 0, 0, size);
@@ -116,8 +119,7 @@ export class CanvasRenderer {
       .slice(0, particlesToRender)
       .sort((a, b) => a.color.localeCompare(b.color));
 
-    for (let i = 0; i < sortedParticles.length; i++) {
-      const particle = sortedParticles[i];
+    for (const particle of sortedParticles) {
       if (!particle) continue;
 
       this.renderSingleParticle(particle);

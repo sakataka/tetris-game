@@ -187,7 +187,10 @@ class ThemeCache {
   public async getTheme(themeName: ThemeVariant): Promise<ThemeConfig> {
     // Get from cache
     if (this.cache.has(themeName)) {
-      return this.cache.get(themeName)!;
+      const cached = this.cache.get(themeName);
+      if (cached !== undefined) {
+        return cached;
+      }
     }
 
     // Load and validate from JSON

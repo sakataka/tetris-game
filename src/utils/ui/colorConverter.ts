@@ -39,7 +39,10 @@ export class ColorConverter {
   static hexToRgb(hex: string): RGB | null {
     // Check cache first
     if (ColorConverter.hexToRgbCache.has(hex)) {
-      return ColorConverter.hexToRgbCache.get(hex)!;
+      const cached = ColorConverter.hexToRgbCache.get(hex);
+      if (cached !== undefined) {
+        return cached;
+      }
     }
 
     // Remove # if present and validate
@@ -70,7 +73,10 @@ export class ColorConverter {
 
     // Check cache first
     if (ColorConverter.rgbToHexCache.has(cacheKey)) {
-      return ColorConverter.rgbToHexCache.get(cacheKey)!;
+      const cached = ColorConverter.rgbToHexCache.get(cacheKey);
+      if (cached !== undefined) {
+        return cached;
+      }
     }
 
     // Clamp values to valid range
@@ -143,11 +149,12 @@ export class ColorConverter {
     }
 
     const hue2rgb = (p: number, q: number, t: number): number => {
-      if (t < 0) t += 1;
-      if (t > 1) t -= 1;
-      if (t < 1 / 6) return p + (q - p) * 6 * t;
-      if (t < 1 / 2) return q;
-      if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+      let normalizedT = t;
+      if (normalizedT < 0) normalizedT += 1;
+      if (normalizedT > 1) normalizedT -= 1;
+      if (normalizedT < 1 / 6) return p + (q - p) * 6 * normalizedT;
+      if (normalizedT < 1 / 2) return q;
+      if (normalizedT < 2 / 3) return p + (q - p) * (2 / 3 - normalizedT) * 6;
       return p;
     };
 

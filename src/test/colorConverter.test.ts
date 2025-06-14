@@ -73,8 +73,10 @@ describe('ColorConverter', () => {
       originalColors.forEach((color) => {
         const rgb = ColorConverter.hexToRgb(color);
         expect(rgb).not.toBeNull();
-        const backToHex = ColorConverter.rgbToHex(rgb!);
-        expect(backToHex).toBe(color);
+        if (rgb !== null) {
+          const backToHex = ColorConverter.rgbToHex(rgb);
+          expect(backToHex).toBe(color);
+        }
       });
     });
   });

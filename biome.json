@@ -78,7 +78,8 @@
         "noUselessLabel": "error",
         "noUselessRename": "error",
         "noUselessSwitchCase": "error",
-        "noWith": "error"
+        "noWith": "error",
+        "useLiteralKeys": "off"
       },
       "style": {
         "useImportType": "error",

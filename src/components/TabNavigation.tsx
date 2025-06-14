@@ -55,6 +55,7 @@ const TabNavigation = memo(function TabNavigation({
     <div className={`flex space-x-1 mb-2 flex-shrink-0 ${className}`}>
       {tabs.map((tab) => (
         <button
+          type='button'
           key={tab.key}
           onClick={() => onTabChange(tab.key)}
           className={getTabStyles(tab, activeTab === tab.key)}

@@ -21,7 +21,7 @@ interface LineClearResult {
 }
 
 interface LineEffectResult {
-  flashingLines: ReadonlyArray<number>;
+  flashingLines: readonly number[];
   shaking: boolean;
   particles: LineEffectState['particles'];
 }
