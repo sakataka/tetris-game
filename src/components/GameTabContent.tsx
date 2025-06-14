@@ -45,6 +45,8 @@ const GameTabContent = memo(function GameTabContent({
         level={level}
         lines={lines}
         nextPiece={nextPiece}
+        gameOver={gameOver}
+        isPaused={isPaused}
         size='xs'
       />
 

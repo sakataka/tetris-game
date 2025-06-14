@@ -7,6 +7,7 @@ import { SPACING, TYPOGRAPHY } from '../constants/layout';
 import type { AnimationIntensity, ColorBlindnessType, ContrastLevel } from '../types/tetris';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Switch } from './ui/switch';
+import { Label } from './ui/label';
 
 interface AccessibilitySettingsProps {
   colorBlindnessType: ColorBlindnessType;
@@ -87,12 +88,12 @@ export default function AccessibilitySettings({
       <div className={SPACING.FORM_ELEMENTS}>
         {/* Color blindness support */}
         <div>
-          <label
+          <Label
             htmlFor='color-blindness-select'
             className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-cyber-cyan`}
           >
             {t('accessibility.colorVisionSupport')}
-          </label>
+          </Label>
           <Select value={colorBlindnessType} onValueChange={handleColorBlindnessChange}>
             <SelectTrigger
               id='color-blindness-select'
@@ -122,12 +123,12 @@ export default function AccessibilitySettings({
 
         {/* Contrast settings */}
         <div>
-          <label
+          <Label
             htmlFor='contrast-select'
             className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-cyber-cyan`}
           >
             {t('accessibility.contrast')}
-          </label>
+          </Label>
           <Select value={contrast} onValueChange={handleContrastChange}>
             <SelectTrigger
               id='contrast-select'
@@ -157,12 +158,12 @@ export default function AccessibilitySettings({
 
         {/* Animation intensity */}
         <div>
-          <label
+          <Label
             htmlFor='animation-intensity-select'
             className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-cyber-cyan`}
           >
             {t('accessibility.animationIntensity')}
-          </label>
+          </Label>
           <Select value={animationIntensity} onValueChange={handleAnimationChange}>
             <SelectTrigger
               id='animation-intensity-select'
@@ -203,14 +204,14 @@ export default function AccessibilitySettings({
               )}
               aria-label={t('settings.reducedMotion')}
             />
-            <label htmlFor='reduced-motion-switch' className='cursor-pointer'>
+            <Label htmlFor='reduced-motion-switch' className='cursor-pointer'>
               <span className={`${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} text-cyber-cyan`}>
                 {t('settings.reducedMotion')}
               </span>
               <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple`}>
                 {t('accessibility.animationIntensityDescription')}
               </p>
-            </label>
+            </Label>
           </div>
         </div>
 

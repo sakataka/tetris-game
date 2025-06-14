@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import type { ColorPalette } from '../types/tetris';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { cn } from '@/utils/ui/cn';
 
 interface ColorPaletteEditorProps {
@@ -44,9 +45,9 @@ function ColorInput({ label, value, onChange, description }: ColorInputProps) {
 
   return (
     <div className='color-input mb-3'>
-      <label htmlFor={colorInputId} className='block text-sm font-medium mb-1 text-cyber-cyan'>
+      <Label htmlFor={colorInputId} className='block text-sm font-medium mb-1 text-cyber-cyan'>
         {label}
-      </label>
+      </Label>
       <div className='flex gap-2 items-center'>
         <input
           id={colorInputId}

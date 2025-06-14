@@ -7,6 +7,7 @@ import GameTabContent from './GameTabContent';
 import MobileGameInfo from './MobileGameInfo';
 import StatisticsTabContent from './StatisticsTabContent';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export type TabType = 'game' | 'stats' | 'theme' | 'settings';
 // Heavy component lazy loading
@@ -104,56 +105,58 @@ const GameInfo = memo(function GameInfo({
           </TabsList>
 
           {/* Tab Content */}
-          <div className='flex-1 overflow-y-auto overflow-x-hidden min-h-0'>
-            <TabsContent value='game' className='mt-0 h-full'>
-              <GameTabContent
-                score={score}
-                level={level}
-                lines={lines}
-                nextPiece={nextPiece}
-                gameOver={gameOver}
-                isPaused={isPaused}
-                onReset={onReset}
-                onTogglePause={onTogglePause}
-              />
-            </TabsContent>
+          <div className='flex-1 min-h-0'>
+            <ScrollArea className='h-full'>
+              <TabsContent value='game' className='mt-0 h-full'>
+                <GameTabContent
+                  score={score}
+                  level={level}
+                  lines={lines}
+                  nextPiece={nextPiece}
+                  gameOver={gameOver}
+                  isPaused={isPaused}
+                  onReset={onReset}
+                  onTogglePause={onTogglePause}
+                />
+              </TabsContent>
 
-            <TabsContent value='stats' className='mt-0 h-full'>
-              <StatisticsTabContent />
-            </TabsContent>
+              <TabsContent value='stats' className='mt-0 h-full'>
+                <StatisticsTabContent />
+              </TabsContent>
 
-            <TabsContent value='theme' className='mt-0 h-full'>
-              <Suspense
-                fallback={
-                  <div className='flex items-center justify-center p-4'>
-                    <div className='text-cyan-300 text-sm'>{t('common.loading')}</div>
-                  </div>
-                }
-              >
-                <ThemeTabContent />
-              </Suspense>
-            </TabsContent>
+              <TabsContent value='theme' className='mt-0 h-full'>
+                <Suspense
+                  fallback={
+                    <div className='flex items-center justify-center p-4'>
+                      <div className='text-cyan-300 text-sm'>{t('common.loading')}</div>
+                    </div>
+                  }
+                >
+                  <ThemeTabContent />
+                </Suspense>
+              </TabsContent>
 
-            <TabsContent value='settings' className='mt-0 h-full'>
-              <Suspense
-                fallback={
-                  <div className='flex items-center justify-center p-4'>
-                    <div className='text-cyan-300 text-sm'>{t('common.loading')}</div>
-                  </div>
-                }
-              >
-                {audioSystemStatus && (
-                  <SettingsTabContent
-                    isMuted={isMuted}
-                    volume={volume}
-                    onToggleMute={onToggleMute}
-                    onVolumeChange={onVolumeChange}
-                    settings={settings}
-                    updateSettings={updateSettings}
-                  />
-                )}
-              </Suspense>
-            </TabsContent>
+              <TabsContent value='settings' className='mt-0 h-full'>
+                <Suspense
+                  fallback={
+                    <div className='flex items-center justify-center p-4'>
+                      <div className='text-cyan-300 text-sm'>{t('common.loading')}</div>
+                    </div>
+                  }
+                >
+                  {audioSystemStatus && (
+                    <SettingsTabContent
+                      isMuted={isMuted}
+                      volume={volume}
+                      onToggleMute={onToggleMute}
+                      onVolumeChange={onVolumeChange}
+                      settings={settings}
+                      updateSettings={updateSettings}
+                    />
+                  )}
+                </Suspense>
+              </TabsContent>
+            </ScrollArea>
           </div>
         </Tabs>
       </div>

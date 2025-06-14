@@ -4,6 +4,8 @@ import { SPACING, TYPOGRAPHY } from '../constants/layout';
 import type { GameStatistics, HighScore } from '../types/tetris';
 import { STATISTICS_PERIODS, StatisticsService } from '../utils/data/StatisticsService';
 import type { EnhancedStatistics, GameSession } from '../utils/data/statisticsUtils';
+import { Badge } from './ui/badge';
+import { cn } from '@/utils/ui/cn';
 
 interface StatisticsDashboardProps {
   baseStatistics: GameStatistics;
@@ -210,33 +212,61 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
               🏆 {t('statistics.highScores')}
             </h3>
             <div className={SPACING.TIGHT}>
-              {highScores.slice(0, 3).map((score, index) => (
-                <div
-                  key={score.id}
-                  className={`flex justify-between items-center ${TYPOGRAPHY.SMALL_LABEL}`}
-                >
-                  <span className='text-gray-400'>#{index + 1}</span>
-                  <span className={`text-cyan-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
-                    {score.score.toLocaleString()}
-                  </span>
-                  <span className='text-purple-400'>Lv{score.level}</span>
-                  <span className='text-gray-500'>
-                    {(() => {
-                      const msAgo = Date.now() - score.date;
-                      const daysAgo = Math.floor(msAgo / 86400000);
-                      const hoursAgo = Math.floor(msAgo / 3600000);
+              {highScores.slice(0, 3).map((score, index) => {
+                const getRankingBadgeStyle = (position: number) => {
+                  switch (position) {
+                    case 0:
+                      return 'bg-gradient-to-r from-yellow-500 to-amber-500 text-black border-yellow-400';
+                    case 1:
+                      return 'bg-gradient-to-r from-gray-300 to-gray-400 text-black border-gray-300';
+                    case 2:
+                      return 'bg-gradient-to-r from-orange-600 to-amber-700 text-white border-orange-500';
+                    default:
+                      return 'bg-cyber-cyan-20 text-cyber-cyan border-cyber-cyan-30';
+                  }
+                };
 
-                      if (daysAgo > 0) {
-                        return t('statistics.daysAgo', { count: daysAgo });
-                      }
-                      if (hoursAgo > 0) {
-                        return t('statistics.hoursAgo', { count: hoursAgo });
-                      }
-                      return t('statistics.hoursAgo', { count: 1 });
-                    })()}
-                  </span>
-                </div>
-              ))}
+                return (
+                  <div
+                    key={score.id}
+                    className={`flex justify-between items-center gap-2 ${TYPOGRAPHY.SMALL_LABEL}`}
+                  >
+                    <Badge
+                      variant='outline'
+                      className={cn(
+                        'font-mono font-bold min-w-[32px] justify-center',
+                        getRankingBadgeStyle(index)
+                      )}
+                    >
+                      #{index + 1}
+                    </Badge>
+                    <span className={`text-cyan-400 ${TYPOGRAPHY.BODY_WEIGHT} flex-1 text-right`}>
+                      {score.score.toLocaleString()}
+                    </span>
+                    <Badge
+                      variant='secondary'
+                      className='bg-purple-500/20 text-purple-400 border-purple-400/30'
+                    >
+                      Lv{score.level}
+                    </Badge>
+                    <span className='text-gray-500 text-xs'>
+                      {(() => {
+                        const msAgo = Date.now() - score.date;
+                        const daysAgo = Math.floor(msAgo / 86400000);
+                        const hoursAgo = Math.floor(msAgo / 3600000);
+
+                        if (daysAgo > 0) {
+                          return t('statistics.daysAgo', { count: daysAgo });
+                        }
+                        if (hoursAgo > 0) {
+                          return t('statistics.hoursAgo', { count: hoursAgo });
+                        }
+                        return t('statistics.hoursAgo', { count: 1 });
+                      })()}
+                    </span>
+                  </div>
+                );
+              })}
               {highScores.length === 0 && (
                 <div className={`text-gray-500 text-center py-0.5 ${TYPOGRAPHY.SMALL_LABEL}`}>
                   {t('statistics.noHighScores')}

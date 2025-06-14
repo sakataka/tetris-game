@@ -16,6 +16,8 @@ import { ThemeSelectorMemo } from './ThemeSelector';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Slider } from '@/components/ui/slider';
+import { Label } from '@/components/ui/label';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/utils/ui/cn';
 
 interface ThemeSettingsProps {
@@ -104,133 +106,135 @@ export default function ThemeSettings({
 
       {/* Tab content */}
       <div className='min-h-[200px]'>
-        {activeTab === 'theme' && (
-          <div className={SPACING.PANEL_INTERNAL}>
-            <ThemeSelectorMemo currentTheme={currentTheme} onThemeChange={onThemeChange} />
+        <ScrollArea className='h-[400px]'>
+          {activeTab === 'theme' && (
+            <div className={SPACING.PANEL_INTERNAL}>
+              <ThemeSelectorMemo currentTheme={currentTheme} onThemeChange={onThemeChange} />
 
-            <div className='flex gap-2'>
-              <Button
-                variant='destructive'
-                onClick={onResetToDefault}
-                className={cn(
-                  'bg-cyber-red-20 border border-cyber-red-30 text-cyber-red',
-                  'hover:bg-cyber-red-30 hover:text-cyber-red',
-                  TYPOGRAPHY.BUTTON_TEXT
-                )}
-              >
-                {t('buttons.reset')}
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'colors' && (
-          <ColorPaletteEditorMemo colors={colors} onColorsChange={onColorsChange} />
-        )}
-
-        {activeTab === 'accessibility' && (
-          <AccessibilitySettingsMemo
-            colorBlindnessType={colorBlindnessType}
-            contrast={contrast}
-            animationIntensity={animationIntensity}
-            reducedMotion={reducedMotion}
-            onSettingsChange={onAccessibilityChange}
-          />
-        )}
-
-        {activeTab === 'effects' && (
-          <div className={SPACING.PANEL_INTERNAL}>
-            {/* Effect intensity */}
-            <div>
-              <label
-                htmlFor='effect-intensity-range'
-                className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-cyber-cyan`}
-              >
-                {t('colorPalette.advancedSettings')}: {(effectIntensity * 100).toFixed(0)}%
-              </label>
-              <Slider
-                id='effect-intensity-range'
-                value={[effectIntensity]}
-                onValueChange={handleEffectIntensityChange}
-                min={0}
-                max={2}
-                step={0.1}
-                className={cn(
-                  'w-full',
-                  '[&>span[data-slot=slider-track]]:bg-cyber-cyan-20',
-                  '[&>span[data-slot=slider-range]]:bg-cyber-cyan',
-                  '[&>span[data-slot=slider-thumb]]:border-cyber-cyan [&>span[data-slot=slider-thumb]]:bg-cyber-cyan',
-                  '[&>span[data-slot=slider-thumb]]:shadow-[0_0_10px_rgba(0,255,255,0.5)]'
-                )}
-              />
-              <div
-                className={`flex justify-between ${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple mt-0.5`}
-              >
-                <span>{t('accessibility.lowContrast')}</span>
-                <span>{t('accessibility.standard')}</span>
-                <span>{t('accessibility.highContrast')}</span>
-              </div>
-              <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple mt-1`}>
-                {t('colorPalette.advancedSettings')}
-              </p>
-            </div>
-
-            {/* Animation enable/disable */}
-            <div>
-              <div className='flex items-center space-x-3'>
-                <Switch
-                  id='animations-switch'
-                  checked={animations}
-                  onCheckedChange={() => onAnimationsToggle()}
+              <div className='flex gap-2'>
+                <Button
+                  variant='destructive'
+                  onClick={onResetToDefault}
                   className={cn(
-                    'data-[state=checked]:bg-cyber-cyan data-[state=unchecked]:bg-gray-600',
-                    'border-2 data-[state=checked]:border-cyber-cyan data-[state=unchecked]:border-gray-500'
+                    'bg-cyber-red-20 border border-cyber-red-30 text-cyber-red',
+                    'hover:bg-cyber-red-30 hover:text-cyber-red',
+                    TYPOGRAPHY.BUTTON_TEXT
                   )}
-                  aria-label={t('accessibility.fullAnimation')}
-                />
-                <label htmlFor='animations-switch' className='cursor-pointer'>
-                  <span
-                    className={`${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} text-cyber-cyan`}
-                  >
-                    {t('accessibility.fullAnimation')}
-                  </span>
-                  <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple`}>
-                    {t('accessibility.fullAnimation')}
-                  </p>
-                </label>
+                >
+                  {t('buttons.reset')}
+                </Button>
               </div>
             </div>
+          )}
 
-            {/* Effect preview */}
-            <div className='p-4 rounded-lg hologram'>
-              <div
-                className={`${TYPOGRAPHY.SECTION_HEADER} ${TYPOGRAPHY.TITLE_WEIGHT} mb-3 text-cyber-cyan`}
-              >
-                {t('colorPalette.preview')}
-              </div>
-              <div className={SPACING.LOOSE}>
-                <div
-                  className='p-3 rounded neon-border text-center'
-                  style={{
-                    filter: `brightness(${0.8 + effectIntensity * 0.4}) saturate(${0.8 + effectIntensity * 0.4})`,
-                    animation: animations ? 'pulse 2s infinite' : 'none',
-                  }}
+          {activeTab === 'colors' && (
+            <ColorPaletteEditorMemo colors={colors} onColorsChange={onColorsChange} />
+          )}
+
+          {activeTab === 'accessibility' && (
+            <AccessibilitySettingsMemo
+              colorBlindnessType={colorBlindnessType}
+              contrast={contrast}
+              animationIntensity={animationIntensity}
+              reducedMotion={reducedMotion}
+              onSettingsChange={onAccessibilityChange}
+            />
+          )}
+
+          {activeTab === 'effects' && (
+            <div className={SPACING.PANEL_INTERNAL}>
+              {/* Effect intensity */}
+              <div>
+                <Label
+                  htmlFor='effect-intensity-range'
+                  className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-cyber-cyan`}
                 >
-                  Neon Effect
+                  {t('colorPalette.advancedSettings')}: {(effectIntensity * 100).toFixed(0)}%
+                </Label>
+                <Slider
+                  id='effect-intensity-range'
+                  value={[effectIntensity]}
+                  onValueChange={handleEffectIntensityChange}
+                  min={0}
+                  max={2}
+                  step={0.1}
+                  className={cn(
+                    'w-full',
+                    '[&>span[data-slot=slider-track]]:bg-cyber-cyan-20',
+                    '[&>span[data-slot=slider-range]]:bg-cyber-cyan',
+                    '[&>span[data-slot=slider-thumb]]:border-cyber-cyan [&>span[data-slot=slider-thumb]]:bg-cyber-cyan',
+                    '[&>span[data-slot=slider-thumb]]:shadow-[0_0_10px_rgba(0,255,255,0.5)]'
+                  )}
+                />
+                <div
+                  className={`flex justify-between ${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple mt-0.5`}
+                >
+                  <span>{t('accessibility.lowContrast')}</span>
+                  <span>{t('accessibility.standard')}</span>
+                  <span>{t('accessibility.highContrast')}</span>
                 </div>
+                <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple mt-1`}>
+                  {t('colorPalette.advancedSettings')}
+                </p>
+              </div>
+
+              {/* Animation enable/disable */}
+              <div>
+                <div className='flex items-center space-x-3'>
+                  <Switch
+                    id='animations-switch'
+                    checked={animations}
+                    onCheckedChange={() => onAnimationsToggle()}
+                    className={cn(
+                      'data-[state=checked]:bg-cyber-cyan data-[state=unchecked]:bg-gray-600',
+                      'border-2 data-[state=checked]:border-cyber-cyan data-[state=unchecked]:border-gray-500'
+                    )}
+                    aria-label={t('accessibility.fullAnimation')}
+                  />
+                  <Label htmlFor='animations-switch' className='cursor-pointer'>
+                    <span
+                      className={`${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} text-cyber-cyan`}
+                    >
+                      {t('accessibility.fullAnimation')}
+                    </span>
+                    <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple`}>
+                      {t('accessibility.fullAnimation')}
+                    </p>
+                  </Label>
+                </div>
+              </div>
+
+              {/* Effect preview */}
+              <div className='p-4 rounded-lg hologram'>
                 <div
-                  className='p-3 rounded hologram-purple text-center'
-                  style={{
-                    backdropFilter: `blur(${5 + effectIntensity * 10}px)`,
-                    animation: animations ? 'float 3s ease-in-out infinite' : 'none',
-                  }}
+                  className={`${TYPOGRAPHY.SECTION_HEADER} ${TYPOGRAPHY.TITLE_WEIGHT} mb-3 text-cyber-cyan`}
                 >
-                  Hologram + Blur
+                  {t('colorPalette.preview')}
+                </div>
+                <div className={SPACING.LOOSE}>
+                  <div
+                    className='p-3 rounded neon-border text-center'
+                    style={{
+                      filter: `brightness(${0.8 + effectIntensity * 0.4}) saturate(${0.8 + effectIntensity * 0.4})`,
+                      animation: animations ? 'pulse 2s infinite' : 'none',
+                    }}
+                  >
+                    Neon Effect
+                  </div>
+                  <div
+                    className='p-3 rounded hologram-purple text-center'
+                    style={{
+                      backdropFilter: `blur(${5 + effectIntensity * 10}px)`,
+                      animation: animations ? 'float 3s ease-in-out infinite' : 'none',
+                    }}
+                  >
+                    Hologram + Blur
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </ScrollArea>
       </div>
     </div>
   );

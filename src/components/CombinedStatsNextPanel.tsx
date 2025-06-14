@@ -5,12 +5,16 @@ import { useTranslation } from 'react-i18next';
 import { GAME_UI_SIZES, SPACING, TYPOGRAPHY } from '../constants/layout';
 import type { Tetromino } from '../types/tetris';
 import CyberCard from './ui/CyberCard';
+import { Badge } from './ui/badge';
+import { Progress } from './ui/progress';
 
 interface CombinedStatsNextPanelProps {
   score: number;
   level: number;
   lines: number;
   nextPiece: Tetromino | null;
+  gameOver?: boolean;
+  isPaused?: boolean;
   size?: 'xs' | 'sm' | 'md' | 'lg';
 }
 
@@ -19,6 +23,8 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
   level,
   lines,
   nextPiece,
+  gameOver = false,
+  isPaused = false,
   size = 'xs',
 }: CombinedStatsNextPanelProps) {
   const { t } = useTranslation();
@@ -28,12 +34,43 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
   const containerSize =
     size === 'xs' ? 'w-8 h-8' : size === 'sm' ? 'w-12 h-12' : GAME_UI_SIZES.NEXT_PIECE.CONTAINER;
 
+  // Game status badge
+  const getGameStatusBadge = () => {
+    if (gameOver) {
+      return (
+        <Badge
+          variant='destructive'
+          className='bg-red-500/20 text-red-400 border-red-400/50 animate-pulse'
+        >
+          {t('game.gameOver')}
+        </Badge>
+      );
+    }
+    if (isPaused) {
+      return (
+        <Badge
+          variant='secondary'
+          className='bg-yellow-500/20 text-yellow-400 border-yellow-400/50'
+        >
+          {t('game.paused')}
+        </Badge>
+      );
+    }
+    return (
+      <Badge variant='default' className='bg-green-500/20 text-green-400 border-green-400/50'>
+        {t('game.playing')}
+      </Badge>
+    );
+  };
+
   return (
     <CyberCard
       title={`${t('panels.scoreData')} & ${t('game.nextPiece')}`.toUpperCase()}
       theme='cyan'
       size={size}
     >
+      {/* Game Status Badge */}
+      <div className='flex justify-center mb-2'>{getGameStatusBadge()}</div>
       <div className='grid grid-cols-2 gap-2'>
         {/* Score Information */}
         <div className={SPACING.TIGHT}>
@@ -54,6 +91,20 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
             <span className={`font-mono ${TYPOGRAPHY.STAT_VALUE} text-blue-400 font-bold`}>
               {lines}
             </span>
+          </div>
+
+          {/* Level Progress */}
+          <div className='mt-2'>
+            <div className='flex justify-between items-center mb-1'>
+              <span className={`text-gray-400 ${TYPOGRAPHY.SMALL_LABEL}`}>Level Progress</span>
+              <span className={`text-purple-400 ${TYPOGRAPHY.SMALL_LABEL} font-mono`}>
+                {lines % 10}/10
+              </span>
+            </div>
+            <Progress
+              value={(lines % 10) * 10}
+              className='h-1.5 bg-gray-700/50 [&>div]:bg-gradient-to-r [&>div]:from-purple-500 [&>div]:to-pink-500'
+            />
           </div>
         </div>
 
