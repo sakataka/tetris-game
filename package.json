@@ -6,8 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "oxlint",
-    "lint:fix": "oxlint --fix",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
     "test": "vitest",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
@@ -18,7 +18,7 @@
     "biome:check": "biome check --apply .",
     "biome:check-dry": "biome check .",
     "quality:check": "pnpm lint && pnpm tsc --noEmit && pnpm test:run",
-    "quality:fix": "pnpm format && pnpm lint:fix"
+    "quality:fix": "biome check --apply ."
   },
   "dependencies": {
     "i18next": "^25.2.1",
@@ -46,13 +46,12 @@
     "husky": "^9.1.7",
     "jsdom": "^26.1.0",
     "lint-staged": "^16.1.0",
-    "oxlint": "^1.1.0",
     "tailwindcss": "^4.1.10",
     "typescript": "^5",
     "vitest": "^3.2.3"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": ["biome format", "oxlint --allow exhaustive-deps"],
-    "*.{json,css}": ["biome format"]
+    "*.{js,jsx,ts,tsx}": ["biome check --write"],
+    "*.{json,css}": ["biome format --write"]
   }
 }

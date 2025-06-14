@@ -51,17 +51,60 @@
       "recommended": true,
       "suspicious": {
         "noExplicitAny": "warn",
-        "noConsoleLog": "off"
+        "noConsoleLog": "off",
+        "noDoubleEquals": "error",
+        "noGlobalIsFinite": "error",
+        "noGlobalIsNan": "error",
+        "noImplicitAnyLet": "error",
+        "noMisleadingCharacterClass": "warn",
+        "noUnsafeDeclarationMerging": "error",
+        "noArrayIndexKey": "off"
       },
       "correctness": {
-        "useExhaustiveDependencies": "warn"
+        "useExhaustiveDependencies": "warn",
+        "noUnusedVariables": "error",
+        "noUnusedImports": "error",
+        "useHookAtTopLevel": "error",
+        "useValidForDirection": "error"
       },
       "complexity": {
-        "noForEach": "off"
+        "noForEach": "off",
+        "noBannedTypes": "error",
+        "noStaticOnlyClass": "off",
+        "noThisInStatic": "error",
+        "noUselessConstructor": "warn",
+        "noUselessEmptyExport": "error",
+        "noUselessFragments": "error",
+        "noUselessLabel": "error",
+        "noUselessRename": "error",
+        "noUselessSwitchCase": "error",
+        "noWith": "error"
       },
       "style": {
         "useImportType": "error",
-        "useNodejsImportProtocol": "error"
+        "useNodejsImportProtocol": "error",
+        "useConst": "warn",
+        "useDefaultParameterLast": "error",
+        "useEnumInitializers": "error",
+        "useExportType": "error",
+        "useFilenamingConvention": "off",
+        "useForOf": "error",
+        "useFragmentSyntax": "error",
+        "useNamingConvention": "off",
+        "useNumberNamespace": "error",
+        "useNumericLiterals": "error",
+        "useSelfClosingElements": "error",
+        "useShorthandArrayType": "error",
+        "useShorthandAssign": "error",
+        "useSingleVarDeclarator": "error",
+        "useTemplate": "error"
+      },
+      "performance": {
+        "noAccumulatingSpread": "warn",
+        "noDelete": "error"
+      },
+      "security": {
+        "noDangerouslySetInnerHtml": "error"
       }
     }
   },
@@ -89,6 +132,34 @@
       "formatter": { "indentWidth": 2, "lineWidth": 120 }
     },
     { "include": ["*.md"], "formatter": { "lineWidth": 80 } },
-    { "include": ["*.css"], "formatter": { "lineWidth": 120 } }
+    { "include": ["*.css"], "formatter": { "lineWidth": 120 } },
+    {
+      "include": ["src/test/**/*.ts", "src/test/**/*.tsx"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noExplicitAny": "off"
+          },
+          "complexity": {
+            "noStaticOnlyClass": "off"
+          }
+        }
+      }
+    },
+    {
+      "include": [
+        "src/utils/audio/audioFallback.ts",
+        "src/utils/audio/audioPreloader.ts",
+        "src/utils/audio/audioManager.ts",
+        "src/utils/ui/themeLoader.ts"
+      ],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noAsyncPromiseExecutor": "off"
+          }
+        }
+      }
+    }
   ]
 }

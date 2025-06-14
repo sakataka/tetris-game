@@ -63,7 +63,7 @@ const TetrisBoard = memo(function TetrisBoard({
         {/* Inner glow effect */}
         <div className='absolute inset-0 bg-gradient-to-br from-cyan-400/10 via-transparent to-purple-400/10 pointer-events-none' />
 
-        {displayBoard.map((row, y) =>
+        {displayBoard.flatMap((row, y) =>
           row.map((cell, x) => {
             const cellStyle = cellStyles[y]?.[x];
             if (!cellStyle) return null;

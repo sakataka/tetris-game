@@ -31,6 +31,7 @@ const GameButtonsPanel = memo(function GameButtonsPanel({
   return (
     <div className={containerClasses}>
       <button
+        type='button'
         onClick={onTogglePause}
         disabled={gameOver}
         className={`${buttonWidthClass} bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 
@@ -46,6 +47,7 @@ const GameButtonsPanel = memo(function GameButtonsPanel({
       </button>
 
       <button
+        type='button'
         onClick={onReset}
         className={`${buttonWidthClass} bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-400 hover:to-pink-400 
                    text-white font-bold ${buttonPadding} rounded-lg transition-all duration-300 transform 

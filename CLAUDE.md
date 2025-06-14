@@ -39,6 +39,7 @@ When implementing new components or features, always verify the following:
 **→ ALWAYS ask the user for guidance and clarification**
 
 Do not deviate from the guidelines without explicit user approval. Explain:
+
 1. What guideline you were following
 2. What specific issue occurred
 3. What alternative approach you're considering
@@ -80,10 +81,11 @@ pnpm test:run           # Run tests once
 pnpm test:coverage      # Run tests with coverage report
 
 # Code Quality
-pnpm lint               # Oxlint validation (7-8ms execution)
-pnpm lint:full          # Oxlint + ESLint comprehensive check
-pnpm lint:fix           # Auto-fix issues with both linters
+pnpm lint               # Biome linting (fast execution)
+pnpm lint:fix           # Auto-fix lint issues with Biome
 pnpm format             # Format code with Biome
+pnpm format:check       # Biome format validation
+pnpm biome:check        # Comprehensive check (format + lint + imports)
 pnpm quality:check      # Full quality pipeline (lint + typecheck + test)
 
 # Analysis
@@ -447,39 +449,13 @@ The i18n system uses two complementary stores:
 
 ## Code Quality & Linting
 
-### Biome Integration (All-in-one Code Quality Tool)
+### Current Linting & Formatting Strategy
 
-- **Primary Formatter & Secondary Linter**: Biome 1.9.4 for formatting and additional linting
-- **Performance**: 25x faster than Prettier, unified toolchain
-- **Features**: Combined formatting, linting, and import sorting
-- **Configuration**: `biome.json` with Next.js/React/TypeScript optimization
-
-```bash
-pnpm format         # Biome formatting (daily development)
-pnpm format:check   # Biome format validation
-pnpm biome:check    # Biome comprehensive check (format + lint + imports)
-pnpm biome:check-dry # Biome check without applying fixes
-```
-
-### Oxlint Integration (Rust-based, Primary Linter)
-
-- **Primary Linter**: Oxlint 1.0 with 500+ rules for strict code quality
-- **Performance**: 7-8ms execution time vs ESLint's 1.4s
-- **Memory Usage**: 78MB vs ESLint's 416MB (5.3x less)
-- **Configuration**: `.oxlintrc.json` with Next.js/React/TypeScript plugins
-
-```bash
-pnpm lint         # Oxlint only (daily development)
-pnpm lint:fix     # Auto-fix with Oxlint
-```
-
-### Linting & Formatting Strategy
-
-- **Development**: Biome for formatting + Oxlint for linting (instant feedback)
-- **Pre-commit**: Biome format check + Biome lint + Oxlint via lint-staged
-- **CI/CD**: Biome + Oxlint in pipeline (faster builds)
-- **Unified Configuration**: Single `biome.json` for formatting, linting, and import organization
-- **Migration**: Successfully migrated from Prettier to Biome with automatic configuration conversion
+- **Development**: Biome-only for all code quality checks
+- **Pre-commit**: Biome format check + lint via lint-staged
+- **CI/CD**: Biome in build pipeline for fast validation
+- **Editor Integration**: Biome extension for real-time feedback
+- **Tetris-Specific**: Customized rules for game grid patterns and UI components
 
 ## Build Configuration
 
@@ -493,14 +469,6 @@ pnpm lint:fix     # Auto-fix with Oxlint
 - **Image Optimization**: AVIF/WebP formats with responsive sizes
 
 ### React Compiler Configuration
-
-```typescript
-// next.config.ts
-experimental: {
-  reactCompiler: true, // Enables automatic optimization
-  optimizePackageImports: ['zustand', 'immer', 'react', 'react-dom'],
-}
-```
 
 **React Compiler Benefits:**
 
@@ -552,7 +520,7 @@ experimental: {
 - Package manager: pnpm (required)
 - React version: 19.1.0 with React Compiler enabled
 - Comments and commits: English only
-- Linting: Oxlint only (ESLint removed for performance)
+- Linting: Biome only (Oxlint removed, ESLint removed for performance)
 - Build before commit: Always run `pnpm build`
 - Git hooks: Pre-commit checks via Husky
 - Performance: Let React Compiler handle optimization automatically
@@ -601,6 +569,7 @@ experimental: {
    - Request for guidance on how to proceed
 
 **Examples of when to escalate:**
+
 - TypeScript strict mode preventing valid patterns
 - React Compiler optimization causing performance regressions
 - Zustand patterns conflicting with Next.js requirements
@@ -806,6 +775,7 @@ For all React development in this project, refer to:
 **[React 19.1 + React Compiler Development Guidelines](./docs/REACT_DEVELOPMENT_GUIDELINES.md)**
 
 This comprehensive guide includes:
+
 - Complete evaluation of 101 React TIPs with project-specific adoption decisions
 - React Compiler optimization strategies
 - TypeScript integration patterns
@@ -820,8 +790,9 @@ This comprehensive guide includes:
 **When guidelines conflict with practical implementation needs:**
 
 The development guidelines are comprehensive but may not cover every edge case. If following the guidelines results in:
+
 - Build errors or runtime issues
-- Significant performance degradation  
+- Significant performance degradation
 - Development blockages
 - Conflicts with framework requirements
 

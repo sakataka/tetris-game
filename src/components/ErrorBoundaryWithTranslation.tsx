@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import type React from 'react';
 import { useTranslation } from 'react-i18next';
 import ErrorBoundary, { withErrorBoundary, useErrorBoundary } from './ErrorBoundary';
 
@@ -47,6 +47,7 @@ export default function ErrorBoundaryWithTranslation({
               <div className='space-y-4'>
                 {retryCount < maxRetries ? (
                   <button
+                    type='button'
                     onClick={resetError}
                     className='w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-400 hover:to-purple-400 
                               text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105'
@@ -55,6 +56,7 @@ export default function ErrorBoundaryWithTranslation({
                   </button>
                 ) : (
                   <button
+                    type='button'
                     onClick={() => window.location.reload()}
                     className='w-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-400 hover:to-pink-400 
                               text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105'
@@ -64,7 +66,10 @@ export default function ErrorBoundaryWithTranslation({
                 )}
 
                 <button
-                  onClick={() => (window.location.href = '/')}
+                  type='button'
+                  onClick={() => {
+                    window.location.href = '/';
+                  }}
                   className='w-full bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-lg transition-colors'
                 >
                   {t('errors.backToHome')}
@@ -87,6 +92,7 @@ export default function ErrorBoundaryWithTranslation({
 
             {retryCount < maxRetries && (
               <button
+                type='button'
                 onClick={resetError}
                 className='bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 
                           text-white font-bold py-2 px-4 rounded transition-all duration-300'
@@ -103,6 +109,7 @@ export default function ErrorBoundaryWithTranslation({
           <p className='text-red-300 text-sm mb-2'>{t('errors.componentError')}</p>
           {retryCount < maxRetries && (
             <button
+              type='button'
               onClick={resetError}
               className='bg-red-500 hover:bg-red-400 text-white text-xs py-1 px-3 rounded transition-colors'
             >

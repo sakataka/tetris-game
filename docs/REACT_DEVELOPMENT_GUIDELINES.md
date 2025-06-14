@@ -1515,7 +1515,7 @@ function AdvancedSettingsForm() {
   "editor.stickyScroll.enabled": true,
   "typescript.preferences.includePackageJsonAutoImports": "on",
   "editor.codeActionsOnSave": {
-    "source.fixAll.oxlint": true,
+    "source.fixAll.biome": true,
     "source.organizeImports": true
   }
 }
@@ -2105,8 +2105,8 @@ These guidelines enable the practice of modern React development best practices 
 
 **TIP 94: Boost code quality with `eslint-plugin-react` and Prettier**
 - **Assessment**: 🟨 Modified Adoption
-- **Rationale**: Adapted to Oxlint + Biome environment
-- **Project Application**: Quality assurance with Oxlint + Biome configuration
+- **Rationale**: Adapted to Biome unified environment
+- **Project Application**: Quality assurance with Biome-only configuration (migrated from Oxlint + Biome)
 
 **TIP 95: Log and monitor with tools like Sentry or Grafana**
 - **Assessment**: 🟡 Conditional Adoption

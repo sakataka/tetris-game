@@ -48,6 +48,7 @@ const VirtualControls = memo(function VirtualControls({
         <div className='relative'>
           {/* Rotate button (top) */}
           <button
+            type='button'
             onTouchStart={handleTouchStart(onRotate)}
             className={`absolute left-1/2 -translate-x-1/2 -translate-y-full mb-1
                       ${UI_SIZES.VIRTUAL_BUTTON.STANDARD} rounded-lg bg-gradient-to-r from-purple-500 to-pink-500
@@ -64,6 +65,7 @@ const VirtualControls = memo(function VirtualControls({
           <div className='flex items-center gap-1'>
             {/* Move left */}
             <button
+              type='button'
               onTouchStart={handleTouchStart(moveHandlers.left)}
               className={`${UI_SIZES.VIRTUAL_BUTTON.STANDARD} rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500
                         hover:from-cyan-400 hover:to-blue-400 active:scale-95
@@ -77,6 +79,7 @@ const VirtualControls = memo(function VirtualControls({
 
             {/* Soft drop (down) */}
             <button
+              type='button'
               onTouchStart={handleTouchStart(moveHandlers.down)}
               className={`${UI_SIZES.VIRTUAL_BUTTON.STANDARD} rounded-lg bg-gradient-to-r from-yellow-500 to-orange-500
                         hover:from-yellow-400 hover:to-orange-400 active:scale-95
@@ -90,6 +93,7 @@ const VirtualControls = memo(function VirtualControls({
 
             {/* Move right */}
             <button
+              type='button'
               onTouchStart={handleTouchStart(moveHandlers.right)}
               className={`${UI_SIZES.VIRTUAL_BUTTON.STANDARD} rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500
                         hover:from-cyan-400 hover:to-blue-400 active:scale-95
@@ -105,6 +109,7 @@ const VirtualControls = memo(function VirtualControls({
 
         {/* Right side: Hard drop button */}
         <button
+          type='button'
           onTouchStart={handleTouchStart(onHardDrop)}
           className={`${UI_SIZES.VIRTUAL_BUTTON.LARGE} rounded-lg bg-gradient-to-r from-red-500 to-pink-500
                     hover:from-red-400 hover:to-pink-400 active:scale-95
