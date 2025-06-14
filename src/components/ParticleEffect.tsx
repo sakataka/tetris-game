@@ -185,7 +185,7 @@ const ParticleEffect = memo(function ParticleEffect({
 
   // Development-only performance optimization logging with enhanced metrics
   useEffect(() => {
-    if (process.env.NODE_ENV === 'development' && enablePerformanceMonitoring) {
+    if (process.env['NODE_ENV'] === 'development' && enablePerformanceMonitoring) {
       const fpsInfo = globalFpsController.getFpsInfo();
       const poolStats = particlePool.getPoolStatistics();
 

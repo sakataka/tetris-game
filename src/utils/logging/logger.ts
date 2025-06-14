@@ -22,7 +22,7 @@ class Logger {
   private isProduction: boolean;
 
   constructor() {
-    this.isProduction = process.env.NODE_ENV === 'production';
+    this.isProduction = process.env['NODE_ENV'] === 'production';
     this.level = this.isProduction ? LogLevel.WARN : LogLevel.DEBUG;
   }
 

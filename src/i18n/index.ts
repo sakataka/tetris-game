@@ -46,7 +46,7 @@ if (typeof window !== 'undefined') {
       },
 
       // Development options
-      debug: process.env.NODE_ENV === 'development',
+      debug: process.env['NODE_ENV'] === 'development',
     });
 } else {
   // Server-side initialization without detection

@@ -26,8 +26,8 @@ function getEnvString(key: string, defaultValue: string): string {
 export const ENV_CONFIG = {
   // Runtime Environment
   NODE_ENV: getEnvString('NODE_ENV', 'development'),
-  IS_PRODUCTION: process.env.NODE_ENV === 'production',
-  IS_DEVELOPMENT: process.env.NODE_ENV === 'development',
+  IS_PRODUCTION: process.env['NODE_ENV'] === 'production',
+  IS_DEVELOPMENT: process.env['NODE_ENV'] === 'development',
 
   // Feature Flags
   FEATURES: {

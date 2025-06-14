@@ -319,10 +319,10 @@ export interface ErrorReportConfig {
 
 // Default error report configuration
 export const DEFAULT_ERROR_CONFIG: ErrorReportConfig = {
-  enableConsoleLogging: process.env.NODE_ENV === 'development',
+  enableConsoleLogging: process.env['NODE_ENV'] === 'development',
   enableUserNotifications: true,
   enableErrorStats: true,
-  enableStackTrace: process.env.NODE_ENV === 'development',
+  enableStackTrace: process.env['NODE_ENV'] === 'development',
   maxStoredErrors: 50,
   autoReportCritical: true,
 } as const;
