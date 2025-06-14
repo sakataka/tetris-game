@@ -16,8 +16,6 @@ interface GameTabContentProps {
   nextPiece: Tetromino | null;
   gameOver: boolean;
   isPaused: boolean;
-  onReset?: () => void; // Optional since we're not using it
-  onTogglePause?: () => void; // Optional since we're not using it
   className?: string;
 }
 
@@ -28,8 +26,6 @@ const GameTabContent = memo(function GameTabContent({
   nextPiece,
   gameOver,
   isPaused,
-  onReset: _onReset, // Unused but kept for compatibility
-  onTogglePause: _onTogglePause, // Unused but kept for compatibility
   className = '',
 }: GameTabContentProps) {
   const highScores = useHighScores();

@@ -4,25 +4,19 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/ui/cn';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useGameButtons } from '../hooks/useGameButtons';
 
 interface GameButtonsPanelProps {
-  gameOver: boolean;
-  isPaused: boolean;
-  onTogglePause: () => void;
-  onReset: () => void;
   size?: 'xs' | 'sm' | 'md' | 'lg';
   layout?: 'vertical' | 'horizontal';
 }
 
 const GameButtonsPanel = memo(function GameButtonsPanel({
-  gameOver,
-  isPaused,
-  onTogglePause,
-  onReset,
   size = 'md',
   layout = 'vertical',
 }: GameButtonsPanelProps) {
   const { t } = useTranslation();
+  const { gameOver, isPaused, onTogglePause, onReset } = useGameButtons();
 
   // Map size to shadcn/ui Button size variants
   const buttonSize = size === 'xs' ? 'sm' : size === 'lg' ? 'lg' : 'default';

@@ -6,17 +6,17 @@ import { cn } from '@/utils/ui/cn';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GAME_UI_SIZES, SPACING, TYPOGRAPHY, UI_SIZES } from '../constants/layout';
-// import type { GameSettings } from '../types/tetris'; // Temporarily removed for type compatibility
+import type { ExtendedGameSettings } from '../store/settingsStore';
 import CyberCard from './ui/CyberCard';
 import { Progress } from './ui/progress';
 
 interface AudioPanelProps {
   isMuted: boolean;
   volume: number;
-  settings: any; // Temporary fix for type compatibility
+  settings: ExtendedGameSettings;
   onToggleMute: () => void;
   onVolumeChange: (volume: number) => void;
-  onUpdateSettings: (settings: any) => void;
+  onUpdateSettings: (settings: Partial<ExtendedGameSettings>) => void;
   audioSystemStatus?: {
     isWebAudioEnabled: boolean;
     preloadProgress?: {

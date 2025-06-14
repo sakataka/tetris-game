@@ -11,10 +11,6 @@ interface MobileGameInfoProps {
   level: number;
   lines: number;
   nextPiece: Tetromino | null;
-  gameOver: boolean;
-  isPaused: boolean;
-  onReset: () => void;
-  onTogglePause: () => void;
   className?: string;
 }
 
@@ -23,10 +19,6 @@ const MobileGameInfo = memo(function MobileGameInfo({
   level,
   lines,
   nextPiece,
-  gameOver,
-  isPaused,
-  onReset,
-  onTogglePause,
   className = '',
 }: MobileGameInfoProps) {
   const { t } = useTranslation();
@@ -53,12 +45,7 @@ const MobileGameInfo = memo(function MobileGameInfo({
 
       {/* Game buttons */}
       <div className='w-20 flex-shrink-0'>
-        <GameButtonsPanel
-          gameOver={gameOver}
-          isPaused={isPaused}
-          onTogglePause={onTogglePause}
-          onReset={onReset}
-        />
+        <GameButtonsPanel />
       </div>
     </div>
   );

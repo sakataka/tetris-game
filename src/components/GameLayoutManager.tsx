@@ -24,13 +24,6 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
     gameState,
     isMobile,
     onParticleUpdate,
-    onReset,
-    onTogglePause,
-    onVolumeChange,
-    onToggleMute,
-    isMuted,
-    volume,
-    audioSystemStatus,
     settings,
     onMove,
     onRotate,
@@ -72,13 +65,6 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
                   nextPiece={gameState.nextPiece}
                   gameOver={gameState.gameOver}
                   isPaused={gameState.isPaused}
-                  onReset={onReset}
-                  onTogglePause={onTogglePause}
-                  isMuted={isMuted}
-                  volume={volume}
-                  onToggleMute={onToggleMute}
-                  onVolumeChange={onVolumeChange}
-                  audioSystemStatus={audioSystemStatus}
                 />
               </ErrorBoundary>
             </div>
@@ -106,13 +92,6 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
               nextPiece={gameState.nextPiece}
               gameOver={gameState.gameOver}
               isPaused={gameState.isPaused}
-              onReset={onReset}
-              onTogglePause={onTogglePause}
-              isMuted={isMuted}
-              volume={volume}
-              onToggleMute={onToggleMute}
-              onVolumeChange={onVolumeChange}
-              audioSystemStatus={audioSystemStatus}
             />
           </ErrorBoundary>
         </div>

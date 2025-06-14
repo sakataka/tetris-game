@@ -3,30 +3,19 @@
 import { Suspense, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
-// import type { GameSettings } from '../types/tetris'; // Temporarily removed for compatibility
+import { useAudioVolumeState } from '../store/audioStore';
+import { useSettings, useUpdateSettings } from '../store/settingsStore';
 import AudioPanel from './AudioPanel';
 import LanguageSelector from './LanguageSelector';
 import { Checkbox } from './ui/checkbox';
 import { Label } from './ui/label';
 
-interface SettingsTabContentProps {
-  isMuted: boolean;
-  volume: number;
-  onToggleMute: () => void;
-  onVolumeChange: (volume: number) => void;
-  settings: any; // Temporary fix for ExtendedGameSettings compatibility
-  updateSettings: (settings: any) => void;
-}
-
-const SettingsTabContent = memo(function SettingsTabContent({
-  isMuted,
-  volume,
-  onToggleMute,
-  onVolumeChange,
-  settings,
-  updateSettings,
-}: SettingsTabContentProps) {
+// No props needed - all state comes from stores
+const SettingsTabContent = memo(function SettingsTabContent() {
   const { t } = useTranslation();
+  const audioState = useAudioVolumeState();
+  const settings = useSettings();
+  const updateSettings = useUpdateSettings();
 
   return (
     <div className={`${SPACING.PANEL_INTERNAL} p-4 space-y-6`}>
@@ -48,11 +37,11 @@ const SettingsTabContent = memo(function SettingsTabContent({
 
       {/* Audio Settings */}
       <AudioPanel
-        isMuted={isMuted}
-        volume={volume}
+        isMuted={audioState.isMuted}
+        volume={audioState.volume}
         settings={settings}
-        onToggleMute={onToggleMute}
-        onVolumeChange={onVolumeChange}
+        onToggleMute={audioState.toggleMute}
+        onVolumeChange={audioState.setVolume}
         onUpdateSettings={updateSettings}
       />
 

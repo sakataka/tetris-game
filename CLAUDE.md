@@ -657,6 +657,7 @@ The i18n system uses two complementary stores:
 - Focus on component logic rather than performance concerns
 - Trust the compiler for automatic memoization
 - You should check the latest Next.js, Node.js, and other libraries with `use context7` MCP.
+- You can use web search including `use brave-search` MCP to search the latest solution.
 
 **DON'T:**
 

@@ -3,18 +3,17 @@
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Suspense, lazy, memo, useState } from 'react';
+import { Suspense, lazy, memo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { type TabType, useActiveTab, useSetActiveTab } from '../store/navigationStore';
 import type { Tetromino } from '../types/tetris';
 import GameTabContent from './GameTabContent';
 import MobileGameInfo from './MobileGameInfo';
 import StatisticsTabContent from './StatisticsTabContent';
 
-export type TabType = 'game' | 'stats' | 'theme' | 'settings';
 // Heavy component lazy loading
 const ThemeTabContent = lazy(() => import('./ThemeTabContent'));
 const SettingsTabContent = lazy(() => import('./SettingsTabContent'));
-import { useSettings, useUpdateSettings } from '../store/settingsStore';
 
 interface GameInfoProps {
   score: number;
@@ -23,33 +22,6 @@ interface GameInfoProps {
   nextPiece: Tetromino | null;
   gameOver: boolean;
   isPaused: boolean;
-  onReset: () => void;
-  onTogglePause: () => void;
-  isMuted: boolean;
-  volume: number;
-  onToggleMute: () => void;
-  onVolumeChange: (volume: number) => void;
-  // Audio system status for enhanced display
-  audioSystemStatus?: {
-    isWebAudioEnabled: boolean;
-    preloadProgress?: {
-      total: number;
-      loaded: number;
-      failed: number;
-      progress: number;
-    };
-    fallbackStatus?: {
-      currentLevel: number;
-      availableLevels: string[];
-      silentMode: boolean;
-    };
-    detailedState?: {
-      initialized: boolean;
-      suspended: boolean;
-      loadedSounds: string[];
-      activeSounds: number;
-    };
-  };
 }
 
 const GameInfo = memo(function GameInfo({
@@ -59,19 +31,10 @@ const GameInfo = memo(function GameInfo({
   nextPiece,
   gameOver,
   isPaused,
-  onReset,
-  onTogglePause,
-  isMuted,
-  volume,
-  onToggleMute,
-  onVolumeChange,
-  audioSystemStatus,
 }: GameInfoProps) {
   const { t } = useTranslation();
-  const settings = useSettings();
-  const updateSettings = useUpdateSettings();
-
-  const [activeTab, setActiveTab] = useState<TabType>('game');
+  const activeTab = useActiveTab();
+  const setActiveTab = useSetActiveTab();
 
   const tabs = [
     { key: 'game', label: t('tabs.game'), color: 'cyan' },
@@ -116,8 +79,6 @@ const GameInfo = memo(function GameInfo({
                   nextPiece={nextPiece}
                   gameOver={gameOver}
                   isPaused={isPaused}
-                  onReset={onReset}
-                  onTogglePause={onTogglePause}
                 />
               </TabsContent>
 
@@ -162,16 +123,7 @@ const GameInfo = memo(function GameInfo({
                     </div>
                   }
                 >
-                  {audioSystemStatus && (
-                    <SettingsTabContent
-                      isMuted={isMuted}
-                      volume={volume}
-                      onToggleMute={onToggleMute}
-                      onVolumeChange={onVolumeChange}
-                      settings={settings}
-                      updateSettings={updateSettings}
-                    />
-                  )}
+                  <SettingsTabContent />
                 </Suspense>
               </TabsContent>
             </ScrollArea>
@@ -181,16 +133,7 @@ const GameInfo = memo(function GameInfo({
 
       {/* Mobile: Compact display (game info only) */}
       <div className='md:hidden h-full'>
-        <MobileGameInfo
-          score={score}
-          level={level}
-          lines={lines}
-          nextPiece={nextPiece}
-          gameOver={gameOver}
-          isPaused={isPaused}
-          onReset={onReset}
-          onTogglePause={onTogglePause}
-        />
+        <MobileGameInfo score={score} level={level} lines={lines} nextPiece={nextPiece} />
       </div>
     </div>
   );
