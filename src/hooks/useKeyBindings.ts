@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+// useCallback removed - React Compiler handles optimization automatically
 import type { GameSettings } from './useSettings';
 
 export interface KeyBindingsAPI {
@@ -19,32 +19,27 @@ export function useKeyBindings(
   defaultKeyBindings: GameSettings['keyBindings'],
   onKeyBindingChange: (keyBindings: GameSettings['keyBindings']) => void
 ): KeyBindingsAPI {
-  const updateKeyBinding = useCallback(
-    (action: keyof GameSettings['keyBindings'], keys: string[]) => {
-      const newKeyBindings = {
-        ...currentKeyBindings,
-        [action]: keys,
-      };
-      onKeyBindingChange(newKeyBindings);
-    },
-    [currentKeyBindings, onKeyBindingChange]
-  );
+  // React Compiler will optimize these functions automatically
+  const updateKeyBinding = (action: keyof GameSettings['keyBindings'], keys: string[]) => {
+    const newKeyBindings = {
+      ...currentKeyBindings,
+      [action]: keys,
+    };
+    onKeyBindingChange(newKeyBindings);
+  };
 
-  const validateKeyBinding = useCallback((keys: string[]): boolean => {
+  const validateKeyBinding = (keys: string[]): boolean => {
     // Basic validation: at least one key and all keys are valid
     return keys.length > 0 && keys.every((key) => typeof key === 'string' && key.length > 0);
-  }, []);
+  };
 
-  const getKeyBinding = useCallback(
-    (action: keyof GameSettings['keyBindings']): string[] => {
-      return currentKeyBindings[action] || [];
-    },
-    [currentKeyBindings]
-  );
+  const getKeyBinding = (action: keyof GameSettings['keyBindings']): string[] => {
+    return currentKeyBindings[action] || [];
+  };
 
-  const resetKeyBindings = useCallback(() => {
+  const resetKeyBindings = () => {
     onKeyBindingChange(defaultKeyBindings);
-  }, [defaultKeyBindings, onKeyBindingChange]);
+  };
 
   return {
     updateKeyBinding,

@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+// useCallback removed - React Compiler handles optimization automatically
 import { useAnimationTimer } from './useAnimationTimer';
 import { useDropTimeCalculator } from './useDropTimeCalculator';
 import { useKeyboardInput } from './useKeyboardInput';
@@ -31,11 +31,11 @@ export function useGameLoop({
   actions,
   onDropTimeChange,
 }: UseGameLoopProps) {
-  // Callback for keyboard input processing
-  const onMoveLeft = useCallback(() => actions.movePiece({ x: -1, y: 0 }), [actions]);
-  const onMoveRight = useCallback(() => actions.movePiece({ x: 1, y: 0 }), [actions]);
-  const onMoveDown = useCallback(() => actions.movePiece({ x: 0, y: 1 }), [actions]);
-  const onConfirm = useCallback(() => actions.resetGame(), [actions]);
+  // React Compiler will optimize these event handlers automatically
+  const onMoveLeft = () => actions.movePiece({ x: -1, y: 0 });
+  const onMoveRight = () => actions.movePiece({ x: 1, y: 0 });
+  const onMoveDown = () => actions.movePiece({ x: 0, y: 1 });
+  const onConfirm = () => actions.resetGame();
 
   // Keyboard input processing
   useKeyboardInput({

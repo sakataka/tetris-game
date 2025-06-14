@@ -20,8 +20,8 @@ export default function ErrorBoundaryWithTranslation({
 }: ErrorBoundaryWithTranslationProps) {
   const { t } = useTranslation();
 
-  // Create custom fallback with translations
-  const translatedFallback = React.useMemo(() => {
+  // React Compiler will optimize this fallback component creation
+  const createTranslatedFallback = () => {
     if (fallback) return fallback;
 
     // Return a function that will be called by ErrorBoundary to render the fallback
@@ -115,7 +115,9 @@ export default function ErrorBoundaryWithTranslation({
 
     FallbackComponent.displayName = 'ErrorFallback';
     return FallbackComponent;
-  }, [fallback, level, t]);
+  };
+
+  const translatedFallback = createTranslatedFallback();
 
   return (
     <ErrorBoundary

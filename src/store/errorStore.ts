@@ -122,7 +122,7 @@ export const useErrorStore = create<ErrorState>()(
           };
 
           if (state.selectedErrorId === errorId) {
-            updates.selectedErrorId = null as any;
+            delete updates.selectedErrorId;
           }
 
           return updates;
@@ -212,7 +212,7 @@ export const useErrorStore = create<ErrorState>()(
           state.errors = [];
           state.stats = INITIAL_STATS;
           state.showErrorPanel = false;
-          state.selectedErrorId = null as any;
+          delete state.selectedErrorId;
         }
       },
     }
