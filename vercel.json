@@ -2,7 +2,6 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "pnpm build",
   "outputDirectory": "build/client",
-  "serverFiles": ["build/server/**"],
 
   "functions": {
     "build/server/index.js": {
@@ -83,7 +82,7 @@
   "rewrites": [
     {
       "source": "/((?!api/).*)",
-      "destination": "/index.html"
+      "destination": "/build/server/index.js"
     }
   ],
 
@@ -104,10 +103,5 @@
 
   "regions": ["sin1", "hnd1", "sfo1"],
 
-  "crons": [
-    {
-      "path": "/api/health",
-      "schedule": "0 */6 * * *"
-    }
-  ]
+  "framework": null
 }
