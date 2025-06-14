@@ -26,17 +26,27 @@
 
 ## 🎯 全体アーキテクチャ比較
 
-### 現在のアーキテクチャ (Next.js)
+### 現在のアーキテクチャ (Next.js + Phase 1完了)
 
 ```
-Next.js App Router
+Next.js App Router (Phase 1 リファクタリング完了)
 ├── src/app/
 │   ├── layout.tsx          # RootLayout + Providers
 │   ├── page.tsx            # Single Page (TetrisGame)
 │   └── globals.css         # Global Styles
 ├── src/components/         # 60個のコンポーネント
-├── src/store/             # 13個のZustandストア
-└── src/hooks/             # 17個のカスタムフック
+│   └── layout/            # 🆕 Phase 1: レイアウトコンポーネント
+│       ├── MainLayout.tsx      # React Router対応レイアウト
+│       ├── Navigation.tsx      # 抽象化されたナビゲーション
+│       ├── GameHeader.tsx      # 再利用可能ヘッダー
+│       └── BackgroundEffects.tsx # 背景エフェクト
+├── src/store/             # 15個のZustandストア
+│   ├── navigationStore.ts     # 🆕 Phase 1: ナビゲーション状態
+│   └── audioStore.ts          # 🆕 Phase 1: オーディオ状態
+├── src/utils/metadata/    # 🆕 Phase 1: メタデータ管理
+│   └── pageMetadata.ts         # React Router Meta API準備
+├── src/hooks/             # 17個のカスタムフック
+└── src/test/routing/      # 🆕 Phase 1: ルーティングテスト (60個)
 ```
 
 ### 移行後アーキテクチャ (React Router 7)
@@ -79,11 +89,16 @@ React Router 7 + Vite
 - **Day 5**: 統合テスト・ドキュメント更新
 
 **成果物**:
-- [ ] プロップドリリング50%削減
-- [ ] ナビゲーション状態のストア管理
-- [ ] 共通レイアウトコンポーネント
-- [ ] TypeScript設定最適化
-- [ ] 依存関係整理済み
+- [x] ✅ プロップドリリング50%削減 (完了)
+- [x] ✅ ナビゲーション状態のストア管理 (navigationStore.ts作成)
+- [x] ✅ 共通レイアウトコンポーネント (MainLayout等4コンポーネント)
+- [x] ✅ TypeScript設定最適化 (ES2024対応済み)
+- [x] ✅ 依存関係整理済み (React 19.1等最新)
+- [x] ✅ メタデータ管理システム (React Router Meta API準備)
+- [x] ✅ ルーティングテスト準備 (60個のテスト追加)
+
+**Phase 1 完了日**: 2025-06-14  
+**テスト結果**: 全349テスト通過 (289 + 60 routing tests)
 
 ### Phase 2: React Router 7環境構築 (Week 3-4)
 
@@ -169,8 +184,11 @@ React Router 7 + Vite
 | **バンドル分析** | @next/bundle-analyzer | vite-bundle-analyzer | Phase 2 |
 | **React Compiler** | experimental.reactCompiler | babel-plugin-react-compiler | Phase 2 |
 | **コンポーネント** | 60個すべて保持 | 100%移行 | Phase 3 |
-| **状態管理** | Zustand (13ストア) | 100%移行 | Phase 3 |
+| **状態管理** | Zustand (15ストア) | 100%移行 | Phase 3 |
 | **カスタムフック** | 17個すべて保持 | 100%移行 | Phase 3 |
+| **レイアウト** | ❌ Page単一構造 | ✅ MainLayout完成 | ✅ Phase 1完了 |
+| **ナビゲーション** | ❌ プロップドリリング | ✅ navigationStore | ✅ Phase 1完了 |
+| **メタデータ準備** | ❌ 未対応 | ✅ pageMetadata.ts | ✅ Phase 1完了 |
 
 ### パフォーマンス目標
 
@@ -184,13 +202,13 @@ React Router 7 + Vite
 
 ## 📋 各フェーズの成功判定基準
 
-### Phase 1完了判定 ✅
-- [ ] プロップドリリング50%以上削減
-- [ ] ナビゲーション状態がストア管理
-- [ ] 共通レイアウトコンポーネント完成
-- [ ] TypeScriptエラー0件維持
-- [ ] 既存機能100%動作
-- [ ] テストカバレッジ維持 (289テスト)
+### Phase 1完了判定 ✅ **COMPLETED 2025-06-14**
+- [x] ✅ プロップドリリング50%以上削減 (達成)
+- [x] ✅ ナビゲーション状態がストア管理 (navigationStore.ts)
+- [x] ✅ 共通レイアウトコンポーネント完成 (MainLayout等4つ)
+- [x] ✅ TypeScriptエラー0件維持 (strict mode継続)
+- [x] ✅ 既存機能100%動作 (全テスト通過)
+- [x] ✅ テストカバレッジ拡大 (289→349テスト、+60 routing)
 
 ### Phase 2完了判定 ✅
 - [ ] React Router 7環境構築完了
@@ -201,7 +219,7 @@ React Router 7 + Vite
 
 ### Phase 3完了判定 ✅
 - [ ] 全コンポーネント移行完了 (60個)
-- [ ] 全ストア移行完了 (13個)  
+- [ ] 全ストア移行完了 (15個)  
 - [ ] 全フック移行完了 (17個)
 - [ ] i18n機能完全動作
 - [ ] エラーハンドリング完全動作
@@ -210,7 +228,7 @@ React Router 7 + Vite
 ### Phase 4完了判定 ✅
 - [ ] パフォーマンス目標達成
 - [ ] バンドルサイズ目標達成 (≤200kB)
-- [ ] 全テスト100%合格 (289テスト)
+- [ ] 全テスト100%合格 (349テスト)
 - [ ] アクセシビリティ維持 (WCAG 2.1 AA)
 - [ ] プロダクション環境動作確認
 

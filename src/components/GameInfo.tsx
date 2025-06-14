@@ -3,10 +3,11 @@
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Suspense, lazy, memo } from 'react';
+import { Suspense, lazy, memo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { type TabType, useActiveTab, useSetActiveTab } from '../store/navigationStore';
 import type { Tetromino } from '../types/tetris';
+import { updateDocumentMetadata } from '../utils/metadata/pageMetadata';
 import GameTabContent from './GameTabContent';
 import MobileGameInfo from './MobileGameInfo';
 import StatisticsTabContent from './StatisticsTabContent';
@@ -35,6 +36,11 @@ const GameInfo = memo(function GameInfo({
   const { t } = useTranslation();
   const activeTab = useActiveTab();
   const setActiveTab = useSetActiveTab();
+
+  // Update document metadata when tab changes (preparation for React Router)
+  useEffect(() => {
+    updateDocumentMetadata(activeTab);
+  }, [activeTab]);
 
   const tabs = [
     { key: 'game', label: t('tabs.game'), color: 'cyan' },
