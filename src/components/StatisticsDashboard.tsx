@@ -62,15 +62,33 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
             <SelectValue />
           </SelectTrigger>
           <SelectContent className='bg-background border-cyber-purple-30'>
-            {STATISTICS_PERIODS.map((period) => (
-              <SelectItem
-                key={period.label}
-                value={period.label}
-                className='text-foreground hover:bg-cyber-purple-20 focus:bg-cyber-purple-20 focus:text-cyber-purple'
-              >
-                {t(`statistics.period.${period.label.toLowerCase().replace(/\s+/g, '')}`)}
-              </SelectItem>
-            ))}
+            {STATISTICS_PERIODS.map((period) => {
+              // Map period labels to translation keys
+              const getTranslationKey = (label: string) => {
+                switch (label) {
+                  case 'Today':
+                    return 'statistics.period.today';
+                  case 'This Week':
+                    return 'statistics.period.week';
+                  case 'This Month':
+                    return 'statistics.period.month';
+                  case 'All Time':
+                    return 'statistics.period.all';
+                  default:
+                    return 'statistics.period.all';
+                }
+              };
+
+              return (
+                <SelectItem
+                  key={period.label}
+                  value={period.label}
+                  className='text-foreground hover:bg-cyber-purple-20 focus:bg-cyber-purple-20 focus:text-cyber-purple'
+                >
+                  {t(getTranslationKey(period.label))}
+                </SelectItem>
+              );
+            })}
           </SelectContent>
         </Select>
       </div>

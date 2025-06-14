@@ -29,7 +29,7 @@ const SettingsTabContent = memo(function SettingsTabContent({
   const { t } = useTranslation();
 
   return (
-    <div className={`${SPACING.PANEL_INTERNAL} p-1.5`}>
+    <div className={`${SPACING.PANEL_INTERNAL} p-4 space-y-6`}>
       {/* Language Settings */}
       <div className={SPACING.PANEL_INTERNAL}>
         <h3

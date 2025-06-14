@@ -1,7 +1,6 @@
 'use client';
 
 import { memo } from 'react';
-import { useTranslation } from 'react-i18next';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
 import { useHighScores } from '../store/statisticsStore';
 import type { Tetromino } from '../types/tetris';
@@ -33,7 +32,6 @@ const GameTabContent = memo(function GameTabContent({
   onTogglePause: _onTogglePause, // Unused but kept for compatibility
   className = '',
 }: GameTabContentProps) {
-  const { t } = useTranslation();
   const highScores = useHighScores();
 
   return (
@@ -57,11 +55,8 @@ const GameTabContent = memo(function GameTabContent({
       {/* High scores */}
       <HighScoreDisplay highScores={highScores} maxDisplay={3} className='' size='xs' />
 
-      {/* Score reference - always visible */}
+      {/* Score reference - always visible, no label */}
       <div className={TYPOGRAPHY.SMALL_LABEL}>
-        <div className={`text-cyan-400 ${TYPOGRAPHY.BODY_TEXT} mb-2`}>
-          {t('panels.scoreReference')}
-        </div>
         <ScoringPanel size='xs' />
       </div>
     </div>

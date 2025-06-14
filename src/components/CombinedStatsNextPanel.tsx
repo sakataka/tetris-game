@@ -69,8 +69,10 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
       theme='cyan'
       size={size}
     >
-      {/* Game Status Badge */}
-      <div className='flex justify-center mb-2'>{getGameStatusBadge()}</div>
+      {/* Game Status Badge - Show only for paused/game over */}
+      {(gameOver || isPaused) && (
+        <div className='flex justify-center mb-2'>{getGameStatusBadge()}</div>
+      )}
       <div className='grid grid-cols-2 gap-2'>
         {/* Score Information */}
         <div className={SPACING.TIGHT}>
