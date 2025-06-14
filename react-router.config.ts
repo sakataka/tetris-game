@@ -4,10 +4,13 @@ export default {
   // SSR有効化
   ssr: true,
 
-  // 将来のプリレンダリング対応
+  // プリレンダリング設定（静的ページのパフォーマンス向上）
   prerender: [
     '/', // ホームページ
     '/about', // Aboutページ
+    '/settings', // 設定ページ
+    '/statistics', // 統計ページ
+    '/themes', // テーマページ
   ],
 
   // サーバー設定

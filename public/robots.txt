@@ -1,0 +1,20 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://tetris.example.com/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1
+
+# Disallow sensitive paths (if any)
+Disallow: /api/
+Disallow: /admin/
+
+# Allow search engines to index all game pages
+Allow: /
+Allow: /about
+Allow: /settings
+Allow: /statistics
+Allow: /themes

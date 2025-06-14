@@ -1,6 +1,6 @@
 'use client';
 
-import { memo } from 'react';
+import { Suspense, lazy, memo } from 'react';
 import {
   type BoardRenderState,
   DEFAULT_RENDERING_OPTIONS,
@@ -9,8 +9,10 @@ import {
 import type { LineEffectState, Tetromino } from '../types/tetris';
 import { BoardRendererFactory } from '../utils/game/boardRenderer';
 import GameOverMessage from './GameOverMessage';
-import ParticleEffect from './ParticleEffect';
 import PausedMessage from './PausedMessage';
+
+// Lazy load particle effects for better initial load performance
+const ParticleEffect = lazy(() => import('./ParticleEffect'));
 
 interface TetrisBoardProps {
   board: (string | null)[][];
@@ -80,7 +82,9 @@ const TetrisBoard = memo(function TetrisBoard({
         )}
       </div>
 
-      <ParticleEffect lineEffect={lineEffect} onParticleUpdate={onParticleUpdate} />
+      <Suspense fallback={null}>
+        <ParticleEffect lineEffect={lineEffect} onParticleUpdate={onParticleUpdate} />
+      </Suspense>
 
       {gameOver && <GameOverMessage />}
 
