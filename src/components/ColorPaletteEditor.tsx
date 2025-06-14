@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ColorPalette } from '../types/tetris';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { cn } from '@/utils/ui/cn';
 
 interface ColorPaletteEditorProps {
@@ -58,15 +59,18 @@ function ColorInput({ label, value, onChange, description }: ColorInputProps) {
           className='w-10 h-10 rounded border border-cyber-cyan-30 cursor-pointer
                      hover:border-cyber-cyan transition-colors'
         />
-        <input
+        <Input
           type='text'
           value={inputValue}
           onChange={handleChange}
           onBlur={handleBlur}
           placeholder='#FFFFFF'
-          className='flex-1 p-2 rounded bg-cyber-cyan-10 border border-cyber-cyan-30 
-                     text-foreground focus:outline-none focus:ring-2 focus:ring-cyber-cyan
-                     hover:bg-cyber-cyan-20 transition-colors font-mono text-sm'
+          className={cn(
+            'flex-1 font-mono text-sm',
+            'bg-cyber-cyan-10 border-cyber-cyan-30 text-foreground',
+            'focus-visible:ring-cyber-cyan focus-visible:border-cyber-cyan',
+            'hover:bg-cyber-cyan-20 transition-colors'
+          )}
         />
       </div>
       {description && <p className='text-xs text-cyber-purple mt-1'>{description}</p>}

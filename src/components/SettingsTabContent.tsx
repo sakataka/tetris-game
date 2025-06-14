@@ -6,6 +6,7 @@ import { SPACING, TYPOGRAPHY } from '../constants/layout';
 import type { GameSettings } from '../types/tetris';
 import AudioPanel from './AudioPanel';
 import LanguageSelector from './LanguageSelector';
+import { Checkbox } from './ui/checkbox';
 
 interface SettingsTabContentProps {
   isMuted: boolean;
@@ -62,19 +63,22 @@ const SettingsTabContent = memo(function SettingsTabContent({
           {t('settings.gameMode')}
         </h3>
         <div className='mt-3'>
-          <label className='flex items-center space-x-3 text-gray-300 hover:text-white transition-colors cursor-pointer'>
-            <input
-              type='checkbox'
+          <div className='flex items-center space-x-3'>
+            <Checkbox
+              id='debug-mode-checkbox'
               checked={settings.gameMode === 'debug'}
-              onChange={(e) => {
+              onCheckedChange={(checked) => {
                 updateSettings({
-                  gameMode: e.target.checked ? 'debug' : 'single',
+                  gameMode: checked ? 'debug' : 'single',
                 });
               }}
-              className='w-4 h-4 text-cyber-cyan bg-gray-900 border-gray-600 rounded focus:ring-cyber-cyan focus:ring-2'
+              className='data-[state=checked]:bg-cyber-cyan data-[state=checked]:border-cyber-cyan data-[state=unchecked]:border-gray-600 data-[state=unchecked]:bg-gray-900'
+              aria-label={t('settings.debugMode')}
             />
-            <span className={TYPOGRAPHY.BODY_TEXT}>{t('settings.debugMode')}</span>
-          </label>
+            <label htmlFor='debug-mode-checkbox' className='text-gray-300 hover:text-white transition-colors cursor-pointer'>
+              <span className={TYPOGRAPHY.BODY_TEXT}>{t('settings.debugMode')}</span>
+            </label>
+          </div>
           <p className='mt-1 text-xs text-gray-500'>{t('settings.debugModeDescription')}</p>
         </div>
       </div>
