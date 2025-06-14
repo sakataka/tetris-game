@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ColorPalette } from '../types/tetris';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/utils/ui/cn';
 
 interface ColorPaletteEditorProps {
   colors: ColorPalette;
@@ -138,14 +140,17 @@ export default function ColorPaletteEditor({
     <div className={`color-palette-editor ${className}`}>
       <div className='flex items-center justify-between mb-3'>
         <h3 className='text-lg font-bold text-cyber-cyan'>{t('colorPalette.title')}</h3>
-        <button
-          type='button'
+        <Button
+          variant='outline'
+          size='sm'
           onClick={() => setIsExpanded(!isExpanded)}
-          className='px-3 py-1 rounded bg-cyber-purple-20 border border-cyber-purple-30
-                     text-cyber-purple hover:bg-cyber-purple-30 transition-colors text-sm'
+          className={cn(
+            'border-cyber-purple-30 text-cyber-purple hover:bg-cyber-purple-30',
+            'bg-cyber-purple-20 hover:text-cyber-purple'
+          )}
         >
           {isExpanded ? t('colorPalette.collapse') : t('colorPalette.advancedSettings')}
-        </button>
+        </Button>
       </div>
 
       {/* Color preview (always displayed) */}
@@ -180,14 +185,17 @@ export default function ColorPaletteEditor({
           ))}
 
           <div className='flex gap-2 mt-4'>
-            <button
-              type='button'
+            <Button
+              variant='outline'
+              size='sm'
               onClick={resetToDefaults}
-              className='px-4 py-2 rounded bg-cyber-yellow-20 border border-cyber-yellow-30
-                         text-cyber-yellow hover:bg-cyber-yellow-30 transition-colors text-sm'
+              className={cn(
+                'border-cyber-yellow-30 text-cyber-yellow hover:bg-cyber-yellow-30',
+                'bg-cyber-yellow-20 hover:text-cyber-yellow'
+              )}
             >
               {t('colorPalette.resetToDefaults')}
-            </button>
+            </Button>
           </div>
         </div>
       )}

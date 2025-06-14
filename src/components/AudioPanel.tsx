@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { GAME_UI_SIZES, SPACING, TYPOGRAPHY, UI_SIZES } from '../constants/layout';
 import type { GameSettings } from '../types/tetris';
 import PanelBase from './ui/PanelBase';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/utils/ui/cn';
 
 interface AudioPanelProps {
   isMuted: boolean;
@@ -49,37 +51,43 @@ const AudioPanel = memo(function AudioPanel({
         </div>
         <div className='flex justify-between items-center'>
           <span className={`text-gray-300 ${TYPOGRAPHY.BODY_TEXT}`}>{t('settings.mute')}</span>
-          <button
-            type='button'
+          <Button
+            variant='outline'
+            size='sm'
             onClick={onToggleMute}
-            className={`px-3 py-1 rounded font-mono ${TYPOGRAPHY.BUTTON_TEXT} transition-all duration-300 ${
+            className={cn(
+              'font-mono',
+              TYPOGRAPHY.BUTTON_TEXT,
               isMuted
-                ? 'bg-red-500/20 text-red-400 border border-red-400/50'
-                : 'bg-green-500/20 text-green-400 border border-green-400/50'
-            }`}
+                ? 'border-red-400/50 text-red-400 hover:bg-red-500/20'
+                : 'border-green-400/50 text-green-400 hover:bg-green-500/20'
+            )}
           >
             {isMuted ? t('common.off').toUpperCase() : t('common.on').toUpperCase()}
-          </button>
+          </Button>
         </div>
         <div className='flex justify-between items-center'>
           <span className={`text-gray-300 ${TYPOGRAPHY.BODY_TEXT}`}>
             {t('settings.virtualControls')}
           </span>
-          <button
-            type='button'
+          <Button
+            variant='outline'
+            size='sm'
             onClick={() =>
               onUpdateSettings({ virtualControlsEnabled: !settings.virtualControlsEnabled })
             }
-            className={`px-3 py-1 rounded font-mono ${TYPOGRAPHY.BUTTON_TEXT} transition-all duration-300 ${
+            className={cn(
+              'font-mono',
+              TYPOGRAPHY.BUTTON_TEXT,
               settings.virtualControlsEnabled
-                ? 'bg-green-500/20 text-green-400 border border-green-400/50'
-                : 'bg-gray-500/20 text-gray-400 border border-gray-400/50'
-            }`}
+                ? 'border-green-400/50 text-green-400 hover:bg-green-500/20'
+                : 'border-gray-400/50 text-gray-400 hover:bg-gray-500/20'
+            )}
           >
             {settings.virtualControlsEnabled
               ? t('common.on').toUpperCase()
               : t('common.off').toUpperCase()}
-          </button>
+          </Button>
         </div>
       </div>
     </PanelBase>

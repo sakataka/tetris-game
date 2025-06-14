@@ -13,6 +13,8 @@ import type {
 import { AccessibilitySettingsMemo } from './AccessibilitySettings';
 import { ColorPaletteEditorMemo } from './ColorPaletteEditor';
 import { ThemeSelectorMemo } from './ThemeSelector';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/utils/ui/cn';
 
 interface ThemeSettingsProps {
   currentTheme: ThemeVariant;
@@ -78,20 +80,23 @@ export default function ThemeSettings({
         className={`flex flex-wrap gap-0.5 ${SPACING.PANEL_TITLE_BOTTOM} p-0.5 rounded-lg bg-cyber-cyan-10`}
       >
         {tabs.map((tab) => (
-          <button
-            type='button'
+          <Button
             key={tab.id}
+            variant={activeTab === tab.id ? 'default' : 'outline'}
+            size='sm'
             onClick={() => setActiveTab(tab.id)}
-            className={`flex-1 min-w-0 px-2 py-1 rounded-md ${TYPOGRAPHY.BUTTON_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} transition-colors
-              ${
-                activeTab === tab.id
-                  ? 'bg-cyber-cyan text-background'
-                  : 'text-cyber-cyan hover:bg-cyber-cyan-20'
-              }`}
+            className={cn(
+              'flex-1 min-w-0',
+              TYPOGRAPHY.BUTTON_TEXT,
+              TYPOGRAPHY.BODY_WEIGHT,
+              activeTab === tab.id
+                ? 'bg-cyber-cyan text-background hover:bg-cyber-cyan/90'
+                : 'border-transparent text-cyber-cyan hover:bg-cyber-cyan-20 hover:text-cyber-cyan'
+            )}
           >
             <span className='hidden sm:inline'>{tab.icon} </span>
             <span className='truncate'>{tab.label}</span>
-          </button>
+          </Button>
         ))}
       </div>
 
@@ -102,14 +107,17 @@ export default function ThemeSettings({
             <ThemeSelectorMemo currentTheme={currentTheme} onThemeChange={onThemeChange} />
 
             <div className='flex gap-2'>
-              <button
-                type='button'
+              <Button
+                variant='destructive'
                 onClick={onResetToDefault}
-                className={`px-4 py-2 rounded bg-cyber-red-20 border border-cyber-red-30
-                           text-cyber-red hover:bg-cyber-red-30 transition-colors ${TYPOGRAPHY.BUTTON_TEXT}`}
+                className={cn(
+                  'bg-cyber-red-20 border border-cyber-red-30 text-cyber-red',
+                  'hover:bg-cyber-red-30 hover:text-cyber-red',
+                  TYPOGRAPHY.BUTTON_TEXT
+                )}
               >
                 {t('buttons.reset')}
-              </button>
+              </Button>
             </div>
           </div>
         )}
