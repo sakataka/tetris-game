@@ -7,7 +7,6 @@ import { useHighScores } from '../store/statisticsStore';
 import type { Tetromino } from '../types/tetris';
 import CombinedStatsNextPanel from './CombinedStatsNextPanel';
 import ControlsPanel from './ControlsPanel';
-import GameButtonsPanel from './GameButtonsPanel';
 import HighScoreDisplay from './HighScoreDisplay';
 import ScoringPanel from './ScoringPanel';
 
@@ -18,8 +17,8 @@ interface GameTabContentProps {
   nextPiece: Tetromino | null;
   gameOver: boolean;
   isPaused: boolean;
-  onReset: () => void;
-  onTogglePause: () => void;
+  onReset?: () => void; // Optional since we're not using it
+  onTogglePause?: () => void; // Optional since we're not using it
   className?: string;
 }
 
@@ -30,8 +29,8 @@ const GameTabContent = memo(function GameTabContent({
   nextPiece,
   gameOver,
   isPaused,
-  onReset,
-  onTogglePause,
+  onReset: _onReset, // Unused but kept for compatibility
+  onTogglePause: _onTogglePause, // Unused but kept for compatibility
   className = '',
 }: GameTabContentProps) {
   const { t } = useTranslation();
@@ -50,15 +49,7 @@ const GameTabContent = memo(function GameTabContent({
         size='xs'
       />
 
-      {/* Buttons - Horizontal Layout */}
-      <GameButtonsPanel
-        gameOver={gameOver}
-        isPaused={isPaused}
-        onTogglePause={onTogglePause}
-        onReset={onReset}
-        size='xs'
-        layout='horizontal'
-      />
+      {/* Buttons - Hidden per requirement */}
 
       {/* Controls */}
       <ControlsPanel size='xs' />
@@ -66,15 +57,13 @@ const GameTabContent = memo(function GameTabContent({
       {/* High scores */}
       <HighScoreDisplay highScores={highScores} maxDisplay={3} className='' size='xs' />
 
-      {/* Score reference - collapsible */}
-      <details className={TYPOGRAPHY.SMALL_LABEL}>
-        <summary
-          className={`cursor-pointer text-cyan-400 hover:text-cyan-300 ${TYPOGRAPHY.BODY_TEXT}`}
-        >
+      {/* Score reference - always visible */}
+      <div className={TYPOGRAPHY.SMALL_LABEL}>
+        <div className={`text-cyan-400 ${TYPOGRAPHY.BODY_TEXT} mb-2`}>
           {t('panels.scoreReference')}
-        </summary>
+        </div>
         <ScoringPanel size='xs' />
-      </details>
+      </div>
     </div>
   );
 });

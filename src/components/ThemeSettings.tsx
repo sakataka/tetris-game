@@ -17,7 +17,6 @@ import type {
   ContrastLevel,
   ThemeVariant,
 } from '../types/tetris';
-import { AccessibilitySettingsMemo } from './AccessibilitySettings';
 import { ColorPaletteEditorMemo } from './ColorPaletteEditor';
 import { ThemeSelectorMemo } from './ThemeSelector';
 
@@ -47,24 +46,22 @@ interface ThemeSettingsProps {
 export default function ThemeSettings({
   currentTheme,
   colors,
-  colorBlindnessType,
-  contrast,
-  animationIntensity,
-  reducedMotion,
+  colorBlindnessType: _colorBlindnessType, // Unused after accessibility removal
+  contrast: _contrast, // Unused after accessibility removal
+  animationIntensity: _animationIntensity, // Unused after accessibility removal
+  reducedMotion: _reducedMotion, // Unused after accessibility removal
   effectIntensity,
   animations,
   onThemeChange,
   onColorsChange,
-  onAccessibilityChange,
+  onAccessibilityChange: _onAccessibilityChange, // Unused after accessibility removal
   onEffectIntensityChange,
   onAnimationsToggle,
   onResetToDefault,
   className = '',
 }: ThemeSettingsProps) {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState<'theme' | 'colors' | 'accessibility' | 'effects'>(
-    'theme'
-  );
+  const [activeTab, setActiveTab] = useState<'theme' | 'colors' | 'effects'>('theme');
 
   // Event handler (React Compiler will optimize this)
   const handleEffectIntensityChange = (value: number[]) => {
@@ -74,7 +71,6 @@ export default function ThemeSettings({
   const tabs = [
     { id: 'theme', label: t('themes.preview'), icon: '🎨' },
     { id: 'colors', label: t('colorPalette.title'), icon: '🌈' },
-    { id: 'accessibility', label: t('settings.accessibility'), icon: '♿' },
     { id: 'effects', label: t('accessibility.motion'), icon: '✨' },
   ] as const;
 
@@ -137,16 +133,6 @@ export default function ThemeSettings({
 
           {activeTab === 'colors' && (
             <ColorPaletteEditorMemo colors={colors} onColorsChange={onColorsChange} />
-          )}
-
-          {activeTab === 'accessibility' && (
-            <AccessibilitySettingsMemo
-              colorBlindnessType={colorBlindnessType}
-              contrast={contrast}
-              animationIntensity={animationIntensity}
-              reducedMotion={reducedMotion}
-              onSettingsChange={onAccessibilityChange}
-            />
           )}
 
           {activeTab === 'effects' && (
