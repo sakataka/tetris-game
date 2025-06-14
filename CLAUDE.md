@@ -25,8 +25,6 @@ Production-ready cyberpunk-themed Tetris game built with React Router 7, TypeScr
 
 **Tech Stack**: React Router 7.6.2 + React 19.1.0 + Vite 6.3.5 + TypeScript 5 (ES2024) + Zustand 5 + Tailwind CSS 4.1.10 + shadcn/ui (15/20 components active, React Compiler optimized)
 
-**📋 Migration Status**: **🎉 Phase 4 Complete (2025-06-14)** - React Router 7 migration fully complete with production monitoring
-
 ## Environment Setup
 
 **Prerequisites**: Node.js 18+, pnpm package manager
@@ -160,52 +158,7 @@ The project leverages React 19.1's React Compiler for automatic performance opti
 - `ParticleEffect`: 4 manual optimizations replaced
 - All settings components: Event handlers automatically optimized
 
-### Modern React Features
-
-**1. use() Hook for Async Resources**
-
-```typescript
-// GameOrchestrator.tsx - Enhanced hydration management
-const isHydrated = use(getHydrationPromise());
-```
-
-**2. Ref as Prop (Native Support)**
-
-- No forwardRef dependencies required
-- Direct ref passing to functional components
-- Cleaner component APIs
-
-**3. Enhanced Error Handling**
-
-- Better hydration error messages
-- Improved client-server mismatch detection
-- Automatic error recovery patterns
-
-**4. Performance Improvements**
-
-- Faster compilation with React Compiler
-- Reduced bundle size through intelligent optimization
-- Better memory usage patterns
-
-**Performance Impact:**
-
-- Bundle size: Main page 68.5 kB (First Load JS: 219 kB) - optimized by compiler
-- Compilation: ~1000ms build time with React Compiler optimizations
-- Runtime: Better performance through intelligent memoization
-- Memory: More efficient with compiler-managed optimization
-- Tests: 349 tests passing with improved performance (🆕 +60 routing tests)
-
 ## State Management (Zustand)
-
-
-### Store Usage Pattern
-
-```typescript
-// Individual selectors prevent object regeneration
-export const useGameState = () => useGameStateStore((state) => state.gameState);
-export const useSetGameState = () =>
-  useGameStateStore((state) => state.setGameState);
-```
 
 ### Zustand Stores (15 total)
 
@@ -380,31 +333,6 @@ alert, badge, button, card, checkbox, dialog, input, label,
 popover, progress, scroll-area, select, separator, skeleton, 
 slider, sonner, switch, tabs, tooltip, CyberCard (custom)
 ```
-
-**Actively Used Components (15 total):**
-```
-✅ alert - Error notifications with cyberpunk variants
-✅ badge - Statistics display in GameInfo
-✅ button - All interactive elements (60+ usage)
-✅ card - Via CyberCard wrapper with hologram effects
-✅ input - ColorPaletteEditor form inputs
-✅ label - All form elements for accessibility
-✅ progress - Audio loading and level progression
-✅ scroll-area - Long content areas in GameInfo/Settings
-✅ select - ThemeSelector dropdown
-✅ separator - Visual organization in panels
-✅ skeleton - Loading states in StatisticsTabContent
-✅ slider - Volume/effects controls with neon styling
-✅ sonner - Global toast notification system
-✅ switch - Settings toggles
-✅ tabs - Main navigation in GameInfo
-```
-
-**Available for Future Use (5 components):**
-```
-⏳ checkbox, dialog, popover, tooltip - Ready for integration
-```
-
 ### Core shadcn/ui Components
 
 - **Button**: Enhanced with cyberpunk variants (default, destructive, outline, secondary, ghost, link)

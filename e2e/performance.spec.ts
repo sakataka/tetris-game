@@ -55,8 +55,9 @@ test.describe('Performance Tests', () => {
         const observer = new PerformanceObserver((list) => {
           const entries = list.getEntries();
           for (const entry of entries) {
-            if (!entry.hadRecentInput) {
-              clsValue += (entry as any).value;
+            const layoutShiftEntry = entry as any;
+            if (!layoutShiftEntry.hadRecentInput) {
+              clsValue += layoutShiftEntry.value;
             }
           }
         });
@@ -179,7 +180,7 @@ test.describe('Performance Tests', () => {
 
     page.on('response', async (response) => {
       if (response.url().includes('.js') || response.url().includes('.css')) {
-        const _request = response.request();
+        // const _request = response.request();
         const timing = response.request().timing();
 
         resources.push({

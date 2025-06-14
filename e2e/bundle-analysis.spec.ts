@@ -21,7 +21,7 @@ test.describe('Bundle Analysis', () => {
       if (url.includes('/assets/') && (url.includes('.js') || url.includes('.css'))) {
         const headers = response.headers();
         const contentLength = headers['content-length'];
-        const _contentEncoding = headers['content-encoding'];
+        // const _contentEncoding = headers['content-encoding'];
         const timing = response.request().timing();
 
         try {
@@ -33,7 +33,7 @@ test.describe('Bundle Analysis', () => {
             type: url.includes('.js') ? 'javascript' : 'css',
             timing: timing?.responseEnd ? timing.responseEnd - timing.responseStart : 0,
           });
-        } catch (_error) {
+        } catch {
           // ボディ取得エラーをキャッチ
         }
       }
@@ -120,7 +120,8 @@ test.describe('Bundle Analysis', () => {
     page.on('response', (response) => {
       const url = response.url();
       if (url.includes('/assets/') && url.includes('.js')) {
-        const chunkName = url.split('/').pop()?.split('-')[0] || 'unknown';
+        const filename = url.split('/').pop();
+        const chunkName = filename?.split('-')[0] || 'unknown';
         loadedChunks.add(chunkName);
       }
     });
@@ -181,10 +182,14 @@ test.describe('Bundle Analysis', () => {
     let usedBytes = 0;
 
     for (const entry of jsCoverage) {
-      if (entry.url.includes('/assets/')) {
-        totalBytes += entry.text.length;
-        for (const range of entry.ranges) {
-          usedBytes += range.end - range.start;
+      if (entry.url.includes('/assets/') && entry.source) {
+        totalBytes += entry.source.length;
+        for (const func of entry.functions) {
+          for (const range of func.ranges) {
+            if (range.count > 0) {
+              usedBytes += range.endOffset - range.startOffset;
+            }
+          }
         }
       }
     }
@@ -197,7 +202,7 @@ test.describe('Bundle Analysis', () => {
     let usedCssBytes = 0;
 
     for (const entry of cssCoverage) {
-      if (entry.url.includes('/assets/')) {
+      if (entry.url.includes('/assets/') && entry.text) {
         totalCssBytes += entry.text.length;
         for (const range of entry.ranges) {
           usedCssBytes += range.end - range.start;
@@ -217,7 +222,7 @@ test.describe('Bundle Analysis', () => {
         try {
           const text = await response.text();
           bundleContent.push(text);
-        } catch (_error) {
+        } catch {
           // テキスト取得エラーをキャッチ
         }
       }

@@ -47,7 +47,11 @@ test.describe('Mobile Device Compatibility', () => {
       test.beforeEach(async ({ page }) => {
         // デバイス設定の適用
         await page.setViewportSize(device.viewport);
-        await page.setUserAgent(device.userAgent);
+        await page.context().addInitScript(`
+          Object.defineProperty(navigator, 'userAgent', {
+            get: () => '${device.userAgent}'
+          });
+        `);
 
         // SSR互換性問題回避のため、開発環境に直接アクセス
         await page.goto('http://localhost:3001/', {
@@ -73,7 +77,9 @@ test.describe('Mobile Device Compatibility', () => {
         // ビューポート内に収まっているか確認
         expect(boundingBox?.x).toBeGreaterThanOrEqual(0);
         expect(boundingBox?.y).toBeGreaterThanOrEqual(0);
-        expect(boundingBox?.x + boundingBox?.width).toBeLessThanOrEqual(device.viewport.width + 50);
+        if (boundingBox) {
+          expect(boundingBox.x + boundingBox.width).toBeLessThanOrEqual(device.viewport.width + 50);
+        }
       });
 
       test(`should handle touch controls on ${device.name}`, async ({ page }) => {
@@ -88,11 +94,11 @@ test.describe('Mobile Device Compatibility', () => {
             '[data-testid="virtual-drop"]',
           ];
 
-          let _hasVirtualControls = false;
+          // let _hasVirtualControls = false;
           for (const selector of virtualControls) {
             const exists = (await page.locator(selector).count()) > 0;
             if (exists) {
-              _hasVirtualControls = true;
+              // _hasVirtualControls = true;
 
               // タッチ操作テスト
               const control = page.locator(selector);
@@ -354,7 +360,7 @@ test.describe('Mobile Device Compatibility', () => {
 
       if (swSupport) {
         // Web App Manifest確認
-        const _manifestLink = await page.locator('link[rel="manifest"]').count();
+        // const _manifestLink = await page.locator('link[rel="manifest"]').count();
         // PWA対応は今後の実装予定のためチェックは緩く
       }
 

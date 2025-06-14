@@ -12,7 +12,7 @@ export interface SentryConfig {
   tracesSampleRate: number;
   profilesSampleRate: number;
   integrations?: any[];
-  beforeSend?: (event: Sentry.Event) => Sentry.Event | null;
+  beforeSend?: (event: Sentry.ErrorEvent, hint: Sentry.EventHint) => Sentry.ErrorEvent | null;
 }
 
 /**
@@ -30,10 +30,10 @@ export function initSentry(config?: Partial<SentryConfig>): void {
 
   const defaultConfig = {
     dsn,
-    environment: (process.env['NODE_ENV'] as any) || 'production',
+    environment: (process.env['NODE_ENV'] as 'development' | 'staging' | 'production') || 'production',
     tracesSampleRate: Number.parseFloat(process.env['VITE_SENTRY_TRACES_SAMPLE_RATE'] || '0.1'),
     integrations: [Sentry.browserTracingIntegration()],
-    beforeSend: (event: any) => {
+    beforeSend: (event: Sentry.ErrorEvent, _hint: Sentry.EventHint) => {
       // 開発環境やローカル環境ではイベントを送信しない
       if (
         event.server_name?.includes('localhost') ||
@@ -115,7 +115,7 @@ export const GameSentry = {
         email,
         message: comments,
       });
-    } catch (_error) {
+    } catch {
       // フォールバック：通常のメッセージとして送信
       Sentry.captureMessage(`User Feedback: ${comments}`, 'info');
     }
@@ -133,10 +133,10 @@ export const GameSentry = {
       (span) => {
         try {
           const result = operation();
-          span?.setStatus({ code: 1 }); // OK
+          span?.setStatus({ code: 1, message: 'ok' }); // OK
           return result;
         } catch (error) {
-          span?.setStatus({ code: 2, message: String(error) }); // ERROR
+          span?.setStatus({ code: 2, message: error instanceof Error ? error.message : String(error) }); // ERROR
           throw error;
         }
       }

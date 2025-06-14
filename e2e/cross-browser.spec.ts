@@ -31,10 +31,10 @@ test.describe('Cross-Browser Compatibility', () => {
         try {
           // Array.prototype.toSpliced (ES2023)
           const arr = [1, 2, 3];
-          const result = arr.toSpliced(1, 1, 'replaced');
+          const result = (arr as any).toSpliced(1, 1, 'replaced');
 
           // Object.groupBy (ES2024提案)
-          const supported = typeof Array.prototype.toSpliced === 'function';
+          const supported = typeof (Array.prototype as any).toSpliced === 'function';
 
           return { modernJs: supported, toSpliced: result.length === 3 };
         } catch {
@@ -304,10 +304,7 @@ test.describe('Cross-Browser Compatibility', () => {
 
   // パフォーマンス比較テスト
   test.describe('Cross-Browser Performance', () => {
-    test('should maintain consistent performance across browsers', async ({
-      page,
-      browserName,
-    }) => {
+    test('should maintain consistent performance across browsers', async ({ page }) => {
       const performanceMetrics = await page.evaluate(() => {
         return new Promise<{
           browserName: string;

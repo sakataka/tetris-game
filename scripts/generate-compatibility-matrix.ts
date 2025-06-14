@@ -77,21 +77,21 @@ export class CompatibilityMatrixGenerator {
   /**
    * テスト結果のパース
    */
-  private parseTestResults(suites: any[]): void {
+  private parseTestResults(suites: Array<Record<string, any>>): void {
     for (const suite of suites) {
-      if (suite.suites) {
-        this.parseTestResults(suite.suites);
+      if (suite['suites']) {
+        this.parseTestResults(suite['suites']);
       }
 
-      if (suite.specs) {
-        for (const spec of suite.specs) {
+      if (suite['specs']) {
+        for (const spec of suite['specs']) {
           for (const test of spec.tests) {
             for (const result of test.results) {
               this.testResults.push({
                 projectName: result.projectName || 'unknown',
                 testName: spec.title,
-                status: result.status,
-                duration: result.duration,
+                status: result.status as 'passed' | 'failed' | 'skipped',
+                duration: result.duration || 0,
                 error: result.error?.message,
               });
             }
@@ -151,10 +151,11 @@ export class CompatibilityMatrixGenerator {
     const groups: Record<string, TestResult[]> = {};
 
     for (const result of this.testResults) {
-      if (!groups[result.projectName]) {
-        groups[result.projectName] = [];
+      const projectName = result.projectName || 'unknown';
+      if (!groups[projectName]) {
+        groups[projectName] = [];
       }
-      groups[result.projectName].push(result);
+      groups[projectName].push(result);
     }
 
     return groups;
@@ -380,7 +381,7 @@ async function generateCompatibilityMatrix() {
 }
 
 // スクリプトとして直接実行された場合
-if (require.main === module) {
+if (typeof require !== 'undefined' && require.main === module) {
   generateCompatibilityMatrix().catch(console.error);
 }
 

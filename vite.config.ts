@@ -4,7 +4,7 @@ import { defineConfig } from 'vite';
 import viteCompression from 'vite-plugin-compression';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig(() => ({
   plugins: [
     reactRouter(),
     tsconfigPaths(),
