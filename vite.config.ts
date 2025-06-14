@@ -4,7 +4,7 @@ import { defineConfig } from 'vite';
 import viteCompression from 'vite-plugin-compression';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
     reactRouter(),
     tsconfigPaths(),
@@ -24,6 +24,25 @@ export default defineConfig({
       filter: /\.(js|css|html|svg|json)$/i,
       deleteOriginFile: false,
     }),
+    // Sentry監視（プロダクションのみ） - 一時的に無効化
+    // ...(mode === 'production' && process.env['SENTRY_AUTH_TOKEN']
+    //   ? [
+    //       sentryVitePlugin({
+    //         org: process.env['SENTRY_ORG'],
+    //         project: process.env['SENTRY_PROJECT'],
+    //         authToken: process.env['SENTRY_AUTH_TOKEN'],
+    //         // ソースマップ設定
+    //         sourcemaps: {
+    //           assets: './build/client/**',
+    //           ignore: ['node_modules/**'],
+    //         },
+    //         // Release設定
+    //         release: {
+    //           name: `tetris-game@${process.env['npm_package_version'] || '1.0.0'}`,
+    //         },
+    //       }),
+    //     ]
+    //   : []),
   ],
 
   // Tailwind CSS v4.1 統合
@@ -46,6 +65,7 @@ export default defineConfig({
   build: {
     target: 'ES2024',
     minify: 'terser',
+    sourcemap: false, // ソースマップを無効化
     terserOptions: {
       compress: {
         drop_console: true,
@@ -112,4 +132,4 @@ export default defineConfig({
   optimizeDeps: {
     include: ['react', 'react-dom', 'zustand', 'react-router'],
   },
-});
+}));

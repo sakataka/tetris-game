@@ -4,9 +4,18 @@ import { renderToPipeableStream } from 'react-dom/server';
 import { ServerRouter } from 'react-router';
 import type { EntryContext } from 'react-router';
 
+// Sentry監視（サーバーサイド）
+import { GameSentry, initSentry } from './utils/sentry';
+
+// セキュリティ強化
+import { applySecurityHeaders, securityMiddleware } from './utils/security';
+
 // SSR optimization constants
 const ABORT_TIMEOUT = 10000; // Increased timeout for slower connections
 const CHUNK_SIZE = 16 * 1024; // 16KB chunks for optimal streaming
+
+// サーバーサイドでSentry初期化
+initSentry();
 
 export default function handleRequest(
   request: Request,
@@ -15,6 +24,16 @@ export default function handleRequest(
   routerContext: EntryContext,
   _loadContext?: unknown
 ) {
+  // セキュリティミドルウェアチェック
+  const securityResponse = securityMiddleware(request);
+  if (securityResponse) {
+    return Promise.resolve(securityResponse);
+  }
+
+  // セキュリティヘッダーの適用
+  const environment = process.env['NODE_ENV'] === 'production' ? 'production' : 'development';
+  applySecurityHeaders(responseHeaders, environment);
+
   // Check if client accepts streaming
   const acceptsStreaming = request.headers.get('Accept')?.includes('text/html');
 
@@ -75,6 +94,15 @@ export default function handleRequest(
           didError = true;
           console.error('Shell rendering error:', error);
 
+          // Sentryにサーバーサイドエラーを送信
+          if (error instanceof Error) {
+            GameSentry.captureGameError(error, {
+              type: 'ssr_shell_error',
+              url: request.url,
+              userAgent: request.headers.get('User-Agent') || 'unknown',
+            });
+          }
+
           // Fallback to static error page
           responseHeaders.set('Content-Type', 'text/html; charset=utf-8');
           resolve(
@@ -92,6 +120,15 @@ export default function handleRequest(
           didError = true;
           console.error('Streaming error:', error);
           statusCode = 500;
+
+          // Sentryにストリーミングエラーを送信
+          if (error instanceof Error) {
+            GameSentry.captureGameError(error, {
+              type: 'ssr_streaming_error',
+              url: request.url,
+              userAgent: request.headers.get('User-Agent') || 'unknown',
+            });
+          }
         },
 
         // Enable streaming for all browsers
