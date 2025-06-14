@@ -2,7 +2,11 @@
  * Enhanced utility function for combining CSS class names
  * Provides Tailwind CSS v4.1 class merging capabilities with advanced type safety
  * Supports conditional classes, responsive utilities, and modern CSS features
+ * Compatible with shadcn/ui components
  */
+
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 // Enhanced type definitions for better type safety
 export type ClassName = string | number | undefined | null | false | 0;
@@ -61,10 +65,20 @@ function processConditionalClasses(obj: Record<string, unknown>, classSet: Set<s
 
 /**
  * Combines and filters CSS class names with enhanced type safety
+ * Compatible with shadcn/ui and supports both legacy and modern approaches
+ * @param inputs - Array of class names, conditional class names, or objects
+ * @returns Combined class string with duplicates removed and Tailwind conflicts resolved
+ */
+export function cn(...inputs: ClassValue[]): string {
+  return twMerge(clsx(inputs));
+}
+
+/**
+ * Legacy cn function for backward compatibility with existing cyberpunk theme utilities
  * @param classes - Array of class names, conditional class names, or objects
  * @returns Combined class string with duplicates removed
  */
-export function cn(...classes: (ClassName | ConditionalClassName)[]): string {
+export function cnLegacy(...classes: (ClassName | ConditionalClassName)[]): string {
   const resolvedClasses = new Set<string>();
 
   for (const cls of classes) {

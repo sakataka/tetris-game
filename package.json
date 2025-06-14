@@ -21,6 +21,10 @@
     "quality:fix": "biome check --apply ."
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-tabs": "^1.1.12",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "i18next": "^25.2.1",
     "i18next-browser-languagedetector": "^8.2.0",
     "immer": "^10.1.1",
@@ -28,6 +32,7 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-i18next": "^15.5.3",
+    "tailwind-merge": "^3.3.1",
     "zustand": "^5.0.5"
   },
   "devDependencies": {
