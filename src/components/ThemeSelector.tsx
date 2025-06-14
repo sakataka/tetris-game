@@ -33,6 +33,7 @@ export default function ThemeSelector({
       <Select value={currentTheme} onValueChange={handleThemeChange}>
         <SelectTrigger
           id='theme-selector'
+          data-testid='theme-selector'
           className='w-full p-3 rounded-lg bg-cyber-cyan-10 border border-cyber-cyan-30 
                      text-foreground focus:outline-none focus:ring-2 focus:ring-cyber-cyan
                      hover:bg-cyber-cyan-20 transition-colors

@@ -82,6 +82,7 @@ const AudioPanel = memo(function AudioPanel({
               min={0}
               max={1}
               step={0.1}
+              data-testid='volume-slider'
               className={cn(
                 UI_SIZES.SLIDER.WIDTH,
                 '[&>span[data-slot=slider-track]]:bg-gray-700',

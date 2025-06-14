@@ -1,0 +1,246 @@
+{
+  "config": {
+    "configFile": "/Users/sakataka/tetris-game/playwright.config.ts",
+    "rootDir": "/Users/sakataka/tetris-game/e2e",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      ["html", null],
+      [
+        "json",
+        {
+          "outputFile": "playwright-report/results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "playwright-report/results.xml"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/sakataka/tetris-game/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/sakataka/tetris-game/e2e",
+        "testIgnore": [],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/sakataka/tetris-game/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/sakataka/tetris-game/e2e",
+        "testIgnore": [],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/sakataka/tetris-game/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/sakataka/tetris-game/e2e",
+        "testIgnore": [],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/sakataka/tetris-game/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "/Users/sakataka/tetris-game/e2e",
+        "testIgnore": [],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/sakataka/tetris-game/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "/Users/sakataka/tetris-game/e2e",
+        "testIgnore": [],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/sakataka/tetris-game/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Microsoft Edge",
+        "name": "Microsoft Edge",
+        "testDir": "/Users/sakataka/tetris-game/e2e",
+        "testIgnore": [],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/sakataka/tetris-game/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Google Chrome",
+        "name": "Google Chrome",
+        "testDir": "/Users/sakataka/tetris-game/e2e",
+        "testIgnore": [],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
+        "timeout": 60000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.53.0",
+    "workers": 6,
+    "webServer": {
+      "command": "pnpm start",
+      "port": 3000,
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "game-basic-flow.spec.ts",
+      "file": "game-basic-flow.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Basic Game Flow",
+          "file": "game-basic-flow.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should load game interface correctly",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 185,
+                      "error": {
+                        "message": "Error: page.goto: net::ERR_EMPTY_RESPONSE at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: net::ERR_EMPTY_RESPONSE at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n\n    at /Users/sakataka/tetris-game/e2e/game-basic-flow.spec.ts:6:16",
+                        "location": {
+                          "file": "/Users/sakataka/tetris-game/e2e/game-basic-flow.spec.ts",
+                          "column": 16,
+                          "line": 6
+                        },
+                        "snippet": "  4 |   test.beforeEach(async ({ page }) => {\n  5 |     // Navigate to the game\n> 6 |     await page.goto('/');\n    |                ^\n  7 |     \n  8 |     // Wait for the game to load\n  9 |     await page.waitForLoadState('networkidle');"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/sakataka/tetris-game/e2e/game-basic-flow.spec.ts",
+                            "column": 16,
+                            "line": 6
+                          },
+                          "message": "Error: page.goto: net::ERR_EMPTY_RESPONSE at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n\n\n  4 |   test.beforeEach(async ({ page }) => {\n  5 |     // Navigate to the game\n> 6 |     await page.goto('/');\n    |                ^\n  7 |     \n  8 |     // Wait for the game to load\n  9 |     await page.waitForLoadState('networkidle');\n    at /Users/sakataka/tetris-game/e2e/game-basic-flow.spec.ts:6:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-14T21:36:20.551Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/sakataka/tetris-game/test-results/game-basic-flow-Basic-Game-62af3-ad-game-interface-correctly-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/sakataka/tetris-game/test-results/game-basic-flow-Basic-Game-62af3-ad-game-interface-correctly-chromium/video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/sakataka/tetris-game/e2e/game-basic-flow.spec.ts",
+                        "column": 16,
+                        "line": 6
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "950f4e369db58c2714c4-66b7f720b6752dc5d1c3",
+              "file": "game-basic-flow.spec.ts",
+              "line": 12,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-06-14T21:36:19.931Z",
+    "duration": 983.5579999999999,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

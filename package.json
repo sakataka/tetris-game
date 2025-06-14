@@ -1,6 +1,7 @@
 {
   "name": "tetris-game",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "react-router dev",
@@ -12,6 +13,9 @@
     "test": "vitest",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug",
     "prepare": "husky",
     "analyze": "vite-bundle-analyzer build/client",
     "format": "biome format --write .",
@@ -55,6 +59,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
+    "@playwright/test": "^1.53.0",
     "@react-router/dev": "^7.6.2",
     "@tailwindcss/postcss": "^4.1.10",
     "@testing-library/jest-dom": "^6.6.3",

@@ -25,7 +25,7 @@ Production-ready cyberpunk-themed Tetris game built with React Router 7, TypeScr
 
 **Tech Stack**: React Router 7.6.2 + React 19.1.0 + Vite 6.3.5 + TypeScript 5 (ES2024) + Zustand 5 + Tailwind CSS 4.1.10 + shadcn/ui (15/20 components active, React Compiler optimized)
 
-**📋 Migration Status**: **Phase 4 Week 7 Complete (2025-06-14)** - Performance optimization implemented, production deployment ready
+**📋 Migration Status**: **Phase 4 Week 8 Day 1 Complete (2025-06-14)** - E2E testing setup finished, React 19.1+RR7 compatibility issue discovered
 
 ## Environment Setup
 
@@ -52,6 +52,9 @@ pnpm preview            # Preview production build
 pnpm test               # Run tests in watch mode
 pnpm test:run           # Run tests once
 pnpm test:coverage      # Run tests with coverage report
+pnpm test:e2e           # Run E2E tests with Playwright
+pnpm test:e2e:ui        # Run E2E tests with Playwright UI
+pnpm test:e2e:debug     # Run E2E tests in debug mode
 
 # Code Quality
 pnpm lint               # Biome linting (fast execution)

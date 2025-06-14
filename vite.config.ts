@@ -1,4 +1,5 @@
 import { reactRouter } from '@react-router/dev/vite';
+import tailwindcss from '@tailwindcss/postcss';
 import { defineConfig } from 'vite';
 import viteCompression from 'vite-plugin-compression';
 import tsconfigPaths from 'vite-tsconfig-paths';
@@ -28,7 +29,7 @@ export default defineConfig({
   // Tailwind CSS v4.1 統合
   css: {
     postcss: {
-      plugins: [require('@tailwindcss/postcss')()],
+      plugins: [tailwindcss()],
     },
   },
 

@@ -39,6 +39,7 @@ const LanguageSelector = memo(function LanguageSelector({
       <Select value={currentLanguage} onValueChange={handleLanguageChange}>
         <SelectTrigger
           id='language-select'
+          data-testid='language-selector'
           className={cn(
             'w-[180px] bg-cyber-cyan-10 border-cyber-cyan-30 text-cyber-cyan',
             'hover:bg-cyber-cyan-20 hover:border-cyber-cyan transition-colors',

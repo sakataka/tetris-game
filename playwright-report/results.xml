@@ -1,0 +1,39 @@
+<testsuites id="" name="" tests="1" failures="1" skipped="0" errors="0" time="0.9835579999999999">
+<testsuite name="game-basic-flow.spec.ts" timestamp="2025-06-14T21:36:20.349Z" hostname="chromium" tests="1" failures="1" skipped="0" time="0.185" errors="0">
+<testcase name="Basic Game Flow › should load game interface correctly" classname="game-basic-flow.spec.ts" time="0.185">
+<failure message="game-basic-flow.spec.ts:12:3 should load game interface correctly" type="FAILURE">
+<![CDATA[  [chromium] › game-basic-flow.spec.ts:12:3 › Basic Game Flow › should load game interface correctly 
+
+    Error: page.goto: net::ERR_EMPTY_RESPONSE at http://localhost:3000/
+    Call log:
+      - navigating to "http://localhost:3000/", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Navigate to the game
+    > 6 |     await page.goto('/');
+        |                ^
+      7 |     
+      8 |     // Wait for the game to load
+      9 |     await page.waitForLoadState('networkidle');
+        at /Users/sakataka/tetris-game/e2e/game-basic-flow.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/game-basic-flow-Basic-Game-62af3-ad-game-interface-correctly-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/game-basic-flow-Basic-Game-62af3-ad-game-interface-correctly-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/game-basic-flow-Basic-Game-62af3-ad-game-interface-correctly-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/game-basic-flow-Basic-Game-62af3-ad-game-interface-correctly-chromium/video.webm]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

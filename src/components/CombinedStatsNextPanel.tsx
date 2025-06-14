@@ -78,19 +78,28 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
         <div className={SPACING.TIGHT}>
           <div className='flex justify-between items-center'>
             <span className={`text-gray-300 ${TYPOGRAPHY.SMALL_LABEL}`}>{t('game.score')}</span>
-            <span className={`font-mono ${TYPOGRAPHY.STAT_VALUE} text-yellow-400 font-bold`}>
+            <span
+              className={`font-mono ${TYPOGRAPHY.STAT_VALUE} text-yellow-400 font-bold`}
+              data-testid='score'
+            >
               {score.toLocaleString()}
             </span>
           </div>
           <div className='flex justify-between items-center'>
             <span className={`text-gray-300 ${TYPOGRAPHY.SMALL_LABEL}`}>{t('game.level')}</span>
-            <span className={`font-mono ${TYPOGRAPHY.STAT_VALUE} text-green-400 font-bold`}>
+            <span
+              className={`font-mono ${TYPOGRAPHY.STAT_VALUE} text-green-400 font-bold`}
+              data-testid='level'
+            >
               {level}
             </span>
           </div>
           <div className='flex justify-between items-center'>
             <span className={`text-gray-300 ${TYPOGRAPHY.SMALL_LABEL}`}>{t('game.lines')}</span>
-            <span className={`font-mono ${TYPOGRAPHY.STAT_VALUE} text-blue-400 font-bold`}>
+            <span
+              className={`font-mono ${TYPOGRAPHY.STAT_VALUE} text-blue-400 font-bold`}
+              data-testid='lines'
+            >
               {lines}
             </span>
           </div>

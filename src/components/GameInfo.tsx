@@ -68,6 +68,7 @@ const GameInfo = memo(function GameInfo({
                 key={tab.key}
                 value={tab.key}
                 className={getTabTriggerClassName(tab.color)}
+                data-testid={`${tab.key}-tab`}
               >
                 {tab.label}
               </TabsTrigger>
