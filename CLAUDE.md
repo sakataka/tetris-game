@@ -2,6 +2,52 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 🎯 IMPORTANT: Follow React Development Guidelines
+
+**All React development, implementation, and design must follow this document:**
+
+👉 **[React 19.1 + React Compiler Development Guidelines](./docs/REACT_DEVELOPMENT_GUIDELINES.md)**
+
+This development guideline is a **practical guide** based on comprehensive analysis of 101 React TIPs and real implementation experience in this project.
+
+### 📋 Required Checklist
+
+When implementing new components or features, always verify the following:
+
+- **🤖 React Compiler First**: Prioritize readability over manual optimization
+- **🎨 Component Responsibility Separation**: Strict Single Responsibility Principle
+- **🗄️ Zustand Individual Selectors**: Use Zustand, avoid Context overuse
+- **🛡️ TypeScript Strict Mode**: Ensure type safety
+- **🧪 Testing Strategy**: Implement tests with React Testing Library + Vitest
+- **📁 File Organization**: Use Co-location pattern and Named Exports
+
+### ⚠️ Pre-Development Reading
+
+1. **Appendix 101 TIPS Evaluation**: Check adoption/rejection decisions for each TIP
+2. **Implementation Examples**: Reference project-specific code examples
+3. **Do's & Don'ts Matrix**: Review patterns to avoid before starting
+
+### 🤝 When Guidelines Conflict with Implementation
+
+**If you encounter conflicts between the development guidelines and practical implementation:**
+
+- **Errors occur** when following the guidelines
+- **Performance issues** arise from guideline adherence
+- **Development becomes blocked** due to guideline constraints
+- **Guidelines seem outdated** for a specific use case
+
+**→ ALWAYS ask the user for guidance and clarification**
+
+Do not deviate from the guidelines without explicit user approval. Explain:
+1. What guideline you were following
+2. What specific issue occurred
+3. What alternative approach you're considering
+4. Request permission to proceed with the alternative
+
+The guidelines are living documents that may need updates based on real-world implementation experience.
+
+---
+
 ## Project Overview
 
 Production-ready cyberpunk-themed Tetris game built with Next.js 15, TypeScript, and Tailwind CSS. Features comprehensive state management, audio system with fallback strategies, and particle effects.
@@ -513,15 +559,18 @@ experimental: {
 
 ## Development Workflow
 
+**🚨 MANDATORY: Before any development, read the [React Development Guidelines](./docs/REACT_DEVELOPMENT_GUIDELINES.md)**
+
 ### Adding a New Feature
 
-1. Check existing patterns in similar components (follow MVC/hooks architecture)
-2. Use appropriate Zustand stores (`gameStateStore`, `settingsStore`, etc.)
-3. Follow TypeScript strict mode (no `any` types)
-4. **React Compiler Best Practices**: Avoid manual useMemo/useCallback unless necessary
-5. Let React Compiler handle optimization automatically
-6. Add comprehensive tests in `src/test/`
-7. Run `pnpm quality:check` before committing
+1. **Review Guidelines**: Check [React Development Guidelines](./docs/REACT_DEVELOPMENT_GUIDELINES.md) for patterns and best practices
+2. Check existing patterns in similar components (follow MVC/hooks architecture)
+3. Use appropriate Zustand stores (`gameStateStore`, `settingsStore`, etc.)
+4. Follow TypeScript strict mode (no `any` types)
+5. **React Compiler Best Practices**: Avoid manual useMemo/useCallback unless necessary
+6. Let React Compiler handle optimization automatically
+7. Add comprehensive tests in `src/test/`
+8. Run `pnpm quality:check` before committing
 
 ### React Compiler Guidelines
 
@@ -538,6 +587,26 @@ experimental: {
 - Over-optimize code that the compiler handles better
 - Use complex dependency arrays for simple computations
 - Assume manual optimization is always faster
+
+### 🚨 Guideline Conflicts & Escalation
+
+**If development guidelines cause implementation issues:**
+
+1. **STOP** - Do not proceed with workarounds
+2. **DOCUMENT** - Capture the specific issue and context
+3. **ASK** - Present the conflict to the user with:
+   - Which guideline was being followed
+   - Exact error/issue encountered
+   - Proposed alternative solution
+   - Request for guidance on how to proceed
+
+**Examples of when to escalate:**
+- TypeScript strict mode preventing valid patterns
+- React Compiler optimization causing performance regressions
+- Zustand patterns conflicting with Next.js requirements
+- Testing strategies failing with specific components
+
+Remember: Guidelines are meant to help, not hinder development. When they conflict with practical needs, user input is essential for resolution.
 
 ## Future Feature Roadmap
 
@@ -727,3 +796,39 @@ Before implementing major features:
    - Anti-cheat systems
    - Rate limiting
    - Content moderation tools
+
+---
+
+## 📚 Essential Documentation
+
+For all React development in this project, refer to:
+
+**[React 19.1 + React Compiler Development Guidelines](./docs/REACT_DEVELOPMENT_GUIDELINES.md)**
+
+This comprehensive guide includes:
+- Complete evaluation of 101 React TIPs with project-specific adoption decisions
+- React Compiler optimization strategies
+- TypeScript integration patterns
+- Testing methodologies with Vitest + React Testing Library
+- Performance optimization guidelines
+- Do's & Don'ts matrix for common scenarios
+
+**Always consult this guide before implementing new features or refactoring existing code.**
+
+### 🛠️ Implementation Support
+
+**When guidelines conflict with practical implementation needs:**
+
+The development guidelines are comprehensive but may not cover every edge case. If following the guidelines results in:
+- Build errors or runtime issues
+- Significant performance degradation  
+- Development blockages
+- Conflicts with framework requirements
+
+**Do not work around the issue independently.** Instead:
+
+1. Document the specific conflict
+2. Explain what you were trying to implement
+3. Ask the user for guidance on how to proceed
+
+This ensures the guidelines remain accurate and the project maintains consistency while adapting to real-world development needs.
