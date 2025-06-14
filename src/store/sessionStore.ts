@@ -8,7 +8,7 @@
 
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
-import type { GameError, PlaySession } from '../types/tetris';
+import type { PlaySession } from '../types/tetris';
 
 const SESSION_STORAGE_KEY = 'tetris-play-sessions';
 const CURRENT_SESSION_KEY = 'tetris-current-session';
@@ -26,7 +26,6 @@ interface SessionStore {
   // State
   currentSession: PlaySession | null;
   playSessions: readonly PlaySession[];
-  errors: readonly GameError[];
   stats: SessionStats;
   isSessionActive: boolean;
 
@@ -41,10 +40,7 @@ interface SessionStore {
   clearAllSessions: () => void;
   refreshFromStorage: () => void;
 
-  // Error Actions
-  addError: (error: GameError) => void;
-  clearErrors: () => void;
-  clearError: (errorId: string) => void;
+  // Error actions removed - now handled by errorStore
 
   // Utilities
   getActiveSession: () => PlaySession | null;
@@ -122,7 +118,6 @@ export const useSessionStore = create<SessionStore>()(
       // Initial state
       currentSession: null,
       playSessions: initialSessions,
-      errors: [],
       stats: initialStats,
       isSessionActive: false,
       timeoutId: null,
@@ -283,31 +278,7 @@ export const useSessionStore = create<SessionStore>()(
         get()._loadFromStorage();
       },
 
-      // Error Actions
-      addError: (error) =>
-        set((state) => {
-          const newErrors = [...state.errors, error];
-          // Keep only last 50 errors to prevent memory issues
-          if (newErrors.length > 50) {
-            newErrors.splice(0, newErrors.length - 50);
-          }
-          return {
-            ...state,
-            errors: newErrors,
-          };
-        }),
-
-      clearErrors: () =>
-        set((state) => ({
-          ...state,
-          errors: [],
-        })),
-
-      clearError: (errorId) =>
-        set((state) => ({
-          ...state,
-          errors: state.errors.filter((error) => error.timestamp.toString() !== errorId),
-        })),
+      // Error actions removed - now handled by errorStore
 
       // Utilities
       getActiveSession: () => {
@@ -443,7 +414,7 @@ export const usePlaySessions = () => useSessionStore((state) => state.playSessio
 export const useAllSessions = () => useSessionStore((state) => state.playSessions); // Alias for compatibility
 export const useSessionStats = () => useSessionStore((state) => state.stats);
 export const useIsSessionActive = () => useSessionStore((state) => state.isSessionActive);
-export const useErrors = () => useSessionStore((state) => state.errors);
+// Error hooks removed - use errorStore instead
 
 // Session action hooks (enhanced with persistence)
 export const useStartSession = () => useSessionStore((state) => state.startPlaySession); // Alias for compatibility
@@ -460,10 +431,7 @@ export const useGetActiveSession = () => useSessionStore((state) => state.getAct
 export const useGetSessionDuration = () => useSessionStore((state) => state.getSessionDuration);
 export const useGetTotalPlayTime = () => useSessionStore((state) => state.getTotalPlayTime);
 
-// Error-related action hooks
-export const useAddError = () => useSessionStore((state) => state.addError);
-export const useClearErrors = () => useSessionStore((state) => state.clearErrors);
-export const useClearError = () => useSessionStore((state) => state.clearError);
+// Error hooks removed - use errorStore instead
 
 // Initialize store on first access (SSR-safe)
 if (typeof window !== 'undefined') {

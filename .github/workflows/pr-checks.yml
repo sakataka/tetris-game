@@ -90,7 +90,7 @@ jobs:
       - name: 📚 Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: 🔍 Run Oxlint
+      - name: 🔍 Run Biome linting
         run: pnpm lint
 
       - name: 💅 Check Biome formatting

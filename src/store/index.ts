@@ -66,16 +66,27 @@ export {
   useSessionStore,
   useCurrentSession,
   usePlaySessions,
-  useErrors as useNewErrors,
   useStartPlaySession,
   useEndPlaySession,
   useIncrementGameCount,
   useGetActiveSession,
   useGetSessionDuration,
   useGetTotalPlayTime,
-  useAddError,
-  useClearErrors,
-  useClearError,
 } from './sessionStore';
+
+// Error Store (consolidated error handling)
+export {
+  useErrorStore,
+  useErrors,
+  useErrorStats,
+  useErrorConfig,
+  useShowErrorPanel,
+  useSelectedErrorId,
+  useErrorActions,
+  useErrorSelectors,
+  useErrorSummary,
+  useErrorsByLevel,
+  useErrorsByCategory,
+} from './errorStore';
 
 // Legacy store removal completed

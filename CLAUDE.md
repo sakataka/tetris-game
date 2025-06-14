@@ -656,6 +656,7 @@ The i18n system uses two complementary stores:
 - Use standard React patterns and let the compiler optimize
 - Focus on component logic rather than performance concerns
 - Trust the compiler for automatic memoization
+- You should check the latest Next.js, Node.js, and other libraries with `use context7` MCP.
 
 **DON'T:**
 
@@ -695,7 +696,6 @@ The current architecture is designed to support future expansion with minimal re
 
    - Fully remappable keys
    - Multiple control profiles
-   - Gamepad support (Xbox, PlayStation)
    - Touch gesture customization
    - Architecture: Extend settingsStore with control mapping
 
@@ -843,30 +843,3 @@ The current architecture is designed to support future expansion with minimal re
 | Performance Profiler              | Low        | Medium               | Good             | 🔴 Low    |
 | Accessibility Enhancements        | Medium     | Medium               | Good             | 🔴 Low    |
 
-## 📚 Essential Documentation
-
-For all React development in this project, refer to:
-
-**[React 19.1 + React Compiler Development Guidelines](./docs/REACT_DEVELOPMENT_GUIDELINES.md)**
-
-This comprehensive guide includes:
-
-- Complete evaluation of 101 React TIPs with project-specific adoption decisions
-- React Compiler optimization strategies
-- TypeScript integration patterns
-- Testing methodologies with Vitest + React Testing Library
-- Performance optimization guidelines
-- Do's & Don'ts matrix for common scenarios
-
-**Always consult this guide before implementing new features or refactoring existing code.**
-
-### 🛠️ Implementation Support
-
-**When guidelines conflict with practical implementation needs:**
-
-The development guidelines are comprehensive but may not cover every edge case. If following the guidelines results in:
-
-- Build errors or runtime issues
-- Significant performance degradation
-- Development blockages
-- Conflicts with framework requirements

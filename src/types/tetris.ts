@@ -142,6 +142,10 @@ export interface GameSettings {
   readonly difficulty: DifficultyLevel;
   readonly gameMode: GameMode;
   readonly virtualControlsEnabled: boolean;
+  // Extended settings from useSettings hook
+  readonly audioEnabled?: boolean;
+  readonly showGhost?: boolean;
+  readonly showParticles?: boolean;
 }
 
 // Custom color palette settings
