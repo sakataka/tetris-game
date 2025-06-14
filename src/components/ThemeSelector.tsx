@@ -4,6 +4,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ThemeVariant } from '../types/tetris';
 import { THEME_PRESETS } from '../utils/ui';
+import { Label } from './ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 interface ThemeSelectorProps {
@@ -26,9 +27,9 @@ export default function ThemeSelector({
 
   return (
     <div className={`theme-selector ${className}`}>
-      <label htmlFor='theme-selector' className='block text-sm font-medium mb-2 text-cyber-cyan'>
+      <Label htmlFor='theme-selector' className='block text-sm font-medium mb-2 text-cyber-cyan'>
         {t('themes.preview')}
-      </label>
+      </Label>
       <Select value={currentTheme} onValueChange={handleThemeChange}>
         <SelectTrigger
           id='theme-selector'

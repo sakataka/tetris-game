@@ -2,6 +2,7 @@
 
 import { Suspense, lazy, memo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Skeleton } from './ui/skeleton';
 
 // Dynamically import statistics dashboard
 const StatisticsDashboard = lazy(() => import('./StatisticsDashboard'));
@@ -26,8 +27,20 @@ const StatisticsTabContent = memo(function StatisticsTabContent({
     <div className={`space-y-1.5 ${className}`}>
       <Suspense
         fallback={
-          <div className='flex items-center justify-center p-8'>
-            <div className='text-cyan-300 text-sm'>{t('common.loading')}...</div>
+          <div className='space-y-4 p-4'>
+            {/* Statistics Cards Skeleton */}
+            <div className='grid grid-cols-2 gap-4'>
+              <Skeleton className='h-16 bg-cyber-cyan-10 border border-cyber-cyan-30' />
+              <Skeleton className='h-16 bg-cyber-cyan-10 border border-cyber-cyan-30' />
+            </div>
+            {/* Charts Skeleton */}
+            <Skeleton className='h-32 bg-cyber-cyan-10 border border-cyber-cyan-30' />
+            {/* High Scores Skeleton */}
+            <div className='space-y-2'>
+              <Skeleton className='h-8 bg-cyber-cyan-10 border border-cyber-cyan-30' />
+              <Skeleton className='h-6 bg-cyber-cyan-10 border border-cyber-cyan-30' />
+              <Skeleton className='h-6 bg-cyber-cyan-10 border border-cyber-cyan-30' />
+            </div>
           </div>
         }
       >

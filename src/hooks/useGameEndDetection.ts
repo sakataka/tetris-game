@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
+import { toast } from 'sonner';
 import { useAddHighScore, useStatisticsStore, useUpdateStatistics } from '../store/statisticsStore';
 import type { GameState, SoundKey } from '../types/tetris';
 import {
@@ -79,6 +80,13 @@ export function useGameEndDetection(
               playSound('lineClear'); // For other high scores
             }
           }
+
+          // Show toast notification for high score achievement
+          const rankEmoji = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '🏆';
+          toast.success(`${rankEmoji} ${message}`, {
+            description: `Score: ${finalScore.toLocaleString()} | Level: ${level} | Lines: ${lines}`,
+            duration: 5000,
+          });
 
           return {
             isNewHighScore: true,

@@ -7,6 +7,7 @@ import type { GameSettings } from '../types/tetris';
 import AudioPanel from './AudioPanel';
 import LanguageSelector from './LanguageSelector';
 import { Checkbox } from './ui/checkbox';
+import { Label } from './ui/label';
 
 interface SettingsTabContentProps {
   isMuted: boolean;
@@ -75,12 +76,12 @@ const SettingsTabContent = memo(function SettingsTabContent({
               className='data-[state=checked]:bg-cyber-cyan data-[state=checked]:border-cyber-cyan data-[state=unchecked]:border-gray-600 data-[state=unchecked]:bg-gray-900'
               aria-label={t('settings.debugMode')}
             />
-            <label
+            <Label
               htmlFor='debug-mode-checkbox'
               className='text-gray-300 hover:text-white transition-colors cursor-pointer'
             >
               <span className={TYPOGRAPHY.BODY_TEXT}>{t('settings.debugMode')}</span>
-            </label>
+            </Label>
           </div>
           <p className='mt-1 text-xs text-gray-500'>{t('settings.debugModeDescription')}</p>
         </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import TetrisGame from '../components/TetrisGame';
+import { Toaster } from '../components/ui/sonner';
 
 export default function Home() {
   return (
@@ -31,6 +32,9 @@ export default function Home() {
         className='absolute top-1/2 left-1/4 w-20 h-20 bg-yellow-400 rounded-full opacity-10 blur-2xl animate-pulse'
         style={{ animationDelay: '2s' }}
       />
+
+      {/* Global Toast Notifications */}
+      <Toaster />
     </div>
   );
 }

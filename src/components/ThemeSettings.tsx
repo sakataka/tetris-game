@@ -8,6 +8,7 @@ import { Switch } from '@/components/ui/switch';
 import { cn } from '@/utils/ui/cn';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
 import type {
   AnimationIntensity,
@@ -114,7 +115,14 @@ export default function ThemeSettings({
               <div className='flex gap-2'>
                 <Button
                   variant='destructive'
-                  onClick={onResetToDefault}
+                  onClick={() => {
+                    onResetToDefault();
+                    toast.success('🎨 Theme Reset Complete', {
+                      description:
+                        'All theme settings have been restored to default cyberpunk theme',
+                      duration: 3000,
+                    });
+                  }}
                   className={cn(
                     'bg-cyber-red-20 border border-cyber-red-30 text-cyber-red',
                     'hover:bg-cyber-red-30 hover:text-cyber-red',

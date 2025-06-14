@@ -1,6 +1,7 @@
 'use client';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Suspense, lazy, memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -127,8 +128,17 @@ const GameInfo = memo(function GameInfo({
               <TabsContent value='theme' className='mt-0 h-full'>
                 <Suspense
                   fallback={
-                    <div className='flex items-center justify-center p-4'>
-                      <div className='text-cyan-300 text-sm'>{t('common.loading')}</div>
+                    <div className='space-y-4 p-4'>
+                      {/* Theme Selector Skeleton */}
+                      <Skeleton className='h-10 bg-cyber-cyan-10 border border-cyber-cyan-30' />
+                      {/* Theme Preview Skeleton */}
+                      <div className='grid grid-cols-3 gap-2'>
+                        <Skeleton className='h-6 bg-cyber-cyan-10 border border-cyber-cyan-30' />
+                        <Skeleton className='h-6 bg-cyber-cyan-10 border border-cyber-cyan-30' />
+                        <Skeleton className='h-6 bg-cyber-cyan-10 border border-cyber-cyan-30' />
+                      </div>
+                      {/* Settings Panel Skeleton */}
+                      <Skeleton className='h-32 bg-cyber-cyan-10 border border-cyber-cyan-30' />
                     </div>
                   }
                 >
@@ -139,8 +149,16 @@ const GameInfo = memo(function GameInfo({
               <TabsContent value='settings' className='mt-0 h-full'>
                 <Suspense
                   fallback={
-                    <div className='flex items-center justify-center p-4'>
-                      <div className='text-cyan-300 text-sm'>{t('common.loading')}</div>
+                    <div className='space-y-4 p-4'>
+                      {/* Language Selector Skeleton */}
+                      <Skeleton className='h-10 bg-cyber-cyan-10 border border-cyber-cyan-30' />
+                      {/* Audio Panel Skeleton */}
+                      <Skeleton className='h-24 bg-cyber-cyan-10 border border-cyber-cyan-30' />
+                      {/* Settings Form Skeleton */}
+                      <div className='space-y-2'>
+                        <Skeleton className='h-8 bg-cyber-cyan-10 border border-cyber-cyan-30' />
+                        <Skeleton className='h-6 bg-cyber-cyan-10 border border-cyber-cyan-30' />
+                      </div>
                     </div>
                   }
                 >

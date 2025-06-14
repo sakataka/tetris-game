@@ -11,6 +11,14 @@ const alertVariants = cva(
         default: 'bg-card text-card-foreground',
         destructive:
           'text-destructive bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-destructive/90',
+        cyberpunk:
+          'bg-gray-900/90 border-cyan-500/30 text-cyan-100 shadow-[0_0_15px_rgba(0,255,255,0.3)] backdrop-blur-sm',
+        'cyberpunk-warning':
+          'bg-yellow-500/10 border-yellow-400/50 text-yellow-100 shadow-[0_0_15px_rgba(255,255,0,0.3)] backdrop-blur-sm',
+        'cyberpunk-error':
+          'bg-red-500/10 border-red-400/50 text-red-100 shadow-[0_0_15px_rgba(255,0,0,0.3)] backdrop-blur-sm',
+        'cyberpunk-success':
+          'bg-green-500/10 border-green-400/50 text-green-100 shadow-[0_0_15px_rgba(0,255,0,0.3)] backdrop-blur-sm',
       },
     },
     defaultVariants: {
