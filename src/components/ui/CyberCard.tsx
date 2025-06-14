@@ -6,7 +6,7 @@ import { cn } from '@/utils/ui/cn';
 
 /**
  * Cyberpunk-themed Card component based on shadcn/ui Card
- * 
+ *
  * Replaces PanelBase with improved architecture while maintaining cyberpunk aesthetics.
  * Uses shadcn/ui Card as foundation for better accessibility and maintainability.
  */
@@ -139,24 +139,13 @@ export function CyberCard({
     >
       <CardHeader className={cn('pb-0', sizeConfig.titleSpacing)}>
         <CardTitle
-          className={cn(
-            'font-bold',
-            sizeConfig.titleSize,
-            themeConfig.titleClass,
-            titleClassName
-          )}
+          className={cn('font-bold', sizeConfig.titleSize, themeConfig.titleClass, titleClassName)}
         >
           {title}
         </CardTitle>
       </CardHeader>
 
-      <CardContent
-        className={cn(
-          'relative',
-          sizeConfig.contentSpacing,
-          contentClassName
-        )}
-      >
+      <CardContent className={cn('relative', sizeConfig.contentSpacing, contentClassName)}>
         {children}
       </CardContent>
     </Card>

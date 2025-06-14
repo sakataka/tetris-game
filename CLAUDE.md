@@ -53,7 +53,7 @@ The guidelines are living documents that may need updates based on real-world im
 
 Production-ready cyberpunk-themed Tetris game built with Next.js 15, TypeScript, and Tailwind CSS. Features comprehensive state management, audio system with fallback strategies, and particle effects.
 
-**Tech Stack**: Next.js 15.3.3 + React 19.1.0 + TypeScript 5 (ES2024) + Zustand 5 + Tailwind CSS 4.1.10 (with React Compiler & modern CSS features)
+**Tech Stack**: Next.js 15.3.3 + React 19.1.0 + TypeScript 5 (ES2024) + Zustand 5 + Tailwind CSS 4.1.10 + shadcn/ui (with React Compiler & modern CSS features)
 
 ## Environment Setup
 
@@ -299,21 +299,101 @@ export const useSetGameState = () =>
   - Window focus/blur handling
 - **Statistics**: Total play time, average session duration, games per session
 
-## UI Components
+## UI Components & Design System
 
-### Panel System (Unified Design)
+### shadcn/ui Integration
 
-- **PanelBase**: Universal panel component
-- 6 themes: cyan, purple, green, yellow, red, default
-- Consistent hologram effects and neon borders
-- Responsive sizing (sm, md, lg)
+The project uses **shadcn/ui** as the foundation for a unified, accessible component system:
 
-### Key Components
+- **Component Library**: Built on Radix UI primitives for accessibility
+- **Design System**: shadcn/ui components enhanced with cyberpunk aesthetics
+- **Type Safety**: Full TypeScript support with strict mode compliance
+- **Customization**: CSS variables and Tailwind CSS for theme integration
+
+### Core shadcn/ui Components
+
+- **Button**: Enhanced with cyberpunk variants (default, destructive, outline, secondary, ghost, link)
+- **Card**: CyberCard wrapper with hologram effects and neon borders
+- **Tabs**: Accessible tab navigation with keyboard support
+- **Slider**: Form controls with cyberpunk styling (volume, settings)
+
+### Panel System (CyberCard Architecture)
+
+- **CyberCard**: shadcn/ui Card foundation with cyberpunk enhancements
+- **6 Themes**: cyan, purple, green, yellow, red, default
+- **Hologram Effects**: Consistent gradient backgrounds with blur effects
+- **Neon Borders**: Theme-specific glowing borders with shadow effects
+- **Responsive Sizing**: 4 sizes (xs, sm, md, lg) with adaptive spacing
+
+### Key Game Components
 
 - **TetrisBoard**: Game board with BoardRenderer MVC
 - **ParticleEffect/Canvas**: Line clear animations
 - **VirtualControls**: Mobile touch controls (5 buttons)
 - **StatisticsDashboard**: 15 extended metrics
+
+### Form Components (shadcn/ui Enhanced)
+
+- **Button**: Cyberpunk-themed variants for all interactive elements
+- **Slider**: Volume controls and effect intensity adjustments
+- **Tabs**: Settings navigation with enhanced accessibility
+- **Card**: Information panels and content containers
+
+## shadcn/ui + Cyberpunk Theme Integration
+
+### Component Architecture
+
+The project successfully integrates **shadcn/ui** with custom cyberpunk aesthetics:
+
+```typescript
+// CyberCard: shadcn/ui Card + cyberpunk enhancements
+<CyberCard title="GAME STATS" theme="cyan" size="md">
+  <GameContent />
+</CyberCard>
+
+// shadcn/ui Button with cyberpunk styling
+<Button variant="outline" className="border-cyber-cyan text-cyber-cyan">
+  Reset Settings
+</Button>
+
+// shadcn/ui Slider with neon effects
+<Slider 
+  value={[volume]} 
+  onValueChange={(value) => setVolume(value[0])}
+  className="[&>span[data-slot=slider-range]]:bg-cyber-cyan"
+/>
+```
+
+### Available Components
+
+| Component | shadcn/ui Base | Cyberpunk Enhancement | Usage |
+|-----------|---------------|---------------------|-------|
+| **CyberCard** | Card | Hologram effects, neon borders, 6 themes | All panels |
+| **Button** | Button | Cyber variants, neon hover effects | All interactive elements |
+| **Tabs** | Tabs | Custom colors, cyberpunk styling | Settings navigation |
+| **Slider** | Slider | Neon track/thumb, glow effects | Volume, effects |
+
+### Theme System
+
+```typescript
+// 6 Cyberpunk Themes Available
+type CyberTheme = 'cyan' | 'purple' | 'green' | 'yellow' | 'red' | 'default';
+
+// CSS Variables Integration
+--cyber-cyan: theme(colors.cyan.400);
+--cyber-purple: theme(colors.purple.400);
+--cyber-green: theme(colors.green.400);
+--cyber-yellow: theme(colors.yellow.400);
+--cyber-red: theme(colors.red.400);
+```
+
+### Adding New shadcn/ui Components
+
+1. Install component: `npx shadcn@latest add [component-name]`
+2. Enhance with cyberpunk styling in `/src/components/ui/`
+3. Add cyber theme support if needed
+4. Update TypeScript types for theme variants
+5. Test with existing cyberpunk color system
 
 ## Tailwind CSS v4.1 Modern Features
 
@@ -519,6 +599,7 @@ The i18n system uses two complementary stores:
 
 - Package manager: pnpm (required)
 - React version: 19.1.0 with React Compiler enabled
+- UI Components: shadcn/ui + cyberpunk theme (use CyberCard, Button, Tabs, Slider)
 - Comments and commits: English only
 - Linting: Biome only (Oxlint removed, ESLint removed for performance)
 - Build before commit: Always run `pnpm build`

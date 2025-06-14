@@ -86,7 +86,11 @@ const GameInfo = memo(function GameInfo({
     <div className='text-white h-full flex flex-col'>
       {/* Desktop: Tab Navigation with Content */}
       <div className='hidden md:flex flex-col h-full'>
-        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as TabType)} className='flex flex-col h-full'>
+        <Tabs
+          value={activeTab}
+          onValueChange={(value) => setActiveTab(value as TabType)}
+          className='flex flex-col h-full'
+        >
           <TabsList className='flex-shrink-0 mb-2 space-x-1 bg-transparent p-0 h-auto'>
             {tabs.map((tab) => (
               <TabsTrigger
