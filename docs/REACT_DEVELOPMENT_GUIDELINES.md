@@ -1,47 +1,47 @@
-# React 19.1 + React Compiler 時代の開発指針
+# React 19.1 + React Compiler Development Guidelines
 
-> **プロダクション品質のモダンReact開発ガイドライン**  
-> 101 React TIPSの包括的分析と実戦検証に基づく実践的開発指針
-
----
-
-## 📋 概要
-
-本文書は、**React 19.1 + React Compiler + Next.js 15**環境における効率的で保守可能なReact開発のための包括的ガイドラインです。
-
-### 🎯 策定根拠
-- **101 React TIPSの詳細分析**: 各TIPの現代的適用性を評価（73.3%が積極採用）
-- **実戦アーキテクチャ検証**: TetrisゲームプロジェクトでのController Pattern実装実績
-- **React Compiler最適化**: 手動最適化から自動最適化への戦略的移行
-
-### 📊 文書の構成
-1. **開発哲学**: React Compiler時代の根本的パラダイムシフト
-2. **実装パターン**: 具体的なコード例と実践指針
-3. **アーキテクチャ設計**: Controller Pattern + Zustand + TypeScriptの統合
-4. **品質保証**: テスト・デバッグ・エラーハンドリング戦略
-5. **完全評価**: 101個すべてのTIPSの適用判定
+> **Production-Quality Modern React Development Guidelines**  
+> Practical development guidelines based on comprehensive analysis and real-world validation of 101 React TIPS
 
 ---
 
-## 1. React 19.1 + React Compiler時代の開発哲学
+## 📋 Overview
 
-### 🚀 パラダイムシフト：手動最適化から自動最適化へ
+This document provides comprehensive guidelines for efficient and maintainable React development in a **React 19.1 + React Compiler + Next.js 15** environment.
 
-React Compiler の登場により、開発者は**パフォーマンス最適化からビジネスロジック実装**に集中できるようになりました。
+### 🎯 Foundation
+- **Detailed Analysis of 101 React TIPS**: Evaluated modern applicability of each TIP (73.3% actively adopted)
+- **Real-world Architecture Validation**: Controller Pattern implementation experience in Tetris game project
+- **React Compiler Optimization**: Strategic transition from manual to automatic optimization
 
-#### 🎯 新時代の核心原則
+### 📊 Document Structure
+1. **Development Philosophy**: Fundamental paradigm shift in the React Compiler era
+2. **Implementation Patterns**: Concrete code examples and practical guidelines
+3. **Architecture Design**: Integration of Controller Pattern + Zustand + TypeScript
+4. **Quality Assurance**: Testing, debugging, and error handling strategies
+5. **Complete Evaluation**: Application assessment of all 101 TIPS
 
-1. **🤖 React Compilerファースト**: 手動最適化よりも可読性・保守性を優先
-2. **🎨 コンポーネント責務分離**: Single Responsibility Principleの徹底適用
-3. **🛡️ 型安全性至上主義**: TypeScript strict modeによる堅牢なコードベース
-4. **⚡ 状態管理最小化**: 派生値の排除とZustand個別セレクター活用
+---
 
-#### ❌ 従来アプローチからの決別
+## 1. React 19.1 + React Compiler Era Development Philosophy
+
+### 🚀 Paradigm Shift: From Manual to Automatic Optimization
+
+The introduction of React Compiler allows developers to focus on **business logic implementation rather than performance optimization**.
+
+#### 🎯 Core Principles of the New Era
+
+1. **🤖 React Compiler First**: Prioritize readability and maintainability over manual optimization
+2. **🎨 Component Responsibility Separation**: Strict application of Single Responsibility Principle
+3. **🛡️ Type Safety Supremacy**: Robust codebase through TypeScript strict mode
+4. **⚡ State Management Minimization**: Eliminate derived values and leverage Zustand individual selectors
+
+#### ❌ Breaking Away from Traditional Approaches
 
 ```tsx
-// ❌ React Compiler以前：手動最適化に依存したアプローチ
+// ❌ Pre-React Compiler: Manual optimization-dependent approach
 const TetrisBoard = memo(({ board, currentPiece, gameOver }) => {
-  // 手動でmemoization管理
+  // Manually manage memoization
   const displayBoard = useMemo(() => 
     board.map((row, y) => 
       row.map((cell, x) => {
@@ -52,7 +52,7 @@ const TetrisBoard = memo(({ board, currentPiece, gameOver }) => {
       })
     ), [board, currentPiece]);
 
-  // イベントハンドラーも手動で最適化
+  // Manually optimize event handlers too
   const handleCellClick = useCallback((x, y) => {
     onCellClick(x, y);
   }, [onCellClick]);
@@ -74,9 +74,9 @@ const TetrisBoard = memo(({ board, currentPiece, gameOver }) => {
   );
 });
 
-// ✅ React Compiler時代：可読性重視の自動最適化
+// ✅ React Compiler Era: Readability-focused automatic optimization
 function TetrisBoard({ board, currentPiece, gameOver }) {
-  // React Compilerが自動的に最適化判断
+  // React Compiler automatically makes optimization decisions
   const displayBoard = board.map((row, y) => 
     row.map((cell, x) => {
       if (currentPiece && isCurrentPiecePosition(x, y, currentPiece)) {
@@ -86,7 +86,7 @@ function TetrisBoard({ board, currentPiece, gameOver }) {
     })
   );
 
-  // シンプルなイベントハンドラー
+  // Simple event handler
   const handleCellClick = (x, y) => {
     onCellClick(x, y);
   };
@@ -109,27 +109,27 @@ function TetrisBoard({ board, currentPiece, gameOver }) {
 }
 ```
 
-### 📈 パフォーマンス効果の実証
+### 📈 Proven Performance Impact
 
-**React Compiler導入による実測効果**:
-- Bundle Size削減: 手動memoization除去により43.3kB → 41.8kB
-- Build Time短縮: 3.0s → 2.7s（10%改善）
-- Memory使用量最適化: Compiler管理による効率化
-- 開発生産性向上: 40+のuseMemo/useCallback削除
+**Measured effects of React Compiler adoption**:
+- Bundle Size reduction: 43.3kB → 41.8kB through manual memoization removal
+- Build Time improvement: 3.0s → 2.7s (10% improvement)
+- Memory usage optimization: Efficiency through Compiler management
+- Development productivity boost: 40+ useMemo/useCallback instances removed
 
-## 2. Component設計パターン：実践的アプローチ
+## 2. Component Design Patterns: Practical Approaches
 
-### 2.1 基本構造の最適化（TIP 1-14より）
+### 2.1 Basic Structure Optimization (From TIPs 1-14)
 
-#### ✅ コードの簡潔性とDOM効率化
+#### ✅ Code Conciseness and DOM Efficiency
 
 ```tsx
-// TIP 1: Self-closing tags - コンパクトなコード
+// TIP 1: Self-closing tags - Compact code
 <GameButton variant="primary" />
 <ParticleEffect />
 <AudioController />
 
-// TIP 2,3: Fragment活用 - DOM構造最適化
+// TIP 2,3: Fragment utilization - DOM structure optimization
 function GameControls() {
   return (
     <>
@@ -141,7 +141,7 @@ function GameControls() {
   );
 }
 
-// keyが必要な場合のみFullFragment
+// Full Fragment only when key is needed
 function ParticleList({ particles }) {
   return (
     <div>
@@ -156,7 +156,7 @@ function ParticleList({ particles }) {
 }
 ```
 
-#### ✅ Props設計の効率化
+#### ✅ Efficient Props Design
 
 ```tsx
 // TIP 4,5: Props spreading + Default values
@@ -179,43 +179,43 @@ function GamePanel({
   );
 }
 
-// TIP 6: 文字列propsの波括弧省略
+// TIP 6: Omit curly braces for string props
 <GameButton 
-  text="Start Game"    // ✅ 簡潔
-  variant="primary"    // ✅ 簡潔
-  size="large"         // ✅ 簡潔
+  text="Start Game"    // ✅ Concise
+  variant="primary"    // ✅ Concise
+  size="large"         // ✅ Concise
 />
 
-// TIP 7: Boolean値の確実性
+// TIP 7: Boolean value reliability
 function StatisticsDisplay({ score, lines }) {
   return (
     <div>
       <div>Score: {score}</div>
       <div>Lines: {lines}</div>
-      {lines > 0 && <div>Level Up Available!</div>} {/* ✅ 安全 */}
-      {Boolean(lines) && <div>Progress</div>}        {/* ✅ 明示的 */}
+      {lines > 0 && <div>Level Up Available!</div>} {/* ✅ Safe */}
+      {Boolean(lines) && <div>Progress</div>}        {/* ✅ Explicit */}
     </div>
   );
 }
 ```
 
-### 2.2 責務分離とコンポーネント分割（TIP 12,15より）
+### 2.2 Responsibility Separation and Component Division (From TIPs 12,15)
 
-#### ✅ Single Responsibility Principleの実践
+#### ✅ Single Responsibility Principle Implementation
 
 ```tsx
-// ❌ 責務が混在した巨大コンポーネント
+// ❌ Large component with mixed responsibilities
 function TetrisGameLarge() {
-  // ゲーム状態管理
+  // Game state management
   const [board, setBoard] = useState(createEmptyBoard());
   const [score, setScore] = useState(0);
   const [level, setLevel] = useState(1);
   
-  // Audio管理
+  // Audio management
   const [audioContext, setAudioContext] = useState(null);
   const [sounds, setSounds] = useState({});
   
-  // UI状態管理
+  // UI state management
   const [showSettings, setShowSettings] = useState(false);
   const [theme, setTheme] = useState('cyberpunk');
   
@@ -228,7 +228,7 @@ function TetrisGameLarge() {
   );
 }
 
-// ✅ 責務分離された適切な設計
+// ✅ Properly separated responsibilities design
 function TetrisGame() {
   return (
     <GameLogicController>
@@ -257,10 +257,10 @@ function TetrisGame() {
 }
 ```
 
-#### ✅ 条件分岐によるコンポーネント分離（TIP 12より）
+#### ✅ Component Separation Through Conditional Branching (From TIP 12)
 
 ```tsx
-// ❌ 頻繁な条件分岐
+// ❌ Frequent conditional branching
 function GameStatusDisplay({ gameState }) {
   return (
     <div>
@@ -285,14 +285,14 @@ function GameStatusDisplay({ gameState }) {
   );
 }
 
-// ✅ 専用コンポーネントによる分離
+// ✅ Separation through dedicated components
 function GameStatusDisplay({ gameState }) {
   if (gameState.gameOver) return <GameOverMessage gameState={gameState} />;
   if (gameState.isPaused) return <PausedMessage />;
   return <ActiveGameInfo gameState={gameState} />;
 }
 
-// 各状態専用のコンポーネント
+// State-specific dedicated components
 function GameOverMessage({ gameState }: { gameState: GameState }) {
   return (
     <div className="game-over-overlay">
@@ -305,12 +305,12 @@ function GameOverMessage({ gameState }: { gameState: GameState }) {
 }
 ```
 
-### 2.3 Advanced Patterns（TIP 15-19より）
+### 2.3 Advanced Patterns (From TIPs 15-19)
 
-#### ✅ Render Props Pattern の活用
+#### ✅ Leveraging Render Props Pattern
 
 ```tsx
-// TIP 15,17: Childrenとrender functionsの効果的活用
+// TIP 15,17: Effective use of children and render functions
 function GameLogicController({ children }: GameLogicControllerProps) {
   return (
     <EventController>
@@ -339,7 +339,7 @@ function GameLogicController({ children }: GameLogicControllerProps) {
   );
 }
 
-// 使用例：柔軟で再利用可能な設計
+// Usage example: Flexible and reusable design
 <GameLogicController>
   {(api) => (
     <ResponsiveLayout>
@@ -366,7 +366,7 @@ function GameLogicController({ children }: GameLogicControllerProps) {
 #### ✅ Compound Components Pattern
 
 ```tsx
-// TIP 16: 構成可能なコンポーネント設計
+// TIP 16: Composable component design
 function GamePanel({ children, ...props }) {
   return (
     <PanelBase {...props}>
@@ -375,7 +375,7 @@ function GamePanel({ children, ...props }) {
   );
 }
 
-// サブコンポーネントの組み合わせ
+// Sub-component composition
 GamePanel.Header = function GamePanelHeader({ children }) {
   return <div className="panel-header">{children}</div>;
 };
@@ -388,7 +388,7 @@ GamePanel.Footer = function GamePanelFooter({ children }) {
   return <div className="panel-footer">{children}</div>;
 };
 
-// 使用例：柔軟な構成
+// Usage example: Flexible composition
 <GamePanel variant="primary" size="large">
   <GamePanel.Header>
     <h2>Game Statistics</h2>
@@ -402,9 +402,9 @@ GamePanel.Footer = function GamePanelFooter({ children }) {
 </GamePanel>
 ```
 
-### 2.4 命名規約とファイル構成（TIP 13,14,24-27より）
+### 2.4 Naming Conventions and File Structure (From TIPs 13,14,24-27)
 
-#### ✅ 一貫した命名規約
+#### ✅ Consistent Naming Conventions
 
 ```tsx
 // TIP 13,14: PascalCase components, camelCase props
@@ -418,30 +418,30 @@ function GameStateController({ gameState, onGameStart, audioEnabled }: GameContr
   // ✅ PascalCase component name
 }
 
-// TIP 12: 説明的なコンポーネント名
-function UserProfileCard() { /* ✅ 具体的で説明的 */ }
-function GameStatisticsPanel() { /* ✅ 具体的で説明的 */ }
-function AudioControlButton() { /* ✅ 具体的で説明的 */ }
+// TIP 12: Descriptive component names
+function UserProfileCard() { /* ✅ Specific and descriptive */ }
+function GameStatisticsPanel() { /* ✅ Specific and descriptive */ }
+function AudioControlButton() { /* ✅ Specific and descriptive */ }
 
-// ❌ 曖昧な名前
-function Card() { /* 何のCard? */ }
-function Panel() { /* 何のPanel? */ }
-function Button() { /* 何のButton? */ }
+// ❌ Ambiguous names
+function Card() { /* What kind of Card? */ }
+function Panel() { /* What kind of Panel? */ }
+function Button() { /* What kind of Button? */ }
 ```
 
-#### ✅ ファイル構成とCo-location（TIP 24-27より）
+#### ✅ File Structure and Co-location (From TIPs 24-27)
 
 ```
 src/components/
 ├── GameStateController/
-│   ├── GameStateController.tsx      # メインコンポーネント
-│   ├── GameStateController.test.tsx # テスト
-│   ├── GameStateController.types.ts # 型定義
+│   ├── GameStateController.tsx      # Main component
+│   ├── GameStateController.test.tsx # Tests
+│   ├── GameStateController.types.ts # Type definitions
 │   └── index.ts                     # Named exports
 ├── TetrisBoard/
 │   ├── TetrisBoard.tsx
 │   ├── TetrisBoard.module.css       # Co-located styles
-│   ├── BoardRenderer.ts             # 関連ユーティリティ
+│   ├── BoardRenderer.ts             # Related utilities
 │   ├── TetrisBoard.test.tsx
 │   └── index.ts
 └── ui/
@@ -453,26 +453,26 @@ src/components/
 ```
 
 ```tsx
-// TIP 27: Named exports優先
+// TIP 27: Prefer named exports
 // components/GameStateController/index.ts
 export { GameStateController } from './GameStateController';
 export type { GameStateControllerProps, GameStateAPI } from './GameStateController.types';
 
-// 使用側
+// Usage side
 import { GameStateController, type GameStateAPI } from '../components';
 ```
 ---
 
-## 3. State管理戦略：Zustand中心アーキテクチャ
+## 3. State Management Strategy: Zustand-Centric Architecture
 
-### 3.1 Context vs Zustand：戦略的選択（TIP 33-38評価より）
+### 3.1 Context vs Zustand: Strategic Choice (From TIPs 33-38 Evaluation)
 
-#### ❌ React Context の過度な使用を避ける
+#### ❌ Avoiding Excessive Use of React Context
 
-101 React TIPSでは Context の積極使用が推奨されていますが、現代的なプロジェクトでは **Zustand** により効率的な状態管理が実現できます。
+While 101 React TIPS recommends active use of Context, modern projects can achieve more efficient state management with **Zustand**.
 
 ```tsx
-// ❌ Context による複雑な状態管理（TIP 33-35: 非採用）
+// ❌ Complex state management with Context (TIP 33-35: Not adopted)
 const GameContext = createContext();
 const ScoreContext = createContext();
 const SettingsContext = createContext();
@@ -482,7 +482,7 @@ function GameProvider({ children }) {
   const [score, setScore] = useState(0);
   const [settings, setSettings] = useState(defaultSettings);
   
-  // 複雑なProvider階層
+  // Complex Provider hierarchy
   return (
     <GameContext.Provider value={{ gameState, setGameState }}>
       <ScoreContext.Provider value={{ score, setScore }}>
@@ -494,7 +494,7 @@ function GameProvider({ children }) {
   );
 }
 
-// ✅ Zustand による効率的な状態管理（採用済み）
+// ✅ Efficient state management with Zustand (Already adopted)
 // Individual stores with granular subscriptions
 export const useGameState = () => useGameStateStore(state => state.gameState);
 export const useSetGameState = () => useGameStateStore(state => state.setGameState);
@@ -502,23 +502,23 @@ export const useScore = () => useGameStateStore(state => state.gameState.score);
 export const useSettings = () => useSettingsStore(state => state.settings);
 ```
 
-### 3.2 State最小化原則（TIP 28-32より）
+### 3.2 State Minimization Principle (From TIPs 28-32)
 
-#### ✅ 派生値の排除とReact Compiler最適化
+#### ✅ Derived Value Elimination and React Compiler Optimization
 
 ```tsx
-// ❌ 派生値をstateに保存（TIP 28違反）
+// ❌ Storing derived values in state (TIP 28 violation)
 interface GameStateWrong {
   score: number;
   level: number;
   lines: number;
-  canLevelUp: boolean;      // ❌ 派生値
-  nextLevelLines: number;   // ❌ 派生値
-  progressPercentage: number; // ❌ 派生値
-  isHighScore: boolean;     // ❌ 派生値
+  canLevelUp: boolean;      // ❌ Derived value
+  nextLevelLines: number;   // ❌ Derived value
+  progressPercentage: number; // ❌ Derived value
+  isHighScore: boolean;     // ❌ Derived value
 }
 
-// ✅ 最小限のstateで計算値はコンポーネント内（TIP 28準拠）
+// ✅ Minimal state with computed values in components (TIP 28 compliant)
 interface GameState {
   score: number;
   level: number;
@@ -534,7 +534,7 @@ function GameStatistics() {
   const { score, level, lines } = useGameState();
   const highScores = useHighScores();
   
-  // React Compilerが自動的に最適化判断
+  // React Compiler automatically makes optimization decisions
   const canLevelUp = lines >= level * 10;
   const nextLevelLines = (level + 1) * 10 - lines;
   const progressPercentage = (lines % 10) / 10 * 100;
@@ -552,9 +552,9 @@ function GameStatistics() {
 }
 ```
 
-### 3.3 関数的State更新（TIP 31-32より）
+### 3.3 Functional State Updates (From TIPs 31-32)
 
-#### ✅ 前の状態に基づく安全な更新
+#### ✅ Safe Updates Based on Previous State
 
 ```tsx
 // TIP 31: Previous state based updates
@@ -563,7 +563,7 @@ export const useGameActions = () => {
   const updateLines = useGameStateStore(state => state.updateLines);
   
   return {
-    // ✅ 関数的更新による安全性確保
+    // ✅ Ensure safety through functional updates
     addScore: (points: number) => {
       incrementScore(prev => prev + points);
     },
@@ -576,18 +576,18 @@ export const useGameActions = () => {
 
 // TIP 32: Lazy initialization
 const useGameStateStore = create<GameStateStore>()((set) => ({
-  // ✅ 遅延初期化による高コスト処理の最適化
-  gameState: createInitialGameState, // 関数渡しで遅延実行
+  // ✅ Optimize high-cost processing through lazy initialization
+  gameState: createInitialGameState, // Lazy execution through function passing
   
   resetGame: () => set(() => ({
-    gameState: createInitialGameState() // 新しいゲーム状態を生成
+    gameState: createInitialGameState() // Generate new game state
   })),
 }));
 
-// 高コストな初期化処理
+// High-cost initialization processing
 function createInitialGameState(): GameState {
   return {
-    board: createEmptyBoard(), // 20x10の2次元配列生成
+    board: createEmptyBoard(), // Generate 20x10 2D array
     currentPiece: getRandomTetromino(),
     nextPiece: getRandomTetromino(),
     score: 0,
@@ -601,10 +601,10 @@ function createInitialGameState(): GameState {
 
 ### 3.4 Individual Selectors Pattern
 
-#### ✅ 粒度の細かい購読による最適化
+#### ✅ Optimization Through Fine-Grained Subscriptions
 
 ```tsx
-// ✅ Zustand Individual Selectors（最適化済み）
+// ✅ Zustand Individual Selectors (Optimized)
 export const useGameState = () => useGameStateStore(state => state.gameState);
 export const useGameBoard = () => useGameStateStore(state => state.gameState.board);
 export const useCurrentPiece = () => useGameStateStore(state => state.gameState.currentPiece);
@@ -620,14 +620,14 @@ export const useTogglePause = () => useGameStateStore(state => state.togglePause
 export const useMovePiece = () => useGameStateStore(state => state.movePieceToPosition);
 export const useRotatePiece = () => useGameStateStore(state => state.rotatePieceTo);
 
-// コンポーネントでの効率的な使用
+// Efficient usage in components
 function TetrisBoard() {
-  // 必要な部分のみ購読
+  // Subscribe only to necessary parts
   const board = useGameBoard();
   const currentPiece = useCurrentPiece();
   const movePiece = useMovePiece();
   
-  // React Compilerが再レンダリングを最適化
+  // React Compiler optimizes re-rendering
   return (
     <BoardRenderer 
       board={board}
@@ -638,7 +638,7 @@ function TetrisBoard() {
 }
 
 function ScoreDisplay() {
-  // スコア変更時のみ再レンダリング
+  // Re-render only on score changes
   const score = useGameScore();
   const level = useGameLevel();
   const lines = useGameLines();
@@ -653,20 +653,20 @@ function ScoreDisplay() {
 }
 ```
 
-### 3.5 Store分離戦略
+### 3.5 Store Separation Strategy
 
-#### ✅ 責務別Store設計
+#### ✅ Responsibility-Based Store Design
 
 ```tsx
-// ✅ 責務分離されたStore構成
-// 1. ゲーム状態Store
+// ✅ Responsibility-separated Store configuration
+// 1. Game State Store
 export const useGameStateStore = create<GameStateStore>((set) => ({
   gameState: INITIAL_GAME_STATE,
   resetGame: () => set(() => ({ gameState: createInitialGameState() })),
   calculatePiecePlacement: (piece, bonusPoints, playSound) => { /* game logic */ }
 }));
 
-// 2. 設定Store
+// 2. Settings Store
 export const useSettingsStore = create<SettingsStore>()(
   persist((set) => ({
     settings: DEFAULT_SETTINGS,
@@ -676,7 +676,7 @@ export const useSettingsStore = create<SettingsStore>()(
   }), { name: 'tetris-settings' })
 );
 
-// 3. テーマStore  
+// 3. Theme Store  
 export const useThemeStore = create<ThemeStore>()(
   persist((set) => ({
     currentTheme: 'cyberpunk',
@@ -685,7 +685,7 @@ export const useThemeStore = create<ThemeStore>()(
   }), { name: 'tetris-theme' })
 );
 
-// 4. 統計Store
+// 4. Statistics Store
 export const useStatisticsStore = create<StatisticsStore>()(
   persist((set) => ({
     highScores: [],
@@ -696,7 +696,7 @@ export const useStatisticsStore = create<StatisticsStore>()(
   }), { name: 'tetris-statistics' })
 );
 
-// 5. アクセシビリティStore
+// 5. Accessibility Store
 export const useAccessibilityStore = create<AccessibilityStore>()(
   persist((set) => ({
     reducedMotion: false,
@@ -710,12 +710,12 @@ export const useAccessibilityStore = create<AccessibilityStore>()(
 );
 ```
 
-### 3.6 useReducer vs Zustand（TIP 36-37評価）
+### 3.6 useReducer vs Zustand (TIPs 36-37 Evaluation)
 
-#### 🔴 useReducerは非採用、Zustandで統一
+#### 🔴 useReducer Not Adopted, Unified with Zustand
 
 ```tsx
-// ❌ useReducer アプローチ（TIP 36: 非採用）
+// ❌ useReducer approach (TIP 36: Not adopted)
 function useGameLogic() {
   const [state, dispatch] = useReducer(gameReducer, initialState);
   
@@ -726,7 +726,7 @@ function useGameLogic() {
   return { state, moveLeft, moveRight, rotate };
 }
 
-// ✅ Zustand統一アプローチ（採用済み）
+// ✅ Unified Zustand approach (Already adopted)
 export const useGameControls = () => {
   const gameState = useGameState();
   const movePiece = useMovePieceToPosition();
@@ -748,16 +748,16 @@ export const useGameControls = () => {
 
 ---
 
-## 4. Performance最適化：React Compiler時代の戦略
+## 4. Performance Optimization: React Compiler Era Strategy
 
-### 4.1 手動最適化から自動最適化へのシフト（TIP 40-48評価より）
+### 4.1 Shift from Manual to Automatic Optimization (From TIPs 40-48 Evaluation)
 
-#### 🟨 改良採用：Compilerファーストアプローチ
+#### 🟨 Improved Adoption: Compiler-First Approach
 
-React Compilerの登場により、従来の手動最適化パターンは**選択的採用**に変わりました。
+With the introduction of React Compiler, traditional manual optimization patterns have shifted to **selective adoption**.
 
 ```tsx
-// ❌ React Compiler以前：手動最適化依存
+// ❌ Pre-React Compiler: Manual optimization dependency
 const TetrisBoard = memo(({ board, currentPiece, gameOver }) => {
   const displayBoard = useMemo(() => 
     board.map((row, y) => 
@@ -767,11 +767,11 @@ const TetrisBoard = memo(({ board, currentPiece, gameOver }) => {
         }
         return cell;
       })
-    ), [board, currentPiece]); // 手動依存関係管理
+    ), [board, currentPiece]); // Manual dependency management
 
   const handleCellClick = useCallback((x, y) => {
     if (!gameOver) onCellClick(x, y);
-  }, [gameOver, onCellClick]); // 手動メモ化
+  }, [gameOver, onCellClick]); // Manual memoization
 
   return (
     <div className="tetris-board">
@@ -790,9 +790,9 @@ const TetrisBoard = memo(({ board, currentPiece, gameOver }) => {
   );
 });
 
-// ✅ React Compiler時代：可読性重視の自動最適化
+// ✅ React Compiler Era: Readability-focused automatic optimization
 function TetrisBoard({ board, currentPiece, gameOver }) {
-  // React Compilerが自動的に最適化判断
+  // React Compiler automatically makes optimization decisions
   const displayBoard = board.map((row, y) => 
     row.map((cell, x) => {
       if (currentPiece && isCurrentPiecePosition(x, y, currentPiece)) {
@@ -802,7 +802,7 @@ function TetrisBoard({ board, currentPiece, gameOver }) {
     })
   );
 
-  // シンプルなイベントハンドラー
+  // Simple event handler
   const handleCellClick = (x, y) => {
     if (!gameOver) onCellClick(x, y);
   };
@@ -825,22 +825,22 @@ function TetrisBoard({ board, currentPiece, gameOver }) {
 }
 ```
 
-#### ⚠️ 手動最適化が必要な限定的ケース
+#### ⚠️ Limited Cases Requiring Manual Optimization
 
 ```tsx
-// ✅ 外部副作用や重いI/O処理のみ手動最適化
+// ✅ Manual optimization only for external side effects and heavy I/O
 function GameStatisticsLoader({ userId }) {
-  // 外部API呼び出し：React Compilerで最適化されない
+  // External API calls: Not optimized by React Compiler
   const userData = useMemo(() => {
     return fetchUserStatistics(userId);
   }, [userId]);
 
-  // 外部追跡システム：副作用があるため手動最適化
+  // External tracking system: Manual optimization due to side effects
   const trackUserAction = useCallback((action) => {
     analytics.track('game_action', { userId, action });
   }, [userId]);
 
-  // 重いファイル処理：I/O bound な処理
+  // Heavy file processing: I/O bound operations
   const exportData = useCallback(() => {
     return generateStatisticsReport(userData);
   }, [userData]);
@@ -854,9 +854,9 @@ function GameStatisticsLoader({ userId }) {
   );
 }
 
-// ✅ 純粋な計算：React Compilerに委ねる
+// ✅ Pure calculations: Leave to React Compiler
 function ScoreCalculator({ rawScore, multiplier, bonus }) {
-  // React Compilerが自動最適化（useMemo不要）
+  // React Compiler automatically optimizes (no useMemo needed)
   const finalScore = rawScore * multiplier + bonus;
   const formattedScore = finalScore.toLocaleString();
   const scoreGrade = getScoreGrade(finalScore);
@@ -870,18 +870,18 @@ function ScoreCalculator({ rawScore, multiplier, bonus }) {
 }
 ```
 
-### 4.2 Keys & Refs の戦略的活用（TIP 20-23より）
+### 4.2 Strategic Use of Keys & Refs (From TIPs 20-23)
 
-#### ✅ 安定したKey設計
+#### ✅ Stable Key Design
 
 ```tsx
-// TIP 20,21: 安定したID生成と使用
+// TIP 20,21: Stable ID generation and usage
 function ParticleSystem({ particles }) {
   return (
     <div>
       {particles.map((particle) => (
         <ParticleEffect 
-          key={particle.id}    // ✅ 一意で安定したID
+          key={particle.id}    // ✅ Unique and stable ID
           particle={particle}
         />
       ))}
@@ -889,13 +889,13 @@ function ParticleSystem({ particles }) {
   );
 }
 
-// ❌ インデックスkey（動的リストで問題）
+// ❌ Index keys (problematic for dynamic lists)
 function BadParticleSystem({ particles }) {
   return (
     <div>
       {particles.map((particle, index) => (
         <ParticleEffect 
-          key={index}          // ❌ 順序変更で問題発生
+          key={index}          // ❌ Problems occur with order changes
           particle={particle}
         />
       ))}
@@ -903,11 +903,11 @@ function BadParticleSystem({ particles }) {
   );
 }
 
-// TIP 22: 戦略的なkey使用でコンポーネントリセット
+// TIP 22: Strategic key usage for component reset
 function GameBoard({ gameKey, board }) {
   return (
     <div 
-      key={gameKey}  // ゲームリセット時に強制再マウント
+      key={gameKey}  // Force remount on game reset
       className="game-board"
     >
       <BoardRenderer board={board} />
@@ -915,25 +915,25 @@ function GameBoard({ gameKey, board }) {
   );
 }
 
-// 使用例：ゲームリセット時
+// Usage example: During game reset
 function GameController() {
   const [gameKey, setGameKey] = useState(0);
   const resetGame = () => {
-    setGameKey(prev => prev + 1); // keyを変更して強制リセット
+    setGameKey(prev => prev + 1); // Change key to force reset
   };
   
   return <GameBoard gameKey={gameKey} board={board} />;
 }
 ```
 
-#### ✅ Ref Callbackによる動的制御
+#### ✅ Dynamic Control with Ref Callbacks
 
 ```tsx
-// TIP 23: Ref callbackによるサイズ監視
+// TIP 23: Size monitoring with ref callbacks
 function ResponsiveCanvas({ onResize }) {
   const canvasRef = useRef(null);
   
-  // Ref callbackでResizeObserver管理
+  // Manage ResizeObserver with ref callback
   const setCanvasRef = useCallback((element) => {
     if (element) {
       const resizeObserver = new ResizeObserver((entries) => {
@@ -942,7 +942,7 @@ function ResponsiveCanvas({ onResize }) {
       });
       resizeObserver.observe(element);
       
-      // Cleanup関数を返す
+      // Return cleanup function
       return () => resizeObserver.disconnect();
     }
   }, [onResize]);
@@ -951,14 +951,14 @@ function ResponsiveCanvas({ onResize }) {
 }
 ```
 
-### 4.3 リスト仮想化と大量データ処理（TIP 48より）
+### 4.3 List Virtualization and Large Data Processing (From TIP 48)
 
-#### 🟡 条件付き採用：react-window
+#### 🟡 Conditional Adoption: react-window
 
 ```tsx
-// TIP 48: 大量データ表示時のみ仮想化を採用
+// TIP 48: Adopt virtualization only for large data display
 function StatisticsHistory({ gameHistory }) {
-  // 100件未満：通常レンダリング
+  // Under 100 items: Normal rendering
   if (gameHistory.length < 100) {
     return (
       <div>
@@ -969,7 +969,7 @@ function StatisticsHistory({ gameHistory }) {
     );
   }
   
-  // 100件以上：仮想化採用
+  // 100+ items: Adopt virtualization
   return (
     <FixedSizeList
       height={400}
@@ -987,12 +987,12 @@ function StatisticsHistory({ gameHistory }) {
 }
 ```
 
-### 4.4 Lazy Loading & Code Splitting（TIP 46より）
+### 4.4 Lazy Loading & Code Splitting (From TIP 46)
 
-#### ✅ 戦略的コード分割
+#### ✅ Strategic Code Splitting
 
 ```tsx
-// TIP 46: Next.js dynamic importとの統合
+// TIP 46: Integration with Next.js dynamic imports
 const SettingsModal = lazy(() => import('./SettingsModal'));
 const StatisticsDashboard = lazy(() => import('./StatisticsDashboard'));
 const GameTutorial = lazy(() => import('./GameTutorial'));
@@ -1011,7 +1011,7 @@ function GameApp() {
         {showStats && <StatisticsDashboard />}
       </Suspense>
       
-      {/* 初回ゲーム時のみ表示 */}
+      {/* Display only during first-time game */}
       <Suspense fallback={null}>
         <ConditionalTutorial />
       </Suspense>
@@ -1019,7 +1019,7 @@ function GameApp() {
   );
 }
 
-// 条件付きLazy Loading
+// Conditional Lazy Loading
 function ConditionalTutorial() {
   const [showTutorial, setShowTutorial] = useState(false);
   const isFirstTime = useFirstTimeUser();
@@ -1036,12 +1036,12 @@ function ConditionalTutorial() {
 }
 ```
 
-### 4.5 デバッグとパフォーマンス監視（TIP 47,49-53より）
+### 4.5 Debugging and Performance Monitoring (From TIPs 47, 49-53)
 
-#### ✅ 開発時パフォーマンステスト
+#### ✅ Development Performance Testing
 
 ```tsx
-// TIP 47: ネットワーク制限テスト
+// TIP 47: Network throttling tests
 function DevelopmentTools() {
   if (process.env.NODE_ENV !== 'development') return null;
   
@@ -1073,7 +1073,7 @@ function App() {
 function useGameState() {
   const gameState = useGameStateStore(state => state.gameState);
   
-  // React DevToolsでの表示をカスタマイズ
+  // Customize display in React DevTools
   useDebugValue(gameState, (state) => 
     `Score: ${state.score}, Level: ${state.level}, GameOver: ${state.gameOver}`
   );
@@ -1082,49 +1082,49 @@ function useGameState() {
 }
 ```
 
-### 4.6 実測パフォーマンス指標
+### 4.6 Measured Performance Metrics
 
-#### 📊 React Compiler導入効果
+#### 📊 React Compiler Implementation Effects
 
-**Before（手動最適化）vs After（React Compiler）**:
+**Before (Manual Optimization) vs After (React Compiler)**:
 
-| 指標 | Before | After | 改善率 |
+| Metric | Before | After | Improvement |
 |------|--------|-------|--------|
 | Bundle Size | 43.3kB | 41.8kB | -3.5% |
 | Build Time | 3.0s | 2.7s | -10% |
 | Memory Usage | 78MB | 71MB | -9% |
-| 開発生産性 | - | +40% | memoization削除 |
-| コード可読性 | - | +35% | 複雑な依存関係削除 |
+| Developer Productivity | - | +40% | Memoization removal |
+| Code Readability | - | +35% | Complex dependency removal |
 
-#### 🎯 最適化の指針
+#### 🎯 Optimization Guidelines
 
-1. **React Compilerファースト**: 純粋な計算や表示ロジックは自動最適化に委ねる
-2. **選択的手動最適化**: 外部I/O、副作用のみ手動最適化
-3. **Key設計の重要性**: 安定したIDによるリスト最適化
-4. **戦略的コード分割**: ユーザー行動に基づく Lazy Loading
+1. **React Compiler First**: Leave pure calculations and display logic to automatic optimization
+2. **Selective Manual Optimization**: Manual optimization only for external I/O and side effects
+3. **Importance of Key Design**: List optimization through stable IDs
+4. **Strategic Code Splitting**: User behavior-based Lazy Loading
 ---
 
-## 5. TypeScript統合戦略：型安全性の徹底（TIP 82-93より）
+## 5. TypeScript Integration Strategy: Comprehensive Type Safety (From TIPs 82-93)
 
-### 5.1 React 19.1互換の型定義
+### 5.1 React 19.1 Compatible Type Definitions
 
-#### ✅ モダンReact型の活用
+#### ✅ Utilizing Modern React Types
 
 ```tsx
-// TIP 82,83: ReactNode と PropsWithChildren
+// TIP 82,83: ReactNode and PropsWithChildren
 interface GamePanelProps {
   title: string;
   variant?: 'primary' | 'secondary' | 'default';
-  children: ReactNode;  // ✅ ReactNode（JSX.Element | null | undefined...より簡潔）
+  children: ReactNode;  // ✅ ReactNode (more concise than JSX.Element | null | undefined...)
 }
 
-// PropsWithChildrenによる簡略化
+// Simplification with PropsWithChildren
 interface WrapperProps extends PropsWithChildren {
   className?: string;
   onClose?: () => void;
 }
 
-// TIP 84: ComponentProps で既存要素の型を拡張
+// TIP 84: Extend existing element types with ComponentProps
 interface CustomButtonProps extends ComponentProps<'button'> {
   variant: 'primary' | 'secondary' | 'danger';
   size: 'small' | 'medium' | 'large';
@@ -1140,7 +1140,7 @@ function CustomButton({ variant, size, ...buttonProps }: CustomButtonProps) {
 }
 ```
 
-#### ✅ イベントハンドラーの型定義
+#### ✅ Event Handler Type Definitions
 
 ```tsx
 // TIP 85: Event Handler Types
@@ -1166,15 +1166,15 @@ function GameControls({ onMove, onRotate, onFocus, onSubmit }: GameControlsProps
 
 ### 5.2 Branded Types and Advanced Patterns
 
-#### ✅ 型安全なID管理
+#### ✅ Type-Safe ID Management
 
 ```tsx
-// TIP 86: 明示的型指定とBranded Types
+// TIP 86: Explicit type specification and Branded Types
 type HighScoreId = string & { readonly brand: unique symbol };
 type GameSessionId = string & { readonly brand: unique symbol };
 type ParticleId = string & { readonly brand: unique symbol };
 
-// TIP 87: Record型による構造化
+// TIP 87: Structuring with Record types
 type ThemeConfig = Record<'primary' | 'secondary' | 'accent', string>;
 type GameSettings = Record<'volume' | 'difficulty' | 'speed', number>;
 
@@ -1184,36 +1184,36 @@ interface GameStore {
   particles: Record<ParticleId, Particle>;
 }
 
-// TIP 88: as const による正確な型推論
+// TIP 88: Accurate type inference with as const
 function useGameActions() {
   const actions = {
     moveLeft: () => console.log('move left'),
     moveRight: () => console.log('move right'),
     rotate: () => console.log('rotate'),
-  } as const;  // ✅ Readonly tuple型として推論
+  } as const;  // ✅ Inferred as Readonly tuple type
   
   return [actions.moveLeft, actions.moveRight, actions.rotate] as const;
 }
 ```
 
-#### ✅ Generic Constraints とUtility Types
+#### ✅ Generic Constraints and Utility Types
 
 ```tsx
-// TIP 90,91: ComponentType と Generics
+// TIP 90,91: ComponentType and Generics
 type GameController<TState extends GameState> = ComponentType<{
   initialState: TState;
   onStateChange: (state: TState) => void;
 }>;
 
-// TIP 92: NoInfer による精密な型制御
+// TIP 92: Precise type control with NoInfer
 function createGameStore<T extends Record<string, unknown>>(
   initialState: T,
   actions: Record<string, (state: NoInfer<T>) => T>
 ) {
-  // T型の推論をactions引数で変更されないよう制御
+  // Control to prevent T type inference from being modified by actions parameter
 }
 
-// TIP 93: ElementRef による ref型定義
+// TIP 93: ref type definition with ElementRef
 function GameCanvas() {
   const canvasRef = useRef<ElementRef<'canvas'>>(null);
   const inputRef = useRef<ElementRef<'input'>>(null);
@@ -1229,14 +1229,14 @@ function GameCanvas() {
 
 ---
 
-## 6. Testing & Debugging戦略（TIP 49-58より）
+## 6. Testing & Debugging Strategy (From TIPs 49-58)
 
-### 6.1 開発時品質保証
+### 6.1 Development Quality Assurance
 
-#### ✅ StrictMode とデバッグツール
+#### ✅ StrictMode and Debug Tools
 
 ```tsx
-// TIP 49: StrictMode による早期バグ検出
+// TIP 49: Early bug detection with StrictMode
 function App() {
   return (
     <StrictMode>
@@ -1247,12 +1247,12 @@ function App() {
   );
 }
 
-// TIP 52: useDebugValue による開発支援
+// TIP 52: Development support with useDebugValue
 function useGameStatistics() {
   const gameState = useGameState();
   const statistics = calculateStatistics(gameState);
   
-  // React DevToolsでの表示をカスタマイズ
+  // Customize display in React DevTools
   useDebugValue(statistics, (stats) => 
     `Score: ${stats.score}, Level: ${stats.level}, Efficiency: ${stats.efficiency}%`
   );
@@ -1260,20 +1260,70 @@ function useGameStatistics() {
   return statistics;
 }
 
-// TIP 51: コンポーネント再レンダリング監視
+// TIP 51: Component re-rendering monitoring
 function GameBoard({ board, currentPiece }) {
-  // 開発環境でのレンダリング追跡
+  // Rendering tracking in development environment
   if (process.env.NODE_ENV === 'development') {
     console.log('GameBoard render:', { board: board.length, piece: currentPiece?.type });
   }
   
   return <BoardRenderer board={board} currentPiece={currentPiece} />;
 }
+
+// TIP 54: Prevent duplicate logs in StrictMode
+function useStrictModeLogger(message: string, data?: unknown) {
+  const hasLogged = useRef(false);
+  
+  useEffect(() => {
+    // Only log once per component lifecycle, even in StrictMode
+    if (!hasLogged.current && process.env.NODE_ENV === 'development') {
+      console.log(message, data);
+      hasLogged.current = true;
+    }
+  });
+}
+
+// Alternative approach: Custom logger with StrictMode detection
+function createStrictModeLogger() {
+  const loggedMessages = new Set<string>();
+  
+  return function log(message: string, data?: unknown) {
+    if (process.env.NODE_ENV === 'development') {
+      const logKey = `${message}_${JSON.stringify(data)}`;
+      
+      // Prevent duplicate logs in StrictMode
+      if (!loggedMessages.has(logKey)) {
+        console.log(message, data);
+        loggedMessages.add(logKey);
+        
+        // Clean up after a brief delay to allow for legitimate duplicate logs
+        setTimeout(() => loggedMessages.delete(logKey), 100);
+      }
+    }
+  };
+}
+
+// Usage example: Game state change logging
+function GameStateController({ children }) {
+  const gameState = useGameState();
+  const logger = useMemo(createStrictModeLogger, []);
+  
+  useEffect(() => {
+    // Log state changes without duplication
+    logger('Game state changed:', {
+      score: gameState.score,
+      level: gameState.level,
+      gameOver: gameState.gameOver
+    });
+  }, [gameState.score, gameState.level, gameState.gameOver, logger]);
+  
+  return children;
+}
 ```
 
 ### 6.2 Testing Strategy（Vitest + React Testing Library）
 
-#### ✅ コンポーネントテスト
+#### ✅ Component Testing
 
 ```tsx
 // TIP 55,56: React Testing Library best practices
@@ -1318,7 +1368,7 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 ```
 
-#### ✅ Custom Hooks テスト
+#### ✅ Custom Hooks Testing
 
 ```tsx
 describe('useGameControls', () => {
@@ -1351,16 +1401,16 @@ describe('useGameControls', () => {
 
 ### 6.3 Error Handling System
 
-#### ✅ Error Boundaries とエラー追跡
+#### ✅ Error Boundaries and Error Tracking
 
 ```tsx
-// TIP 19: 階層的Error Boundary設計
+// TIP 19: Hierarchical Error Boundary design
 function GameErrorBoundary({ children }: PropsWithChildren) {
   return (
     <ErrorBoundary
       fallback={<GameErrorFallback />}
       onError={(error, errorInfo) => {
-        // エラー追跡システムへの送信
+        // Send to error tracking system
         errorTracker.reportError(error, {
           component: 'GameErrorBoundary',
           errorInfo,
@@ -1373,7 +1423,7 @@ function GameErrorBoundary({ children }: PropsWithChildren) {
   );
 }
 
-// エラー分類と処理
+// Error classification and handling
 function ErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
   const errorType = categorizeError(error);
   
@@ -1403,14 +1453,14 @@ function ErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
 
 ---
 
-## 7. React Ecosystem Integration（TIP 69-81より）
+## 7. React Ecosystem Integration (From TIPs 69-81)
 
-### 7.1 ライブラリ選択戦略
+### 7.1 Library Selection Strategy
 
-#### 🟢 積極採用ライブラリ
+#### 🟢 Actively Adopted Libraries
 
 ```tsx
-// TIP 72: react-i18next（既存実装）
+// TIP 72: react-i18next (existing implementation)
 function GameInterface() {
   const { t } = useTranslation();
   
@@ -1423,7 +1473,7 @@ function GameInterface() {
   );
 }
 
-// TIP 76: axe-core による自動アクセシビリティテスト
+// TIP 76: Automated accessibility testing with axe-core
 describe('Accessibility', () => {
   it('should not have accessibility violations', async () => {
     const { container } = render(<GameInterface />);
@@ -1433,11 +1483,11 @@ describe('Accessibility', () => {
 });
 ```
 
-#### 🟡 条件付き採用
+#### 🟡 Conditional Adoption
 
 ```tsx
-// TIP 70: データフェッチング（シンプルなケースでは不要）
-// 複雑なserver stateが必要になった場合のみ
+// TIP 70: Data fetching (unnecessary for simple cases)
+// Only when complex server state is needed
 function ComplexDataComponent() {
   const { data, error, isLoading } = useQuery('gameStats', fetchGameStats);
   
@@ -1447,17 +1497,17 @@ function ComplexDataComponent() {
   return <div>{data}</div>;
 }
 
-// TIP 71: フォーム管理（複雑なフォームでのみ）
+// TIP 71: Form management (complex forms only)
 function AdvancedSettingsForm() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   
-  // 複雑なバリデーションロジックがある場合のみ採用
+  // Adopt only when complex validation logic exists
 }
 ```
 
-### 7.2 開発環境最適化
+### 7.2 Development Environment Optimization
 
-#### ✅ VS Code統合（TIP 79-81）
+#### ✅ VS Code Integration (TIPs 79-81)
 
 ```json
 // .vscode/settings.json
@@ -1483,650 +1533,650 @@ function AdvancedSettingsForm() {
 
 ---
 
-## 8. 実装指針とベストプラクティス
+## 8. Implementation Guidelines and Best Practices
 
 ### 8.1 Do's and Don'ts Matrix
 
-| カテゴリ | ✅ Do's | ❌ Don'ts |
+| Category | ✅ Do's | ❌ Don'ts |
 |----------|---------|-----------|
-| **Component Design** | Single Responsibility、Props spreading、Named functions | 巨大コンポーネント、過度な条件分岐、Magic numbers |
-| **State Management** | Zustand individual selectors、State最小化、関数的更新 | Context過用、派生値のstate化、直接変更 |
-| **Performance** | React Compiler信頼、安定したKey、戦略的Lazy loading | 早すぎる最適化、手動memoization多用、メモリリーク |
-| **TypeScript** | 厳密な型定義、Branded types、Utility types活用 | any使用、型アサーション乱用、型定義省略 |
-| **Testing** | React Testing Library、MSW、アクセシビリティテスト | E2Eテスト過多、実装詳細テスト、テストなし |
+| **Component Design** | Single Responsibility, Props spreading, Named functions | Massive components, excessive conditionals, Magic numbers |
+| **State Management** | Zustand individual selectors, State minimization, functional updates | Context overuse, derived value state, direct mutations |
+| **Performance** | Trust React Compiler, stable Keys, strategic Lazy loading | Premature optimization, manual memoization overuse, memory leaks |
+| **TypeScript** | Strict type definitions, Branded types, Utility types utilization | any usage, type assertion abuse, type definition omission |
+| **Testing** | React Testing Library, MSW, accessibility testing | E2E test excess, implementation detail testing, no testing |
 
-### 8.2 コード品質メトリクス
+### 8.2 Code Quality Metrics
 
-#### 📊 品質指標
+#### 📊 Quality Indicators
 
-- **型安全性**: TypeScript strict mode 100%準拠
-- **テストカバレッジ**: 343テスト、100%パス率維持
-- **アクセシビリティ**: WCAG 2.1 AA準拠
-- **パフォーマンス**: Lighthouse Score 95+
-- **バンドルサイズ**: First Load JS 176kB以下
+- **Type Safety**: 100% compliance with TypeScript strict mode
+- **Test Coverage**: 343 tests, 100% pass rate maintenance
+- **Accessibility**: WCAG 2.1 AA compliance
+- **Performance**: Lighthouse Score 95+
+- **Bundle Size**: First Load JS under 176kB
 
-## まとめ
+## Summary
 
-React 19.1 + React Compiler時代の開発では、**手動最適化からの脱却**と**コードの可読性・保守性の重視**が重要です。101 React TIPSの詳細評価により、以下が明確になりました：
+In React 19.1 + React Compiler era development, **breaking away from manual optimization** and **emphasizing code readability and maintainability** are crucial. Through detailed evaluation of 101 React TIPS, the following became clear:
 
-### 🎯 **核心戦略**
+### 🎯 **Core Strategy**
 
-1. **🤖 React Compilerファースト**: 74%のTIPSが積極採用、自動最適化への信頼
-2. **🎨 責務分離設計**: Controller Pattern + Zustand による明確なアーキテクチャ
-3. **🛡️ 型安全性確保**: TypeScript strict mode による堅牢な基盤
-4. **⚡ 性能と可読性の両立**: 手動最適化を選択的に適用
+1. **🤖 React Compiler First**: 74% of TIPS actively adopted, trust in automatic optimization
+2. **🎨 Responsibility Separation Design**: Clear architecture through Controller Pattern + Zustand
+3. **🛡️ Type Safety Assurance**: Robust foundation through TypeScript strict mode
+4. **⚡ Balance of Performance and Readability**: Selective application of manual optimization
 
-### 📈 **実証された効果**
+### 📈 **Proven Effects**
 
-- Bundle Size: 43.3kB → 41.8kB（3.5%削減）
-- Build Time: 3.0s → 2.7s（10%短縮）
-- 開発生産性: 40%向上（memoization削除による）
-- コード可読性: 35%向上（複雑な依存関係削除）
+- Bundle Size: 43.3kB → 41.8kB (3.5% reduction)
+- Build Time: 3.0s → 2.7s (10% reduction)
+- Developer Productivity: 40% improvement (through memoization removal)
+- Code Readability: 35% improvement (through complex dependency removal)
 
-本指針により、現在のプロジェクトアーキテクチャとの完全な整合性を保ちながら、モダンなReact開発のベストプラクティスを実践できます。
+These guidelines enable the practice of modern React development best practices while maintaining complete consistency with the current project architecture.
 
 ---
 
-## 付録: 101 React TIPS 完全評価
+## Appendix: Complete Evaluation of 101 React TIPS
 
-### 評価基準
+### Evaluation Criteria
 
-- **🟢 積極採用**: React 19.1 + React Compiler環境で推奨
-- **🟡 条件付き採用**: 特定の状況でのみ有効
-- **🟨 改良採用**: 現代的なアプローチに修正して採用
-- **🔴 非採用**: 現在の構成と矛盾または不要
+- **🟢 Active Adoption**: Recommended in React 19.1 + React Compiler environment
+- **🟡 Conditional Adoption**: Effective only in specific situations
+- **🟨 Modified Adoption**: Adopted with modifications to modern approaches
+- **🔴 Not Adopted**: Contradicts current configuration or unnecessary
 
 ---
 
 ### 📋 Components Organization (Tips 1-14)
 
 **TIP 1: Use self-closing tags to keep your code compact**
-- **評価**: 🟢 積極採用
-- **理由**: コードの簡潔性向上、React Compilerでも有効
-- **プロジェクト適用**: 全コンポーネントで既に実践済み
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Code conciseness improvement、Effective with React Compiler
+- **Project Application**: Already implemented in all components
 
 **TIP 2: Prefer `fragments` over DOM nodes to group elements**
-- **評価**: 🟢 積極採用
-- **理由**: DOM構造の最適化、SEO向上
-- **プロジェクト適用**: GameLayoutManager等で積極活用
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: DOM structure optimization、SEO improvement
+- **Project Application**: GameLayoutManager and actively utilized
 
 **TIP 3: Use React fragment shorthand `<></>`**
-- **評価**: 🟢 積極採用
-- **理由**: より簡潔な記法、keyが不要な場合に最適
-- **プロジェクト適用**: 現在のコードベースで広く使用中
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: More concise notation, optimal when key is not needed
+- **Project Application**: Widely used in current codebase
 
 **TIP 4: Prefer spreading props over accessing each one individually**
-- **評価**: 🟢 積極採用
-- **理由**: Props destructuringによる可読性向上
-- **プロジェクト適用**: PanelBase等のUIコンポーネントで活用
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Readability improvement through Props destructuring
+- **Project Application**: Utilized in UI components like PanelBase
 
 **TIP 5: When setting default values for props, do it while destructuring them**
-- **評価**: 🟢 積極採用
-- **理由**: TypeScript default parametersとの相性が良い
-- **プロジェクト適用**: GamePanelProps等で実装済み
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Good compatibility with TypeScript default parameters
+- **Project Application**: Implemented in GamePanelProps and others
 
 **TIP 6: Drop curly braces when passing `string` type props**
-- **評価**: 🟢 積極採用
-- **理由**: コードの簡潔性、React Compilerでも推奨
-- **プロジェクト適用**: 文字列propsで実践中
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Code conciseness, also recommended with React Compiler
+- **Project Application**: Practiced with string props
 
 **TIP 7: Ensure that `value` is a boolean before using conditional rendering**
-- **評価**: 🟢 積極採用
-- **理由**: TypeScriptのstrict modeとの整合性
-- **プロジェクト適用**: gameState.lines > 0等の条件で実装済み
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Consistency with TypeScript strict mode
+- **Project Application**: gameState.lines > 0 and other conditions already implemented
 
 **TIP 8: Use functions (inline or not) to avoid polluting your scope**
-- **評価**: 🟢 積極採用
-- **理由**: スコープ汚染防止、React Compilerが最適化
-- **プロジェクト適用**: イベントハンドラーやヘルパー関数で活用
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Prevent scope pollution, React Compiler optimizes
+- **Project Application**: Utilized in event handlers and helper functions
 
 **TIP 9: Use curried functions to reuse logic**
-- **評価**: 🟡 条件付き採用
-- **理由**: 複雑性増加の可能性、適切な場面でのみ
-- **プロジェクト適用**: ゲームロジックの再利用部分で検討
+- **Assessment**: 🟡 Conditional Adoption
+- **Rationale**: Potential complexity increase, only in appropriate situations
+- **Project Application**: Consider for game logic reuse sections
 
 **TIP 10: Move data that doesn't rely on component props/state outside**
-- **評価**: 🟢 積極採用
-- **理由**: レンダリング最適化、定数の外部定義
-- **プロジェクト適用**: TETROMINOES、COLORS等の定数で実践
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Rendering optimization, external constant definition
+- **Project Application**: TETROMINOES、COLORS and other constants in practice
 
 **TIP 11: When storing selected item from list, store ID rather than entire item**
-- **評価**: 🟢 積極採用
-- **理由**: メモリ効率、参照の安定性
-- **プロジェクト適用**: HighScoreId等のbranded typesで実装
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Memory efficiency, reference stability
+- **Project Application**: HighScoreId and other branded types implementation
 
 **TIP 12: If frequently checking prop's value, introduce new component**
-- **評価**: 🟢 積極採用
-- **理由**: Single Responsibility Principle
-- **プロジェクト適用**: GameOverMessage、PausedMessage等で実践
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Single Responsibility Principle
+- **Project Application**: GameOverMessage、PausedMessage and others in practice
 
 **TIP 13: Use CSS `:empty` pseudo-class to hide elements with no children**
-- **評価**: 🟢 積極採用
-- **理由**: CSS-onlyでのUI最適化
-- **プロジェクト適用**: Empty stateのスタイリングで活用
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: CSS-only UI optimization
+- **Project Application**: Utilized in Empty state styling
 
 **TIP 14: Group all state and context at the top of component**
-- **評価**: 🟢 積極採用
-- **理由**: コードの可読性向上
-- **プロジェクト適用**: Controller内での hook使用順序で実践
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Code readability improvement
+- **Project Application**: Practiced in hook usage order within Controllers
 
 ---
 
 ### 🛠️ Design Patterns & Techniques (Tips 15-19)
 
 **TIP 15: Leverage the `children` props for cleaner code**
-- **評価**: 🟢 積極採用
-- **理由**: Render Props Patternとの相性
-- **プロジェクト適用**: Controller Patternで既に実装
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Compatibility with Render Props Pattern
+- **Project Application**: Already implemented in Controller Pattern
 
 **TIP 16: Build composable code with `compound components`**
-- **評価**: 🟢 積極採用
-- **理由**: コンポーネントの再利用性向上
-- **プロジェクト適用**: PanelBase等のUI systemで活用
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Component reusability improvement
+- **Project Application**: PanelBase and other UI systems utilization
 
 **TIP 17: Make code extensible with `render functions` or component props**
-- **評価**: 🟢 積極採用
-- **理由**: 現在のController Pattern基盤
-- **プロジェクト適用**: GameLogicControllerで実装済み
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Current Controller Pattern foundation
+- **Project Application**: GameLogicController already implemented
 
 **TIP 18: Use `value === case && <Component />` to avoid old state**
-- **評価**: 🟢 積極採用
-- **理由**: State管理の安全性
-- **プロジェクト適用**: ゲーム状態に応じたコンポーネント表示
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: State management safety
+- **Project Application**: Component display according to game state
 
 **TIP 19: Always use error boundaries**
-- **評価**: 🟢 積極採用
-- **理由**: プロダクション環境でのエラー処理
-- **プロジェクト適用**: ErrorBoundary、ErrorStore統合済み
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Error handling in production environment
+- **Project Application**: ErrorBoundary、ErrorStore integrated
 
 ---
 
 ### 🗝️ Keys & Refs (Tips 20-23)
 
 **TIP 20: Use `crypto.randomUUID` or `Math.random` to generate keys**
-- **評価**: 🟡 条件付き採用
-- **理由**: 一意IDが理想、fallbackとしてのみ
-- **プロジェクト適用**: Particle ID生成で検討
+- **Assessment**: 🟡 Conditional Adoption
+- **Rationale**: Unique ID is ideal, only as fallback
+- **Project Application**: Particle ID generation consideration
 
 **TIP 21: Make sure list items IDs are stable**
-- **評価**: 🟢 積極採用
-- **理由**: React仮想DOM最適化の基本
-- **プロジェクト適用**: particles.map(p => <Particle key={p.id} />)で実装
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: React Virtual DOM optimization basics
+- **Project Application**: particles.map(p => <Particle key={p.id} />) implementation
 
 **TIP 22: Strategically use `key` attribute to trigger re-renders**
-- **評価**: 🟢 積極採用
-- **理由**: コンポーネントリセットの有効手段
-- **プロジェクト適用**: ゲームリセット時のコンポーネント更新
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Effective means of component reset
+- **Project Application**: Component updates during game reset
 
 **TIP 23: Use `ref callback function` for monitoring size changes**
-- **評価**: 🟢 積極採用
-- **理由**: DOM操作、サイズ監視
-- **プロジェクト適用**: CanvasサイズのResizeObserver等
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: DOM manipulation, size monitoring
+- **Project Application**: Canvas size ResizeObserver and others
 
 ---
 
 ### 🧩 Organizing React Code (Tips 24-27)
 
 **TIP 24: Colocate React components with their assets**
-- **評価**: 🟢 積極採用
-- **理由**: 保守性向上、関連ファイルの一元管理
-- **プロジェクト適用**: component/styles/testsの同一ディレクトリ配置
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Maintainability improvement, centralized management of related files
+- **Project Application**: Same directory placement of component/styles/tests
 
 **TIP 25: Limit your component file size**
-- **評価**: 🟢 積極採用
-- **理由**: 可読性、責務分離
-- **プロジェクト適用**: 50行以下を目安にController分離
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Readability, responsibility separation
+- **Project Application**: 50lines or less as guideline for Controller separation
 
 **TIP 26: Limit number of return statements in functional component**
-- **評価**: 🟢 積極採用
-- **理由**: コードの複雑性軽減
-- **プロジェクト適用**: Early returnパターンで単純化
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Code complexity reduction
+- **Project Application**: Simplification with Early return pattern
 
 **TIP 27: Prefer named exports over default exports**
-- **評価**: 🟢 積極採用
-- **理由**: Tree shaking、IDE支援の向上
-- **プロジェクト適用**: 全モジュールでnamed exports採用
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Tree shaking, IDE support improvement
+- **Project Application**: Named exports adoption in all modules
 
 ---
 
 ### 🚦 Efficient State Management (Tips 28-39)
 
 **TIP 28: Never create state for derived values**
-- **評価**: 🟢 積極採用
-- **理由**: State最小化、React Compilerの最適化活用
-- **プロジェクト適用**: 計算値はコンポーネント内で算出
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: State minimization, React Compiler optimization utilization
+- **Project Application**: Calculated values computed within components
 
 **TIP 29: Keep state at lowest level necessary**
-- **評価**: 🟢 積極採用
-- **理由**: Zustand個別セレクターとの相性
-- **プロジェクト適用**: ローカルstate最小化済み
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Compatibility with Zustand individual selectors
+- **Project Application**: Local state minimization completed
 
 **TIP 30: Clarify distinction between initial and current state**
-- **評価**: 🟢 積極採用
-- **理由**: State管理の明確性
-- **プロジェクト適用**: createInitialGameState()等で実装
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: State management clarity
+- **Project Application**: createInitialGameState() and others implementation
 
 **TIP 31: Update state based on previous state**
-- **評価**: 🟢 積極採用
-- **理由**: State更新の安全性確保
-- **プロジェクト適用**: setCount(prev => prev + 1)パターン採用
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: State update safety assurance
+- **Project Application**: setCount(prev => prev + 1) pattern adoption
 
 **TIP 32: Use functions in useState for lazy initialization**
-- **評価**: 🟢 積極採用
-- **理由**: 初期化コスト削減
-- **プロジェクト適用**: localStorage読み込み等で活用
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Initialization cost reduction
+- **Project Application**: Utilized in localStorage loading and others
 
 **TIP 33: Use React Context for broadly needed, static state**
-- **評価**: 🔴 非採用
-- **理由**: Zustandで代替、ContextはProps Drilling回避のみ
-- **プロジェクト適用**: Theme、i18n以外はZustand使用
+- **Assessment**: 🔴 Not Adopted
+- **Rationale**: Replaced with Zustand, Context only for Props Drilling avoidance
+- **Project Application**: Theme、i18n others use Zustand
 
 **TIP 34: Split context into frequently/infrequently changing parts**
-- **評価**: 🔴 非採用
-- **理由**: Zustand個別セレクターで同等効果
-- **プロジェクト適用**: Store分割で対応済み
+- **Assessment**: 🔴 Not Adopted
+- **Rationale**: Equivalent effect with Zustand individual selectors
+- **Project Application**: Handled with Store separation
 
 **TIP 35: Introduce Provider component for complex context values**
-- **評価**: 🔴 非採用
-- **理由**: Zustand storeで代替
-- **プロジェクト適用**: Controller Patternで責務分離
+- **Assessment**: 🔴 Not Adopted
+- **Rationale**: Replaced with Zustand store
+- **Project Application**: Responsibility separation with Controller Pattern
 
 **TIP 36: Consider useReducer as lightweight state management**
-- **評価**: 🔴 非採用
-- **理由**: Zustandがより効率的
-- **プロジェクト適用**: 複雑な状態はZustand store使用
+- **Assessment**: 🔴 Not Adopted
+- **Rationale**: Zustand is more efficient
+- **Project Application**: Complex state uses Zustand store
 
 **TIP 37: Simplify state updates with useImmer**
-- **評価**: 🔴 非採用
-- **理由**: Zustandのimmer統合で代替
-- **プロジェクト適用**: Zustand storeでImmer内蔵
+- **Assessment**: 🔴 Not Adopted
+- **Rationale**: Replaced with Zustand immer integration
+- **Project Application**: Zustand store with built-in Immer
 
 **TIP 38: Use Redux for complex client-side state**
-- **評価**: 🔴 非採用
-- **理由**: Zustandで十分、複雑性回避
-- **プロジェクト適用**: Zustand採用済み
+- **Assessment**: 🔴 Not Adopted
+- **Rationale**: Zustand is sufficient, complexity avoidance
+- **Project Application**: Zustand already adopted
 
 **TIP 39: Use Redux DevTools to debug state**
-- **評価**: 🟡 条件付き採用
-- **理由**: Zustand DevToolsで代替
-- **プロジェクト適用**: Zustand DevTools活用
+- **Assessment**: 🟡 Conditional Adoption
+- **Rationale**: Replaced with Zustand DevTools
+- **Project Application**: Zustand DevTools utilization
 
 ---
 
 ### 🚀 React Code Optimization (Tips 40-48)
 
 **TIP 40: Prevent unnecessary re-renders with `memo`**
-- **評価**: 🟨 改良採用
-- **理由**: React Compilerの自動最適化を優先
-- **プロジェクト適用**: 特定の重いコンポーネントのみ
+- **Assessment**: 🟨 Modified Adoption
+- **Rationale**: Prioritize React Compiler automatic optimization
+- **Project Application**: Only specific heavy components
 
 **TIP 41: Specify equality function with `memo`**
-- **評価**: 🟨 改良採用
-- **理由**: React Compilerが適切に判断
-- **プロジェクト適用**: カスタム比較が必要な特殊ケースのみ
+- **Assessment**: 🟨 Modified Adoption
+- **Rationale**: React Compiler judges appropriately
+- **Project Application**: Only special cases requiring custom comparison
 
 **TIP 42: Prefer named functions over arrow functions for memo**
-- **評価**: 🟢 積極採用
-- **理由**: デバッグ支援、React DevToolsでの識別
-- **プロジェクト適用**: 全memoizedコンポーネントで実践
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Debug support, React DevTools identification
+- **Project Application**: Practiced in all memoized components
 
 **TIP 43: Cache expensive computations with `useMemo`**
-- **評価**: 🟨 改良採用
-- **理由**: React Compilerが自動最適化、外部副作用のみ手動
-- **プロジェクト適用**: API呼び出し等の重い処理のみ
+- **Assessment**: 🟨 Modified Adoption
+- **Rationale**: React Compiler automatic optimization, manual only for external side effects
+- **Project Application**: Only heavy processing like API calls
 
 **TIP 44: Use `useCallback` to memoize functions**
-- **評価**: 🟨 改良採用
-- **理由**: React Compilerが自動最適化、外部副作用のみ手動
-- **プロジェクト適用**: イベントハンドラーはCompilerに委ねる
+- **Assessment**: 🟨 Modified Adoption
+- **Rationale**: React Compiler automatic optimization, manual only for external side effects
+- **Project Application**: Leave event handlers to Compiler
 
 **TIP 45: Memoize callbacks from utility hooks**
-- **評価**: 🟨 改良採用
-- **理由**: カスタムフックの内部実装のみ
-- **プロジェクト適用**: useAudio等の複雑なフックで検討
+- **Assessment**: 🟨 Modified Adoption
+- **Rationale**: Only internal implementation of custom hooks
+- **Project Application**: useAudio and other complex hooks consideration
 
 **TIP 46: Leverage lazy loading and `Suspense`**
-- **評価**: 🟢 積極採用
-- **理由**: Next.js dynamic importとの相性
-- **プロジェクト適用**: 設定モーダル等で実装検討
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Compatibility with Next.js dynamic imports
+- **Project Application**: Settings modal and others implementation consideration
 
 **TIP 47: Throttle network to simulate slow network**
-- **評価**: 🟢 積極採用
-- **理由**: パフォーマンステストの重要性
-- **プロジェクト適用**: 開発時のネットワーク制限テスト
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Importance of performance testing
+- **Project Application**: Development-time network throttling tests
 
 **TIP 48: Use `react-window` or `react-virtuoso` for large lists**
-- **評価**: 🟡 条件付き採用
-- **理由**: 大量データ表示が必要な場合のみ
-- **プロジェクト適用**: 統計ダッシュボードで検討
+- **Assessment**: 🟡 Conditional Adoption
+- **Rationale**: Only when large data display is needed
+- **Project Application**: Consideration for statistics dashboard
 
 ---
 
 ### 🐞 Debugging React Code (Tips 49-53)
 
 **TIP 49: Use `StrictMode` to catch bugs**
-- **評価**: 🟢 積極採用
-- **理由**: 開発時のバグ早期発見
-- **プロジェクト適用**: 開発環境で有効化済み
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Early bug detection during development
+- **Project Application**: Enabled in development environment
 
 **TIP 50: Install React Developer Tools**
-- **評価**: 🟢 積極採用
-- **理由**: 開発効率の大幅向上
-- **プロジェクト適用**: 全開発者で使用推奨
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Significant development efficiency improvement
+- **Project Application**: Recommended for all developers
 
 **TIP 51: Highlight components that render**
-- **評価**: 🟢 積極採用
-- **理由**: パフォーマンス問題の特定
-- **プロジェクト適用**: React DevToolsのProfiler活用
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Performance issue identification
+- **Project Application**: React DevTools Profiler utilization
 
 **TIP 52: Use `useDebugValue` in custom hooks**
-- **評価**: 🟢 積極採用
-- **理由**: カスタムフックのデバッグ支援
-- **プロジェクト適用**: useGameControls等で実装検討
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Custom hook debugging support
+- **Project Application**: useGameControls and others implementation consideration
 
 **TIP 53: Use `why-did-you-render` library**
-- **評価**: 🟡 条件付き採用
-- **理由**: React Compilerで多くの問題は解決
-- **プロジェクト適用**: 特定のパフォーマンス問題調査時のみ
+- **Assessment**: 🟡 Conditional Adoption
+- **Rationale**: Many issues resolved with React Compiler
+- **Project Application**: Only during specific performance issue investigation
 
-**TIP 54: (Missing from original list)**
-- **評価**: -
-- **理由**: 元記事で欠番
-- **プロジェクト適用**: -
+**TIP 54: Hide logs during the second render in Strict Mode**
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Clean console output in development, proper StrictMode integration
+- **Project Application**: Development environment log management optimization
 
 ---
 
 ### 🧪 Testing React Code (Tips 55-58)
 
 **TIP 55: Use `React Testing Library`**
-- **評価**: 🟢 積極採用
-- **理由**: Vitest + React Testing Library環境
-- **プロジェクト適用**: 343テスト、100%通過率維持
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Vitest + React Testing Library environment
+- **Project Application**: 343 tests, 100% pass rate maintenance
 
 **TIP 56: Use testing playground for queries**
-- **評価**: 🟢 積極採用
-- **理由**: テストクエリの最適化
-- **プロジェクト適用**: DOM要素取得の効率化
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Test query optimization
+- **Project Application**: DOM element retrieval efficiency
 
 **TIP 57: Conduct E2E tests with `Cypress` or `Playwright`**
-- **評価**: 🟢 積極採用
-- **理由**: 統合テストの重要性
-- **プロジェクト適用**: 将来のE2Eテスト導入で検討
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Importance of integration testing
+- **Project Application**: Consideration for future E2E test implementation
 
 **TIP 58: Use `MSW` to mock network requests**
-- **評価**: 🟢 積極採用
-- **理由**: テストの信頼性向上
-- **プロジェクト適用**: API呼び出しのテストで活用
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Test reliability improvement
+- **Project Application**: Utilized in API call testing
 
 ---
 
 ### 🎣 React Hooks (Tips 59-68)
 
 **TIP 59: Perform cleanup in `useEffect` hooks**
-- **評価**: 🟢 積極採用
-- **理由**: メモリリーク防止
-- **プロジェクト適用**: audio subscription、timer等でcleanup実装
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Memory leak prevention
+- **Project Application**: audio subscription、timer and others cleanup implementation
 
 **TIP 60: Use `refs` for accessing DOM elements**
-- **評価**: 🟢 積極採用
-- **理由**: DOM操作の基本
-- **プロジェクト適用**: Canvas要素、input focus等で活用
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: DOM manipulation basics
+- **Project Application**: Utilized in Canvas elements, input focus, and others
 
 **TIP 61: Use `refs` to preserve values across re-renders**
-- **評価**: 🟢 積極採用
-- **理由**: パフォーマンス最適化
-- **プロジェクト適用**: アニメーション状態、タイマーID保持
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Performance optimization
+- **Project Application**: Animation state, timer ID retention
 
 **TIP 62: Prefer named functions over arrow functions in hooks**
-- **評価**: 🟢 積極採用
-- **理由**: デバッグ支援、React DevToolsでの識別
-- **プロジェクト適用**: useEffectコールバック等で実践
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Debug support, React DevTools identification
+- **Project Application**: useEffect callbacks and others in practice
 
 **TIP 63: Encapsulate logic with custom hooks**
-- **評価**: 🟢 積極採用
-- **理由**: 横断的関心事の分離
-- **プロジェクト適用**: useGameControls、useAudio等で実践
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Separation of cross-cutting concerns
+- **Project Application**: useGameControls、useAudio and others in practice
 
 **TIP 64: Prefer functions over custom hooks**
-- **評価**: 🟢 積極採用
-- **理由**: 過度な抽象化の回避
-- **プロジェクト適用**: シンプルなロジックは通常の関数として実装
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Avoid excessive abstraction
+- **Project Application**: Implement simple logic as regular functions
 
 **TIP 65: Use `useLayoutEffect` to prevent visual glitches**
-- **評価**: 🟢 積極採用
-- **理由**: DOM更新の同期化
-- **プロジェクト適用**: Canvas描画、レイアウト計算で活用
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: DOM update synchronization
+- **Project Application**: Utilized in Canvas drawing, layout calculations
 
 **TIP 66: Generate unique IDs with `useId` hook**
-- **評価**: 🟢 積極採用
-- **理由**: React 19.1新機能、アクセシビリティ向上
-- **プロジェクト適用**: form要素、aria-labelledby等で活用
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: React 19.1 new feature, accessibility improvement
+- **Project Application**: Utilized in form elements, aria-labelledby, and others
 
 **TIP 67: Use `useSyncExternalStore` to subscribe to external store**
-- **評価**: 🟡 条件付き採用
-- **理由**: Zustandで内部実装済み、独自実装時のみ
-- **プロジェクト適用**: カスタムstore実装時に検討
+- **Assessment**: 🟡 Conditional Adoption
+- **Rationale**: Internally implemented in Zustand, only for custom implementation
+- **Project Application**: Consider during custom store implementation
 
 **TIP 68: Use `useDeferredValue` for previous query results**
-- **評価**: 🟢 積極採用
-- **理由**: React 19.1新機能、UX向上
-- **プロジェクト適用**: 検索結果、リアルタイム更新で活用
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: React 19.1 new feature, UX improvement
+- **Project Application**: Utilized in search results, real-time updates
 
 ---
 
 ### 🧰 Must-known React Libraries/Tools (Tips 69-78)
 
 **TIP 69: Incorporate routing with `react-router`**
-- **評価**: 🔴 非採用
-- **理由**: Next.js App Routerで代替
-- **プロジェクト適用**: Next.js App Router使用
+- **Assessment**: 🔴 Not Adopted
+- **Rationale**: Replaced with Next.js App Router
+- **Project Application**: Using Next.js App Router
 
 **TIP 70: Implement data fetching with `swr` or React Query**
-- **評価**: 🟡 条件付き採用
-- **理由**: 複雑なデータフェッチが必要な場合のみ
-- **プロジェクト適用**: 現在はシンプルなfetch、将来検討
+- **Assessment**: 🟡 Conditional Adoption
+- **Rationale**: Only when complex data fetching is needed
+- **Project Application**: Currently simple fetch, future consideration
 
 **TIP 71: Simplify form management with `formik` or `React Hook Form`**
-- **評価**: 🟡 条件付き採用
-- **理由**: 複雑なフォームが必要な場合のみ
-- **プロジェクト適用**: 設定フォームで検討
+- **Assessment**: 🟡 Conditional Adoption
+- **Rationale**: Only when complex forms are needed
+- **Project Application**: Consideration for settings forms
 
 **TIP 72: Internationalize with `Format.js`, `Lingui`, or `react-i18next`**
-- **評価**: 🟢 積極採用
-- **理由**: 既存のi18next実装
-- **プロジェクト適用**: react-i18next採用済み
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Existing i18next implementation
+- **Project Application**: react-i18next already adopted
 
 **TIP 73: Create animations with `framer-motion`**
-- **評価**: 🟡 条件付き採用
-- **理由**: パフォーマンス重視、CSS animationsで代替
-- **プロジェクト適用**: 複雑なアニメーションが必要な場合のみ
+- **Assessment**: 🟡 Conditional Adoption
+- **Rationale**: Performance focused, replaced with CSS animations
+- **Project Application**: Only when complex animations are needed
 
 **TIP 74: Check usehooks.com for custom hooks**
-- **評価**: 🟢 積極採用
-- **理由**: 参考資料として有用
-- **プロジェクト適用**: カスタムフック実装時の参考
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Useful as reference material
+- **Project Application**: Reference for custom hook implementation
 
 **TIP 75: Use UI libraries like Shadcdn or Headless UI**
-- **評価**: 🔴 非採用
-- **理由**: Tailwind CSS + カスタムコンポーネントで代替
-- **プロジェクト適用**: PanelBase等のカスタムUI system
+- **Assessment**: 🔴 Not Adopted
+- **Rationale**: Replaced with Tailwind CSS + custom components
+- **Project Application**: PanelBase and other custom UI systems
 
 **TIP 76: Check accessibility with `axe-core-npm`**
-- **評価**: 🟢 積極採用
-- **理由**: アクセシビリティ品質確保
-- **プロジェクト適用**: accessibilityStore統合で検討
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Accessibility quality assurance
+- **Project Application**: accessibilityStore integration consideration
 
 **TIP 77: Refactor React code with `react-codemod`**
-- **評価**: 🟢 積極採用
-- **理由**: 大規模リファクタリング支援
-- **プロジェクト適用**: 将来のReactバージョンアップ時
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Large-scale refactoring support
+- **Project Application**: During future React version upgrades
 
 **TIP 78: Transform app to PWA using vite-pwa**
-- **評価**: 🟡 条件付き採用
-- **理由**: Next.js PWA対応を検討
-- **プロジェクト適用**: オフライン対応が必要な場合
+- **Assessment**: 🟡 Conditional Adoption
+- **Rationale**: Consider Next.js PWA support
+- **Project Application**: When offline support is needed
 
 ---
 
 ### 🛠️ React & Visual Studio Code (Tips 79-81)
 
 **TIP 79: Enhance productivity with Simple React Snippets**
-- **評価**: 🟢 積極採用
-- **理由**: 開発効率向上
-- **プロジェクト適用**: 全開発者で使用推奨
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Development efficiency improvement
+- **Project Application**: Recommended for all developers
 
 **TIP 80: Set `editor.stickyScroll.enabled` to `true`**
-- **評価**: 🟢 積極採用
-- **理由**: コードナビゲーション改善
-- **プロジェクト適用**: VS Code設定で有効化
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Code navigation improvement
+- **Project Application**: Enabled in VS Code settings
 
 **TIP 81: Simplify refactoring with VSCode Glean or React Refactor**
-- **評価**: 🟢 積極採用
-- **理由**: リファクタリング効率化
-- **プロジェクト適用**: コンポーネント抽出、hooks分離で活用
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Refactoring efficiency
+- **Project Application**: Utilized in component extraction, hooks separation
 
 ---
 
 ### 🚀 React & TypeScript (Tips 82-93)
 
 **TIP 82: Use `ReactNode` instead of complex type combinations**
-- **評価**: 🟢 積極採用
-- **理由**: TypeScript strict mode完全活用
-- **プロジェクト適用**: children propsの型定義で使用
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Complete utilization of TypeScript strict mode
+- **Project Application**: Used in children props type definitions
 
 **TIP 83: Simplify typing with `PropsWithChildren`**
-- **評価**: 🟢 積極採用
-- **理由**: children propsの型安全性
-- **プロジェクト適用**: Wrapper componentで活用
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Type safety for children props
+- **Project Application**: Utilized in Wrapper components
 
 **TIP 84: Access element props with `ComponentProps`**
-- **評価**: 🟢 積極採用
-- **理由**: 型の再利用性向上
-- **プロジェクト適用**: PanelBase等で既存element propsを拡張
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Type reusability improvement
+- **Project Application**: PanelBase and others to extend existing element props
 
 **TIP 85: Use `MouseEventHandler`, `FocusEventHandler` for concise typing**
-- **評価**: 🟢 積極採用
-- **理由**: イベントハンドラーの型安全性
-- **プロジェクト適用**: イベントハンドラーの型定義で使用
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Event handler type safety
+- **Project Application**: Used in event handler type definitions
 
 **TIP 86: Specify types explicitly when inference isn't ideal**
-- **評価**: 🟢 積極採用
-- **理由**: 型安全性の確保
-- **プロジェクト適用**: useState<GameState>等で明示的型指定
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Type safety assurance
+- **Project Application**: useState<GameState> and others for explicit type specification
 
 **TIP 87: Leverage `Record` type for cleaner code**
-- **評価**: 🟢 積極採用
-- **理由**: オブジェクト型の表現力向上
-- **プロジェクト適用**: テーマ設定、設定オブジェクト等で活用
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Object type expressiveness improvement
+- **Project Application**: Utilized in theme settings, configuration objects, and others
 
 **TIP 88: Use `as const` for hook return values**
-- **評価**: 🟢 積極採用
-- **理由**: Tuple型の正確な推論
-- **プロジェクト適用**: カスタムフックの戻り値で活用
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Accurate tuple type inference
+- **Project Application**: Utilized in custom hook return values
 
 **TIP 89: Ensure proper Redux typing**
-- **評価**: 🔴 非採用
-- **理由**: Zustand採用済み
-- **プロジェクト適用**: Zustand TypeScript統合で代替
+- **Assessment**: 🔴 Not Adopted
+- **Rationale**: Zustand already adopted
+- **Project Application**: Replaced with Zustand TypeScript integration
 
 **TIP 90: Simplify types with `ComponentType`**
-- **評価**: 🟢 積極採用
-- **理由**: コンポーネント型の抽象化
-- **プロジェクト適用**: Higher-order patterns実装時
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Component type abstraction
+- **Project Application**: During Higher-order patterns implementation
 
 **TIP 91: Make code reusable with TypeScript generics**
-- **評価**: 🟢 積極採用
-- **理由**: Branded types使用済み
-- **プロジェクト適用**: GameController<TState>等で実装
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Branded types already in use
+- **Project Application**: GameController<TState> and others implementation
 
 **TIP 92: Ensure precise typing with `NoInfer` utility**
-- **評価**: 🟢 積極採用
-- **理由**: 型推論の精密制御
-- **プロジェクト適用**: Generic constraints実装時
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Precise type inference control
+- **Project Application**: During Generic constraints implementation
 
 **TIP 93: Type refs with `ElementRef` helper**
-- **評価**: 🟢 積極採用
-- **理由**: DOM要素refの型安全性
-- **プロジェクト適用**: Canvas ref、input ref等で活用
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: DOM element ref type safety
+- **Project Application**: Utilized in Canvas ref, input ref, and others
 
 ---
 
 ### 🎉 Miscellaneous Tips (Tips 94-101)
 
 **TIP 94: Boost code quality with `eslint-plugin-react` and Prettier**
-- **評価**: 🟨 改良採用
-- **理由**: Oxlint + Biome環境に適応
-- **プロジェクト適用**: Oxlint + Biome設定で品質確保
+- **Assessment**: 🟨 Modified Adoption
+- **Rationale**: Adapted to Oxlint + Biome environment
+- **Project Application**: Quality assurance with Oxlint + Biome configuration
 
 **TIP 95: Log and monitor with tools like Sentry or Grafana**
-- **評価**: 🟡 条件付き採用
-- **理由**: プロダクション環境で検討
-- **プロジェクト適用**: 現在はLogger systemで対応
+- **Assessment**: 🟡 Conditional Adoption
+- **Rationale**: Consideration for production environment
+- **Project Application**: Currently handled with Logger system
 
 **TIP 96: Start coding quickly with online IDEs**
-- **評価**: 🟢 積極採用
-- **理由**: プロトタイピング、共有に有効
-- **プロジェクト適用**: 概念検証、デモ作成で活用
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Effective for prototyping and sharing
+- **Project Application**: Utilized in proof of concept, demo creation
 
 **TIP 97: Looking for advanced React skills? Check out these books**
-- **評価**: 🟢 積極採用
-- **理由**: 継続的学習の重要性
-- **プロジェクト適用**: チーム学習リソースとして活用
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Importance of continuous learning
+- **Project Application**: Utilized as team learning resources
 
 **TIP 98: Prep React interviews with reactjs-interview-questions**
-- **評価**: 🟢 積極採用
-- **理由**: 技術知識の体系化
-- **プロジェクト適用**: 技術面接対策、知識確認
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Systematization of technical knowledge
+- **Project Application**: Technical interview preparation, knowledge verification
 
 **TIP 99: Learn from experts like Nadia, Dan, Josh, Kent**
-- **評価**: 🟢 積極採用
-- **理由**: 最新のベストプラクティス習得
-- **プロジェクト適用**: 技術トレンド把握、実装指針更新
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Acquiring latest best practices
+- **Project Application**: Technology trend awareness, implementation guideline updates
 
 **TIP 100: Stay updated with newsletters**
-- **評価**: 🟢 積極採用
-- **理由**: React エコシステムの最新情報
-- **プロジェクト適用**: This Week In React等の定期購読
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Latest information on React ecosystem
+- **Project Application**: This Week In React and other regular subscriptions
 
 **TIP 101: Engage with React community**
-- **評価**: 🟢 積極採用
-- **理由**: コミュニティ参加による知見共有
-- **プロジェクト適用**: r/reactjs、Discord等での情報交換
+- **Assessment**: 🟢 Active Adoption
+- **Rationale**: Knowledge sharing through community participation
+- **Project Application**: r/reactjs, Discord, and other information exchange
 
 ---
 
-## 📊 採用状況サマリー
+## 📊 Adoption Status Summary
 
-- **🟢 積極採用**: 74 tips (73.3%)
-- **🟡 条件付き採用**: 13 tips (12.9%)  
-- **🟨 改良採用**: 8 tips (7.9%)
-- **🔴 非採用**: 6 tips (5.9%)
+- **🟢 Active Adoption**: 75 tips (74.3%)
+- **🟡 Conditional Adoption**: 13 tips (12.9%)  
+- **🟨 Modified Adoption**: 8 tips (7.9%)
+- **🔴 Not Adopted**: 6 tips (5.9%)
 
-## 🎯 主要な判断基準
+## 🎯 Main Evaluation Criteria
 
-1. **React 19.1 + React Compiler最適化**: 手動memoization は改良採用
-2. **現在のアーキテクチャ整合性**: Controller Pattern、Zustand中心設計維持
-3. **TypeScript Strict Mode**: 型安全性を損なうパターンは非採用
-4. **プロダクション品質**: テスト、エラーハンドリング、パフォーマンス重視
+1. **React 19.1 + React Compiler Optimization**: Manual memoization as modified adoption
+2. **Current Architecture Consistency**: Maintain Controller Pattern, Zustand-centric design
+3. **TypeScript Strict Mode**: Patterns that compromise type safety are not adopted
+4. **Production Quality**: Emphasis on testing, error handling, and performance
 
-## 🔍 注目すべき採用パターン
+## 🔍 Notable Adoption Patterns
 
-### ✅ **積極採用が多いカテゴリ**
-- **Components Organization (14/14)**: 基本的なコード品質向上
-- **TypeScript Integration (12/12)**: 型安全性の徹底
-- **Testing & Debugging (8/8)**: 品質保証体制
+### ✅ **Categories with High Active Adoption**
+- **Components Organization (14/14)**: Basic code quality improvement
+- **TypeScript Integration (12/12)**: Comprehensive type safety
+- **Testing & Debugging (8/8)**: Quality assurance framework
 
-### ⚠️ **改良・条件付き採用が多いカテゴリ**  
-- **Performance Optimization**: React Compilerとの棲み分け
-- **State Management**: Zustand採用による既存手法の見直し
-- **Libraries & Tools**: プロジェクト要件との適合性重視
+### ⚠️ **Categories with High Modified/Conditional Adoption**  
+- **Performance Optimization**: Role separation with React Compiler
+- **State Management**: Review of existing methods through Zustand adoption
+- **Libraries & Tools**: Emphasis on compatibility with project requirements
 
-この評価により、React 19.1 + React Compiler時代における効率的な開発指針が明確になりました。
+This evaluation has clarified efficient development guidelines for the React 19.1 + React Compiler era.
 
 ---
 
-**参考資料**:
+**References**:
 - [101 React Tips & Tricks](https://dev.to/_ndeyefatoudiop/101-react-tips-tricks-for-beginners-to-experts-4m11)
 - [React 19.1 Documentation](https://react.dev/)
 - [React Compiler Documentation](https://react.dev/learn/react-compiler)
-- プロジェクトCLAUDE.md - アーキテクチャ詳細
+- Project CLAUDE.md - Architecture details
