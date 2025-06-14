@@ -47,7 +47,7 @@ const ErrorToastAdapter = () => {
       }
 
       // Auto-resolve error after duration
-      if (duration && duration < Infinity) {
+      if (duration && duration < Number.POSITIVE_INFINITY) {
         setTimeout(() => {
           errorHandler.resolveError(errorInfo.id);
         }, duration);

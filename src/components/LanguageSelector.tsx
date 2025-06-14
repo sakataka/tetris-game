@@ -5,13 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { TYPOGRAPHY } from '../constants/layout';
 import { type SupportedLanguage, languageNames, supportedLanguages } from '../i18n';
 import { useCurrentLanguage, useSetLanguage } from '../store/languageStore';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from './ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 interface LanguageSelectorProps {
   className?: string;

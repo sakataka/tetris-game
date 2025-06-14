@@ -1,18 +1,12 @@
 'use client';
 
+import { cn } from '@/utils/ui/cn';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
 import type { AnimationIntensity, ColorBlindnessType, ContrastLevel } from '../types/tetris';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from './ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Switch } from './ui/switch';
-import { cn } from '@/utils/ui/cn';
 
 interface AccessibilitySettingsProps {
   colorBlindnessType: ColorBlindnessType;

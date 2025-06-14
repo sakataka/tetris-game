@@ -1,13 +1,13 @@
 'use client';
 
+import { Slider } from '@/components/ui/slider';
+import { Switch } from '@/components/ui/switch';
+import { cn } from '@/utils/ui/cn';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GAME_UI_SIZES, SPACING, TYPOGRAPHY, UI_SIZES } from '../constants/layout';
 import type { GameSettings } from '../types/tetris';
 import CyberCard from './ui/CyberCard';
-import { Slider } from '@/components/ui/slider';
-import { Switch } from '@/components/ui/switch';
-import { cn } from '@/utils/ui/cn';
 
 interface AudioPanelProps {
   isMuted: boolean;
@@ -71,15 +71,16 @@ const AudioPanel = memo(function AudioPanel({
           />
         </div>
         <div className='flex justify-between items-center'>
-          <label htmlFor='virtual-controls-switch' className={`text-gray-300 ${TYPOGRAPHY.BODY_TEXT}`}>
+          <label
+            htmlFor='virtual-controls-switch'
+            className={`text-gray-300 ${TYPOGRAPHY.BODY_TEXT}`}
+          >
             {t('settings.virtualControls')}
           </label>
           <Switch
             id='virtual-controls-switch'
             checked={settings.virtualControlsEnabled}
-            onCheckedChange={(checked) =>
-              onUpdateSettings({ virtualControlsEnabled: checked })
-            }
+            onCheckedChange={(checked) => onUpdateSettings({ virtualControlsEnabled: checked })}
             className={cn(
               'data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-gray-600',
               'border-2 data-[state=checked]:border-green-400 data-[state=unchecked]:border-gray-500'

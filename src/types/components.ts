@@ -219,26 +219,6 @@ export interface ErrorBoundaryProps extends BaseComponentProps {
   level?: 'page' | 'component';
 }
 
-export interface ErrorNotificationProps extends BaseComponentProps {
-  error: Error;
-  onDismiss?: () => void;
-  autoHide?: boolean;
-  autoHideDelay?: number;
-}
-
-// Tab components
-export interface TabNavigationProps extends BaseComponentProps {
-  tabs: Array<{
-    id: string;
-    label: string;
-    icon?: ReactNode;
-    disabled?: boolean;
-  }>;
-  activeTab: string;
-  onTabChange: (tabId: string) => void;
-  variant?: 'default' | 'pills' | 'underline';
-}
-
 // Session components
 export interface SessionTrackerProps {
   sessionId: SessionId;

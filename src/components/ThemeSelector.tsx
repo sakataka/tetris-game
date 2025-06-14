@@ -4,13 +4,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ThemeVariant } from '../types/tetris';
 import { THEME_PRESETS } from '../utils/ui';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from './ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 interface ThemeSelectorProps {
   currentTheme: ThemeVariant;
