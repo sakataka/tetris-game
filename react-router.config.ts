@@ -9,7 +9,7 @@ export default {
 
   // サーバー設定（SPAモードでは不要）
   // serverBuildFile: 'index.js',
-  buildDirectory: './build',
+  buildDirectory: './dist',
 
   // アプリケーションディレクトリ
   appDirectory: './src',
