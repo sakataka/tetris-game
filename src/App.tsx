@@ -7,11 +7,11 @@ import ErrorToastAdapter from './components/ErrorToastAdapter';
 import I18nProvider from './components/I18nProvider';
 import { Toaster } from './components/ui/sonner';
 
-// Font configuration
-import '@fontsource/geist-sans/400.css';
-import '@fontsource/geist-sans/500.css';
-import '@fontsource/geist-sans/600.css';
-import '@fontsource/geist-mono/400.css';
+// Font configuration - temporarily disabled for debugging
+// import '@fontsource/geist-sans/400.css';
+// import '@fontsource/geist-sans/500.css';
+// import '@fontsource/geist-sans/600.css';
+// import '@fontsource/geist-mono/400.css';
 
 // Global styles
 import './app/globals.css';
