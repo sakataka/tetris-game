@@ -2,13 +2,13 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router';
 
-// Sentry監視初期化
+// Sentry monitoring initialization
 import { initSentry } from './utils/sentry';
 
-// グローバルスタイル
+// Global styles
 import './app/globals.css';
 
-import RootRoute from './root';
+import App from './App';
 // Routes
 import AboutRoute from './routes/about';
 import HomeRoute from './routes/home';
@@ -16,14 +16,14 @@ import SettingsRoute from './routes/settings';
 import StatisticsRoute from './routes/statistics';
 import ThemesRoute from './routes/themes';
 
-// プロダクション環境でSentry初期化
+// Initialize Sentry in production environment
 initSentry();
 
 // SPA Router setup
 const router = createBrowserRouter([
   {
     path: '/',
-    Component: RootRoute,
+    Component: App,
     children: [
       {
         index: true,
