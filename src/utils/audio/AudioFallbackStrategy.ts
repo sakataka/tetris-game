@@ -99,12 +99,17 @@ export class WebAudioStrategy extends AudioFallbackStrategy {
     }
 
     if (!this.audioContext) {
-      throw new AudioError('AudioContext not initialized', 'INITIALIZATION_FAILED');
+      throw new AudioError('AudioContext not initialized', {
+        action: 'INITIALIZATION_FAILED',
+      });
     }
 
     const buffer = this.audioInstances.get(soundKey) as AudioBuffer;
     if (!buffer) {
-      throw new AudioError(`Sound not preloaded: ${soundKey}`, 'SOUND_NOT_FOUND');
+      throw new AudioError(`Sound not preloaded: ${soundKey}`, {
+        action: 'SOUND_NOT_FOUND',
+        additionalData: { soundKey },
+      });
     }
 
     const source = this.audioContext.createBufferSource();
@@ -126,7 +131,10 @@ export class WebAudioStrategy extends AudioFallbackStrategy {
         }
         this.audioInstances.set(soundKey as SoundKey, audioBuffer);
       } catch (error) {
-        log.warn(`Failed to preload sound ${soundKey}:`, error as Error);
+        log.warn(`Failed to preload sound ${soundKey}:`, {
+          component: 'WebAudioStrategy',
+          metadata: { error: error as Error, soundKey },
+        });
       }
     });
 
@@ -173,7 +181,10 @@ export class HtmlAudioStrategy extends AudioFallbackStrategy {
   async playSound(soundKey: SoundKey): Promise<void> {
     const audio = this.audioInstances.get(soundKey) as HTMLAudioElement;
     if (!audio) {
-      throw new AudioError(`Sound not preloaded: ${soundKey}`, 'SOUND_NOT_FOUND');
+      throw new AudioError(`Sound not preloaded: ${soundKey}`, {
+        action: 'SOUND_NOT_FOUND',
+        additionalData: { soundKey },
+      });
     }
 
     // Reset to beginning and play
@@ -196,7 +207,10 @@ export class HtmlAudioStrategy extends AudioFallbackStrategy {
 
         this.audioInstances.set(soundKey as SoundKey, audio);
       } catch (error) {
-        log.warn(`Failed to preload sound ${soundKey}:`, error as Error);
+        log.warn(`Failed to preload sound ${soundKey}:`, {
+          component: 'WebAudioStrategy',
+          metadata: { error: error as Error, soundKey },
+        });
       }
     });
 

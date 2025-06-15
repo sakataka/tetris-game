@@ -87,7 +87,10 @@ export class AudioCapabilityDetector {
     // Detect autoplay policy
     capabilities.autoplayPolicy = await AudioCapabilityDetector.detectAutoplayPolicy();
 
-    log.info('Audio capabilities detected', capabilities);
+    log.info('Audio capabilities detected', {
+      component: 'AudioCapabilityDetector',
+      metadata: capabilities as unknown as Record<string, unknown>,
+    });
     AudioCapabilityDetector.cachedCapabilities = capabilities;
     return capabilities;
   }

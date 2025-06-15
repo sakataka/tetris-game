@@ -22,9 +22,14 @@ export function handleError(
     // Add context to error if it's a BaseAppError
     if (errorObj instanceof BaseAppError && context) {
       // Create new error with updated context
-      const ErrorClass = errorObj.constructor as new (message: string) => BaseAppError;
-      const updatedError = new ErrorClass(errorObj.message);
-      updatedError.context = { ...errorObj.context, ...context };
+      const ErrorClass = errorObj.constructor as new (
+        message: string,
+        context?: Record<string, unknown>
+      ) => BaseAppError;
+      const updatedError = new ErrorClass(errorObj.message, {
+        ...errorObj.context,
+        ...context,
+      });
       originalHandleError(updatedError);
       return;
     }
@@ -32,7 +37,10 @@ export function handleError(
     originalHandleError(errorObj);
   } catch (handlingError) {
     // Fallback if error handling itself fails
-    log.error('Error handler failed:', handlingError as Error);
+    log.error('Error handler failed:', {
+      component: 'UnifiedErrorHandler',
+      metadata: { error: handlingError as Error },
+    });
     console.error('Critical error handling failure:', error, handlingError);
   }
 }
@@ -49,8 +57,8 @@ export function withErrorHandling<T extends (...args: unknown[]) => unknown>(
       const result = fn(...args);
 
       // Handle promise-returning functions
-      if (result && typeof result.then === 'function') {
-        return result.catch((error: Error) => {
+      if (result && typeof result === 'object' && 'then' in result && typeof result.then === 'function') {
+        return (result as Promise<unknown>).catch((error: Error) => {
           handleError(error, { ...context, functionName: fn.name, args });
           throw error; // Re-throw to maintain promise rejection behavior
         });
@@ -123,7 +131,10 @@ export async function withRetry<T>(
       }
 
       // Log intermediate failures as warnings  
-      log.warn(`Attempt ${attempt}/${maxRetries} failed:`, { error: error as Error });
+      log.warn(`Attempt ${attempt}/${maxRetries} failed:`, {
+        component: 'UnifiedErrorHandler',
+        metadata: { error: error as Error, attempt, maxRetries },
+      });
 
       // Wait before retrying
       await new Promise((resolve) => setTimeout(resolve, delay * attempt));

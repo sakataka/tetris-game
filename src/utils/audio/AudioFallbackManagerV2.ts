@@ -92,7 +92,10 @@ export class AudioFallbackManager {
           }
         }
       } catch (error) {
-        log.warn(`Strategy ${strategy.getName()} failed test:`, error as Error);
+        log.warn(`Strategy ${strategy.getName()} failed test:`, {
+          component: 'AudioFallbackManager',
+          metadata: { error: error as Error },
+        });
       }
     }
 
@@ -126,18 +129,30 @@ export class AudioFallbackManager {
       const strategy = this.strategies[this.currentStrategyIndex];
 
       try {
-        await strategy.playSound(soundKey);
+        if (strategy) {
+          await strategy.playSound(soundKey);
+        }
         return; // Success!
       } catch (error) {
         lastError = error as Error;
 
-        log.warn(`Strategy ${strategy.getName()} failed for sound ${soundKey}:`, error as Error);
+        if (strategy) {
+          log.warn(`Strategy ${strategy.getName()} failed for sound ${soundKey}:`, {
+            component: 'AudioFallbackManager',
+            metadata: { error: error as Error, soundKey },
+          });
+        }
 
         // Move to next strategy
         this.currentStrategyIndex++;
 
         if (this.currentStrategyIndex < this.strategies.length) {
-          log.info(`Falling back to: ${this.strategies[this.currentStrategyIndex].getName()}`);
+          const nextStrategy = this.strategies[this.currentStrategyIndex];
+          if (nextStrategy) {
+            log.info(`Falling back to: ${nextStrategy.getName()}`, {
+              component: 'AudioFallbackManager',
+            });
+          }
 
           // Add delay before retry
           if (this.config.fallbackDelay > 0) {
@@ -152,9 +167,12 @@ export class AudioFallbackManager {
     // If all strategies failed, log error but don't throw
     if (lastError) {
       handleError(
-        new AudioError(`All audio strategies failed for sound: ${soundKey}`, 'FALLBACK_EXHAUSTED', {
-          soundKey,
-          strategies: this.strategies.map((s) => s.getName()),
+        new AudioError(`All audio strategies failed for sound: ${soundKey}`, {
+          action: 'FALLBACK_EXHAUSTED',
+          additionalData: {
+            soundKey,
+            strategies: this.strategies.map((s) => s.getName()),
+          },
         })
       );
     }
@@ -169,11 +187,18 @@ export class AudioFallbackManager {
     // Preload for current strategy only (for efficiency)
     if (this.strategies.length > 0) {
       const currentStrategy = this.strategies[this.currentStrategyIndex];
-      try {
-        await currentStrategy.preloadSounds(soundMap);
-        log.info(`Sounds preloaded for strategy: ${currentStrategy.getName()}`);
-      } catch (error) {
-        log.warn(`Failed to preload sounds for ${currentStrategy.getName()}:`, error as Error);
+      if (currentStrategy) {
+        try {
+          await currentStrategy.preloadSounds(soundMap);
+          log.info(`Sounds preloaded for strategy: ${currentStrategy.getName()}`, {
+            component: 'AudioFallbackManager',
+          });
+        } catch (error) {
+          log.warn(`Failed to preload sounds for ${currentStrategy.getName()}:`, {
+            component: 'AudioFallbackManager',
+            metadata: { error: error as Error },
+          });
+        }
       }
     }
   }
@@ -230,7 +255,10 @@ export class AudioFallbackManager {
       try {
         strategy.cleanup();
       } catch (error) {
-        log.warn(`Error cleaning up strategy ${strategy.getName()}:`, error as Error);
+        log.warn(`Error cleaning up strategy ${strategy.getName()}:`, {
+          component: 'AudioFallbackManager',
+          metadata: { error: error as Error },
+        });
       }
     }
     this.strategies = [];
