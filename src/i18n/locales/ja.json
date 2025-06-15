@@ -45,8 +45,7 @@
     "upArrow": "↑",
     "pKey": "P",
     "rKey": "R",
-    "pauseHint": "スペースキーまたは一時停止ボタンを押して再開",
-    "keyboardShortcuts": "キーボード: スペース=一時停止/再開, R=リセット"
+    "pauseHint": "スペースキーまたは一時停止ボタンを押して再開"
   },
   "settings": {
     "title": "設定",

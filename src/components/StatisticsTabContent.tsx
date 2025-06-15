@@ -24,7 +24,7 @@ const StatisticsTabContent = memo(function StatisticsTabContent({
 
   return (
     <div className={`max-w-4xl ${className}`}>
-      <CyberCard title={t('statistics.title')} theme='purple' size='lg'>
+      <CyberCard title={t('statistics.title')} theme='cyan' size='lg'>
         <Suspense
           fallback={
             <div className='space-y-4 p-4'>

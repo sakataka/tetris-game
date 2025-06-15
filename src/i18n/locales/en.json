@@ -45,8 +45,7 @@
     "upArrow": "↑",
     "pKey": "P",
     "rKey": "R",
-    "pauseHint": "Press Space or Pause button to resume",
-    "keyboardShortcuts": "Keyboard: Space=Pause/Resume, R=Reset"
+    "pauseHint": "Press Space or Pause button to resume"
   },
   "settings": {
     "title": "Settings",

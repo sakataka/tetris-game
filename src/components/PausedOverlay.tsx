@@ -6,18 +6,13 @@ import { Button } from './ui/button';
 interface PausedOverlayProps {
   isVisible: boolean;
   onResume: () => void;
-  onReset: () => void;
 }
 
 /**
  * PausedOverlay component that displays over the game when paused
  * Provides consistent cyberpunk styling with the rest of the game UI
  */
-const PausedOverlay = memo(function PausedOverlay({
-  isVisible,
-  onResume,
-  onReset,
-}: PausedOverlayProps) {
+const PausedOverlay = memo(function PausedOverlay({ isVisible, onResume }: PausedOverlayProps) {
   const { t } = useTranslation();
 
   if (!isVisible) return null;
@@ -41,31 +36,20 @@ const PausedOverlay = memo(function PausedOverlay({
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className='flex flex-col gap-3 sm:flex-row sm:gap-4'>
+            {/* Resume Button */}
+            <div className='flex justify-center'>
               <Button
                 onClick={onResume}
-                className='flex-1 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 font-bold transition-all duration-300 transform hover:scale-105 shadow-[0_0_20px_rgba(0,255,255,0.3)] hover:shadow-[0_0_30px_rgba(0,255,255,0.5)] border border-cyan-400/50 relative overflow-hidden font-mono'
+                className='px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 font-bold transition-all duration-300 transform hover:scale-105 shadow-[0_0_20px_rgba(0,255,255,0.3)] hover:shadow-[0_0_30px_rgba(0,255,255,0.5)] border border-cyan-400/50 relative overflow-hidden font-mono'
               >
                 <div className='absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-blue-400/20 blur-sm' />
                 <span className='relative'>{t('game.resume')}</span>
               </Button>
-
-              <Button
-                onClick={onReset}
-                variant='outline'
-                className='flex-1 border-red-400/50 text-red-400 hover:bg-red-500/20 hover:border-red-400 font-mono'
-              >
-                {t('buttons.reset')}
-              </Button>
             </div>
 
             {/* Instructions */}
-            <div className='text-center text-xs text-gray-400 space-y-1'>
+            <div className='text-center text-xs text-gray-400'>
               <div>{t('controls.pauseHint', 'Press Space or Pause button to resume')}</div>
-              <div className='text-cyan-400'>
-                {t('controls.keyboardShortcuts', 'Keyboard: Space=Pause/Resume, R=Reset')}
-              </div>
             </div>
           </div>
         </CyberCard>

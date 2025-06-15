@@ -35,7 +35,7 @@ const ThemeTabContent = memo(function ThemeTabContent({ className = '' }: ThemeT
 
   return (
     <div className={`max-w-4xl ${className}`}>
-      <CyberCard title={t('themes.title') || t('tabs.themes')} theme='yellow' size='lg'>
+      <CyberCard title={t('themes.title') || t('tabs.themes')} theme='cyan' size='lg'>
         <ThemeSettingsMemo
           currentTheme={themeState.current}
           colors={themeState.config.colors}

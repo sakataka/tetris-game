@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { Button } from '../components/ui/button';
-import { useGameButtons } from '../hooks/useGameButtons';
+import { useTogglePause } from '../store/gameStateStore';
 import ErrorBoundary from './ErrorBoundary';
 import GameInfo from './GameInfo';
 import type { GameControllerAPI } from './GameLogicController';
@@ -35,8 +35,8 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
     unlockAudio,
   } = api;
 
-  // Game control actions for pause overlay
-  const { onTogglePause, onReset } = useGameButtons();
+  // Toggle pause function for overlay
+  const togglePause = useTogglePause();
 
   // Desktop Layout
   if (!isMobile) {
@@ -91,7 +91,7 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
         </div>
 
         {/* Paused Overlay */}
-        <PausedOverlay isVisible={gameState.isPaused} onResume={onTogglePause} onReset={onReset} />
+        <PausedOverlay isVisible={gameState.isPaused} onResume={togglePause} />
       </div>
     );
   }
@@ -158,7 +158,7 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
         </div>
 
         {/* Paused Overlay */}
-        <PausedOverlay isVisible={gameState.isPaused} onResume={onTogglePause} onReset={onReset} />
+        <PausedOverlay isVisible={gameState.isPaused} onResume={togglePause} />
       </div>
     </div>
   );
