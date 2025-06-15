@@ -40,7 +40,8 @@ const Navigation = memo(function Navigation({
     { key: 'about', path: '/about', label: t('tabs.about'), color: 'green' },
   ];
 
-  const activeTab = navigationItems.find(item => item.path === location.pathname)?.key || 'settings';
+  const activeTab =
+    navigationItems.find((item) => item.path === location.pathname)?.key || 'settings';
 
   const getTabLinkClassName = (color: string, isActive: boolean) => {
     const baseClasses = [
