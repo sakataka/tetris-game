@@ -11,7 +11,7 @@ import { Label } from './ui/label';
 // No props needed - all state comes from stores
 const SettingsTabContent = memo(function SettingsTabContent() {
   const { t } = useTranslation();
-  const audioState = useAudioVolumeState();
+  const { volume, isMuted, setVolume, toggleMute } = useAudioVolumeState();
   const settings = useSettings();
   const updateSettings = useUpdateSettings();
 
@@ -35,11 +35,11 @@ const SettingsTabContent = memo(function SettingsTabContent() {
 
       {/* Audio Settings */}
       <AudioPanel
-        isMuted={audioState.isMuted}
-        volume={audioState.volume}
+        isMuted={isMuted}
+        volume={volume}
         settings={settings}
-        onToggleMute={audioState.toggleMute}
-        onVolumeChange={audioState.setVolume}
+        onToggleMute={toggleMute}
+        onVolumeChange={setVolume}
         onUpdateSettings={updateSettings}
       />
 
@@ -76,5 +76,7 @@ const SettingsTabContent = memo(function SettingsTabContent() {
     </div>
   );
 });
+
+SettingsTabContent.displayName = 'SettingsTabContent';
 
 export default SettingsTabContent;

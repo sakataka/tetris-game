@@ -110,18 +110,20 @@ export const useAudioInitialized = () => useAudioStore((state) => state.isInitia
 export const useAudioPreloadProgress = () => useAudioStore((state) => state.preloadProgress);
 
 // Combined selectors for components that need multiple values
-export const useAudioVolumeState = () =>
-  useAudioStore((state) => ({
-    volume: state.volume,
-    isMuted: state.isMuted,
-    setVolume: state.setVolume,
-    toggleMute: state.toggleMute,
-  }));
+export const useAudioVolumeState = () => {
+  const volume = useAudioStore((state) => state.volume);
+  const isMuted = useAudioStore((state) => state.isMuted);
+  const setVolume = useAudioStore((state) => state.setVolume);
+  const toggleMute = useAudioStore((state) => state.toggleMute);
 
-export const useAudioSystemStatus = () =>
-  useAudioStore((state) => ({
-    strategy: state.currentStrategy,
-    initialized: state.isInitialized,
-    error: state.initializationError,
-    preloadProgress: state.preloadProgress,
-  }));
+  return { volume, isMuted, setVolume, toggleMute };
+};
+
+export const useAudioSystemStatus = () => {
+  const strategy = useAudioStore((state) => state.currentStrategy);
+  const initialized = useAudioStore((state) => state.isInitialized);
+  const error = useAudioStore((state) => state.initializationError);
+  const preloadProgress = useAudioStore((state) => state.preloadProgress);
+
+  return { strategy, initialized, error, preloadProgress };
+};
