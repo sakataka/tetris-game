@@ -1,136 +1,69 @@
-import { useCallback, useEffect, useState } from 'react';
-import { log } from '../utils/logging';
+/**
+ * Unified Settings Hook (Simplified)
+ * 
+ * Simplified wrapper that combines focused hooks for settings management.
+ * Replaces the original 379-line useSettings.ts with a cleaner architecture.
+ */
 
-export interface GameSettings {
-  audioEnabled: boolean;
-  volume: number;
-  isMuted: boolean;
-  keyBindings: {
-    moveLeft: string[];
-    moveRight: string[];
-    moveDown: string[];
-    rotate: string[];
-    hardDrop: string[];
-    pause: string[];
-    reset: string[];
-  };
-  theme: 'cyberpunk' | 'classic' | 'neon';
-  showGhost: boolean;
-  showParticles: boolean;
-}
-
-export interface KeyBindings {
-  moveLeft: string[];
-  moveRight: string[];
-  moveDown: string[];
-  rotate: string[];
-  hardDrop: string[];
-  pause: string[];
-  reset: string[];
-}
-
-const DEFAULT_SETTINGS: GameSettings = {
-  audioEnabled: true,
-  volume: 0.5,
-  isMuted: false,
-  keyBindings: {
-    moveLeft: ['ArrowLeft', 'a', 'A'],
-    moveRight: ['ArrowRight', 'd', 'D'],
-    moveDown: ['ArrowDown', 's', 'S'],
-    rotate: ['ArrowUp', 'w', 'W'],
-    hardDrop: [' '],
-    pause: ['p', 'P'],
-    reset: ['r', 'R'],
-  },
-  theme: 'cyberpunk',
-  showGhost: true,
-  showParticles: true,
-};
-
-const STORAGE_KEY = 'tetris-game-settings';
+import { useCallback, useState } from 'react';
+import { useSettingsStorage, type GameSettings, type KeyBindings, DEFAULT_SETTINGS } from './useSettingsStorage';
+import { useSettingsSync } from './useSettingsSync';
+import { useSettingsValidation } from './useSettingsValidation';
 
 /**
  * Unified settings management hook
- *
- * Consolidates all settings-related functionality:
- * - State management with React state
- * - localStorage persistence with error handling
- * - Cross-tab synchronization via storage events
- * - Key bindings management
- * - Volume and audio controls
- * - Theme management
+ * 
+ * Combines storage, sync, and validation functionality with a clean API.
+ * Much simpler than the original 379-line implementation.
  */
 export function useSettings() {
-  // ===== Storage Operations =====
+  // Storage operations
+  const {
+    saveSettings,
+    loadSettings,
+    clearSettings,
+    exportSettings,
+    importSettings,
+    STORAGE_KEY,
+  } = useSettingsStorage();
 
-  const saveSettings = useCallback((settings: GameSettings): void => {
-    if (typeof window === 'undefined') return;
-
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
-    } catch (error) {
-      log.warn('Failed to save settings to localStorage', {
-        component: 'SettingsStorage',
-        metadata: { error },
-      });
-    }
-  }, []);
-
-  const loadSettings = useCallback((): GameSettings | null => {
-    if (typeof window === 'undefined') return null;
-
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        // Merge with default settings to handle missing properties
-        return {
-          ...DEFAULT_SETTINGS,
-          ...parsed,
-          keyBindings: {
-            ...DEFAULT_SETTINGS.keyBindings,
-            ...parsed.keyBindings,
-          },
-        };
-      }
-    } catch (error) {
-      log.warn('Failed to load settings from localStorage', {
-        component: 'SettingsStorage',
-        metadata: { error },
-      });
-    }
-    return null;
-  }, []);
-
-  const clearSettings = useCallback((): void => {
-    if (typeof window === 'undefined') return;
-
-    try {
-      localStorage.removeItem(STORAGE_KEY);
-    } catch (error) {
-      log.warn('Failed to clear settings from localStorage', {
-        component: 'SettingsStorage',
-        metadata: { error },
-      });
-    }
-  }, []);
-
-  // ===== State Management =====
+  // Validation utilities
+  const {
+    isKeyBound,
+    getActionForKey,
+    getEffectiveVolume,
+    clampVolume,
+    validateSettings,
+    addKeyToBinding,
+    removeKeyFromBinding,
+  } = useSettingsValidation();
 
   // Initialize settings from storage or defaults
-  const initialSettings = loadSettings() || DEFAULT_SETTINGS;
-  const [settings, setSettings] = useState<GameSettings>(initialSettings);
+  const [settings, setSettings] = useState<GameSettings>(() => {
+    return loadSettings() || DEFAULT_SETTINGS;
+  });
 
+  // Cross-tab synchronization
+  useSettingsSync({
+    storageKey: STORAGE_KEY,
+    onSettingsChange: setSettings,
+  });
+
+  // Update settings with validation and auto-save
   const updateSettings = useCallback(
     (updates: Partial<GameSettings>) => {
+      if (!validateSettings(updates)) {
+        console.warn('Invalid settings update attempted:', updates);
+        return;
+      }
+
       setSettings((prevSettings) => {
         const newSettings = { ...prevSettings, ...updates };
-        // Auto-save to localStorage
         saveSettings(newSettings);
         return newSettings;
       });
     },
-    [saveSettings]
+    [saveSettings, validateSettings]
   );
 
   const resetToDefaults = useCallback(() => {
@@ -138,39 +71,7 @@ export function useSettings() {
     saveSettings(DEFAULT_SETTINGS);
   }, [saveSettings]);
 
-  // ===== Cross-tab Synchronization =====
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === STORAGE_KEY && e.newValue) {
-        try {
-          const newSettings = JSON.parse(e.newValue);
-          const mergedSettings = {
-            ...DEFAULT_SETTINGS,
-            ...newSettings,
-            keyBindings: {
-              ...DEFAULT_SETTINGS.keyBindings,
-              ...newSettings.keyBindings,
-            },
-          };
-          setSettings(mergedSettings);
-        } catch (error) {
-          log.warn('Failed to parse settings from storage event', {
-            component: 'SettingsSync',
-            metadata: { error },
-          });
-        }
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
-
-  // ===== Key Bindings Management =====
-
+  // Key binding management
   const updateKeyBinding = useCallback(
     (action: keyof KeyBindings, newKeys: string[]) => {
       updateSettings({
@@ -183,42 +84,37 @@ export function useSettings() {
     [settings.keyBindings, updateSettings]
   );
 
+  const addKeyBinding = useCallback(
+    (action: keyof KeyBindings, newKey: string) => {
+      const currentKeys = settings.keyBindings[action];
+      const updatedKeys = addKeyToBinding(currentKeys, newKey);
+      updateKeyBinding(action, updatedKeys);
+    },
+    [settings.keyBindings, updateKeyBinding, addKeyToBinding]
+  );
+
+  const removeKeyBinding = useCallback(
+    (action: keyof KeyBindings, keyToRemove: string) => {
+      const currentKeys = settings.keyBindings[action];
+      const updatedKeys = removeKeyFromBinding(currentKeys, keyToRemove);
+      updateKeyBinding(action, updatedKeys);
+    },
+    [settings.keyBindings, updateKeyBinding, removeKeyFromBinding]
+  );
+
   const resetKeyBindings = useCallback(() => {
     updateSettings({
       keyBindings: DEFAULT_SETTINGS.keyBindings,
     });
   }, [updateSettings]);
 
-  const addKeyBinding = useCallback(
-    (action: keyof KeyBindings, newKey: string) => {
-      const currentKeys = settings.keyBindings[action];
-      if (!currentKeys.includes(newKey)) {
-        updateKeyBinding(action, [...currentKeys, newKey]);
-      }
-    },
-    [settings.keyBindings, updateKeyBinding]
-  );
-
-  const removeKeyBinding = useCallback(
-    (action: keyof KeyBindings, keyToRemove: string) => {
-      const currentKeys = settings.keyBindings[action];
-      const filteredKeys = currentKeys.filter((key) => key !== keyToRemove);
-      if (filteredKeys.length > 0) {
-        // Ensure at least one key remains
-        updateKeyBinding(action, filteredKeys);
-      }
-    },
-    [settings.keyBindings, updateKeyBinding]
-  );
-
-  // ===== Audio Controls =====
-
+  // Audio controls
   const setVolume = useCallback(
     (volume: number) => {
-      const clampedVolume = Math.max(0, Math.min(1, volume));
+      const clampedVolume = clampVolume(volume);
       updateSettings({ volume: clampedVolume });
     },
-    [updateSettings]
+    [updateSettings, clampVolume]
   );
 
   const toggleAudio = useCallback(() => {
@@ -236,8 +132,7 @@ export function useSettings() {
     updateSettings({ isMuted: !settings.isMuted });
   }, [settings.isMuted, updateSettings]);
 
-  // ===== Theme Management =====
-
+  // Theme management
   const setTheme = useCallback(
     (theme: GameSettings['theme']) => {
       updateSettings({ theme });
@@ -245,8 +140,7 @@ export function useSettings() {
     [updateSettings]
   );
 
-  // ===== Visual Settings =====
-
+  // Visual settings
   const toggleGhost = useCallback(() => {
     updateSettings({ showGhost: !settings.showGhost });
   }, [settings.showGhost, updateSettings]);
@@ -255,65 +149,19 @@ export function useSettings() {
     updateSettings({ showParticles: !settings.showParticles });
   }, [settings.showParticles, updateSettings]);
 
-  // ===== Utility Functions =====
-
-  const isKeyBound = useCallback(
-    (key: string): boolean => {
-      return Object.values(settings.keyBindings).some((keys) => keys.includes(key));
-    },
-    [settings.keyBindings]
-  );
-
-  const getActionForKey = useCallback(
-    (key: string): keyof KeyBindings | null => {
-      for (const [action, keys] of Object.entries(settings.keyBindings)) {
-        if (keys.includes(key)) {
-          return action as keyof KeyBindings;
-        }
-      }
-      return null;
-    },
-    [settings.keyBindings]
-  );
-
-  const getEffectiveVolume = useCallback((): number => {
-    if (!settings.audioEnabled || settings.isMuted) {
-      return 0;
-    }
-    return settings.volume;
-  }, [settings.audioEnabled, settings.isMuted, settings.volume]);
-
-  const exportSettings = useCallback((): string => {
-    return JSON.stringify(settings, null, 2);
-  }, [settings]);
-
-  const importSettings = useCallback(
+  // Import/Export with validation
+  const handleImportSettings = useCallback(
     (settingsJson: string): boolean => {
-      try {
-        const importedSettings = JSON.parse(settingsJson);
-        // Validate and merge with defaults
-        const validatedSettings = {
-          ...DEFAULT_SETTINGS,
-          ...importedSettings,
-          keyBindings: {
-            ...DEFAULT_SETTINGS.keyBindings,
-            ...importedSettings.keyBindings,
-          },
-        };
-        updateSettings(validatedSettings);
+      const imported = importSettings(settingsJson);
+      if (imported) {
+        setSettings(imported);
+        saveSettings(imported);
         return true;
-      } catch (error) {
-        log.warn('Failed to import settings', {
-          component: 'Settings',
-          metadata: { error },
-        });
-        return false;
       }
+      return false;
     },
-    [updateSettings]
+    [importSettings, saveSettings]
   );
-
-  // ===== Return API =====
 
   return {
     // Current settings
@@ -328,15 +176,15 @@ export function useSettings() {
     resetKeyBindings,
     addKeyBinding,
     removeKeyBinding,
-    isKeyBound,
-    getActionForKey,
+    isKeyBound: (key: string) => isKeyBound(settings, key),
+    getActionForKey: (key: string) => getActionForKey(settings, key),
 
     // Audio controls
     setVolume,
     toggleAudio,
     setMuted,
     toggleMute,
-    getEffectiveVolume,
+    getEffectiveVolume: () => getEffectiveVolume(settings),
 
     // Theme management
     setTheme,
@@ -346,23 +194,17 @@ export function useSettings() {
     toggleParticles,
 
     // Storage operations
-    saveSettings,
-    loadSettings,
+    saveSettings: () => saveSettings(settings),
     clearSettings,
-    exportSettings,
-    importSettings,
+    exportSettings: () => exportSettings(settings),
+    importSettings: handleImportSettings,
 
     // Constants
     DEFAULT_SETTINGS,
-
-    // Backward compatibility (legacy API)
-    resetToDefaults,
   };
 }
 
-// ===== Legacy Compatibility Exports =====
-
-// Store-like selectors for backward compatibility with existing usage patterns
+// Legacy compatibility exports
 export const useGameSettings = () => {
   const settingsApi = useSettings();
   return settingsApi.settings;
@@ -377,3 +219,7 @@ export const useResetSettings = () => {
   const settingsApi = useSettings();
   return settingsApi.resetSettings;
 };
+
+// Re-export types for convenience
+export type { GameSettings, KeyBindings } from './useSettingsStorage';
+export { DEFAULT_SETTINGS } from './useSettingsStorage';

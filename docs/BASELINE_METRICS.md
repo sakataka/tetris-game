@@ -70,6 +70,22 @@ src/
 
 **Total:** 15 stores, ~3,000 lines
 
+## 📊 Phase 1 Updates (2025-06-15)
+
+### **Store Changes:**
+- ✅ **Removed:** `languageStore.ts` (49 lines), `localeStore.ts` (168 lines)
+- ✅ **Added:** `i18nStore.ts` (200 lines) - unified language + locale functionality
+- **Current Total:** 14 stores (~3,050 lines)
+
+### **Hook Changes:**
+- ✅ **Split:** `useSettings.ts` (379 lines) → 4 focused hooks (410 lines total)
+- **New Hooks Added:**
+  - `useSettingsStorage.ts` (120 lines)
+  - `useSettingsSync.ts` (40 lines)  
+  - `useSettingsValidation.ts` (100 lines)
+  - `useSettings.ts` (150 lines, simplified)
+- **Current Total:** 25 hooks (~3,100 lines)
+
 ## 🎣 Custom Hooks Detail
 
 | Hook | Lines | Purpose |

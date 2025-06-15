@@ -1,5 +1,18 @@
 // Unified export of new split Zustand store collection
 
+// I18n Store (unified language + locale)
+export {
+  useI18nStore,
+  useCurrentLanguage,
+  useSupportedLanguages,
+  useIsRTL,
+  useDateFormat,
+  useSetLanguage,
+  useInitializeLanguage,
+  useLanguageChange,
+  type LanguageChangeCallback,
+} from './i18nStore';
+
 // Settings Store
 export {
   useSettingsStore,
