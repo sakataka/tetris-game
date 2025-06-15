@@ -152,13 +152,31 @@ src/
 
 ## Development Workflow
 
+### Quality Assurance Strategy
+**Performance-Optimized Multi-Layer Validation:**
+
+1. **Pre-commit (Fast: ~0.9s)** - Automatic on every commit
+   - Biome format + lint (staged files only)
+   - TypeScript type checking (full project)
+   - Prevents commits with TypeScript errors
+
+2. **Pre-push (Complete: ~3.5s)** - Manual before pushing
+   ```bash
+   pnpm pre-push  # Full quality check + all tests
+   ```
+
+3. **CI/CD (GitHub Actions)** - Final validation
+   - Complete test suite
+   - Build verification
+   - Deployment checks
+
 ### Adding Features
 1. Check existing patterns in similar components
 2. Use appropriate Zustand stores with individual selectors
 3. Follow TypeScript strict mode (no `any`)
 4. Let React Compiler handle optimization
 5. Add tests in `src/test/`
-6. Run `pnpm quality:check` before commit
+6. **Run `pnpm pre-push` before pushing** (recommended)
 
 ### React Compiler Guidelines
 **DO:**
@@ -195,7 +213,8 @@ src/
 - **Package Manager**: pnpm required (not npm/yarn)
 - **React Version**: 19.1.0 with React Compiler enabled
 - **Comments/Commits**: English only for source code
-- **Pre-commit**: Husky runs Biome format + lint + TypeScript check
+- **Pre-commit**: Husky runs Biome format + lint + TypeScript check (fast: ~0.9s)
+- **Pre-push**: Full validation with tests available via `pnpm pre-push` (~3.5s)
 - **Performance**: React Compiler handles optimization automatically
 - **Testing**: Use React Testing Library + Vitest for component tests
 

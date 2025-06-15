@@ -22,7 +22,8 @@
     "format:check": "biome format .",
     "biome:check": "biome check --apply .",
     "quality:check": "pnpm lint && pnpm tsc --noEmit",
-    "quality:fix": "biome check --apply ."
+    "quality:fix": "biome check --apply .",
+    "pre-push": "pnpm quality:check && pnpm test --run"
   },
   "dependencies": {
     "@fontsource/geist-mono": "^5.0.0",

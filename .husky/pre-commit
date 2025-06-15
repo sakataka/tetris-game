@@ -1,12 +1,20 @@
-# Pre-commit checks for code quality
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Exit on any error to prevent commits with issues
+set -e
+
 echo "🔍 Running pre-commit quality checks..."
 
-# Run lint-staged for staged files
+# Step 1: Fast checks first (lint-staged for staged files only)
 echo "🔍 Running lint-staged checks..."
 pnpm exec lint-staged
 
-# Run TypeScript type checking
+# Step 2: TypeScript type checking (critical for preventing today's issue)
 echo "🔎 Running TypeScript type checking..."
 pnpm tsc --noEmit
 
-echo "✅ Pre-commit checks completed!"
+# Note: Tests are not run here for performance reasons
+# Use 'pnpm pre-push' before pushing or rely on CI/CD
+
+echo "✅ Pre-commit checks completed! (Use 'pnpm pre-push' for full validation)"
