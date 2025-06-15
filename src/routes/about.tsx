@@ -1,16 +1,5 @@
 import MainLayout from '../components/layout/MainLayout';
 import CyberCard from '../components/ui/CyberCard';
-import type { MetaFunction } from '../types/route';
-import { getPageMetadata } from '../utils/metadata/pageMetadata';
-
-export const meta: MetaFunction = () => {
-  const metadata = getPageMetadata('about');
-  return [
-    { title: metadata.title },
-    { name: 'description', content: metadata.description || '' },
-    { name: 'keywords', content: metadata.keywords?.join(', ') || '' },
-  ];
-};
 
 export default function AboutPage() {
   return (
