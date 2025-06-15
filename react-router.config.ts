@@ -1,16 +1,16 @@
 import type { Config } from '@react-router/dev/config';
 
 export default {
-  // SPA モード - SSR完全無効化 (React 19.1 + React Router 7 互換性問題により)
+  // SPA mode - Complete SSR disabling (due to React 19.1 + React Router 7 compatibility issues)
   ssr: false,
 
-  // SPA モードではプリレンダリングも無効化
+  // Disable prerendering in SPA mode as well
   // prerender: [],
 
-  // サーバー設定（SPAモードでは不要）
+  // Server configuration (not needed in SPA mode)
   // serverBuildFile: 'index.js',
   buildDirectory: './dist',
 
-  // アプリケーションディレクトリ
+  // Application directory
   appDirectory: './src',
 } satisfies Config;

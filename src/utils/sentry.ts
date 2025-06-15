@@ -1,6 +1,6 @@
 /**
  * Sentry Error Tracking & Performance Monitoring
- * プロダクション環境でのエラー追跡とパフォーマンス監視
+ * Error tracking and performance monitoring in production environment
  */
 
 import * as Sentry from '@sentry/react';
@@ -16,10 +16,10 @@ export interface SentryConfig {
 }
 
 /**
- * Sentry初期化設定
+ * Sentry initialization configuration
  */
 export function initSentry(config?: Partial<SentryConfig>): void {
-  // プロダクション環境でのみSentryを有効化
+  // Enable Sentry only in production environment
   const isProduction = import.meta.env.PROD;
   const dsn = import.meta.env['VITE_SENTRY_DSN'];
 
@@ -34,7 +34,7 @@ export function initSentry(config?: Partial<SentryConfig>): void {
     tracesSampleRate: Number.parseFloat(import.meta.env['VITE_SENTRY_TRACES_SAMPLE_RATE'] || '0.1'),
     integrations: [Sentry.browserTracingIntegration()],
     beforeSend: (event: Sentry.ErrorEvent, _hint: Sentry.EventHint) => {
-      // 開発環境やローカル環境ではイベントを送信しない
+      // Do not send events in development or local environments
       if (
         event.server_name?.includes('localhost') ||
         event.server_name?.includes('127.0.0.1') ||
@@ -43,11 +43,11 @@ export function initSentry(config?: Partial<SentryConfig>): void {
         return null;
       }
 
-      // ゲーム特有のエラーのフィルタリング
+      // Filtering game-specific errors
       if (event.exception) {
         const error = event.exception.values?.[0];
         if (error?.type === 'AudioContextError' && error.value?.includes('user gesture')) {
-          // ユーザージェスチャーが必要なオーディオエラーは無視
+          // Ignore audio errors that require user gesture
           return null;
         }
       }
@@ -76,11 +76,11 @@ export function initSentry(config?: Partial<SentryConfig>): void {
 }
 
 /**
- * ゲーム特有のエラー追跡
+ * Game-specific error tracking
  */
 export const GameSentry = {
   /**
-   * ゲームエラーの記録
+   * Record game errors
    */
   captureGameError: (error: Error, context?: Record<string, unknown>) => {
     Sentry.withScope((scope) => {
@@ -93,7 +93,7 @@ export const GameSentry = {
   },
 
   /**
-   * オーディオエラーの記録
+   * Record audio errors
    */
   captureAudioError: (error: Error, strategy?: string) => {
     Sentry.withScope((scope) => {
@@ -104,7 +104,7 @@ export const GameSentry = {
   },
 
   /**
-   * パフォーマンス問題の記録
+   * Record performance issues
    */
   capturePerformanceIssue: (message: string, context?: Record<string, unknown>) => {
     Sentry.withScope((scope) => {
@@ -117,24 +117,24 @@ export const GameSentry = {
   },
 
   /**
-   * ユーザーフィードバック
+   * User feedback
    */
   captureUserFeedback: (name: string, email: string, comments: string) => {
     try {
-      // Sentryのフィードバック機能を利用
+      // Use Sentry's feedback functionality
       Sentry.captureFeedback({
         name,
         email,
         message: comments,
       });
     } catch {
-      // フォールバック：通常のメッセージとして送信
+      // Fallback: send as normal message
       Sentry.captureMessage(`User Feedback: ${comments}`, 'info');
     }
   },
 
   /**
-   * カスタムパフォーマンス測定
+   * Custom performance measurement
    */
   measurePerformance: <T>(name: string, operation: () => T): T => {
     return Sentry.startSpan(
@@ -159,14 +159,14 @@ export const GameSentry = {
   },
 
   /**
-   * ユーザー情報の設定
+   * Set user information
    */
   setUser: (user: { id: string; username?: string; email?: string }) => {
     Sentry.setUser(user);
   },
 
   /**
-   * ゲームセッション情報の設定
+   * Set game session information
    */
   setGameSession: (sessionId: string, gameMode?: string) => {
     Sentry.setTag('session_id', sessionId);

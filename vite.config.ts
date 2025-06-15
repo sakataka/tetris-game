@@ -5,7 +5,7 @@ import viteCompression from 'vite-plugin-compression';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig(() => ({
-  // エントリーポイントの設定
+  // Entry point configuration
   root: '.',
   publicDir: 'public',
 
@@ -16,35 +16,35 @@ export default defineConfig(() => ({
       },
     }),
     tsconfigPaths(),
-    // gzip圧縮
+    // gzip compression
     viteCompression({
       algorithm: 'gzip',
       ext: '.gz',
-      threshold: 10240, // 10KB以上のファイルのみ圧縮
+      threshold: 10240, // Compress files larger than 10KB only
       filter: /\.(js|css|html|svg|json)$/i,
       deleteOriginFile: false,
     }),
-    // brotli圧縮
+    // brotli compression
     viteCompression({
       algorithm: 'brotliCompress',
       ext: '.br',
-      threshold: 10240, // 10KB以上のファイルのみ圧縮
+      threshold: 10240, // Compress files larger than 10KB only
       filter: /\.(js|css|html|svg|json)$/i,
       deleteOriginFile: false,
     }),
-    // Sentry監視（プロダクションのみ） - 一時的に無効化
+    // Sentry monitoring (production only) - temporarily disabled
     // ...(mode === 'production' && process.env['SENTRY_AUTH_TOKEN']
     //   ? [
     //       sentryVitePlugin({
     //         org: process.env['SENTRY_ORG'],
     //         project: process.env['SENTRY_PROJECT'],
     //         authToken: process.env['SENTRY_AUTH_TOKEN'],
-    //         // ソースマップ設定
+    //         // Source map configuration
     //         sourcemaps: {
     //           assets: './build/client/**',
     //           ignore: ['node_modules/**'],
     //         },
-    //         // Release設定
+    //         // Release configuration
     //         release: {
     //           name: `tetris-game@${process.env['npm_package_version'] || '1.0.0'}`,
     //         },
@@ -53,14 +53,14 @@ export default defineConfig(() => ({
     //   : []),
   ],
 
-  // Tailwind CSS v4.1 統合
+  // Tailwind CSS v4.1 integration
   css: {
     postcss: {
       plugins: [tailwindcss()],
     },
   },
 
-  // 開発サーバー最適化
+  // Development server optimization
   server: {
     port: 3000,
     host: true,
@@ -69,11 +69,11 @@ export default defineConfig(() => ({
     },
   },
 
-  // ビルド最適化
+  // Build optimization
   build: {
     target: 'ES2024',
     minify: 'terser',
-    sourcemap: false, // ソースマップを無効化
+    sourcemap: false, // Disable source maps
     terserOptions: {
       compress: {
         drop_console: true,
@@ -86,7 +86,7 @@ export default defineConfig(() => ({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          // React関連のベンダーチャンク（React RouterとReactを同じチャンクに）
+          // React-related vendor chunk (React Router and React in same chunk)
           if (
             id.includes('node_modules/react') ||
             id.includes('node_modules/react-dom') ||
@@ -95,15 +95,15 @@ export default defineConfig(() => ({
           ) {
             return 'react-vendor';
           }
-          // UI関連のベンダーチャンク
+          // UI-related vendor chunk
           if (id.includes('@radix-ui') || id.includes('class-variance-authority')) {
             return 'ui-vendor';
           }
-          // i18n関連
+          // i18n related
           if (id.includes('i18next') || id.includes('react-i18next')) {
             return 'i18n';
           }
-          // ゲームコア（大きなコンポーネント）
+          // Game core (large components)
           if (
             id.includes('TetrisBoard') ||
             id.includes('GameLogicController') ||
@@ -111,11 +111,11 @@ export default defineConfig(() => ({
           ) {
             return 'game-core';
           }
-          // パーティクルとアニメーション
+          // Particles and animations
           if (id.includes('ParticleCanvas') || id.includes('ParticleEffect')) {
             return 'particle-system';
           }
-          // 設定とテーマ関連
+          // Settings and theme related
           if (
             id.includes('ThemeTabContent') ||
             id.includes('SettingsTabContent') ||
@@ -123,14 +123,14 @@ export default defineConfig(() => ({
           ) {
             return 'settings';
           }
-          // デフォルトは何も返さない（undefinedでViteが自動で決定）
+          // Return nothing by default (undefined lets Vite decide automatically)
           return undefined;
         },
       },
     },
   },
 
-  // テスト設定
+  // Test configuration
   test: {
     globals: true,
     environment: 'jsdom',
@@ -138,7 +138,7 @@ export default defineConfig(() => ({
     css: true,
   },
 
-  // React Compiler 最適化
+  // React Compiler optimization
   optimizeDeps: {
     include: ['react', 'react-dom', 'zustand', 'react-router'],
   },

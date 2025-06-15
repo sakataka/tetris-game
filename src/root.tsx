@@ -1,20 +1,20 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
 import type { MetaFunction } from './types/route';
 
-// グローバルプロバイダー
+// Global providers
 import ErrorBoundaryWithTranslation from './components/ErrorBoundaryWithTranslation';
 import ErrorStoreInitializer from './components/ErrorStoreInitializer';
 import ErrorToastAdapter from './components/ErrorToastAdapter';
 import I18nProvider from './components/I18nProvider';
 import { Toaster } from './components/ui/sonner';
 
-// フォント設定（React Router対応）
+// Font configuration (React Router compatible)
 import '@fontsource/geist-sans/400.css';
 import '@fontsource/geist-sans/500.css';
 import '@fontsource/geist-sans/600.css';
 import '@fontsource/geist-mono/400.css';
 
-// グローバルスタイル
+// Global styles
 import './app/globals.css';
 
 export const meta: MetaFunction = () => {
