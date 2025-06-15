@@ -8,9 +8,9 @@
     "pnpm": ">=9.0.0"
   },
   "scripts": {
-    "dev": "react-router dev",
+    "dev": "vite",
     "build": "vite build",
-    "start": "react-router-serve ./build/server/index.js",
+    "start": "vite preview",
     "preview": "vite preview",
     "lint": "biome lint .",
     "lint:fix": "biome lint --write .",
