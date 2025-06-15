@@ -253,7 +253,7 @@ export function logSecurityEvent(
   };
 
   // プロダクション環境ではSentryに送信
-  if (process.env['NODE_ENV'] === 'production') {
+  if (import.meta.env.PROD) {
     try {
       // Sentryがロードされている場合のみ
       const { GameSentry } = require('./sentry');

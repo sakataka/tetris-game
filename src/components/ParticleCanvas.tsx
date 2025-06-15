@@ -74,7 +74,7 @@ const ParticleCanvas = memo(function ParticleCanvas({
   }, [lineEffect.particles, width, height, enablePerformanceMode]);
 
   // Performance monitoring display (development only)
-  const shouldShowStats = process.env['NODE_ENV'] === 'development' && enablePerformanceMode;
+  const shouldShowStats = import.meta.env.DEV && enablePerformanceMode;
 
   useEffect(() => {
     if (shouldShowStats && renderStats.particleCount > 0) {

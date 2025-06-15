@@ -20,8 +20,8 @@ export interface SentryConfig {
  */
 export function initSentry(config?: Partial<SentryConfig>): void {
   // プロダクション環境でのみSentryを有効化
-  const isProduction = process.env['NODE_ENV'] === 'production';
-  const dsn = process.env['VITE_SENTRY_DSN'] || process.env['SENTRY_DSN'];
+  const isProduction = import.meta.env.PROD;
+  const dsn = import.meta.env['VITE_SENTRY_DSN'];
 
   if (!dsn || !isProduction) {
     console.log('🔍 Sentry disabled in development mode');
@@ -30,9 +30,8 @@ export function initSentry(config?: Partial<SentryConfig>): void {
 
   const defaultConfig = {
     dsn,
-    environment:
-      (process.env['NODE_ENV'] as 'development' | 'staging' | 'production') || 'production',
-    tracesSampleRate: Number.parseFloat(process.env['VITE_SENTRY_TRACES_SAMPLE_RATE'] || '0.1'),
+    environment: import.meta.env.PROD ? 'production' : 'development',
+    tracesSampleRate: Number.parseFloat(import.meta.env['VITE_SENTRY_TRACES_SAMPLE_RATE'] || '0.1'),
     integrations: [Sentry.browserTracingIntegration()],
     beforeSend: (event: Sentry.ErrorEvent, _hint: Sentry.EventHint) => {
       // 開発環境やローカル環境ではイベントを送信しない

@@ -6,28 +6,28 @@
 
 // Environment validation helper
 function getEnvBoolean(key: string, defaultValue = false): boolean {
-  const value = process.env[key];
+  const value = import.meta.env[key];
   if (value === undefined) return defaultValue;
   return value.toLowerCase() === 'true';
 }
 
 function getEnvNumber(key: string, defaultValue: number): number {
-  const value = process.env[key];
+  const value = import.meta.env[key];
   if (value === undefined) return defaultValue;
   const parsed = Number.parseInt(value, 10);
   return Number.isNaN(parsed) ? defaultValue : parsed;
 }
 
 function getEnvString(key: string, defaultValue: string): string {
-  return process.env[key] || defaultValue;
+  return import.meta.env[key] || defaultValue;
 }
 
 // Core environment configuration
 export const ENV_CONFIG = {
   // Runtime Environment
   NODE_ENV: getEnvString('NODE_ENV', 'development'),
-  IS_PRODUCTION: process.env['NODE_ENV'] === 'production',
-  IS_DEVELOPMENT: process.env['NODE_ENV'] === 'development',
+  IS_PRODUCTION: import.meta.env.PROD,
+  IS_DEVELOPMENT: import.meta.env.DEV,
 
   // Feature Flags
   FEATURES: {

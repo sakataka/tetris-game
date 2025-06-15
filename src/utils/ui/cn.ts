@@ -301,7 +301,7 @@ export const performance = {
  * @param label - Optional label for console output
  */
 export function debugClasses(classes: string, label?: string): string {
-  if (process.env['NODE_ENV'] === 'development') {
+  if (import.meta.env.DEV) {
     const classArray = classes.split(' ').filter(Boolean);
     console.log(`🎨 ${label || 'Classes'}:`, classArray);
   }
