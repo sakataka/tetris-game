@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Tetromino } from '../types/tetris';
 import GameTabContent from './GameTabContent';
 import MobileGameInfo from './MobileGameInfo';
@@ -21,16 +22,15 @@ const GameInfo = memo(function GameInfo({
   gameOver,
   isPaused,
 }: GameInfoProps) {
+  const { t } = useTranslation();
 
   return (
     <div className='text-white h-full flex flex-col'>
       {/* Desktop: Game Title + Game Info */}
       <div className='hidden md:flex flex-col h-full space-y-4'>
         {/* TETRIS Title with consistent styling */}
-        <CyberCard title='TETRIS' theme='cyan' size='sm'>
-          <div className='text-center text-cyber-cyan-400 font-mono text-sm'>
-            Game Mode
-          </div>
+        <CyberCard title={t('app.title')} theme='cyan' size='md'>
+          <div className='text-center text-cyber-cyan-400 text-xs'>{t('game.playing')}</div>
         </CyberCard>
 
         {/* Game Information */}

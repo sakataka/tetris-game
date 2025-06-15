@@ -1,4 +1,7 @@
 {
+  "app": {
+    "title": "TETRIS"
+  },
   "game": {
     "title": "サイバーパンク テトリス",
     "score": "スコア",
