@@ -1,72 +1,34 @@
-import { useSettings, useUpdateSettings } from '../store/settingsStore';
-import {
-  AudioController,
-  type AudioSystemAPI,
-  DeviceController,
-  type DeviceSystemAPI,
-  EventController,
-  type EventSystemAPI,
-  type GameStateAPI,
-  GameStateController,
-} from './controllers';
+/**
+ * GameLogicController - Hook-based implementation
+ * 
+ * Replaces the 5-level render prop nesting with clean hook composition.
+ * This demonstrates the modernized pattern that React Compiler can optimize.
+ */
 
-// Combined API interface that will be passed to children
-export interface GameControllerAPI
-  extends GameStateAPI,
-    AudioSystemAPI,
-    EventSystemAPI,
-    DeviceSystemAPI {
-  // Settings
-  settings: ReturnType<typeof useSettings>;
-  updateSettings: ReturnType<typeof useUpdateSettings>;
-}
+import { useGameController, type GameControllerAPI } from '../hooks/useGameController';
 
 interface GameLogicControllerProps {
   children: (api: GameControllerAPI) => React.ReactNode;
 }
 
 /**
- * GameLogicController now serves as an integration layer for specialized controllers.
- * Responsibilities:
- * - Controller composition and coordination
- * - Unified API surface provision
- * - Settings management
+ * Modernized GameLogicController using hook composition instead of render props.
+ * 
+ * Benefits:
+ * - Single hook call replaces 5-level nesting
+ * - Better React Compiler optimization
+ * - Cleaner component tree
+ * - Reduced cognitive load
+ * 
+ * Before: 5 levels of render prop nesting (72 lines)
+ * After: Single hook call (15 lines)
  */
 export default function GameLogicController({ children }: GameLogicControllerProps) {
-  // Settings management (shared across controllers)
-  const settings = useSettings();
-  const updateSettings = useUpdateSettings();
+  // Single hook call replaces the entire render prop chain
+  const gameControllerAPI = useGameController();
 
-  return (
-    <EventController>
-      {(eventAPI) => (
-        <DeviceController>
-          {(deviceAPI) => (
-            <AudioController>
-              {(audioAPI) => (
-                <GameStateController
-                  playSound={audioAPI.playSound}
-                  onGameStart={eventAPI.onGameStart}
-                >
-                  {(gameStateAPI) => {
-                    // Combine all APIs into unified interface
-                    const gameControllerAPI: GameControllerAPI = {
-                      ...gameStateAPI,
-                      ...audioAPI,
-                      ...eventAPI,
-                      ...deviceAPI,
-                      settings,
-                      updateSettings,
-                    };
-
-                    return children(gameControllerAPI);
-                  }}
-                </GameStateController>
-              )}
-            </AudioController>
-          )}
-        </DeviceController>
-      )}
-    </EventController>
-  );
+  return children(gameControllerAPI);
 }
+
+// Re-export the API interface for backward compatibility
+export type { GameControllerAPI };
