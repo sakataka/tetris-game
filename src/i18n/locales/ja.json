@@ -45,7 +45,7 @@
     "upArrow": "↑",
     "pKey": "P",
     "rKey": "R",
-    "pauseHint": "スペースキーまたは一時停止ボタンを押して再開"
+    "pauseHint": "一時停止ボタンを押して再開"
   },
   "settings": {
     "title": "設定",
