@@ -48,7 +48,7 @@ React Router 7 SPA Application
 ├── src/store/                   # 15 Zustand stores
 ├── src/hooks/                   # 17 custom hooks
 ├── src/utils/                   # Audio, logging, error handling
-└── src/test/                    # 349 tests (Vitest + Playwright)
+└── src/test/                    # 349 tests (Vitest)
 ```
 
 ### 🎮 Application Features
@@ -99,7 +99,7 @@ pnpm quality:check      # Full pipeline (lint + typecheck + test)
 
 # Testing
 pnpm test               # Vitest watch mode
-pnpm test:e2e           # Playwright E2E tests
+pnpm test:coverage      # Test coverage report
 ```
 
 ## 🎯 Migration Success Criteria ✅

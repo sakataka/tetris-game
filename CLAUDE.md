@@ -26,7 +26,7 @@ This file provides guidance to Claude Code when working with this React Router 7
 ### Bundle Performance
 - **Production Build**: 322.02 kB (gzip: 95.68 kB)
 - **Components**: 60 total (40 game + 20 shadcn/ui)
-- **Tests**: 349 tests across 24 files (Vitest + Playwright)
+- **Tests**: 349 tests across 24 files (Vitest)
 
 ## Key Architecture Patterns
 
