@@ -3,14 +3,22 @@
 **Generated:** 2025-06-15  
 **Purpose:** シンプルでメンテナンスしやすい実装に向けた分析結果
 
-## 📊 Current Codebase Overview
+## 📊 Current Codebase Overview (Baseline: 2025-06-15)
 
-**Scale:**
-- 214 TypeScript files
-- 32,236 total lines of code
-- 529 exports
-- 15 Zustand stores (3,000 lines)
-- 22 custom hooks (2,845 lines)
+**Precise Measurements:**
+- **214 TypeScript files** (.ts/.tsx in src/)
+- **32,236 total lines of code** (excluding tests, config files)
+- **15 Zustand stores** (3,000+ lines total)
+- **22 custom hooks** (2,845+ lines total)
+- **64 React components** (including 20 shadcn/ui components)
+- **8 large files** (>300 lines each)
+
+**Largest Files (Refactoring Targets):**
+- `audioFallback.ts`: 486 lines
+- `sessionStore.ts`: 456 lines  
+- `errorHandler.ts`: 450 lines
+- `accessibilityUtils.ts`: 410 lines
+- `errors.ts`: 387 lines
 
 **Assessment:** The current architecture shows **over-engineering** for a Tetris game, with enterprise-level complexity applied to a relatively simple problem domain.
 
@@ -190,4 +198,8 @@ The fundamental issue is **architectural over-engineering**:
 
 ---
 
-**Next Steps:** Review this analysis and proceed with [SIMPLIFICATION_ROADMAP.md](./SIMPLIFICATION_ROADMAP.md) for detailed implementation plan.
+**Reference Documents:**
+- [BASELINE_METRICS.md](./BASELINE_METRICS.md) - 詳細な現在の数値記録
+- [SIMPLIFICATION_ROADMAP.md](./SIMPLIFICATION_ROADMAP.md) - 実装計画とフェーズ別ロードマップ
+
+**Next Steps:** Review this analysis and proceed with the detailed implementation plan.

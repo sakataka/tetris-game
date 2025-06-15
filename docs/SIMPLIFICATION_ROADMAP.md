@@ -9,13 +9,25 @@ Transform the current over-engineered Tetris game into a **simple, maintainable,
 
 ## 📊 Current vs Target State
 
-| Metric | Current | Target | Reduction |
-|--------|---------|--------|-----------|
-| Zustand Stores | 15 | 6 | -60% |
-| Custom Hooks | 22 | 12 | -45% |
-| Large Files (>300 lines) | 8 | 2 | -75% |
-| Component Nesting Levels | 5 | 2 | -60% |
-| Import Dependencies | High | Medium | -40% |
+### **Baseline Metrics (2025-06-15):**
+- **Total Files:** 214 TypeScript files
+- **Total LOC:** 32,236 lines
+- **Zustand Stores:** 15 stores
+- **Custom Hooks:** 22 hooks  
+- **Large Files:** 8 files >300 lines
+- **Components:** 64 React components
+
+### **Target Improvements:**
+
+| Metric | Current | Target | Goal |
+|--------|---------|--------|------|
+| Zustand Stores | 15 | 8-10 | Merge related stores |
+| Custom Hooks | 22 | 15-18 | Split complex hooks |
+| Large Files (>300 lines) | 8 | 3-4 | Break down largest files |
+| Total LOC | 32,236 | <30,000 | 7-10% reduction |
+| Component Nesting | 5 levels | 2-3 levels | Flatten architecture |
+
+**Note:** 目標は理想的な削減数値であり、実際のリファクタリングでコードサイズが下がれば成功とします。無理に目標数値に合わせる必要はありません。
 
 ## 🚀 Phase-Based Implementation Plan
 
