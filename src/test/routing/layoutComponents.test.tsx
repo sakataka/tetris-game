@@ -35,7 +35,6 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-
 // Mock cn utility
 vi.mock('../../utils/ui/cn', () => ({
   cn: (...args: string[]) => args.filter(Boolean).join(' '),
@@ -85,7 +84,6 @@ describe('Layout Components (React Router Preparation)', () => {
       expect(container.firstChild).toHaveClass('custom-layout');
     });
   });
-
 
   describe('GameHeader Component', () => {
     it('should render title by default', () => {
@@ -175,5 +173,4 @@ describe('Layout Components (React Router Preparation)', () => {
       ).toHaveLength(5);
     });
   });
-
 });
