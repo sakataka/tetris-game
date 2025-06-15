@@ -1,5 +1,3 @@
-'use client';
-
 import { use, useEffect } from 'react';
 import { useMobileDetection } from '../hooks/useMobileDetection';
 import { useInitializeLanguage } from '../store/languageStore';

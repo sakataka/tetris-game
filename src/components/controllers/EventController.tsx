@@ -1,5 +1,3 @@
-'use client';
-
 import type React from 'react';
 import { useSession } from '../../hooks/useSession';
 

@@ -1,5 +1,3 @@
-'use client';
-
 import { useEffect, useRef } from 'react';
 import { EFFECTS } from '../../constants/layout';
 import { useGameControls } from '../../hooks/useGameControls';

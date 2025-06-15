@@ -1,5 +1,3 @@
-'use client';
-
 import i18next from 'i18next';
 import React, { Component, type ReactNode, type ErrorInfo } from 'react';
 import { DEFAULT_VALUES, GAME_TIMING } from '../constants';

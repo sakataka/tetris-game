@@ -1,5 +1,3 @@
-'use client';
-
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/utils/ui/cn';

@@ -1,5 +1,3 @@
-'use client';
-
 import { memo } from 'react';
 import { useTheme as useThemeManager } from '../hooks/useTheme';
 import {

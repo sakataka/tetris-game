@@ -1,5 +1,3 @@
-'use client';
-
 import { Suspense, lazy, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Skeleton } from './ui/skeleton';

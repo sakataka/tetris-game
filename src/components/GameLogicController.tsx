@@ -1,5 +1,3 @@
-'use client';
-
 import { useSettings, useUpdateSettings } from '../store/settingsStore';
 import {
   AudioController,

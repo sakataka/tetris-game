@@ -1,5 +1,3 @@
-'use client';
-
 import { memo } from 'react';
 import ErrorBoundary from './ErrorBoundary';
 import GameInfo from './GameInfo';

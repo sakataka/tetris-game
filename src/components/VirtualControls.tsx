@@ -1,5 +1,3 @@
-'use client';
-
 import { cn } from '@/utils/ui/cn';
 import type React from 'react';
 import { memo } from 'react';

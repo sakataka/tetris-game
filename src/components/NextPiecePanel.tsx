@@ -1,5 +1,3 @@
-'use client';
-
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GAME_UI_SIZES } from '../constants/layout';

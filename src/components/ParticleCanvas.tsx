@@ -1,5 +1,3 @@
-'use client';
-
 import { memo, useEffect, useRef, useState } from 'react';
 import type { LineEffectState } from '../types/tetris';
 import { log } from '../utils/logging';

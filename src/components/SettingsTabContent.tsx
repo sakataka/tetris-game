@@ -1,5 +1,3 @@
-'use client';
-
 import { Suspense, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';

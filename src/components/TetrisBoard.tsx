@@ -1,5 +1,3 @@
-'use client';
-
 import { Suspense, lazy, memo } from 'react';
 import {
   type BoardRenderState,

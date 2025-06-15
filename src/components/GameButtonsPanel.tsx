@@ -1,5 +1,3 @@
-'use client';
-
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/ui/cn';
 import { memo } from 'react';

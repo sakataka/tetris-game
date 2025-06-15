@@ -1,5 +1,3 @@
-'use client';
-
 import { cn } from '@/utils/ui/cn';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

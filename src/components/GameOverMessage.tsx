@@ -1,5 +1,3 @@
-'use client';
-
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { cn } from '@/utils/ui/cn';
 import { memo } from 'react';

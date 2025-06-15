@@ -1,5 +1,3 @@
-'use client';
-
 import ErrorBoundary from './ErrorBoundary';
 import GameLayoutManager from './GameLayoutManager';
 import GameLogicController from './GameLogicController';

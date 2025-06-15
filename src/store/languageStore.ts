@@ -1,8 +1,6 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import i18n from '../i18n';
-import type { SupportedLanguage } from '../i18n';
-import { defaultLanguage } from '../i18n';
+import i18n, { type SupportedLanguage, defaultLanguage } from '../i18n';
 
 interface LanguageState {
   currentLanguage: SupportedLanguage;

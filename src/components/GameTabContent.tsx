@@ -1,5 +1,3 @@
-'use client';
-
 import { memo } from 'react';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
 import { useHighScores } from '../store/statisticsStore';
