@@ -12,7 +12,6 @@ interface CombinedStatsNextPanelProps {
   lines: number;
   nextPiece: Tetromino | null;
   gameOver?: boolean;
-  isPaused?: boolean;
   size?: 'xs' | 'sm' | 'md' | 'lg';
 }
 
@@ -22,7 +21,6 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
   lines,
   nextPiece,
   gameOver = false,
-  isPaused = false,
   size = 'xs',
 }: CombinedStatsNextPanelProps) {
   const { t } = useTranslation();
@@ -32,31 +30,14 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
   const containerSize =
     size === 'xs' ? 'w-8 h-8' : size === 'sm' ? 'w-12 h-12' : GAME_UI_SIZES.NEXT_PIECE.CONTAINER;
 
-  // Game status badge
+  // Game status badge - only for game over
   const getGameStatusBadge = () => {
-    if (gameOver) {
-      return (
-        <Badge
-          variant='destructive'
-          className='bg-red-500/20 text-red-400 border-red-400/50 animate-pulse'
-        >
-          {t('game.gameOver')}
-        </Badge>
-      );
-    }
-    if (isPaused) {
-      return (
-        <Badge
-          variant='secondary'
-          className='bg-yellow-500/20 text-yellow-400 border-yellow-400/50'
-        >
-          {t('game.paused')}
-        </Badge>
-      );
-    }
     return (
-      <Badge variant='default' className='bg-green-500/20 text-green-400 border-green-400/50'>
-        {t('game.playing')}
+      <Badge
+        variant='destructive'
+        className='bg-red-500/20 text-red-400 border-red-400/50 animate-pulse'
+      >
+        {t('game.gameOver')}
       </Badge>
     );
   };
@@ -67,10 +48,8 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
       theme='cyan'
       size={size}
     >
-      {/* Game Status Badge - Show only for paused/game over */}
-      {(gameOver || isPaused) && (
-        <div className='flex justify-center mb-2'>{getGameStatusBadge()}</div>
-      )}
+      {/* Game Status Badge - Show only for game over */}
+      {gameOver && <div className='flex justify-center mb-2'>{getGameStatusBadge()}</div>}
       <div className='grid grid-cols-2 gap-2'>
         {/* Score Information */}
         <div className={SPACING.TIGHT}>

@@ -13,7 +13,6 @@ interface GameTabContentProps {
   lines: number;
   nextPiece: Tetromino | null;
   gameOver: boolean;
-  isPaused: boolean;
   className?: string;
 }
 
@@ -23,7 +22,6 @@ const GameTabContent = memo(function GameTabContent({
   lines,
   nextPiece,
   gameOver,
-  isPaused,
   className = '',
 }: GameTabContentProps) {
   const highScores = useHighScores();
@@ -37,7 +35,6 @@ const GameTabContent = memo(function GameTabContent({
         lines={lines}
         nextPiece={nextPiece}
         gameOver={gameOver}
-        isPaused={isPaused}
         size='xs'
       />
 
