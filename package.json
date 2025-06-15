@@ -20,9 +20,9 @@
     "prepare": "husky",
     "format": "biome format --write .",
     "format:check": "biome format .",
-    "biome:check": "biome check --apply .",
+    "biome:check": "biome check --write .",
     "quality:check": "pnpm lint && pnpm tsc --noEmit",
-    "quality:fix": "biome check --apply .",
+    "quality:fix": "biome check --write .",
     "pre-push": "pnpm quality:check && pnpm test --run"
   },
   "dependencies": {
