@@ -1,31 +1,30 @@
 /**
  * Unified Settings Hook (Simplified)
- * 
+ *
  * Simplified wrapper that combines focused hooks for settings management.
  * Replaces the original 379-line useSettings.ts with a cleaner architecture.
  */
 
 import { useCallback, useState } from 'react';
-import { useSettingsStorage, type GameSettings, type KeyBindings, DEFAULT_SETTINGS } from './useSettingsStorage';
+import {
+  useSettingsStorage,
+  type GameSettings,
+  type KeyBindings,
+  DEFAULT_SETTINGS,
+} from './useSettingsStorage';
 import { useSettingsSync } from './useSettingsSync';
 import { useSettingsValidation } from './useSettingsValidation';
 
 /**
  * Unified settings management hook
- * 
+ *
  * Combines storage, sync, and validation functionality with a clean API.
  * Much simpler than the original 379-line implementation.
  */
 export function useSettings() {
   // Storage operations
-  const {
-    saveSettings,
-    loadSettings,
-    clearSettings,
-    exportSettings,
-    importSettings,
-    STORAGE_KEY,
-  } = useSettingsStorage();
+  const { saveSettings, loadSettings, clearSettings, exportSettings, importSettings, STORAGE_KEY } =
+    useSettingsStorage();
 
   // Validation utilities
   const {

@@ -1,6 +1,6 @@
 /**
  * GameLogicController - Hook-based implementation
- * 
+ *
  * Replaces the 5-level render prop nesting with clean hook composition.
  * This demonstrates the modernized pattern that React Compiler can optimize.
  */
@@ -13,13 +13,13 @@ interface GameLogicControllerProps {
 
 /**
  * Modernized GameLogicController using hook composition instead of render props.
- * 
+ *
  * Benefits:
  * - Single hook call replaces 5-level nesting
  * - Better React Compiler optimization
  * - Cleaner component tree
  * - Reduced cognitive load
- * 
+ *
  * Before: 5 levels of render prop nesting (72 lines)
  * After: Single hook call (15 lines)
  */

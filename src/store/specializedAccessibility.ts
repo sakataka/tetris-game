@@ -24,16 +24,19 @@ import {
 } from '../types/accessibility';
 
 // Combined specialized accessibility state
-interface SpecializedAccessibilityState 
-  extends CognitiveAccessibilityState, InputAccessibilityState {}
+interface SpecializedAccessibilityState
+  extends CognitiveAccessibilityState,
+    InputAccessibilityState {}
 
 // Combined specialized accessibility actions
-interface SpecializedAccessibilityActions 
-  extends CognitiveAccessibilityActions, InputAccessibilityActions {}
+interface SpecializedAccessibilityActions
+  extends CognitiveAccessibilityActions,
+    InputAccessibilityActions {}
 
 // Specialized accessibility store interface
-interface SpecializedAccessibilityStore 
-  extends SpecializedAccessibilityState, SpecializedAccessibilityActions {
+interface SpecializedAccessibilityStore
+  extends SpecializedAccessibilityState,
+    SpecializedAccessibilityActions {
   // Bulk updates
   updateCognitiveState: (updates: Partial<CognitiveAccessibilityState>) => void;
   updateInputState: (updates: Partial<InputAccessibilityState>) => void;
@@ -426,8 +429,10 @@ export const useSpecializedAccessibilityStore = create<SpecializedAccessibilityS
         keyboard: state.keyboard,
         feedback: state.feedback,
       }),
-    } as PersistOptions<SpecializedAccessibilityStore, 
-      Pick<SpecializedAccessibilityStore, 'cognitive' | 'gameSpecific' | 'keyboard' | 'feedback'>>
+    } as PersistOptions<
+      SpecializedAccessibilityStore,
+      Pick<SpecializedAccessibilityStore, 'cognitive' | 'gameSpecific' | 'keyboard' | 'feedback'>
+    >
   )
 );
 
@@ -515,10 +520,10 @@ export const useInputAccessibilityState = () =>
     feedback: state.feedback,
   }));
 
-export const useKeyboardNavigation = () => 
+export const useKeyboardNavigation = () =>
   useSpecializedAccessibilityStore((state) => state.keyboard);
 
-export const useFeedbackSettings = () => 
+export const useFeedbackSettings = () =>
   useSpecializedAccessibilityStore((state) => state.feedback);
 
 // Individual keyboard setting selectors
@@ -528,10 +533,10 @@ export const useKeyboardEnabled = () =>
 export const useFocusOutline = () =>
   useSpecializedAccessibilityStore((state) => state.keyboard.focusOutline);
 
-export const useSkipLinks = () => 
+export const useSkipLinks = () =>
   useSpecializedAccessibilityStore((state) => state.keyboard.skipLinks);
 
-export const useTabOrder = () => 
+export const useTabOrder = () =>
   useSpecializedAccessibilityStore((state) => state.keyboard.tabOrder);
 
 // Individual feedback setting selectors

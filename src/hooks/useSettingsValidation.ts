@@ -1,6 +1,6 @@
 /**
  * Settings Validation Hook
- * 
+ *
  * Focused hook for settings validation and utility functions.
  * Extracted from useSettings.ts for single responsibility.
  */
@@ -10,18 +10,15 @@ import type { GameSettings, KeyBindings } from './useSettingsStorage';
 
 /**
  * Settings validation and utility functions hook
- * 
+ *
  * Provides validation logic and utility functions for settings management.
  * All functions are pure and side-effect free.
  */
 export function useSettingsValidation() {
   // Key binding utilities
-  const isKeyBound = useCallback(
-    (settings: GameSettings, key: string): boolean => {
-      return Object.values(settings.keyBindings).some((keys) => keys.includes(key));
-    },
-    []
-  );
+  const isKeyBound = useCallback((settings: GameSettings, key: string): boolean => {
+    return Object.values(settings.keyBindings).some((keys) => keys.includes(key));
+  }, []);
 
   const getActionForKey = useCallback(
     (settings: GameSettings, key: string): keyof KeyBindings | null => {
@@ -49,82 +46,85 @@ export function useSettingsValidation() {
 
   // Key binding validation
   const validateKeyBinding = useCallback((keys: string[]): boolean => {
-    return keys.length > 0 && keys.every(key => typeof key === 'string' && key.length > 0);
+    return keys.length > 0 && keys.every((key) => typeof key === 'string' && key.length > 0);
   }, []);
 
-  const validateKeyBindings = useCallback((keyBindings: KeyBindings): boolean => {
-    return Object.values(keyBindings).every(keys => validateKeyBinding(keys));
-  }, [validateKeyBinding]);
+  const validateKeyBindings = useCallback(
+    (keyBindings: KeyBindings): boolean => {
+      return Object.values(keyBindings).every((keys) => validateKeyBinding(keys));
+    },
+    [validateKeyBinding]
+  );
 
   // Settings validation
-  const validateSettings = useCallback((settings: Partial<GameSettings>): boolean => {
-    // Volume validation
-    if (settings.volume !== undefined) {
-      if (typeof settings.volume !== 'number' || settings.volume < 0 || settings.volume > 1) {
-        return false;
+  const validateSettings = useCallback(
+    (settings: Partial<GameSettings>): boolean => {
+      // Volume validation
+      if (settings.volume !== undefined) {
+        if (typeof settings.volume !== 'number' || settings.volume < 0 || settings.volume > 1) {
+          return false;
+        }
       }
-    }
 
-    // Theme validation
-    if (settings.theme !== undefined) {
-      const validThemes = ['cyberpunk', 'classic', 'neon'] as const;
-      if (!validThemes.includes(settings.theme)) {
-        return false;
+      // Theme validation
+      if (settings.theme !== undefined) {
+        const validThemes = ['cyberpunk', 'classic', 'neon'] as const;
+        if (!validThemes.includes(settings.theme)) {
+          return false;
+        }
       }
-    }
 
-    // Key bindings validation
-    if (settings.keyBindings !== undefined) {
-      if (!validateKeyBindings(settings.keyBindings)) {
-        return false;
+      // Key bindings validation
+      if (settings.keyBindings !== undefined) {
+        if (!validateKeyBindings(settings.keyBindings)) {
+          return false;
+        }
       }
-    }
 
-    // Boolean validations
-    const booleanFields = ['audioEnabled', 'isMuted', 'showGhost', 'showParticles'] as const;
-    for (const field of booleanFields) {
-      if (settings[field] !== undefined && typeof settings[field] !== 'boolean') {
-        return false;
+      // Boolean validations
+      const booleanFields = ['audioEnabled', 'isMuted', 'showGhost', 'showParticles'] as const;
+      for (const field of booleanFields) {
+        if (settings[field] !== undefined && typeof settings[field] !== 'boolean') {
+          return false;
+        }
       }
-    }
 
-    return true;
-  }, [validateKeyBindings]);
+      return true;
+    },
+    [validateKeyBindings]
+  );
 
   // Key binding helpers
-  const addKeyToBinding = useCallback((
-    currentKeys: string[],
-    newKey: string
-  ): string[] => {
+  const addKeyToBinding = useCallback((currentKeys: string[], newKey: string): string[] => {
     if (!currentKeys.includes(newKey)) {
       return [...currentKeys, newKey];
     }
     return currentKeys;
   }, []);
 
-  const removeKeyFromBinding = useCallback((
-    currentKeys: string[],
-    keyToRemove: string
-  ): string[] => {
-    const filteredKeys = currentKeys.filter((key) => key !== keyToRemove);
-    // Ensure at least one key remains
-    return filteredKeys.length > 0 ? filteredKeys : currentKeys;
-  }, []);
+  const removeKeyFromBinding = useCallback(
+    (currentKeys: string[], keyToRemove: string): string[] => {
+      const filteredKeys = currentKeys.filter((key) => key !== keyToRemove);
+      // Ensure at least one key remains
+      return filteredKeys.length > 0 ? filteredKeys : currentKeys;
+    },
+    []
+  );
 
   return {
     // Key binding utilities
     isKeyBound,
     getActionForKey,
-    
+
     // Audio utilities
     getEffectiveVolume,
     clampVolume,
-    
+
     // Validation functions
     validateKeyBinding,
     validateKeyBindings,
     validateSettings,
-    
+
     // Key binding helpers
     addKeyToBinding,
     removeKeyFromBinding,

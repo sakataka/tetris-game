@@ -1,6 +1,6 @@
 /**
  * Game State Controller Hook
- * 
+ *
  * Converts GameStateController render prop pattern to hook composition.
  * Manages core game state and game logic operations.
  */
@@ -198,9 +198,12 @@ export function useGameStateController({
     togglePause();
   }, [togglePause]);
 
-  const handleParticleUpdate = useCallback((particles: LineEffectState['particles']) => {
-    updateParticles(particles);
-  }, [updateParticles]);
+  const handleParticleUpdate = useCallback(
+    (particles: LineEffectState['particles']) => {
+      updateParticles(particles);
+    },
+    [updateParticles]
+  );
 
   // Return API object
   return {

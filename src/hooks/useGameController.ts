@@ -1,6 +1,6 @@
 /**
  * Unified Game Controller Hook
- * 
+ *
  * Replaces the 5-level render prop nesting in GameLogicController
  * with a clean composition hooks pattern.
  */
@@ -8,7 +8,7 @@
 import { useSettings, useUpdateSettings } from '../store/settingsStore';
 import {
   useAudioController,
-  useDeviceController, 
+  useDeviceController,
   useEventController,
   useGameStateController,
   type AudioSystemAPI,
@@ -37,11 +37,11 @@ export function useGameController(): GameControllerAPI {
   const eventAPI = useEventController();
   const deviceAPI = useDeviceController();
   const audioAPI = useAudioController();
-  
+
   // Settings management
   const settings = useSettings();
   const updateSettings = useUpdateSettings();
-  
+
   // Initialize game state with dependencies
   const gameStateAPI = useGameStateController({
     playSound: audioAPI.playSound,

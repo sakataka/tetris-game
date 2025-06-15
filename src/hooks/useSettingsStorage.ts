@@ -1,6 +1,6 @@
 /**
  * Settings Storage Hook
- * 
+ *
  * Focused hook for localStorage operations with error handling.
  * Extracted from useSettings.ts for single responsibility.
  */
@@ -58,7 +58,7 @@ const STORAGE_KEY = 'tetris-game-settings';
 
 /**
  * Settings storage operations hook
- * 
+ *
  * Provides localStorage operations with error handling and validation.
  * All storage operations are resilient to localStorage being unavailable.
  */

@@ -1,6 +1,6 @@
 /**
  * Event Controller Hook
- * 
+ *
  * Converts EventController render prop pattern to hook composition.
  * Manages session tracking and game lifecycle events.
  */

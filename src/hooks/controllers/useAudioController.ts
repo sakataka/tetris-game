@@ -1,6 +1,6 @@
 /**
  * Audio Controller Hook
- * 
+ *
  * Converts AudioController render prop pattern to hook composition.
  * Manages audio system and sound-related settings.
  */
@@ -93,10 +93,13 @@ export function useAudioController(): AudioSystemAPI {
   }, [unlockAudio, preloadAudio]);
 
   // Enhanced playSound that initializes audio on first call
-  const playSound = useCallback(async (soundKey: SoundKey) => {
-    await initializeAudioOnUserInteraction();
-    return originalPlaySound(soundKey);
-  }, [initializeAudioOnUserInteraction, originalPlaySound]);
+  const playSound = useCallback(
+    async (soundKey: SoundKey) => {
+      await initializeAudioOnUserInteraction();
+      return originalPlaySound(soundKey);
+    },
+    [initializeAudioOnUserInteraction, originalPlaySound]
+  );
 
   // Setup global user interaction listeners for audio initialization
   useEffect(() => {
@@ -118,10 +121,13 @@ export function useAudioController(): AudioSystemAPI {
   }, [initializeAudioOnUserInteraction]);
 
   // Event handlers (React Compiler will optimize these)
-  const handleVolumeChange = useCallback((newVolume: number) => {
-    updateSettings({ volume: newVolume });
-    setVolumeLevel(newVolume);
-  }, [updateSettings, setVolumeLevel]);
+  const handleVolumeChange = useCallback(
+    (newVolume: number) => {
+      updateSettings({ volume: newVolume });
+      setVolumeLevel(newVolume);
+    },
+    [updateSettings, setVolumeLevel]
+  );
 
   const handleToggleMute = useCallback(() => {
     updateSettings({ isMuted: !settings.isMuted });

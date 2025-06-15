@@ -1,6 +1,6 @@
 /**
  * Audio Fallback Manager V2
- * 
+ *
  * Modernized version using modular strategy pattern.
  * Replaces the monolithic audioFallback.ts with clean architecture.
  */
@@ -10,12 +10,11 @@ import { AudioError, handleError } from '../data/errorHandler';
 import { log } from '../logging';
 import { AudioCapabilityDetector, type AudioCapabilities } from './AudioCapabilityDetector';
 import {
-  AudioFallbackStrategy,
+  type AudioFallbackStrategy,
   WebAudioStrategy,
   HtmlAudioStrategy,
   VisualFeedbackStrategy,
   SilentStrategy,
-  type FallbackLevel,
 } from './AudioFallbackStrategy';
 
 interface FallbackConfig {
@@ -110,7 +109,7 @@ export class AudioFallbackManager {
    */
   public async playWithFallback(
     soundKey: SoundKey,
-    options: { volume?: number } = {}
+    _options: { volume?: number } = {}
   ): Promise<void> {
     if (this.config.silentMode) return;
 
@@ -120,44 +119,43 @@ export class AudioFallbackManager {
     let lastError: Error | null = null;
     let retryCount = 0;
 
-    while (this.currentStrategyIndex < this.strategies.length && retryCount < this.config.maxRetries) {
+    while (
+      this.currentStrategyIndex < this.strategies.length &&
+      retryCount < this.config.maxRetries
+    ) {
       const strategy = this.strategies[this.currentStrategyIndex];
-      
+
       try {
         await strategy.playSound(soundKey);
         return; // Success!
       } catch (error) {
         lastError = error as Error;
-        
-        log.warn(
-          `Strategy ${strategy.getName()} failed for sound ${soundKey}:`,
-          error as Error
-        );
+
+        log.warn(`Strategy ${strategy.getName()} failed for sound ${soundKey}:`, error as Error);
 
         // Move to next strategy
         this.currentStrategyIndex++;
-        
+
         if (this.currentStrategyIndex < this.strategies.length) {
           log.info(`Falling back to: ${this.strategies[this.currentStrategyIndex].getName()}`);
-          
+
           // Add delay before retry
           if (this.config.fallbackDelay > 0) {
-            await new Promise(resolve => setTimeout(resolve, this.config.fallbackDelay));
+            await new Promise((resolve) => setTimeout(resolve, this.config.fallbackDelay));
           }
         }
       }
-      
+
       retryCount++;
     }
 
     // If all strategies failed, log error but don't throw
     if (lastError) {
       handleError(
-        new AudioError(
-          `All audio strategies failed for sound: ${soundKey}`,
-          'FALLBACK_EXHAUSTED',
-          { soundKey, strategies: this.strategies.map(s => s.getName()) }
-        )
+        new AudioError(`All audio strategies failed for sound: ${soundKey}`, 'FALLBACK_EXHAUSTED', {
+          soundKey,
+          strategies: this.strategies.map((s) => s.getName()),
+        })
       );
     }
   }
@@ -186,7 +184,7 @@ export class AudioFallbackManager {
   public getStatus(): FallbackStatus {
     return {
       currentLevel: this.currentStrategyIndex,
-      availableLevels: this.strategies.map(s => s.getName()),
+      availableLevels: this.strategies.map((s) => s.getName()),
       silentMode: this.config.silentMode,
     };
   }
@@ -216,7 +214,7 @@ export class AudioFallbackManager {
    * Manually set current strategy
    */
   public setStrategy(strategyName: string): boolean {
-    const index = this.strategies.findIndex(s => s.getName() === strategyName);
+    const index = this.strategies.findIndex((s) => s.getName() === strategyName);
     if (index !== -1) {
       this.currentStrategyIndex = index;
       return true;

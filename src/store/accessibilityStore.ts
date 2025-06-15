@@ -24,9 +24,7 @@ import {
 } from '../types/accessibility';
 import type { ColorBlindnessType, ContrastLevel } from '../types/tetris';
 
-import {
-  useSpecializedAccessibilityStore,
-} from './specializedAccessibility';
+import { useSpecializedAccessibilityStore } from './specializedAccessibility';
 
 // System preference detection for visual settings
 function detectSystemVisualPreferences(): Partial<VisualAccessibilityState> {
@@ -111,7 +109,7 @@ function applyPresetToStores(preset: AccessibilityLevel) {
     specializedStore.updateGameSpecific(presetConfig.gameSpecific);
   if (presetConfig.keyboard !== undefined)
     specializedStore.updateKeyboardNavigation(presetConfig.keyboard);
-  if (presetConfig.feedback !== undefined) 
+  if (presetConfig.feedback !== undefined)
     specializedStore.updateFeedbackSettings(presetConfig.feedback);
 }
 
@@ -294,10 +292,13 @@ export const useAccessibilityStore = create<UnifiedAccessibilityStore>()(
           state.detectSystemPreferences();
         }
       },
-    } as PersistOptions<UnifiedAccessibilityStore, Partial<VisualAccessibilityState> & {
-      level: AccessibilityLevel;
-      enabled: boolean;
-    }>
+    } as PersistOptions<
+      UnifiedAccessibilityStore,
+      Partial<VisualAccessibilityState> & {
+        level: AccessibilityLevel;
+        enabled: boolean;
+      }
+    >
   )
 );
 
@@ -401,8 +402,7 @@ export const useUpdateVisualAssistance = () =>
 export const useToggleHighContrast = () =>
   useAccessibilityStore((state) => state.toggleHighContrast);
 
-export const useToggleLargeText = () =>
-  useAccessibilityStore((state) => state.toggleLargeText);
+export const useToggleLargeText = () => useAccessibilityStore((state) => state.toggleLargeText);
 
 export const useToggleReducedMotion = () =>
   useAccessibilityStore((state) => state.toggleReducedMotion);

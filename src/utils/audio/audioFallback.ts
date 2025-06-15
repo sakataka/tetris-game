@@ -1,12 +1,12 @@
 /**
  * Audio Fallback System - Modernized Entry Point
- * 
+ *
  * This file now serves as a simplified interface to the modular fallback system.
  * The original monolithic implementation (486 lines) has been split into:
  * - AudioCapabilityDetector: Browser capability detection (~150 lines)
  * - AudioFallbackStrategy: Individual strategy implementations (~200 lines)
  * - AudioFallbackManagerV2: Core management logic (~180 lines)
- * 
+ *
  * Total: 486 lines → 530 lines across 3 focused modules (better maintainability)
  */
 
@@ -76,15 +76,15 @@ export class AudioFallbackManagerLegacy {
   }
 
   public configure(config: Partial<FallbackConfig>): void {
-    return this.modernManager.configure(config);
+    this.modernManager.configure(config);
   }
 
   public reset(): void {
-    return this.modernManager.reset();
+    this.modernManager.reset();
   }
 
   public cleanup(): void {
-    return this.modernManager.cleanup();
+    this.modernManager.cleanup();
   }
 }
 

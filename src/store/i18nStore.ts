@@ -1,6 +1,6 @@
 /**
  * Internationalization Store
- * 
+ *
  * Unified i18n store combining language selection and locale management.
  * Consolidates functionality from languageStore.ts and localeStore.ts
  * for simpler and more maintainable internationalization.
@@ -17,8 +17,8 @@ interface I18nState {
   // Language state (from languageStore)
   currentLanguage: SupportedLanguage;
   isInitialized: boolean;
-  
-  // Locale state (from localeStore) 
+
+  // Locale state (from localeStore)
   supportedLanguages: readonly SupportedLanguage[];
   dateFormat: string;
   isRTL: boolean;
@@ -28,7 +28,7 @@ interface I18nActions {
   // Language actions
   setLanguage: (language: SupportedLanguage) => void;
   initializeLanguage: () => void;
-  
+
   // Locale actions
   getDateFormat: () => string;
   isLanguageSupported: (language: string) => boolean;
@@ -42,7 +42,10 @@ const DATE_FORMAT_MAP: Record<SupportedLanguage, string> = {
 };
 
 // Default state combining both stores
-const DEFAULT_I18N_STATE: Pick<I18nState, 'currentLanguage' | 'supportedLanguages' | 'dateFormat' | 'isRTL' | 'isInitialized'> = {
+const DEFAULT_I18N_STATE: Pick<
+  I18nState,
+  'currentLanguage' | 'supportedLanguages' | 'dateFormat' | 'isRTL' | 'isInitialized'
+> = {
   currentLanguage: defaultLanguage,
   isInitialized: false,
   supportedLanguages: supportedLanguages,
@@ -98,10 +101,9 @@ export const useI18nStore = create<I18nState & I18nActions>()(
       setLanguage: (language: SupportedLanguage) => {
         let validLanguage = language;
         if (!get().isLanguageSupported(language)) {
-          log.warn(
-            `Unsupported language: ${language}. Falling back to ${defaultLanguage}`,
-            { component: 'I18nStore' }
-          );
+          log.warn(`Unsupported language: ${language}. Falling back to ${defaultLanguage}`, {
+            component: 'I18nStore',
+          });
           validLanguage = defaultLanguage;
         }
 

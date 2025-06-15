@@ -1,6 +1,6 @@
 /**
  * Unified Error Handler
- * 
+ *
  * Provides consistent error handling patterns across the application.
  * Consolidates handleError, handleAsyncError, and withErrorHandling patterns.
  */
@@ -13,25 +13,26 @@ import { log } from '../logging';
  */
 export function handleError(
   error: Error | BaseAppError | string,
-  context?: Record<string, any>
+  context?: Record<string, unknown>
 ): void {
   try {
     // Convert string to Error if needed
     const errorObj = typeof error === 'string' ? new Error(error) : error;
-    
+
     // Add context to error if it's a BaseAppError
     if (errorObj instanceof BaseAppError && context) {
       // Create new error with updated context
-      const updatedError = new (errorObj.constructor as any)(errorObj.message);
+      const ErrorClass = errorObj.constructor as new (message: string) => BaseAppError;
+      const updatedError = new ErrorClass(errorObj.message);
       updatedError.context = { ...errorObj.context, ...context };
       originalHandleError(updatedError);
       return;
     }
-    
+
     originalHandleError(errorObj);
   } catch (handlingError) {
     // Fallback if error handling itself fails
-    log.error('Error handler failed:', handlingError as any);
+    log.error('Error handler failed:', handlingError as Error);
     console.error('Critical error handling failure:', error, handlingError);
   }
 }
@@ -39,14 +40,14 @@ export function handleError(
 /**
  * Higher-order function that wraps functions with error handling
  */
-export function withErrorHandling<T extends (...args: any[]) => any>(
+export function withErrorHandling<T extends (...args: unknown[]) => unknown>(
   fn: T,
-  context?: Record<string, any>
+  context?: Record<string, unknown>
 ): T {
-  return ((...args: any[]) => {
+  return ((...args: unknown[]) => {
     try {
       const result = fn(...args);
-      
+
       // Handle promise-returning functions
       if (result && typeof result.then === 'function') {
         return result.catch((error: Error) => {
@@ -54,7 +55,7 @@ export function withErrorHandling<T extends (...args: any[]) => any>(
           throw error; // Re-throw to maintain promise rejection behavior
         });
       }
-      
+
       return result;
     } catch (error) {
       handleError(error as Error, { ...context, functionName: fn.name, args });
@@ -68,7 +69,7 @@ export function withErrorHandling<T extends (...args: any[]) => any>(
  */
 export async function handleAsyncError<T>(
   operation: () => Promise<T>,
-  context?: Record<string, any>
+  context?: Record<string, unknown>
 ): Promise<T | null> {
   try {
     return await operation();
@@ -84,7 +85,7 @@ export async function handleAsyncError<T>(
 export async function safeAsync<T>(
   operation: () => Promise<T>,
   fallback?: T,
-  context?: Record<string, any>
+  context?: Record<string, unknown>
 ): Promise<T | null> {
   try {
     return await operation();
@@ -99,37 +100,37 @@ export async function safeAsync<T>(
  */
 export async function withRetry<T>(
   operation: () => Promise<T>,
-  maxRetries: number = 3,
-  delay: number = 1000,
-  context?: Record<string, any>
+  maxRetries = 3,
+  delay = 1000,
+  context?: Record<string, unknown>
 ): Promise<T> {
-  let lastError: Error;
-  
+  let lastError: Error = new Error('No attempts made');
+
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       return await operation();
     } catch (error) {
       lastError = error as Error;
-      
+
       if (attempt === maxRetries) {
-        handleError(lastError, { 
-          ...context, 
-          attempt, 
-          maxRetries, 
-          type: 'retry_exhausted' 
+        handleError(lastError, {
+          ...context,
+          attempt,
+          maxRetries,
+          type: 'retry_exhausted',
         });
         throw lastError;
       }
-      
-      // Log intermediate failures as warnings
-      log.warn(`Attempt ${attempt}/${maxRetries} failed:`, error as any);
-      
+
+      // Log intermediate failures as warnings  
+      log.warn(`Attempt ${attempt}/${maxRetries} failed:`, { error: error as Error });
+
       // Wait before retrying
-      await new Promise(resolve => setTimeout(resolve, delay * attempt));
+      await new Promise((resolve) => setTimeout(resolve, delay * attempt));
     }
   }
-  
-  throw lastError!;
+
+  throw lastError;
 }
 
 /**
@@ -141,14 +142,12 @@ export function createErrorFilter(
 ) {
   return (error: Error): boolean => {
     const errorMessage = error.message.toLowerCase();
-    const shouldHandle = errorTypes.some(type => 
-      errorMessage.includes(type.toLowerCase())
-    );
-    
+    const shouldHandle = errorTypes.some((type) => errorMessage.includes(type.toLowerCase()));
+
     if (shouldHandle) {
       handler(error);
     }
-    
+
     return shouldHandle;
   };
 }
@@ -160,13 +159,13 @@ const errorDebounceMap = new Map<string, number>();
 
 export function handleErrorDebounced(
   error: Error | BaseAppError | string,
-  context?: Record<string, any>,
-  debounceMs: number = 1000
+  context?: Record<string, unknown>,
+  debounceMs = 1000
 ): void {
   const errorKey = typeof error === 'string' ? error : error.message;
   const now = Date.now();
   const lastTime = errorDebounceMap.get(errorKey) || 0;
-  
+
   if (now - lastTime > debounceMs) {
     errorDebounceMap.set(errorKey, now);
     handleError(error, context);
@@ -179,7 +178,7 @@ export function handleErrorDebounced(
 setInterval(() => {
   const now = Date.now();
   const cutoff = 5 * 60 * 1000; // 5 minutes
-  
+
   for (const [key, time] of errorDebounceMap.entries()) {
     if (now - time > cutoff) {
       errorDebounceMap.delete(key);

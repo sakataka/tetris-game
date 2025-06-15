@@ -1,6 +1,6 @@
 /**
  * Settings Synchronization Hook
- * 
+ *
  * Focused hook for cross-tab synchronization via storage events.
  * Extracted from useSettings.ts for single responsibility.
  */
@@ -16,7 +16,7 @@ interface UseSettingsSyncOptions {
 
 /**
  * Settings synchronization hook
- * 
+ *
  * Handles cross-tab synchronization via localStorage events.
  * Updates local state when settings change in other tabs.
  */

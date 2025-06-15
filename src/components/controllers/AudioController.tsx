@@ -94,10 +94,13 @@ export function AudioController({ children }: AudioControllerProps) {
   }, [unlockAudio, preloadAudio]);
 
   // Enhanced playSound that initializes audio on first call
-  const playSound = useCallback(async (soundKey: SoundKey) => {
-    await initializeAudioOnUserInteraction();
-    return originalPlaySound(soundKey);
-  }, [initializeAudioOnUserInteraction, originalPlaySound]);
+  const playSound = useCallback(
+    async (soundKey: SoundKey) => {
+      await initializeAudioOnUserInteraction();
+      return originalPlaySound(soundKey);
+    },
+    [initializeAudioOnUserInteraction, originalPlaySound]
+  );
 
   // Setup global user interaction listeners for audio initialization
   useEffect(() => {

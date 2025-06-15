@@ -57,7 +57,7 @@ export function useAudio({
   //   useWebAudio,
   //   ...(onPreloadError && { onInitializationError: onPreloadError }),
   // });
-  
+
   // Minimal strategy state for compatibility
   const strategyAPI = {
     strategyState: {
@@ -111,7 +111,7 @@ export function useAudio({
       // Use audio player with effective volume
       await playerAPI.playSound(soundKey);
     },
-    [strategyAPI.strategyState.currentStrategy, stateAPI.volumeState.isMuted, playerAPI.playSound]
+    [stateAPI.volumeState.isMuted, playerAPI.playSound]
   );
 
   // Play sound with specific volume (convenience method)
@@ -150,7 +150,6 @@ export function useAudio({
       return preloaderAPI.loadState.loaded.has(soundKey);
     },
     [
-      strategyAPI.strategyState.currentStrategy,
       stateAPI.volumeState.isMuted,
       preloaderAPI.loadState.loaded,
     ]

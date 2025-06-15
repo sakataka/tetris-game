@@ -1,6 +1,6 @@
 /**
  * Audio Capability Detector
- * 
+ *
  * Detects browser audio capabilities and autoplay policies.
  * Extracted from audioFallback.ts for better modularity.
  */
@@ -23,8 +23,8 @@ export class AudioCapabilityDetector {
    * Detect browser audio capabilities with caching
    */
   public static async detect(): Promise<AudioCapabilities> {
-    if (this.cachedCapabilities) {
-      return this.cachedCapabilities;
+    if (AudioCapabilityDetector.cachedCapabilities) {
+      return AudioCapabilityDetector.cachedCapabilities;
     }
 
     const capabilities: AudioCapabilities = {
@@ -37,7 +37,7 @@ export class AudioCapabilityDetector {
     };
 
     if (typeof window === 'undefined') {
-      this.cachedCapabilities = capabilities;
+      AudioCapabilityDetector.cachedCapabilities = capabilities;
       return capabilities;
     }
 
@@ -85,10 +85,10 @@ export class AudioCapabilityDetector {
     }
 
     // Detect autoplay policy
-    capabilities.autoplayPolicy = await this.detectAutoplayPolicy();
+    capabilities.autoplayPolicy = await AudioCapabilityDetector.detectAutoplayPolicy();
 
     log.info('Audio capabilities detected', capabilities);
-    this.cachedCapabilities = capabilities;
+    AudioCapabilityDetector.cachedCapabilities = capabilities;
     return capabilities;
   }
 
@@ -134,6 +134,6 @@ export class AudioCapabilityDetector {
    * Clear cached capabilities (for testing)
    */
   public static clearCache(): void {
-    this.cachedCapabilities = null;
+    AudioCapabilityDetector.cachedCapabilities = null;
   }
 }

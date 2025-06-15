@@ -1,12 +1,12 @@
 /**
  * Audio Fallback Strategies
- * 
+ *
  * Individual strategy implementations for different audio fallback levels.
  * Extracted from audioFallback.ts for better modularity.
  */
 
 import type { SoundKey } from '../../types/tetris';
-import { AudioError, handleError } from '../data/errorHandler';
+import { AudioError } from '../data/errorHandler';
 import { log } from '../logging';
 
 export interface FallbackLevel {
@@ -53,12 +53,12 @@ export class WebAudioStrategy extends AudioFallbackStrategy {
 
   async isAvailable(): Promise<boolean> {
     if (typeof window === 'undefined') return false;
-    
+
     try {
       const AudioContextClass =
         window.AudioContext ||
         (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-      
+
       if (!AudioContextClass) return false;
 
       // Test AudioContext creation
@@ -98,25 +98,32 @@ export class WebAudioStrategy extends AudioFallbackStrategy {
       await this.initializeContext();
     }
 
+    if (!this.audioContext) {
+      throw new AudioError('AudioContext not initialized', 'INITIALIZATION_FAILED');
+    }
+
     const buffer = this.audioInstances.get(soundKey) as AudioBuffer;
     if (!buffer) {
       throw new AudioError(`Sound not preloaded: ${soundKey}`, 'SOUND_NOT_FOUND');
     }
 
-    const source = this.audioContext!.createBufferSource();
+    const source = this.audioContext.createBufferSource();
     source.buffer = buffer;
-    source.connect(this.audioContext!.destination);
+    source.connect(this.audioContext.destination);
     source.start(0);
   }
 
   async preloadSounds(soundMap: Record<SoundKey, string>): Promise<void> {
     await this.initializeContext();
-    
+
     const promises = Object.entries(soundMap).map(async ([soundKey, url]) => {
       try {
         const response = await fetch(url);
         const arrayBuffer = await response.arrayBuffer();
-        const audioBuffer = await this.audioContext!.decodeAudioData(arrayBuffer);
+        const audioBuffer = await this.audioContext?.decodeAudioData(arrayBuffer);
+        if (!audioBuffer) {
+          throw new Error('Failed to decode audio data');
+        }
         this.audioInstances.set(soundKey as SoundKey, audioBuffer);
       } catch (error) {
         log.warn(`Failed to preload sound ${soundKey}:`, error as Error);
@@ -145,7 +152,7 @@ export class HtmlAudioStrategy extends AudioFallbackStrategy {
 
   async isAvailable(): Promise<boolean> {
     if (typeof window === 'undefined') return false;
-    
+
     try {
       const audio = new Audio();
       return audio.canPlayType('audio/mpeg') !== '';
@@ -179,7 +186,7 @@ export class HtmlAudioStrategy extends AudioFallbackStrategy {
       try {
         const audio = new Audio(url);
         audio.preload = 'auto';
-        
+
         // Wait for load
         await new Promise<void>((resolve, reject) => {
           audio.oncanplaythrough = () => resolve();
@@ -275,7 +282,7 @@ export class VisualFeedbackStrategy extends AudioFallbackStrategy {
   }
 
   cleanup(): void {
-    if (this.feedbackContainer && this.feedbackContainer.parentNode) {
+    if (this.feedbackContainer?.parentNode) {
       this.feedbackContainer.parentNode.removeChild(this.feedbackContainer);
       this.feedbackContainer = null;
     }

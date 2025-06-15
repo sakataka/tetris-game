@@ -1,6 +1,6 @@
 /**
  * Device Controller Hook
- * 
+ *
  * Converts DeviceController render prop pattern to hook composition.
  * Manages device detection and platform-specific optimizations.
  */
