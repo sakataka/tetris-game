@@ -43,25 +43,25 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
   return (
     <div
       data-testid='statistics-dashboard'
-      className={`hologram-purple p-1 ${SPACING.PANEL_INTERNAL}`}
+      className={`hologram-cyan p-1 ${SPACING.PANEL_INTERNAL}`}
     >
       <div className='flex justify-between items-center'>
-        <h2 className={`${TYPOGRAPHY.PANEL_TITLE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyber-purple`}>
+        <h2 className={`${TYPOGRAPHY.PANEL_TITLE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyber-cyan`}>
           📊 {t('statistics.title')}
         </h2>
         <Select value={selectedPeriod || ''} onValueChange={onPeriodChange}>
           <SelectTrigger
             className={cn(
-              'w-[140px] bg-cyber-purple-10 border-cyber-purple-30 text-cyber-purple',
-              'hover:bg-cyber-purple-20 focus:ring-cyber-purple focus:border-cyber-purple',
-              'data-[state=open]:border-cyber-purple',
+              'w-[140px] bg-cyber-cyan-10 border-cyber-cyan-30 text-cyber-cyan',
+              'hover:bg-cyber-cyan-20 focus:ring-cyber-cyan focus:border-cyber-cyan',
+              'data-[state=open]:border-cyber-cyan',
               TYPOGRAPHY.SMALL_LABEL
             )}
             data-testid='period-selector'
           >
             <SelectValue />
           </SelectTrigger>
-          <SelectContent className='bg-background border-cyber-purple-30'>
+          <SelectContent className='bg-background border-cyber-cyan-30'>
             {STATISTICS_PERIODS.map((period) => {
               // Map period labels to translation keys
               const getTranslationKey = (label: string) => {
@@ -83,7 +83,7 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
                 <SelectItem
                   key={period.label}
                   value={period.label}
-                  className='text-foreground hover:bg-cyber-purple-20 focus:bg-cyber-purple-20 focus:text-cyber-purple'
+                  className='text-foreground hover:bg-cyber-cyan-20 focus:bg-cyber-cyan-20 focus:text-cyber-cyan'
                 >
                   {t(getTranslationKey(period.label))}
                 </SelectItem>
@@ -115,7 +115,7 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
           <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400`}>
             {t('statistics.totalLines')}
           </div>
-          <div className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-green-400`}>
+          <div className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400`}>
             {statistics.totalLines.toLocaleString()}
           </div>
         </div>
@@ -123,7 +123,7 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
           <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400`}>
             {t('statistics.playTime')}
           </div>
-          <div className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-purple-400`}>
+          <div className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400`}>
             {Math.floor(statistics.playTime / 3600)}h{' '}
             {Math.floor((statistics.playTime % 3600) / 60)}m
           </div>
@@ -134,11 +134,11 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
         <>
           {/* Efficiency metrics */}
           <div
-            className='hologram-yellow neon-border-yellow p-1 rounded'
+            className='hologram-cyan neon-border-cyan p-1 rounded'
             data-testid='efficiency-stats'
           >
             <h3
-              className={`${TYPOGRAPHY.SECTION_HEADER} ${TYPOGRAPHY.TITLE_WEIGHT} text-yellow-400 ${SPACING.SECTION_TITLE_BOTTOM}`}
+              className={`${TYPOGRAPHY.SECTION_HEADER} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400 ${SPACING.SECTION_TITLE_BOTTOM}`}
             >
               🎯 {t('statistics.efficiency')}
             </h3>
@@ -151,19 +151,19 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
               </div>
               <div>
                 <span className='text-gray-400'>{t('statistics.consistency')}: </span>
-                <span className={`text-green-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
+                <span className={`text-yellow-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
                   {statistics.consistency.toFixed(1)}%
                 </span>
               </div>
               <div>
                 <span className='text-gray-400'>{t('statistics.metrics.scorePerLine')}: </span>
-                <span className={`text-purple-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
+                <span className={`text-cyan-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
                   {Math.round(statistics.scorePerLine)}
                 </span>
               </div>
               <div>
                 <span className='text-gray-400'>{t('statistics.tetrisRate')}: </span>
-                <span className={`text-red-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
+                <span className={`text-yellow-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
                   {advancedMetrics?.tetrisRate.toFixed(1) || '0.0'}%
                 </span>
               </div>
@@ -175,7 +175,7 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
               </div>
               <div>
                 <span className='text-gray-400'>{t('statistics.playTime')}: </span>
-                <span className={`text-pink-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
+                <span className={`text-cyan-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
                   {advancedMetrics
                     ? `${Math.floor(advancedMetrics.averageGameDuration / 60)}m`
                     : '0m'}
@@ -200,13 +200,13 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
               </div>
               <div>
                 <span className='text-gray-400'>{t('statistics.bestScore')}: </span>
-                <span className={`text-purple-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
+                <span className={`text-cyan-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
                   {Math.floor(statistics.longestSession / 60)}m
                 </span>
               </div>
               <div>
                 <span className='text-gray-400'>{t('statistics.gamesPlayed')}: </span>
-                <span className={`text-green-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
+                <span className={`text-cyan-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
                   {advancedMetrics?.gamesPerSession.toFixed(1) || '0.0'}
                 </span>
               </div>
@@ -223,7 +223,7 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
               </div>
               <div>
                 <span className='text-gray-400'>{t('statistics.playTime')}: </span>
-                <span className={`text-yellow-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
+                <span className={`text-cyan-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
                   {statistics.lastPlayDate > 0
                     ? `${Math.floor((Date.now() - statistics.lastPlayDate) / 3600000)}h ago`
                     : t('statistics.never')}
@@ -234,11 +234,11 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
 
           {/* Recent high scores */}
           <div
-            className='hologram-purple neon-border-purple p-1 rounded'
+            className='hologram-cyan neon-border-cyan p-1 rounded'
             data-testid='recent-achievements'
           >
             <h3
-              className={`${TYPOGRAPHY.SECTION_HEADER} ${TYPOGRAPHY.TITLE_WEIGHT} text-purple-400 ${SPACING.SECTION_TITLE_BOTTOM}`}
+              className={`${TYPOGRAPHY.SECTION_HEADER} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400 ${SPACING.SECTION_TITLE_BOTTOM}`}
             >
               🏆 {t('statistics.highScores')}
             </h3>
@@ -276,7 +276,7 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
                     </span>
                     <Badge
                       variant='secondary'
-                      className='bg-purple-500/20 text-purple-400 border-purple-400/30'
+                      className='bg-cyber-cyan-20 text-cyber-cyan border-cyber-cyan-30'
                     >
                       Lv{score.level}
                     </Badge>

@@ -23,7 +23,11 @@
     "levelProgress": "Level Progress",
     "playing": "Playing",
     "gameIsPaused": "Game is Paused",
-    "pauseMessage": "Press Resume to continue playing"
+    "pauseMessage": "Press Resume to continue playing",
+    "resetConfirmation": {
+      "title": "Reset Game?",
+      "description": "Are you sure you want to reset the current game? All progress will be lost and cannot be recovered."
+    }
   },
   "controls": {
     "title": "Controls",
@@ -98,7 +102,11 @@
     "primary": "Primary",
     "secondary": "Secondary",
     "accent": "Accent",
-    "background": "Background"
+    "background": "Background",
+    "resetConfirmation": {
+      "title": "Reset Theme Settings?",
+      "description": "Are you sure you want to reset all theme settings to default? All custom colors and preferences will be lost."
+    }
   },
   "statistics": {
     "title": "Statistics",
@@ -168,7 +176,9 @@
     "none": "None",
     "failed": "Failed",
     "ready": "Ready",
-    "level": "Level"
+    "level": "Level",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   },
   "scoring": {
     "title": "Scoring",

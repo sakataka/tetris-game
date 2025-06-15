@@ -1,8 +1,9 @@
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/ui/cn';
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGameButtons } from '../hooks/useGameButtons';
+import { ConfirmationDialog } from './ui/ConfirmationDialog';
 
 interface GameButtonsPanelProps {
   size?: 'xs' | 'sm' | 'md' | 'lg';
@@ -15,11 +16,16 @@ const GameButtonsPanel = memo(function GameButtonsPanel({
 }: GameButtonsPanelProps) {
   const { t } = useTranslation();
   const { gameOver, isPaused, onTogglePause, onReset } = useGameButtons();
+  const [showResetConfirmation, setShowResetConfirmation] = useState(false);
 
   // Map size to shadcn/ui Button size variants
   const buttonSize = size === 'xs' ? 'sm' : size === 'lg' ? 'lg' : 'default';
   const containerClasses = layout === 'horizontal' ? 'flex space-x-2' : 'space-y-2';
   const buttonWidthClass = layout === 'horizontal' ? 'flex-1' : 'w-full';
+
+  const handleResetConfirm = () => {
+    onReset();
+  };
 
   return (
     <div className={containerClasses}>
@@ -42,7 +48,7 @@ const GameButtonsPanel = memo(function GameButtonsPanel({
       </Button>
 
       <Button
-        onClick={onReset}
+        onClick={() => setShowResetConfirmation(true)}
         size={buttonSize}
         className={cn(
           buttonWidthClass,
@@ -56,6 +62,17 @@ const GameButtonsPanel = memo(function GameButtonsPanel({
         <div className='absolute inset-0 bg-gradient-to-r from-red-400/20 to-pink-400/20 blur-sm' />
         <span className='relative'>{t('buttons.reset')}</span>
       </Button>
+
+      <ConfirmationDialog
+        isOpen={showResetConfirmation}
+        onClose={() => setShowResetConfirmation(false)}
+        onConfirm={handleResetConfirm}
+        title={t('game.resetConfirmation.title')}
+        description={t('game.resetConfirmation.description')}
+        confirmText={t('buttons.reset')}
+        cancelText={t('common.cancel')}
+        variant='destructive'
+      />
     </div>
   );
 });

@@ -7,6 +7,7 @@ import { cn } from '@/utils/ui/cn';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
+import { ConfirmationDialog } from './ui/ConfirmationDialog';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
 import type {
   AnimationIntensity,
@@ -60,10 +61,19 @@ export default function ThemeSettings({
 }: ThemeSettingsProps) {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'theme' | 'colors' | 'effects'>('theme');
+  const [showResetConfirmation, setShowResetConfirmation] = useState(false);
 
   // Event handler (React Compiler will optimize this)
   const handleEffectIntensityChange = (value: number[]) => {
     onEffectIntensityChange(value[0] ?? 1);
+  };
+
+  const handleResetConfirm = () => {
+    onResetToDefault();
+    toast.success('🎨 Theme Reset Complete', {
+      description: 'All theme settings have been restored to default cyberpunk theme',
+      duration: 3000,
+    });
   };
 
   const tabs = [
@@ -109,14 +119,7 @@ export default function ThemeSettings({
               <div className='flex gap-2'>
                 <Button
                   variant='destructive'
-                  onClick={() => {
-                    onResetToDefault();
-                    toast.success('🎨 Theme Reset Complete', {
-                      description:
-                        'All theme settings have been restored to default cyberpunk theme',
-                      duration: 3000,
-                    });
-                  }}
+                  onClick={() => setShowResetConfirmation(true)}
                   className={cn(
                     'bg-cyber-red-20 border border-cyber-red-30 text-cyber-red',
                     'hover:bg-cyber-red-30 hover:text-cyber-red',
@@ -228,6 +231,17 @@ export default function ThemeSettings({
           )}
         </ScrollArea>
       </div>
+
+      <ConfirmationDialog
+        isOpen={showResetConfirmation}
+        onClose={() => setShowResetConfirmation(false)}
+        onConfirm={handleResetConfirm}
+        title={t('themes.resetConfirmation.title')}
+        description={t('themes.resetConfirmation.description')}
+        confirmText={t('buttons.reset')}
+        cancelText={t('common.cancel')}
+        variant='destructive'
+      />
     </div>
   );
 }

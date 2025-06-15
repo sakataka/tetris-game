@@ -23,7 +23,11 @@
     "levelProgress": "レベル進行度",
     "playing": "プレイ中",
     "gameIsPaused": "ゲームが一時停止中です",
-    "pauseMessage": "再開ボタンを押してゲームを続けてください"
+    "pauseMessage": "再開ボタンを押してゲームを続けてください",
+    "resetConfirmation": {
+      "title": "ゲームをリセットしますか？",
+      "description": "現在のゲームをリセットしてもよろしいですか？すべての進行状況が失われ、復元することはできません。"
+    }
   },
   "controls": {
     "title": "操作方法",
@@ -98,7 +102,11 @@
     "primary": "プライマリ",
     "secondary": "セカンダリ",
     "accent": "アクセント",
-    "background": "背景"
+    "background": "背景",
+    "resetConfirmation": {
+      "title": "テーマ設定をリセットしますか？",
+      "description": "すべてのテーマ設定をデフォルトにリセットしてもよろしいですか？カスタムカラーと設定がすべて失われます。"
+    }
   },
   "statistics": {
     "title": "統計",
@@ -169,6 +177,8 @@
     "no": "いいえ",
     "unknown": "不明",
     "none": "なし",
+    "cancel": "キャンセル",
+    "confirm": "確認",
     "failed": "失敗",
     "ready": "準備完了",
     "level": "レベル"
