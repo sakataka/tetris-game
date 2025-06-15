@@ -5,7 +5,7 @@
  * This demonstrates the modernized pattern that React Compiler can optimize.
  */
 
-import { useGameController, type GameControllerAPI } from '../hooks/useGameController';
+import { type GameControllerAPI, useGameController } from '../hooks/useGameController';
 
 interface GameLogicControllerProps {
   children: (api: GameControllerAPI) => React.ReactNode;

@@ -57,9 +57,9 @@ const VirtualControls = memo(function VirtualControls({
                 className={cn(
                   'absolute left-1/2 -translate-x-1/2 -translate-y-full mb-1',
                   UI_SIZES.VIRTUAL_BUTTON.STANDARD,
-                  'bg-gradient-to-r from-purple-600 to-purple-500',
-                  'hover:from-purple-500 hover:to-purple-400 active:scale-95',
-                  'border border-purple-400/50 shadow-[0_0_10px_rgb(147_51_234/30%)]',
+                  'bg-gradient-to-r from-cyan-600 to-cyan-500',
+                  'hover:from-cyan-500 hover:to-cyan-400 active:scale-95',
+                  'border border-cyan-400/50 shadow-[0_0_10px_rgb(6_182_212/30%)]',
                   'text-white font-bold text-sm mobile-touch-zone select-none'
                 )}
                 aria-label={t('controls.rotate')}
@@ -113,9 +113,9 @@ const VirtualControls = memo(function VirtualControls({
                   onTouchStart={handleTouchStart(moveHandlers.down)}
                   className={cn(
                     UI_SIZES.VIRTUAL_BUTTON.STANDARD,
-                    'bg-gradient-to-r from-yellow-600 to-yellow-500',
-                    'hover:from-yellow-500 hover:to-yellow-400 active:scale-95',
-                    'border border-yellow-400/50 shadow-[0_0_10px_rgb(245_158_11/30%)]',
+                    'bg-gradient-to-r from-cyan-600 to-cyan-500',
+                    'hover:from-cyan-500 hover:to-cyan-400 active:scale-95',
+                    'border border-cyan-400/50 shadow-[0_0_10px_rgb(6_182_212/30%)]',
                     'text-white font-bold text-sm mobile-touch-zone select-none'
                   )}
                   aria-label={t('controls.moveDown')}

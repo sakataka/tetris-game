@@ -21,7 +21,9 @@
     "congratulations": "おめでとうございます！",
     "levelPrefix": "Lv",
     "levelProgress": "レベル進行度",
-    "playing": "プレイ中"
+    "playing": "プレイ中",
+    "gameIsPaused": "ゲームが一時停止中です",
+    "pauseMessage": "再開ボタンを押してゲームを続けてください"
   },
   "controls": {
     "title": "操作方法",
@@ -42,7 +44,9 @@
     "downArrow": "↓",
     "upArrow": "↑",
     "pKey": "P",
-    "rKey": "R"
+    "rKey": "R",
+    "pauseHint": "スペースキーまたは一時停止ボタンを押して再開",
+    "keyboardShortcuts": "キーボード: スペース=一時停止/再開, R=リセット"
   },
   "settings": {
     "title": "設定",

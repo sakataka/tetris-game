@@ -105,8 +105,8 @@ const AudioPanel = memo(function AudioPanel({
             checked={!isMuted}
             onCheckedChange={() => onToggleMute()}
             className={cn(
-              'data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-gray-600',
-              'border-2 data-[state=checked]:border-green-400 data-[state=unchecked]:border-gray-500'
+              'data-[state=checked]:bg-cyan-500 data-[state=unchecked]:bg-gray-600',
+              'border-2 data-[state=checked]:border-cyan-400 data-[state=unchecked]:border-gray-500'
             )}
             aria-label={t('settings.mute')}
           />
@@ -123,8 +123,8 @@ const AudioPanel = memo(function AudioPanel({
             checked={settings.virtualControlsEnabled}
             onCheckedChange={(checked) => onUpdateSettings({ virtualControlsEnabled: checked })}
             className={cn(
-              'data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-gray-600',
-              'border-2 data-[state=checked]:border-green-400 data-[state=unchecked]:border-gray-500'
+              'data-[state=checked]:bg-cyan-500 data-[state=unchecked]:bg-gray-600',
+              'border-2 data-[state=checked]:border-cyan-400 data-[state=unchecked]:border-gray-500'
             )}
             aria-label={t('settings.virtualControls')}
           />

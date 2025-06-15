@@ -1,8 +1,8 @@
 import { memo } from 'react';
-import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { Button } from '../ui/button';
+import { Link } from 'react-router';
 import { cn } from '../../utils/ui/cn';
+import { Button } from '../ui/button';
 import BackgroundEffects from './BackgroundEffects';
 import GameHeader from './GameHeader';
 import Navigation from './Navigation';

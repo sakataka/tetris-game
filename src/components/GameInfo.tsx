@@ -11,7 +11,6 @@ interface GameInfoProps {
   lines: number;
   nextPiece: Tetromino | null;
   gameOver: boolean;
-  isPaused: boolean;
 }
 
 const GameInfo = memo(function GameInfo({
@@ -20,7 +19,6 @@ const GameInfo = memo(function GameInfo({
   lines,
   nextPiece,
   gameOver,
-  isPaused,
 }: GameInfoProps) {
   const { t } = useTranslation();
 
@@ -30,9 +28,7 @@ const GameInfo = memo(function GameInfo({
       <div className='hidden md:flex flex-col h-full space-y-4'>
         {/* TETRIS Title with consistent styling */}
         <CyberCard title={t('app.title')} theme='cyan' size='md'>
-          <div className={`text-center text-xs ${isPaused ? 'text-yellow-400' : 'text-green-400'}`}>
-            {isPaused ? t('game.paused') : t('game.playing')}
-          </div>
+          <div className='text-center text-xs text-cyan-400'>{t('app.title')}</div>
         </CyberCard>
 
         {/* Game Information */}

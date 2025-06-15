@@ -1,10 +1,12 @@
 import { memo } from 'react';
-import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router';
 import { Button } from '../components/ui/button';
+import { useGameButtons } from '../hooks/useGameButtons';
 import ErrorBoundary from './ErrorBoundary';
 import GameInfo from './GameInfo';
 import type { GameControllerAPI } from './GameLogicController';
+import PausedOverlay from './PausedOverlay';
 import TetrisBoard from './TetrisBoard';
 import VirtualControls from './VirtualControls';
 
@@ -32,6 +34,9 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
     onHardDrop,
     unlockAudio,
   } = api;
+
+  // Game control actions for pause overlay
+  const { onTogglePause, onReset } = useGameButtons();
 
   // Desktop Layout
   if (!isMobile) {
@@ -79,12 +84,14 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
                   lines={gameState.lines}
                   nextPiece={gameState.nextPiece}
                   gameOver={gameState.gameOver}
-                  isPaused={gameState.isPaused}
                 />
               </ErrorBoundary>
             </div>
           </div>
         </div>
+
+        {/* Paused Overlay */}
+        <PausedOverlay isVisible={gameState.isPaused} onResume={onTogglePause} onReset={onReset} />
       </div>
     );
   }
@@ -119,7 +126,6 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
               lines={gameState.lines}
               nextPiece={gameState.nextPiece}
               gameOver={gameState.gameOver}
-              isPaused={gameState.isPaused}
             />
           </ErrorBoundary>
         </div>
@@ -150,6 +156,9 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
             />
           </ErrorBoundary>
         </div>
+
+        {/* Paused Overlay */}
+        <PausedOverlay isVisible={gameState.isPaused} onResume={onTogglePause} onReset={onReset} />
       </div>
     </div>
   );

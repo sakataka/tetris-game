@@ -7,10 +7,10 @@
 
 import { useCallback, useState } from 'react';
 import {
-  useSettingsStorage,
+  DEFAULT_SETTINGS,
   type GameSettings,
   type KeyBindings,
-  DEFAULT_SETTINGS,
+  useSettingsStorage,
 } from './useSettingsStorage';
 import { useSettingsSync } from './useSettingsSync';
 import { useSettingsValidation } from './useSettingsValidation';

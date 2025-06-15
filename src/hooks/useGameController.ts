@@ -7,14 +7,14 @@
 
 import { useSettings, useUpdateSettings } from '../store/settingsStore';
 import {
-  useAudioController,
-  useDeviceController,
-  useEventController,
-  useGameStateController,
   type AudioSystemAPI,
   type DeviceSystemAPI,
   type EventSystemAPI,
   type GameStateAPI,
+  useAudioController,
+  useDeviceController,
+  useEventController,
+  useGameStateController,
 } from './controllers';
 
 // Combined API interface

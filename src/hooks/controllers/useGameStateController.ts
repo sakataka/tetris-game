@@ -7,10 +7,6 @@
 
 import { useCallback, useEffect, useRef } from 'react';
 import { EFFECTS } from '../../constants/layout';
-import { useGameControls } from '../useGameControls';
-import { useGameLoop } from '../useGameLoop';
-import { useHighScoreManager } from '../useHighScoreManager';
-import { useSession } from '../useSession';
 import {
   useCalculatePiecePlacementState,
   useClearLineEffect,
@@ -26,6 +22,10 @@ import {
 } from '../../store/gameStateStore';
 import type { GameState, LineEffectState, SoundKey, Tetromino } from '../../types/tetris';
 import { animationManager } from '../../utils/animation/animationManager';
+import { useGameControls } from '../useGameControls';
+import { useGameLoop } from '../useGameLoop';
+import { useHighScoreManager } from '../useHighScoreManager';
+import { useSession } from '../useSession';
 
 export interface GameStateAPI {
   gameState: GameState;

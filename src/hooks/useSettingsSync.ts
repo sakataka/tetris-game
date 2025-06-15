@@ -7,7 +7,7 @@
 
 import { useEffect } from 'react';
 import { log } from '../utils/logging';
-import { type GameSettings, DEFAULT_SETTINGS } from './useSettingsStorage';
+import { DEFAULT_SETTINGS, type GameSettings } from './useSettingsStorage';
 
 interface UseSettingsSyncOptions {
   storageKey: string;

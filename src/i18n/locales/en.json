@@ -21,7 +21,9 @@
     "congratulations": "Congratulations!",
     "levelPrefix": "Lv",
     "levelProgress": "Level Progress",
-    "playing": "Playing"
+    "playing": "Playing",
+    "gameIsPaused": "Game is Paused",
+    "pauseMessage": "Press Resume to continue playing"
   },
   "controls": {
     "title": "Controls",
@@ -42,7 +44,9 @@
     "downArrow": "↓",
     "upArrow": "↑",
     "pKey": "P",
-    "rKey": "R"
+    "rKey": "R",
+    "pauseHint": "Press Space or Pause button to resume",
+    "keyboardShortcuts": "Keyboard: Space=Pause/Resume, R=Reset"
   },
   "settings": {
     "title": "Settings",

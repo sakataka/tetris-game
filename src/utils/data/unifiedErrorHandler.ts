@@ -5,8 +5,8 @@
  * Consolidates handleError, handleAsyncError, and withErrorHandling patterns.
  */
 
-import { handleError as originalHandleError, BaseAppError } from './errorHandler';
 import { log } from '../logging';
+import { BaseAppError, handleError as originalHandleError } from './errorHandler';
 
 /**
  * Unified error handling function that works for both sync and async operations
