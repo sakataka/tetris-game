@@ -18,6 +18,16 @@ export const languageNames: Record<SupportedLanguage, string> = {
 const resources = {
   en: {
     translation: {
+      // Common UI
+      common: {
+        loading: 'Loading...',
+        error: 'Error',
+        retry: 'Retry',
+        cancel: 'Cancel',
+        confirm: 'Confirm',
+        save: 'Save',
+        close: 'Close',
+      },
       // Game UI
       game: {
         title: 'Cyberpunk Tetris',
@@ -111,10 +121,26 @@ const resources = {
         fontSize: 'Font Size',
         focusIndicator: 'Focus Indicator',
       },
+      // Accessibility
+      aria: {
+        changeLanguage: 'Change language',
+        closeDialog: 'Close dialog',
+        openMenu: 'Open menu',
+      },
     },
   },
   ja: {
     translation: {
+      // 共通UI
+      common: {
+        loading: '読み込み中...',
+        error: 'エラー',
+        retry: '再試行',
+        cancel: 'キャンセル',
+        confirm: '確認',
+        save: '保存',
+        close: '閉じる',
+      },
       // ゲームUI
       game: {
         title: 'サイバーパンクテトリス',
@@ -207,6 +233,12 @@ const resources = {
         keyboardOnly: 'キーボードのみ',
         fontSize: 'フォントサイズ',
         focusIndicator: 'フォーカスインジケーター',
+      },
+      // アクセシビリティ
+      aria: {
+        changeLanguage: '言語を変更',
+        closeDialog: 'ダイアログを閉じる',
+        openMenu: 'メニューを開く',
       },
     },
   },
