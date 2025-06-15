@@ -4,7 +4,6 @@ import { getAudioPreloadProgress, getFallbackStatus } from '../utils/audio';
 import { useAudioPlayer } from './useAudioPlayer';
 import { useAudioPreloader } from './useAudioPreloader';
 import { useAudioState } from './useAudioState';
-import { useAudioStrategy } from './useAudioStrategy';
 
 interface UseAudioProps {
   initialVolume?: number;
@@ -46,7 +45,6 @@ interface PlayOptions {
 export function useAudio({
   initialVolume = 0.5,
   initialMuted = false,
-  useWebAudio = true,
   autoPreload = true,
   onPreloadComplete,
   onPreloadError,
@@ -54,11 +52,24 @@ export function useAudio({
 }: UseAudioProps = {}) {
   // ===== Decomposed Hooks Integration =====
 
-  // Strategy management - handles Web Audio/HTML Audio/Silent fallback
-  const strategyAPI = useAudioStrategy({
-    useWebAudio,
-    ...(onPreloadError && { onInitializationError: onPreloadError }),
-  });
+  // Strategy management - TEMPORARILY DISABLED for debugging
+  // const strategyAPI = useAudioStrategy({
+  //   useWebAudio,
+  //   ...(onPreloadError && { onInitializationError: onPreloadError }),
+  // });
+  
+  // Minimal strategy state for compatibility
+  const strategyAPI = {
+    strategyState: {
+      currentStrategy: 'webaudio' as 'webaudio' | 'htmlaudio' | 'silent',
+      isWebAudioSupported: true,
+      isInitialized: true,
+      initializationError: null,
+    },
+    switchToStrategy: async () => true,
+    retryInitialization: async () => {},
+    detectWebAudioSupport: () => true,
+  };
 
   // Volume and mute state management
   const stateAPI = useAudioState({

@@ -36,6 +36,7 @@ class AudioFallbackManager {
   private fallbackLevels: FallbackLevel[] = [];
   private currentLevel = 0;
   private capabilities: AudioCapabilities | null = null;
+  private initialized = false;
   private config: FallbackConfig = {
     enableFallback: true,
     maxRetries: 3,
@@ -48,7 +49,8 @@ class AudioFallbackManager {
   private fallbackCallbacks: Map<string, (soundKey: SoundKey) => Promise<void>> = new Map();
 
   private constructor() {
-    this.initializeFallbackLevels();
+    // Don't initialize immediately to avoid AudioContext creation before user interaction
+    // this.initializeFallbackLevels();
   }
 
   public static getInstance(): AudioFallbackManager {
@@ -56,6 +58,16 @@ class AudioFallbackManager {
       AudioFallbackManager.instance = new AudioFallbackManager();
     }
     return AudioFallbackManager.instance;
+  }
+
+  /**
+   * Ensure initialization is complete before using audio features
+   */
+  public async ensureInitialized(): Promise<void> {
+    if (!this.initialized) {
+      await this.initializeFallbackLevels();
+      this.initialized = true;
+    }
   }
 
   /**
@@ -269,6 +281,9 @@ class AudioFallbackManager {
   ): Promise<void> {
     if (this.config.silentMode) return;
 
+    // Ensure initialization is complete
+    await this.ensureInitialized();
+
     let lastError: Error | null = null;
 
     for (let i = this.currentLevel; i < this.fallbackLevels.length; i++) {
@@ -410,6 +425,16 @@ class AudioFallbackManager {
     capabilities: AudioCapabilities | null;
     silentMode: boolean;
   } {
+    // Return default status if not initialized
+    if (!this.initialized) {
+      return {
+        currentLevel: 0,
+        availableLevels: [],
+        capabilities: null,
+        silentMode: this.config.silentMode,
+      };
+    }
+
     return {
       currentLevel: this.currentLevel,
       availableLevels: this.fallbackLevels.map((level) => level.name),

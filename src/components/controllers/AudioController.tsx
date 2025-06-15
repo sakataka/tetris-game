@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useAudio } from '../../hooks/useAudio';
 import { useSettings, useUpdateSettings } from '../../store/settingsStore';
 import type { SoundKey } from '../../types/tetris';
@@ -54,14 +54,17 @@ export function AudioController({ children }: AudioControllerProps) {
   const settings = useSettings();
   const updateSettings = useUpdateSettings();
 
+  // Track if audio has been initialized after user interaction
+  const audioInitializedRef = useRef(false);
+
   // Sound system integration
   const {
-    playSound,
+    playSound: originalPlaySound,
     isMuted,
     volume,
     setVolumeLevel,
     toggleMute,
-    initializeSounds,
+    preloadAudio,
     unlockAudio,
     isWebAudioEnabled,
     getDetailedAudioState,
@@ -74,12 +77,46 @@ export function AudioController({ children }: AudioControllerProps) {
   } = useAudio({
     initialVolume: settings.volume,
     initialMuted: settings.isMuted,
+    autoPreload: false, // Disable auto preload to prevent AudioContext creation before user interaction
   });
 
-  // Initialize sounds on mount
+  // Initialize audio after first user interaction
+  const initializeAudioOnUserInteraction = useCallback(async () => {
+    if (!audioInitializedRef.current) {
+      audioInitializedRef.current = true;
+      try {
+        await unlockAudio();
+        await preloadAudio();
+      } catch (error) {
+        console.warn('Failed to initialize audio on user interaction:', error);
+      }
+    }
+  }, [unlockAudio, preloadAudio]);
+
+  // Enhanced playSound that initializes audio on first call
+  const playSound = useCallback(async (soundKey: SoundKey) => {
+    await initializeAudioOnUserInteraction();
+    return originalPlaySound(soundKey);
+  }, [initializeAudioOnUserInteraction, originalPlaySound]);
+
+  // Setup global user interaction listeners for audio initialization
   useEffect(() => {
-    initializeSounds();
-  }, [initializeSounds]);
+    const handleUserInteraction = () => {
+      initializeAudioOnUserInteraction();
+    };
+
+    // Add listeners for various user interaction events
+    document.addEventListener('click', handleUserInteraction, { once: true });
+    document.addEventListener('keydown', handleUserInteraction, { once: true });
+    document.addEventListener('touchstart', handleUserInteraction, { once: true });
+
+    return () => {
+      // Cleanup listeners (though they should be removed automatically with 'once: true')
+      document.removeEventListener('click', handleUserInteraction);
+      document.removeEventListener('keydown', handleUserInteraction);
+      document.removeEventListener('touchstart', handleUserInteraction);
+    };
+  }, [initializeAudioOnUserInteraction]);
 
   // Event handlers (React Compiler will optimize these)
   const handleVolumeChange = (newVolume: number) => {
