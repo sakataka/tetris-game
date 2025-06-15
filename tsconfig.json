@@ -46,7 +46,7 @@
 
     // ES2024 and modern JavaScript features
     "useDefineForClassFields": true, // ES2022+ class field behavior
-    "allowImportingTsExtensions": false, // Keep false for Next.js compatibility
+    "allowImportingTsExtensions": false, // Keep false for bundler compatibility
     "allowArbitraryExtensions": false,
     "verbatimModuleSyntax": false, // Allow optimized imports
 

@@ -31,36 +31,36 @@ export const ENV_CONFIG = {
 
   // Feature Flags
   FEATURES: {
-    AUDIO_ENABLED: getEnvBoolean('NEXT_PUBLIC_AUDIO_ENABLED', true),
-    PARTICLES_ENABLED: getEnvBoolean('NEXT_PUBLIC_PARTICLES_ENABLED', true),
-    ANALYTICS_ENABLED: getEnvBoolean('NEXT_PUBLIC_ANALYTICS_ENABLED', false),
-    AUTO_SAVE_ENABLED: getEnvBoolean('NEXT_PUBLIC_AUTO_SAVE_ENABLED', true),
-    GHOST_PIECE_ENABLED: getEnvBoolean('NEXT_PUBLIC_GHOST_PIECE_ENABLED', true),
+    AUDIO_ENABLED: getEnvBoolean('VITE_AUDIO_ENABLED', true),
+    PARTICLES_ENABLED: getEnvBoolean('VITE_PARTICLES_ENABLED', true),
+    ANALYTICS_ENABLED: getEnvBoolean('VITE_ANALYTICS_ENABLED', false),
+    AUTO_SAVE_ENABLED: getEnvBoolean('VITE_AUTO_SAVE_ENABLED', true),
+    GHOST_PIECE_ENABLED: getEnvBoolean('VITE_GHOST_PIECE_ENABLED', true),
   },
 
   // Performance Settings
   PERFORMANCE: {
-    MAX_PARTICLES: getEnvNumber('NEXT_PUBLIC_MAX_PARTICLES', 200),
-    TARGET_FPS: getEnvNumber('NEXT_PUBLIC_TARGET_FPS', 60),
-    PARTICLE_POOL_SIZE: getEnvNumber('NEXT_PUBLIC_PARTICLE_POOL_SIZE', 150),
-    DEBUG_PERFORMANCE: getEnvBoolean('NEXT_PUBLIC_DEBUG_PERFORMANCE', false),
+    MAX_PARTICLES: getEnvNumber('VITE_MAX_PARTICLES', 200),
+    TARGET_FPS: getEnvNumber('VITE_TARGET_FPS', 60),
+    PARTICLE_POOL_SIZE: getEnvNumber('VITE_PARTICLE_POOL_SIZE', 150),
+    DEBUG_PERFORMANCE: getEnvBoolean('VITE_DEBUG_PERFORMANCE', false),
   },
 
   // Audio Settings
   AUDIO: {
-    DEFAULT_VOLUME: getEnvNumber('NEXT_PUBLIC_DEFAULT_VOLUME', 50) / 100, // Convert to 0-1 range
-    PRELOAD_ENABLED: getEnvBoolean('NEXT_PUBLIC_AUDIO_PRELOAD', true),
+    DEFAULT_VOLUME: getEnvNumber('VITE_DEFAULT_VOLUME', 50) / 100, // Convert to 0-1 range
+    PRELOAD_ENABLED: getEnvBoolean('VITE_AUDIO_PRELOAD', true),
   },
 
   // Game Settings
   GAME: {
-    DEFAULT_LEVEL: getEnvNumber('NEXT_PUBLIC_DEFAULT_LEVEL', 1),
+    DEFAULT_LEVEL: getEnvNumber('VITE_DEFAULT_LEVEL', 1),
   },
 
   // Development Tools
   DEBUG: {
-    SHOW_FPS: getEnvBoolean('NEXT_PUBLIC_SHOW_FPS', false),
-    SHOW_DEBUG_INFO: getEnvBoolean('NEXT_PUBLIC_SHOW_DEBUG_INFO', false),
+    SHOW_FPS: getEnvBoolean('VITE_SHOW_FPS', false),
+    SHOW_DEBUG_INFO: getEnvBoolean('VITE_SHOW_DEBUG_INFO', false),
     ENABLE_BUNDLE_ANALYZER: getEnvBoolean('ANALYZE', false),
   },
 } as const;

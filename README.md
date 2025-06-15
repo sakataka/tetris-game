@@ -1,6 +1,6 @@
 # Tetris Game
 
-Production-ready cyberpunk-themed Tetris game built with Next.js 15, TypeScript, and comprehensive configuration management.
+Production-ready cyberpunk-themed Tetris game built with React Router 7, React 19, TypeScript, and comprehensive configuration management.
 
 ## Getting Started
 
@@ -16,7 +16,7 @@ Production-ready cyberpunk-themed Tetris game built with Next.js 15, TypeScript,
 3. Install dependencies: `pnpm install`
 4. Start development server: `pnpm dev`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:5173](http://localhost:5173) with your browser to see the result.
 
 ## Configuration System
 
@@ -28,17 +28,17 @@ Copy `.env.example` to `.env.local` and customize settings:
 
 ```bash
 # Feature Flags
-NEXT_PUBLIC_AUDIO_ENABLED=true
-NEXT_PUBLIC_PARTICLES_ENABLED=true
-NEXT_PUBLIC_DEBUG_PERFORMANCE=false
+VITE_AUDIO_ENABLED=true
+VITE_PARTICLES_ENABLED=true
+VITE_DEBUG_PERFORMANCE=false
 
 # Performance Settings
-NEXT_PUBLIC_MAX_PARTICLES=200
-NEXT_PUBLIC_TARGET_FPS=60
+VITE_MAX_PARTICLES=200
+VITE_TARGET_FPS=60
 
 # Game Settings
-NEXT_PUBLIC_DEFAULT_LEVEL=1
-NEXT_PUBLIC_GHOST_PIECE_ENABLED=true
+VITE_DEFAULT_LEVEL=1
+VITE_GHOST_PIECE_ENABLED=true
 ```
 
 ### Using Configuration in Components
@@ -78,15 +78,14 @@ function SettingsPanel() {
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+To learn more about the technologies used in this project:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [React Router Documentation](https://reactrouter.com/) - learn about React Router features and API.
+- [React 19 Documentation](https://react.dev/) - learn about the latest React features.
+- [Vite Documentation](https://vitejs.dev/) - learn about the build tool and development server.
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The easiest way to deploy your React Router app is to use the [Vercel Platform](https://vercel.com/new). The project is configured for static site generation (SPA mode) and includes proper routing configuration.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Check out the [Vercel deployment documentation](https://vercel.com/docs) for more details.

@@ -13,9 +13,6 @@
 # testing
 /coverage
 
-# next.js
-/.next/
-/out/
 
 # react-router
 .react-router/
@@ -42,4 +39,3 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts

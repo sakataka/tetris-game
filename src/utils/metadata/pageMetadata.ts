@@ -150,7 +150,7 @@ export function generateMetaTags(pageKey: string): Array<{
 }
 
 /**
- * Update document title and meta tags (for current Next.js implementation)
+ * Update document title and meta tags (for current React Router implementation)
  */
 export function updateDocumentMetadata(pageKey: string): void {
   const metadata = getPageMetadata(pageKey);
