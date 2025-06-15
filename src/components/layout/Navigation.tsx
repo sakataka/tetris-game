@@ -35,9 +35,9 @@ const Navigation = memo(function Navigation({
 
   const navigationItems: NavigationItem[] = [
     { key: 'settings', path: '/settings', label: t('tabs.settings'), color: 'cyan' },
-    { key: 'statistics', path: '/statistics', label: t('tabs.statistics'), color: 'purple' },
-    { key: 'themes', path: '/themes', label: t('tabs.themes'), color: 'yellow' },
-    { key: 'about', path: '/about', label: t('tabs.about'), color: 'green' },
+    { key: 'statistics', path: '/statistics', label: t('tabs.statistics'), color: 'cyan' },
+    { key: 'themes', path: '/themes', label: t('tabs.themes'), color: 'cyan' },
+    { key: 'about', path: '/about', label: t('tabs.about'), color: 'cyan' },
   ];
 
   const activeTab =
