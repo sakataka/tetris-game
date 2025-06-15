@@ -1,14 +1,7 @@
 {
   "version": 2,
   "buildCommand": "pnpm build",
-  "outputDirectory": "build/client",
-  "functions": {
-    "build/server/index.js": {
-      "runtime": "nodejs20.x",
-      "memory": 1024,
-      "maxDuration": 30
-    }
-  },
+  "outputDirectory": "dist",
 
   "headers": [
     {
@@ -78,10 +71,10 @@
     }
   ],
 
-  "routes": [
+  "rewrites": [
     {
-      "src": "/(.*)",
-      "dest": "/build/server/index.js"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ],
 

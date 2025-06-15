@@ -1,12 +1,20 @@
-import { reactRouter } from '@react-router/dev/vite';
 import tailwindcss from '@tailwindcss/postcss';
+import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import viteCompression from 'vite-plugin-compression';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig(() => ({
+  // エントリーポイントの設定
+  root: '.',
+  publicDir: 'public',
+
   plugins: [
-    reactRouter(),
+    react({
+      babel: {
+        plugins: ['babel-plugin-react-compiler'],
+      },
+    }),
     tsconfigPaths(),
     // gzip圧縮
     viteCompression({

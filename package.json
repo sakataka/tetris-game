@@ -3,9 +3,13 @@
   "version": "0.1.0",
   "type": "module",
   "private": true,
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
   "scripts": {
     "dev": "react-router dev",
-    "build": "react-router build",
+    "build": "vite build",
     "start": "react-router-serve ./build/server/index.js",
     "preview": "vite preview",
     "lint": "biome lint .",

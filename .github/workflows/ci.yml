@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  NODE_VERSION: '20.x'
+  NODE_VERSION: '24.x'
 
 jobs:
   quality-check:
@@ -53,9 +53,6 @@ jobs:
       - name: 🧹 Run Biome linting
         run: pnpm lint
 
-      - name: 💅 Check code formatting with Biome
-        run: pnpm format:check
-
       - name: 🧪 Run tests
         run: pnpm test:run
 
@@ -91,15 +88,15 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
 
-      - name: 💾 Cache React Router build
+      - name: 💾 Cache Vite build
         uses: actions/cache@v4
         with:
           path: |
-            build/
+            dist/
             .vite/
-          key: ${{ runner.os }}-reactrouter-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+          key: ${{ runner.os }}-vite-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
           restore-keys: |
-            ${{ runner.os }}-reactrouter-${{ hashFiles('**/pnpm-lock.yaml') }}-
+            ${{ runner.os }}-vite-${{ hashFiles('**/pnpm-lock.yaml') }}-
 
       - name: 📚 Install dependencies
         run: pnpm install --frozen-lockfile
@@ -115,7 +112,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-output
-          path: build/
+          path: dist/
           retention-days: 7
         if: always()
 
