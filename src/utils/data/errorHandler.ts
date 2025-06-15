@@ -59,8 +59,8 @@ class ErrorHandlerService {
     // Add to error history
     this.addToHistory(errorInfo);
 
-    // Console log output
-    if (this.config.enableConsoleLogging) {
+    // Console log output (skip for suppressed audio errors)
+    if (this.config.enableConsoleLogging && this.shouldLogToConsole(appError)) {
       this.logToConsole(errorInfo);
     }
 
@@ -191,6 +191,31 @@ class ErrorHandlerService {
   }
 
   // Private methods
+
+  private shouldLogToConsole(error: BaseAppError): boolean {
+    // Suppress console logs for audio loading/initialization errors
+    if (error.category === 'audio') {
+      const isLoadingError = error.context.action === 'audio_load';
+      const isInitializationError = error.context.action === 'audio_context_init';
+      const isPreloadError = error.context.action === 'audio_preload';
+      const isCreateError = error.context.action === 'html_audio_create';
+      const isUnlockError = error.context.action === 'audio_unlock';
+      const isHTMLInit = error.context.action === 'html_audio_init';
+
+      // Only log actual playback failures, not loading/initialization
+      return (
+        error.context.action === 'audio_play' &&
+        !isLoadingError &&
+        !isInitializationError &&
+        !isPreloadError &&
+        !isCreateError &&
+        !isUnlockError &&
+        !isHTMLInit
+      );
+    }
+
+    return true; // Log all non-audio errors
+  }
 
   private normalizeError(
     error: Error | BaseAppError,
