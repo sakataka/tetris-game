@@ -44,7 +44,7 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
 
   return (
     <CyberCard
-      title={`${t('panels.scoreData')} & ${t('game.nextPiece')}`.toUpperCase()}
+      title={`${t('panels.scoreDataUpper')} & ${t('game.nextPieceUpper')}`}
       theme='cyan'
       size={size}
     >
@@ -56,7 +56,7 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
           <div className='flex justify-between items-center'>
             <span className={`text-gray-300 ${TYPOGRAPHY.SMALL_LABEL}`}>{t('game.score')}</span>
             <span
-              className={`font-mono ${TYPOGRAPHY.STAT_VALUE} text-yellow-400 font-bold`}
+              className={`font-mono ${TYPOGRAPHY.STAT_VALUE} text-cyan-400 font-bold`}
               data-testid='score'
             >
               {score.toLocaleString()}
@@ -65,7 +65,7 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
           <div className='flex justify-between items-center'>
             <span className={`text-gray-300 ${TYPOGRAPHY.SMALL_LABEL}`}>{t('game.level')}</span>
             <span
-              className={`font-mono ${TYPOGRAPHY.STAT_VALUE} text-green-400 font-bold`}
+              className={`font-mono ${TYPOGRAPHY.STAT_VALUE} text-cyan-300 font-bold`}
               data-testid='level'
             >
               {level}
@@ -74,7 +74,7 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
           <div className='flex justify-between items-center'>
             <span className={`text-gray-300 ${TYPOGRAPHY.SMALL_LABEL}`}>{t('game.lines')}</span>
             <span
-              className={`font-mono ${TYPOGRAPHY.STAT_VALUE} text-blue-400 font-bold`}
+              className={`font-mono ${TYPOGRAPHY.STAT_VALUE} text-cyan-200 font-bold`}
               data-testid='lines'
             >
               {lines}
@@ -87,13 +87,13 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
               <span className={`text-gray-400 ${TYPOGRAPHY.SMALL_LABEL}`}>
                 {t('game.levelProgress')}
               </span>
-              <span className={`text-purple-400 ${TYPOGRAPHY.SMALL_LABEL} font-mono`}>
+              <span className={`text-cyan-400 ${TYPOGRAPHY.SMALL_LABEL} font-mono`}>
                 {lines % 10}/10
               </span>
             </div>
             <Progress
               value={(lines % 10) * 10}
-              className='h-1.5 bg-gray-700/50 [&>div]:bg-gradient-to-r [&>div]:from-purple-500 [&>div]:to-pink-500'
+              className='h-1.5 bg-gray-700/50 [&>div]:bg-gradient-to-r [&>div]:from-cyan-500 [&>div]:to-cyan-300'
             />
           </div>
         </div>

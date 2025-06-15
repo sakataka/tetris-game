@@ -8,6 +8,7 @@
     "level": "レベル",
     "lines": "ライン",
     "nextPiece": "次",
+    "nextPieceUpper": "次",
     "hold": "ホールド",
     "pause": "一時停止",
     "resume": "再開",
@@ -24,6 +25,7 @@
   },
   "controls": {
     "title": "操作方法",
+    "titleUpper": "操作方法",
     "moveLeft": "左移動",
     "moveRight": "右移動",
     "moveDown": "ソフトドロップ",
@@ -45,6 +47,7 @@
   "settings": {
     "title": "設定",
     "audio": "音声",
+    "audioUpper": "音声",
     "volume": "音量",
     "soundEffects": "効果音",
     "mute": "ミュート",
@@ -75,6 +78,7 @@
   },
   "panels": {
     "scoreData": "スコアデータ",
+    "scoreDataUpper": "スコアデータ",
     "scoreReference": "スコア参考"
   },
   "themes": {
@@ -168,13 +172,19 @@
   },
   "scoring": {
     "title": "スコア",
+    "titleUpper": "スコア",
     "single": "シングル",
+    "singleUpper": "シングル",
     "double": "ダブル",
+    "doubleUpper": "ダブル",
     "triple": "トリプル",
+    "tripleUpper": "トリプル",
     "tetris": "テトリス",
+    "tetrisUpper": "テトリス",
     "combo": "コンボ",
     "bonus": "ボーナス",
     "hardDrop": "ハードドロップ",
+    "hardDropUpper": "ハードドロップ",
     "level": "レベル",
     "distance": "距離"
   },

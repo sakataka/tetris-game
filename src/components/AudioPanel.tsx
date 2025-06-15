@@ -43,7 +43,7 @@ const AudioPanel = memo(function AudioPanel({
   const { t } = useTranslation();
 
   return (
-    <CyberCard title={t('settings.audio').toUpperCase()} theme='cyan'>
+    <CyberCard title={t('settings.audioUpper')} theme='cyan'>
       {/* Audio System Status - Hidden per requirement */}
 
       {/* Audio Preload Progress */}

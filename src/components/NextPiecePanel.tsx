@@ -19,12 +19,7 @@ const NextPiecePanel = memo(function NextPiecePanel({
   const containerSize = size === 'sm' ? 'w-12 h-12' : GAME_UI_SIZES.NEXT_PIECE.CONTAINER;
 
   return (
-    <CyberCard
-      title={t('game.nextPiece').toUpperCase()}
-      theme='purple'
-      size={size}
-      data-testid='next-piece'
-    >
+    <CyberCard title={t('game.nextPieceUpper')} theme='purple' size={size} data-testid='next-piece'>
       <div className='grid gap-0 w-fit mx-auto p-2 bg-black/30 rounded-lg border border-purple-400/30'>
         {nextPiece ? (
           nextPiece.shape.map((row, y) => (

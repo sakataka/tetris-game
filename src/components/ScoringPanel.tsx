@@ -11,27 +11,27 @@ const ScoringPanel = memo(function ScoringPanel({ size = 'md' }: ScoringPanelPro
   const { t } = useTranslation();
 
   return (
-    <CyberCard title={t('scoring.title', 'SCORING').toUpperCase()} theme='yellow' size={size}>
+    <CyberCard title={t('scoring.titleUpper', 'SCORING')} theme='cyan' size={size}>
       <div className={`${SPACING.PANEL_INTERNAL} ${TYPOGRAPHY.BODY_TEXT}`}>
         <div className='flex justify-between items-center text-gray-300'>
-          <span>{t('scoring.single').toUpperCase()}</span>
-          <span className='font-mono text-blue-400'>100 × {t('scoring.level')}</span>
+          <span>{t('scoring.singleUpper')}</span>
+          <span className='font-mono text-cyan-200'>100 × {t('scoring.level')}</span>
         </div>
         <div className='flex justify-between items-center text-gray-300'>
-          <span>{t('scoring.double').toUpperCase()}</span>
-          <span className='font-mono text-green-400'>200 × {t('scoring.level')}</span>
+          <span>{t('scoring.doubleUpper')}</span>
+          <span className='font-mono text-cyan-300'>200 × {t('scoring.level')}</span>
         </div>
         <div className='flex justify-between items-center text-gray-300'>
-          <span>{t('scoring.triple').toUpperCase()}</span>
-          <span className='font-mono text-yellow-400'>300 × {t('scoring.level')}</span>
+          <span>{t('scoring.tripleUpper')}</span>
+          <span className='font-mono text-cyan-400'>300 × {t('scoring.level')}</span>
         </div>
         <div className='flex justify-between items-center text-gray-300'>
-          <span>{t('scoring.tetris').toUpperCase()}</span>
-          <span className='font-mono text-red-400 font-bold'>700 × {t('scoring.level')}</span>
+          <span>{t('scoring.tetrisUpper')}</span>
+          <span className='font-mono text-cyan-400 font-bold'>700 × {t('scoring.level')}</span>
         </div>
         <div className='flex justify-between items-center text-gray-300 border-t border-gray-600 pt-2'>
-          <span>{t('scoring.hardDrop').toUpperCase()}</span>
-          <span className='font-mono text-purple-400'>{t('scoring.distance')} × 2</span>
+          <span>{t('scoring.hardDropUpper')}</span>
+          <span className='font-mono text-cyan-300'>{t('scoring.distance')} × 2</span>
         </div>
       </div>
     </CyberCard>

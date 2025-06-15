@@ -8,6 +8,7 @@
     "level": "Level",
     "lines": "Lines",
     "nextPiece": "Next",
+    "nextPieceUpper": "NEXT",
     "hold": "Hold",
     "pause": "Pause",
     "resume": "Resume",
@@ -24,6 +25,7 @@
   },
   "controls": {
     "title": "Controls",
+    "titleUpper": "CONTROLS",
     "moveLeft": "Move Left",
     "moveRight": "Move Right",
     "moveDown": "Soft Drop",
@@ -45,6 +47,7 @@
   "settings": {
     "title": "Settings",
     "audio": "Audio",
+    "audioUpper": "AUDIO",
     "volume": "Volume",
     "soundEffects": "Sound Effects",
     "mute": "Mute",
@@ -75,6 +78,7 @@
   },
   "panels": {
     "scoreData": "Score Data",
+    "scoreDataUpper": "SCORE DATA",
     "scoreReference": "Score Reference"
   },
   "themes": {
@@ -165,13 +169,19 @@
   },
   "scoring": {
     "title": "Scoring",
+    "titleUpper": "SCORING",
     "single": "Single",
+    "singleUpper": "SINGLE",
     "double": "Double",
+    "doubleUpper": "DOUBLE",
     "triple": "Triple",
+    "tripleUpper": "TRIPLE",
     "tetris": "Tetris",
+    "tetrisUpper": "TETRIS",
     "combo": "Combo",
     "bonus": "Bonus",
     "hardDrop": "Hard Drop",
+    "hardDropUpper": "HARD DROP",
     "level": "LV",
     "distance": "DIST"
   },
