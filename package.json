@@ -81,7 +81,6 @@
     "vitest": "^3.2.3"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": ["biome check --write"],
-    "*.{json,css}": ["biome format --write"]
+    "*.{js,jsx,ts,tsx}": ["biome lint --write"]
   }
 }

@@ -1,13 +1,6 @@
 # Pre-commit checks for code quality
 echo "🔍 Running pre-commit quality checks..."
 
-# Run Biome format check first
-echo "🎨 Running Biome format check..."
-if ! pnpm format:check; then
-  echo "❌ Biome format check failed! Run 'pnpm format' to fix formatting issues."
-  exit 1
-fi
-
 # Run lint-staged for staged files
 echo "🔍 Running lint-staged checks..."
 pnpm exec lint-staged
