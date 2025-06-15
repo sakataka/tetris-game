@@ -93,7 +93,5 @@
 
   "installCommand": "pnpm install --frozen-lockfile",
 
-  "regions": ["sin1", "hnd1", "sfo1"],
-
   "framework": null
 }
