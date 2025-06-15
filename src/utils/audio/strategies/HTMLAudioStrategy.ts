@@ -148,7 +148,20 @@ export class HTMLAudioStrategy extends AudioStrategy {
       // Wait for loadeddata event
       return new Promise((resolve, reject) => {
         const timeout = setTimeout(() => {
-          reject(new Error('Audio load timeout'));
+          const audioError = new AudioError(
+            `Audio load timeout: ${soundKey}`,
+            {
+              action: 'audio_load',
+              component: 'HTMLAudioStrategy',
+              additionalData: { soundKey, timeout: GAME_TIMING.AUDIO_TIMEOUT },
+            },
+            {
+              recoverable: true,
+              retryable: false,
+              // userMessage omitted to suppress user notification for timeout errors
+            }
+          );
+          reject(audioError);
         }, GAME_TIMING.AUDIO_TIMEOUT);
 
         audio.addEventListener(
@@ -165,7 +178,20 @@ export class HTMLAudioStrategy extends AudioStrategy {
           'error',
           () => {
             clearTimeout(timeout);
-            reject(new Error(`Failed to load audio: ${soundKey}`));
+            const audioError = new AudioError(
+              `Failed to load audio file: ${soundKey}`,
+              {
+                action: 'audio_load',
+                component: 'HTMLAudioStrategy',
+                additionalData: { soundKey },
+              },
+              {
+                recoverable: true,
+                retryable: false,
+                // userMessage omitted to suppress user notification for loading errors
+              }
+            );
+            reject(audioError);
           },
           { once: true }
         );
@@ -181,7 +207,11 @@ export class HTMLAudioStrategy extends AudioStrategy {
           component: 'HTMLAudioStrategy',
           additionalData: { soundKey, error },
         },
-        { recoverable: true, retryable: false }
+        {
+          recoverable: true,
+          retryable: false,
+          // userMessage omitted to suppress user notification for HTML audio creation errors
+        }
       );
       handleError(audioError);
       return null;

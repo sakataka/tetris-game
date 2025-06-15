@@ -81,7 +81,11 @@ export class WebAudioStrategy extends AudioStrategy {
       const audioError = new AudioError(
         'Failed to initialize AudioContext',
         { action: 'audio_context_init', component: 'WebAudioStrategy', additionalData: { error } },
-        { recoverable: false, retryable: false }
+        {
+          recoverable: false,
+          retryable: false,
+          // userMessage omitted to suppress user notification for initialization errors
+        }
       );
       handleError(audioError);
       throw audioError;
@@ -103,7 +107,11 @@ export class WebAudioStrategy extends AudioStrategy {
         const audioError = new AudioError(
           'Failed to unlock audio context',
           { action: 'audio_unlock', component: 'WebAudioStrategy', additionalData: { error } },
-          { recoverable: true, retryable: true }
+          {
+            recoverable: true,
+            retryable: true,
+            // userMessage omitted to suppress user notification for unlock errors
+          }
         );
         handleError(audioError);
       }
@@ -265,7 +273,11 @@ export class WebAudioStrategy extends AudioStrategy {
           component: 'WebAudioStrategy',
           additionalData: { soundKey, path, error },
         },
-        { recoverable: true, retryable: true }
+        {
+          recoverable: true,
+          retryable: true,
+          // userMessage omitted to suppress user notification for loading errors
+        }
       );
       handleError(audioError);
       throw audioError;

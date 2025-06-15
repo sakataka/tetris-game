@@ -160,12 +160,19 @@ export class AudioError extends BaseAppError {
       cause?: Error;
     } = {}
   ) {
-    super(message, 'warning', 'audio', context, {
+    // Only set default userMessage if not explicitly provided (including undefined)
+    const baseOptions = {
       recoverable: true,
       retryable: true,
-      userMessage: i18next.t('errors.audioPlaybackError'),
       ...options,
-    });
+    };
+
+    // Only add default userMessage if userMessage is not in options
+    if (!('userMessage' in options)) {
+      baseOptions.userMessage = i18next.t('errors.audioPlaybackError');
+    }
+
+    super(message, 'warning', 'audio', context, baseOptions);
   }
 }
 

@@ -311,18 +311,41 @@ class ErrorHandlerService {
     );
 
     // Audio error handler
-    this.registerHandler(
-      'audio',
-      (): ErrorHandlingResult => ({
+    this.registerHandler('audio', (error: BaseAppError): ErrorHandlingResult => {
+      // Suppress user notifications for all audio-related errors during initialization/loading
+      const isLoadingError = error.context.action === 'audio_load';
+      const isInitializationError = error.context.action === 'audio_context_init';
+      const isPreloadError = error.context.action === 'audio_preload';
+      const isCreateError = error.context.action === 'html_audio_create';
+      const isUnlockError = error.context.action === 'audio_unlock';
+      const isHTMLInit = error.context.action === 'html_audio_init';
+
+      // Only show notifications for actual playback failures during gameplay
+      const shouldShowNotification =
+        !isLoadingError &&
+        !isInitializationError &&
+        !isPreloadError &&
+        !isCreateError &&
+        !isUnlockError &&
+        !isHTMLInit &&
+        error.context.action === 'audio_play';
+
+      const result: ErrorHandlingResult = {
         handled: true,
-        retry: true, // Audio is usually retryable
-        userNotification: {
-          message: 'Audio playback failed. Please try again later.',
+        retry: error.retryable,
+      };
+
+      // Only show notification for actual playback failures
+      if (shouldShowNotification && error.userMessage) {
+        result.userNotification = {
+          message: error.userMessage,
           level: 'warning',
           duration: 3000,
-        },
-      })
-    );
+        };
+      }
+
+      return result;
+    });
 
     // Storage error handler
     this.registerHandler(

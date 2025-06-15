@@ -105,7 +105,9 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
           {/* Level Progress */}
           <div className='mt-2'>
             <div className='flex justify-between items-center mb-1'>
-              <span className={`text-gray-400 ${TYPOGRAPHY.SMALL_LABEL}`}>Level Progress</span>
+              <span className={`text-gray-400 ${TYPOGRAPHY.SMALL_LABEL}`}>
+                {t('game.levelProgress')}
+              </span>
               <span className={`text-purple-400 ${TYPOGRAPHY.SMALL_LABEL} font-mono`}>
                 {lines % 10}/10
               </span>

@@ -15,7 +15,9 @@
     "finalScore": "最終スコア: {{score}}",
     "newHighScore": "新記録達成！",
     "congratulations": "おめでとうございます！",
-    "levelPrefix": "Lv"
+    "levelPrefix": "Lv",
+    "levelProgress": "レベル進行度",
+    "playing": "プレイ中"
   },
   "controls": {
     "title": "操作方法",

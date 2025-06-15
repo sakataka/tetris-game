@@ -15,7 +15,9 @@
     "finalScore": "Final Score: {{score}}",
     "newHighScore": "New High Score!",
     "congratulations": "Congratulations!",
-    "levelPrefix": "Lv"
+    "levelPrefix": "Lv",
+    "levelProgress": "Level Progress",
+    "playing": "Playing"
   },
   "controls": {
     "title": "Controls",
