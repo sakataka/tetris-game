@@ -199,13 +199,32 @@ src/
 - **Performance**: React Compiler handles optimization automatically
 - **Testing**: Use React Testing Library + Vitest for component tests
 
-## Future Architecture Considerations
+## Future Feature Roadmap
 
-The current architecture supports expansion with:
+### 🟢 High Priority (1-3 months)
+1. **Custom Control Schemes** - Remappable keys, multiple profiles
+2. **Advanced Game Modes** - Puzzle, Marathon, Time Attack modes
+3. **Achievement System** - 50+ achievements, progression tracking
+4. **Tutorial System** - Interactive tutorials, T-spin training
+
+### 🟡 Medium Priority (3-6 months)
+5. **Real-time Multiplayer** - WebSocket battles, spectator mode
+6. **AI Opponent** - ML-based difficulty, multiple personalities
+7. **Replay System** - Record/playback, sharing, video export
+8. **Power-ups & Special Blocks** - Bomb blocks, time freeze
+9. **Social Features** - Friends, leaderboards, chat
+10. **Advanced Statistics** - Heat maps, performance graphs
+
+### 🔴 Low Priority (6+ months)
+11. **Tournament Platform** - Brackets, events, live streaming
+12. **Plugin System** - Third-party extensions, marketplace
+13. **Performance Profiler** - In-game FPS, memory monitoring
+
+### Architecture Support
+The current architecture supports expansion through:
 - **Controller Pattern**: Extensible for new game modes
 - **Store Pattern**: Easy addition of new Zustand stores
 - **Strategy Pattern**: Audio system can add new strategies
 - **Component System**: shadcn/ui base for consistent UI expansion
-- **Plugin Architecture**: Ready for modular feature additions
 
-This architecture ensures maintainability, performance, and developer experience while providing a solid foundation for future enhancements.
+This foundation ensures maintainability and developer experience for future enhancements.
