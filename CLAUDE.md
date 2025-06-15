@@ -23,11 +23,11 @@ When implementing new components or features, always verify the following:
 
 Production-ready cyberpunk-themed Tetris game built with React Router 7, TypeScript, and Tailwind CSS. Features comprehensive state management, audio system with fallback strategies, and particle effects.
 
-**Tech Stack**: React Router 7.6.2 + React 19.1.0 + Vite 6.3.5 + TypeScript 5 (ES2024) + Zustand 5 + Tailwind CSS 4.1.10 + shadcn/ui (15/20 components active, React Compiler optimized)
+**Tech Stack**: Vite 6.3.5 + React 19.1.0 + React Router 7.6.2 (SPA mode) + TypeScript 5 (ES2024) + Zustand 5 + Tailwind CSS 4.1.10 + shadcn/ui (15/20 components active, React Compiler optimized)
 
 ## Environment Setup
 
-**Prerequisites**: Node.js 18+, pnpm package manager
+**Prerequisites**: Node.js 20+, pnpm 9+ package manager
 
 **Configuration**: The game uses environment-based configuration with `.env.local` overrides:
 
@@ -41,9 +41,8 @@ pnpm install            # Install dependencies (required: pnpm)
 cp .env.example .env.local  # Copy environment configuration
 
 # Development
-pnpm dev                # React Router development server with Vite HMR
-pnpm build              # React Router production build
-pnpm start              # Start production server
+pnpm dev                # Vite development server with HMR
+pnpm build              # Vite production build (SPA)
 pnpm preview            # Preview production build
 
 # Testing
@@ -132,10 +131,10 @@ Controllers compose through render props, allowing clean API aggregation:
 
 **Code Quality Metrics:**
 - **Test Coverage**: 349 tests across 24 files + E2E test suite (Playwright)
-- **Bundle Size**: 177.48 kB entry.client, 377.47 kB SSR bundle (optimized with Vite)
-- **Build Performance**: ~2300ms with Vite (React Router + SSR + monitoring)
-- **TypeScript Strict**: ES2024 target with React Router 7 integration
-- **🎯 Migration Status**: 🎉 Phase 4 complete - Production monitoring and security implemented
+- **Bundle Size**: 322.02 kB main bundle (optimized with Vite, gzip: 95.68 kB)
+- **Build Performance**: ~3770ms with Vite (SPA mode with compression)
+- **TypeScript Strict**: ES2024 target with React Router 7 SPA integration
+- **🎯 Migration Status**: 🎉 SPA mode deployment - React 19.1 + React Router 7 SSR temporarily disabled
 
 ## React 19.1 Modern Features
 
@@ -178,9 +177,9 @@ The project leverages React 19.1's React Compiler for automatic performance opti
 - **🆕 navigationStore**: Tab navigation state management (Phase 1 React Router preparation)
 - **🆕 audioStore**: Audio system state centralization (Phase 1 prop drilling elimination)
 
-## React Router 7 Architecture (Phase 2 Complete)
+## Build Architecture (SPA Mode)
 
-### File-Based Routing System
+### Routing System
 
 **Route Structure**: Clean, organized page hierarchy
 ```
@@ -192,28 +191,29 @@ src/routes/
 └── about.tsx       # /about (Project information)
 ```
 
-**Entry Points**: Modern React Router 7 pattern
-- **entry.client.tsx**: Client-side hydration with HydratedRouter
-- **entry.server.tsx**: SSR with ServerRouter and streaming
+**Entry Points**: Standard Vite + React SPA pattern
+- **main.tsx**: Application entry with createBrowserRouter
 - **root.tsx**: Global layout with providers (I18n, Error boundaries, Toaster)
+- **index.html**: Static HTML template
 
-**Configuration**: Optimized for performance and development
-- **react-router.config.ts**: SSR enabled, prerendering for `/` and `/about`
-- **vite.config.ts**: Tailwind CSS v4.1, React Compiler, tsconfigPaths
-- **Type Safety**: Custom MetaFunction types for route metadata
+**Configuration**: Optimized for SPA deployment
+- **vite.config.ts**: Tailwind CSS v4.1, React Compiler, standard Vite build
+- **vercel.json**: SPA rewrites, security headers, caching strategy
+- **Type Safety**: Full TypeScript integration with React Router
 
 ### Build System (Vite 6.3.5)
 
 **Development**: Lightning-fast HMR and dev server
 - **HMR Speed**: ~200ms (target achieved)
-- **Dev Server Startup**: ~1000ms (significantly faster than Next.js)
+- **Dev Server Startup**: ~1000ms
 - **Hot Module Replacement**: Instant component updates
 
-**Production Build**: Optimized bundle output
-- **Entry Client**: 177.5 kB (optimized with React Compiler)
-- **SSR Bundle**: 377.5 kB server build
+**Production Build**: Optimized SPA bundle
+- **Main Bundle**: 322.02 kB (gzip: 95.68 kB)
+- **Code Splitting**: Automatic chunking for optimal loading
+- **Compression**: Brotli and gzip pre-compression
 - **Font Loading**: @fontsource integration (Geist Sans/Mono)
-- **Asset Optimization**: Automatic chunking and tree-shaking
+- **Asset Optimization**: Aggressive tree-shaking and minification
 
 ## Key Systems
 
@@ -588,13 +588,17 @@ The i18n system uses two complementary stores:
 - **Bundle Analyzer**: Integrated for size analysis (`pnpm analyze`)
 - **Compiler Options**: Console.log removal in production (keeps warn/error)
 - **Package Optimization**: Optimized imports for zustand, immer, react
-- **Security Headers**: CSP + 10 security headers via Vercel + middleware
-- **SSR Optimization**: Streaming, chunked delivery, enhanced error handling
+- **Security Headers**: CSP + 10 security headers via Vercel configuration
 
-### React Compiler Configuration
+### Build Configuration
+
+**Vite Optimization**:
+- Standard React plugin with babel-plugin-react-compiler
+- Automatic code splitting and lazy loading
+- Pre-compression with gzip and brotli
+- Asset fingerprinting for cache optimization
 
 **React Compiler Benefits:**
-
 - Automatic memoization without manual optimization
 - Intelligent re-rendering control
 - Reduced bundle size through optimized compilation

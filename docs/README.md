@@ -1,4 +1,4 @@
-# Next.js → React Router 7 移行プロジェクト ドキュメント 🎉 **Phase 4 Complete - Project Finished**
+# Next.js → React Router 7 移行プロジェクト ドキュメント 🚀 **SPA Mode Deployment**
 
 ## 📚 ドキュメント構成
 
@@ -64,17 +64,18 @@
 - [x] i18n・エラーハンドリング・オーディオシステム完全動作
 - [x] パフォーマンス目標達成（Entry Client: 177.48kB < 200kB）
 
-#### Phase 4: 最適化と品質保証 🎉 **完了**
+#### Phase 4: 最適化と品質保証 🚀 **SPA Mode Deployment**
 - [x] E2Eテストスイート実装（Playwright + 5種類のテストパターン）
 - [x] Lighthouse CI実装・Core Web Vitals測定
 - [x] クロスブラウザ・モバイルデバイス互換性テスト
 - [x] Sentry監視システム・プロダクションエラートラッキング
 - [x] セキュリティ強化（CSP + 10種類のセキュリティヘッダー）
-- [x] Vercel最適化設定・プロダクション環境準備完了
+- [x] React 19.1 + React Router 7 SSR互換性問題によりSPA移行
+- [x] Vercel SPA最適化設定・プロダクション環境準備完了
 
-### 🎉 プロジェクト完了
+### 🚀 現在の状態: SPA Mode Deployment
 
-**React Router 7移行プロジェクト正式完了** - 本格的なプロダクション運用準備完了
+**React Router 7移行プロジェクト** - React 19.1との互換性問題により、一時的にSPAモードでデプロイ
 
 ## 📁 プロジェクト構造
 
@@ -98,8 +99,8 @@ tetris-game/
 ## 🎮 移行対象アプリケーション
 
 **Cyberpunk Tetris Game**
-- **現在**: Next.js 15.3.3 + React 19.1.0
-- **移行先**: React Router 7 + Vite 6 + React 19.1.0
+- **元**: Next.js 15.3.3 + React 19.1.0
+- **現在**: Vite 6.3.5 + React 19.1.0 + React Router 7.6.2 (SPA Mode)
 - **特徴**: 本格的なゲーム機能・アクセシビリティ対応・i18n・テーマシステム
 
 ### 主要機能
@@ -121,10 +122,10 @@ tetris-game/
 
 ### 技術的効果（実績）
 - **HMR速度**: 500ms → ~200ms（✅ 目標達成: 2.5x高速化）
-- **ビルド時間**: 1000ms → 1300ms（SSR対応込み）
+- **ビルド時間**: 1000ms → 3770ms（SPAモード、圧縮込み）
 - **開発サーバー起動**: 2000ms → ~1000ms（✅ 目標達成: 2x高速化）
-- **バンドルサイズ**: 219kB → 177.48kB（✅ 目標超過達成: 19%削減）
-- **SSR Bundle**: 新機能として377.47kB追加（サーバーサイドレンダリング対応）
+- **バンドルサイズ**: 219kB → 322.02kB（SPAモード、gzip: 95.68kB）
+- **デプロイ方式**: SPAモード（React 19.1 + React Router 7 SSR互換性問題により）
 
 ## 📅 完全移行スケジュール
 
