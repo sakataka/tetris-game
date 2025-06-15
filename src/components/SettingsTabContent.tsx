@@ -1,10 +1,11 @@
 import { Suspense, memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { SPACING, TYPOGRAPHY } from '../constants/layout';
+import { TYPOGRAPHY } from '../constants/layout';
 import { useAudioVolumeState } from '../store/audioStore';
 import { useSettings, useUpdateSettings } from '../store/settingsStore';
 import AudioPanel from './AudioPanel';
 import LanguageSelector from './LanguageSelector';
+import CyberCard from './ui/CyberCard';
 import { Checkbox } from './ui/checkbox';
 import { Label } from './ui/label';
 
@@ -16,14 +17,9 @@ const SettingsTabContent = memo(function SettingsTabContent() {
   const updateSettings = useUpdateSettings();
 
   return (
-    <div className={`${SPACING.PANEL_INTERNAL} p-4 space-y-6`}>
+    <div className='space-y-6 max-w-4xl'>
       {/* Language Settings */}
-      <div className={SPACING.PANEL_INTERNAL}>
-        <h3
-          className={`${TYPOGRAPHY.SECTION_HEADER} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyber-cyan border-b border-cyber-cyan/30 ${SPACING.SECTION_TITLE_BOTTOM}`}
-        >
-          {t('settings.language')}
-        </h3>
+      <CyberCard title={t('settings.language')} theme='cyan' size='md'>
         <Suspense
           fallback={
             <div className={`text-gray-400 ${TYPOGRAPHY.BODY_TEXT}`}>{t('common.loading')}</div>
@@ -31,7 +27,7 @@ const SettingsTabContent = memo(function SettingsTabContent() {
         >
           <LanguageSelector />
         </Suspense>
-      </div>
+      </CyberCard>
 
       {/* Audio Settings */}
       <AudioPanel
@@ -44,13 +40,8 @@ const SettingsTabContent = memo(function SettingsTabContent() {
       />
 
       {/* Game Mode Settings */}
-      <div className={SPACING.PANEL_INTERNAL}>
-        <h3
-          className={`${TYPOGRAPHY.SECTION_HEADER} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyber-cyan border-b border-cyber-cyan/30 ${SPACING.SECTION_TITLE_BOTTOM}`}
-        >
-          {t('settings.gameMode')}
-        </h3>
-        <div className='mt-3'>
+      <CyberCard title={t('settings.gameMode')} theme='green' size='md'>
+        <div className='space-y-3'>
           <div className='flex items-center space-x-3'>
             <Checkbox
               id='debug-mode-checkbox'
@@ -70,9 +61,9 @@ const SettingsTabContent = memo(function SettingsTabContent() {
               <span className={TYPOGRAPHY.BODY_TEXT}>{t('settings.debugMode')}</span>
             </Label>
           </div>
-          <p className='mt-1 text-xs text-gray-500'>{t('settings.debugModeDescription')}</p>
+          <p className='text-xs text-gray-500'>{t('settings.debugModeDescription')}</p>
         </div>
-      </div>
+      </CyberCard>
     </div>
   );
 });

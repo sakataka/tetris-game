@@ -1,4 +1,7 @@
 import { memo } from 'react';
+import { Link } from 'react-router';
+import { useTranslation } from 'react-i18next';
+import { Button } from '../ui/button';
 import { cn } from '../../utils/ui/cn';
 import BackgroundEffects from './BackgroundEffects';
 import GameHeader from './GameHeader';
@@ -33,6 +36,7 @@ const MainLayout = memo(function MainLayout({
   backgroundVariant = 'default',
   className = '',
 }: MainLayoutProps) {
+  const { t } = useTranslation();
   return (
     <div
       className={cn(
@@ -47,7 +51,18 @@ const MainLayout = memo(function MainLayout({
         {/* Header */}
         {showHeader && (
           <div className='flex-shrink-0 pt-8 px-4'>
-            <GameHeader variant={headerVariant} />
+            <div className='flex items-center justify-between mb-4'>
+              <GameHeader variant={headerVariant} />
+              <Link to='/'>
+                <Button
+                  variant='outline'
+                  size='sm'
+                  className='bg-gray-800/80 border-cyan-400/50 text-cyan-400 hover:bg-cyan-500/20 hover:border-cyan-400 transition-all duration-200'
+                >
+                  {t('tabs.game')}
+                </Button>
+              </Link>
+            </div>
           </div>
         )}
 

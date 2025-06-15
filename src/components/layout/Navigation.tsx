@@ -1,10 +1,11 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Tabs, TabsList, TabsTrigger } from '../../components/ui/tabs';
-import { type TabType, useActiveTab, useSetActiveTab } from '../../store/navigationStore';
+import { Link, useLocation } from 'react-router';
+import { cn } from '../../utils/ui/cn';
 
 interface NavigationItem {
-  key: TabType;
+  key: string;
+  path: string;
   label: string;
   color: string;
   icon?: string;
@@ -16,71 +17,80 @@ interface NavigationProps {
 }
 
 /**
- * Navigation component for tab-based routing
+ * Navigation component for React Router-based routing
  *
  * Features:
  * - Cyberpunk-themed tab styling
- * - Centralized navigation state management
+ * - React Router-based active state detection
  * - Internationalization support
  * - Responsive design considerations
- *
- * This component abstracts navigation logic and prepares for future
- * React Router integration where tabs will become actual routes.
+ * - Professional menu navigation for settings pages
  */
 const Navigation = memo(function Navigation({
   className = '',
   variant = 'default',
 }: NavigationProps) {
   const { t } = useTranslation();
-  const activeTab = useActiveTab();
-  const setActiveTab = useSetActiveTab();
+  const location = useLocation();
 
   const navigationItems: NavigationItem[] = [
-    { key: 'game', label: t('tabs.game'), color: 'cyan' },
-    { key: 'stats', label: t('tabs.statistics'), color: 'purple' },
-    { key: 'theme', label: t('tabs.themes'), color: 'yellow' },
-    { key: 'settings', label: t('tabs.settings'), color: 'green' },
+    { key: 'settings', path: '/settings', label: t('tabs.settings'), color: 'cyan' },
+    { key: 'statistics', path: '/statistics', label: t('tabs.statistics'), color: 'purple' },
+    { key: 'themes', path: '/themes', label: t('tabs.themes'), color: 'yellow' },
+    { key: 'about', path: '/about', label: t('tabs.about'), color: 'green' },
   ];
 
-  const getTabTriggerClassName = (color: string) => {
+  const activeTab = navigationItems.find(item => item.path === location.pathname)?.key || 'settings';
+
+  const getTabLinkClassName = (color: string, isActive: boolean) => {
     const baseClasses = [
-      `data-[state=active]:bg-${color}-500/20`,
-      `data-[state=active]:text-${color}-400`,
-      'data-[state=active]:border-b-2',
-      `data-[state=active]:border-${color}-400`,
-      `hover:text-${color}-400`,
-      'text-xs px-3 py-1 rounded-t-lg font-semibold',
-      'bg-gray-800/50 text-gray-400',
-      'transition-all duration-200',
+      'inline-flex items-center justify-center px-4 py-2.5 rounded-lg font-medium text-sm',
+      'transition-all duration-200 border border-transparent',
+      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
+      `focus-visible:ring-${color}-400`,
     ];
 
-    if (variant === 'compact') {
-      baseClasses.push('px-2 py-0.5 text-2xs');
+    if (isActive) {
+      baseClasses.push(
+        `bg-${color}-500/20`,
+        `text-${color}-400`,
+        `border-${color}-400/50`,
+        'shadow-lg shadow-${color}-500/20'
+      );
+    } else {
+      baseClasses.push(
+        'bg-gray-800/30 text-gray-400',
+        `hover:bg-${color}-500/10`,
+        `hover:text-${color}-400`,
+        `hover:border-${color}-400/30`
+      );
     }
 
-    return baseClasses.join(' ');
+    if (variant === 'compact') {
+      baseClasses.push('px-3 py-1.5 text-xs');
+    }
+
+    return cn(baseClasses);
   };
 
   return (
-    <nav className={`navigation-container ${className}`}>
-      <Tabs
-        value={activeTab}
-        onValueChange={(value) => setActiveTab(value as TabType)}
-        className='w-full'
-      >
-        <TabsList className='flex-shrink-0 mb-2 space-x-1 bg-transparent p-0 h-auto'>
-          {navigationItems.map((item) => (
-            <TabsTrigger
+    <nav className={cn('navigation-container', className)}>
+      <div className='flex flex-wrap gap-2 bg-gray-900/50 p-3 rounded-xl backdrop-blur-sm border border-gray-700/50'>
+        {navigationItems.map((item) => {
+          const isActive = activeTab === item.key;
+          return (
+            <Link
               key={item.key}
-              value={item.key}
-              className={getTabTriggerClassName(item.color)}
+              to={item.path}
+              className={getTabLinkClassName(item.color, isActive)}
               aria-label={item.label}
+              aria-current={isActive ? 'page' : undefined}
             >
               {item.label}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-      </Tabs>
+            </Link>
+          );
+        })}
+      </div>
     </nav>
   );
 });

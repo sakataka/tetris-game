@@ -75,6 +75,7 @@
     "scoreReference": "スコア参考"
   },
   "themes": {
+    "title": "テーマ",
     "cyberpunk": "サイバーパンク",
     "classic": "クラシック",
     "retro": "レトロ",
@@ -132,7 +133,8 @@
     "game": "ゲーム",
     "statistics": "統計",
     "themes": "テーマ",
-    "settings": "設定"
+    "settings": "設定",
+    "about": "情報"
   },
   "buttons": {
     "ok": "OK",

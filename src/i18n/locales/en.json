@@ -75,6 +75,7 @@
     "scoreReference": "Score Reference"
   },
   "themes": {
+    "title": "Themes",
     "cyberpunk": "Cyberpunk",
     "classic": "Classic",
     "retro": "Retro",
@@ -129,7 +130,8 @@
     "game": "Game",
     "statistics": "Statistics",
     "themes": "Themes",
-    "settings": "Settings"
+    "settings": "Settings",
+    "about": "About"
   },
   "buttons": {
     "ok": "OK",
