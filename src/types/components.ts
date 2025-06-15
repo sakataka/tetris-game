@@ -82,13 +82,6 @@ export interface GameControllerAPIProps {
 }
 
 // Panel component props
-export interface GameStatsPanelProps extends BaseComponentProps {
-  score: number;
-  level: number;
-  lines: number;
-  time: number;
-  showExtendedStats?: boolean;
-}
 
 export interface NextPiecePanelProps extends BaseComponentProps {
   nextPiece: GameState['nextPiece'];
@@ -161,11 +154,6 @@ export interface ColorPaletteEditorProps extends BaseComponentProps {
   validateContrast?: boolean;
 }
 
-export interface AccessibilitySettingsProps extends BaseComponentProps {
-  settings: ThemeConfig['accessibility'];
-  onChange: (settings: ThemeConfig['accessibility']) => void;
-  showPreview?: boolean;
-}
 
 // Virtual controls
 export interface VirtualControlsProps extends BaseComponentProps {
@@ -205,11 +193,6 @@ export interface PausedMessageProps extends BaseComponentProps {
   showControls?: boolean;
 }
 
-export interface LoadingMessageProps extends BaseComponentProps {
-  message?: string;
-  progress?: number;
-  showSpinner?: boolean;
-}
 
 // Error components
 export interface ErrorBoundaryProps extends BaseComponentProps {

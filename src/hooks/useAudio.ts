@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import type { SoundKey } from '../types/tetris';
-import { getAudioPreloadProgress, getFallbackStatus } from '../utils/audio';
+import { getAudioPreloadProgress } from '../utils/audio';
 import { useAudioPlayer } from './useAudioPlayer';
 import { useAudioPreloader } from './useAudioPreloader';
 import { useAudioState } from './useAudioState';
@@ -239,7 +239,6 @@ export function useAudio({
       }
       return null;
     },
-    getFallbackStatus,
     playStats: getPlayStats(),
 
     // Debug and recovery features
