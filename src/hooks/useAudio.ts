@@ -149,10 +149,7 @@ export function useAudio({
       // Check if sound is loaded
       return preloaderAPI.loadState.loaded.has(soundKey);
     },
-    [
-      stateAPI.volumeState.isMuted,
-      preloaderAPI.loadState.loaded,
-    ]
+    [stateAPI.volumeState.isMuted, preloaderAPI.loadState.loaded]
   );
 
   // ===== Legacy Compatibility Functions =====

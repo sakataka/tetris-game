@@ -57,7 +57,12 @@ export function withErrorHandling<T extends (...args: unknown[]) => unknown>(
       const result = fn(...args);
 
       // Handle promise-returning functions
-      if (result && typeof result === 'object' && 'then' in result && typeof result.then === 'function') {
+      if (
+        result &&
+        typeof result === 'object' &&
+        'then' in result &&
+        typeof result.then === 'function'
+      ) {
         return (result as Promise<unknown>).catch((error: Error) => {
           handleError(error, { ...context, functionName: fn.name, args });
           throw error; // Re-throw to maintain promise rejection behavior
@@ -130,7 +135,7 @@ export async function withRetry<T>(
         throw lastError;
       }
 
-      // Log intermediate failures as warnings  
+      // Log intermediate failures as warnings
       log.warn(`Attempt ${attempt}/${maxRetries} failed:`, {
         component: 'UnifiedErrorHandler',
         metadata: { error: error as Error, attempt, maxRetries },

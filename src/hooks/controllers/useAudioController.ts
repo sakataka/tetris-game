@@ -68,7 +68,6 @@ export function useAudioController(): AudioSystemAPI {
     isWebAudioEnabled,
     getDetailedAudioState,
     getPreloadProgress,
-    getFallbackStatus,
     audioSystemStatus,
     hasInitializationError,
     canRetryInitialization,
@@ -135,7 +134,6 @@ export function useAudioController(): AudioSystemAPI {
   }, [updateSettings, settings.isMuted, toggleMute]);
 
   // Audio system status computation (React Compiler will optimize this)
-  const fallbackStatus = getFallbackStatus();
   const detailedState = getDetailedAudioState();
   const preloadProgress = getPreloadProgress();
 
@@ -149,14 +147,6 @@ export function useAudioController(): AudioSystemAPI {
 
   if (preloadProgress) {
     enhancedAudioSystemStatus.preloadProgress = preloadProgress;
-  }
-
-  if (fallbackStatus) {
-    enhancedAudioSystemStatus.fallbackStatus = {
-      currentLevel: fallbackStatus.currentLevel,
-      availableLevels: fallbackStatus.availableLevels,
-      silentMode: fallbackStatus.silentMode,
-    };
   }
 
   if (detailedState) {

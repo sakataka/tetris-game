@@ -154,7 +154,6 @@ export interface ColorPaletteEditorProps extends BaseComponentProps {
   validateContrast?: boolean;
 }
 
-
 // Virtual controls
 export interface VirtualControlsProps extends BaseComponentProps {
   onControlPress: (control: VirtualControl) => void;
@@ -192,7 +191,6 @@ export interface PausedMessageProps extends BaseComponentProps {
   onRestart: () => void;
   showControls?: boolean;
 }
-
 
 // Error components
 export interface ErrorBoundaryProps extends BaseComponentProps {
