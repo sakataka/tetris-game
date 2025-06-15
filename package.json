@@ -16,6 +16,7 @@
     "lint:fix": "biome lint --write .",
     "test": "vitest",
     "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "prepare": "husky",
     "format": "biome format --write .",
     "format:check": "biome format .",
