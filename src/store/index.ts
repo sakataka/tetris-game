@@ -102,4 +102,83 @@ export {
   useErrorsByCategory,
 } from './errorStore';
 
+// Accessibility Store (unified visual + orchestration)
+export {
+  useAccessibilityStore,
+  useAccessibility,
+  useAccessibilityLevel,
+  useAccessibilityEnabled,
+  useSetAccessibilityLevel,
+  useToggleAccessibility,
+  useApplyAccessibilityPreset,
+  useResetAllAccessibility,
+  useDetectSystemPreferences,
+  useEnableAccessibilityMode,
+  useEnableGamingMode,
+  useEnableScreenReaderMode,
+  // Visual accessibility (now integrated)
+  useVisualAccessibilityState,
+  useColorBlindnessType,
+  useContrastLevel,
+  useFontSizeLevel,
+  useVisualAssistance,
+  useAnimationSettings,
+  useSetColorBlindnessType,
+  useSetContrast,
+  useSetFontSize,
+  useSetAnimationIntensity,
+  useUpdateVisualAssistance,
+  useToggleHighContrast,
+  useToggleLargeText,
+  useToggleReducedMotion,
+  useDetectSystemVisualPreferences,
+} from './accessibilityStore';
+
+// Specialized Accessibility Store (cognitive + input)
+export {
+  // Cognitive accessibility
+  useCognitiveAccessibilityState,
+  useCognitiveAssistance,
+  useGameAccessibility,
+  useSimplifiedUI,
+  useConfirmActions,
+  useAutoSave,
+  useTimeoutWarnings,
+  usePauseOnFocusLoss,
+  usePauseOnBlur,
+  useVisualGameOver,
+  useColorCodedPieces,
+  useGridLines,
+  useDropPreview,
+  useUpdateCognitiveAssistance,
+  useUpdateGameSpecific,
+  useToggleSimplifiedUI,
+  useToggleConfirmActions,
+  useToggleAutoSave,
+  useEnableFocusMode,
+  useDisableFocusMode,
+  // Input accessibility
+  useInputAccessibilityState,
+  useKeyboardNavigation,
+  useFeedbackSettings,
+  useKeyboardEnabled,
+  useFocusOutline,
+  useSkipLinks,
+  useTabOrder,
+  useSoundEffects,
+  useVoiceAnnouncements,
+  useHapticFeedback,
+  useScreenReader,
+  useUpdateKeyboardNavigation,
+  useUpdateFeedbackSettings,
+  useToggleKeyboardFocus,
+  useToggleSoundEffects,
+  useToggleVoiceAnnouncements,
+  useToggleHapticFeedback,
+  // Reset functions
+  useResetCognitiveToDefaults,
+  useResetInputToDefaults,
+  useResetSpecializedToDefaults,
+} from './specializedAccessibility';
+
 // Legacy store removal completed

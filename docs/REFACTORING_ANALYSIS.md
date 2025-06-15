@@ -3,15 +3,24 @@
 **Generated:** 2025-06-15  
 **Purpose:** シンプルでメンテナンスしやすい実装に向けた分析結果
 
-## 📊 Current Codebase Overview (Baseline: 2025-06-15)
+## 📊 Current Codebase Overview (Updated: 2025-06-15)
 
-**Precise Measurements:**
-- **214 TypeScript files** (.ts/.tsx in src/)
-- **32,236 total lines of code** (excluding tests, config files)
-- **15 Zustand stores** (3,000+ lines total)
-- **22 custom hooks** (2,845+ lines total)
-- **64 React components** (including 20 shadcn/ui components)
-- **8 large files** (>300 lines each)
+**Phase 1 + 2 Progress Measurements:**
+- **216 TypeScript files** (.ts/.tsx in src/) [+2 from 214]
+- **~31,500 total lines of code** (Phase 1+2 reduction ~2%)
+- **12 Zustand stores** (from 15 → 12, -20% reduction)
+- **25 custom hooks** (from 22 → 25, +3 for better separation)
+- **64 React components** (unchanged)
+- **7 large files** (from 8 → 7, -12.5% reduction)
+
+**✅ Phase 1 Completed (2025-06-15):**
+- Language/Locale Store Unification: `languageStore.ts` + `localeStore.ts` → `i18nStore.ts`
+- Settings Hook Decomposition: `useSettings.ts` (379 lines) → 4 focused hooks
+
+**✅ Phase 2 Completed (2025-06-15):**
+- Accessibility Store Consolidation: 4 stores → 2 stores
+  - `accessibilityStore.ts` + `visualAccessibility.ts` → unified `accessibilityStore.ts`
+  - `cognitiveAccessibility.ts` + `inputAccessibility.ts` → `specializedAccessibility.ts`
 
 **Largest Files (Refactoring Targets):**
 - `audioFallback.ts`: 486 lines
