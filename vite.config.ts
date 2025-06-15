@@ -86,11 +86,13 @@ export default defineConfig(() => ({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          // React関連のベンダーチャンク
-          if (id.includes('react-router') || id.includes('@react-router')) {
-            return 'react-router';
-          }
-          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
+          // React関連のベンダーチャンク（React RouterとReactを同じチャンクに）
+          if (
+            id.includes('node_modules/react') || 
+            id.includes('node_modules/react-dom') ||
+            id.includes('react-router') || 
+            id.includes('@react-router')
+          ) {
             return 'react-vendor';
           }
           // UI関連のベンダーチャンク
