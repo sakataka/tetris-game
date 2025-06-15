@@ -73,7 +73,12 @@ export const useAudioStore = create<AudioState>((set, get) => ({
 
   toggleMute: () => {
     const state = get();
-    state.setMuted(!state.isMuted);
+    const newMuted = !state.isMuted;
+    set({
+      isMuted: newMuted,
+      // If unmuting and current volume is 0, restore previous volume
+      volume: !newMuted && state.volume === 0 ? state.previousVolume : state.volume,
+    });
   },
 
   // Strategy actions

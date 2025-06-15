@@ -300,19 +300,24 @@ export class AnimationManager {
     const now = performance.now();
     if (now - this.stats.lastPerformanceCheck < INTERVALS.PERFORMANCE_CHECK) return;
 
-    const dropRate = this.stats.droppedFrames / this.stats.totalFrames;
+    const dropRate =
+      this.stats.totalFrames > 0 ? this.stats.droppedFrames / this.stats.totalFrames : 0;
 
-    // Auto-optimize when frame drop rate exceeds threshold
-    if (dropRate > PERFORMANCE_LIMITS.FRAME_DROP_THRESHOLD) {
-      log.warn(`High frame drop rate (${(dropRate * 100).toFixed(1)}%). Optimizing...`, {
-        component: 'AnimationManager',
-        action: 'checkPerformance',
-        metadata: {
-          dropRate,
-          totalFrames: this.stats.totalFrames,
-          droppedFrames: this.stats.droppedFrames,
-        },
-      });
+    // Auto-optimize when frame drop rate exceeds threshold (but not in development with limited frames)
+    if (dropRate > PERFORMANCE_LIMITS.FRAME_DROP_THRESHOLD && this.stats.totalFrames > 60) {
+      // Only log performance warnings in production or when there are significant samples
+      if (import.meta.env.PROD || this.stats.totalFrames > 300) {
+        log.warn(`High frame drop rate (${(dropRate * 100).toFixed(1)}%). Optimizing...`, {
+          component: 'AnimationManager',
+          action: 'checkPerformance',
+          metadata: {
+            dropRate,
+            totalFrames: this.stats.totalFrames,
+            droppedFrames: this.stats.droppedFrames,
+          },
+        });
+      }
+
       this.pauseLowPriorityAnimations();
 
       // Lower global FPS limit
@@ -322,6 +327,18 @@ export class AnimationManager {
     }
 
     this.stats.lastPerformanceCheck = now;
+  }
+
+  /**
+   * Reset performance statistics (useful for development)
+   */
+  public resetPerformanceStats(): void {
+    this.stats = {
+      totalFrames: 0,
+      droppedFrames: 0,
+      averageFrameTime: 0,
+      lastPerformanceCheck: performance.now(),
+    };
   }
 }
 
