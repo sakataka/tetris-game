@@ -7,6 +7,11 @@ const ErrorToastAdapter = () => {
   useEffect(() => {
     // Subscribe to error events and show them as toasts
     return errorHandler.onError((errorInfo: ErrorInfo) => {
+      // Skip toast notification for suppressed audio errors
+      if (shouldSuppressToast(errorInfo)) {
+        return;
+      }
+
       const message = errorInfo.userMessage || errorInfo.message;
       const duration = getDefaultDuration(errorInfo.level);
 
@@ -55,6 +60,31 @@ const ErrorToastAdapter = () => {
 
   return null;
 };
+
+function shouldSuppressToast(errorInfo: ErrorInfo): boolean {
+  // Suppress toast notifications for audio loading/initialization errors
+  if (errorInfo.category === 'audio') {
+    const isLoadingError = errorInfo.context.action === 'audio_load';
+    const isInitializationError = errorInfo.context.action === 'audio_context_init';
+    const isPreloadError = errorInfo.context.action === 'audio_preload';
+    const isCreateError = errorInfo.context.action === 'html_audio_create';
+    const isUnlockError = errorInfo.context.action === 'audio_unlock';
+    const isHTMLInit = errorInfo.context.action === 'html_audio_init';
+
+    // Suppress toasts for loading/initialization errors, only show userMessage if explicitly set
+    return (
+      isLoadingError ||
+      isInitializationError ||
+      isPreloadError ||
+      isCreateError ||
+      isUnlockError ||
+      isHTMLInit ||
+      !errorInfo.userMessage // Also suppress if no explicit userMessage is set
+    );
+  }
+
+  return false; // Don't suppress non-audio errors
+}
 
 function getDefaultDuration(level: ErrorLevel): number {
   switch (level) {
