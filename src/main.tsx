@@ -1,67 +1,32 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { RouterProvider, createBrowserRouter } from 'react-router';
 
-// Sentry monitoring initialization
-import { initSentry } from './utils/sentry';
+console.log('🎮 Simple Tetris Game initializing...');
 
-// Global styles
-import './app/globals.css';
-
-import App from './App';
-// Routes
-import AboutRoute from './routes/about';
-import HomeRoute from './routes/home';
-import SettingsRoute from './routes/settings';
-import StatisticsRoute from './routes/statistics';
-import ThemesRoute from './routes/themes';
-
-// Debug: Log initialization
-console.log('🎮 Tetris Game initializing...', {
-  env: import.meta.env.MODE,
-  prod: import.meta.env.PROD,
-  vite: import.meta.env['VITE_APP_ENV'],
-});
-
-// Initialize Sentry in production environment
-try {
-  initSentry();
-  console.log('✅ Sentry initialization complete');
-} catch (error) {
-  console.error('❌ Sentry initialization failed:', error);
+function SimpleApp() {
+  return (
+    <div
+      style={{
+        minHeight: '100vh',
+        backgroundColor: '#0a0a0a',
+        color: '#00ffff',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily: 'Arial, sans-serif',
+      }}
+    >
+      <div style={{ textAlign: 'center' }}>
+        <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>🎮 Cyberpunk Tetris</h1>
+        <p>✅ React App is working!</p>
+        <p>Environment: {import.meta.env.MODE}</p>
+        <p>Production: {import.meta.env.PROD ? 'Yes' : 'No'}</p>
+      </div>
+    </div>
+  );
 }
 
-// SPA Router setup
-const router = createBrowserRouter([
-  {
-    path: '/',
-    Component: App,
-    children: [
-      {
-        index: true,
-        Component: HomeRoute,
-      },
-      {
-        path: 'about',
-        Component: AboutRoute,
-      },
-      {
-        path: 'settings',
-        Component: SettingsRoute,
-      },
-      {
-        path: 'statistics',
-        Component: StatisticsRoute,
-      },
-      {
-        path: 'themes',
-        Component: ThemesRoute,
-      },
-    ],
-  },
-]);
-
-console.log('🎯 Router created successfully');
+console.log('🎯 Creating simple app...');
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -69,16 +34,16 @@ if (!rootElement) {
   throw new Error('Root element not found');
 }
 
-console.log('✅ Root element found, starting React app...');
+console.log('✅ Root element found, starting simple React app...');
 
 try {
   createRoot(rootElement).render(
     <StrictMode>
-      <RouterProvider router={router} />
+      <SimpleApp />
     </StrictMode>
   );
-  console.log('🚀 React app rendered successfully!');
+  console.log('🚀 Simple React app rendered successfully!');
 } catch (error) {
-  console.error('❌ React app render failed:', error);
+  console.error('❌ Simple React app render failed:', error);
   throw error;
 }
