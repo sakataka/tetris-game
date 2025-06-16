@@ -69,27 +69,6 @@ const isSupportedLanguage = (language: string): language is SupportedLanguage =>
   return supportedLanguages.includes(language as SupportedLanguage);
 };
 
-const detectBrowserLanguage = (): SupportedLanguage => {
-  if (typeof window === 'undefined') {
-    return defaultLanguage;
-  }
-
-  const browserLang = navigator.language;
-
-  // Check for exact match
-  if (isSupportedLanguage(browserLang)) {
-    return browserLang;
-  }
-
-  // Check for language code only match (e.g., en-US → en)
-  const langCode = browserLang.split('-')[0];
-  if (langCode && isSupportedLanguage(langCode)) {
-    return langCode;
-  }
-
-  // Fallback
-  return defaultLanguage;
-};
 
 // Unified i18n store
 export const useI18nStore = create<I18nState & I18nActions>()(
@@ -148,19 +127,18 @@ export const useI18nStore = create<I18nState & I18nActions>()(
       },
 
       reset: () => {
-        const detectedLanguage = detectBrowserLanguage();
         set({
           ...DEFAULT_I18N_STATE,
-          currentLanguage: detectedLanguage,
-          dateFormat: getDateFormatForLanguage(detectedLanguage),
-          isRTL: isRTLLanguage(detectedLanguage),
+          currentLanguage: defaultLanguage,
+          dateFormat: getDateFormatForLanguage(defaultLanguage),
+          isRTL: isRTLLanguage(defaultLanguage),
         });
 
         // Update i18n and HTML attributes
-        i18n.changeLanguage(detectedLanguage);
+        i18n.changeLanguage(defaultLanguage);
         if (typeof document !== 'undefined') {
-          document.documentElement.lang = detectedLanguage;
-          document.documentElement.dir = isRTLLanguage(detectedLanguage) ? 'rtl' : 'ltr';
+          document.documentElement.lang = defaultLanguage;
+          document.documentElement.dir = isRTLLanguage(defaultLanguage) ? 'rtl' : 'ltr';
         }
       },
     }),

@@ -1,5 +1,4 @@
 import i18n from 'i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
 
 import en from './locales/en.json';
@@ -26,20 +25,18 @@ export const languageNames: Record<SupportedLanguage, string> = {
 
 // Only initialize on client side to avoid SSR issues
 if (typeof window !== 'undefined') {
+  // Get language from localStorage or use default
+  const storedLanguage = localStorage.getItem('tetris-language');
+  const initialLanguage = (storedLanguage && supportedLanguages.includes(storedLanguage as SupportedLanguage)) 
+    ? storedLanguage as SupportedLanguage 
+    : defaultLanguage;
+
   i18n
-    .use(LanguageDetector)
     .use(initReactI18next)
     .init({
       resources,
-      lng: defaultLanguage,
+      lng: initialLanguage,
       fallbackLng: defaultLanguage,
-
-      // Language detection options - force English as default
-      detection: {
-        order: ['localStorage'],
-        caches: ['localStorage'],
-        lookupLocalStorage: 'tetris-language',
-      },
 
       interpolation: {
         escapeValue: false, // React already does escaping
@@ -48,6 +45,9 @@ if (typeof window !== 'undefined') {
       // Development options
       debug: import.meta.env.DEV,
     });
+
+  // Ensure localStorage is set to the determined language
+  localStorage.setItem('tetris-language', initialLanguage);
 } else {
   // Server-side initialization without detection
   i18n.use(initReactI18next).init({
