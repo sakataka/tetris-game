@@ -230,11 +230,11 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
                 const getRankingBadgeStyle = (position: number) => {
                   switch (position) {
                     case 0:
-                      return 'bg-gradient-to-r from-yellow-500 to-amber-500 text-black border-yellow-400';
+                      return 'bg-yellow-500 text-black border-yellow-400';
                     case 1:
-                      return 'bg-gradient-to-r from-gray-300 to-gray-400 text-black border-gray-300';
+                      return 'bg-gray-400 text-black border-gray-300';
                     case 2:
-                      return 'bg-gradient-to-r from-orange-600 to-amber-700 text-white border-orange-500';
+                      return 'bg-orange-600 text-white border-orange-500';
                     default:
                       return 'bg-cyber-cyan-20 text-cyber-cyan border-cyber-cyan-30';
                   }

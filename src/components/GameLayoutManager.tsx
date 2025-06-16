@@ -2,6 +2,7 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { Button } from '../components/ui/button';
+import { ConfirmationDialog } from '../components/ui/ConfirmationDialog';
 import { useTogglePause } from '../store/gameStateStore';
 import ErrorBoundary from './ErrorBoundary';
 import GameInfo from './GameInfo';
@@ -33,6 +34,9 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
     onRotate,
     onHardDrop,
     unlockAudio,
+    showKeyboardResetConfirmation,
+    setShowKeyboardResetConfirmation,
+    onKeyboardResetConfirm,
   } = api;
 
   // Toggle pause function for overlay
@@ -160,6 +164,18 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
         {/* Paused Overlay */}
         <PausedOverlay isVisible={gameState.isPaused} onResume={togglePause} />
       </div>
+      
+      {/* Reset Confirmation Dialog */}
+      <ConfirmationDialog
+        isOpen={showKeyboardResetConfirmation}
+        onClose={() => setShowKeyboardResetConfirmation(false)}
+        onConfirm={onKeyboardResetConfirm}
+        title={t('game.resetConfirmation.title')}
+        description={t('game.resetConfirmation.description')}
+        confirmText={t('buttons.reset')}
+        cancelText={t('common.cancel')}
+        variant='destructive'
+      />
     </div>
   );
 });

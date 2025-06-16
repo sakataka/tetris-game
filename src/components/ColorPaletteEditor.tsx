@@ -168,7 +168,7 @@ export default function ColorPaletteEditor({
       </div>
 
       {/* Color preview (always displayed) */}
-      <div className='mb-4 p-3 rounded-lg hologram'>
+      <div className='mb-4 p-3 rounded-lg bg-cyber-cyan-10 border border-cyber-cyan-30'>
         <div className='text-sm font-medium mb-2 text-cyber-cyan'>{t('colorPalette.preview')}</div>
         <div className='grid grid-cols-6 gap-2'>
           {colorFields.map(({ key, label }) => (
@@ -177,7 +177,7 @@ export default function ColorPaletteEditor({
                 className='w-full h-8 rounded border border-cyber-cyan-30 mb-1'
                 style={{ backgroundColor: colors[key] }}
               />
-              <div className='text-xs text-cyber-purple truncate' title={label}>
+              <div className='text-xs text-cyber-cyan truncate' title={label}>
                 {label.slice(0, 4)}
               </div>
             </div>

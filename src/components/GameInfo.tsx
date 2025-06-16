@@ -1,9 +1,8 @@
 import { memo } from 'react';
-import { useTranslation } from 'react-i18next';
 import type { Tetromino } from '../types/tetris';
 import GameTabContent from './GameTabContent';
 import MobileGameInfo from './MobileGameInfo';
-import CyberCard from './ui/CyberCard';
+import GameHeader from './layout/GameHeader';
 
 interface GameInfoProps {
   score: number;
@@ -20,16 +19,14 @@ const GameInfo = memo(function GameInfo({
   nextPiece,
   gameOver,
 }: GameInfoProps) {
-  const { t } = useTranslation();
-
   return (
     <div className='text-white h-full flex flex-col'>
       {/* Desktop: Game Title + Game Info */}
       <div className='hidden md:flex flex-col h-full space-y-4'>
-        {/* TETRIS Title with consistent styling */}
-        <CyberCard title={t('app.title')} theme='cyan' size='md'>
-          <div className='text-center text-xs text-cyan-400'>{t('app.title')}</div>
-        </CyberCard>
+        {/* TETRIS Title with large decorative styling matching Settings */}
+        <div className='mb-4'>
+          <GameHeader variant='default' />
+        </div>
 
         {/* Game Information */}
         <div className='flex-1'>

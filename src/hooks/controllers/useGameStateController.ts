@@ -5,7 +5,7 @@
  * Manages core game state and game logic operations.
  */
 
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { EFFECTS } from '../../constants/layout';
 import {
   useCalculatePiecePlacementState,
@@ -36,6 +36,9 @@ export interface GameStateAPI {
   onMove: (direction: { x: number; y: number }) => void;
   onRotate: () => void;
   onHardDrop: () => void;
+  showKeyboardResetConfirmation: boolean;
+  setShowKeyboardResetConfirmation: (show: boolean) => void;
+  onKeyboardResetConfirm: () => void;
 }
 
 interface GameStateControllerDependencies {
@@ -51,6 +54,8 @@ export function useGameStateController({
   playSound,
   onGameStart,
 }: GameStateControllerDependencies): GameStateAPI {
+  const [showKeyboardResetConfirmation, setShowKeyboardResetConfirmation] = useState(false);
+  
   // Zustand store integration for game state
   const gameState = useGameState();
   const dropTime = useDropTime();
@@ -170,28 +175,20 @@ export function useGameStateController({
     playSound,
   });
 
-  // Game loop integration
-  useGameLoop({
-    isGameOver: gameState.gameOver,
-    isPaused: gameState.isPaused,
-    level: gameState.level,
-    dropTime,
-    initialDropTime: 1000, // Initial drop time in milliseconds
-    actions: {
-      movePiece: gameControls.movePiece,
-      rotatePieceClockwise: gameControls.rotatePieceClockwise,
-      hardDrop: gameControls.hardDrop,
-      dropPiece: gameControls.dropPiece,
-      togglePause: togglePause,
-      resetGame: resetGame,
-    },
-    onDropTimeChange: setDropTime,
-  });
-
   // Event handlers (React Compiler will optimize these)
   const handleReset = useCallback(() => {
     onGameStart();
     resetGame();
+  }, [onGameStart, resetGame]);
+
+  const handleKeyboardReset = useCallback(() => {
+    setShowKeyboardResetConfirmation(true);
+  }, []);
+
+  const handleKeyboardResetConfirm = useCallback(() => {
+    onGameStart();
+    resetGame();
+    setShowKeyboardResetConfirmation(false);
   }, [onGameStart, resetGame]);
 
   const handleTogglePause = useCallback(() => {
@@ -205,6 +202,24 @@ export function useGameStateController({
     [updateParticles]
   );
 
+  // Game loop integration
+  useGameLoop({
+    isGameOver: gameState.gameOver,
+    isPaused: gameState.isPaused,
+    level: gameState.level,
+    dropTime,
+    initialDropTime: 1000, // Initial drop time in milliseconds
+    actions: {
+      movePiece: gameControls.movePiece,
+      rotatePieceClockwise: gameControls.rotatePieceClockwise,
+      hardDrop: gameControls.hardDrop,
+      dropPiece: gameControls.dropPiece,
+      togglePause: togglePause,
+      resetGame: handleKeyboardReset,
+    },
+    onDropTimeChange: setDropTime,
+  });
+
   // Return API object
   return {
     gameState,
@@ -215,5 +230,8 @@ export function useGameStateController({
     onMove: gameControls.movePiece,
     onRotate: gameControls.rotatePieceClockwise,
     onHardDrop: gameControls.hardDrop,
+    showKeyboardResetConfirmation,
+    setShowKeyboardResetConfirmation,
+    onKeyboardResetConfirm: handleKeyboardResetConfirm,
   };
 }

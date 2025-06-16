@@ -53,7 +53,7 @@ export default function ThemeSelector({
       </Select>
 
       {/* Theme preview */}
-      <div className='mt-3 p-3 rounded-lg hologram'>
+      <div className='mt-3 p-3 rounded-lg bg-cyber-cyan-10 border border-cyber-cyan-30'>
         <div className='flex gap-2'>
           {Object.entries(THEME_PRESETS[currentTheme].colors)
             .slice(0, 3)
@@ -66,7 +66,7 @@ export default function ThemeSelector({
               />
             ))}
         </div>
-        <div className='text-xs text-cyber-purple mt-2'>
+        <div className='text-xs text-cyber-cyan mt-2'>
           {t('accessibility.motion')}: {THEME_PRESETS[currentTheme].effects.glow}px
         </div>
       </div>
