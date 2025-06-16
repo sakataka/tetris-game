@@ -24,7 +24,7 @@ const PlayHistory: React.FC<PlayHistoryProps> = ({
   const { t } = useTranslation();
 
   return (
-    <CyberCard title={`📅 ${t('statistics.playTime')}`} theme='accent' size='md'>
+    <CyberCard title={`📅 ${t('statistics.playTime')}`} theme='primary' size='md'>
       <div
         className={`grid grid-cols-2 gap-3 ${TYPOGRAPHY.SMALL_LABEL}`}
         data-testid='play-history'

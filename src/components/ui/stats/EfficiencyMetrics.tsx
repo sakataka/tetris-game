@@ -24,7 +24,7 @@ const EfficiencyMetrics: React.FC<EfficiencyMetricsProps> = ({
   const { t } = useTranslation();
 
   return (
-    <CyberCard title={`🎯 ${t('statistics.efficiency')}`} theme='secondary' size='md'>
+    <CyberCard title={`🎯 ${t('statistics.efficiency')}`} theme='primary' size='md'>
       <div
         className={`grid grid-cols-2 gap-3 ${TYPOGRAPHY.SMALL_LABEL}`}
         data-testid='efficiency-stats'

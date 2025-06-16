@@ -46,7 +46,7 @@ const HighScoresList: React.FC<HighScoresListProps> = ({ highScores }) => {
   };
 
   return (
-    <CyberCard title={`🏆 ${t('statistics.highScores')}`} theme='success' size='md'>
+    <CyberCard title={`🏆 ${t('statistics.highScores')}`} theme='primary' size='md'>
       <div className='space-y-2' data-testid='recent-achievements'>
         {highScores.slice(0, 3).map((score, index) => (
           <div
