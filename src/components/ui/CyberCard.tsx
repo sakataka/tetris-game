@@ -27,45 +27,45 @@ const CYBER_THEMES: Record<
   {
     cardClass: string;
     titleClass: string;
-    hologramEffect: string;
+    backgroundClass: string;
     borderGlow: string;
   }
 > = {
   cyan: {
     cardClass: 'bg-cyber-cyan/5 border-cyber-cyan/30',
     titleClass: 'text-cyber-cyan',
-    hologramEffect: 'hologram-cyan',
-    borderGlow: 'neon-border',
+    backgroundClass: 'bg-cyber-cyan-10',
+    borderGlow: 'border border-cyber-cyan-30',
   },
   purple: {
     cardClass: 'bg-cyber-purple/5 border-cyber-purple/30',
     titleClass: 'text-cyber-purple',
-    hologramEffect: 'hologram-purple',
-    borderGlow: 'neon-border-purple',
+    backgroundClass: 'bg-cyber-purple-10',
+    borderGlow: 'border border-cyber-purple-30',
   },
   green: {
     cardClass: 'bg-cyber-green/5 border-cyber-green/30',
     titleClass: 'text-cyber-green',
-    hologramEffect: 'hologram',
-    borderGlow: 'neon-border',
+    backgroundClass: 'bg-cyber-green-10',
+    borderGlow: 'border border-cyber-green-30',
   },
   yellow: {
     cardClass: 'bg-cyber-yellow/5 border-cyber-yellow/30',
     titleClass: 'text-cyber-yellow',
-    hologramEffect: 'hologram-yellow',
-    borderGlow: 'neon-border-yellow',
+    backgroundClass: 'bg-cyber-yellow-10',
+    borderGlow: 'border border-cyber-yellow-30',
   },
   red: {
     cardClass: 'bg-cyber-red/5 border-cyber-red/30',
     titleClass: 'text-cyber-red',
-    hologramEffect: 'bg-gradient-to-br from-red-500/20 via-red-600/10 to-transparent',
-    borderGlow: 'border-2 border-red-400/50 shadow-lg shadow-red-400/20',
+    backgroundClass: 'bg-cyber-red-10',
+    borderGlow: 'border border-cyber-red-30',
   },
   default: {
     cardClass: 'bg-gray-500/5 border-gray-500/30',
     titleClass: 'text-gray-400',
-    hologramEffect: 'hologram',
-    borderGlow: 'neon-border',
+    backgroundClass: 'bg-gray-800/30',
+    borderGlow: 'border border-gray-700/50',
   },
 };
 
@@ -127,7 +127,7 @@ export function CyberCard({
         'relative overflow-hidden',
         // Cyberpunk theme styling
         themeConfig.cardClass,
-        themeConfig.hologramEffect,
+        themeConfig.backgroundClass,
         themeConfig.borderGlow,
         // Size-based padding override
         sizeConfig.cardPadding,

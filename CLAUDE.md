@@ -2,6 +2,9 @@
 
 This file provides guidance to Claude Code when working with this React Router 7 + React 19.1 Tetris game.
 
+# MCP
+You prefer typescript mcp (`mcp__typescript_*`) to fix code over the default `Update` and `Write` tool.
+
 ## 🎯 Development Guidelines
 
 **Critical Reference**: [React Development Guidelines](./docs/REACT_DEVELOPMENT_GUIDELINES.md)
