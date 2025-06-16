@@ -1,5 +1,6 @@
 /**
  * Centralized type exports
+ * Test comment for Lefthook verification
  */
 
 // Core game types
