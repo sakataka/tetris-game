@@ -144,7 +144,7 @@ export default function ThemeSettings({
                   htmlFor='effect-intensity-range'
                   className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-cyber-cyan`}
                 >
-                  Effect Intensity: {(effectIntensity * 100).toFixed(0)}%
+                  {t('accessibility.effectIntensity')}: {(effectIntensity * 100).toFixed(0)}%
                 </Label>
                 <Slider
                   id='effect-intensity-range'
@@ -205,7 +205,7 @@ export default function ThemeSettings({
                       animation: animations ? 'pulse 2s infinite' : 'none',
                     }}
                   >
-                    Neon Effect
+                    {t('themes.effects.neon')}
                   </div>
                   <div
                     className='p-3 rounded bg-cyber-cyan-10 border border-cyber-cyan-30 text-center'
@@ -214,7 +214,7 @@ export default function ThemeSettings({
                       animation: animations ? 'float 3s ease-in-out infinite' : 'none',
                     }}
                   >
-                    Hologram + Blur
+                    {t('themes.effects.hologram')}
                   </div>
                 </div>
               </div>

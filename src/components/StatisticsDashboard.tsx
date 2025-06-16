@@ -46,7 +46,7 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
       {/* Overview */}
       <CyberCard title={`📊 ${t('statistics.title')}`} theme='cyan' size='lg'>
         <div className='flex justify-between items-center mb-4'>
-          <span className='text-gray-400'>Period</span>
+          <span className='text-gray-400'>{t('statistics.period.label')}</span>
           <Select value={selectedPeriod || ''} onValueChange={onPeriodChange}>
             <SelectTrigger
               className={cn(

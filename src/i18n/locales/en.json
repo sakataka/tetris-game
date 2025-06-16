@@ -106,6 +106,10 @@
     "resetConfirmation": {
       "title": "Reset Theme Settings?",
       "description": "Are you sure you want to reset all theme settings to default? All custom colors and preferences will be lost."
+    },
+    "effects": {
+      "neon": "Neon Effect",
+      "hologram": "Hologram + Blur"
     }
   },
   "statistics": {
@@ -127,6 +131,7 @@
     "never": "Never",
     "allTime": "All Time",
     "period": {
+      "label": "Period",
       "all": "All Time",
       "today": "Today",
       "week": "This Week",
@@ -245,6 +250,7 @@
     "reducedAnimation": "Reduced Animation",
     "noAnimation": "No Animation",
     "animationIntensity": "Animation Intensity",
+    "effectIntensity": "Effect Intensity",
     "enhanced": "Enhanced",
     "reduced": "Reduced",
     "currentSettings": "Current Settings",
