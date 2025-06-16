@@ -57,6 +57,7 @@ class ErrorHandlerService {
     
     return new GameAppError(
       error.message || 'Unknown error',
+      undefined,
       'medium',
       'game',
       { component: 'ErrorHandler' }

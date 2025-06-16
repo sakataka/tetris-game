@@ -17,29 +17,23 @@ const ErrorToastAdapter = () => {
 
       // Map error levels to toast types
       switch (errorInfo.level) {
-        case 'info':
+        case 'low':
           toast.info(message, {
             duration,
             id: errorInfo.id,
           });
           break;
-        case 'warning':
+        case 'medium':
           toast.warning(message, {
             duration,
             id: errorInfo.id,
           });
           break;
-        case 'error':
+        case 'high':
           toast.error(message, {
             duration,
             id: errorInfo.id,
-          });
-          break;
-        case 'critical':
-          toast.error(message, {
-            duration,
-            id: errorInfo.id,
-            description: 'Critical Error',
+            description: 'High Priority Error',
           });
           break;
         default:
@@ -49,12 +43,7 @@ const ErrorToastAdapter = () => {
           });
       }
 
-      // Auto-resolve error after duration
-      if (duration && duration < Number.POSITIVE_INFINITY) {
-        setTimeout(() => {
-          errorHandler.resolveError(errorInfo.id);
-        }, duration);
-      }
+      // Auto-dismiss toast (no auto-resolve needed in simplified system)
     });
   }, []);
 
@@ -64,23 +53,31 @@ const ErrorToastAdapter = () => {
 function shouldSuppressToast(errorInfo: ErrorInfo): boolean {
   // Suppress toast notifications for audio loading/initialization errors
   if (errorInfo.category === 'audio') {
-    const isLoadingError = errorInfo.context.action === 'audio_load';
-    const isInitializationError = errorInfo.context.action === 'audio_context_init';
-    const isPreloadError = errorInfo.context.action === 'audio_preload';
-    const isCreateError = errorInfo.context.action === 'html_audio_create';
-    const isUnlockError = errorInfo.context.action === 'audio_unlock';
-    const isHTMLInit = errorInfo.context.action === 'html_audio_init';
+    // Check metadata for audio action types
+    const metadata = errorInfo.context.metadata as Record<string, unknown> | undefined;
+    if (metadata) {
+      const action = metadata['action'] as string | undefined;
+      const isLoadingError = action === 'audio_load';
+      const isInitializationError = action === 'audio_context_init';
+      const isPreloadError = action === 'audio_preload';
+      const isCreateError = action === 'html_audio_create';
+      const isUnlockError = action === 'audio_unlock';
+      const isHTMLInit = action === 'html_audio_init';
 
-    // Suppress toasts for loading/initialization errors, only show userMessage if explicitly set
-    return (
-      isLoadingError ||
-      isInitializationError ||
-      isPreloadError ||
-      isCreateError ||
-      isUnlockError ||
-      isHTMLInit ||
-      !errorInfo.userMessage // Also suppress if no explicit userMessage is set
-    );
+      // Suppress toasts for loading/initialization errors, only show userMessage if explicitly set
+      return (
+        isLoadingError ||
+        isInitializationError ||
+        isPreloadError ||
+        isCreateError ||
+        isUnlockError ||
+        isHTMLInit ||
+        !errorInfo.userMessage // Also suppress if no explicit userMessage is set
+      );
+    }
+
+    // Fallback: suppress if no userMessage for audio errors
+    return !errorInfo.userMessage;
   }
 
   return false; // Don't suppress non-audio errors
@@ -88,14 +85,12 @@ function shouldSuppressToast(errorInfo: ErrorInfo): boolean {
 
 function getDefaultDuration(level: ErrorLevel): number {
   switch (level) {
-    case 'info':
+    case 'low':
       return 3000;
-    case 'warning':
+    case 'medium':
       return 5000;
-    case 'error':
-      return 7000;
-    case 'critical':
-      return 10000;
+    case 'high':
+      return 8000;
     default:
       return 5000;
   }
