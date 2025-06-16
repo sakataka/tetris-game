@@ -17,7 +17,7 @@
     "test": "vitest",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "prepare": "husky",
+    "prepare": "lefthook install",
     "format": "biome format --write .",
     "format:check": "biome format .",
     "biome:check": "biome check --write .",
@@ -71,8 +71,8 @@
     "@vitejs/plugin-react": "^4.5.2",
     "@vitest/coverage-v8": "^3.2.3",
     "babel-plugin-react-compiler": "19.1.0-rc.2",
-    "husky": "^9.1.7",
     "jsdom": "^26.1.0",
+    "lefthook": "^1.11.14",
     "lint-staged": "^16.1.0",
     "tailwindcss": "^4.1.10",
     "typescript": "^5",
@@ -83,6 +83,8 @@
     "vitest": "^3.2.3"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": ["biome lint --write"]
+    "*.{js,jsx,ts,tsx}": [
+      "biome lint --write"
+    ]
   }
 }

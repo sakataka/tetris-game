@@ -1,0 +1,44 @@
+# Lefthook Configuration for Tetris Game
+# Fast and reliable Git hooks manager
+
+# Pre-commit hook for quality assurance
+pre-commit:
+  # Parallel execution for better performance
+  parallel: true
+  
+  commands:
+    # Lint and format staged files only (fast)
+    lint-staged:
+      glob: "*.{js,jsx,ts,tsx}"
+      run: pnpm exec lint-staged
+      stage_fixed: true
+      
+    # TypeScript type checking (critical for preventing errors)
+    type-check:
+      run: pnpm tsc --noEmit
+      
+  # Output configuration
+  output:
+    - meta
+    - summary
+
+# Pre-push hook for comprehensive validation (optional, manual)
+pre-push:
+  # Run full quality pipeline before pushing
+  commands:
+    full-validation:
+      run: pnpm pre-push
+      
+  output:
+    - meta
+    - summary
+
+# Global settings
+colors: true
+no_tty: false
+
+# Skip hooks configuration (can be overridden via environment)
+skip_output:
+  - meta
+  - execution_out
+  - execution_info
