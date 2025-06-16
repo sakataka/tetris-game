@@ -184,7 +184,7 @@ export default function ThemeSettings({
                       {t('accessibility.fullAnimation')}
                     </span>
                     <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyan-400`}>
-                      Enable smooth animations and transitions
+                      {t('accessibility.fullAnimationDesc')}
                     </p>
                   </Label>
                 </div>

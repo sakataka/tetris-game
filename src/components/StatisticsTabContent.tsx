@@ -1,4 +1,4 @@
-import { Suspense, lazy, memo } from 'react';
+import { Suspense, lazy, memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import CyberCard from './ui/CyberCard';
 import { Skeleton } from './ui/skeleton';
@@ -18,9 +18,17 @@ const StatisticsTabContent = memo(function StatisticsTabContent({
   const { t } = useTranslation();
   const highScores = useHighScores();
   const statistics = useStatistics();
+  
+  // Period selection state
+  const [selectedPeriod, setSelectedPeriod] = useState<string>('All Time');
 
   // Use empty sessions array for now - can be extended later
   const sessions: GameSession[] = [];
+
+  // Handle period change
+  const handlePeriodChange = (period: string) => {
+    setSelectedPeriod(period);
+  };
 
   return (
     <div className={`max-w-4xl ${className}`}>
@@ -48,7 +56,8 @@ const StatisticsTabContent = memo(function StatisticsTabContent({
             baseStatistics={statistics}
             sessions={sessions}
             highScores={highScores}
-            selectedPeriod={t('statistics.allTime')}
+            selectedPeriod={selectedPeriod}
+            onPeriodChange={handlePeriodChange}
             showDetailedView={true}
           />
         </Suspense>

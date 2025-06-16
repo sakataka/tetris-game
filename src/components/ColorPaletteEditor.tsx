@@ -109,32 +109,32 @@ export default function ColorPaletteEditor({
     {
       key: 'primary',
       label: t('colorPalette.primaryColor'),
-      description: 'Main accent color (neon effects, etc.)',
+      description: t('colorPalette.primaryColorDesc'),
     },
     {
       key: 'secondary',
       label: t('colorPalette.secondaryColor'),
-      description: 'Secondary accent color',
+      description: t('colorPalette.secondaryColorDesc'),
     },
     {
       key: 'tertiary',
       label: t('colorPalette.tertiaryColor'),
-      description: 'Tertiary accent color',
+      description: t('colorPalette.tertiaryColorDesc'),
     },
     {
       key: 'background',
       label: t('colorPalette.backgroundColor'),
-      description: 'Main background color',
+      description: t('colorPalette.backgroundColorDesc'),
     },
     {
       key: 'foreground',
       label: t('colorPalette.textColor'),
-      description: 'Primary text color',
+      description: t('colorPalette.textColorDesc'),
     },
     {
       key: 'accent',
       label: t('colorPalette.accentColor'),
-      description: 'Accent color (for special elements)',
+      description: t('colorPalette.accentColorDesc'),
     },
   ];
 
