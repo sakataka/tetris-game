@@ -25,7 +25,7 @@ const HighScoreDisplay = memo(function HighScoreDisplay({
   return (
     <CyberCard
       title={`🏆 ${t('statistics.highScores')}`}
-      theme='cyan'
+      theme='primary'
       size={size}
       className={className}
       data-testid='high-score-display'

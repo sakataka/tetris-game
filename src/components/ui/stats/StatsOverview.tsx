@@ -41,27 +41,27 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({
   };
 
   return (
-    <CyberCard title={`📊 ${t('statistics.title')}`} theme='cyan' size='lg'>
+    <CyberCard title={`📊 ${t('statistics.title')}`} theme='primary' size='lg'>
       <div className='flex justify-between items-center mb-4'>
         <span className='text-gray-400'>{t('statistics.period.label')}</span>
         <Select value={selectedPeriod} onValueChange={onPeriodChange}>
           <SelectTrigger
             className={cn(
-              'w-[140px] bg-cyber-cyan-10 border-cyber-cyan-30 text-cyber-cyan',
-              'hover:bg-cyber-cyan-20 focus:ring-cyber-cyan focus:border-cyber-cyan',
-              'data-[state=open]:border-cyber-cyan',
+              'w-[140px] bg-theme-primary/10 border-theme-primary/30 text-theme-primary',
+              'hover:bg-theme-primary/20 focus:ring-theme-primary focus:border-theme-primary',
+              'data-[state=open]:border-theme-primary',
               TYPOGRAPHY.SMALL_LABEL
             )}
             data-testid='period-selector'
           >
             <SelectValue />
           </SelectTrigger>
-          <SelectContent className='bg-background border-cyber-cyan-30'>
+          <SelectContent className='bg-background border-theme-primary/30'>
             {STATISTICS_PERIODS.map((period) => (
               <SelectItem
                 key={period.label}
                 value={period.label}
-                className='text-foreground hover:bg-cyber-cyan-20 focus:bg-cyber-cyan-20 focus:text-cyber-cyan'
+                className='text-foreground hover:bg-theme-primary/20 focus:bg-theme-primary/20 focus:text-theme-primary'
               >
                 {t(getTranslationKey(period.label))}
               </SelectItem>
@@ -72,45 +72,45 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({
 
       {/* Main statistics grid */}
       <div className='grid grid-cols-2 gap-3' data-testid='main-stats'>
-        <div className='bg-cyber-cyan-10 p-3 rounded border border-cyber-cyan-30'>
+        <div className='bg-theme-primary/10 p-3 rounded border border-theme-primary/30'>
           <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400 text-left`}>
             {t('statistics.totalGames')}
           </div>
           <div
-            className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400 text-right`}
+            className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-theme-primary text-right`}
           >
             {statistics.totalGames}
           </div>
         </div>
 
-        <div className='bg-cyber-cyan-10 p-3 rounded border border-cyber-cyan-30'>
+        <div className='bg-theme-primary/10 p-3 rounded border border-theme-primary/30'>
           <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400 text-left`}>
             {t('statistics.bestScore')}
           </div>
           <div
-            className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-yellow-400 text-right`}
+            className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-theme-warning text-right`}
           >
             {statistics.bestScore.toLocaleString()}
           </div>
         </div>
 
-        <div className='bg-cyber-cyan-10 p-3 rounded border border-cyber-cyan-30'>
+        <div className='bg-theme-primary/10 p-3 rounded border border-theme-primary/30'>
           <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400 text-left`}>
             {t('statistics.totalLines')}
           </div>
           <div
-            className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400 text-right`}
+            className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-theme-primary text-right`}
           >
             {statistics.totalLines.toLocaleString()}
           </div>
         </div>
 
-        <div className='bg-cyber-cyan-10 p-3 rounded border border-cyber-cyan-30'>
+        <div className='bg-theme-primary/10 p-3 rounded border border-theme-primary/30'>
           <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400 text-left`}>
             {t('statistics.playTime')}
           </div>
           <div
-            className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400 text-right`}
+            className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-theme-primary text-right`}
           >
             {Math.floor(statistics.playTime / 3600)}h{' '}
             {Math.floor((statistics.playTime % 3600) / 60)}m

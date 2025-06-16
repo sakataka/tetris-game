@@ -43,7 +43,7 @@ const AudioPanel = memo(function AudioPanel({
   const { t } = useTranslation();
 
   return (
-    <CyberCard title={t('settings.audioUpper')} theme='cyan'>
+    <CyberCard title={t('settings.audioUpper')} theme='primary'>
       {/* Audio System Status - Hidden per requirement */}
 
       {/* Audio Preload Progress */}
@@ -60,10 +60,10 @@ const AudioPanel = memo(function AudioPanel({
           </div>
           <Progress
             value={audioSystemStatus.preloadProgress.progress}
-            className='h-2 bg-gray-700/50 [&>div]:bg-cyan-400'
+            className='h-2 bg-gray-700/50 [&>div]:bg-theme-primary'
           />
           {audioSystemStatus.preloadProgress.failed > 0 && (
-            <div className={`text-red-400 ${TYPOGRAPHY.SMALL_LABEL} mt-1`}>
+            <div className={`text-theme-error ${TYPOGRAPHY.SMALL_LABEL} mt-1`}>
               {audioSystemStatus.preloadProgress.failed} files failed to load
             </div>
           )}
@@ -90,7 +90,7 @@ const AudioPanel = memo(function AudioPanel({
               )}
             />
             <span
-              className={`font-mono text-cyan-400 ${TYPOGRAPHY.BODY_TEXT} ${GAME_UI_SIZES.VOLUME_DISPLAY}`}
+              className={`font-mono text-theme-primary ${TYPOGRAPHY.BODY_TEXT} ${GAME_UI_SIZES.VOLUME_DISPLAY}`}
             >
               {Math.round(volume * 100)}
             </span>
@@ -105,8 +105,8 @@ const AudioPanel = memo(function AudioPanel({
             checked={!isMuted}
             onCheckedChange={() => onToggleMute()}
             className={cn(
-              'data-[state=checked]:bg-cyan-500 data-[state=unchecked]:bg-gray-600',
-              'border-2 data-[state=checked]:border-cyan-400 data-[state=unchecked]:border-gray-500'
+              'data-[state=checked]:bg-theme-primary data-[state=unchecked]:bg-gray-600',
+              'border-2 data-[state=checked]:border-theme-primary data-[state=unchecked]:border-gray-500'
             )}
             aria-label={t('settings.mute')}
           />
@@ -123,8 +123,8 @@ const AudioPanel = memo(function AudioPanel({
             checked={settings.virtualControlsEnabled}
             onCheckedChange={(checked) => onUpdateSettings({ virtualControlsEnabled: checked })}
             className={cn(
-              'data-[state=checked]:bg-cyan-500 data-[state=unchecked]:bg-gray-600',
-              'border-2 data-[state=checked]:border-cyan-400 data-[state=unchecked]:border-gray-500'
+              'data-[state=checked]:bg-theme-primary data-[state=unchecked]:bg-gray-600',
+              'border-2 data-[state=checked]:border-theme-primary data-[state=unchecked]:border-gray-500'
             )}
             aria-label={t('settings.virtualControls')}
           />

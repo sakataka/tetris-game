@@ -19,7 +19,7 @@ const SettingsTabContent = memo(function SettingsTabContent() {
   return (
     <div className='space-y-6 max-w-4xl'>
       {/* Language Settings */}
-      <CyberCard title={t('settings.language')} theme='cyan' size='md'>
+      <CyberCard title={t('settings.language')} theme='primary' size='md'>
         <Suspense
           fallback={
             <div className={`text-gray-400 ${TYPOGRAPHY.BODY_TEXT}`}>{t('common.loading')}</div>
@@ -40,7 +40,7 @@ const SettingsTabContent = memo(function SettingsTabContent() {
       />
 
       {/* Game Mode Settings */}
-      <CyberCard title={t('settings.gameMode')} theme='cyan' size='md'>
+      <CyberCard title={t('settings.gameMode')} theme='secondary' size='md'>
         <div className='space-y-3'>
           <div className='flex items-center space-x-3'>
             <Checkbox

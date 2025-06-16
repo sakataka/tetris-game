@@ -21,13 +21,13 @@ const HighScoresList: React.FC<HighScoresListProps> = ({ highScores }) => {
   const getRankingBadgeStyle = (position: number) => {
     switch (position) {
       case 0:
-        return 'bg-yellow-500 text-black border-yellow-400';
+        return 'bg-theme-warning text-black border-theme-warning';
       case 1:
         return 'bg-gray-400 text-black border-gray-300';
       case 2:
-        return 'bg-orange-600 text-white border-orange-500';
+        return 'bg-theme-accent text-white border-theme-accent';
       default:
-        return 'bg-cyber-cyan-20 text-cyber-cyan border-cyber-cyan-30';
+        return 'bg-theme-primary/20 text-theme-primary border-theme-primary/30';
     }
   };
 
@@ -46,7 +46,7 @@ const HighScoresList: React.FC<HighScoresListProps> = ({ highScores }) => {
   };
 
   return (
-    <CyberCard title={`🏆 ${t('statistics.highScores')}`} theme='cyan' size='md'>
+    <CyberCard title={`🏆 ${t('statistics.highScores')}`} theme='success' size='md'>
       <div className='space-y-2' data-testid='recent-achievements'>
         {highScores.slice(0, 3).map((score, index) => (
           <div
@@ -62,12 +62,12 @@ const HighScoresList: React.FC<HighScoresListProps> = ({ highScores }) => {
             >
               #{index + 1}
             </Badge>
-            <span className={`text-cyan-400 ${TYPOGRAPHY.BODY_WEIGHT} flex-1 text-right`}>
+            <span className={`text-theme-success ${TYPOGRAPHY.BODY_WEIGHT} flex-1 text-right`}>
               {score.score.toLocaleString()}
             </span>
             <Badge
               variant='secondary'
-              className='bg-cyber-cyan-20 text-cyber-cyan border-cyber-cyan-30'
+              className='bg-theme-primary/20 text-theme-primary border-theme-primary/30'
             >
               Lv{score.level}
             </Badge>

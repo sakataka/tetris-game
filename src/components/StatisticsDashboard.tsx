@@ -71,7 +71,7 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
 
       {/* Empty State */}
       {statistics.totalGames === 0 && (
-        <CyberCard title='📈 Get Started' theme='cyan' size='md'>
+        <CyberCard title='📈 Get Started' theme='primary' size='md'>
           <div className='text-center py-2' data-testid='empty-state'>
             <div className={`text-gray-500 ${TYPOGRAPHY.BODY_TEXT}`}>
               {t('statistics.noStatistics')}
