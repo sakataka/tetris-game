@@ -55,7 +55,7 @@ export function useGameStateController({
   onGameStart,
 }: GameStateControllerDependencies): GameStateAPI {
   const [showKeyboardResetConfirmation, setShowKeyboardResetConfirmation] = useState(false);
-  
+
   // Zustand store integration for game state
   const gameState = useGameState();
   const dropTime = useDropTime();

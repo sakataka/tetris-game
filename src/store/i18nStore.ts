@@ -69,7 +69,6 @@ const isSupportedLanguage = (language: string): language is SupportedLanguage =>
   return supportedLanguages.includes(language as SupportedLanguage);
 };
 
-
 // Unified i18n store
 export const useI18nStore = create<I18nState & I18nActions>()(
   persist(
@@ -158,10 +157,8 @@ export const useI18nStore = create<I18nState & I18nActions>()(
         }
       },
 
-      // Filter values to save to storage
-      partialize: (state) => ({
-        currentLanguage: state.currentLanguage,
-      }),
+      // Don't persist language to force English default
+      partialize: (_state) => ({}),
     }
   )
 );

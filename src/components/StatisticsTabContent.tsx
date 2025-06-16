@@ -18,7 +18,7 @@ const StatisticsTabContent = memo(function StatisticsTabContent({
   const { t } = useTranslation();
   const highScores = useHighScores();
   const statistics = useStatistics();
-  
+
   // Period selection state
   const [selectedPeriod, setSelectedPeriod] = useState<string>('All Time');
 

@@ -5,8 +5,8 @@ import { TYPOGRAPHY } from '../constants/layout';
 import type { GameStatistics, HighScore } from '../types/tetris';
 import { STATISTICS_PERIODS, StatisticsService } from '../utils/data/StatisticsService';
 import type { EnhancedStatistics, GameSession } from '../utils/data/statisticsUtils';
-import { Badge } from './ui/badge';
 import CyberCard from './ui/CyberCard';
+import { Badge } from './ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 interface StatisticsDashboardProps {
@@ -96,7 +96,9 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
             <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400 text-left`}>
               {t('statistics.totalGames')}
             </div>
-            <div className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400 text-right`}>
+            <div
+              className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400 text-right`}
+            >
               {statistics.totalGames}
             </div>
           </div>
@@ -104,7 +106,9 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
             <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400 text-left`}>
               {t('statistics.bestScore')}
             </div>
-            <div className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-yellow-400 text-right`}>
+            <div
+              className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-yellow-400 text-right`}
+            >
               {statistics.bestScore.toLocaleString()}
             </div>
           </div>
@@ -112,7 +116,9 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
             <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400 text-left`}>
               {t('statistics.totalLines')}
             </div>
-            <div className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400 text-right`}>
+            <div
+              className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400 text-right`}
+            >
               {statistics.totalLines.toLocaleString()}
             </div>
           </div>
@@ -120,7 +126,9 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
             <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400 text-left`}>
               {t('statistics.playTime')}
             </div>
-            <div className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400 text-right`}>
+            <div
+              className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400 text-right`}
+            >
               {Math.floor(statistics.playTime / 3600)}h{' '}
               {Math.floor((statistics.playTime % 3600) / 60)}m
             </div>

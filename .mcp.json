@@ -2,9 +2,7 @@
   "mcpServers": {
     "typescript": {
       "command": "npx",
-      "args": [
-        "typescript-mcp"
-      ]
+      "args": ["typescript-mcp"]
     }
   }
 }

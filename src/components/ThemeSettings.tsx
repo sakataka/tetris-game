@@ -7,7 +7,6 @@ import { cn } from '@/utils/ui/cn';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { ConfirmationDialog } from './ui/ConfirmationDialog';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
 import type {
   AnimationIntensity,
@@ -18,6 +17,7 @@ import type {
 } from '../types/tetris';
 import { ColorPaletteEditorMemo } from './ColorPaletteEditor';
 import { ThemeSelectorMemo } from './ThemeSelector';
+import { ConfirmationDialog } from './ui/ConfirmationDialog';
 
 interface ThemeSettingsProps {
   currentTheme: ThemeVariant;

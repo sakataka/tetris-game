@@ -1,8 +1,8 @@
 import { useCallback, useEffect } from 'react';
 import type { ThemeConfig, ThemeState, ThemeVariant } from '../types/tetris';
+import { animationManager } from '../utils/animation/animationManager';
 import { log } from '../utils/logging';
 import { initializeTheme } from '../utils/ui';
-import { animationManager } from '../utils/animation/animationManager';
 import { useAccessibilityFilters } from './useAccessibilityFilters';
 import { useSystemPreferences } from './useSystemPreferences';
 
@@ -138,7 +138,7 @@ export function useTheme({
   const toggleAnimations = useCallback(() => {
     const newAnimationsState = !themeState.animations;
     updateThemeState({ animations: newAnimationsState });
-    
+
     // Update AnimationManager to sync with reduced motion
     // When animations are disabled, enable reduced motion
     animationManager.setReducedMotion(!newAnimationsState);

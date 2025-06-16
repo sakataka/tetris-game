@@ -27,24 +27,23 @@ export const languageNames: Record<SupportedLanguage, string> = {
 if (typeof window !== 'undefined') {
   // Get language from localStorage or use default
   const storedLanguage = localStorage.getItem('tetris-language');
-  const initialLanguage = (storedLanguage && supportedLanguages.includes(storedLanguage as SupportedLanguage)) 
-    ? storedLanguage as SupportedLanguage 
-    : defaultLanguage;
+  const initialLanguage =
+    storedLanguage && supportedLanguages.includes(storedLanguage as SupportedLanguage)
+      ? (storedLanguage as SupportedLanguage)
+      : defaultLanguage;
 
-  i18n
-    .use(initReactI18next)
-    .init({
-      resources,
-      lng: initialLanguage,
-      fallbackLng: defaultLanguage,
+  i18n.use(initReactI18next).init({
+    resources,
+    lng: initialLanguage,
+    fallbackLng: defaultLanguage,
 
-      interpolation: {
-        escapeValue: false, // React already does escaping
-      },
+    interpolation: {
+      escapeValue: false, // React already does escaping
+    },
 
-      // Development options
-      debug: import.meta.env.DEV,
-    });
+    // Development options
+    debug: import.meta.env.DEV,
+  });
 
   // Ensure localStorage is set to the determined language
   localStorage.setItem('tetris-language', initialLanguage);
