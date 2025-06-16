@@ -93,34 +93,34 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
         {/* Main statistics */}
         <div className='grid grid-cols-2 gap-3' data-testid='main-stats'>
           <div className='bg-cyber-cyan-10 p-3 rounded border border-cyber-cyan-30'>
-            <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400`}>
+            <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400 text-left`}>
               {t('statistics.totalGames')}
             </div>
-            <div className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400`}>
+            <div className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400 text-right`}>
               {statistics.totalGames}
             </div>
           </div>
           <div className='bg-cyber-cyan-10 p-3 rounded border border-cyber-cyan-30'>
-            <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400`}>
+            <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400 text-left`}>
               {t('statistics.bestScore')}
             </div>
-            <div className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-yellow-400`}>
+            <div className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-yellow-400 text-right`}>
               {statistics.bestScore.toLocaleString()}
             </div>
           </div>
           <div className='bg-cyber-cyan-10 p-3 rounded border border-cyber-cyan-30'>
-            <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400`}>
+            <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400 text-left`}>
               {t('statistics.totalLines')}
             </div>
-            <div className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400`}>
+            <div className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400 text-right`}>
               {statistics.totalLines.toLocaleString()}
             </div>
           </div>
           <div className='bg-cyber-cyan-10 p-3 rounded border border-cyber-cyan-30'>
-            <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400`}>
+            <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400 text-left`}>
               {t('statistics.playTime')}
             </div>
-            <div className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400`}>
+            <div className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400 text-right`}>
               {Math.floor(statistics.playTime / 3600)}h{' '}
               {Math.floor((statistics.playTime % 3600) / 60)}m
             </div>
@@ -136,38 +136,38 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
               className={`grid grid-cols-2 gap-3 ${TYPOGRAPHY.SMALL_LABEL}`}
               data-testid='efficiency-stats'
             >
-              <div>
-                <span className='text-gray-400'>{t('statistics.efficiency')}: </span>
+              <div className='flex justify-between items-center'>
+                <span className='text-gray-400'>{t('statistics.efficiency')}</span>
                 <span className={`text-cyan-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
                   {statistics.efficiency.toFixed(1)} LPM
                 </span>
               </div>
-              <div>
-                <span className='text-gray-400'>{t('statistics.consistency')}: </span>
+              <div className='flex justify-between items-center'>
+                <span className='text-gray-400'>{t('statistics.consistency')}</span>
                 <span className={`text-yellow-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
                   {statistics.consistency.toFixed(1)}%
                 </span>
               </div>
-              <div>
-                <span className='text-gray-400'>{t('statistics.metrics.scorePerLine')}: </span>
+              <div className='flex justify-between items-center'>
+                <span className='text-gray-400'>{t('statistics.metrics.scorePerLine')}</span>
                 <span className={`text-cyan-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
                   {Math.round(statistics.scorePerLine)}
                 </span>
               </div>
-              <div>
-                <span className='text-gray-400'>{t('statistics.tetrisRate')}: </span>
+              <div className='flex justify-between items-center'>
+                <span className='text-gray-400'>{t('statistics.tetrisRate')}</span>
                 <span className={`text-yellow-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
                   {advancedMetrics?.tetrisRate.toFixed(1) || '0.0'}%
                 </span>
               </div>
-              <div>
-                <span className='text-gray-400'>{t('statistics.averageScore')}: </span>
+              <div className='flex justify-between items-center'>
+                <span className='text-gray-400'>{t('statistics.averageScore')}</span>
                 <span className={`text-yellow-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
                   {statistics.favoriteLevel}
                 </span>
               </div>
-              <div>
-                <span className='text-gray-400'>{t('statistics.playTime')}: </span>
+              <div className='flex justify-between items-center'>
+                <span className='text-gray-400'>{t('statistics.playTime')}</span>
                 <span className={`text-cyan-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
                   {advancedMetrics
                     ? `${Math.floor(advancedMetrics.averageGameDuration / 60)}m`
@@ -183,26 +183,26 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
               className={`grid grid-cols-2 gap-3 ${TYPOGRAPHY.SMALL_LABEL}`}
               data-testid='play-history'
             >
-              <div>
-                <span className='text-gray-400'>{t('statistics.gamesPlayed')}: </span>
+              <div className='flex justify-between items-center'>
+                <span className='text-gray-400'>{t('statistics.gamesPlayed')}</span>
                 <span className={`text-cyan-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
                   {statistics.sessionCount}
                 </span>
               </div>
-              <div>
-                <span className='text-gray-400'>{t('statistics.bestScore')}: </span>
+              <div className='flex justify-between items-center'>
+                <span className='text-gray-400'>{t('statistics.bestScore')}</span>
                 <span className={`text-cyan-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
                   {Math.floor(statistics.longestSession / 60)}m
                 </span>
               </div>
-              <div>
-                <span className='text-gray-400'>{t('statistics.gamesPlayed')}: </span>
+              <div className='flex justify-between items-center'>
+                <span className='text-gray-400'>{t('statistics.gamesPlayed')}</span>
                 <span className={`text-cyan-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
                   {advancedMetrics?.gamesPerSession.toFixed(1) || '0.0'}
                 </span>
               </div>
-              <div>
-                <span className='text-gray-400'>{t('statistics.efficiency')}: </span>
+              <div className='flex justify-between items-center'>
+                <span className='text-gray-400'>{t('statistics.efficiency')}</span>
                 <span className={`text-cyan-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
                   {advancedMetrics
                     ? `${
@@ -212,8 +212,8 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
                     : '0.0%'}
                 </span>
               </div>
-              <div>
-                <span className='text-gray-400'>{t('statistics.playTime')}: </span>
+              <div className='flex justify-between items-center'>
+                <span className='text-gray-400'>{t('statistics.playTime')}</span>
                 <span className={`text-cyan-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
                   {statistics.lastPlayDate > 0
                     ? `${Math.floor((Date.now() - statistics.lastPlayDate) / 3600000)}h ago`

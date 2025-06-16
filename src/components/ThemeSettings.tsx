@@ -99,8 +99,8 @@ export default function ThemeSettings({
               TYPOGRAPHY.BUTTON_TEXT,
               TYPOGRAPHY.BODY_WEIGHT,
               activeTab === tab.id
-                ? 'bg-cyber-cyan text-background hover:bg-cyber-cyan/90'
-                : 'border-transparent text-cyber-cyan hover:bg-cyber-cyan-20 hover:text-cyber-cyan'
+                ? 'bg-cyan-500/20 text-cyan-400 border-cyan-400/50 shadow-lg shadow-cyan-500/20'
+                : 'bg-gray-800/30 text-gray-400 hover:bg-cyan-500/10 hover:text-cyan-400 hover:border-cyan-400/30 border-transparent'
             )}
           >
             <span className='hidden sm:inline'>{tab.icon} </span>

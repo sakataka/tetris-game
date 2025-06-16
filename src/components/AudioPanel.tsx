@@ -60,7 +60,7 @@ const AudioPanel = memo(function AudioPanel({
           </div>
           <Progress
             value={audioSystemStatus.preloadProgress.progress}
-            className='h-2 bg-gray-700/50 [&>div]:bg-gradient-to-r [&>div]:from-cyber-cyan [&>div]:to-blue-400'
+            className='h-2 bg-gray-700/50 [&>div]:bg-cyan-400'
           />
           {audioSystemStatus.preloadProgress.failed > 0 && (
             <div className={`text-red-400 ${TYPOGRAPHY.SMALL_LABEL} mt-1`}>

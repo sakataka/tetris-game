@@ -93,7 +93,7 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
             </div>
             <Progress
               value={(lines % 10) * 10}
-              className='h-1.5 bg-gray-700/50 [&>div]:bg-gradient-to-r [&>div]:from-cyan-500 [&>div]:to-cyan-300'
+              className='h-1.5 bg-gray-700/50 [&>div]:bg-cyan-400'
             />
           </div>
         </div>
