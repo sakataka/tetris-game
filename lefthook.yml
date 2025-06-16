@@ -9,7 +9,6 @@ pre-commit:
   commands:
     # Lint and format staged files only (fast)
     lint-staged:
-      glob: "*.{js,jsx,ts,tsx}"
       run: pnpm exec lint-staged
       stage_fixed: true
       
@@ -21,6 +20,7 @@ pre-commit:
   output:
     - meta
     - summary
+    - execution
 
 # Pre-push hook for comprehensive validation (optional, manual)
 pre-push:
