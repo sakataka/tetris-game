@@ -57,7 +57,7 @@ const MainLayout = memo(function MainLayout({
                 <Button
                   variant='outline'
                   size='sm'
-                  className='bg-gray-800/80 border-cyan-400/50 text-cyan-400 hover:bg-cyan-500/20 hover:border-cyan-400 transition-all duration-200 text-xs'
+                  className='bg-gray-800/80 border-theme-primary/50 text-theme-primary hover:bg-theme-primary/20 hover:border-theme-primary transition-all duration-200 text-xs'
                 >
                   {t('tabs.game')}
                 </Button>

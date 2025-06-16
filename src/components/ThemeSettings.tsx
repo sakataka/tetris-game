@@ -86,7 +86,7 @@ export default function ThemeSettings({
     <div className={`theme-settings ${className}`}>
       {/* Tab navigation */}
       <div
-        className={`flex flex-wrap gap-0.5 ${SPACING.PANEL_TITLE_BOTTOM} p-0.5 rounded-lg bg-cyber-cyan-10`}
+        className={`flex flex-wrap gap-0.5 ${SPACING.PANEL_TITLE_BOTTOM} p-0.5 rounded-lg bg-theme-primary/10`}
       >
         {tabs.map((tab) => (
           <Button
@@ -99,8 +99,8 @@ export default function ThemeSettings({
               TYPOGRAPHY.BUTTON_TEXT,
               TYPOGRAPHY.BODY_WEIGHT,
               activeTab === tab.id
-                ? 'bg-cyan-500/20 text-cyan-400 border-cyan-400/50 shadow-lg shadow-cyan-500/20'
-                : 'bg-gray-800/30 text-gray-400 hover:bg-cyan-500/10 hover:text-cyan-400 hover:border-cyan-400/30 border-transparent'
+                ? 'bg-theme-primary/20 text-theme-primary border-theme-primary/50 shadow-lg shadow-theme-primary/20'
+                : 'bg-gray-800/30 text-gray-400 hover:bg-theme-primary/10 hover:text-theme-primary hover:border-theme-primary/30 border-transparent'
             )}
           >
             <span className='hidden sm:inline'>{tab.icon} </span>
@@ -121,8 +121,8 @@ export default function ThemeSettings({
                   variant='destructive'
                   onClick={() => setShowResetConfirmation(true)}
                   className={cn(
-                    'bg-cyber-red-20 border border-cyber-red-30 text-cyber-red',
-                    'hover:bg-cyber-red-30 hover:text-cyber-red',
+                    'bg-theme-error/20 border border-theme-error/30 text-theme-error',
+                    'hover:bg-theme-error/30 hover:text-theme-error',
                     TYPOGRAPHY.BUTTON_TEXT
                   )}
                 >
@@ -142,7 +142,7 @@ export default function ThemeSettings({
               <div>
                 <Label
                   htmlFor='effect-intensity-range'
-                  className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-cyber-cyan`}
+                  className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-theme-primary`}
                 >
                   {t('accessibility.effectIntensity')}: {(effectIntensity * 100).toFixed(0)}%
                 </Label>
@@ -156,7 +156,7 @@ export default function ThemeSettings({
                   className='w-full cursor-pointer'
                 />
                 <div
-                  className={`flex justify-between ${TYPOGRAPHY.SMALL_LABEL} text-cyan-400 mt-0.5`}
+                  className={`flex justify-between ${TYPOGRAPHY.SMALL_LABEL} text-theme-primary mt-0.5`}
                 >
                   <span>50%</span>
                   <span>100%</span>
@@ -172,18 +172,18 @@ export default function ThemeSettings({
                     checked={animations}
                     onCheckedChange={() => onAnimationsToggle()}
                     className={cn(
-                      'data-[state=checked]:bg-cyber-cyan data-[state=unchecked]:bg-gray-600',
-                      'border-2 data-[state=checked]:border-cyber-cyan data-[state=unchecked]:border-gray-500'
+                      'data-[state=checked]:bg-theme-primary data-[state=unchecked]:bg-gray-600',
+                      'border-2 data-[state=checked]:border-theme-primary data-[state=unchecked]:border-gray-500'
                     )}
                     aria-label={t('accessibility.fullAnimation')}
                   />
                   <Label htmlFor='animations-switch' className='cursor-pointer'>
                     <span
-                      className={`${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} text-cyber-cyan`}
+                      className={`${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} text-theme-primary`}
                     >
                       {t('accessibility.fullAnimation')}
                     </span>
-                    <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyan-400`}>
+                    <p className={`${TYPOGRAPHY.SMALL_LABEL} text-theme-primary`}>
                       {t('accessibility.fullAnimationDesc')}
                     </p>
                   </Label>
@@ -191,9 +191,9 @@ export default function ThemeSettings({
               </div>
 
               {/* Effect preview */}
-              <div className='p-4 rounded-lg bg-cyber-cyan-10 border border-cyber-cyan-30'>
+              <div className='p-4 rounded-lg bg-theme-primary/10 border border-theme-primary/30'>
                 <div
-                  className={`${TYPOGRAPHY.SECTION_HEADER} ${TYPOGRAPHY.TITLE_WEIGHT} mb-3 text-cyber-cyan`}
+                  className={`${TYPOGRAPHY.SECTION_HEADER} ${TYPOGRAPHY.TITLE_WEIGHT} mb-3 text-theme-primary`}
                 >
                   {t('colorPalette.preview')}
                 </div>

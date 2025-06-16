@@ -57,9 +57,9 @@ const VirtualControls = memo(function VirtualControls({
                 className={cn(
                   'absolute left-1/2 -translate-x-1/2 -translate-y-full mb-1',
                   UI_SIZES.VIRTUAL_BUTTON.STANDARD,
-                  'bg-gradient-to-r from-cyan-600 to-cyan-500',
-                  'hover:from-cyan-500 hover:to-cyan-400 active:scale-95',
-                  'border border-cyan-400/50 shadow-[0_0_10px_rgb(6_182_212/30%)]',
+                  'bg-gradient-to-r from-theme-primary to-theme-primary',
+                  'hover:from-theme-primary/80 hover:to-theme-primary/80 active:scale-95',
+                  'border border-theme-primary/50 shadow-[0_0_10px_rgba(var(--theme-primary),0.3)]',
                   'text-white font-bold text-sm mobile-touch-zone select-none'
                 )}
                 aria-label={t('controls.rotate')}
@@ -70,7 +70,7 @@ const VirtualControls = memo(function VirtualControls({
             <TooltipContent>
               <div className='text-center'>
                 <div className='font-medium'>{t('controls.rotate')}</div>
-                <div className='text-xs text-cyan-300 mt-1'>Tap to rotate piece clockwise</div>
+                <div className='text-xs text-theme-primary mt-1'>Tap to rotate piece clockwise</div>
               </div>
             </TooltipContent>
           </Tooltip>
@@ -99,7 +99,7 @@ const VirtualControls = memo(function VirtualControls({
               <TooltipContent>
                 <div className='text-center'>
                   <div className='font-medium'>{t('controls.moveLeft')}</div>
-                  <div className='text-xs text-cyan-300 mt-1'>Move piece left</div>
+                  <div className='text-xs text-theme-primary mt-1'>Move piece left</div>
                 </div>
               </TooltipContent>
             </Tooltip>
@@ -126,7 +126,7 @@ const VirtualControls = memo(function VirtualControls({
               <TooltipContent>
                 <div className='text-center'>
                   <div className='font-medium'>{t('controls.moveDown')}</div>
-                  <div className='text-xs text-cyan-300 mt-1'>
+                  <div className='text-xs text-theme-primary mt-1'>
                     Move piece down faster (soft drop)
                   </div>
                 </div>
@@ -155,7 +155,7 @@ const VirtualControls = memo(function VirtualControls({
               <TooltipContent>
                 <div className='text-center'>
                   <div className='font-medium'>{t('controls.moveRight')}</div>
-                  <div className='text-xs text-cyan-300 mt-1'>Move piece right</div>
+                  <div className='text-xs text-theme-primary mt-1'>Move piece right</div>
                 </div>
               </TooltipContent>
             </Tooltip>
@@ -171,9 +171,9 @@ const VirtualControls = memo(function VirtualControls({
               onTouchStart={handleTouchStart(onHardDrop)}
               className={cn(
                 UI_SIZES.VIRTUAL_BUTTON.LARGE,
-                'bg-gradient-to-r from-red-600 to-red-500',
-                'hover:from-red-500 hover:to-red-400 active:scale-95',
-                'border border-red-400/50 shadow-[0_0_15px_rgb(239_68_68/40%)]',
+                'bg-gradient-to-r from-theme-error to-theme-error',
+                'hover:from-theme-error/80 hover:to-theme-error/80 active:scale-95',
+                'border border-theme-error/50 shadow-[0_0_15px_rgba(var(--theme-error),0.4)]',
                 'flex flex-col items-center justify-center text-white font-bold',
                 'mobile-touch-zone select-none'
               )}
@@ -186,8 +186,8 @@ const VirtualControls = memo(function VirtualControls({
           <TooltipContent>
             <div className='text-center'>
               <div className='font-medium'>{t('controls.hardDrop')}</div>
-              <div className='text-xs text-cyan-300 mt-1'>Drop piece instantly to bottom</div>
-              <div className='text-xs text-yellow-300 mt-0.5'>Awards bonus points!</div>
+              <div className='text-xs text-theme-primary mt-1'>Drop piece instantly to bottom</div>
+              <div className='text-xs text-theme-warning mt-0.5'>Awards bonus points!</div>
             </div>
           </TooltipContent>
         </Tooltip>
