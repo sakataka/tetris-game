@@ -1,11 +1,12 @@
 import { cn } from '@/utils/ui/cn';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { SPACING, TYPOGRAPHY } from '../constants/layout';
+import { TYPOGRAPHY } from '../constants/layout';
 import type { GameStatistics, HighScore } from '../types/tetris';
 import { STATISTICS_PERIODS, StatisticsService } from '../utils/data/StatisticsService';
 import type { EnhancedStatistics, GameSession } from '../utils/data/statisticsUtils';
 import { Badge } from './ui/badge';
+import CyberCard from './ui/CyberCard';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 interface StatisticsDashboardProps {
@@ -41,108 +42,100 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
     ? StatisticsService.calculateAdvancedMetrics(sessions, period)
     : null;
   return (
-    <div
-      data-testid='statistics-dashboard'
-      className={`hologram-cyan p-1 ${SPACING.PANEL_INTERNAL}`}
-    >
-      <div className='flex justify-between items-center'>
-        <h2 className={`${TYPOGRAPHY.PANEL_TITLE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyber-cyan`}>
-          📊 {t('statistics.title')}
-        </h2>
-        <Select value={selectedPeriod || ''} onValueChange={onPeriodChange}>
-          <SelectTrigger
-            className={cn(
-              'w-[140px] bg-cyber-cyan-10 border-cyber-cyan-30 text-cyber-cyan',
-              'hover:bg-cyber-cyan-20 focus:ring-cyber-cyan focus:border-cyber-cyan',
-              'data-[state=open]:border-cyber-cyan',
-              TYPOGRAPHY.SMALL_LABEL
-            )}
-            data-testid='period-selector'
-          >
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent className='bg-background border-cyber-cyan-30'>
-            {STATISTICS_PERIODS.map((period) => {
-              // Map period labels to translation keys
-              const getTranslationKey = (label: string) => {
-                switch (label) {
-                  case 'Today':
-                    return 'statistics.period.today';
-                  case 'This Week':
-                    return 'statistics.period.week';
-                  case 'This Month':
-                    return 'statistics.period.month';
-                  case 'All Time':
-                    return 'statistics.period.all';
-                  default:
-                    return 'statistics.period.all';
-                }
-              };
+    <div data-testid='statistics-dashboard' className='space-y-6 max-w-4xl'>
+      {/* Overview */}
+      <CyberCard title={`📊 ${t('statistics.title')}`} theme='cyan' size='lg'>
+        <div className='flex justify-between items-center mb-4'>
+          <span className='text-gray-400'>Period</span>
+          <Select value={selectedPeriod || ''} onValueChange={onPeriodChange}>
+            <SelectTrigger
+              className={cn(
+                'w-[140px] bg-cyber-cyan-10 border-cyber-cyan-30 text-cyber-cyan',
+                'hover:bg-cyber-cyan-20 focus:ring-cyber-cyan focus:border-cyber-cyan',
+                'data-[state=open]:border-cyber-cyan',
+                TYPOGRAPHY.SMALL_LABEL
+              )}
+              data-testid='period-selector'
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className='bg-background border-cyber-cyan-30'>
+              {STATISTICS_PERIODS.map((period) => {
+                // Map period labels to translation keys
+                const getTranslationKey = (label: string) => {
+                  switch (label) {
+                    case 'Today':
+                      return 'statistics.period.today';
+                    case 'This Week':
+                      return 'statistics.period.week';
+                    case 'This Month':
+                      return 'statistics.period.month';
+                    case 'All Time':
+                      return 'statistics.period.all';
+                    default:
+                      return 'statistics.period.all';
+                  }
+                };
 
-              return (
-                <SelectItem
-                  key={period.label}
-                  value={period.label}
-                  className='text-foreground hover:bg-cyber-cyan-20 focus:bg-cyber-cyan-20 focus:text-cyber-cyan'
-                >
-                  {t(getTranslationKey(period.label))}
-                </SelectItem>
-              );
-            })}
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Main statistics */}
-      <div className='grid grid-cols-2 gap-1' data-testid='main-stats'>
-        <div className='hologram-cyan p-1 rounded neon-border-cyan'>
-          <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400`}>
-            {t('statistics.totalGames')}
+                return (
+                  <SelectItem
+                    key={period.label}
+                    value={period.label}
+                    className='text-foreground hover:bg-cyber-cyan-20 focus:bg-cyber-cyan-20 focus:text-cyber-cyan'
+                  >
+                    {t(getTranslationKey(period.label))}
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
+        </div>
+        {/* Main statistics */}
+        <div className='grid grid-cols-2 gap-3' data-testid='main-stats'>
+          <div className='bg-cyber-cyan-10 p-3 rounded border border-cyber-cyan-30'>
+            <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400`}>
+              {t('statistics.totalGames')}
+            </div>
+            <div className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400`}>
+              {statistics.totalGames}
+            </div>
           </div>
-          <div className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400`}>
-            {statistics.totalGames}
+          <div className='bg-cyber-cyan-10 p-3 rounded border border-cyber-cyan-30'>
+            <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400`}>
+              {t('statistics.bestScore')}
+            </div>
+            <div className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-yellow-400`}>
+              {statistics.bestScore.toLocaleString()}
+            </div>
+          </div>
+          <div className='bg-cyber-cyan-10 p-3 rounded border border-cyber-cyan-30'>
+            <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400`}>
+              {t('statistics.totalLines')}
+            </div>
+            <div className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400`}>
+              {statistics.totalLines.toLocaleString()}
+            </div>
+          </div>
+          <div className='bg-cyber-cyan-10 p-3 rounded border border-cyber-cyan-30'>
+            <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400`}>
+              {t('statistics.playTime')}
+            </div>
+            <div className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400`}>
+              {Math.floor(statistics.playTime / 3600)}h{' '}
+              {Math.floor((statistics.playTime % 3600) / 60)}m
+            </div>
           </div>
         </div>
-        <div className='hologram-cyan p-1 rounded neon-border-cyan'>
-          <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400`}>
-            {t('statistics.bestScore')}
-          </div>
-          <div className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-yellow-400`}>
-            {statistics.bestScore.toLocaleString()}
-          </div>
-        </div>
-        <div className='hologram-cyan p-1 rounded neon-border-cyan'>
-          <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400`}>
-            {t('statistics.totalLines')}
-          </div>
-          <div className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400`}>
-            {statistics.totalLines.toLocaleString()}
-          </div>
-        </div>
-        <div className='hologram-cyan p-1 rounded neon-border-cyan'>
-          <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400`}>
-            {t('statistics.playTime')}
-          </div>
-          <div className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400`}>
-            {Math.floor(statistics.playTime / 3600)}h{' '}
-            {Math.floor((statistics.playTime % 3600) / 60)}m
-          </div>
-        </div>
-      </div>
+      </CyberCard>
 
       {showDetailedView && (
         <>
           {/* Efficiency metrics */}
-          <div
-            className='hologram-cyan neon-border-cyan p-1 rounded'
-            data-testid='efficiency-stats'
-          >
-            <h3
-              className={`${TYPOGRAPHY.SECTION_HEADER} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400 ${SPACING.SECTION_TITLE_BOTTOM}`}
+          <CyberCard title={`🎯 ${t('statistics.efficiency')}`} theme='cyan' size='md'>
+            <div
+              className={`grid grid-cols-2 gap-3 ${TYPOGRAPHY.SMALL_LABEL}`}
+              data-testid='efficiency-stats'
             >
-              🎯 {t('statistics.efficiency')}
-            </h3>
-            <div className={`grid grid-cols-2 gap-0.5 ${TYPOGRAPHY.SMALL_LABEL}`}>
               <div>
                 <span className='text-gray-400'>{t('statistics.efficiency')}: </span>
                 <span className={`text-cyan-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
@@ -182,16 +175,14 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
                 </span>
               </div>
             </div>
-          </div>
+          </CyberCard>
 
           {/* Play history summary */}
-          <div className='hologram-cyan neon-border-cyan p-1 rounded' data-testid='play-history'>
-            <h3
-              className={`${TYPOGRAPHY.SECTION_HEADER} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400 ${SPACING.SECTION_TITLE_BOTTOM}`}
+          <CyberCard title={`📅 ${t('statistics.playTime')}`} theme='cyan' size='md'>
+            <div
+              className={`grid grid-cols-2 gap-3 ${TYPOGRAPHY.SMALL_LABEL}`}
+              data-testid='play-history'
             >
-              📅 {t('statistics.playTime')}
-            </h3>
-            <div className={`grid grid-cols-2 gap-0.5 ${TYPOGRAPHY.SMALL_LABEL}`}>
               <div>
                 <span className='text-gray-400'>{t('statistics.gamesPlayed')}: </span>
                 <span className={`text-cyan-400 ${TYPOGRAPHY.BODY_WEIGHT}`}>
@@ -230,19 +221,11 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
                 </span>
               </div>
             </div>
-          </div>
+          </CyberCard>
 
           {/* Recent high scores */}
-          <div
-            className='hologram-cyan neon-border-cyan p-1 rounded'
-            data-testid='recent-achievements'
-          >
-            <h3
-              className={`${TYPOGRAPHY.SECTION_HEADER} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyan-400 ${SPACING.SECTION_TITLE_BOTTOM}`}
-            >
-              🏆 {t('statistics.highScores')}
-            </h3>
-            <div className={SPACING.TIGHT}>
+          <CyberCard title={`🏆 ${t('statistics.highScores')}`} theme='cyan' size='md'>
+            <div className='space-y-2' data-testid='recent-achievements'>
               {highScores.slice(0, 3).map((score, index) => {
                 const getRankingBadgeStyle = (position: number) => {
                   switch (position) {
@@ -304,20 +287,22 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
                 </div>
               )}
             </div>
-          </div>
+          </CyberCard>
         </>
       )}
 
       {/* Empty state */}
       {statistics.totalGames === 0 && (
-        <div className='text-center py-2' data-testid='empty-state'>
-          <div className={`text-gray-500 ${TYPOGRAPHY.BODY_TEXT}`}>
-            {t('statistics.noStatistics')}
+        <CyberCard title='📈 Get Started' theme='cyan' size='md'>
+          <div className='text-center py-2' data-testid='empty-state'>
+            <div className={`text-gray-500 ${TYPOGRAPHY.BODY_TEXT}`}>
+              {t('statistics.noStatistics')}
+            </div>
+            <div className={`text-gray-600 ${TYPOGRAPHY.SMALL_LABEL} mt-1`}>
+              {t('statistics.playGameToViewStats')}
+            </div>
           </div>
-          <div className={`text-gray-600 ${TYPOGRAPHY.SMALL_LABEL} mt-1`}>
-            {t('statistics.playGameToViewStats')}
-          </div>
-        </div>
+        </CyberCard>
       )}
     </div>
   );

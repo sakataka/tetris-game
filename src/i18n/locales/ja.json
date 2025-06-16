@@ -154,6 +154,18 @@
     "settings": "設定",
     "about": "情報"
   },
+  "about": {
+    "title": "情報",
+    "gameTitle": "サイバーパンク テトリス",
+    "description": "サイバーパンク風の美しいテトリスゲーム",
+    "features": "特徴",
+    "feature1": "滑らかな60fpsゲームプレイ",
+    "feature2": "美しいパーティクルエフェクト",
+    "feature3": "複数のテーマと言語対応",
+    "feature4": "統計とハイスコア機能",
+    "version": "バージョン",
+    "builtWith": "ReactとTypeScriptで構築"
+  },
   "buttons": {
     "ok": "OK",
     "cancel": "キャンセル",

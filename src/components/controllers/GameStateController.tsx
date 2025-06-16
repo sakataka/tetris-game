@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { EFFECTS } from '../../constants/layout';
 import { useGameControls } from '../../hooks/useGameControls';
 import { useGameLoop } from '../../hooks/useGameLoop';
 import { useHighScoreManager } from '../../hooks/useHighScoreManager';
 import { useSession } from '../../hooks/useSession';
+import { useTranslation } from 'react-i18next';
 import {
   useCalculatePiecePlacementState,
   useClearLineEffect,
@@ -19,6 +20,7 @@ import {
 } from '../../store/gameStateStore';
 import type { GameState, LineEffectState, SoundKey, Tetromino } from '../../types/tetris';
 import { animationManager } from '../../utils/animation/animationManager';
+import { ConfirmationDialog } from '../ui/ConfirmationDialog';
 
 export interface GameStateAPI {
   gameState: GameState;
@@ -51,6 +53,9 @@ export function GameStateController({
   onGameStart,
   children,
 }: GameStateControllerProps) {
+  const { t } = useTranslation();
+  const [showKeyboardResetConfirmation, setShowKeyboardResetConfirmation] = useState(false);
+
   // Zustand store integration for game state
   const gameState = useGameState();
   const dropTime = useDropTime();
@@ -163,6 +168,21 @@ export function GameStateController({
     }
   }, [gameState.gameOver, endSession]);
 
+  // Event handlers (React Compiler will optimize these)
+  const handleReset = () => {
+    onGameStart();
+    resetGame();
+  };
+
+  const handleKeyboardReset = () => {
+    setShowKeyboardResetConfirmation(true);
+  };
+
+  const handleKeyboardResetConfirm = () => {
+    onGameStart();
+    resetGame();
+  };
+
   // Game controls integration
   const gameControls = useGameControls({
     gameState,
@@ -183,16 +203,10 @@ export function GameStateController({
       hardDrop: gameControls.hardDrop,
       dropPiece: gameControls.dropPiece,
       togglePause: togglePause,
-      resetGame: resetGame,
+      resetGame: handleKeyboardReset,
     },
     onDropTimeChange: setDropTime,
   });
-
-  // Event handlers (React Compiler will optimize these)
-  const handleReset = () => {
-    onGameStart();
-    resetGame();
-  };
 
   const handleTogglePause = () => {
     togglePause();
@@ -214,5 +228,19 @@ export function GameStateController({
     onHardDrop: gameControls.hardDrop,
   };
 
-  return children(gameStateAPI);
+  return (
+    <>
+      {children(gameStateAPI)}
+      <ConfirmationDialog
+        isOpen={showKeyboardResetConfirmation}
+        onClose={() => setShowKeyboardResetConfirmation(false)}
+        onConfirm={handleKeyboardResetConfirm}
+        title={t('game.resetConfirmation.title')}
+        description={t('game.resetConfirmation.description')}
+        confirmText={t('buttons.reset')}
+        cancelText={t('common.cancel')}
+        variant='destructive'
+      />
+    </>
+  );
 }

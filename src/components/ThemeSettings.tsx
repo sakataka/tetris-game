@@ -200,7 +200,7 @@ export default function ThemeSettings({
               </div>
 
               {/* Effect preview */}
-              <div className='p-4 rounded-lg hologram'>
+              <div className='p-4 rounded-lg bg-cyber-cyan-10 border border-cyber-cyan-30'>
                 <div
                   className={`${TYPOGRAPHY.SECTION_HEADER} ${TYPOGRAPHY.TITLE_WEIGHT} mb-3 text-cyber-cyan`}
                 >
@@ -208,7 +208,7 @@ export default function ThemeSettings({
                 </div>
                 <div className={SPACING.LOOSE}>
                   <div
-                    className='p-3 rounded neon-border text-center'
+                    className='p-3 rounded border border-cyber-cyan-30 text-center bg-cyber-cyan-10'
                     style={{
                       filter: `brightness(${0.8 + effectIntensity * 0.4}) saturate(${0.8 + effectIntensity * 0.4})`,
                       animation: animations ? 'pulse 2s infinite' : 'none',
@@ -217,7 +217,7 @@ export default function ThemeSettings({
                     Neon Effect
                   </div>
                   <div
-                    className='p-3 rounded hologram-purple text-center'
+                    className='p-3 rounded bg-cyber-cyan-10 border border-cyber-cyan-30 text-center'
                     style={{
                       backdropFilter: `blur(${5 + effectIntensity * 10}px)`,
                       animation: animations ? 'float 3s ease-in-out infinite' : 'none',

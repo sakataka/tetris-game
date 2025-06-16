@@ -151,6 +151,18 @@
     "settings": "Settings",
     "about": "About"
   },
+  "about": {
+    "title": "About",
+    "gameTitle": "Cyberpunk Tetris",
+    "description": "A modern Tetris game with cyberpunk aesthetics",
+    "features": "Features",
+    "feature1": "Smooth 60fps gameplay",
+    "feature2": "Beautiful particle effects",
+    "feature3": "Multiple themes and languages",
+    "feature4": "Statistics and high scores",
+    "version": "Version",
+    "builtWith": "Built with React and TypeScript"
+  },
   "buttons": {
     "ok": "OK",
     "cancel": "Cancel",
