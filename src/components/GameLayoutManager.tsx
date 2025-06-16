@@ -96,6 +96,18 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
 
         {/* Paused Overlay */}
         <PausedOverlay isVisible={gameState.isPaused} onResume={togglePause} />
+        
+        {/* Reset Confirmation Dialog */}
+        <ConfirmationDialog
+          isOpen={showKeyboardResetConfirmation}
+          onClose={() => setShowKeyboardResetConfirmation(false)}
+          onConfirm={onKeyboardResetConfirm}
+          title={t('game.resetConfirmation.title')}
+          description={t('game.resetConfirmation.description')}
+          confirmText={t('buttons.reset')}
+          cancelText={t('common.cancel')}
+          variant='destructive'
+        />
       </div>
     );
   }

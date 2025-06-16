@@ -162,13 +162,13 @@ export default function ThemeSettings({
                   )}
                 />
                 <div
-                  className={`flex justify-between ${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple mt-0.5`}
+                  className={`flex justify-between ${TYPOGRAPHY.SMALL_LABEL} text-cyan-400 mt-0.5`}
                 >
                   <span>{t('accessibility.lowContrast')}</span>
                   <span>{t('accessibility.standard')}</span>
                   <span>{t('accessibility.highContrast')}</span>
                 </div>
-                <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple mt-1`}>
+                <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyan-400 mt-1`}>
                   {t('colorPalette.advancedSettings')}
                 </p>
               </div>
@@ -192,7 +192,7 @@ export default function ThemeSettings({
                     >
                       {t('accessibility.fullAnimation')}
                     </span>
-                    <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple`}>
+                    <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyan-400`}>
                       {t('accessibility.fullAnimation')}
                     </p>
                   </Label>
