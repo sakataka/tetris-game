@@ -4,7 +4,7 @@
  */
 
 import type { SoundKey } from '../../../types/tetris';
-import { AudioError, handleError } from '../../data/errorHandler';
+import { createAudioError } from '../../../types/errors';
 import { log } from '../../logging/logger';
 import { type AudioState, AudioStrategy, type SoundConfig } from './AudioStrategy';
 
@@ -58,10 +58,13 @@ export class WebAudioStrategy extends AudioStrategy {
         (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
 
       if (!AudioContextClass) {
-        throw new AudioError(
+        throw createAudioError(
           'Web Audio API is not supported',
-          { action: 'audio_context_init', component: 'WebAudioStrategy' },
-          { recoverable: false, retryable: false }
+          { 
+            component: 'WebAudioStrategy', 
+            metadata: { operation: 'audio_context_init' }
+          },
+          undefined // No user message for audio errors (they're suppressed)
         );
       }
 
@@ -78,16 +81,19 @@ export class WebAudioStrategy extends AudioStrategy {
         this.setupUserInteractionUnlock();
       }
     } catch (error) {
-      const audioError = new AudioError(
+      const audioError = createAudioError(
         'Failed to initialize AudioContext',
-        { action: 'audio_context_init', component: 'WebAudioStrategy', additionalData: { error } },
-        {
-          recoverable: false,
-          retryable: false,
-          // userMessage omitted to suppress user notification for initialization errors
-        }
+        { 
+          component: 'WebAudioStrategy', 
+          metadata: { error, operation: 'audio_context_init' }
+        },
+        undefined // No user message for audio errors (they're suppressed)
       );
-      handleError(audioError);
+      log.warn('AudioContext initialization failed', { 
+        component: 'WebAudioStrategy', 
+        action: 'audio_context_init',
+        metadata: { audioError }
+      });
       throw audioError;
     }
   }
@@ -104,16 +110,19 @@ export class WebAudioStrategy extends AudioStrategy {
         document.removeEventListener('keydown', unlockAudio);
         document.removeEventListener('touchstart', unlockAudio);
       } catch (error) {
-        const audioError = new AudioError(
+        const audioError = createAudioError(
           'Failed to unlock audio context',
-          { action: 'audio_unlock', component: 'WebAudioStrategy', additionalData: { error } },
-          {
-            recoverable: true,
-            retryable: true,
-            // userMessage omitted to suppress user notification for unlock errors
-          }
+          { 
+            component: 'WebAudioStrategy', 
+            metadata: { error, operation: 'audio_unlock' }
+          },
+          undefined // No user message for audio errors (they're suppressed)
         );
-        handleError(audioError);
+        log.warn('Audio unlock failed', { 
+          component: 'WebAudioStrategy', 
+          action: 'audio_unlock',
+          metadata: { audioError }
+        });
       }
     };
 
@@ -202,25 +211,31 @@ export class WebAudioStrategy extends AudioStrategy {
 
       source.start(0);
     } catch (error) {
-      const audioError = new AudioError(
+      const audioError = createAudioError(
         `Failed to play sound: ${soundKey}`,
         {
-          action: 'audio_play',
           component: 'WebAudioStrategy',
-          additionalData: { soundKey, error },
+          metadata: { soundKey, error, operation: 'audio_play' },
         },
-        { recoverable: true, retryable: false }
+        undefined // No user message for audio errors (they're suppressed)
       );
-      handleError(audioError);
+      log.warn('Sound playback failed', { 
+        component: 'WebAudioStrategy', 
+        action: 'audio_play',
+        metadata: { audioError }
+      });
     }
   }
 
   private async loadSoundBuffer(soundKey: SoundKey): Promise<void> {
     if (!this.audioState.context) {
-      throw new AudioError(
+      throw createAudioError(
         'AudioContext not initialized',
-        { action: 'audio_load', component: 'WebAudioStrategy', additionalData: { soundKey } },
-        { recoverable: true, retryable: true }
+        { 
+          component: 'WebAudioStrategy', 
+          metadata: { soundKey, operation: 'audio_load' }
+        },
+        undefined // No user message for audio errors (they're suppressed)
       );
     }
 
@@ -250,10 +265,13 @@ export class WebAudioStrategy extends AudioStrategy {
 
   private async loadAudioBuffer(soundKey: SoundKey, path: string): Promise<AudioBuffer> {
     if (!this.audioState.context) {
-      throw new AudioError(
+      throw createAudioError(
         'AudioContext not initialized',
-        { action: 'audio_load', component: 'WebAudioStrategy', additionalData: { soundKey } },
-        { recoverable: true, retryable: true }
+        { 
+          component: 'WebAudioStrategy', 
+          metadata: { soundKey, operation: 'audio_load' }
+        },
+        undefined // No user message for audio errors (they're suppressed)
       );
     }
 
@@ -266,20 +284,19 @@ export class WebAudioStrategy extends AudioStrategy {
       const arrayBuffer = await response.arrayBuffer();
       return await this.audioState.context.decodeAudioData(arrayBuffer);
     } catch (error) {
-      const audioError = new AudioError(
+      const audioError = createAudioError(
         `Failed to load audio file: ${soundKey}`,
         {
-          action: 'audio_load',
           component: 'WebAudioStrategy',
-          additionalData: { soundKey, path, error },
+          metadata: { soundKey, path, error, operation: 'audio_load' },
         },
-        {
-          recoverable: true,
-          retryable: true,
-          // userMessage omitted to suppress user notification for loading errors
-        }
+        undefined // No user message for audio errors (they're suppressed)
       );
-      handleError(audioError);
+      log.warn('Audio file loading failed', { 
+        component: 'WebAudioStrategy', 
+        action: 'audio_load',
+        metadata: { audioError }
+      });
       throw audioError;
     }
   }

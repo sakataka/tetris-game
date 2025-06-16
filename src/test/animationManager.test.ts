@@ -6,10 +6,8 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-// Mock error handler first
-vi.mock('../utils/data/errorHandler', () => ({
-  handleError: vi.fn(),
-}));
+// Error handling is now done via logging system
+// No need to mock errorHandler anymore
 
 // Mock matchMedia
 const mockMatchMedia = vi.fn().mockImplementation((query: string) => ({

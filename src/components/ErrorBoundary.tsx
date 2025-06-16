@@ -1,7 +1,7 @@
 import i18next from 'i18next';
 import React, { Component, type ReactNode, type ErrorInfo } from 'react';
 import { DEFAULT_VALUES, GAME_TIMING } from '../constants';
-import { UIError } from '../types/errors';
+import { createUIError } from '../types/errors';
 import { errorHandler } from '../utils/data';
 import { Button } from './ui/button';
 
@@ -49,22 +49,16 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   override componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // Create custom error object
-    const appError = new UIError(
+    const appError = createUIError(
       error.message,
       {
         component: this.props.level || 'unknown',
-        action: 'component_render',
-        additionalData: {
+        metadata: {
           componentStack: errorInfo.componentStack,
           errorBoundaryLevel: this.props.level,
         },
       },
-      {
-        recoverable: this.state.retryCount < this.maxRetries,
-        retryable: true,
-        userMessage: i18next.t('errors.componentRenderError'),
-        cause: error,
-      }
+      i18next.t('errors.componentRenderError')
     );
 
     // Process with error handler

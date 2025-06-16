@@ -4,7 +4,8 @@
  */
 
 import type { SoundKey } from '../../types/tetris';
-import { AudioError, handleError } from '../data/errorHandler';
+import { createAudioError } from '../../types/errors';
+import { log } from '../logging/logger';
 import { audioManager } from './audioManager';
 
 interface PreloadStrategy {
@@ -128,16 +129,18 @@ class AudioPreloader {
     // Memory limit enforcement
     if (this.memoryUsage > config.memoryLimit * 1024 * 1024) {
       this.preloadProgress.set(soundKey, 'failed');
-      const error = new AudioError(
+      const error = createAudioError(
         `Memory limit exceeded for ${soundKey}`,
         {
-          action: 'audio_preload',
           component: 'AudioPreloader',
-          additionalData: { soundKey, memoryUsage: this.memoryUsage },
+          metadata: { soundKey, memoryUsage: this.memoryUsage, action: 'audio_preload' },
         },
-        { recoverable: true, retryable: false }
+        undefined
       );
-      handleError(error);
+      log.warn('Audio preload failed due to memory limit', {
+        component: 'AudioPreloader',
+        metadata: { error: error.toString() },
+      });
       return;
     }
 
@@ -164,16 +167,18 @@ class AudioPreloader {
 
         if (currentRetry > maxRetries) {
           this.preloadProgress.set(soundKey, 'failed');
-          const audioError = new AudioError(
+          const audioError = createAudioError(
             `Failed to preload ${soundKey} after ${maxRetries} retries`,
             {
-              action: 'audio_preload',
               component: 'AudioPreloader',
-              additionalData: { soundKey, retries: currentRetry, error },
+              metadata: { soundKey, retries: currentRetry, error, action: 'audio_preload' },
             },
-            { recoverable: true, retryable: false }
+            undefined
           );
-          handleError(audioError);
+          log.warn('Audio preload failed after retries', {
+            component: 'AudioPreloader',
+            metadata: { error: audioError.toString() },
+          });
           return;
         }
 

@@ -4,7 +4,7 @@
  */
 
 import type { SoundKey } from '../../types/tetris';
-import { AudioError, handleError } from '../data/errorHandler';
+import { createAudioError } from '../../types/errors';
 import { log } from '../logging';
 import {
   type AudioState,
@@ -66,16 +66,18 @@ export class AudioManagerV2 {
         log.audio(`Audio system initialized with ${strategy.constructor.name}`);
         return;
       } catch (error) {
-        const audioError = new AudioError(
+        const audioError = createAudioError(
           `Failed to initialize ${strategy.constructor.name}`,
           {
-            action: 'audio_strategy_init',
             component: 'AudioManagerV2',
-            additionalData: { strategy: strategy.constructor.name, error },
+            metadata: { action: 'audio_strategy_init', strategy: strategy.constructor.name, error },
           },
-          { recoverable: true, retryable: false }
+          undefined
         );
-        handleError(audioError);
+        log.warn('audio strategy initialization failed', { 
+          component: 'AudioManagerV2', 
+          metadata: { audioError: audioError.toString() } 
+        });
       }
     }
 
@@ -108,16 +110,18 @@ export class AudioManagerV2 {
         try {
           await this.currentStrategy.playSound(soundKey, config);
         } catch (fallbackError) {
-          const audioError = new AudioError(
+          const audioError = createAudioError(
             `Failed to play sound after fallback: ${soundKey}`,
             {
-              action: 'audio_play_fallback',
               component: 'AudioManagerV2',
-              additionalData: { soundKey, originalError: error, fallbackError },
+              metadata: { action: 'audio_play_fallback', soundKey, originalError: error, fallbackError },
             },
-            { recoverable: false, retryable: false }
+            undefined
           );
-          handleError(audioError);
+          log.warn('sound playback failed after fallback', { 
+            component: 'AudioManagerV2', 
+            metadata: { audioError: audioError.toString() } 
+          });
         }
       }
     }
@@ -149,16 +153,18 @@ export class AudioManagerV2 {
 
       log.warn(`Audio strategy fallback: ${nextStrategy.constructor.name}`, { component: 'Audio' });
     } catch (initError) {
-      const audioError = new AudioError(
+      const audioError = createAudioError(
         `Failed to fallback to ${nextStrategy.constructor.name}`,
         {
-          action: 'audio_strategy_fallback',
           component: 'AudioManagerV2',
-          additionalData: { originalError: error, fallbackError: initError },
+          metadata: { action: 'audio_strategy_fallback', originalError: error, fallbackError: initError },
         },
-        { recoverable: true, retryable: false }
+        undefined
       );
-      handleError(audioError);
+      log.warn('audio strategy fallback failed', { 
+        component: 'AudioManagerV2', 
+        metadata: { audioError: audioError.toString() } 
+      });
 
       // Try next strategy recursively
       await this.fallbackToNextStrategy(initError);
@@ -227,16 +233,18 @@ export class AudioManagerV2 {
       try {
         await this.currentStrategy.preloadSounds();
       } catch (error) {
-        const audioError = new AudioError(
+        const audioError = createAudioError(
           'Failed to preload sounds',
           {
-            action: 'audio_preload',
             component: 'AudioManagerV2',
-            additionalData: { strategy: this.currentStrategy.constructor.name, error },
+            metadata: { action: 'audio_preload', strategy: this.currentStrategy.constructor.name, error },
           },
-          { recoverable: true, retryable: false }
+          undefined
         );
-        handleError(audioError);
+        log.warn('sound preloading failed', { 
+          component: 'AudioManagerV2', 
+          metadata: { audioError: audioError.toString() } 
+        });
       }
     }
   }

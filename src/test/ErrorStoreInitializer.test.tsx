@@ -1,62 +1,43 @@
 /**
  * ErrorStoreInitializer component test
  *
- * Tests for error store initialization component functionality
+ * Tests for simplified error store initialization component
  */
 
 import { render } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-
-// Mock the integration function before importing
-vi.mock('../store/errorStore', () => ({
-  initializeErrorStoreIntegration: vi.fn(),
-}));
-
-// Import the component and mocked function
+import { describe, expect, it } from 'vitest';
 import ErrorStoreInitializer from '../components/ErrorStoreInitializer';
-import { initializeErrorStoreIntegration } from '../store/errorStore';
-
-const mockInitializeErrorStoreIntegration = initializeErrorStoreIntegration as ReturnType<
-  typeof vi.fn
->;
 
 describe('ErrorStoreInitializer', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it('should call initializeErrorStoreIntegration on mount', () => {
-    render(<ErrorStoreInitializer />);
-
-    expect(mockInitializeErrorStoreIntegration).toHaveBeenCalledTimes(1);
-  });
-
   it('should render nothing', () => {
     const { container } = render(<ErrorStoreInitializer />);
 
     expect(container.firstChild).toBeNull();
   });
 
-  it('should not reinitialize on unmount', () => {
-    const { unmount } = render(<ErrorStoreInitializer />);
-
-    expect(mockInitializeErrorStoreIntegration).toHaveBeenCalledTimes(1);
-
-    unmount();
-
-    // No additional calls after unmount
-    expect(mockInitializeErrorStoreIntegration).toHaveBeenCalledTimes(1);
+  it('should be a functional component without side effects', () => {
+    // Since the error store integration is now handled automatically,
+    // this component should be a simple null-rendering component
+    const { container } = render(<ErrorStoreInitializer />);
+    
+    expect(container.firstChild).toBeNull();
   });
 
-  it('should initialize only once on re-render', () => {
+  it('should handle mount and unmount without issues', () => {
+    expect(() => {
+      const { unmount } = render(<ErrorStoreInitializer />);
+      unmount();
+    }).not.toThrow();
+  });
+
+  it('should be stable across multiple renders', () => {
     const { rerender } = render(<ErrorStoreInitializer />);
-
-    expect(mockInitializeErrorStoreIntegration).toHaveBeenCalledTimes(1);
-
-    // Re-render
-    rerender(<ErrorStoreInitializer />);
-
-    // Still called only once
-    expect(mockInitializeErrorStoreIntegration).toHaveBeenCalledTimes(1);
+    
+    // Should handle multiple re-renders without issues
+    expect(() => {
+      rerender(<ErrorStoreInitializer />);
+      rerender(<ErrorStoreInitializer />);
+      rerender(<ErrorStoreInitializer />);
+    }).not.toThrow();
   });
 });

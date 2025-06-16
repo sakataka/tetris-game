@@ -3,6 +3,9 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 import type { GameSettings, ThemeVariant } from '../types/tetris';
 import { log } from '../utils/logging';
 
+// Navigation types
+export type TabType = 'game' | 'stats' | 'theme' | 'settings';
+
 // Extended key bindings to support multiple keys per action
 export interface ExtendedKeyBindings {
   moveLeft: string[];
@@ -21,6 +24,8 @@ export interface ExtendedGameSettings extends Omit<GameSettings, 'keyBindings'> 
   showGhost: boolean;
   showParticles: boolean;
   keyBindings: ExtendedKeyBindings;
+  // Navigation state
+  activeTab: TabType;
 }
 
 // Default settings values
@@ -50,6 +55,9 @@ const DEFAULT_SETTINGS: ExtendedGameSettings = {
   difficulty: 'normal' as const,
   gameMode: 'single' as const,
   virtualControlsEnabled: false,
+  
+  // Navigation settings
+  activeTab: 'game' as const,
 };
 
 interface SettingsStore {
@@ -60,6 +68,9 @@ interface SettingsStore {
   updateSettings: (newSettings: Partial<ExtendedGameSettings>) => void;
   resetSettings: () => void;
   updateTheme: (theme: ThemeVariant) => void;
+
+  // Navigation management
+  setActiveTab: (tab: TabType) => void;
 
   // Key binding management
   updateKeyBinding: (action: keyof ExtendedKeyBindings, newKeys: string[]) => void;
@@ -103,6 +114,12 @@ export const useSettingsStore = create<SettingsStore>()(
       updateTheme: (theme) =>
         set((state) => ({
           settings: { ...state.settings, theme },
+        })),
+
+      // Navigation management
+      setActiveTab: (tab) =>
+        set((state) => ({
+          settings: { ...state.settings, activeTab: tab },
         })),
 
       // Key binding management
@@ -201,6 +218,9 @@ export const useShowGhost = () => useSettingsStore((state) => state.settings.sho
 export const useShowParticles = () => useSettingsStore((state) => state.settings.showParticles);
 export const useKeyBindings = () => useSettingsStore((state) => state.settings.keyBindings);
 
+// Navigation selectors (integrated from navigationStore)
+export const useActiveTab = () => useSettingsStore((state) => state.settings.activeTab);
+
 // Individual action hooks (function reference stabilization)
 export const useUpdateSettings = () => useSettingsStore((state) => state.updateSettings);
 export const useResetSettings = () => useSettingsStore((state) => state.resetSettings);
@@ -216,3 +236,6 @@ export const useToggleMute = () => useSettingsStore((state) => state.toggleMute)
 export const useToggleAudioEnabled = () => useSettingsStore((state) => state.toggleAudioEnabled);
 export const useToggleShowGhost = () => useSettingsStore((state) => state.toggleShowGhost);
 export const useToggleShowParticles = () => useSettingsStore((state) => state.toggleShowParticles);
+
+// Navigation action hooks (integrated from navigationStore)
+export const useSetActiveTab = () => useSettingsStore((state) => state.setActiveTab);

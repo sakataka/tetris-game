@@ -5,7 +5,8 @@
 
 import { GAME_TIMING } from '../../../constants/timing';
 import type { SoundKey } from '../../../types/tetris';
-import { AudioError, handleError } from '../../data/errorHandler';
+import { createAudioError } from '../../../types/errors';
+import { log } from '../../logging';
 import { type AudioState, AudioStrategy, type SoundConfig } from './AudioStrategy';
 
 interface HTMLAudioElement extends globalThis.HTMLAudioElement {
@@ -35,21 +36,21 @@ export class HTMLAudioStrategy extends AudioStrategy {
 
     try {
       if (!this.canPlayAudio()) {
-        throw new AudioError(
+        throw createAudioError(
           'HTML Audio is not supported',
-          { action: 'html_audio_init', component: 'HTMLAudioStrategy' },
-          { recoverable: false, retryable: false }
+          { component: 'HTMLAudioStrategy', metadata: { action: 'html_audio_init' } },
+          undefined
         );
       }
 
       this.initialized = true;
     } catch (error) {
-      const audioError = new AudioError(
+      const audioError = createAudioError(
         'Failed to initialize HTML Audio',
-        { action: 'html_audio_init', component: 'HTMLAudioStrategy', additionalData: { error } },
-        { recoverable: false, retryable: false }
+        { component: 'HTMLAudioStrategy', metadata: { action: 'html_audio_init', error } },
+        undefined
       );
-      handleError(audioError);
+      log.warn('HTML Audio initialization failed', { component: 'HTMLAudioStrategy', metadata: { audioError } });
       throw audioError;
     }
   }
@@ -88,16 +89,15 @@ export class HTMLAudioStrategy extends AudioStrategy {
       // Play audio
       await audio.play();
     } catch (error) {
-      const audioError = new AudioError(
+      const audioError = createAudioError(
         `Failed to play HTML audio: ${soundKey}`,
         {
-          action: 'html_audio_play',
           component: 'HTMLAudioStrategy',
-          additionalData: { soundKey, error },
+          metadata: { action: 'html_audio_play', soundKey, error },
         },
-        { recoverable: true, retryable: false }
+        undefined
       );
-      handleError(audioError);
+      log.warn('HTML audio playback failed', { component: 'HTMLAudioStrategy', metadata: { audioError } });
     }
   }
 
@@ -121,16 +121,15 @@ export class HTMLAudioStrategy extends AudioStrategy {
           return newElement;
         }
       } catch (error) {
-        const audioError = new AudioError(
+        const audioError = createAudioError(
           `Failed to create audio element: ${soundKey}`,
           {
-            action: 'html_audio_create',
             component: 'HTMLAudioStrategy',
-            additionalData: { soundKey, error },
+            metadata: { action: 'html_audio_create', soundKey, error },
           },
-          { recoverable: true, retryable: false }
+          undefined
         );
-        handleError(audioError);
+        log.warn('Audio element creation failed', { component: 'HTMLAudioStrategy', metadata: { audioError } });
       }
     }
 
@@ -148,18 +147,13 @@ export class HTMLAudioStrategy extends AudioStrategy {
       // Wait for loadeddata event
       return new Promise((resolve, reject) => {
         const timeout = setTimeout(() => {
-          const audioError = new AudioError(
+          const audioError = createAudioError(
             `Audio load timeout: ${soundKey}`,
             {
-              action: 'audio_load',
               component: 'HTMLAudioStrategy',
-              additionalData: { soundKey, timeout: GAME_TIMING.AUDIO_TIMEOUT },
+              metadata: { action: 'audio_load', soundKey, timeout: GAME_TIMING.AUDIO_TIMEOUT },
             },
-            {
-              recoverable: true,
-              retryable: false,
-              // userMessage omitted to suppress user notification for timeout errors
-            }
+            undefined
           );
           reject(audioError);
         }, GAME_TIMING.AUDIO_TIMEOUT);
@@ -178,18 +172,13 @@ export class HTMLAudioStrategy extends AudioStrategy {
           'error',
           () => {
             clearTimeout(timeout);
-            const audioError = new AudioError(
+            const audioError = createAudioError(
               `Failed to load audio file: ${soundKey}`,
               {
-                action: 'audio_load',
                 component: 'HTMLAudioStrategy',
-                additionalData: { soundKey },
+                metadata: { action: 'audio_load', soundKey },
               },
-              {
-                recoverable: true,
-                retryable: false,
-                // userMessage omitted to suppress user notification for loading errors
-              }
+              undefined
             );
             reject(audioError);
           },
@@ -200,20 +189,15 @@ export class HTMLAudioStrategy extends AudioStrategy {
         audio.load();
       });
     } catch (error) {
-      const audioError = new AudioError(
+      const audioError = createAudioError(
         `Failed to create audio element: ${soundKey}`,
         {
-          action: 'html_audio_create',
           component: 'HTMLAudioStrategy',
-          additionalData: { soundKey, error },
+          metadata: { action: 'html_audio_create', soundKey, error },
         },
-        {
-          recoverable: true,
-          retryable: false,
-          // userMessage omitted to suppress user notification for HTML audio creation errors
-        }
+        undefined
       );
-      handleError(audioError);
+      log.warn('Audio element creation failed', { component: 'HTMLAudioStrategy', metadata: { audioError } });
       return null;
     }
   }

@@ -2,8 +2,46 @@
 
 This file provides guidance to Claude Code when working with this React Router 7 + React 19.1 Tetris game.
 
-# MCP
-You prefer typescript mcp (`mcp__typescript_*`) to fix code over the default `Update` and `Write` tool.
+# MCP TypeScript Tools Usage Guidelines
+
+## 🎯 Preferred Tools for TypeScript Operations
+
+You prefer typescript mcp (`mcp__typescript_*`) to fix code over the default `Read` and `Edit` tools when possible.
+
+### When to Use MCP TypeScript Tools:
+1. **Symbol Operations**: Renaming, deleting, finding references
+2. **Type Information**: Getting symbol types, module exports
+3. **Diagnostics**: TypeScript error checking
+4. **Safe Refactoring**: Moving files/directories with automatic import updates
+
+### Tool Priority (Highest to Lowest):
+```typescript
+// 1st Priority: TypeScript MCP tools
+mcp__typescript__rename_symbol     // Symbol renaming across codebase
+mcp__typescript__find_references   // Find all symbol usages
+mcp__typescript__get_diagnostics   // TypeScript error checking
+mcp__typescript__move_file         // Move files with import updates
+mcp__typescript__delete_symbol     // Safe symbol deletion
+
+// 2nd Priority: Search tools for discovery
+Grep, Glob, Bash with rg/fd
+
+// 3rd Priority: Traditional tools for complex edits
+Read, Edit, MultiEdit for complex logic changes
+```
+
+### MCP TypeScript Best Practices:
+- Use `get_diagnostics` before and after major changes
+- Use `find_references` before renaming/deleting symbols
+- Use `move_file` instead of manual file moves
+- Handle MCP errors gracefully (fallback to traditional tools)
+- Be aware of 25000 token limits for large scope queries
+
+### Token Optimization Strategy:
+1. Use MCP TypeScript tools for structural changes
+2. Use Grep/Glob for discovery without reading file contents
+3. Use Read/Edit only when complex logic changes are needed
+4. Batch related operations to minimize tool calls
 
 ## 🎯 Development Guidelines
 

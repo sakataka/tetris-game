@@ -205,8 +205,8 @@ export interface GlobalGameState extends GameState {
 export interface PlaySession {
   readonly id: string;
   readonly startTime: number;
-  readonly endTime?: number;
-  readonly gameCount: number;
+  readonly endTime: number | null;
+  readonly gamesPlayed: number;
   readonly isActive: boolean;
 }
 

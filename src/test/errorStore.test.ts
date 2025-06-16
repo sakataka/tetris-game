@@ -22,6 +22,7 @@ describe('errorStore', () => {
       useErrorStore.getState().setSelectedError(undefined);
       useErrorStore.getState().updateConfig({
         maxStoredErrors: 100,
+        showNotifications: true,
       });
     });
   });
@@ -31,14 +32,13 @@ describe('errorStore', () => {
       const testError: ErrorInfo = {
         id: 'test-error-1',
         message: 'Test error',
-        level: 'error',
-        category: 'system',
+        level: 'medium',
+        category: 'game',
         context: {
           timestamp: Date.now(),
           component: 'TestComponent',
         },
-        recoverable: true,
-        retryable: false,
+        userMessage: undefined,
       };
 
       act(() => {
@@ -48,7 +48,7 @@ describe('errorStore', () => {
       const state = useErrorStore.getState();
       expect(state.errors).toHaveLength(1);
       expect(state.errors[0]?.message).toBe('Test error');
-      expect(state.errors[0]?.level).toBe('error');
+      expect(state.errors[0]?.level).toBe('medium');
     });
 
     it('should manage multiple errors', () => {
@@ -56,29 +56,26 @@ describe('errorStore', () => {
         {
           id: '1',
           message: 'Error 1',
-          level: 'error',
+          level: 'high',
           category: 'game',
           context: { timestamp: Date.now() },
-          recoverable: true,
-          retryable: false,
+          userMessage: undefined,
         },
         {
           id: '2',
           message: 'Warning 1',
-          level: 'warning',
+          level: 'medium',
           category: 'ui',
           context: { timestamp: Date.now() },
-          recoverable: true,
-          retryable: false,
+          userMessage: undefined,
         },
         {
           id: '3',
           message: 'Info 1',
-          level: 'info',
-          category: 'system',
+          level: 'low',
+          category: 'audio',
           context: { timestamp: Date.now() },
-          recoverable: true,
-          retryable: false,
+          userMessage: undefined,
         },
       ];
 
@@ -92,25 +89,23 @@ describe('errorStore', () => {
       expect(state.errors).toHaveLength(3);
     });
 
-    it('should remove error individually', () => {
+    it('should dismiss error individually', () => {
       const error1: ErrorInfo = {
         id: 'remove-1',
         message: 'Error to remove',
-        level: 'error',
-        category: 'system',
+        level: 'medium',
+        category: 'game',
         context: { timestamp: Date.now() },
-        recoverable: true,
-        retryable: false,
+        userMessage: undefined,
       };
 
       const error2: ErrorInfo = {
         id: 'keep-1',
         message: 'Error to keep',
-        level: 'error',
-        category: 'system',
+        level: 'medium',
+        category: 'game',
         context: { timestamp: Date.now() },
-        recoverable: true,
-        retryable: false,
+        userMessage: undefined,
       };
 
       act(() => {
@@ -119,7 +114,7 @@ describe('errorStore', () => {
       });
 
       act(() => {
-        useErrorStore.getState().removeError('remove-1');
+        useErrorStore.getState().dismissError('remove-1');
       });
 
       const state = useErrorStore.getState();
@@ -134,11 +129,10 @@ describe('errorStore', () => {
           useErrorStore.getState().addError({
             id: `error-${i}`,
             message: `Error ${i}`,
-            level: 'error',
-            category: 'system',
+            level: 'medium',
+            category: 'game',
             context: { timestamp: Date.now() },
-            recoverable: true,
-            retryable: false,
+            userMessage: undefined,
           });
         });
       }
@@ -151,6 +145,32 @@ describe('errorStore', () => {
 
       expect(useErrorStore.getState().errors).toHaveLength(0);
     });
+
+    it('should clear selected error when dismissing it', () => {
+      const testError: ErrorInfo = {
+        id: 'selected-error',
+        message: 'Selected error',
+        level: 'medium',
+        category: 'game',
+        context: { timestamp: Date.now() },
+        userMessage: undefined,
+      };
+
+      act(() => {
+        useErrorStore.getState().addError(testError);
+        useErrorStore.getState().setSelectedError('selected-error');
+      });
+
+      expect(useErrorStore.getState().selectedErrorId).toBe('selected-error');
+
+      act(() => {
+        useErrorStore.getState().dismissError('selected-error');
+      });
+
+      const state = useErrorStore.getState();
+      expect(state.errors).toHaveLength(0);
+      expect(state.selectedErrorId).toBeUndefined();
+    });
   });
 
   describe('Error filtering', () => {
@@ -158,31 +178,28 @@ describe('errorStore', () => {
       // Create test error set
       const testErrors: ErrorInfo[] = [
         {
-          id: 'critical-1',
-          message: 'Critical error',
-          level: 'critical',
-          category: 'system',
+          id: 'high-1',
+          message: 'High priority error',
+          level: 'high',
+          category: 'storage',
           context: { timestamp: Date.now() },
-          recoverable: false,
-          retryable: false,
+          userMessage: undefined,
         },
         {
-          id: 'error-1',
-          message: 'Normal error',
-          level: 'error',
+          id: 'medium-1',
+          message: 'Medium priority error',
+          level: 'medium',
           category: 'game',
           context: { timestamp: Date.now() },
-          recoverable: true,
-          retryable: true,
+          userMessage: undefined,
         },
         {
-          id: 'warning-1',
-          message: 'Warning message',
-          level: 'warning',
+          id: 'low-1',
+          message: 'Low priority message',
+          level: 'low',
           category: 'audio',
           context: { timestamp: Date.now() },
-          recoverable: true,
-          retryable: false,
+          userMessage: undefined,
         },
       ];
 
@@ -194,71 +211,56 @@ describe('errorStore', () => {
     });
 
     it('should get errors by level', () => {
-      const criticalErrors = useErrorStore.getState().getErrorsByLevel('critical');
-      const normalErrors = useErrorStore.getState().getErrorsByLevel('error');
-      const warnings = useErrorStore.getState().getErrorsByLevel('warning');
+      const highErrors = useErrorStore.getState().getErrorsByLevel('high');
+      const mediumErrors = useErrorStore.getState().getErrorsByLevel('medium');
+      const lowErrors = useErrorStore.getState().getErrorsByLevel('low');
 
-      expect(criticalErrors).toHaveLength(1);
-      expect(normalErrors).toHaveLength(1);
-      expect(warnings).toHaveLength(1);
+      expect(highErrors).toHaveLength(1);
+      expect(mediumErrors).toHaveLength(1);
+      expect(lowErrors).toHaveLength(1);
     });
 
     it('should get errors by category', () => {
-      const systemErrors = useErrorStore.getState().getErrorsByCategory('system');
+      const storageErrors = useErrorStore.getState().getErrorsByCategory('storage');
       const gameErrors = useErrorStore.getState().getErrorsByCategory('game');
       const audioErrors = useErrorStore.getState().getErrorsByCategory('audio');
 
-      expect(systemErrors).toHaveLength(1);
+      expect(storageErrors).toHaveLength(1);
       expect(gameErrors).toHaveLength(1);
       expect(audioErrors).toHaveLength(1);
     });
 
-    it('should get critical errors only', () => {
-      const criticalErrors = useErrorStore.getState().getCriticalErrors();
+    // Removed: getCriticalErrors method no longer exists in simplified API
 
-      expect(criticalErrors).toHaveLength(1);
-      expect(criticalErrors[0]?.level).toBe('critical');
-    });
-
-    it('should get recent errors', () => {
-      const recentErrors = useErrorStore.getState().getRecentErrors(2);
-
-      expect(recentErrors).toHaveLength(2);
-      // Should return in newest first order
-      expect(recentErrors[0]?.id).toBe('warning-1');
-      expect(recentErrors[1]?.id).toBe('error-1');
-    });
+    // Removed: getRecentErrors method no longer exists in simplified API
   });
 
-  describe('Error statistics', () => {
-    it('should calculate error statistics correctly', () => {
+  describe('Error filtering and selection', () => {
+    it('should filter errors by level using store selectors', () => {
       const errors: ErrorInfo[] = [
         {
           id: '1',
           message: 'Error 1',
-          level: 'error',
+          level: 'high',
           category: 'game',
           context: { timestamp: Date.now() },
-          recoverable: true,
-          retryable: false,
+          userMessage: undefined,
         },
         {
           id: '2',
           message: 'Error 2',
-          level: 'error',
+          level: 'medium',
           category: 'audio',
           context: { timestamp: Date.now() },
-          recoverable: true,
-          retryable: false,
+          userMessage: undefined,
         },
         {
           id: '3',
           message: 'Warning 1',
-          level: 'warning',
+          level: 'low',
           category: 'ui',
           context: { timestamp: Date.now() },
-          recoverable: true,
-          retryable: false,
+          userMessage: undefined,
         },
       ];
 
@@ -266,91 +268,111 @@ describe('errorStore', () => {
         act(() => {
           useErrorStore.getState().addError(error);
         });
-      });
-
-      const stats = useErrorStore.getState().stats;
-
-      expect(stats.totalErrors).toBe(3);
-      expect(stats.errorsByLevel.error).toBe(2);
-      expect(stats.errorsByLevel.warning).toBe(1);
-      expect(stats.errorsByCategory.game).toBe(1);
-      expect(stats.errorsByCategory.audio).toBe(1);
-      expect(stats.errorsByCategory.ui).toBe(1);
-    });
-
-    it('should reset statistics after clearing errors', () => {
-      // Add error
-      act(() => {
-        useErrorStore.getState().addError({
-          id: 'stat-test',
-          message: 'Test error',
-          level: 'error',
-          category: 'system',
-          context: { timestamp: Date.now() },
-          recoverable: true,
-          retryable: false,
-        });
-      });
-
-      expect(useErrorStore.getState().stats.totalErrors).toBe(1);
-
-      act(() => {
-        useErrorStore.getState().clearErrors();
-      });
-
-      const stats = useErrorStore.getState().stats;
-      expect(stats.totalErrors).toBe(0);
-      expect(stats.errorsByLevel.error).toBe(0);
-    });
-  });
-
-  describe('Clear errors by category', () => {
-    it('should clear only errors of specific category', () => {
-      const errors: ErrorInfo[] = [
-        {
-          id: 'game-1',
-          message: 'Game error',
-          level: 'error',
-          category: 'game',
-          context: { timestamp: Date.now() },
-          recoverable: true,
-          retryable: false,
-        },
-        {
-          id: 'audio-1',
-          message: 'Audio error',
-          level: 'error',
-          category: 'audio',
-          context: { timestamp: Date.now() },
-          recoverable: true,
-          retryable: false,
-        },
-        {
-          id: 'game-2',
-          message: 'Another game error',
-          level: 'error',
-          category: 'game',
-          context: { timestamp: Date.now() },
-          recoverable: true,
-          retryable: false,
-        },
-      ];
-
-      errors.forEach((error) => {
-        act(() => {
-          useErrorStore.getState().addError(error);
-        });
-      });
-
-      act(() => {
-        useErrorStore.getState().clearErrorsByCategory('game');
       });
 
       const state = useErrorStore.getState();
-      expect(state.errors).toHaveLength(1);
-      expect(state.errors[0]?.category).toBe('audio');
+      const highErrors = state.getErrorsByLevel('high');
+      const mediumErrors = state.getErrorsByLevel('medium');
+      const lowErrors = state.getErrorsByLevel('low');
+
+      expect(highErrors).toHaveLength(1);
+      expect(mediumErrors).toHaveLength(1);
+      expect(lowErrors).toHaveLength(1);
+      expect(highErrors[0]?.level).toBe('high');
+      expect(mediumErrors[0]?.level).toBe('medium');
+      expect(lowErrors[0]?.level).toBe('low');
+    });
+
+    it('should filter errors by category using store selectors', () => {
+      const errors: ErrorInfo[] = [
+        {
+          id: 'game-error',
+          message: 'Game error',
+          level: 'high',
+          category: 'game',
+          context: { timestamp: Date.now() },
+          userMessage: undefined,
+        },
+        {
+          id: 'audio-error',
+          message: 'Audio error',
+          level: 'low',
+          category: 'audio',
+          context: { timestamp: Date.now() },
+          userMessage: undefined,
+        },
+        {
+          id: 'storage-error',
+          message: 'Storage error',
+          level: 'high',
+          category: 'storage',
+          context: { timestamp: Date.now() },
+          userMessage: undefined,
+        },
+      ];
+
+      errors.forEach((error) => {
+        act(() => {
+          useErrorStore.getState().addError(error);
+        });
+      });
+
+      const state = useErrorStore.getState();
+      const gameErrors = state.getErrorsByCategory('game');
+      const audioErrors = state.getErrorsByCategory('audio');
+      const storageErrors = state.getErrorsByCategory('storage');
+
+      expect(gameErrors).toHaveLength(1);
+      expect(audioErrors).toHaveLength(1);
+      expect(storageErrors).toHaveLength(1);
+      expect(gameErrors[0]?.category).toBe('game');
+      expect(audioErrors[0]?.category).toBe('audio');
+      expect(storageErrors[0]?.category).toBe('storage');
+    });
+
+    it('should calculate basic error statistics manually', () => {
+      const errors: ErrorInfo[] = [
+        {
+          id: 'stat-1',
+          message: 'Error 1',
+          level: 'high',
+          category: 'game',
+          context: { timestamp: Date.now() },
+          userMessage: undefined,
+        },
+        {
+          id: 'stat-2',
+          message: 'Error 2',
+          level: 'medium',
+          category: 'audio',
+          context: { timestamp: Date.now() },
+          userMessage: undefined,
+        },
+      ];
+
+      errors.forEach((error) => {
+        act(() => {
+          useErrorStore.getState().addError(error);
+        });
+      });
+
+      const state = useErrorStore.getState();
+      expect(state.errors).toHaveLength(2);
+      
+      // Manual statistics calculation
+      const highErrors = state.errors.filter(e => e.level === 'high');
+      const mediumErrors = state.errors.filter(e => e.level === 'medium');
+      const gameErrors = state.errors.filter(e => e.category === 'game');
+      const audioErrors = state.errors.filter(e => e.category === 'audio');
+
+      expect(highErrors).toHaveLength(1);
+      expect(mediumErrors).toHaveLength(1);
+      expect(gameErrors).toHaveLength(1);
+      expect(audioErrors).toHaveLength(1);
     });
   });
+
+  // Removed: clearErrorsByCategory method no longer exists in simplified API
 
   describe('Error panel UI management', () => {
     it('should manage error panel display state', () => {
@@ -399,13 +421,13 @@ describe('errorStore', () => {
       act(() => {
         useErrorStore.getState().updateConfig({
           maxStoredErrors: 50,
-          enableConsoleLogging: true,
+          showNotifications: false,
         });
       });
 
       const updatedConfig = useErrorStore.getState().config;
       expect(updatedConfig.maxStoredErrors).toBe(50);
-      expect(updatedConfig.enableConsoleLogging).toBe(true);
+      expect(updatedConfig.showNotifications).toBe(false);
     });
   });
 
@@ -413,7 +435,10 @@ describe('errorStore', () => {
     it('should remove oldest errors when exceeding maxStoredErrors', () => {
       // Set smaller limit
       act(() => {
-        useErrorStore.getState().updateConfig({ maxStoredErrors: 3 });
+        useErrorStore.getState().updateConfig({ 
+          maxStoredErrors: 3,
+          showNotifications: true,
+        });
       });
 
       // Add 4 errors
@@ -422,19 +447,19 @@ describe('errorStore', () => {
           useErrorStore.getState().addError({
             id: `limited-${i}`,
             message: `Error ${i}`,
-            level: 'error',
-            category: 'system',
+            level: 'medium',
+            category: 'game',
             context: { timestamp: Date.now() + i }, // Ensure order
-            recoverable: true,
-            retryable: false,
+            userMessage: undefined,
           });
         });
       }
 
       const state = useErrorStore.getState();
       expect(state.errors).toHaveLength(3);
-      expect(state.errors[0]?.id).toBe('limited-1'); // First error removed
-      expect(state.errors[2]?.id).toBe('limited-3'); // Latest error kept
+      // Most recent errors are kept (newest first ordering)
+      expect(state.errors[0]?.id).toBe('limited-3'); // Latest error kept at top
+      expect(state.errors[2]?.id).toBe('limited-1'); // Oldest kept error
     });
   });
 });

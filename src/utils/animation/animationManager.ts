@@ -7,9 +7,8 @@
 
 import { PERFORMANCE_LIMITS } from '../../constants/performance';
 import { INTERVALS } from '../../constants/timing';
-import { SystemError } from '../../types/errors';
-import { handleError } from '../data/errorHandler';
 import { log } from '../logging';
+import { ENV_CONFIG } from '../../config/environment';
 
 export interface AnimationOptions {
   /** Target FPS (default: 60) */
@@ -138,14 +137,10 @@ export class AnimationManager {
             // Update performance statistics
             this.updatePerformanceStats(deltaTime);
           } catch (error) {
-            handleError(
-              new SystemError(`Animation callback error: ${id}`, {
-                component: 'AnimationManager',
-                action: 'animate',
-                timestamp: Date.now(),
-                additionalData: { animationId: id, error },
-              })
-            );
+            log.warn('Animation callback error', {
+              component: 'AnimationManager',
+              metadata: { animationId: id, error },
+            });
             this.unregisterAnimation(id);
             return;
           }
@@ -157,14 +152,10 @@ export class AnimationManager {
       animation.requestId = requestAnimationFrame(animate);
       this.activeAnimations.set(id, animation);
     } catch (error) {
-      handleError(
-        new SystemError(`Failed to register animation: ${id}`, {
-          component: 'AnimationManager',
-          action: 'registerAnimation',
-          timestamp: Date.now(),
-          additionalData: { animationId: id, error },
-        })
-      );
+      log.warn('Failed to register animation', {
+        component: 'AnimationManager',
+        metadata: { animationId: id, error },
+      });
     }
   }
 
@@ -306,7 +297,7 @@ export class AnimationManager {
     // Auto-optimize when frame drop rate exceeds threshold (but not in development with limited frames)
     if (dropRate > PERFORMANCE_LIMITS.FRAME_DROP_THRESHOLD && this.stats.totalFrames > 60) {
       // Only log performance warnings in production or when there are significant samples
-      if (import.meta.env.PROD || this.stats.totalFrames > 300) {
+      if (ENV_CONFIG.IS_PRODUCTION || this.stats.totalFrames > 300) {
         log.warn(`High frame drop rate (${(dropRate * 100).toFixed(1)}%). Optimizing...`, {
           component: 'AnimationManager',
           action: 'checkPerformance',

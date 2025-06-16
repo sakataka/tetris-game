@@ -13,13 +13,37 @@ export {
   type LanguageChangeCallback,
 } from './i18nStore';
 
-// Settings Store
+// Settings Store (unified with navigation)
 export {
   useSettingsStore,
+  // Settings selectors
   useSettings,
+  useVolume,
+  useIsMuted,
+  useAudioEnabled,
+  useTheme,
+  useShowGhost,
+  useShowParticles,
+  useKeyBindings,
+  // Navigation selectors
+  useActiveTab,
+  // Settings actions
   useUpdateSettings,
   useResetSettings,
   useUpdateTheme,
+  useUpdateKeyBinding,
+  useAddKeyBinding,
+  useRemoveKeyBinding,
+  useResetKeyBindings,
+  useIsKeyBound,
+  useGetKeyBinding,
+  useUpdateVolume,
+  useToggleMute,
+  useToggleAudioEnabled,
+  useToggleShowGhost,
+  useToggleShowParticles,
+  // Navigation actions
+  useSetActiveTab,
 } from './settingsStore';
 
 // Game State Store
@@ -54,11 +78,18 @@ export {
   useToggleAnimations,
 } from './themeStore';
 
-// Statistics Store
+// Statistics Store (unified with session management)
 export {
   useStatisticsStore,
-  useHighScores as useNewHighScores,
-  useStatistics as useNewStatistics,
+  // Statistics selectors
+  useHighScores,
+  useStatistics,
+  // Session selectors
+  useCurrentSession,
+  usePlaySessions,
+  useSessionStats,
+  useIsSessionActive,
+  // Statistics actions
   useAddHighScore,
   useClearHighScores,
   useUpdateStatistics,
@@ -70,22 +101,18 @@ export {
   useAddTetris,
   useAddPlayTime,
   useUpdateBestStreak,
-  useGetAverageScore,
-  useGetEfficiency,
-} from './statisticsStore';
-
-// Session Store
-export {
-  useSessionStore,
-  useCurrentSession,
-  usePlaySessions,
+  // Session actions
   useStartPlaySession,
   useEndPlaySession,
   useIncrementGameCount,
+  useClearAllSessions,
+  // Computed getters
+  useGetAverageScore,
+  useGetEfficiency,
   useGetActiveSession,
   useGetSessionDuration,
   useGetTotalPlayTime,
-} from './sessionStore';
+} from './statisticsStore';
 
 // Error Store (consolidated error handling)
 export {
@@ -102,7 +129,7 @@ export {
   useErrorsByCategory,
 } from './errorStore';
 
-// Accessibility Store (unified visual + orchestration)
+// Accessibility Store (unified: visual + cognitive + input)
 export {
   useAccessibilityStore,
   useAccessibility,
@@ -116,7 +143,7 @@ export {
   useEnableAccessibilityMode,
   useEnableGamingMode,
   useEnableScreenReaderMode,
-  // Visual accessibility (now integrated)
+  // Visual accessibility
   useVisualAccessibilityState,
   useColorBlindnessType,
   useContrastLevel,
@@ -132,10 +159,6 @@ export {
   useToggleLargeText,
   useToggleReducedMotion,
   useDetectSystemVisualPreferences,
-} from './accessibilityStore';
-
-// Specialized Accessibility Store (cognitive + input)
-export {
   // Cognitive accessibility
   useCognitiveAccessibilityState,
   useCognitiveAssistance,
@@ -157,6 +180,7 @@ export {
   useToggleAutoSave,
   useEnableFocusMode,
   useDisableFocusMode,
+  useSetUIComplexity,
   // Input accessibility
   useInputAccessibilityState,
   useKeyboardNavigation,
@@ -175,10 +199,14 @@ export {
   useToggleSoundEffects,
   useToggleVoiceAnnouncements,
   useToggleHapticFeedback,
+  useEnableOptimizedKeyboard,
+  useEnableBasicKeyboard,
+  useEnableFullFeedback,
+  useEnableMinimalFeedback,
+  useEnableSilentMode,
   // Reset functions
   useResetCognitiveToDefaults,
   useResetInputToDefaults,
-  useResetSpecializedToDefaults,
-} from './specializedAccessibility';
+} from './accessibilityStore';
 
 // Legacy store removal completed

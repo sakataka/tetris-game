@@ -1,4 +1,4 @@
-import type { TabType } from '../../store/navigationStore';
+import type { TabType } from '../../store/settingsStore';
 
 export interface PageMetadata {
   title: string;

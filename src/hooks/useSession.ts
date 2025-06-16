@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import {
   useCurrentSession,
-  useEndSession,
+  useEndPlaySession,
   useIsSessionActive,
-  useOnGameStart,
+  useIncrementGameCount,
   useSessionStats,
-  useStartSession,
-} from '../store/sessionStore';
+  useStartPlaySession,
+} from '../store/statisticsStore';
 
 /**
  * Unified session tracking hook
@@ -21,9 +21,9 @@ export function useSession() {
   const currentSession = useCurrentSession();
   const isSessionActive = useIsSessionActive();
   const sessionStats = useSessionStats();
-  const startSession = useStartSession();
-  const endSession = useEndSession();
-  const onGameStart = useOnGameStart();
+  const startSession = useStartPlaySession();
+  const endSession = useEndPlaySession();
+  const onGameStart = useIncrementGameCount();
 
   // Start session on component mount if none exists
   useEffect(() => {
@@ -48,7 +48,7 @@ export function useSession() {
       ? Math.floor((Date.now() - currentSession.startTime) / 1000)
       : 0,
 
-    gameCountInCurrentSession: currentSession?.gameCount ?? 0,
+    gameCountInCurrentSession: currentSession?.gamesPlayed ?? 0,
 
     // Utility functions
     hasActiveSession: !!currentSession && isSessionActive,
