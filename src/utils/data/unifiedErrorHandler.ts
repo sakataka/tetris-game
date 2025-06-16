@@ -6,35 +6,38 @@
  */
 
 import { log } from '../logging';
-import { BaseAppError, handleError as originalHandleError } from './errorHandler';
+import { GameAppError } from '../../types/errors';
+import { errorHandler } from './errorHandler';
 
 /**
  * Unified error handling function that works for both sync and async operations
  */
 export function handleError(
-  error: Error | BaseAppError | string,
+  error: Error | GameAppError | string,
   context?: Record<string, unknown>
 ): void {
   try {
     // Convert string to Error if needed
     const errorObj = typeof error === 'string' ? new Error(error) : error;
 
-    // Add context to error if it's a BaseAppError
-    if (errorObj instanceof BaseAppError && context) {
+    // Add context to error if it's a GameAppError
+    if (errorObj instanceof GameAppError && context) {
       // Create new error with updated context
-      const ErrorClass = errorObj.constructor as new (
-        message: string,
-        context?: Record<string, unknown>
-      ) => BaseAppError;
-      const updatedError = new ErrorClass(errorObj.message, {
-        ...errorObj.context,
-        ...context,
-      });
-      originalHandleError(updatedError);
+      const updatedError = new GameAppError(
+        errorObj.message,
+        errorObj.userMessage,
+        errorObj.level,
+        errorObj.category,
+        {
+          ...errorObj.context,
+          ...context,
+        }
+      );
+      errorHandler.handleError(updatedError);
       return;
     }
 
-    originalHandleError(errorObj);
+    errorHandler.handleError(errorObj);
   } catch (handlingError) {
     // Fallback if error handling itself fails
     log.error('Error handler failed:', {
@@ -174,7 +177,7 @@ export function createErrorFilter(
 const errorDebounceMap = new Map<string, number>();
 
 export function handleErrorDebounced(
-  error: Error | BaseAppError | string,
+  error: Error | GameAppError | string,
   context?: Record<string, unknown>,
   debounceMs = 1000
 ): void {

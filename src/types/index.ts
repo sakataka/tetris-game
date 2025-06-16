@@ -32,8 +32,23 @@ export type {
   safeArrayUpdate,
 } from './utilities';
 
-// Error types (excluding GameError which is already exported from tetris)
-export type { AudioError, BaseAppError } from './errors';
+// Error types (selective export to avoid conflicts)
+export {
+  type ErrorLevel,
+  type ErrorCategory,
+  type ErrorContext,
+  type ErrorInfo,
+  GameAppError,
+  createGameError,
+  createAudioError,
+  createUIError,
+  createStorageError,
+  type ErrorHandler,
+  type ErrorAction as ErrorStoreAction, // Rename to avoid conflict with generics.ts
+  type ErrorConfig,
+  DEFAULT_ERROR_CONFIG,
+  ERROR_LEVEL_PRIORITY,
+} from './errors';
 
 // New type safety types
 export * from './branded';
