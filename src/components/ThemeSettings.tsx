@@ -144,7 +144,7 @@ export default function ThemeSettings({
                   htmlFor='effect-intensity-range'
                   className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-cyber-cyan`}
                 >
-                  {t('colorPalette.advancedSettings')}: {(effectIntensity * 100).toFixed(0)}%
+                  Effect Intensity: {(effectIntensity * 100).toFixed(0)}%
                 </Label>
                 <Slider
                   id='effect-intensity-range'
@@ -153,13 +153,7 @@ export default function ThemeSettings({
                   min={0}
                   max={2}
                   step={0.1}
-                  className={cn(
-                    'w-full',
-                    '[&>span[data-slot=slider-track]]:bg-cyber-cyan-20',
-                    '[&>span[data-slot=slider-range]]:bg-cyber-cyan',
-                    '[&>span[data-slot=slider-thumb]]:border-cyber-cyan [&>span[data-slot=slider-thumb]]:bg-cyber-cyan',
-                    '[&>span[data-slot=slider-thumb]]:shadow-[0_0_10px_rgba(0,255,255,0.5)]'
-                  )}
+                  className='w-full cursor-pointer'
                 />
                 <div
                   className={`flex justify-between ${TYPOGRAPHY.SMALL_LABEL} text-cyan-400 mt-0.5`}
@@ -168,9 +162,6 @@ export default function ThemeSettings({
                   <span>{t('accessibility.standard')}</span>
                   <span>{t('accessibility.highContrast')}</span>
                 </div>
-                <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyan-400 mt-1`}>
-                  {t('colorPalette.advancedSettings')}
-                </p>
               </div>
 
               {/* Animation enable/disable */}
@@ -193,7 +184,7 @@ export default function ThemeSettings({
                       {t('accessibility.fullAnimation')}
                     </span>
                     <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyan-400`}>
-                      {t('accessibility.fullAnimation')}
+                      Enable smooth animations and transitions
                     </p>
                   </Label>
                 </div>

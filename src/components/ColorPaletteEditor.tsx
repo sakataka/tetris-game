@@ -80,7 +80,7 @@ function ColorInput({ label, value, onChange, description }: ColorInputProps) {
         />
       </div>
       {description && (
-        <p id={`${colorInputId}-description`} className='text-xs text-cyber-purple mt-1'>
+        <p id={`${colorInputId}-description`} className='text-xs text-cyan-400 mt-1'>
           {description}
         </p>
       )}
@@ -159,8 +159,8 @@ export default function ColorPaletteEditor({
           size='sm'
           onClick={() => setIsExpanded(!isExpanded)}
           className={cn(
-            'border-cyber-purple-30 text-cyber-purple hover:bg-cyber-purple-30',
-            'bg-cyber-purple-20 hover:text-cyber-purple'
+            'border-cyan-400/30 text-cyan-400 hover:bg-cyan-500/10',
+            'bg-cyan-500/5 hover:text-cyan-400'
           )}
         >
           {isExpanded ? t('colorPalette.collapse') : t('colorPalette.advancedSettings')}
@@ -200,15 +200,15 @@ export default function ColorPaletteEditor({
 
           <div className='flex gap-2 mt-4'>
             <Button
-              variant='outline'
+              variant='destructive'
               size='sm'
               onClick={resetToDefaults}
               className={cn(
-                'border-cyber-yellow-30 text-cyber-yellow hover:bg-cyber-yellow-30',
-                'bg-cyber-yellow-20 hover:text-cyber-yellow'
+                'bg-cyber-red-20 border border-cyber-red-30 text-cyber-red',
+                'hover:bg-cyber-red-30 hover:text-cyber-red'
               )}
             >
-              {t('colorPalette.resetToDefaults')}
+              {t('buttons.reset')}
             </Button>
           </div>
         </div>
