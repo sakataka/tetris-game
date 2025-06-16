@@ -118,6 +118,40 @@
   --color-theme-accent-20: color-mix(in oklch, var(--theme-accent) 20%, transparent);
   --color-theme-accent-30: color-mix(in oklch, var(--theme-accent) 30%, transparent);
   --color-theme-accent-50: color-mix(in oklch, var(--theme-accent) 50%, transparent);
+  
+  /* Success color transparency variants */
+  --color-theme-success-5: color-mix(in oklch, var(--theme-success) 5%, transparent);
+  --color-theme-success-10: color-mix(in oklch, var(--theme-success) 10%, transparent);
+  --color-theme-success-20: color-mix(in oklch, var(--theme-success) 20%, transparent);
+  --color-theme-success-30: color-mix(in oklch, var(--theme-success) 30%, transparent);
+  --color-theme-success-50: color-mix(in oklch, var(--theme-success) 50%, transparent);
+  
+  /* Warning color transparency variants */
+  --color-theme-warning-5: color-mix(in oklch, var(--theme-warning) 5%, transparent);
+  --color-theme-warning-10: color-mix(in oklch, var(--theme-warning) 10%, transparent);
+  --color-theme-warning-20: color-mix(in oklch, var(--theme-warning) 20%, transparent);
+  --color-theme-warning-30: color-mix(in oklch, var(--theme-warning) 30%, transparent);
+  --color-theme-warning-50: color-mix(in oklch, var(--theme-warning) 50%, transparent);
+  
+  /* Error color transparency variants */
+  --color-theme-error-5: color-mix(in oklch, var(--theme-error) 5%, transparent);
+  --color-theme-error-10: color-mix(in oklch, var(--theme-error) 10%, transparent);
+  --color-theme-error-20: color-mix(in oklch, var(--theme-error) 20%, transparent);
+  --color-theme-error-30: color-mix(in oklch, var(--theme-error) 30%, transparent);
+  --color-theme-error-50: color-mix(in oklch, var(--theme-error) 50%, transparent);
+  
+  /* Muted and border transparency variants */
+  --color-theme-muted-5: color-mix(in oklch, var(--theme-muted) 5%, transparent);
+  --color-theme-muted-10: color-mix(in oklch, var(--theme-muted) 10%, transparent);
+  --color-theme-muted-30: color-mix(in oklch, var(--theme-muted) 30%, transparent);
+  --color-theme-border-50: color-mix(in oklch, var(--theme-border) 50%, transparent);
+  
+  /* Surface color transparency variants */
+  --color-theme-surface-5: color-mix(in oklch, var(--theme-surface) 5%, transparent);
+  --color-theme-surface-10: color-mix(in oklch, var(--theme-surface) 10%, transparent);
+  --color-theme-surface-20: color-mix(in oklch, var(--theme-surface) 20%, transparent);
+  --color-theme-surface-30: color-mix(in oklch, var(--theme-surface) 30%, transparent);
+  --color-theme-surface-50: color-mix(in oklch, var(--theme-surface) 50%, transparent);
 
   /* Enhanced cyberpunk palette with full spectrum */
   --color-cyber-cyan: #00ffff;
