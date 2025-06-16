@@ -76,7 +76,7 @@ const CSS_VARIABLE_MAP: Record<keyof SemanticColorTokens, string> = {
 function mapThemeToSemanticColors(themeVariant: ThemeVariant): SemanticColorTokens {
   const preset = getThemePreset(themeVariant);
   
-  // Base mapping from preset colors to semantic roles
+  // Map preset colors to semantic roles using theme palette
   const baseColors: SemanticColorTokens = {
     primary: preset.colors.primary,
     secondary: preset.colors.secondary,
@@ -85,62 +85,17 @@ function mapThemeToSemanticColors(themeVariant: ThemeVariant): SemanticColorToke
     foreground: preset.colors.foreground,
     accent: preset.colors.accent,
     surface: preset.colors.background,
-    muted: preset.colors.secondary,
+    muted: preset.colors.tertiary,
     border: preset.colors.primary,
-    success: '#00ff00',
-    warning: '#ffff00',
-    error: '#ff0040',
-    info: preset.colors.accent,
+    success: preset.colors.accent,
+    warning: preset.colors.tertiary,
+    error: preset.colors.secondary,
+    info: preset.colors.primary,
   };
 
-  // Theme-specific overrides for better semantic mapping
-  switch (themeVariant) {
-    case 'cyberpunk':
-      return {
-        ...baseColors,
-        surface: '#1a1a2e',
-        muted: '#666699',
-        border: '#00ffff30',
-      };
-      
-    case 'classic':
-      return {
-        ...baseColors,
-        surface: '#ffffff',
-        muted: '#999999',
-        border: '#cccccc',
-        success: '#006600',
-        warning: '#cc6600',
-        error: '#cc0000',
-      };
-      
-    case 'retro':
-      return {
-        ...baseColors,
-        surface: '#3d2b69',
-        muted: '#8b7bb8',
-        border: '#ff6b3550',
-      };
-      
-    case 'minimal':
-      return {
-        ...baseColors,
-        surface: '#f8f9fa',
-        muted: '#6c757d',
-        border: '#dee2e6',
-      };
-      
-    case 'neon':
-      return {
-        ...baseColors,
-        surface: '#111111',
-        muted: '#666666',
-        border: '#ff008050',
-      };
-      
-    default:
-      return baseColors;
-  }
+  // All themes now use the consistent preset-based mapping
+  // No per-theme overrides needed - colors come from theme presets
+  return baseColors;
 }
 
 /**
