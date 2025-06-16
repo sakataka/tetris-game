@@ -7,7 +7,31 @@
   --accent-secondary: #ff00ff;
   --accent-tertiary: #ffff00;
 
-  /* Cyberpunk color palette */
+  /* ===== SEMANTIC COLOR TOKENS ===== */
+  /* Dynamic theme colors - updated by ThemeManager */
+  --theme-primary: #00ffff;
+  --theme-secondary: #ff00ff;
+  --theme-tertiary: #ffff00;
+  --theme-background: #0a0a0f;
+  --theme-foreground: #ffffff;
+  --theme-surface: #1a1a2e;
+  --theme-accent: #00ff00;
+  --theme-muted: #666699;
+  --theme-border: #00ffff30;
+  
+  /* Semantic feedback colors */
+  --theme-success: #00ff00;
+  --theme-warning: #ffff00;
+  --theme-error: #ff0040;
+  --theme-info: #00ffff;
+  
+  /* Theme effects */
+  --theme-blur: 8px;
+  --theme-glow: 12px;
+  --theme-saturation: 1.0;
+  --theme-brightness: 1.0;
+
+  /* Cyberpunk color palette (legacy support) */
   --cyber-cyan: #00ffff;
   --cyber-purple: #ff00ff;
   --cyber-yellow: #ffff00;
@@ -52,6 +76,48 @@
   /* Base semantic colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  
+  /* ===== SEMANTIC COLOR TOKENS FOR TAILWIND ===== */
+  /* Primary theme colors - dynamically updated */
+  --color-theme-primary: var(--theme-primary);
+  --color-theme-secondary: var(--theme-secondary);
+  --color-theme-tertiary: var(--theme-tertiary);
+  --color-theme-background: var(--theme-background);
+  --color-theme-foreground: var(--theme-foreground);
+  --color-theme-surface: var(--theme-surface);
+  --color-theme-accent: var(--theme-accent);
+  --color-theme-muted: var(--theme-muted);
+  --color-theme-border: var(--theme-border);
+  
+  /* Semantic feedback colors */
+  --color-theme-success: var(--theme-success);
+  --color-theme-warning: var(--theme-warning);
+  --color-theme-error: var(--theme-error);
+  --color-theme-info: var(--theme-info);
+  
+  /* Transparency variants for theme colors */
+  --color-theme-primary-5: color-mix(in oklch, var(--theme-primary) 5%, transparent);
+  --color-theme-primary-10: color-mix(in oklch, var(--theme-primary) 10%, transparent);
+  --color-theme-primary-20: color-mix(in oklch, var(--theme-primary) 20%, transparent);
+  --color-theme-primary-30: color-mix(in oklch, var(--theme-primary) 30%, transparent);
+  --color-theme-primary-40: color-mix(in oklch, var(--theme-primary) 40%, transparent);
+  --color-theme-primary-50: color-mix(in oklch, var(--theme-primary) 50%, transparent);
+  --color-theme-primary-60: color-mix(in oklch, var(--theme-primary) 60%, transparent);
+  --color-theme-primary-70: color-mix(in oklch, var(--theme-primary) 70%, transparent);
+  --color-theme-primary-80: color-mix(in oklch, var(--theme-primary) 80%, transparent);
+  --color-theme-primary-90: color-mix(in oklch, var(--theme-primary) 90%, transparent);
+  
+  --color-theme-secondary-5: color-mix(in oklch, var(--theme-secondary) 5%, transparent);
+  --color-theme-secondary-10: color-mix(in oklch, var(--theme-secondary) 10%, transparent);
+  --color-theme-secondary-20: color-mix(in oklch, var(--theme-secondary) 20%, transparent);
+  --color-theme-secondary-30: color-mix(in oklch, var(--theme-secondary) 30%, transparent);
+  --color-theme-secondary-50: color-mix(in oklch, var(--theme-secondary) 50%, transparent);
+  
+  --color-theme-accent-5: color-mix(in oklch, var(--theme-accent) 5%, transparent);
+  --color-theme-accent-10: color-mix(in oklch, var(--theme-accent) 10%, transparent);
+  --color-theme-accent-20: color-mix(in oklch, var(--theme-accent) 20%, transparent);
+  --color-theme-accent-30: color-mix(in oklch, var(--theme-accent) 30%, transparent);
+  --color-theme-accent-50: color-mix(in oklch, var(--theme-accent) 50%, transparent);
 
   /* Enhanced cyberpunk palette with full spectrum */
   --color-cyber-cyan: #00ffff;

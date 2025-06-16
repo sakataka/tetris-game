@@ -5,6 +5,7 @@ import ErrorBoundaryWithTranslation from './components/ErrorBoundaryWithTranslat
 import ErrorStoreInitializer from './components/ErrorStoreInitializer';
 import ErrorToastAdapter from './components/ErrorToastAdapter';
 import I18nProvider from './components/I18nProvider';
+import ThemeProvider from './components/providers/ThemeProvider';
 import { Toaster } from './components/ui/sonner';
 
 // Font configuration
@@ -19,14 +20,16 @@ import './app/globals.css';
 export default function App() {
   return (
     <div className='font-geist-sans antialiased'>
-      <I18nProvider>
-        <ErrorBoundaryWithTranslation level='page'>
-          <ErrorStoreInitializer />
-          <Outlet />
-          <ErrorToastAdapter />
-          <Toaster />
-        </ErrorBoundaryWithTranslation>
-      </I18nProvider>
+      <ThemeProvider>
+        <I18nProvider>
+          <ErrorBoundaryWithTranslation level='page'>
+            <ErrorStoreInitializer />
+            <Outlet />
+            <ErrorToastAdapter />
+            <Toaster />
+          </ErrorBoundaryWithTranslation>
+        </I18nProvider>
+      </ThemeProvider>
     </div>
   );
 }

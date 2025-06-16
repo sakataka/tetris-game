@@ -17,6 +17,13 @@ const buttonVariants = cva(
         secondary: 'bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
         link: 'text-primary underline-offset-4 hover:underline',
+        
+        // Cyberpunk themed variants using semantic color tokens
+        'cyber-primary': 'bg-theme-primary/20 text-theme-primary border border-theme-primary/50 shadow-[0_0_10px_var(--theme-primary)] hover:bg-theme-primary/30 hover:shadow-[0_0_15px_var(--theme-primary)] transition-all duration-300',
+        'cyber-secondary': 'bg-theme-secondary/20 text-theme-secondary border border-theme-secondary/50 shadow-[0_0_10px_var(--theme-secondary)] hover:bg-theme-secondary/30 hover:shadow-[0_0_15px_var(--theme-secondary)] transition-all duration-300',
+        'cyber-accent': 'bg-theme-accent/20 text-theme-accent border border-theme-accent/50 shadow-[0_0_10px_var(--theme-accent)] hover:bg-theme-accent/30 hover:shadow-[0_0_15px_var(--theme-accent)] transition-all duration-300',
+        'cyber-outline': 'bg-transparent text-theme-foreground border border-theme-border hover:bg-theme-primary/10 hover:border-theme-primary/50 hover:text-theme-primary transition-all duration-300',
+        'cyber-ghost': 'bg-transparent text-theme-foreground hover:bg-theme-primary/10 hover:text-theme-primary transition-all duration-300',
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',

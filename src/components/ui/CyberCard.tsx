@@ -5,11 +5,11 @@ import type { ReactNode } from 'react';
 /**
  * Cyberpunk-themed Card component based on shadcn/ui Card
  *
- * Replaces PanelBase with improved architecture while maintaining cyberpunk aesthetics.
- * Uses shadcn/ui Card as foundation for better accessibility and maintainability.
+ * Uses semantic color tokens for dynamic theming across all themes.
+ * Automatically adapts to current theme without hardcoded colors.
  */
 
-export type CyberTheme = 'cyan' | 'purple' | 'green' | 'yellow' | 'red' | 'default';
+export type CyberTheme = 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'error' | 'default';
 
 interface CyberCardProps {
   title: string;
@@ -21,7 +21,7 @@ interface CyberCardProps {
   size?: 'xs' | 'sm' | 'md' | 'lg';
 }
 
-// Enhanced theme configurations with cyber aesthetics
+// Semantic theme configurations for dynamic theming
 const CYBER_THEMES: Record<
   CyberTheme,
   {
@@ -31,41 +31,47 @@ const CYBER_THEMES: Record<
     borderGlow: string;
   }
 > = {
-  cyan: {
-    cardClass: 'bg-cyber-cyan/5 border-cyber-cyan/30',
-    titleClass: 'text-cyber-cyan',
-    backgroundClass: 'bg-cyber-cyan-10',
-    borderGlow: 'border border-cyber-cyan-30',
+  primary: {
+    cardClass: 'bg-theme-primary/5 border-theme-primary/30',
+    titleClass: 'text-theme-primary',
+    backgroundClass: 'bg-theme-primary-10',
+    borderGlow: 'border border-theme-primary-30',
   },
-  purple: {
-    cardClass: 'bg-cyber-purple/5 border-cyber-purple/30',
-    titleClass: 'text-cyber-purple',
-    backgroundClass: 'bg-cyber-purple-10',
-    borderGlow: 'border border-cyber-purple-30',
+  secondary: {
+    cardClass: 'bg-theme-secondary/5 border-theme-secondary/30',
+    titleClass: 'text-theme-secondary',
+    backgroundClass: 'bg-theme-secondary-10',
+    borderGlow: 'border border-theme-secondary-30',
   },
-  green: {
-    cardClass: 'bg-cyber-green/5 border-cyber-green/30',
-    titleClass: 'text-cyber-green',
-    backgroundClass: 'bg-cyber-green-10',
-    borderGlow: 'border border-cyber-green-30',
+  accent: {
+    cardClass: 'bg-theme-accent/5 border-theme-accent/30',
+    titleClass: 'text-theme-accent',
+    backgroundClass: 'bg-theme-accent-10',
+    borderGlow: 'border border-theme-accent-30',
   },
-  yellow: {
-    cardClass: 'bg-cyber-yellow/5 border-cyber-yellow/30',
-    titleClass: 'text-cyber-yellow',
-    backgroundClass: 'bg-cyber-yellow-10',
-    borderGlow: 'border border-cyber-yellow-30',
+  success: {
+    cardClass: 'bg-theme-success/5 border-theme-success/30',
+    titleClass: 'text-theme-success',
+    backgroundClass: 'bg-theme-success-10',
+    borderGlow: 'border border-theme-success-30',
   },
-  red: {
-    cardClass: 'bg-cyber-red/5 border-cyber-red/30',
-    titleClass: 'text-cyber-red',
-    backgroundClass: 'bg-cyber-red-10',
-    borderGlow: 'border border-cyber-red-30',
+  warning: {
+    cardClass: 'bg-theme-warning/5 border-theme-warning/30',
+    titleClass: 'text-theme-warning',
+    backgroundClass: 'bg-theme-warning-10',
+    borderGlow: 'border border-theme-warning-30',
+  },
+  error: {
+    cardClass: 'bg-theme-error/5 border-theme-error/30',
+    titleClass: 'text-theme-error',
+    backgroundClass: 'bg-theme-error-10',
+    borderGlow: 'border border-theme-error-30',
   },
   default: {
-    cardClass: 'bg-gray-500/5 border-gray-500/30',
-    titleClass: 'text-gray-400',
-    backgroundClass: 'bg-gray-800/30',
-    borderGlow: 'border border-gray-700/50',
+    cardClass: 'bg-theme-muted/5 border-theme-muted/30',
+    titleClass: 'text-theme-muted',
+    backgroundClass: 'bg-theme-surface/30',
+    borderGlow: 'border border-theme-border/50',
   },
 };
 

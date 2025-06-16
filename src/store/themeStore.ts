@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type {
   ColorBlindnessType,
   ColorPalette,
@@ -7,6 +8,7 @@ import type {
   ThemeVariant,
 } from '../types/tetris';
 import { getThemePreset } from '../utils/ui/themePresets';
+import { applyThemeToDocument, applyCustomColors, initializeThemeSystem } from '../utils/ui/themeManager';
 
 // Default theme state
 const DEFAULT_THEME_STATE: ThemeState = {
@@ -38,36 +40,46 @@ interface ThemeStore {
   toggleAnimations: () => void;
 }
 
-export const useThemeStore = create<ThemeStore>()((set) => ({
-  // Initial state
-  theme: DEFAULT_THEME_STATE,
+export const useThemeStore = create<ThemeStore>()(
+  persist(
+    (set) => ({
+      // Initial state
+      theme: DEFAULT_THEME_STATE,
 
-  // Actions
-  setTheme: (themeVariant) =>
-    set((state) => ({
-      theme: {
-        ...state.theme,
-        current: themeVariant,
-        config: getThemePreset(themeVariant),
+      // Actions
+      setTheme: (themeVariant) => {
+        // Apply theme to document immediately
+        applyThemeToDocument(themeVariant);
+        
+        set((state) => ({
+          theme: {
+            ...state.theme,
+            current: themeVariant,
+            config: getThemePreset(themeVariant),
+          },
+        }));
       },
-    })),
 
   updateThemeState: (themeState) =>
     set((state) => ({
       theme: { ...state.theme, ...themeState },
     })),
 
-  setCustomColors: (colors) =>
-    set((state) => ({
-      theme: {
-        ...state.theme,
-        config: {
-          ...state.theme.config,
-          colors: { ...state.theme.config.colors, ...colors },
-        },
-        customColors: { ...state.theme.customColors, ...colors },
+  setCustomColors: (colors) => {
+        // Apply custom colors to document immediately
+        applyCustomColors(colors);
+        
+        set((state) => ({
+          theme: {
+            ...state.theme,
+            config: {
+              ...state.theme.config,
+              colors: { ...state.theme.config.colors, ...colors },
+            },
+            customColors: { ...state.theme.customColors, ...colors },
+          },
+        }));
       },
-    })),
 
   setAccessibilityOptions: (accessibility) =>
     set((state) => ({
@@ -95,13 +107,30 @@ export const useThemeStore = create<ThemeStore>()((set) => ({
     })),
 
   toggleAnimations: () =>
-    set((state) => ({
-      theme: {
-        ...state.theme,
-        animations: !state.theme.animations,
+        set((state) => ({
+          theme: {
+            ...state.theme,
+            animations: !state.theme.animations,
+          },
+        })),
+    }),
+    {
+      name: 'tetris-theme-storage',
+      version: 1,
+      partialize: (state) => ({ theme: state.theme }),
+      onRehydrateStorage: () => (state) => {
+        if (state?.theme?.current) {
+          // Reapply theme on hydration
+          applyThemeToDocument(state.theme.current);
+          console.log('🎨 Theme rehydrated:', state.theme.current);
+        } else {
+          // Initialize with default theme
+          initializeThemeSystem();
+        }
       },
-    })),
-}));
+    }
+  )
+);
 
 // Selector hooks for optimized access
 export const useTheme = () => useThemeStore((state) => state.theme);
