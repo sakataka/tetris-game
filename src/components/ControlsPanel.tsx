@@ -11,7 +11,7 @@ const ControlsPanel = memo(function ControlsPanel({ size = 'md' }: ControlsPanel
   const { t } = useTranslation();
 
   return (
-    <CyberCard title={t('controls.titleUpper')} theme='green' size={size}>
+    <CyberCard title={t('controls.titleUpper')} theme='cyan' size={size}>
       <div className={`${SPACING.PANEL_INTERNAL} ${TYPOGRAPHY.BODY_TEXT}`}>
         <div className='flex justify-between items-center'>
           <span className='text-gray-300'>

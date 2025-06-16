@@ -90,7 +90,7 @@ export const useThemeStore = create<ThemeStore>()((set) => ({
     set((state) => ({
       theme: {
         ...state.theme,
-        effectIntensity: Math.max(0, Math.min(2, intensity)),
+        effectIntensity: Math.max(0.5, Math.min(1.5, intensity)),
       },
     })),
 

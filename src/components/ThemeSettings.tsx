@@ -150,17 +150,17 @@ export default function ThemeSettings({
                   id='effect-intensity-range'
                   value={[effectIntensity]}
                   onValueChange={handleEffectIntensityChange}
-                  min={0}
-                  max={2}
+                  min={0.5}
+                  max={1.5}
                   step={0.1}
                   className='w-full cursor-pointer'
                 />
                 <div
                   className={`flex justify-between ${TYPOGRAPHY.SMALL_LABEL} text-cyan-400 mt-0.5`}
                 >
-                  <span>{t('accessibility.lowContrast')}</span>
-                  <span>{t('accessibility.standard')}</span>
-                  <span>{t('accessibility.highContrast')}</span>
+                  <span>50%</span>
+                  <span>100%</span>
+                  <span>150%</span>
                 </div>
               </div>
 

@@ -2,6 +2,7 @@ import { useCallback, useEffect } from 'react';
 import type { ThemeConfig, ThemeState, ThemeVariant } from '../types/tetris';
 import { log } from '../utils/logging';
 import { initializeTheme } from '../utils/ui';
+import { animationManager } from '../utils/animation/animationManager';
 import { useAccessibilityFilters } from './useAccessibilityFilters';
 import { useSystemPreferences } from './useSystemPreferences';
 
@@ -87,6 +88,13 @@ export function useTheme({
     initializeTheme(processedConfig);
   }, [processedConfig]);
 
+  // Sync animation settings with AnimationManager
+  useEffect(() => {
+    // When animations are disabled or reducedMotion is enabled, set reduced motion
+    const shouldReduceMotion = !themeState.animations || themeState.accessibility.reducedMotion;
+    animationManager.setReducedMotion(shouldReduceMotion);
+  }, [themeState.animations, themeState.accessibility.reducedMotion]);
+
   // ===== System Preferences Monitoring =====
 
   // Monitor system preferences and update accessibility settings
@@ -117,18 +125,23 @@ export function useTheme({
     [setAccessibilityOptions]
   );
 
-  // Update effect intensity
+  // Update effect intensity (50%-150% range for visual effects)
   const updateEffectIntensity = useCallback(
     (intensity: number) => {
-      const clampedIntensity = Math.max(0, Math.min(1, intensity));
+      const clampedIntensity = Math.max(0.5, Math.min(1.5, intensity));
       updateThemeState({ effectIntensity: clampedIntensity });
     },
     [updateThemeState]
   );
 
-  // Toggle animations
+  // Toggle animations (integrates with AnimationManager)
   const toggleAnimations = useCallback(() => {
-    updateThemeState({ animations: !themeState.animations });
+    const newAnimationsState = !themeState.animations;
+    updateThemeState({ animations: newAnimationsState });
+    
+    // Update AnimationManager to sync with reduced motion
+    // When animations are disabled, enable reduced motion
+    animationManager.setReducedMotion(!newAnimationsState);
   }, [themeState.animations, updateThemeState]);
 
   // Update custom colors
@@ -167,7 +180,7 @@ export function useTheme({
     const defaultTheme: ThemeVariant = 'cyberpunk';
     setTheme(defaultTheme);
     updateThemeState({
-      effectIntensity: 0.8,
+      effectIntensity: 1.0, // 100% - balanced effect intensity
       animations: true,
     });
   }, [setTheme, updateThemeState]);
