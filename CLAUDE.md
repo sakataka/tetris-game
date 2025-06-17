@@ -53,6 +53,7 @@ Read, Edit, MultiEdit for complex logic changes
 - **TypeScript Strict Mode**: No `any` types, comprehensive interfaces
 - **shadcn/ui + Cyberpunk**: Use CyberCard, Button, Tabs, Slider components
 - **English Comments/Commits**: All source code documentation in English
+- **No Hardcoding**: Never hardcode values to pass tests. Tests verify actual functionality, not hardcoded responses. Hardcoding defeats the purpose of testing and is strictly prohibited
 
 ## Project Architecture
 
@@ -218,6 +219,13 @@ src/
 4. Let React Compiler handle optimization
 5. Add tests in `src/test/`
 6. **Run `pnpm pre-push` before pushing** (recommended)
+
+### Testing Guidelines
+**Critical: No Hardcoding**
+- **Never hardcode implementation to pass tests** - Tests must verify actual functionality
+- **Avoid test-specific code paths** - Implementation should work correctly in all scenarios
+- **Tests validate real behavior** - Hardcoding circumvents the purpose of testing
+- **Write honest implementations** - If a test fails, fix the actual implementation, not bypass it
 
 ### React Compiler Guidelines
 **DO:**
