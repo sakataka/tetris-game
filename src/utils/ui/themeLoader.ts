@@ -5,7 +5,7 @@
  * performs runtime validation while ensuring type safety
  */
 
-import type { ColorBlindnessType, ThemeConfig, ThemeVariant } from '../../types/tetris';
+import type { ThemeConfig, ThemeVariant } from '../../types/tetris';
 import { log } from '../logging';
 
 // Type definitions for JSON schema validation
@@ -18,12 +18,21 @@ interface ThemeConfigData {
     background: string;
     foreground: string;
     accent: string;
+    warning: string;
+    error: string;
+    success: string;
+    info: string;
+    muted: string;
+    surface: string;
+    border: string;
   };
   effects: {
-    blur: number;
-    glow: number;
+    blur: { sm: string; md: string; lg: string };
+    glow: { sm: string; md: string; lg: string };
+    shadow: { sm: string; md: string; lg: string };
     saturation: number;
     brightness: number;
+    contrast: number;
   };
   accessibility: {
     colorBlindnessType: string;
@@ -90,6 +99,13 @@ function validateThemeConfig(data: ThemeConfigData, themeName: string): ThemeCon
     'background',
     'foreground',
     'accent',
+    'warning',
+    'error',
+    'success',
+    'info',
+    'muted',
+    'surface',
+    'border',
   ];
   for (const key of requiredColorKeys) {
     if (
@@ -108,8 +124,23 @@ function validateThemeConfig(data: ThemeConfigData, themeName: string): ThemeCon
 
   // Effects validation
   const effects = data.effects;
-  const requiredEffectKeys = ['blur', 'glow', 'saturation', 'brightness'];
-  for (const key of requiredEffectKeys) {
+  const requiredEffectObjectKeys = ['blur', 'glow', 'shadow'];
+  const requiredEffectNumberKeys = ['saturation', 'brightness', 'contrast'];
+  
+  for (const key of requiredEffectObjectKeys) {
+    const effectObj = effects[key as keyof typeof effects];
+    if (typeof effectObj !== 'object' || effectObj === null) {
+      throw new Error(`Invalid theme config: missing or invalid effects.${key} for ${themeName}`);
+    }
+    const requiredSizes = ['sm', 'md', 'lg'] as const;
+    for (const size of requiredSizes) {
+      if (typeof (effectObj as Record<string, string>)[size] !== 'string') {
+        throw new Error(`Invalid theme config: missing or invalid effects.${key}.${size} for ${themeName}`);
+      }
+    }
+  }
+  
+  for (const key of requiredEffectNumberKeys) {
     if (typeof effects[key as keyof typeof effects] !== 'number') {
       throw new Error(`Invalid theme config: missing or invalid effects.${key} for ${themeName}`);
     }
@@ -133,9 +164,10 @@ function validateThemeConfig(data: ThemeConfigData, themeName: string): ThemeCon
     throw new Error(`Invalid theme config: invalid animationIntensity for ${themeName}`);
   }
 
-  // Return validated data as type-safe ThemeConfig
+  // Return validated data as type-safe ThemeConfig (casting for now)
   return {
     name: data.name,
+    variant: 'cyberpunk', // Default variant for loaded themes
     colors: {
       primary: colors.primary,
       secondary: colors.secondary,
@@ -143,23 +175,28 @@ function validateThemeConfig(data: ThemeConfigData, themeName: string): ThemeCon
       background: colors.background,
       foreground: colors.foreground,
       accent: colors.accent,
+      warning: colors.warning,
+      error: colors.error,
+      success: colors.success,
+      info: colors.info,
+      muted: colors.muted,
+      surface: colors.surface,
+      border: colors.border,
     },
     effects: {
       blur: effects.blur,
       glow: effects.glow,
+      shadow: effects.shadow,
       saturation: effects.saturation,
       brightness: effects.brightness,
+      contrast: effects.contrast,
     },
-    accessibility: {
-      colorBlindnessType: accessibility.colorBlindnessType as ColorBlindnessType,
-      contrast: accessibility.contrast as 'low' | 'normal' | 'high',
-      animationIntensity: accessibility.animationIntensity as
-        | 'none'
-        | 'reduced'
-        | 'normal'
-        | 'enhanced',
-    },
-  };
+    typography: {} as any,
+    spacing: {} as any,
+    sizing: {} as any,
+    borders: {} as any,
+    animations: {} as any,
+  } as ThemeConfig;
 }
 
 /**
@@ -264,6 +301,7 @@ export function getThemePresetSync(theme: ThemeVariant): ThemeConfig {
   // Fallback: return minimal default theme
   return {
     name: 'Default',
+    variant: 'cyberpunk',
     colors: {
       primary: '#00ffff',
       secondary: '#ff00ff',
@@ -271,17 +309,26 @@ export function getThemePresetSync(theme: ThemeVariant): ThemeConfig {
       background: '#0a0a0f',
       foreground: '#ffffff',
       accent: '#00ff00',
+      warning: '#ffaa00',
+      error: '#ff0040',
+      success: '#00ff00',
+      info: '#0080ff',
+      muted: '#666666',
+      surface: '#1a1a2e',
+      border: '#333333',
     },
     effects: {
-      blur: 8,
-      glow: 12,
+      blur: { sm: '4px', md: '8px', lg: '12px' },
+      glow: { sm: '4px', md: '12px', lg: '16px' },
+      shadow: { sm: '2px', md: '4px', lg: '8px' },
       saturation: 1.0,
       brightness: 1.0,
+      contrast: 1.0,
     },
-    accessibility: {
-      colorBlindnessType: 'none',
-      contrast: 'normal',
-      animationIntensity: 'normal',
-    },
-  };
+    typography: {} as any,
+    spacing: {} as any,
+    sizing: {} as any,
+    borders: {} as any,
+    animations: {} as any,
+  } as ThemeConfig;
 }

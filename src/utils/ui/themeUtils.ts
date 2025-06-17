@@ -73,6 +73,7 @@ const COLOR_NAME_MAPPING = {
   warning: 'warning',
   error: 'error',
   success: 'success',
+  info: 'info',
   muted: 'muted',
 } as const;
 
@@ -87,6 +88,7 @@ const THEME_COLOR_MAPPING = {
   warning: 'warning',
   error: 'error',
   success: 'success',
+  info: 'info',
   muted: 'muted',
 } as const;
 
