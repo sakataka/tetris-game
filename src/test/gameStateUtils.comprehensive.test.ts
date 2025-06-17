@@ -10,13 +10,13 @@ import type { GameState, Tetromino, LineEffectState } from '../types/tetris';
 
 // Mock tetrisUtils
 vi.mock('../utils/game/tetrisUtils', () => ({
-  placePiece: vi.fn((board, piece) => {
+  placePiece: vi.fn((board: any, piece: any) => {
     // Mock: return board with piece placed
-    const newBoard = board.map(row => [...row]);
+    const newBoard = board.map((row: any) => [...row]);
     // Simulate placing piece at bottom
     const { x, y } = piece.position;
-    piece.shape.forEach((row, dy) => {
-      row.forEach((cell, dx) => {
+    piece.shape.forEach((row: any, dy: number) => {
+      row.forEach((cell: any, dx: number) => {
         if (cell && newBoard[y + dy] && newBoard[y + dy][x + dx] !== undefined) {
           newBoard[y + dy][x + dx] = cell;
         }
@@ -24,43 +24,49 @@ vi.mock('../utils/game/tetrisUtils', () => ({
     });
     return newBoard;
   }),
-  clearLines: vi.fn((board) => {
+  clearLines: vi.fn((board: any) => {
     // Mock: find full lines and clear them
     const fullLines: number[] = [];
-    board.forEach((row, index) => {
-      if (row.every(cell => cell !== null)) {
+    board.forEach((row: any, index: number) => {
+      if (row.every((cell: any) => cell !== null)) {
         fullLines.push(index);
       }
     });
-    
-    const newBoard = board.filter((_, index) => !fullLines.includes(index));
+
+    const newBoard = board.filter((_: any, index: number) => !fullLines.includes(index));
     // Add empty lines at top
     while (newBoard.length < 20) {
       newBoard.unshift(Array(10).fill(null));
     }
-    
+
     return {
       newBoard,
       linesCleared: fullLines.length,
       linesToClear: fullLines,
     };
   }),
-  isValidPosition: vi.fn((board, piece, position) => {
+  isValidPosition: vi.fn((board: any, piece: any, position: any) => {
     // Mock: simple collision detection
     const { x, y } = position;
-    return piece.shape.every((row, dy) =>
-      row.every((cell, dx) => {
+    return piece.shape.every((row: any, dy: number) =>
+      row.every((cell: any, dx: number) => {
         if (!cell) return true;
         const newY = y + dy;
         const newX = x + dx;
-        return newY >= 0 && newY < 20 && newX >= 0 && newX < 10 && 
-               (board[newY] && board[newY][newX] === null);
+        return (
+          newY >= 0 &&
+          newY < 20 &&
+          newX >= 0 &&
+          newX < 10 &&
+          board[newY] &&
+          board[newY][newX] === null
+        );
       })
     );
   }),
-  createParticles: vi.fn((linesToClear, board) => {
+  createParticles: vi.fn((linesToClear: any, _board: any) => {
     // Mock: create simple particles
-    return linesToClear.map((lineIndex, i) => ({
+    return linesToClear.map((lineIndex: number, i: number) => ({
       x: i * 50,
       y: lineIndex * 30,
       vx: 1,
@@ -72,7 +78,12 @@ vi.mock('../utils/game/tetrisUtils', () => ({
   }),
   getRandomTetromino: vi.fn((debugMode = false) => ({
     type: debugMode ? 'I' : 'T',
-    shape: debugMode ? [['I', 'I', 'I', 'I']] : [['T', 'T', 'T'], [null, 'T', null]],
+    shape: debugMode
+      ? [['I', 'I', 'I', 'I']]
+      : [
+          ['T', 'T', 'T'],
+          [null, 'T', null],
+        ],
     position: { x: 4, y: 0 },
     color: debugMode ? '#00FFFF' : '#FF0000',
   })),
@@ -89,11 +100,17 @@ vi.mock('../constants/gameRules', () => ({
 }));
 
 describe('GameStateUtils - Comprehensive Tests', () => {
-  const createEmptyBoard = () => Array(20).fill(null).map(() => Array(10).fill(null));
-  
+  const createEmptyBoard = () =>
+    Array(20)
+      .fill(null)
+      .map(() => Array(10).fill(null));
+
   const createMockTetromino = (): Tetromino => ({
     type: 'T',
-    shape: [['T', 'T', 'T'], [null, 'T', null]],
+    shape: [
+      [1, 1, 1],
+      [0, 1, 0],
+    ] as const,
     position: { x: 4, y: 18 },
     color: '#FF0000',
   });
@@ -121,7 +138,7 @@ describe('GameStateUtils - Comprehensive Tests', () => {
   describe('calculateScoreIncrease', () => {
     it('should calculate score for single line clear', () => {
       const result = calculateScoreIncrease(1000, 10, 1);
-      
+
       expect(result.newScore).toBe(1000 + 100 * 2); // 100 (SINGLE) * level 2
       expect(result.newLevel).toBe(2); // (10 + 1) / 10 + 1 = 2
       expect(result.newLines).toBe(11);
@@ -129,7 +146,7 @@ describe('GameStateUtils - Comprehensive Tests', () => {
 
     it('should calculate score for double line clear', () => {
       const result = calculateScoreIncrease(2000, 8, 2);
-      
+
       expect(result.newScore).toBe(2000 + 300 * 2); // 300 (DOUBLE) * level 2
       expect(result.newLevel).toBe(2); // (8 + 2) / 10 + 1 = 2
       expect(result.newLines).toBe(10);
@@ -137,7 +154,7 @@ describe('GameStateUtils - Comprehensive Tests', () => {
 
     it('should calculate score for triple line clear', () => {
       const result = calculateScoreIncrease(3000, 15, 3);
-      
+
       expect(result.newScore).toBe(3000 + 500 * 2); // 500 (TRIPLE) * level 2
       expect(result.newLevel).toBe(2); // (15 + 3) / 10 + 1 = 2
       expect(result.newLines).toBe(18);
@@ -145,7 +162,7 @@ describe('GameStateUtils - Comprehensive Tests', () => {
 
     it('should calculate score for tetris (4 lines)', () => {
       const result = calculateScoreIncrease(5000, 20, 4);
-      
+
       expect(result.newScore).toBe(5000 + 800 * 3); // 800 (TETRIS) * level 3
       expect(result.newLevel).toBe(3); // (20 + 4) / 10 + 1 = 3
       expect(result.newLines).toBe(24);
@@ -153,7 +170,7 @@ describe('GameStateUtils - Comprehensive Tests', () => {
 
     it('should include bonus points', () => {
       const result = calculateScoreIncrease(1000, 5, 1, 50);
-      
+
       expect(result.newScore).toBe(1000 + 100 * 1 + 50); // Score + single + bonus
       expect(result.newLevel).toBe(1);
       expect(result.newLines).toBe(6);
@@ -161,7 +178,7 @@ describe('GameStateUtils - Comprehensive Tests', () => {
 
     it('should not increase score in debug mode', () => {
       const result = calculateScoreIncrease(1000, 10, 4, 100, true);
-      
+
       expect(result.newScore).toBe(1000); // No score increase in debug mode
       expect(result.newLevel).toBe(2); // Math.floor((10+4)/10) + 1 = 2
       expect(result.newLines).toBe(14); // Lines still increase
@@ -169,7 +186,7 @@ describe('GameStateUtils - Comprehensive Tests', () => {
 
     it('should handle zero lines cleared', () => {
       const result = calculateScoreIncrease(5000, 25, 0);
-      
+
       expect(result.newScore).toBe(5000); // No score increase
       expect(result.newLevel).toBe(3); // (25 + 0) / 10 + 1 = 3
       expect(result.newLines).toBe(25); // No lines increase
@@ -179,10 +196,10 @@ describe('GameStateUtils - Comprehensive Tests', () => {
       // Test crossing level threshold
       const result1 = calculateScoreIncrease(1000, 9, 1); // 9 -> 10 lines
       expect(result1.newLevel).toBe(2); // Level advances
-      
+
       const result2 = calculateScoreIncrease(2000, 19, 1); // 19 -> 20 lines
       expect(result2.newLevel).toBe(3); // Level advances
-      
+
       const result3 = calculateScoreIncrease(3000, 29, 2); // 29 -> 31 lines
       expect(result3.newLevel).toBe(4); // Level advances
     });
@@ -192,9 +209,9 @@ describe('GameStateUtils - Comprehensive Tests', () => {
     it('should process line clear with mock', () => {
       const board = createEmptyBoard();
       const piece = createMockTetromino();
-      
+
       const result = processLineClear(board, piece);
-      
+
       expect(result).toHaveProperty('newBoard');
       expect(result).toHaveProperty('linesCleared');
       expect(result).toHaveProperty('linesToClear');
@@ -207,16 +224,16 @@ describe('GameStateUtils - Comprehensive Tests', () => {
       // Create board with full bottom line
       const board = createEmptyBoard();
       board[19] = Array(10).fill('X'); // Full line
-      
+
       const piece = createMockTetromino();
       const result = processLineClear(board, piece);
-      
+
       expect(result.linesCleared).toBe(1);
       expect(result.linesToClear).toEqual([19]);
       // Mock removes full lines and adds empty lines at top
       // After clearing line 19, line 18 becomes the new bottom line
       expect(result.newBoard).toHaveLength(20);
-      expect(result.newBoard[0].every(cell => cell === null)).toBe(true); // New empty line at top
+      expect(result.newBoard[0]?.every((cell: any) => cell === null)).toBe(true); // New empty line at top
     });
   });
 
@@ -229,14 +246,20 @@ describe('GameStateUtils - Comprehensive Tests', () => {
 
     it('should return previous effect when no lines cleared', () => {
       const result = createLineEffects(0, [], createEmptyBoard(), mockLineEffect);
-      
+
       expect(result).toEqual(mockLineEffect);
     });
 
     it('should create line clear effects', () => {
       const mockPlaySound = vi.fn();
-      const result = createLineEffects(2, [18, 19], createEmptyBoard(), mockLineEffect, mockPlaySound);
-      
+      const result = createLineEffects(
+        2,
+        [18, 19],
+        createEmptyBoard(),
+        mockLineEffect,
+        mockPlaySound
+      );
+
       expect(result.flashingLines).toEqual([18, 19]);
       expect(result.shaking).toBe(true);
       expect(result.particles).toHaveLength(2); // Mock creates one particle per line
@@ -245,8 +268,14 @@ describe('GameStateUtils - Comprehensive Tests', () => {
 
     it('should play tetris sound for 4 lines', () => {
       const mockPlaySound = vi.fn();
-      const result = createLineEffects(4, [16, 17, 18, 19], createEmptyBoard(), mockLineEffect, mockPlaySound);
-      
+      const result = createLineEffects(
+        4,
+        [16, 17, 18, 19],
+        createEmptyBoard(),
+        mockLineEffect,
+        mockPlaySound
+      );
+
       expect(result.flashingLines).toEqual([16, 17, 18, 19]);
       expect(result.shaking).toBe(true);
       expect(mockPlaySound).toHaveBeenCalledWith('tetris');
@@ -264,14 +293,14 @@ describe('GameStateUtils - Comprehensive Tests', () => {
       const board = createEmptyBoard();
       const piece = createMockTetromino();
       const gameState = createMockGameState();
-      
+
       // Mock isValidPosition to return false (collision)
       const tetrisUtils = await import('../utils/game/tetrisUtils');
       vi.mocked(tetrisUtils.isValidPosition).mockReturnValue(false);
-      
+
       const mockPlaySound = vi.fn();
       const result = checkGameOver(board, piece, gameState, mockPlaySound);
-      
+
       expect(result.isGameOver).toBe(true);
       expect(result.gameOverState).toEqual({ gameOver: true });
       expect(mockPlaySound).toHaveBeenCalledWith('gameOver');
@@ -281,13 +310,13 @@ describe('GameStateUtils - Comprehensive Tests', () => {
       const board = createEmptyBoard();
       const piece = createMockTetromino();
       const gameState = createMockGameState();
-      
+
       // Mock isValidPosition to return true (no collision)
       const tetrisUtils = await import('../utils/game/tetrisUtils');
       vi.mocked(tetrisUtils.isValidPosition).mockReturnValue(true);
-      
+
       const result = checkGameOver(board, piece, gameState);
-      
+
       expect(result.isGameOver).toBe(false);
       expect(result.gameOverState).toBeUndefined();
     });
@@ -296,10 +325,10 @@ describe('GameStateUtils - Comprehensive Tests', () => {
       const board = createEmptyBoard();
       const piece = createMockTetromino();
       const gameState = createMockGameState();
-      
+
       const tetrisUtils = await import('../utils/game/tetrisUtils');
       vi.mocked(tetrisUtils.isValidPosition).mockReturnValue(false);
-      
+
       expect(() => {
         checkGameOver(board, piece, gameState);
       }).not.toThrow();
@@ -406,7 +435,7 @@ describe('GameStateUtils - Comprehensive Tests', () => {
         isGameOver: false,
       };
 
-      const result = updateGameStateWithPiece(
+      updateGameStateWithPiece(
         prevState,
         lineClearResult,
         scoreResult,
@@ -426,10 +455,10 @@ describe('GameStateUtils - Comprehensive Tests', () => {
       // Test a complete flow: piece placement -> line clear -> score calculation
       const board = createEmptyBoard();
       board[19] = [...Array(9).fill('X'), null]; // Almost full line
-      
+
       const piece: Tetromino = {
         type: 'I',
-        shape: [['I']],
+        shape: [[1]] as const,
         position: { x: 9, y: 19 }, // Fill the last cell
         color: '#00FFFF',
       };
@@ -454,3 +483,4 @@ describe('GameStateUtils - Comprehensive Tests', () => {
     });
   });
 });
+

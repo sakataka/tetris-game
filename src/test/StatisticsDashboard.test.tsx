@@ -20,35 +20,35 @@ vi.mock('react-i18next', () => ({
 // Mock child components to avoid deep dependency chains
 vi.mock('../components/ui/stats/StatsOverview', () => ({
   default: ({ statistics, selectedPeriod }: any) => (
-    <div data-testid="stats-overview">
-      <span data-testid="total-games">{statistics.totalGames}</span>
-      <span data-testid="best-score">{statistics.bestScore}</span>
-      <span data-testid="total-lines">{statistics.totalLines}</span>
-      <span data-testid="selected-period">{selectedPeriod}</span>
+    <div data-testid='stats-overview'>
+      <span data-testid='total-games'>{statistics.totalGames}</span>
+      <span data-testid='best-score'>{statistics.bestScore}</span>
+      <span data-testid='total-lines'>{statistics.totalLines}</span>
+      <span data-testid='selected-period'>{selectedPeriod}</span>
     </div>
   ),
 }));
 
 vi.mock('../components/ui/stats/EfficiencyMetrics', () => ({
   default: ({ statistics }: any) => (
-    <div data-testid="efficiency-metrics">
-      <span data-testid="average-score">{statistics.averageScore}</span>
+    <div data-testid='efficiency-metrics'>
+      <span data-testid='average-score'>{statistics.averageScore}</span>
     </div>
   ),
 }));
 
 vi.mock('../components/ui/stats/PlayHistory', () => ({
   default: ({ statistics }: any) => (
-    <div data-testid="play-history">
-      <span data-testid="play-time">{statistics.playTime}</span>
+    <div data-testid='play-history'>
+      <span data-testid='play-time'>{statistics.playTime}</span>
     </div>
   ),
 }));
 
 vi.mock('../components/ui/stats/HighScoresList', () => ({
   default: ({ highScores }: any) => (
-    <div data-testid="high-scores-list">
-      <span data-testid="high-scores-count">{highScores.length}</span>
+    <div data-testid='high-scores-list'>
+      <span data-testid='high-scores-count'>{highScores.length}</span>
     </div>
   ),
 }));
@@ -191,7 +191,7 @@ describe('StatisticsDashboard component', () => {
           baseStatistics={mockBaseStatistics}
           sessions={mockSessions}
           highScores={mockHighScores}
-          selectedPeriod="This Week"
+          selectedPeriod='This Week'
         />
       );
 
@@ -200,7 +200,7 @@ describe('StatisticsDashboard component', () => {
 
     it('Calls onPeriodChange callback', () => {
       const mockOnPeriodChange = vi.fn();
-      
+
       render(
         <StatisticsDashboard
           baseStatistics={mockBaseStatistics}
@@ -251,11 +251,7 @@ describe('StatisticsDashboard component', () => {
   describe('Empty state display', () => {
     it('Shows empty state when no games have been played', () => {
       render(
-        <StatisticsDashboard
-          baseStatistics={emptyStatistics}
-          sessions={[]}
-          highScores={[]}
-        />
+        <StatisticsDashboard baseStatistics={emptyStatistics} sessions={[]} highScores={[]} />
       );
 
       expect(screen.getByTestId('empty-state')).toBeInTheDocument();
@@ -304,10 +300,7 @@ describe('StatisticsDashboard component', () => {
 
     it('Works with default props when sessions is not provided', () => {
       render(
-        <StatisticsDashboard
-          baseStatistics={mockBaseStatistics}
-          highScores={mockHighScores}
-        />
+        <StatisticsDashboard baseStatistics={mockBaseStatistics} highScores={mockHighScores} />
       );
 
       expect(screen.getByTestId('statistics-dashboard')).toBeInTheDocument();

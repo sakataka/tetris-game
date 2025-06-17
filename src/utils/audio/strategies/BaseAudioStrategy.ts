@@ -65,13 +65,13 @@ export abstract class BaseAudioStrategy {
   // Common error handling
   protected handleAudioError(error: unknown, operation: string, soundKey?: SoundKey): void {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    
+
     // Create audio error (not used directly but logs the error)
     createAudioError(
       `${operation} failed: ${errorMessage}`,
-      { 
+      {
         component: this.constructor.name,
-        metadata: { soundKey, operation }
+        metadata: { soundKey, operation },
       },
       undefined // No user message for audio errors (they're suppressed)
     );

@@ -152,7 +152,7 @@ describe('HighScoreDisplay component', () => {
       // Mock i18next with Japanese locale
       const { unmount } = render(<div />);
       unmount();
-      
+
       vi.doMock('react-i18next', () => ({
         useTranslation: () => ({
           t: (key: string) => {
@@ -170,12 +170,12 @@ describe('HighScoreDisplay component', () => {
       }));
 
       const { rerender } = render(<HighScoreDisplay highScores={mockHighScores} />);
-      
+
       // Force re-render with Japanese locale
       rerender(<HighScoreDisplay highScores={mockHighScores} />);
 
       // Since the actual component uses toLocaleDateString with the i18n.language,
-      // and we can't easily override Date behavior in tests, we'll check for 
+      // and we can't easily override Date behavior in tests, we'll check for
       // the presence of dates in any format
       const dateElements = screen.getAllByText(/2024/);
       expect(dateElements.length).toBeGreaterThan(0);
@@ -184,17 +184,17 @@ describe('HighScoreDisplay component', () => {
 
   describe('Component props', () => {
     it('Accepts custom className', () => {
-      render(<HighScoreDisplay highScores={mockHighScores} className="custom-class" />);
-      
+      render(<HighScoreDisplay highScores={mockHighScores} className='custom-class' />);
+
       const container = screen.getByTestId('high-score-display');
       expect(container).toHaveClass('custom-class');
     });
 
     it('Accepts different size props', () => {
-      const { rerender } = render(<HighScoreDisplay highScores={mockHighScores} size="xs" />);
+      const { rerender } = render(<HighScoreDisplay highScores={mockHighScores} size='xs' />);
       expect(screen.getByTestId('high-score-display')).toHaveClass('xs');
 
-      rerender(<HighScoreDisplay highScores={mockHighScores} size="lg" />);
+      rerender(<HighScoreDisplay highScores={mockHighScores} size='lg' />);
       expect(screen.getByTestId('high-score-display')).toHaveClass('lg');
     });
   });

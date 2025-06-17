@@ -1,6 +1,6 @@
 /**
  * Unified Statistics and Session Store
- * 
+ *
  * Combines session management and statistics tracking
  * for simplified state management and better performance
  */
@@ -18,7 +18,7 @@ export interface SessionStats {
   averageGamesPerSession: number;
 }
 
-// Constants  
+// Constants
 // const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes (for future use)
 
 // Default values
@@ -134,10 +134,9 @@ export const useStatisticsStore = create<StatisticsStore>()(
       addScore: (score) =>
         set((state) => {
           const newTotalScore = state.statistics.totalScore + score;
-          const newAverageScore = state.statistics.totalGames > 0 
-            ? newTotalScore / state.statistics.totalGames 
-            : 0;
-          
+          const newAverageScore =
+            state.statistics.totalGames > 0 ? newTotalScore / state.statistics.totalGames : 0;
+
           return {
             statistics: {
               ...state.statistics,
@@ -266,13 +265,13 @@ export const useStatisticsStore = create<StatisticsStore>()(
 
       getSessionDuration: (sessionId) => {
         const { currentSession, playSessions } = get();
-        
+
         if (sessionId) {
           const session = playSessions.find((s) => s.id === sessionId);
           if (!session) return 0;
           return (session.endTime || Date.now()) - session.startTime;
         }
-        
+
         if (!currentSession) return 0;
         return (currentSession.endTime || Date.now()) - currentSession.startTime;
       },
@@ -301,14 +300,15 @@ export const useStatisticsStore = create<StatisticsStore>()(
 // Helper function to calculate session statistics
 function calculateSessionStats(sessions: readonly PlaySession[]): SessionStats {
   const completedSessions = sessions.filter((s) => s.endTime !== null);
-  
+
   if (completedSessions.length === 0) {
     return DEFAULT_SESSION_STATS;
   }
 
-  const totalPlayTime = completedSessions.reduce((total, session) => {
-    return total + ((session.endTime || 0) - session.startTime);
-  }, 0) / 1000; // Convert to seconds
+  const totalPlayTime =
+    completedSessions.reduce((total, session) => {
+      return total + ((session.endTime || 0) - session.startTime);
+    }, 0) / 1000; // Convert to seconds
 
   const totalGames = completedSessions.reduce((total, session) => {
     return total + (session.gamesPlayed || 0);
@@ -338,7 +338,8 @@ export const useAddHighScore = () => useStatisticsStore((state) => state.addHigh
 export const useClearHighScores = () => useStatisticsStore((state) => state.clearHighScores);
 export const useUpdateStatistics = () => useStatisticsStore((state) => state.updateStatistics);
 export const useResetStatistics = () => useStatisticsStore((state) => state.resetStatistics);
-export const useIncrementTotalGames = () => useStatisticsStore((state) => state.incrementTotalGames);
+export const useIncrementTotalGames = () =>
+  useStatisticsStore((state) => state.incrementTotalGames);
 export const useUpdateBestScore = () => useStatisticsStore((state) => state.updateBestScore);
 export const useAddScore = () => useStatisticsStore((state) => state.addScore);
 export const useAddLines = () => useStatisticsStore((state) => state.addLines);

@@ -25,7 +25,7 @@ export const useStatisticsCalculation = ({
   // Validate and normalize the period
   const period = StatisticsService.validatePeriod(selectedPeriod);
 
-  // Calculate enhanced statistics using StatisticsService 
+  // Calculate enhanced statistics using StatisticsService
   // React Compiler will optimize this calculation
   const statistics: EnhancedStatistics = StatisticsService.calculatePeriodStatistics(
     baseStatistics,

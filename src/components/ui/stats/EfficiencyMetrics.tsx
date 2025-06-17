@@ -1,5 +1,5 @@
 /**
- * Efficiency Metrics Component  
+ * Efficiency Metrics Component
  * Displays efficiency and performance metrics
  */
 
@@ -17,10 +17,7 @@ interface EfficiencyMetricsProps {
   } | null;
 }
 
-const EfficiencyMetrics: React.FC<EfficiencyMetricsProps> = ({
-  statistics,
-  advancedMetrics,
-}) => {
+const EfficiencyMetrics: React.FC<EfficiencyMetricsProps> = ({ statistics, advancedMetrics }) => {
   const { t } = useTranslation();
 
   return (
@@ -67,9 +64,7 @@ const EfficiencyMetrics: React.FC<EfficiencyMetricsProps> = ({
         <div className='flex justify-between items-center'>
           <span className='text-gray-400'>{t('statistics.playTime')}</span>
           <span className={`text-theme-primary ${TYPOGRAPHY.BODY_WEIGHT}`}>
-            {advancedMetrics
-              ? `${Math.floor(advancedMetrics.averageGameDuration / 60)}m`
-              : '0m'}
+            {advancedMetrics ? `${Math.floor(advancedMetrics.averageGameDuration / 60)}m` : '0m'}
           </span>
         </div>
       </div>

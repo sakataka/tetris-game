@@ -17,7 +17,7 @@ import {
 export interface ErrorState {
   // Error collection (limited)
   errors: ErrorInfo[];
-  
+
   // Configuration
   config: ErrorConfig;
 
@@ -78,12 +78,10 @@ export const useErrorStore = create<ErrorState>()(
         })),
 
       // Toggle error panel visibility
-      setShowErrorPanel: (show: boolean) =>
-        set(() => ({ showErrorPanel: show })),
+      setShowErrorPanel: (show: boolean) => set(() => ({ showErrorPanel: show })),
 
       // Set selected error
-      setSelectedError: (errorId?: string) =>
-        set(() => ({ selectedErrorId: errorId })),
+      setSelectedError: (errorId?: string) => set(() => ({ selectedErrorId: errorId })),
 
       // Get errors by level
       getErrorsByLevel: (level: ErrorLevel) =>
@@ -108,7 +106,7 @@ export const useErrors = () => useErrorStore((state) => state.errors);
 
 export const useErrorStats = () => {
   const errors = useErrorStore((state) => state.errors);
-  
+
   const stats = {
     total: errors.length,
     byLevel: { low: 0, medium: 0, high: 0 } as Record<ErrorLevel, number>,
@@ -149,11 +147,11 @@ export const useErrorSelectors = () => ({
 export const useErrorSummary = () => {
   const errors = useErrorStore((state) => state.errors);
   const hasErrors = errors.length > 0;
-  const highPriorityCount = errors.filter(e => e.level === 'high').length;
-  const recentCount = errors.filter(e => 
-    Date.now() - e.context.timestamp < 5 * 60 * 1000 // Last 5 minutes
+  const highPriorityCount = errors.filter((e) => e.level === 'high').length;
+  const recentCount = errors.filter(
+    (e) => Date.now() - e.context.timestamp < 5 * 60 * 1000 // Last 5 minutes
   ).length;
-  
+
   return {
     hasErrors,
     totalCount: errors.length,

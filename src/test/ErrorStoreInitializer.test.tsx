@@ -19,7 +19,7 @@ describe('ErrorStoreInitializer', () => {
     // Since the error store integration is now handled automatically,
     // this component should be a simple null-rendering component
     const { container } = render(<ErrorStoreInitializer />);
-    
+
     expect(container.firstChild).toBeNull();
   });
 
@@ -32,7 +32,7 @@ describe('ErrorStoreInitializer', () => {
 
   it('should be stable across multiple renders', () => {
     const { rerender } = render(<ErrorStoreInitializer />);
-    
+
     // Should handle multiple re-renders without issues
     expect(() => {
       rerender(<ErrorStoreInitializer />);

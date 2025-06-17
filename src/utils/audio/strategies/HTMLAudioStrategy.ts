@@ -50,7 +50,10 @@ export class HTMLAudioStrategy extends AudioStrategy {
         { component: 'HTMLAudioStrategy', metadata: { action: 'html_audio_init', error } },
         undefined
       );
-      log.warn('HTML Audio initialization failed', { component: 'HTMLAudioStrategy', metadata: { audioError } });
+      log.warn('HTML Audio initialization failed', {
+        component: 'HTMLAudioStrategy',
+        metadata: { audioError },
+      });
       throw audioError;
     }
   }
@@ -97,7 +100,10 @@ export class HTMLAudioStrategy extends AudioStrategy {
         },
         undefined
       );
-      log.warn('HTML audio playback failed', { component: 'HTMLAudioStrategy', metadata: { audioError } });
+      log.warn('HTML audio playback failed', {
+        component: 'HTMLAudioStrategy',
+        metadata: { audioError },
+      });
     }
   }
 
@@ -129,7 +135,10 @@ export class HTMLAudioStrategy extends AudioStrategy {
           },
           undefined
         );
-        log.warn('Audio element creation failed', { component: 'HTMLAudioStrategy', metadata: { audioError } });
+        log.warn('Audio element creation failed', {
+          component: 'HTMLAudioStrategy',
+          metadata: { audioError },
+        });
       }
     }
 
@@ -197,7 +206,10 @@ export class HTMLAudioStrategy extends AudioStrategy {
         },
         undefined
       );
-      log.warn('Audio element creation failed', { component: 'HTMLAudioStrategy', metadata: { audioError } });
+      log.warn('Audio element creation failed', {
+        component: 'HTMLAudioStrategy',
+        metadata: { audioError },
+      });
       return null;
     }
   }

@@ -17,10 +17,7 @@ interface PlayHistoryProps {
   } | null;
 }
 
-const PlayHistory: React.FC<PlayHistoryProps> = ({
-  statistics,
-  advancedMetrics,
-}) => {
+const PlayHistory: React.FC<PlayHistoryProps> = ({ statistics, advancedMetrics }) => {
   const { t } = useTranslation();
 
   return (

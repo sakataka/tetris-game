@@ -74,9 +74,9 @@ export class AudioManagerV2 {
           },
           undefined
         );
-        log.warn('audio strategy initialization failed', { 
-          component: 'AudioManagerV2', 
-          metadata: { audioError: audioError.toString() } 
+        log.warn('audio strategy initialization failed', {
+          component: 'AudioManagerV2',
+          metadata: { audioError: audioError.toString() },
         });
       }
     }
@@ -114,13 +114,18 @@ export class AudioManagerV2 {
             `Failed to play sound after fallback: ${soundKey}`,
             {
               component: 'AudioManagerV2',
-              metadata: { action: 'audio_play_fallback', soundKey, originalError: error, fallbackError },
+              metadata: {
+                action: 'audio_play_fallback',
+                soundKey,
+                originalError: error,
+                fallbackError,
+              },
             },
             undefined
           );
-          log.warn('sound playback failed after fallback', { 
-            component: 'AudioManagerV2', 
-            metadata: { audioError: audioError.toString() } 
+          log.warn('sound playback failed after fallback', {
+            component: 'AudioManagerV2',
+            metadata: { audioError: audioError.toString() },
           });
         }
       }
@@ -157,13 +162,17 @@ export class AudioManagerV2 {
         `Failed to fallback to ${nextStrategy.constructor.name}`,
         {
           component: 'AudioManagerV2',
-          metadata: { action: 'audio_strategy_fallback', originalError: error, fallbackError: initError },
+          metadata: {
+            action: 'audio_strategy_fallback',
+            originalError: error,
+            fallbackError: initError,
+          },
         },
         undefined
       );
-      log.warn('audio strategy fallback failed', { 
-        component: 'AudioManagerV2', 
-        metadata: { audioError: audioError.toString() } 
+      log.warn('audio strategy fallback failed', {
+        component: 'AudioManagerV2',
+        metadata: { audioError: audioError.toString() },
       });
 
       // Try next strategy recursively
@@ -237,13 +246,17 @@ export class AudioManagerV2 {
           'Failed to preload sounds',
           {
             component: 'AudioManagerV2',
-            metadata: { action: 'audio_preload', strategy: this.currentStrategy.constructor.name, error },
+            metadata: {
+              action: 'audio_preload',
+              strategy: this.currentStrategy.constructor.name,
+              error,
+            },
           },
           undefined
         );
-        log.warn('sound preloading failed', { 
-          component: 'AudioManagerV2', 
-          metadata: { audioError: audioError.toString() } 
+        log.warn('sound preloading failed', {
+          component: 'AudioManagerV2',
+          metadata: { audioError: audioError.toString() },
         });
       }
     }

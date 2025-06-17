@@ -9,7 +9,14 @@ import type { ReactNode } from 'react';
  * Automatically adapts to current theme without hardcoded colors.
  */
 
-export type CyberTheme = 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'error' | 'default';
+export type CyberTheme =
+  | 'primary'
+  | 'secondary'
+  | 'accent'
+  | 'success'
+  | 'warning'
+  | 'error'
+  | 'default';
 
 interface CyberCardProps {
   title: string;

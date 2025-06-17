@@ -60,9 +60,9 @@ export class WebAudioStrategy extends AudioStrategy {
       if (!AudioContextClass) {
         throw createAudioError(
           'Web Audio API is not supported',
-          { 
-            component: 'WebAudioStrategy', 
-            metadata: { operation: 'audio_context_init' }
+          {
+            component: 'WebAudioStrategy',
+            metadata: { operation: 'audio_context_init' },
           },
           undefined // No user message for audio errors (they're suppressed)
         );
@@ -83,16 +83,16 @@ export class WebAudioStrategy extends AudioStrategy {
     } catch (error) {
       const audioError = createAudioError(
         'Failed to initialize AudioContext',
-        { 
-          component: 'WebAudioStrategy', 
-          metadata: { error, operation: 'audio_context_init' }
+        {
+          component: 'WebAudioStrategy',
+          metadata: { error, operation: 'audio_context_init' },
         },
         undefined // No user message for audio errors (they're suppressed)
       );
-      log.warn('AudioContext initialization failed', { 
-        component: 'WebAudioStrategy', 
+      log.warn('AudioContext initialization failed', {
+        component: 'WebAudioStrategy',
         action: 'audio_context_init',
-        metadata: { audioError }
+        metadata: { audioError },
       });
       throw audioError;
     }
@@ -112,16 +112,16 @@ export class WebAudioStrategy extends AudioStrategy {
       } catch (error) {
         const audioError = createAudioError(
           'Failed to unlock audio context',
-          { 
-            component: 'WebAudioStrategy', 
-            metadata: { error, operation: 'audio_unlock' }
+          {
+            component: 'WebAudioStrategy',
+            metadata: { error, operation: 'audio_unlock' },
           },
           undefined // No user message for audio errors (they're suppressed)
         );
-        log.warn('Audio unlock failed', { 
-          component: 'WebAudioStrategy', 
+        log.warn('Audio unlock failed', {
+          component: 'WebAudioStrategy',
           action: 'audio_unlock',
-          metadata: { audioError }
+          metadata: { audioError },
         });
       }
     };
@@ -219,10 +219,10 @@ export class WebAudioStrategy extends AudioStrategy {
         },
         undefined // No user message for audio errors (they're suppressed)
       );
-      log.warn('Sound playback failed', { 
-        component: 'WebAudioStrategy', 
+      log.warn('Sound playback failed', {
+        component: 'WebAudioStrategy',
         action: 'audio_play',
-        metadata: { audioError }
+        metadata: { audioError },
       });
     }
   }
@@ -231,9 +231,9 @@ export class WebAudioStrategy extends AudioStrategy {
     if (!this.audioState.context) {
       throw createAudioError(
         'AudioContext not initialized',
-        { 
-          component: 'WebAudioStrategy', 
-          metadata: { soundKey, operation: 'audio_load' }
+        {
+          component: 'WebAudioStrategy',
+          metadata: { soundKey, operation: 'audio_load' },
         },
         undefined // No user message for audio errors (they're suppressed)
       );
@@ -267,9 +267,9 @@ export class WebAudioStrategy extends AudioStrategy {
     if (!this.audioState.context) {
       throw createAudioError(
         'AudioContext not initialized',
-        { 
-          component: 'WebAudioStrategy', 
-          metadata: { soundKey, operation: 'audio_load' }
+        {
+          component: 'WebAudioStrategy',
+          metadata: { soundKey, operation: 'audio_load' },
         },
         undefined // No user message for audio errors (they're suppressed)
       );
@@ -292,10 +292,10 @@ export class WebAudioStrategy extends AudioStrategy {
         },
         undefined // No user message for audio errors (they're suppressed)
       );
-      log.warn('Audio file loading failed', { 
-        component: 'WebAudioStrategy', 
+      log.warn('Audio file loading failed', {
+        component: 'WebAudioStrategy',
         action: 'audio_load',
-        metadata: { audioError }
+        metadata: { audioError },
       });
       throw audioError;
     }

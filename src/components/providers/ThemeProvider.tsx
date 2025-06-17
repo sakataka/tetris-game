@@ -1,6 +1,6 @@
 /**
  * Theme Provider Component
- * 
+ *
  * Initializes the theme system and provides theme context to the app.
  * Ensures theme is applied consistently across all components.
  */

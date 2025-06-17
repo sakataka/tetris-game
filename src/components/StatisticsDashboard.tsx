@@ -33,7 +33,7 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
   showDetailedView = true,
 }) => {
   const { t } = useTranslation();
-  
+
   // Use custom hook for statistics calculation
   const { statistics, advancedMetrics } = useStatisticsCalculation({
     baseStatistics,
@@ -55,16 +55,10 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
       {/* Detailed Views */}
       {showDetailedView && (
         <>
-          <EfficiencyMetrics
-            statistics={statistics}
-            advancedMetrics={advancedMetrics}
-          />
-          
-          <PlayHistory
-            statistics={statistics}
-            advancedMetrics={advancedMetrics}
-          />
-          
+          <EfficiencyMetrics statistics={statistics} advancedMetrics={advancedMetrics} />
+
+          <PlayHistory statistics={statistics} advancedMetrics={advancedMetrics} />
+
           <HighScoresList highScores={highScores} />
         </>
       )}

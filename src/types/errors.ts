@@ -1,6 +1,6 @@
 /**
  * Simplified Error Type Definitions
- * 
+ *
  * Streamlined error handling focused on practical game needs
  */
 
@@ -43,7 +43,7 @@ export class GameAppError extends Error {
     context: Partial<ErrorContext> = {}
   ) {
     super(message);
-    
+
     this.name = 'GameAppError';
     this.id = `${category}_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
     this.level = level;
@@ -76,23 +76,35 @@ export class GameAppError extends Error {
 }
 
 // Simplified error factory functions
-export const createGameError = (message: string, context?: Partial<ErrorContext>, userMessage?: string) =>
-  new GameAppError(message, userMessage, 'medium', 'game', context);
+export const createGameError = (
+  message: string,
+  context?: Partial<ErrorContext>,
+  userMessage?: string
+) => new GameAppError(message, userMessage, 'medium', 'game', context);
 
-export const createAudioError = (message: string, context?: Partial<ErrorContext>, userMessage?: string) =>
-  new GameAppError(message, userMessage, 'low', 'audio', context);
+export const createAudioError = (
+  message: string,
+  context?: Partial<ErrorContext>,
+  userMessage?: string
+) => new GameAppError(message, userMessage, 'low', 'audio', context);
 
-export const createUIError = (message: string, context?: Partial<ErrorContext>, userMessage?: string) =>
-  new GameAppError(message, userMessage, 'medium', 'ui', context);
+export const createUIError = (
+  message: string,
+  context?: Partial<ErrorContext>,
+  userMessage?: string
+) => new GameAppError(message, userMessage, 'medium', 'ui', context);
 
-export const createStorageError = (message: string, context?: Partial<ErrorContext>, userMessage?: string) =>
-  new GameAppError(message, userMessage, 'high', 'storage', context);
+export const createStorageError = (
+  message: string,
+  context?: Partial<ErrorContext>,
+  userMessage?: string
+) => new GameAppError(message, userMessage, 'high', 'storage', context);
 
 // Simplified error handling
 export type ErrorHandler = (error: GameAppError) => void;
 
 // Essential error actions for store
-export type ErrorAction = 
+export type ErrorAction =
   | { type: 'ADD_ERROR'; error: ErrorInfo }
   | { type: 'DISMISS_ERROR'; errorId: string }
   | { type: 'CLEAR_ERRORS' };

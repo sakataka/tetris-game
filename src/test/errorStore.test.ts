@@ -358,12 +358,12 @@ describe('errorStore', () => {
 
       const state = useErrorStore.getState();
       expect(state.errors).toHaveLength(2);
-      
+
       // Manual statistics calculation
-      const highErrors = state.errors.filter(e => e.level === 'high');
-      const mediumErrors = state.errors.filter(e => e.level === 'medium');
-      const gameErrors = state.errors.filter(e => e.category === 'game');
-      const audioErrors = state.errors.filter(e => e.category === 'audio');
+      const highErrors = state.errors.filter((e) => e.level === 'high');
+      const mediumErrors = state.errors.filter((e) => e.level === 'medium');
+      const gameErrors = state.errors.filter((e) => e.category === 'game');
+      const audioErrors = state.errors.filter((e) => e.category === 'audio');
 
       expect(highErrors).toHaveLength(1);
       expect(mediumErrors).toHaveLength(1);
@@ -435,7 +435,7 @@ describe('errorStore', () => {
     it('should remove oldest errors when exceeding maxStoredErrors', () => {
       // Set smaller limit
       act(() => {
-        useErrorStore.getState().updateConfig({ 
+        useErrorStore.getState().updateConfig({
           maxStoredErrors: 3,
           showNotifications: true,
         });

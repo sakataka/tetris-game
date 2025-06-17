@@ -55,7 +55,7 @@ const DEFAULT_SETTINGS: ExtendedGameSettings = {
   difficulty: 'normal' as const,
   gameMode: 'single' as const,
   virtualControlsEnabled: false,
-  
+
   // Navigation settings
   activeTab: 'game' as const,
 };

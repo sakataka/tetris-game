@@ -1,6 +1,6 @@
 /**
  * Theme Manager - Dynamic Theme Application System
- * 
+ *
  * Provides a unified interface for applying themes across the entire UI.
  * Bridges theme store with CSS variables for dynamic theme switching.
  */
@@ -17,17 +17,17 @@ export interface SemanticColorTokens {
   primary: string;
   secondary: string;
   tertiary: string;
-  
+
   // UI surface colors
   background: string;
   foreground: string;
   surface: string;
-  
+
   // Interactive states
   accent: string;
   muted: string;
   border: string;
-  
+
   // Semantic feedback colors
   success: string;
   warning: string;
@@ -75,7 +75,7 @@ const CSS_VARIABLE_MAP: Record<keyof SemanticColorTokens, string> = {
  */
 function mapThemeToSemanticColors(themeVariant: ThemeVariant): SemanticColorTokens {
   const preset = getThemePreset(themeVariant);
-  
+
   // Map preset colors to semantic roles using theme palette
   const baseColors: SemanticColorTokens = {
     primary: preset.colors.primary,
@@ -104,19 +104,25 @@ function mapThemeToSemanticColors(themeVariant: ThemeVariant): SemanticColorToke
 export function applyThemeToDocument(themeVariant: ThemeVariant): void {
   const semanticColors = mapThemeToSemanticColors(themeVariant);
   const preset = getThemePreset(themeVariant);
-  
+
   // Apply semantic color tokens
   Object.entries(semanticColors).forEach(([tokenName, colorValue]) => {
     const cssVariable = CSS_VARIABLE_MAP[tokenName as keyof SemanticColorTokens];
     document.documentElement.style.setProperty(cssVariable, colorValue);
   });
-  
+
   // Apply effect variables
   document.documentElement.style.setProperty('--theme-blur', `${preset.effects.blur}px`);
   document.documentElement.style.setProperty('--theme-glow', `${preset.effects.glow}px`);
-  document.documentElement.style.setProperty('--theme-saturation', preset.effects.saturation.toString());
-  document.documentElement.style.setProperty('--theme-brightness', preset.effects.brightness.toString());
-  
+  document.documentElement.style.setProperty(
+    '--theme-saturation',
+    preset.effects.saturation.toString()
+  );
+  document.documentElement.style.setProperty(
+    '--theme-brightness',
+    preset.effects.brightness.toString()
+  );
+
   // Apply theme class to body for CSS-based theming
   document.body.className = document.body.className
     .replace(/theme-\w+/g, '')
@@ -129,8 +135,8 @@ export function applyThemeToDocument(themeVariant: ThemeVariant): void {
  */
 export function generateTransparencyVariants(baseColor: string, variantName: string): void {
   const opacities = [5, 10, 20, 30, 40, 50, 60, 70, 80, 90];
-  
-  opacities.forEach(opacity => {
+
+  opacities.forEach((opacity) => {
     const variableName = `--theme-${variantName}-${opacity}`;
     const colorValue = `color-mix(in oklch, ${baseColor} ${opacity}%, transparent)`;
     document.documentElement.style.setProperty(variableName, colorValue);
@@ -145,7 +151,7 @@ export function applyCustomColors(customColors: Partial<SemanticColorTokens>): v
     const cssVariable = CSS_VARIABLE_MAP[tokenName as keyof SemanticColorTokens];
     if (cssVariable && colorValue) {
       document.documentElement.style.setProperty(cssVariable, colorValue);
-      
+
       // Generate transparency variants for custom colors
       generateTransparencyVariants(colorValue, tokenName);
     }
@@ -158,7 +164,7 @@ export function applyCustomColors(customColors: Partial<SemanticColorTokens>): v
 export function getCurrentThemeConfig(themeVariant: ThemeVariant): ThemeConfig {
   const preset = getThemePreset(themeVariant);
   const semanticColors = mapThemeToSemanticColors(themeVariant);
-  
+
   return {
     name: preset.name,
     variant: themeVariant,
@@ -173,13 +179,13 @@ export function getCurrentThemeConfig(themeVariant: ThemeVariant): ThemeConfig {
 export function initializeThemeSystem(initialTheme: ThemeVariant = 'cyberpunk'): void {
   // Apply initial theme
   applyThemeToDocument(initialTheme);
-  
+
   // Generate transparency variants for all semantic colors
   const semanticColors = mapThemeToSemanticColors(initialTheme);
   Object.entries(semanticColors).forEach(([tokenName, colorValue]) => {
     generateTransparencyVariants(colorValue, tokenName);
   });
-  
+
   console.log(`🎨 Theme system initialized with ${initialTheme} theme`);
 }
 
@@ -191,13 +197,13 @@ export const themeUtils = {
    * Get CSS variable reference for use in Tailwind classes
    */
   getCSSVar: (tokenName: keyof SemanticColorTokens) => `var(${CSS_VARIABLE_MAP[tokenName]})`,
-  
+
   /**
    * Get CSS variable with transparency
    */
-  getCSSVarWithOpacity: (tokenName: keyof SemanticColorTokens, opacity: number) => 
+  getCSSVarWithOpacity: (tokenName: keyof SemanticColorTokens, opacity: number) =>
     `var(--theme-${tokenName}-${opacity})`,
-  
+
   /**
    * Check if color is light (for contrast calculations)
    */

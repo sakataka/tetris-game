@@ -25,7 +25,7 @@ class ErrorHandlerService {
     return () => this.errorCallbacks.delete(callback);
   }
 
-  // Update configuration  
+  // Update configuration
   public updateConfig(newConfig: Partial<ErrorConfig>): void {
     this.config = { ...this.config, ...newConfig };
   }
@@ -33,14 +33,14 @@ class ErrorHandlerService {
   // Simplified error handling
   public handleError(error: Error | GameAppError): void {
     const appError = this.normalizeError(error);
-    
+
     // Console logging in development
     if (import.meta.env.DEV) {
       console.error(`[${appError.category}] ${appError.message}`, appError);
     }
 
     // Notify callbacks
-    this.errorCallbacks.forEach(callback => {
+    this.errorCallbacks.forEach((callback) => {
       try {
         callback(appError);
       } catch (callbackError) {
@@ -54,14 +54,10 @@ class ErrorHandlerService {
     if (error instanceof GameAppError) {
       return error;
     }
-    
-    return new GameAppError(
-      error.message || 'Unknown error',
-      undefined,
-      'medium',
-      'game',
-      { component: 'ErrorHandler' }
-    );
+
+    return new GameAppError(error.message || 'Unknown error', undefined, 'medium', 'game', {
+      component: 'ErrorHandler',
+    });
   }
 
   // Global error handling setup
@@ -72,7 +68,7 @@ class ErrorHandlerService {
         this.handleError(new Error(event.message));
       });
 
-      // Handle unhandled promise rejections  
+      // Handle unhandled promise rejections
       window.addEventListener('unhandledrejection', (event) => {
         this.handleError(new Error(String(event.reason)));
       });

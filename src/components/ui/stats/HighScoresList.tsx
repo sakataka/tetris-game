@@ -71,9 +71,7 @@ const HighScoresList: React.FC<HighScoresListProps> = ({ highScores }) => {
             >
               Lv{score.level}
             </Badge>
-            <span className='text-gray-500 text-xs'>
-              {formatTimeAgo(score.date)}
-            </span>
+            <span className='text-gray-500 text-xs'>{formatTimeAgo(score.date)}</span>
           </div>
         ))}
         {highScores.length === 0 && (

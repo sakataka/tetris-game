@@ -8,7 +8,11 @@ import type {
   ThemeVariant,
 } from '../types/tetris';
 import { getThemePreset } from '../utils/ui/themePresets';
-import { applyThemeToDocument, applyCustomColors, initializeThemeSystem } from '../utils/ui/themeManager';
+import {
+  applyThemeToDocument,
+  applyCustomColors,
+  initializeThemeSystem,
+} from '../utils/ui/themeManager';
 
 // Default theme state
 const DEFAULT_THEME_STATE: ThemeState = {
@@ -50,7 +54,7 @@ export const useThemeStore = create<ThemeStore>()(
       setTheme: (themeVariant) => {
         // Apply theme to document immediately
         applyThemeToDocument(themeVariant);
-        
+
         set((state) => ({
           theme: {
             ...state.theme,
@@ -60,15 +64,15 @@ export const useThemeStore = create<ThemeStore>()(
         }));
       },
 
-  updateThemeState: (themeState) =>
-    set((state) => ({
-      theme: { ...state.theme, ...themeState },
-    })),
+      updateThemeState: (themeState) =>
+        set((state) => ({
+          theme: { ...state.theme, ...themeState },
+        })),
 
-  setCustomColors: (colors) => {
+      setCustomColors: (colors) => {
         // Apply custom colors to document immediately
         applyCustomColors(colors);
-        
+
         set((state) => ({
           theme: {
             ...state.theme,
@@ -81,32 +85,32 @@ export const useThemeStore = create<ThemeStore>()(
         }));
       },
 
-  setAccessibilityOptions: (accessibility) =>
-    set((state) => ({
-      theme: {
-        ...state.theme,
-        accessibility: { ...state.theme.accessibility, ...accessibility },
-        config: {
-          ...state.theme.config,
-          accessibility: { ...state.theme.config.accessibility, ...accessibility },
-        },
-      },
-    })),
+      setAccessibilityOptions: (accessibility) =>
+        set((state) => ({
+          theme: {
+            ...state.theme,
+            accessibility: { ...state.theme.accessibility, ...accessibility },
+            config: {
+              ...state.theme.config,
+              accessibility: { ...state.theme.config.accessibility, ...accessibility },
+            },
+          },
+        })),
 
-  resetThemeToDefault: () =>
-    set(() => ({
-      theme: DEFAULT_THEME_STATE,
-    })),
+      resetThemeToDefault: () =>
+        set(() => ({
+          theme: DEFAULT_THEME_STATE,
+        })),
 
-  setEffectIntensity: (intensity) =>
-    set((state) => ({
-      theme: {
-        ...state.theme,
-        effectIntensity: Math.max(0.5, Math.min(1.5, intensity)),
-      },
-    })),
+      setEffectIntensity: (intensity) =>
+        set((state) => ({
+          theme: {
+            ...state.theme,
+            effectIntensity: Math.max(0.5, Math.min(1.5, intensity)),
+          },
+        })),
 
-  toggleAnimations: () =>
+      toggleAnimations: () =>
         set((state) => ({
           theme: {
             ...state.theme,

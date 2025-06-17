@@ -27,8 +27,8 @@ vi.mock('../utils/ui/cn', () => ({
 }));
 
 vi.mock('../components/ui/select', () => ({
-  Select: ({ children }: any) => <div data-testid="select">{children}</div>,
-  SelectTrigger: ({ children }: any) => <div data-testid="select-trigger">{children}</div>,
+  Select: ({ children }: any) => <div data-testid='select'>{children}</div>,
+  SelectTrigger: ({ children }: any) => <div data-testid='select-trigger'>{children}</div>,
   SelectValue: () => <span>Current Value</span>,
   SelectContent: ({ children }: any) => <div>{children}</div>,
   SelectItem: ({ children }: any) => <div>{children}</div>,
@@ -43,7 +43,7 @@ describe('LanguageSelector - Basic Tests', () => {
 
   it('should render select component', () => {
     const { getByTestId } = render(<LanguageSelector />);
-    
+
     expect(getByTestId('select')).toBeInTheDocument();
     expect(getByTestId('select-trigger')).toBeInTheDocument();
   });
@@ -56,7 +56,8 @@ describe('LanguageSelector - Basic Tests', () => {
 
   it('should render with custom className', () => {
     expect(() => {
-      render(<LanguageSelector className="custom-class" />);
+      render(<LanguageSelector className='custom-class' />);
     }).not.toThrow();
   });
 });
+

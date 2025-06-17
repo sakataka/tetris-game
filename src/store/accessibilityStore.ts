@@ -69,13 +69,13 @@ function detectSystemVisualPreferences(): Partial<VisualAccessibilityState> {
 }
 
 // Complete unified accessibility store interface
-interface UnifiedAccessibilityStore 
-  extends VisualAccessibilityState, 
-          VisualAccessibilityActions,
-          CognitiveAccessibilityState,
-          CognitiveAccessibilityActions,
-          InputAccessibilityState,
-          InputAccessibilityActions {
+interface UnifiedAccessibilityStore
+  extends VisualAccessibilityState,
+    VisualAccessibilityActions,
+    CognitiveAccessibilityState,
+    CognitiveAccessibilityActions,
+    InputAccessibilityState,
+    InputAccessibilityActions {
   // Core orchestration state
   level: AccessibilityLevel;
   enabled: boolean;
@@ -134,16 +134,12 @@ function applyPresetToStore(preset: AccessibilityLevel) {
   if (presetConfig.visual !== undefined) store.updateVisualAssistance(presetConfig.visual);
 
   // Apply cognitive settings
-  if (presetConfig.cognitive !== undefined)
-    store.updateCognitiveAssistance(presetConfig.cognitive);
-  if (presetConfig.gameSpecific !== undefined)
-    store.updateGameSpecific(presetConfig.gameSpecific);
+  if (presetConfig.cognitive !== undefined) store.updateCognitiveAssistance(presetConfig.cognitive);
+  if (presetConfig.gameSpecific !== undefined) store.updateGameSpecific(presetConfig.gameSpecific);
 
   // Apply input settings
-  if (presetConfig.keyboard !== undefined)
-    store.updateKeyboardNavigation(presetConfig.keyboard);
-  if (presetConfig.feedback !== undefined)
-    store.updateFeedbackSettings(presetConfig.feedback);
+  if (presetConfig.keyboard !== undefined) store.updateKeyboardNavigation(presetConfig.keyboard);
+  if (presetConfig.feedback !== undefined) store.updateFeedbackSettings(presetConfig.feedback);
 }
 
 // Create the unified accessibility store
@@ -618,12 +614,12 @@ export const useAccessibilityStore = create<UnifiedAccessibilityStore>()(
       },
     } as PersistOptions<
       UnifiedAccessibilityStore,
-      Partial<VisualAccessibilityState> & 
-      Partial<CognitiveAccessibilityState> & 
-      Partial<InputAccessibilityState> & {
-        level: AccessibilityLevel;
-        enabled: boolean;
-      }
+      Partial<VisualAccessibilityState> &
+        Partial<CognitiveAccessibilityState> &
+        Partial<InputAccessibilityState> & {
+          level: AccessibilityLevel;
+          enabled: boolean;
+        }
     >
   )
 );
@@ -739,20 +735,16 @@ export const useCognitiveAccessibilityState = () =>
     gameSpecific: state.gameSpecific,
   }));
 
-export const useCognitiveAssistance = () =>
-  useAccessibilityStore((state) => state.cognitive);
+export const useCognitiveAssistance = () => useAccessibilityStore((state) => state.cognitive);
 
-export const useGameAccessibility = () =>
-  useAccessibilityStore((state) => state.gameSpecific);
+export const useGameAccessibility = () => useAccessibilityStore((state) => state.gameSpecific);
 
-export const useSimplifiedUI = () =>
-  useAccessibilityStore((state) => state.cognitive.simplifiedUI);
+export const useSimplifiedUI = () => useAccessibilityStore((state) => state.cognitive.simplifiedUI);
 
 export const useConfirmActions = () =>
   useAccessibilityStore((state) => state.cognitive.confirmActions);
 
-export const useAutoSave = () =>
-  useAccessibilityStore((state) => state.cognitive.autoSave);
+export const useAutoSave = () => useAccessibilityStore((state) => state.cognitive.autoSave);
 
 export const useTimeoutWarnings = () =>
   useAccessibilityStore((state) => state.cognitive.timeoutWarnings);
@@ -770,8 +762,7 @@ export const useVisualGameOver = () =>
 export const useColorCodedPieces = () =>
   useAccessibilityStore((state) => state.gameSpecific.colorCodedPieces);
 
-export const useGridLines = () =>
-  useAccessibilityStore((state) => state.gameSpecific.gridLines);
+export const useGridLines = () => useAccessibilityStore((state) => state.gameSpecific.gridLines);
 
 export const useDropPreview = () =>
   useAccessibilityStore((state) => state.gameSpecific.dropPreview);
@@ -789,17 +780,13 @@ export const useToggleSimplifiedUI = () =>
 export const useToggleConfirmActions = () =>
   useAccessibilityStore((state) => state.toggleConfirmActions);
 
-export const useToggleAutoSave = () =>
-  useAccessibilityStore((state) => state.toggleAutoSave);
+export const useToggleAutoSave = () => useAccessibilityStore((state) => state.toggleAutoSave);
 
-export const useEnableFocusMode = () =>
-  useAccessibilityStore((state) => state.enableFocusMode);
+export const useEnableFocusMode = () => useAccessibilityStore((state) => state.enableFocusMode);
 
-export const useDisableFocusMode = () =>
-  useAccessibilityStore((state) => state.disableFocusMode);
+export const useDisableFocusMode = () => useAccessibilityStore((state) => state.disableFocusMode);
 
-export const useSetUIComplexity = () =>
-  useAccessibilityStore((state) => state.setUIComplexity);
+export const useSetUIComplexity = () => useAccessibilityStore((state) => state.setUIComplexity);
 
 // === INPUT ACCESSIBILITY HOOKS ===
 
@@ -809,28 +796,21 @@ export const useInputAccessibilityState = () =>
     feedback: state.feedback,
   }));
 
-export const useKeyboardNavigation = () =>
-  useAccessibilityStore((state) => state.keyboard);
+export const useKeyboardNavigation = () => useAccessibilityStore((state) => state.keyboard);
 
-export const useFeedbackSettings = () =>
-  useAccessibilityStore((state) => state.feedback);
+export const useFeedbackSettings = () => useAccessibilityStore((state) => state.feedback);
 
 // Individual keyboard setting selectors
-export const useKeyboardEnabled = () =>
-  useAccessibilityStore((state) => state.keyboard.enabled);
+export const useKeyboardEnabled = () => useAccessibilityStore((state) => state.keyboard.enabled);
 
-export const useFocusOutline = () =>
-  useAccessibilityStore((state) => state.keyboard.focusOutline);
+export const useFocusOutline = () => useAccessibilityStore((state) => state.keyboard.focusOutline);
 
-export const useSkipLinks = () =>
-  useAccessibilityStore((state) => state.keyboard.skipLinks);
+export const useSkipLinks = () => useAccessibilityStore((state) => state.keyboard.skipLinks);
 
-export const useTabOrder = () =>
-  useAccessibilityStore((state) => state.keyboard.tabOrder);
+export const useTabOrder = () => useAccessibilityStore((state) => state.keyboard.tabOrder);
 
 // Individual feedback setting selectors
-export const useSoundEffects = () =>
-  useAccessibilityStore((state) => state.feedback.soundEffects);
+export const useSoundEffects = () => useAccessibilityStore((state) => state.feedback.soundEffects);
 
 export const useVoiceAnnouncements = () =>
   useAccessibilityStore((state) => state.feedback.voiceAnnouncements);
@@ -838,8 +818,7 @@ export const useVoiceAnnouncements = () =>
 export const useHapticFeedback = () =>
   useAccessibilityStore((state) => state.feedback.hapticFeedback);
 
-export const useScreenReader = () =>
-  useAccessibilityStore((state) => state.feedback.screenReader);
+export const useScreenReader = () => useAccessibilityStore((state) => state.feedback.screenReader);
 
 // Input action hooks
 export const useUpdateKeyboardNavigation = () =>
@@ -873,8 +852,7 @@ export const useEnableFullFeedback = () =>
 export const useEnableMinimalFeedback = () =>
   useAccessibilityStore((state) => state.enableMinimalFeedback);
 
-export const useEnableSilentMode = () =>
-  useAccessibilityStore((state) => state.enableSilentMode);
+export const useEnableSilentMode = () => useAccessibilityStore((state) => state.enableSilentMode);
 
 // Reset hooks
 export const useResetCognitiveToDefaults = () =>
