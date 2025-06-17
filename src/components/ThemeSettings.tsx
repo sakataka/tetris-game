@@ -1,16 +1,13 @@
-import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/utils/ui/cn';
-import React, { useState, useId } from 'react';
+import React, { useId } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
 import type { ThemeVariant } from '../types/tetris';
 import { ThemeSelectorMemo } from './ThemeSelector';
-import { ConfirmationDialog } from './ui/ConfirmationDialog';
 
 interface ThemeSettingsProps {
   currentTheme: ThemeVariant;
@@ -19,7 +16,6 @@ interface ThemeSettingsProps {
   onThemeChange: (theme: ThemeVariant) => void;
   onEffectIntensityChange: (intensity: number) => void;
   onAnimationsToggle: () => void;
-  onResetToDefault: () => void;
   className?: string;
 }
 
@@ -30,11 +26,9 @@ export default function ThemeSettings({
   onThemeChange,
   onEffectIntensityChange,
   onAnimationsToggle,
-  onResetToDefault,
   className = '',
 }: ThemeSettingsProps) {
   const { t } = useTranslation();
-  const [showResetConfirmation, setShowResetConfirmation] = useState(false);
 
   // Generate unique IDs for form elements
   const effectIntensityRangeId = useId();
@@ -45,13 +39,6 @@ export default function ThemeSettings({
     onEffectIntensityChange(value[0] ?? 1);
   };
 
-  const handleResetConfirm = () => {
-    onResetToDefault();
-    toast.success('Theme Reset Complete', {
-      description: 'All theme settings have been restored to default cyberpunk theme',
-      duration: 3000,
-    });
-  };
 
   return (
     <div className={`theme-settings ${className}`}>
@@ -128,33 +115,9 @@ export default function ThemeSettings({
             </div>
           </div>
 
-          {/* Reset Button */}
-          <div className='flex gap-2'>
-            <Button
-              variant='destructive'
-              onClick={() => setShowResetConfirmation(true)}
-              className={cn(
-                'bg-theme-error/20 border border-theme-error/30 text-theme-error',
-                'hover:bg-theme-error/30 hover:text-theme-error',
-                TYPOGRAPHY.BUTTON_TEXT
-              )}
-            >
-              {t('buttons.reset')}
-            </Button>
-          </div>
         </div>
       </ScrollArea>
 
-      <ConfirmationDialog
-        isOpen={showResetConfirmation}
-        onClose={() => setShowResetConfirmation(false)}
-        onConfirm={handleResetConfirm}
-        title={t('themes.resetConfirmation.title')}
-        description={t('themes.resetConfirmation.description')}
-        confirmText={t('buttons.reset')}
-        cancelText={t('common.cancel')}
-        variant='destructive'
-      />
     </div>
   );
 }

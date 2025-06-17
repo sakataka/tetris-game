@@ -209,7 +209,6 @@ export interface GameStoreActions {
   setTheme: (theme: ThemeVariant) => void;
   updateThemeState: (themeState: Partial<ThemeState>) => void;
   setAccessibilityOptions: (accessibility: Partial<ThemeState['accessibility']>) => void;
-  resetThemeToDefault: () => void;
 
   // Error handling actions
   addError: (error: GameError) => void;

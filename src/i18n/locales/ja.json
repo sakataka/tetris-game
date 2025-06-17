@@ -101,11 +101,7 @@
     "primary": "プライマリ",
     "secondary": "セカンダリ",
     "accent": "アクセント",
-    "background": "背景",
-    "resetConfirmation": {
-      "title": "テーマ設定をリセットしますか？",
-      "description": "すべてのテーマ設定をデフォルトにリセットしてもよろしいですか？カスタムカラーと設定がすべて失われます。"
-    }
+    "background": "背景"
   },
   "statistics": {
     "title": "統計",

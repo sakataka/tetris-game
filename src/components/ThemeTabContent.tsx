@@ -2,7 +2,6 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTheme as useThemeManager } from '../hooks/useTheme';
 import {
-  useResetThemeToDefault,
   useSetTheme,
   useTheme,
   useUpdateThemeState,
@@ -20,7 +19,6 @@ const ThemeTabContent = memo(function ThemeTabContent({ className = '' }: ThemeT
   const themeState = useTheme();
   const setTheme = useSetTheme();
   const updateThemeState = useUpdateThemeState();
-  const resetThemeToDefault = useResetThemeToDefault();
 
   const themeManager = useThemeManager({
     themeState,
@@ -39,7 +37,6 @@ const ThemeTabContent = memo(function ThemeTabContent({ className = '' }: ThemeT
           onThemeChange={themeManager.changeTheme}
           onEffectIntensityChange={themeManager.updateEffectIntensity}
           onAnimationsToggle={themeManager.toggleAnimations}
-          onResetToDefault={resetThemeToDefault}
         />
       </CyberCard>
     </div>

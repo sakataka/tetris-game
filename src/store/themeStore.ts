@@ -29,7 +29,6 @@ interface ThemeStore {
   setTheme: (theme: ThemeVariant) => void;
   updateThemeState: (themeState: Partial<ThemeState>) => void;
   setAccessibilityOptions: (accessibility: Partial<ThemeState['accessibility']>) => void;
-  resetThemeToDefault: () => void;
 
   // Effect and animation controls
   setEffectIntensity: (intensity: number) => void;
@@ -73,10 +72,6 @@ export const useThemeStore = create<ThemeStore>()(
           },
         })),
 
-      resetThemeToDefault: () =>
-        set(() => ({
-          theme: DEFAULT_THEME_STATE,
-        })),
 
       setEffectIntensity: (intensity) =>
         set((state) => ({
@@ -123,6 +118,5 @@ export const useSetTheme = () => useThemeStore((state) => state.setTheme);
 export const useUpdateThemeState = () => useThemeStore((state) => state.updateThemeState);
 export const useSetAccessibilityOptions = () =>
   useThemeStore((state) => state.setAccessibilityOptions);
-export const useResetThemeToDefault = () => useThemeStore((state) => state.resetThemeToDefault);
 export const useSetEffectIntensity = () => useThemeStore((state) => state.setEffectIntensity);
 export const useToggleAnimations = () => useThemeStore((state) => state.toggleAnimations);

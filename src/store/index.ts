@@ -71,9 +71,7 @@ export {
   useThemeAccessibility,
   useSetTheme,
   useUpdateThemeState,
-  useSetCustomColors,
   useSetAccessibilityOptions,
-  useResetThemeToDefault,
   useSetEffectIntensity,
   useToggleAnimations,
 } from './themeStore';
