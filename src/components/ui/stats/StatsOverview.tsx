@@ -41,7 +41,7 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({
   };
 
   return (
-    <CyberCard title={`📊 ${t('statistics.title')}`} theme='primary' size='lg'>
+    <CyberCard title={t('statistics.title')} theme='primary' size='lg'>
       <div className='flex justify-between items-center mb-4'>
         <span className='text-theme-muted'>{t('statistics.period.label')}</span>
         <Select value={selectedPeriod} onValueChange={onPeriodChange}>

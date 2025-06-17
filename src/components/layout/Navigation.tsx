@@ -57,12 +57,8 @@ const Navigation = memo(function Navigation({
     ];
 
     if (isActive) {
-      baseClasses.push(
-        'bg-theme-primary/20',
-        'text-theme-primary',
-        'border-theme-primary/50'
-      );
-      
+      baseClasses.push('bg-theme-primary/20', 'text-theme-primary', 'border-theme-primary/50');
+
       if (hasEnhancedEffects) {
         baseClasses.push('shadow-lg shadow-theme-primary/20');
       }

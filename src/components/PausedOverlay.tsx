@@ -43,7 +43,6 @@ const PausedOverlay = memo(function PausedOverlay({ isVisible, onResume }: Pause
                 <span className='relative'>{t('game.resume')}</span>
               </Button>
             </div>
-
           </div>
         </CyberCard>
       </div>

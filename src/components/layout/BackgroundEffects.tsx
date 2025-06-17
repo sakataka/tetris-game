@@ -23,11 +23,11 @@ const BackgroundEffects = memo(function BackgroundEffects({
   className = '',
 }: BackgroundEffectsProps) {
   const currentTheme = useCurrentTheme();
-  
+
   // Define which themes should have gradients and effects
   const gradientThemes = ['cyberpunk', 'neon', 'retro'];
   const hasGradients = gradientThemes.includes(currentTheme);
-  
+
   const getOrbsConfig = () => {
     switch (variant) {
       case 'minimal':

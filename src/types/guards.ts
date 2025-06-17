@@ -144,16 +144,15 @@ export function isAnimationIntensity(value: unknown): value is AnimationIntensit
   return typeof value === 'string' && ['none', 'reduced', 'normal', 'enhanced'].includes(value);
 }
 
-
 export function isThemeConfig(value: unknown): value is ThemeConfig {
   if (typeof value !== 'object' || value === null) return false;
 
   const theme = value as ThemeConfig;
   return (
     typeof theme.name === 'string' &&
-    typeof theme.colors === 'object' && theme.colors !== null &&
-    typeof theme.effects === 'object' &&
-    typeof theme.accessibility === 'object'
+    typeof theme.colors === 'object' &&
+    theme.colors !== null &&
+    typeof theme.effects === 'object'
   );
 }
 

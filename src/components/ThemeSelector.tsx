@@ -1,8 +1,6 @@
 import React, { useId } from 'react';
-import { useTranslation } from 'react-i18next';
 import type { ThemeVariant } from '../types/tetris';
 import { THEME_PRESETS } from '../utils/ui';
-import { Label } from './ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 interface ThemeSelectorProps {
@@ -16,11 +14,9 @@ export default function ThemeSelector({
   onThemeChange,
   className = '',
 }: ThemeSelectorProps) {
-  const { t } = useTranslation();
-  
   // Generate unique ID for form element
   const themeSelectorId = useId();
-  
+
   const handleThemeChange = (value: string) => {
     onThemeChange(value as ThemeVariant);
   };
@@ -29,9 +25,6 @@ export default function ThemeSelector({
 
   return (
     <div className={`theme-selector ${className}`}>
-      <Label htmlFor={themeSelectorId} className='block text-sm font-medium mb-2 text-theme-primary'>
-        {t('themes.preview')}
-      </Label>
       <Select value={currentTheme} onValueChange={handleThemeChange}>
         <SelectTrigger
           id={themeSelectorId}
@@ -71,7 +64,7 @@ export default function ThemeSelector({
             ))}
         </div>
         <div className='text-xs text-theme-primary mt-2'>
-          {t('accessibility.motion')}: {THEME_PRESETS[currentTheme].effects.glow}px
+          Glow: {(THEME_PRESETS[currentTheme].effects as any)?.glow || 0}px
         </div>
       </div>
     </div>

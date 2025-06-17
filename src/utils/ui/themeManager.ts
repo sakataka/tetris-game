@@ -318,7 +318,6 @@ export function generateTransparencyVariants(baseColor: string, variantName: str
   });
 }
 
-
 /**
  * Get current comprehensive theme configuration
  */
@@ -382,7 +381,7 @@ export const themeUtils = {
   /**
    * Get tetromino color CSS variable
    */
-  getTetrominoCSSVar: (piece: 'I' | 'O' | 'T' | 'S' | 'Z' | 'J' | 'L') => 
+  getTetrominoCSSVar: (piece: 'I' | 'O' | 'T' | 'S' | 'Z' | 'J' | 'L') =>
     `var(--tetromino-${piece.toLowerCase()})`,
 
   /**

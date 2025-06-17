@@ -23,7 +23,9 @@ const PausedMessage = memo(function PausedMessage({ className = '' }: PausedMess
           {t('game.paused')}
         </AlertTitle>
         <AlertDescription className='text-center space-y-2'>
-          <p className='text-theme-primary font-mono md:text-base text-sm'>{t('controls.pause')} (P)</p>
+          <p className='text-theme-primary font-mono md:text-base text-sm'>
+            {t('controls.pause')} (P)
+          </p>
           <div className='animate-pulse text-theme-warning'>◆ ◆ ◆</div>
         </AlertDescription>
       </Alert>

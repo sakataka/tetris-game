@@ -18,7 +18,7 @@ const LanguageSelector = memo(function LanguageSelector({
   const { t } = useTranslation();
   const currentLanguage = useCurrentLanguage();
   const setLanguage = useSetLanguage();
-  
+
   // Generate unique ID for form element
   const languageSelectId = useId();
 

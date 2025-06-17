@@ -30,7 +30,7 @@ export default function AccessibilitySettings({
   className = '',
 }: AccessibilitySettingsProps) {
   const { t } = useTranslation();
-  
+
   // Generate unique IDs for form elements
   const colorBlindnessSelectId = useId();
   const contrastSelectId = useId();
@@ -215,7 +215,9 @@ export default function AccessibilitySettings({
               aria-label={t('settings.reducedMotion')}
             />
             <Label htmlFor={reducedMotionSwitchId} className='cursor-pointer'>
-              <span className={`${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} text-theme-primary`}>
+              <span
+                className={`${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} text-theme-primary`}
+              >
                 {t('settings.reducedMotion')}
               </span>
               <p className={`${TYPOGRAPHY.SMALL_LABEL} text-theme-muted`}>

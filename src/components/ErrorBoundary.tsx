@@ -185,7 +185,9 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         <h3 className='text-lg font-bold text-theme-warning mb-2'>
           {i18next.t('errors.sectionError')}
         </h3>
-        <p className='text-theme-foreground text-sm mb-4'>{i18next.t('errors.sectionDisplayError')}</p>
+        <p className='text-theme-foreground text-sm mb-4'>
+          {i18next.t('errors.sectionDisplayError')}
+        </p>
 
         {retryCount < this.maxRetries && (
           <Button

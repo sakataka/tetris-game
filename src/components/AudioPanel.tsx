@@ -41,7 +41,7 @@ const AudioPanel = memo(function AudioPanel({
   audioSystemStatus,
 }: AudioPanelProps) {
   const { t } = useTranslation();
-  
+
   // Generate unique IDs for form elements
   const muteSwitchId = useId();
   const virtualControlsSwitchId = useId();

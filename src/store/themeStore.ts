@@ -1,11 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type {
-  ColorBlindnessType,
-  ContrastLevel,
-  ThemeState,
-  ThemeVariant,
-} from '../types/tetris';
+import type { ColorBlindnessType, ContrastLevel, ThemeState, ThemeVariant } from '../types/tetris';
 import {
   applyThemeToDocument,
   getCurrentThemeConfig,
@@ -65,7 +60,6 @@ export const useThemeStore = create<ThemeStore>()(
         set((state) => ({
           theme: { ...state.theme, ...themeState },
         })),
-
 
       setAccessibilityOptions: (accessibility) =>
         set((state) => ({

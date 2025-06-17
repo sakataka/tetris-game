@@ -1,7 +1,4 @@
-import type {
-  ThemeConfig,
-  ThemeVariant,
-} from '../../types/tetris';
+import type { ThemeConfig, ThemeVariant } from '../../types/tetris';
 import { ColorConverter } from './colorConverter';
 import { getCurrentThemeConfig } from './themeManager';
 
@@ -84,8 +81,6 @@ function generateTransparencyVariables(colors: any): Record<string, string> {
 
 // Removed: hexToRgb function replaced by ColorConverter.hexToRgb
 
-
-
 // Removed: adjustColorBrightness function replaced by ColorConverter methods
 
 // getThemePreset is imported from ./themePresets
@@ -145,12 +140,12 @@ export function applyAnimationSettings(intensity: string): void {
  */
 export function initializeTheme(config: ThemeConfig): void {
   applyThemeToCSS(config);
-  
+
   // Handle accessibility settings if available
   const accessibility = (config as any).accessibility;
   if (accessibility && accessibility.animationIntensity) {
     applyAnimationSettings(accessibility.animationIntensity);
-    
+
     // Configure reduced motion preferences
     if (
       accessibility.animationIntensity === 'none' ||

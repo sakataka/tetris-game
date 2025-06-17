@@ -15,7 +15,7 @@ const SettingsTabContent = memo(function SettingsTabContent() {
   const { volume, isMuted, setVolume, toggleMute } = useAudioVolumeState();
   const settings = useSettings();
   const updateSettings = useUpdateSettings();
-  
+
   // Generate unique ID for form element
   const debugModeCheckboxId = useId();
 

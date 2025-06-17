@@ -22,7 +22,7 @@ export function useAccessibilityFilters(
     // Color vision deficiency filters and contrast adjustment temporarily disabled
     // These features were removed along with Color Palette Settings
     // TODO: Implement new accessibility filters if needed
-    
+
     // Note: accessibility.colorBlindnessType and accessibility.contrast are preserved
     // but not currently applied to theme colors
 

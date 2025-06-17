@@ -39,7 +39,7 @@ const GameHeader = memo(function GameHeader({
   const getTitleClasses = () => {
     const baseClasses = [
       'font-bold mb-2 relative',
-      hasGradients 
+      hasGradients
         ? 'bg-gradient-to-r from-theme-primary via-theme-secondary to-theme-accent bg-clip-text text-transparent'
         : 'text-theme-foreground',
     ];

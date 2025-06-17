@@ -18,10 +18,12 @@ export function getTetrominoColors(themeVariant?: ThemeVariant): Record<string, 
     // Try to read from CSS variables if no theme variant provided
     const colors: Record<string, string> = {};
     const pieces = ['I', 'O', 'T', 'S', 'Z', 'J', 'L'] as const;
-    
+
     pieces.forEach((piece) => {
-      const computedValue = getComputedStyle(document.documentElement).getPropertyValue(`--tetromino-${piece.toLowerCase()}`).trim();
-      
+      const computedValue = getComputedStyle(document.documentElement)
+        .getPropertyValue(`--tetromino-${piece.toLowerCase()}`)
+        .trim();
+
       if (computedValue) {
         colors[piece] = computedValue;
       } else {
@@ -29,7 +31,7 @@ export function getTetrominoColors(themeVariant?: ThemeVariant): Record<string, 
         colors[piece] = FALLBACK_COLORS[piece];
       }
     });
-    
+
     return colors;
   }
 
@@ -44,7 +46,10 @@ export function getTetrominoColors(themeVariant?: ThemeVariant): Record<string, 
 /**
  * Get a specific tetromino color for the current theme
  */
-export function getTetrominoColor(piece: 'I' | 'O' | 'T' | 'S' | 'Z' | 'J' | 'L', themeVariant?: ThemeVariant): string {
+export function getTetrominoColor(
+  piece: 'I' | 'O' | 'T' | 'S' | 'Z' | 'J' | 'L',
+  themeVariant?: ThemeVariant
+): string {
   const colors = getTetrominoColors(themeVariant);
   return colors[piece] || FALLBACK_COLORS[piece];
 }

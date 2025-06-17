@@ -147,7 +147,6 @@ export interface ThemeSelectorProps extends BaseComponentProps {
   allowCustomThemes?: boolean;
 }
 
-
 // Virtual controls
 export interface VirtualControlsProps extends BaseComponentProps {
   onControlPress: (control: VirtualControl) => void;

@@ -19,12 +19,12 @@ export function createEmptyBoard(): (string | null)[][] {
 }
 
 export function getRandomTetromino(
-  debugMode = false, 
+  debugMode = false,
   customColors?: Record<string, string>
 ): Tetromino {
   // Use theme-aware colors if available, otherwise fall back to default colors
   const colors = customColors || getTetrominoColors();
-  
+
   // In debug mode, always return I-piece for easy line clearing
   if (debugMode) {
     return {

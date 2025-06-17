@@ -35,7 +35,7 @@ export default function ThemeSettings({
 }: ThemeSettingsProps) {
   const { t } = useTranslation();
   const [showResetConfirmation, setShowResetConfirmation] = useState(false);
-  
+
   // Generate unique IDs for form elements
   const effectIntensityRangeId = useId();
   const animationsSwitchId = useId();
@@ -47,12 +47,11 @@ export default function ThemeSettings({
 
   const handleResetConfirm = () => {
     onResetToDefault();
-    toast.success('🎨 Theme Reset Complete', {
+    toast.success('Theme Reset Complete', {
       description: 'All theme settings have been restored to default cyberpunk theme',
       duration: 3000,
     });
   };
-
 
   return (
     <div className={`theme-settings ${className}`}>
@@ -60,18 +59,22 @@ export default function ThemeSettings({
         <div className={SPACING.PANEL_INTERNAL}>
           {/* Theme Selection */}
           <div className='mb-6'>
-            <h3 className={`${TYPOGRAPHY.SECTION_HEADER} ${TYPOGRAPHY.TITLE_WEIGHT} mb-3 text-theme-primary`}>
-              🎨 {t('themes.title')}
+            <h3
+              className={`${TYPOGRAPHY.SECTION_HEADER} ${TYPOGRAPHY.TITLE_WEIGHT} mb-3 text-theme-primary`}
+            >
+              {t('themes.title')}
             </h3>
             <ThemeSelectorMemo currentTheme={currentTheme} onThemeChange={onThemeChange} />
           </div>
 
           {/* Effect Settings */}
           <div className='mb-6'>
-            <h3 className={`${TYPOGRAPHY.SECTION_HEADER} ${TYPOGRAPHY.TITLE_WEIGHT} mb-3 text-theme-primary`}>
-              ✨ {t('accessibility.motion')}
+            <h3
+              className={`${TYPOGRAPHY.SECTION_HEADER} ${TYPOGRAPHY.TITLE_WEIGHT} mb-3 text-theme-primary`}
+            >
+              {t('accessibility.motion')}
             </h3>
-            
+
             {/* Effect intensity */}
             <div className='mb-4'>
               <Label

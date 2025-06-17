@@ -46,7 +46,9 @@ const NextPiecePanel = memo(function NextPiecePanel({
             </div>
           ))
         ) : (
-          <div className={`${containerSize} bg-theme-surface/50 rounded border border-theme-muted`} />
+          <div
+            className={`${containerSize} bg-theme-surface/50 rounded border border-theme-muted`}
+          />
         )}
       </div>
     </CyberCard>

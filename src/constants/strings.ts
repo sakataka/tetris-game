@@ -42,11 +42,11 @@ export const PANELS = {
   SCORE_DATA: 'SCORE DATA',
   NEXT_PIECE: 'NEXT PIECE',
   SCORING: 'SCORING',
-  HIGH_SCORES: '🏆 High Scores',
-  STATISTICS_DASHBOARD: '📊 Statistics Dashboard',
-  PERFORMANCE_METRICS: '🎯 Performance Metrics',
-  PLAY_HISTORY: '📅 Play History',
-  RECENT_ACHIEVEMENTS: '🏆 Recent Achievements',
+  HIGH_SCORES: 'High Scores',
+  STATISTICS_DASHBOARD: 'Statistics Dashboard',
+  PERFORMANCE_METRICS: 'Performance Metrics',
+  PLAY_HISTORY: 'Play History',
+  RECENT_ACHIEVEMENTS: 'Recent Achievements',
 } as const;
 
 // Labels

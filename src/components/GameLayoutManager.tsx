@@ -51,11 +51,13 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
   // Desktop Layout
   if (!isMobile) {
     return (
-      <div className={`min-h-dvh relative overflow-hidden ${
-        hasGradients 
-          ? 'bg-gradient-to-br from-theme-surface via-black to-theme-surface/80'
-          : 'bg-theme-surface'
-      }`}>
+      <div
+        className={`min-h-dvh relative overflow-hidden ${
+          hasGradients
+            ? 'bg-gradient-to-br from-theme-surface via-black to-theme-surface/80'
+            : 'bg-theme-surface'
+        }`}
+      >
         {/* Background effects */}
         <div className='absolute inset-0 bg-grid-pattern opacity-5' />
         {hasGradients && (
@@ -126,11 +128,13 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
 
   // Mobile Layout
   return (
-    <div className={`min-h-dvh relative overflow-hidden ${
-      hasGradients 
-        ? 'bg-gradient-to-br from-theme-surface via-black to-theme-surface/80'
-        : 'bg-theme-surface'
-    }`}>
+    <div
+      className={`min-h-dvh relative overflow-hidden ${
+        hasGradients
+          ? 'bg-gradient-to-br from-theme-surface via-black to-theme-surface/80'
+          : 'bg-theme-surface'
+      }`}
+    >
       {/* Background effects */}
       <div className='absolute inset-0 bg-grid-pattern opacity-5' />
       {hasGradients && (

@@ -39,16 +39,16 @@ const MainLayout = memo(function MainLayout({
 }: MainLayoutProps) {
   const { t } = useTranslation();
   const currentTheme = useCurrentTheme();
-  
+
   // Define which themes should have gradients
   const gradientThemes = ['cyberpunk', 'neon', 'retro'];
   const hasGradients = gradientThemes.includes(currentTheme);
-  
+
   return (
     <div
       className={cn(
         'min-h-screen relative overflow-hidden',
-        hasGradients 
+        hasGradients
           ? 'bg-gradient-to-br from-theme-surface via-black to-theme-surface/80'
           : 'bg-theme-surface',
         className

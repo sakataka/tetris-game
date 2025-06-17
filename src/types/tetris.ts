@@ -148,7 +148,6 @@ export interface GameSettings {
   readonly showParticles?: boolean;
 }
 
-
 // Import ThemeConfig from new theme manager
 export type { ThemeConfig } from '../utils/ui/themeManager';
 

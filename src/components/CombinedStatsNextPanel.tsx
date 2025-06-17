@@ -54,7 +54,9 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
         {/* Score Information */}
         <div className={SPACING.TIGHT}>
           <div className='flex justify-between items-center'>
-            <span className={`text-theme-foreground ${TYPOGRAPHY.SMALL_LABEL}`}>{t('game.score')}</span>
+            <span className={`text-theme-foreground ${TYPOGRAPHY.SMALL_LABEL}`}>
+              {t('game.score')}
+            </span>
             <span
               className={`font-mono ${TYPOGRAPHY.STAT_VALUE} text-theme-primary font-bold`}
               data-testid='score'
@@ -63,7 +65,9 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
             </span>
           </div>
           <div className='flex justify-between items-center'>
-            <span className={`text-theme-foreground ${TYPOGRAPHY.SMALL_LABEL}`}>{t('game.level')}</span>
+            <span className={`text-theme-foreground ${TYPOGRAPHY.SMALL_LABEL}`}>
+              {t('game.level')}
+            </span>
             <span
               className={`font-mono ${TYPOGRAPHY.STAT_VALUE} text-theme-primary font-bold`}
               data-testid='level'
@@ -72,7 +76,9 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
             </span>
           </div>
           <div className='flex justify-between items-center'>
-            <span className={`text-theme-foreground ${TYPOGRAPHY.SMALL_LABEL}`}>{t('game.lines')}</span>
+            <span className={`text-theme-foreground ${TYPOGRAPHY.SMALL_LABEL}`}>
+              {t('game.lines')}
+            </span>
             <span
               className={`font-mono ${TYPOGRAPHY.STAT_VALUE} text-theme-primary font-bold`}
               data-testid='lines'
@@ -126,7 +132,9 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
                 </div>
               ))
             ) : (
-              <div className={`${containerSize} bg-theme-surface/50 rounded border border-theme-muted`} />
+              <div
+                className={`${containerSize} bg-theme-surface/50 rounded border border-theme-muted`}
+              />
             )}
           </div>
         </div>
