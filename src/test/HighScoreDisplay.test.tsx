@@ -67,7 +67,7 @@ describe('HighScoreDisplay component', () => {
       render(<HighScoreDisplay highScores={mockHighScores} />);
 
       expect(screen.getByTestId('high-score-display')).toBeInTheDocument();
-      expect(screen.getByText('🏆 High Scores')).toBeInTheDocument();
+      expect(screen.getByText('High Scores')).toBeInTheDocument();
 
       // Verify each score item is displayed
       expect(screen.getByTestId('high-score-item-0')).toBeInTheDocument();
