@@ -28,9 +28,6 @@ const PausedOverlay = memo(function PausedOverlay({ isVisible, onResume }: Pause
           <div className='space-y-6 p-2'>
             {/* Pause Message */}
             <div className='text-center'>
-              <div className='text-theme-warning text-lg font-bold mb-2'>
-                {t('game.gameIsPaused', 'Game is Paused')}
-              </div>
               <div className='text-theme-foreground text-sm'>
                 {t('game.pauseMessage', 'Press Resume to continue playing')}
               </div>
@@ -47,10 +44,6 @@ const PausedOverlay = memo(function PausedOverlay({ isVisible, onResume }: Pause
               </Button>
             </div>
 
-            {/* Instructions */}
-            <div className='text-center text-xs text-theme-muted'>
-              <div>{t('controls.pauseHint', 'Press Space or Pause button to resume')}</div>
-            </div>
           </div>
         </CyberCard>
       </div>
