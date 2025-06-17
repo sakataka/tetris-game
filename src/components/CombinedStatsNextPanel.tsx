@@ -54,7 +54,7 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
         {/* Score Information */}
         <div className={SPACING.TIGHT}>
           <div className='flex justify-between items-center'>
-            <span className={`text-gray-300 ${TYPOGRAPHY.SMALL_LABEL}`}>{t('game.score')}</span>
+            <span className={`text-theme-foreground ${TYPOGRAPHY.SMALL_LABEL}`}>{t('game.score')}</span>
             <span
               className={`font-mono ${TYPOGRAPHY.STAT_VALUE} text-theme-primary font-bold`}
               data-testid='score'
@@ -63,7 +63,7 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
             </span>
           </div>
           <div className='flex justify-between items-center'>
-            <span className={`text-gray-300 ${TYPOGRAPHY.SMALL_LABEL}`}>{t('game.level')}</span>
+            <span className={`text-theme-foreground ${TYPOGRAPHY.SMALL_LABEL}`}>{t('game.level')}</span>
             <span
               className={`font-mono ${TYPOGRAPHY.STAT_VALUE} text-theme-primary font-bold`}
               data-testid='level'
@@ -72,7 +72,7 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
             </span>
           </div>
           <div className='flex justify-between items-center'>
-            <span className={`text-gray-300 ${TYPOGRAPHY.SMALL_LABEL}`}>{t('game.lines')}</span>
+            <span className={`text-theme-foreground ${TYPOGRAPHY.SMALL_LABEL}`}>{t('game.lines')}</span>
             <span
               className={`font-mono ${TYPOGRAPHY.STAT_VALUE} text-theme-primary font-bold`}
               data-testid='lines'
@@ -84,7 +84,7 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
           {/* Level Progress */}
           <div className='mt-2'>
             <div className='flex justify-between items-center mb-1'>
-              <span className={`text-gray-400 ${TYPOGRAPHY.SMALL_LABEL}`}>
+              <span className={`text-theme-muted ${TYPOGRAPHY.SMALL_LABEL}`}>
                 {t('game.levelProgress')}
               </span>
               <span className={`text-theme-primary ${TYPOGRAPHY.SMALL_LABEL} font-mono`}>
@@ -93,14 +93,14 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
             </div>
             <Progress
               value={(lines % 10) * 10}
-              className='h-1.5 bg-gray-700/50 [&>div]:bg-theme-primary'
+              className='h-1.5 bg-theme-surface/50 [&>div]:bg-theme-primary'
             />
           </div>
         </div>
 
         {/* Next Piece Preview */}
         <div className='flex flex-col items-center justify-center'>
-          <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400 mb-1`}>
+          <div className={`${TYPOGRAPHY.SMALL_LABEL} text-theme-muted mb-1`}>
             {t('game.nextPiece')}
           </div>
           <div className='grid gap-0 w-fit p-1 bg-black/30 rounded border border-theme-secondary/30'>
@@ -110,7 +110,7 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
                   {row.map((cell, x) => (
                     <div
                       key={`${y}-${x}`}
-                      className={`${cellSize} border border-gray-600/50 relative ${
+                      className={`${cellSize} border border-theme-muted/50 relative ${
                         cell ? '' : 'bg-transparent'
                       }`}
                       style={{
@@ -126,7 +126,7 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
                 </div>
               ))
             ) : (
-              <div className={`${containerSize} bg-gray-700/50 rounded border border-gray-500`} />
+              <div className={`${containerSize} bg-theme-surface/50 rounded border border-theme-muted`} />
             )}
           </div>
         </div>

@@ -100,7 +100,7 @@ const ParticleCanvas = memo(function ParticleCanvas({
         style={{ width, height }}
       />
       {shouldShowStats && (
-        <div className='absolute top-2 right-2 text-xs text-green-400 bg-black/50 p-1 rounded font-mono'>
+        <div className='absolute top-2 right-2 text-xs text-theme-success bg-black/50 p-1 rounded font-mono'>
           Particles: {renderStats.particleCount}
         </div>
       )}

@@ -47,11 +47,11 @@ const HighScoreDisplay = memo(function HighScoreDisplay({
               )}
               <div>
                 <div
-                  className={`${TYPOGRAPHY.TITLE_WEIGHT} text-cyber-cyan ${TYPOGRAPHY.BODY_TEXT}`}
+                  className={`${TYPOGRAPHY.TITLE_WEIGHT} text-theme-primary ${TYPOGRAPHY.BODY_TEXT}`}
                 >
                   {score.score.toLocaleString()}
                 </div>
-                <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400`}>
+                <div className={`${TYPOGRAPHY.SMALL_LABEL} text-theme-muted`}>
                   {t('game.levelPrefix')}
                   {score.level}
                 </div>
@@ -59,7 +59,7 @@ const HighScoreDisplay = memo(function HighScoreDisplay({
             </div>
 
             <div className='text-right'>
-              <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-500`}>
+              <div className={`${TYPOGRAPHY.SMALL_LABEL} text-theme-muted`}>
                 {new Date(score.date).toLocaleDateString(
                   i18n.language === 'ja' ? 'ja-JP' : 'en-US'
                 )}
@@ -70,7 +70,7 @@ const HighScoreDisplay = memo(function HighScoreDisplay({
 
         {highScores.length === 0 && (
           <div
-            className={`text-center text-gray-500 py-8 ${TYPOGRAPHY.BODY_TEXT}`}
+            className={`text-center text-theme-muted py-8 ${TYPOGRAPHY.BODY_TEXT}`}
             data-testid='no-scores-message'
           >
             {t('statistics.noHighScores')}

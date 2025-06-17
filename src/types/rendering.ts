@@ -67,12 +67,12 @@ export interface BoardStyleTheme {
 
 // Default style themes
 export const DEFAULT_CYBERPUNK_THEME: BoardStyleTheme = {
-  empty: 'bg-gray-900/50 border border-cyan-500/20 backdrop-blur-sm',
+  empty: 'bg-theme-surface/50 border border-theme-primary/20 backdrop-blur-sm',
   ghost:
-    'border-2 border-cyan-400/60 bg-transparent border-dashed shadow-[0_0_10px_rgba(0,255,255,0.3)]',
-  filled: 'border border-gray-800 shadow-[0_0_5px_rgba(0,0,0,0.5)] transition-all duration-200',
+    'border-2 border-theme-primary/60 bg-transparent border-dashed shadow-[0_0_10px_rgba(0,255,255,0.3)]',
+  filled: 'border border-theme-surface shadow-[0_0_5px_rgba(0,0,0,0.5)] transition-all duration-200',
   flashing: ' animate-pulse bg-white border-white shadow-[0_0_20px_rgba(255,255,255,0.8)]',
-  borderColor: 'border-cyan-500',
+  borderColor: 'border-theme-primary',
   backgroundColor:
     'linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(10,10,15,0.9) 50%, rgba(5,5,10,0.8) 100%)',
   glowEffects: true,

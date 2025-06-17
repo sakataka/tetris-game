@@ -32,7 +32,7 @@ const NextPiecePanel = memo(function NextPiecePanel({
               {row.map((cell, x) => (
                 <div
                   key={`${y}-${x}`}
-                  className={`${cellSize} border border-gray-600/50 relative ${
+                  className={`${cellSize} border border-theme-muted/50 relative ${
                     cell ? '' : 'bg-transparent'
                   }`}
                   style={{
@@ -46,7 +46,7 @@ const NextPiecePanel = memo(function NextPiecePanel({
             </div>
           ))
         ) : (
-          <div className={`${containerSize} bg-gray-700/50 rounded border border-gray-500`} />
+          <div className={`${containerSize} bg-theme-surface/50 rounded border border-theme-muted`} />
         )}
       </div>
     </CyberCard>

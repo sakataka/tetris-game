@@ -33,7 +33,7 @@ const GameHeader = memo(function GameHeader({
   const getTitleClasses = () => {
     const baseClasses = [
       'font-bold text-white mb-2 relative',
-      'bg-gradient-to-r from-cyan-400 via-purple-400 to-yellow-400 bg-clip-text text-transparent',
+      'bg-gradient-to-r from-theme-primary via-theme-secondary to-theme-accent bg-clip-text text-transparent',
     ];
 
     switch (variant) {
@@ -54,7 +54,7 @@ const GameHeader = memo(function GameHeader({
         <h1 className={getTitleClasses()}>
           <span>{t('app.title', 'TETRIS')}</span>
           {shouldShowEffects && (
-            <div className='absolute -inset-1 bg-gradient-to-r from-cyan-400 via-purple-400 to-yellow-400 rounded-lg blur opacity-25' />
+            <div className='absolute -inset-1 bg-gradient-to-r from-theme-primary via-theme-secondary to-theme-accent rounded-lg blur opacity-25' />
           )}
         </h1>
       </div>

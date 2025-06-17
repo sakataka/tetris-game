@@ -60,7 +60,7 @@ export function applyAccessibilityToCSS(accessibility: AccessibilityState): void
 
   // Focus outline
   if (accessibility.keyboard.focusOutline) {
-    root.style.setProperty('--focus-outline', '2px solid var(--cyber-cyan)');
+    root.style.setProperty('--focus-outline', '2px solid var(--theme-primary)');
     root.style.setProperty('--focus-outline-offset', '2px');
   } else {
     root.style.setProperty('--focus-outline', 'none');

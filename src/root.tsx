@@ -97,8 +97,8 @@ export function ErrorBoundary() {
       <body className='font-geist-sans antialiased'>
         <div className='min-h-screen flex items-center justify-center'>
           <div className='text-center'>
-            <h1 className='text-2xl font-bold text-red-400 mb-4'>Application Error</h1>
-            <p className='text-gray-300'>Something went wrong. Please refresh the page.</p>
+            <h1 className='text-2xl font-bold text-theme-error mb-4'>Application Error</h1>
+            <p className='text-theme-foreground'>Something went wrong. Please refresh the page.</p>
           </div>
         </div>
         <Scripts />

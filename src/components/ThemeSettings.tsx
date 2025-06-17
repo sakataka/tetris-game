@@ -100,7 +100,7 @@ export default function ThemeSettings({
               TYPOGRAPHY.BODY_WEIGHT,
               activeTab === tab.id
                 ? 'bg-theme-primary/20 text-theme-primary border-theme-primary/50 shadow-lg shadow-theme-primary/20'
-                : 'bg-gray-800/30 text-gray-400 hover:bg-theme-primary/10 hover:text-theme-primary hover:border-theme-primary/30 border-transparent'
+                : 'bg-theme-surface/30 text-theme-muted hover:bg-theme-primary/10 hover:text-theme-primary hover:border-theme-primary/30 border-transparent'
             )}
           >
             <span className='hidden sm:inline'>{tab.icon} </span>

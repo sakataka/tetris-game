@@ -45,7 +45,7 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
   // Desktop Layout
   if (!isMobile) {
     return (
-      <div className='min-h-dvh bg-gradient-to-br from-gray-900 via-black to-gray-800 relative overflow-hidden'>
+      <div className='min-h-dvh bg-gradient-to-br from-theme-surface via-black to-theme-surface/80 relative overflow-hidden'>
         {/* Background effects */}
         <div className='absolute inset-0 bg-grid-pattern opacity-5' />
         <div className='absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/50' />
@@ -56,7 +56,7 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
             <Button
               variant='outline'
               size='sm'
-              className='bg-gray-800/80 border-theme-primary/50 text-theme-primary hover:bg-theme-primary/20 hover:border-theme-primary transition-all duration-200 text-xs'
+              className='bg-theme-surface/80 border-theme-primary/50 text-theme-primary hover:bg-theme-primary/20 hover:border-theme-primary transition-all duration-200 text-xs'
             >
               {t('tabs.settings')}
             </Button>
@@ -114,7 +114,7 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
 
   // Mobile Layout
   return (
-    <div className='min-h-dvh bg-gradient-to-br from-gray-900 via-black to-gray-800 relative overflow-hidden'>
+    <div className='min-h-dvh bg-gradient-to-br from-theme-surface via-black to-theme-surface/80 relative overflow-hidden'>
       {/* Background effects */}
       <div className='absolute inset-0 bg-grid-pattern opacity-5' />
       <div className='absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/50' />
@@ -125,7 +125,7 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
           <Button
             variant='outline'
             size='sm'
-            className='bg-gray-800/80 border-theme-primary/50 text-theme-primary hover:bg-theme-primary/20 hover:border-theme-primary transition-all duration-200 text-xs px-2 py-1'
+            className='bg-theme-surface/80 border-theme-primary/50 text-theme-primary hover:bg-theme-primary/20 hover:border-theme-primary transition-all duration-200 text-xs px-2 py-1'
           >
             {t('tabs.settings')}
           </Button>

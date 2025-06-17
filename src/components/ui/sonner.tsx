@@ -9,24 +9,24 @@ const Toaster = ({ ...props }: ToasterProps) => {
         {
           '--normal-bg': 'var(--background)',
           '--normal-text': 'var(--foreground)',
-          '--normal-border': 'var(--cyber-cyan-30)',
+          '--normal-border': 'var(--theme-primary-30)',
         } as React.CSSProperties
       }
       position='top-right'
       toastOptions={{
         classNames: {
           toast:
-            'group-[.toaster]:bg-background/90 group-[.toaster]:text-foreground group-[.toaster]:border-cyber-cyan-30 group-[.toaster]:backdrop-blur-sm group-[.toaster]:shadow-lg',
+            'group-[.toaster]:bg-background/90 group-[.toaster]:text-foreground group-[.toaster]:border-theme-primary/30 group-[.toaster]:backdrop-blur-sm group-[.toaster]:shadow-lg',
           description: 'group-[.toaster]:text-cyber-purple',
-          actionButton: 'group-[.toaster]:bg-cyber-cyan group-[.toaster]:text-background',
-          cancelButton: 'group-[.toaster]:bg-cyber-red-20 group-[.toaster]:text-cyber-red',
+          actionButton: 'group-[.toaster]:bg-theme-primary group-[.toaster]:text-background',
+          cancelButton: 'group-[.toaster]:bg-theme-error/20 group-[.toaster]:text-theme-error',
           error:
-            'group-[.toaster]:bg-red-500/10 group-[.toaster]:border-red-400/30 group-[.toaster]:text-red-100',
+            'group-[.toaster]:bg-theme-error/10 group-[.toaster]:border-theme-error/30 group-[.toaster]:text-theme-error',
           success:
-            'group-[.toaster]:bg-green-500/10 group-[.toaster]:border-green-400/30 group-[.toaster]:text-green-100',
+            'group-[.toaster]:bg-theme-success/10 group-[.toaster]:border-theme-success/30 group-[.toaster]:text-theme-success',
           warning:
-            'group-[.toaster]:bg-yellow-500/10 group-[.toaster]:border-yellow-400/30 group-[.toaster]:text-yellow-100',
-          info: 'group-[.toaster]:bg-blue-500/10 group-[.toaster]:border-blue-400/30 group-[.toaster]:text-blue-100',
+            'group-[.toaster]:bg-theme-warning/10 group-[.toaster]:border-theme-warning/30 group-[.toaster]:text-theme-warning',
+          info: 'group-[.toaster]:bg-theme-secondary/10 group-[.toaster]:border-theme-secondary/30 group-[.toaster]:text-theme-secondary',
         },
       }}
       {...props}

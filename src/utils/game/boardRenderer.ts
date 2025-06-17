@@ -326,7 +326,7 @@ export class BoardRendererFactory {
     const accessibilityTheme: BoardStyleTheme = {
       ...DEFAULT_CYBERPUNK_THEME,
       empty: highContrast ? 'bg-black border-2 border-white' : DEFAULT_CYBERPUNK_THEME.empty,
-      filled: highContrast ? 'border-2 border-white bg-gray-800' : DEFAULT_CYBERPUNK_THEME.filled,
+      filled: highContrast ? 'border-2 border-white bg-theme-surface' : DEFAULT_CYBERPUNK_THEME.filled,
       glowEffects: !reducedMotion,
     };
 

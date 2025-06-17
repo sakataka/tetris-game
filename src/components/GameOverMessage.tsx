@@ -18,15 +18,15 @@ const GameOverMessage = memo(function GameOverMessage({ className = '' }: GameOv
         backdropFilter: 'blur(var(--overlay-blur))',
       }}
     >
-      <Alert className='max-w-md border-red-400/50 bg-red-500/10 backdrop-blur-sm neon-border'>
-        <AlertTitle className='text-center md:text-4xl text-2xl font-bold mb-2 md:mb-4 bg-gradient-to-r from-red-400 to-red-600 bg-clip-text text-transparent'>
+      <Alert className='max-w-md border-theme-error/50 bg-theme-error/10 backdrop-blur-sm neon-border'>
+        <AlertTitle className='text-center md:text-4xl text-2xl font-bold mb-2 md:mb-4 bg-gradient-to-r from-theme-error to-theme-error bg-clip-text text-transparent'>
           {t('game.gameOver')}
         </AlertTitle>
         <AlertDescription className='text-center space-y-2'>
-          <p className='text-cyan-400 font-mono md:text-base text-sm'>
+          <p className='text-theme-primary font-mono md:text-base text-sm'>
             {t('game.restart')} (Enter/Space)
           </p>
-          <div className='animate-pulse text-red-400'>◆ ◆ ◆</div>
+          <div className='animate-pulse text-theme-error'>◆ ◆ ◆</div>
         </AlertDescription>
       </Alert>
     </div>

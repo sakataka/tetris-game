@@ -27,7 +27,7 @@ const MobileGameInfo = memo(function MobileGameInfo({
         <div className='hologram-cyan neon-border p-2 rounded-lg text-xs'>
           <div className='font-bold text-theme-primary mb-1'>{t('game.score')}</div>
           <div className='text-lg font-mono'>{score.toLocaleString()}</div>
-          <div className='text-gray-400 text-xs'>
+          <div className='text-theme-muted text-xs'>
             L{level} • {lines} lines
           </div>
         </div>

@@ -60,7 +60,7 @@ const Navigation = memo(function Navigation({
       );
     } else {
       baseClasses.push(
-        'bg-gray-800/30 text-gray-400',
+        'bg-theme-surface/30 text-theme-muted',
         `hover:bg-${color}-500/10`,
         `hover:text-${color}-400`,
         `hover:border-${color}-400/30`
@@ -76,7 +76,7 @@ const Navigation = memo(function Navigation({
 
   return (
     <nav className={cn('navigation-container', className)}>
-      <div className='flex flex-wrap gap-2 bg-gray-900/50 p-3 rounded-xl backdrop-blur-sm border border-gray-700/50'>
+      <div className='flex flex-wrap gap-2 bg-theme-surface/50 p-3 rounded-xl backdrop-blur-sm border border-theme-muted/50'>
         {navigationItems.map((item) => {
           const isActive = activeTab === item.key;
           return (

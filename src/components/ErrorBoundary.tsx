@@ -128,21 +128,21 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     const { retryCount } = this.state;
 
     return (
-      <div className='min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-purple-900 to-violet-900'>
+      <div className='min-h-screen flex items-center justify-center bg-gradient-to-br from-theme-surface via-theme-secondary/50 to-theme-accent/50'>
         <div className='text-center text-white p-8 max-w-md mx-auto'>
           <div className='mb-6'>
             <div className='text-6xl mb-4'>💥</div>
-            <h1 className='text-3xl font-bold mb-2 text-red-400'>
+            <h1 className='text-3xl font-bold mb-2 text-theme-error'>
               {i18next.t('errors.systemError')}
             </h1>
-            <p className='text-gray-300 mb-4'>{i18next.t('errors.unexpectedError')}</p>
+            <p className='text-theme-foreground mb-4'>{i18next.t('errors.unexpectedError')}</p>
           </div>
 
           <div className='space-y-4'>
             {retryCount < this.maxRetries ? (
               <Button
                 onClick={this.handleRetry}
-                className='w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-400 hover:to-purple-400 
+                className='w-full bg-gradient-to-r from-theme-secondary to-theme-accent hover:from-theme-secondary/80 hover:to-theme-accent/80 
                           text-white font-bold py-3 px-6 transition-all duration-300 transform hover:scale-105'
               >
                 {i18next.t('errors.retryUpToTimes', { count: this.maxRetries - retryCount })}
@@ -150,7 +150,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
             ) : (
               <Button
                 onClick={() => window.location.reload()}
-                className='w-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-400 hover:to-pink-400 
+                className='w-full bg-gradient-to-r from-theme-error to-theme-error hover:from-theme-error/80 hover:to-theme-error/80 
                           text-white font-bold py-3 px-6 transition-all duration-300 transform hover:scale-105'
               >
                 {i18next.t('errors.reloadPage')}
@@ -162,13 +162,13 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                 window.location.href = '/';
               }}
               variant='secondary'
-              className='w-full bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4'
+              className='w-full bg-theme-muted hover:bg-theme-muted/80 text-white font-bold py-2 px-4'
             >
               {i18next.t('errors.returnToHome')}
             </Button>
           </div>
 
-          <div className='mt-6 text-xs text-gray-400'>
+          <div className='mt-6 text-xs text-theme-muted'>
             {i18next.t('errors.errorId')}: {this.state.errorId}
           </div>
         </div>
@@ -181,16 +181,16 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
     return (
       <div className='hologram neon-border p-6 rounded-lg text-center'>
-        <div className='text-yellow-400 text-4xl mb-4'>⚠️</div>
-        <h3 className='text-lg font-bold text-yellow-400 mb-2'>
+        <div className='text-theme-warning text-4xl mb-4'>⚠️</div>
+        <h3 className='text-lg font-bold text-theme-warning mb-2'>
           {i18next.t('errors.sectionError')}
         </h3>
-        <p className='text-gray-300 text-sm mb-4'>{i18next.t('errors.sectionDisplayError')}</p>
+        <p className='text-theme-foreground text-sm mb-4'>{i18next.t('errors.sectionDisplayError')}</p>
 
         {retryCount < this.maxRetries && (
           <Button
             onClick={this.handleRetry}
-            className='bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 
+            className='bg-gradient-to-r from-theme-warning to-theme-accent hover:from-theme-warning/80 hover:to-theme-accent/80 
                       text-white font-bold py-2 px-4 transition-all duration-300'
           >
             {i18next.t('errors.retry')}
@@ -202,14 +202,14 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   private renderComponentError() {
     return (
-      <div className='bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-center'>
-        <div className='text-red-400 text-2xl mb-2'>🔧</div>
-        <p className='text-red-300 text-sm mb-2'>{i18next.t('errors.componentError')}</p>
+      <div className='bg-theme-error/10 border border-theme-error/30 rounded-lg p-4 text-center'>
+        <div className='text-theme-error text-2xl mb-2'>🔧</div>
+        <p className='text-theme-error text-sm mb-2'>{i18next.t('errors.componentError')}</p>
         {this.state.retryCount < this.maxRetries && (
           <Button
             onClick={this.handleRetry}
             size='sm'
-            className='bg-red-500 hover:bg-red-400 text-white text-xs py-1 px-3'
+            className='bg-theme-error hover:bg-theme-error/80 text-white text-xs py-1 px-3'
           >
             {i18next.t('errors.retry')}
           </Button>

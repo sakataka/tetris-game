@@ -325,7 +325,7 @@ export function createVariants<T extends Record<string, Record<string, string>>>
 // Example variant configuration for Tetris components
 export const tetrisVariants = createVariants({
   piece: {
-    I: 'bg-cyber-cyan shadow-neon-sm',
+    I: 'bg-theme-primary shadow-neon-sm',
     O: 'bg-cyber-yellow shadow-neon-sm',
     T: 'bg-cyber-purple shadow-neon-sm',
     L: 'bg-cyber-orange shadow-neon-sm',

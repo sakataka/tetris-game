@@ -81,7 +81,7 @@ const BackgroundEffects = memo(function BackgroundEffects({
       {/* Additional atmospheric effects for intense variant */}
       {variant === 'intense' && (
         <>
-          <div className='absolute inset-0 bg-gradient-to-br from-cyan-900/5 via-transparent to-purple-900/5' />
+          <div className='absolute inset-0 bg-gradient-to-br from-theme-primary/5 via-transparent to-theme-secondary/5' />
           <div className='absolute inset-0 bg-noise-pattern opacity-[0.02]' />
         </>
       )}
