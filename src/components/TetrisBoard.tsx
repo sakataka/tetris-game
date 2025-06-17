@@ -58,16 +58,13 @@ const TetrisBoard = memo(function TetrisBoard({
   const boardContainerClassName = boardRenderer.getBoardContainerClassName(renderEffects);
 
   return (
-    <div
-      className='relative game-board-responsive'
-      data-testid='game-board'
-    >
+    <div className='relative game-board-responsive' data-testid='game-board'>
       <div className={boardContainerClassName} style={boardContainerStyle}>
         {/* Inner glow effect */}
-        <div 
+        <div
           className='absolute inset-0 pointer-events-none'
           style={{
-            background: 'var(--game-board-gradient)'
+            background: 'var(--game-board-gradient)',
           }}
         />
 
@@ -80,11 +77,11 @@ const TetrisBoard = memo(function TetrisBoard({
               <div key={`${y}-${x}`} className={cellStyle.className} style={cellStyle.style}>
                 {/* Neon effect for filled pieces */}
                 {cell && cell !== 'ghost' && (
-                  <div 
+                  <div
                     className='absolute inset-0 bg-current'
                     style={{
                       opacity: 'var(--piece-glow-opacity)',
-                      filter: 'blur(var(--piece-glow-blur))'
+                      filter: 'blur(var(--piece-glow-blur))',
                     }}
                   />
                 )}

@@ -43,7 +43,7 @@ function ColorInput({ label, value, onChange, description }: ColorInputProps) {
 
   return (
     <div className='color-input mb-3'>
-      <Label htmlFor={colorInputId} className='block text-sm font-medium mb-1 text-cyber-cyan'>
+      <Label htmlFor={colorInputId} className='block text-sm font-medium mb-1 text-theme-primary'>
         {label}
       </Label>
       <div className='flex gap-2 items-center'>
@@ -57,9 +57,9 @@ function ColorInput({ label, value, onChange, description }: ColorInputProps) {
               onChange(e.target.value);
             }}
             className={cn(
-              'w-10 h-10 rounded-md border-2 border-cyber-cyan-30 cursor-pointer',
-              'hover:border-cyber-cyan transition-colors duration-200',
-              'focus:outline-none focus:ring-2 focus:ring-cyber-cyan focus:border-cyber-cyan',
+              'w-10 h-10 rounded-md border-2 border-theme-primary/30 cursor-pointer',
+              'hover:border-theme-primary transition-colors duration-200',
+              'focus:outline-none focus:ring-2 focus:ring-theme-primary focus:border-theme-primary',
               'disabled:cursor-not-allowed disabled:opacity-50'
             )}
             aria-describedby={`${colorInputId}-description`}
@@ -73,14 +73,14 @@ function ColorInput({ label, value, onChange, description }: ColorInputProps) {
           placeholder='#FFFFFF'
           className={cn(
             'flex-1 font-mono text-sm',
-            'bg-cyber-cyan-10 border-cyber-cyan-30 text-foreground',
-            'focus-visible:ring-cyber-cyan focus-visible:border-cyber-cyan',
-            'hover:bg-cyber-cyan-20 transition-colors'
+            'bg-theme-primary/10 border-theme-primary/30 text-foreground',
+            'focus-visible:ring-theme-primary focus-visible:border-theme-primary',
+            'hover:bg-theme-primary/20 transition-colors'
           )}
         />
       </div>
       {description && (
-        <p id={`${colorInputId}-description`} className='text-xs text-cyan-400 mt-1'>
+        <p id={`${colorInputId}-description`} className='text-xs text-theme-primary mt-1'>
           {description}
         </p>
       )}
@@ -153,14 +153,14 @@ export default function ColorPaletteEditor({
   return (
     <div className={`color-palette-editor ${className}`}>
       <div className='flex items-center justify-between mb-3'>
-        <h3 className='text-lg font-bold text-cyber-cyan'>{t('colorPalette.title')}</h3>
+        <h3 className='text-lg font-bold text-theme-primary'>{t('colorPalette.title')}</h3>
         <Button
           variant='outline'
           size='sm'
           onClick={() => setIsExpanded(!isExpanded)}
           className={cn(
-            'border-cyan-400/30 text-cyan-400 hover:bg-cyan-500/10',
-            'bg-cyan-500/5 hover:text-cyan-400'
+            'border-theme-primary/30 text-theme-primary hover:bg-theme-primary/10',
+            'bg-theme-primary/5 hover:text-theme-primary'
           )}
         >
           {isExpanded ? t('colorPalette.collapse') : t('colorPalette.advancedSettings')}
@@ -168,16 +168,18 @@ export default function ColorPaletteEditor({
       </div>
 
       {/* Color preview (always displayed) */}
-      <div className='mb-4 p-3 rounded-lg bg-cyber-cyan-10 border border-cyber-cyan-30'>
-        <div className='text-sm font-medium mb-2 text-cyber-cyan'>{t('colorPalette.preview')}</div>
+      <div className='mb-4 p-3 rounded-lg bg-theme-primary/10 border border-theme-primary/30'>
+        <div className='text-sm font-medium mb-2 text-theme-primary'>
+          {t('colorPalette.preview')}
+        </div>
         <div className='grid grid-cols-6 gap-2'>
           {colorFields.map(({ key, label }) => (
             <div key={key} className='text-center'>
               <div
-                className='w-full h-8 rounded border border-cyber-cyan-30 mb-1'
+                className='w-full h-8 rounded border border-theme-primary/30 mb-1'
                 style={{ backgroundColor: colors[key] }}
               />
-              <div className='text-xs text-cyber-cyan truncate' title={label}>
+              <div className='text-xs text-theme-primary truncate' title={label}>
                 {label.slice(0, 4)}
               </div>
             </div>
@@ -204,8 +206,8 @@ export default function ColorPaletteEditor({
               size='sm'
               onClick={resetToDefaults}
               className={cn(
-                'bg-cyber-red-20 border border-cyber-red-30 text-cyber-red',
-                'hover:bg-cyber-red-30 hover:text-cyber-red'
+                'bg-theme-error/20 border border-theme-error/30 text-theme-error',
+                'hover:bg-theme-error/30 hover:text-theme-error'
               )}
             >
               {t('buttons.reset')}

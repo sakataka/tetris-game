@@ -34,9 +34,9 @@
 
   /* ===== TYPOGRAPHY TOKENS ===== */
   /* Font families - dynamically updated by ThemeManager */
-  --theme-font-primary: 'Orbitron, monospace';
-  --theme-font-secondary: 'Courier New, monospace';
-  --theme-font-body: 'Inter, sans-serif';
+  --theme-font-primary: "Orbitron, monospace";
+  --theme-font-secondary: "Courier New, monospace";
+  --theme-font-body: "Inter, sans-serif";
 
   /* Font sizes */
   --theme-text-xs: 0.75rem;

@@ -4,8 +4,8 @@
  */
 
 import type { GameStatistics, HighScore } from '../types/tetris';
-import type { EnhancedStatistics, GameSession } from '../utils/data/statisticsUtils';
 import { StatisticsService } from '../utils/data/StatisticsService';
+import type { EnhancedStatistics, GameSession } from '../utils/data/statisticsUtils';
 
 interface UseStatisticsCalculationProps {
   baseStatistics: GameStatistics;

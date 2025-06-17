@@ -22,7 +22,7 @@ const SettingsTabContent = memo(function SettingsTabContent() {
       <CyberCard title={t('settings.language')} theme='primary' size='md'>
         <Suspense
           fallback={
-            <div className={`text-gray-400 ${TYPOGRAPHY.BODY_TEXT}`}>{t('common.loading')}</div>
+            <div className={`text-theme-muted ${TYPOGRAPHY.BODY_TEXT}`}>{t('common.loading')}</div>
           }
         >
           <LanguageSelector />
@@ -51,17 +51,17 @@ const SettingsTabContent = memo(function SettingsTabContent() {
                   gameMode: checked ? 'debug' : 'single',
                 });
               }}
-              className='data-[state=checked]:bg-theme-primary data-[state=checked]:border-theme-primary data-[state=unchecked]:border-gray-600 data-[state=unchecked]:bg-gray-900'
+              className='data-[state=checked]:bg-theme-primary data-[state=checked]:border-theme-primary data-[state=unchecked]:border-theme-muted data-[state=unchecked]:bg-theme-surface'
               aria-label={t('settings.debugMode')}
             />
             <Label
               htmlFor='debug-mode-checkbox'
-              className='text-gray-300 hover:text-white transition-colors cursor-pointer'
+              className='text-theme-foreground hover:text-theme-primary transition-colors cursor-pointer'
             >
               <span className={TYPOGRAPHY.BODY_TEXT}>{t('settings.debugMode')}</span>
             </Label>
           </div>
-          <p className='text-xs text-gray-500'>{t('settings.debugModeDescription')}</p>
+          <p className='text-xs text-theme-muted'>{t('settings.debugModeDescription')}</p>
         </div>
       </CyberCard>
     </div>

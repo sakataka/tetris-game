@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { HighScore } from '../types/tetris';
 import HighScoreDisplay from '../components/HighScoreDisplay';
+import type { HighScore } from '../types/tetris';
 
 // Mock i18next
 vi.mock('react-i18next', () => ({

@@ -29,7 +29,7 @@ const LanguageSelector = memo(function LanguageSelector({
       {showLabel && (
         <label
           htmlFor='language-select'
-          className={cn(TYPOGRAPHY.BODY_TEXT, TYPOGRAPHY.BODY_WEIGHT, 'text-cyber-cyan')}
+          className={cn(TYPOGRAPHY.BODY_TEXT, TYPOGRAPHY.BODY_WEIGHT, 'text-theme-primary')}
         >
           {t('settings.language')}:
         </label>
@@ -39,23 +39,23 @@ const LanguageSelector = memo(function LanguageSelector({
           id='language-select'
           data-testid='language-selector'
           className={cn(
-            'w-[180px] bg-cyber-cyan-10 border-cyber-cyan-30 text-cyber-cyan',
-            'hover:bg-cyber-cyan-20 hover:border-cyber-cyan transition-colors',
-            'focus:ring-cyber-cyan focus:border-cyber-cyan',
-            'data-[state=open]:border-cyber-cyan',
-            '[&>span]:text-cyber-cyan',
+            'w-[180px] bg-theme-primary/10 border-theme-primary/30 text-theme-primary',
+            'hover:bg-theme-primary/20 hover:border-theme-primary transition-colors',
+            'focus:ring-theme-primary focus:border-theme-primary',
+            'data-[state=open]:border-theme-primary',
+            '[&>span]:text-theme-primary',
             TYPOGRAPHY.BODY_TEXT
           )}
           aria-label={t('aria.changeLanguage')}
         >
           <SelectValue />
         </SelectTrigger>
-        <SelectContent className='bg-background border-cyber-cyan-30'>
+        <SelectContent className='bg-background border-theme-primary/30'>
           {supportedLanguages.map((lang) => (
             <SelectItem
               key={lang}
               value={lang}
-              className='text-foreground hover:bg-cyber-cyan-20 focus:bg-cyber-cyan-20 focus:text-cyber-cyan'
+              className='text-foreground hover:bg-theme-primary/20 focus:bg-theme-primary/20 focus:text-theme-primary'
             >
               {languageNames[lang]}
             </SelectItem>

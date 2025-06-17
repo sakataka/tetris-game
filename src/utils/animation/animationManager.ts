@@ -5,10 +5,10 @@
  * providing a centralized animation manager that improves performance and maintainability
  */
 
+import { ENV_CONFIG } from '../../config/environment';
 import { PERFORMANCE_LIMITS } from '../../constants/performance';
 import { INTERVALS } from '../../constants/timing';
 import { log } from '../logging';
-import { ENV_CONFIG } from '../../config/environment';
 
 export interface AnimationOptions {
   /** Target FPS (default: 60) */

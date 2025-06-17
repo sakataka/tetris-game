@@ -7,12 +7,12 @@ import type {
   ThemeState,
   ThemeVariant,
 } from '../types/tetris';
-import { getThemePreset } from '../utils/ui/themePresets';
 import {
-  applyThemeToDocument,
   applyCustomColors,
+  applyThemeToDocument,
   initializeThemeSystem,
 } from '../utils/ui/themeManager';
+import { getThemePreset } from '../utils/ui/themePresets';
 
 // Default theme state
 const DEFAULT_THEME_STATE: ThemeState = {

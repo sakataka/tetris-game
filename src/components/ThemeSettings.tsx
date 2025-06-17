@@ -172,8 +172,8 @@ export default function ThemeSettings({
                     checked={animations}
                     onCheckedChange={() => onAnimationsToggle()}
                     className={cn(
-                      'data-[state=checked]:bg-theme-primary data-[state=unchecked]:bg-gray-600',
-                      'border-2 data-[state=checked]:border-theme-primary data-[state=unchecked]:border-gray-500'
+                      'data-[state=checked]:bg-theme-primary data-[state=unchecked]:bg-theme-muted',
+                      'border-2 data-[state=checked]:border-theme-primary data-[state=unchecked]:border-theme-border'
                     )}
                     aria-label={t('accessibility.fullAnimation')}
                   />

@@ -50,17 +50,17 @@ const AudioPanel = memo(function AudioPanel({
       {audioSystemStatus?.preloadProgress && audioSystemStatus.preloadProgress.progress < 100 && (
         <div className='mb-3'>
           <div className='flex justify-between items-center mb-1'>
-            <span className={`text-gray-300 ${TYPOGRAPHY.SMALL_LABEL}`}>
+            <span className={`text-theme-foreground ${TYPOGRAPHY.SMALL_LABEL}`}>
               Loading Audio: {audioSystemStatus.preloadProgress.loaded}/
               {audioSystemStatus.preloadProgress.total}
             </span>
-            <span className={`text-cyber-cyan ${TYPOGRAPHY.SMALL_LABEL} font-mono`}>
+            <span className={`text-theme-primary ${TYPOGRAPHY.SMALL_LABEL} font-mono`}>
               {Math.round(audioSystemStatus.preloadProgress.progress)}%
             </span>
           </div>
           <Progress
             value={audioSystemStatus.preloadProgress.progress}
-            className='h-2 bg-gray-700/50 [&>div]:bg-theme-primary'
+            className='h-2 bg-theme-muted/50 [&>div]:bg-theme-primary'
           />
           {audioSystemStatus.preloadProgress.failed > 0 && (
             <div className={`text-theme-error ${TYPOGRAPHY.SMALL_LABEL} mt-1`}>
@@ -72,7 +72,9 @@ const AudioPanel = memo(function AudioPanel({
 
       <div className={SPACING.FORM_ELEMENTS}>
         <div className='flex justify-between items-center'>
-          <span className={`text-gray-300 ${TYPOGRAPHY.BODY_TEXT}`}>{t('settings.volume')}</span>
+          <span className={`text-theme-foreground ${TYPOGRAPHY.BODY_TEXT}`}>
+            {t('settings.volume')}
+          </span>
           <div className='flex items-center space-x-2'>
             <Slider
               value={[volume]}
@@ -83,10 +85,10 @@ const AudioPanel = memo(function AudioPanel({
               data-testid='volume-slider'
               className={cn(
                 UI_SIZES.SLIDER.WIDTH,
-                '[&>span[data-slot=slider-track]]:bg-gray-700',
-                '[&>span[data-slot=slider-range]]:bg-cyber-cyan',
-                '[&>span[data-slot=slider-thumb]]:border-cyber-cyan [&>span[data-slot=slider-thumb]]:bg-cyber-cyan',
-                '[&>span[data-slot=slider-thumb]]:shadow-[0_0_10px_rgba(0,255,255,0.5)]'
+                '[&>span[data-slot=slider-track]]:bg-theme-muted',
+                '[&>span[data-slot=slider-range]]:bg-theme-primary',
+                '[&>span[data-slot=slider-thumb]]:border-theme-primary [&>span[data-slot=slider-thumb]]:bg-theme-primary',
+                '[&>span[data-slot=slider-thumb]]:shadow-[var(--button-glow-base)_var(--theme-primary)]'
               )}
             />
             <span
@@ -97,7 +99,7 @@ const AudioPanel = memo(function AudioPanel({
           </div>
         </div>
         <div className='flex justify-between items-center'>
-          <label htmlFor='mute-switch' className={`text-gray-300 ${TYPOGRAPHY.BODY_TEXT}`}>
+          <label htmlFor='mute-switch' className={`text-theme-foreground ${TYPOGRAPHY.BODY_TEXT}`}>
             {t('settings.mute')}
           </label>
           <Switch
@@ -105,8 +107,8 @@ const AudioPanel = memo(function AudioPanel({
             checked={!isMuted}
             onCheckedChange={() => onToggleMute()}
             className={cn(
-              'data-[state=checked]:bg-theme-primary data-[state=unchecked]:bg-gray-600',
-              'border-2 data-[state=checked]:border-theme-primary data-[state=unchecked]:border-gray-500'
+              'data-[state=checked]:bg-theme-primary data-[state=unchecked]:bg-theme-muted',
+              'border-2 data-[state=checked]:border-theme-primary data-[state=unchecked]:border-theme-border'
             )}
             aria-label={t('settings.mute')}
           />
@@ -114,7 +116,7 @@ const AudioPanel = memo(function AudioPanel({
         <div className='flex justify-between items-center'>
           <label
             htmlFor='virtual-controls-switch'
-            className={`text-gray-300 ${TYPOGRAPHY.BODY_TEXT}`}
+            className={`text-theme-foreground ${TYPOGRAPHY.BODY_TEXT}`}
           >
             {t('settings.virtualControls')}
           </label>
@@ -123,8 +125,8 @@ const AudioPanel = memo(function AudioPanel({
             checked={settings.virtualControlsEnabled}
             onCheckedChange={(checked) => onUpdateSettings({ virtualControlsEnabled: checked })}
             className={cn(
-              'data-[state=checked]:bg-theme-primary data-[state=unchecked]:bg-gray-600',
-              'border-2 data-[state=checked]:border-theme-primary data-[state=unchecked]:border-gray-500'
+              'data-[state=checked]:bg-theme-primary data-[state=unchecked]:bg-theme-muted',
+              'border-2 data-[state=checked]:border-theme-primary data-[state=unchecked]:border-theme-border'
             )}
             aria-label={t('settings.virtualControls')}
           />

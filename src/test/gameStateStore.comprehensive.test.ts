@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useGameStateStore } from '../store/gameStateStore';
 import { useSettingsStore } from '../store/settingsStore';
-import type { Tetromino, Particle } from '../types/tetris';
+import type { Particle, Tetromino } from '../types/tetris';
 
 // Mock the settings store
 vi.mock('../store/settingsStore', () => ({
@@ -216,7 +216,9 @@ describe('GameStateStore - Comprehensive Tests', () => {
         shaking: true,
       });
 
-      store.updateParticles([{ id: 'p1', x: 100, y: 200, vx: 1, vy: -2, life: 1.0, color: '#FF0000' }]);
+      store.updateParticles([
+        { id: 'p1', x: 100, y: 200, vx: 1, vy: -2, life: 1.0, color: '#FF0000' },
+      ]);
 
       // Clear line effect
       store.clearLineEffect();
@@ -401,4 +403,3 @@ describe('GameStateStore - Comprehensive Tests', () => {
     });
   });
 });
-

@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import {
   useCurrentSession,
   useEndPlaySession,
-  useIsSessionActive,
   useIncrementGameCount,
+  useIsSessionActive,
   useSessionStats,
   useStartPlaySession,
 } from '../store/statisticsStore';

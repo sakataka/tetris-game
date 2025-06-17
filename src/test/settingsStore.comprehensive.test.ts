@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { useSettingsStore, type TabType } from '../store/settingsStore';
+import { type TabType, useSettingsStore } from '../store/settingsStore';
 
 // Mock localStorage for Zustand persist
 const mockStorage = {
@@ -400,4 +400,3 @@ describe('SettingsStore - Comprehensive Tests', () => {
     });
   });
 });
-

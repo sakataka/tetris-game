@@ -7,8 +7,8 @@ import { cn } from '@/utils/ui/cn';
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
 import { TYPOGRAPHY } from '../../../constants/layout';
-import type { EnhancedStatistics } from '../../../utils/data/statisticsUtils';
 import { STATISTICS_PERIODS } from '../../../utils/data/StatisticsService';
+import type { EnhancedStatistics } from '../../../utils/data/statisticsUtils';
 import CyberCard from '../CyberCard';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../select';
 

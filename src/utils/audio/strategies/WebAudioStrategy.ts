@@ -3,8 +3,8 @@
  * High-performance audio with object pooling and concurrent playback
  */
 
-import type { SoundKey } from '../../../types/tetris';
 import { createAudioError } from '../../../types/errors';
+import type { SoundKey } from '../../../types/tetris';
 import { log } from '../../logging/logger';
 import { type AudioState, AudioStrategy, type SoundConfig } from './AudioStrategy';
 

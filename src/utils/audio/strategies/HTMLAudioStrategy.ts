@@ -4,8 +4,8 @@
  */
 
 import { GAME_TIMING } from '../../../constants/timing';
-import type { SoundKey } from '../../../types/tetris';
 import { createAudioError } from '../../../types/errors';
+import type { SoundKey } from '../../../types/tetris';
 import { log } from '../../logging';
 import { type AudioState, AudioStrategy, type SoundConfig } from './AudioStrategy';
 

@@ -3,8 +3,8 @@
  * Extracts shared functionality from concrete implementations
  */
 
-import type { SoundKey } from '../../../types/tetris';
 import { createAudioError } from '../../../types/errors';
+import type { SoundKey } from '../../../types/tetris';
 import { log } from '../../logging';
 
 export interface SoundConfig {

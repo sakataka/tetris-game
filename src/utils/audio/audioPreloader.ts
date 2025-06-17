@@ -3,8 +3,8 @@
  * Features priority-based loading, network-aware strategies, and memory optimization
  */
 
-import type { SoundKey } from '../../types/tetris';
 import { createAudioError } from '../../types/errors';
+import type { SoundKey } from '../../types/tetris';
 import { log } from '../logging/logger';
 import { audioManager } from './audioManager';
 

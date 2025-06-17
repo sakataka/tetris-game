@@ -5,8 +5,8 @@
  * Consolidates handleError, handleAsyncError, and withErrorHandling patterns.
  */
 
-import { log } from '../logging';
 import { GameAppError } from '../../types/errors';
+import { log } from '../logging';
 import { errorHandler } from './errorHandler';
 
 /**

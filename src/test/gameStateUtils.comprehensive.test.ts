@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { GameState, LineEffectState, Tetromino } from '../types/tetris';
 import {
   calculateScoreIncrease,
-  processLineClear,
-  createLineEffects,
   checkGameOver,
+  createLineEffects,
+  processLineClear,
   updateGameStateWithPiece,
 } from '../utils/game/gameStateUtils';
-import type { GameState, Tetromino, LineEffectState } from '../types/tetris';
 
 // Mock tetrisUtils
 vi.mock('../utils/game/tetrisUtils', () => ({
@@ -483,4 +483,3 @@ describe('GameStateUtils - Comprehensive Tests', () => {
     });
   });
 });
-

@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import StatisticsDashboard from '../components/StatisticsDashboard';
 import type { GameStatistics, HighScore } from '../types/tetris';
 import type { GameSession } from '../utils/data/statisticsUtils';
-import StatisticsDashboard from '../components/StatisticsDashboard';
 
 // Mock i18next
 vi.mock('react-i18next', () => ({
