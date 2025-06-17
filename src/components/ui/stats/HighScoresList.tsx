@@ -23,7 +23,7 @@ const HighScoresList: React.FC<HighScoresListProps> = ({ highScores }) => {
       case 0:
         return 'bg-theme-warning text-black border-theme-warning';
       case 1:
-        return 'bg-gray-400 text-black border-gray-300';
+        return 'bg-theme-muted text-black border-theme-muted';
       case 2:
         return 'bg-theme-accent text-white border-theme-accent';
       default:
@@ -71,11 +71,11 @@ const HighScoresList: React.FC<HighScoresListProps> = ({ highScores }) => {
             >
               Lv{score.level}
             </Badge>
-            <span className='text-gray-500 text-xs'>{formatTimeAgo(score.date)}</span>
+            <span className='text-theme-muted text-xs'>{formatTimeAgo(score.date)}</span>
           </div>
         ))}
         {highScores.length === 0 && (
-          <div className={`text-gray-500 text-center py-0.5 ${TYPOGRAPHY.SMALL_LABEL}`}>
+          <div className={`text-theme-muted text-center py-0.5 ${TYPOGRAPHY.SMALL_LABEL}`}>
             {t('statistics.noHighScores')}
           </div>
         )}

@@ -40,7 +40,7 @@ const MainLayout = memo(function MainLayout({
   return (
     <div
       className={cn(
-        'min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 relative overflow-hidden',
+        'min-h-screen bg-gradient-to-br from-theme-surface via-black to-theme-surface/80 relative overflow-hidden',
         className
       )}
     >
@@ -57,7 +57,7 @@ const MainLayout = memo(function MainLayout({
                 <Button
                   variant='outline'
                   size='sm'
-                  className='bg-gray-800/80 border-theme-primary/50 text-theme-primary hover:bg-theme-primary/20 hover:border-theme-primary transition-all duration-200 text-xs'
+                  className='bg-theme-surface/80 border-theme-primary/50 text-theme-primary hover:bg-theme-primary/20 hover:border-theme-primary transition-all duration-200 text-xs'
                 >
                   {t('tabs.game')}
                 </Button>

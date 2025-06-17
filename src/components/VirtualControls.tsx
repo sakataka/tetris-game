@@ -86,9 +86,9 @@ const VirtualControls = memo(function VirtualControls({
                   onTouchStart={handleTouchStart(moveHandlers.left)}
                   className={cn(
                     UI_SIZES.VIRTUAL_BUTTON.STANDARD,
-                    'bg-gradient-to-r from-cyan-600 to-cyan-500',
-                    'hover:from-cyan-500 hover:to-cyan-400 active:scale-95',
-                    'border border-cyan-400/50 shadow-[0_0_10px_rgb(6_182_212/30%)]',
+                    'bg-gradient-to-r from-theme-secondary to-theme-secondary',
+                    'hover:from-theme-secondary/80 hover:to-theme-secondary/80 active:scale-95',
+                    'border border-theme-secondary/50 shadow-[0_0_10px_rgba(var(--theme-secondary),0.3)]',
                     'text-white font-bold text-sm mobile-touch-zone select-none'
                   )}
                   aria-label={t('controls.moveLeft')}
@@ -113,9 +113,9 @@ const VirtualControls = memo(function VirtualControls({
                   onTouchStart={handleTouchStart(moveHandlers.down)}
                   className={cn(
                     UI_SIZES.VIRTUAL_BUTTON.STANDARD,
-                    'bg-gradient-to-r from-cyan-600 to-cyan-500',
-                    'hover:from-cyan-500 hover:to-cyan-400 active:scale-95',
-                    'border border-cyan-400/50 shadow-[0_0_10px_rgb(6_182_212/30%)]',
+                    'bg-gradient-to-r from-theme-secondary to-theme-secondary',
+                    'hover:from-theme-secondary/80 hover:to-theme-secondary/80 active:scale-95',
+                    'border border-theme-secondary/50 shadow-[0_0_10px_rgba(var(--theme-secondary),0.3)]',
                     'text-white font-bold text-sm mobile-touch-zone select-none'
                   )}
                   aria-label={t('controls.moveDown')}
@@ -142,9 +142,9 @@ const VirtualControls = memo(function VirtualControls({
                   onTouchStart={handleTouchStart(moveHandlers.right)}
                   className={cn(
                     UI_SIZES.VIRTUAL_BUTTON.STANDARD,
-                    'bg-gradient-to-r from-cyan-600 to-cyan-500',
-                    'hover:from-cyan-500 hover:to-cyan-400 active:scale-95',
-                    'border border-cyan-400/50 shadow-[0_0_10px_rgb(6_182_212/30%)]',
+                    'bg-gradient-to-r from-theme-secondary to-theme-secondary',
+                    'hover:from-theme-secondary/80 hover:to-theme-secondary/80 active:scale-95',
+                    'border border-theme-secondary/50 shadow-[0_0_10px_rgba(var(--theme-secondary),0.3)]',
                     'text-white font-bold text-sm mobile-touch-zone select-none'
                   )}
                   aria-label={t('controls.moveRight')}

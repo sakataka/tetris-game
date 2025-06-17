@@ -43,6 +43,47 @@ Read, Edit, MultiEdit for complex logic changes
 3. Use Read/Edit only when complex logic changes are needed
 4. Batch related operations to minimize tool calls
 
+## 🔍 Search Command Guidelines
+
+### Ripgrep (rg) Command Usage
+**IMPORTANT**: Always use correct syntax to avoid file type errors
+
+**✅ Correct Usage:**
+```bash
+# Search for patterns in all files
+rg "pattern" src/
+
+# Search in specific file extensions (use include patterns)
+rg "pattern" src/ --include="*.tsx"
+rg "pattern" src/ --include="*.ts"
+
+# Multiple extensions
+rg "pattern" src/ --include="*.{ts,tsx,js,jsx}"
+
+# Search in specific directories
+rg "gray-[0-9]+" src/components/
+```
+
+**❌ Incorrect Usage (causes errors):**
+```bash
+# DO NOT use --type with unsupported file types
+rg "pattern" --type tsx src/  # Error: unrecognized file type: tsx
+rg "pattern" --type ts src/   # May work but prefer --include
+```
+
+**Common Search Patterns for Theme Colors:**
+```bash
+# Search for hardcoded colors
+rg "gray-[0-9]+" src/
+rg "cyan-[0-9]+" src/
+rg "cyber-cyan" src/
+rg "blue-[0-9]+" src/
+rg "red-[0-9]+" src/
+rg "green-[0-9]+" src/
+rg "yellow-[0-9]+" src/
+rg "purple-[0-9]+" src/
+```
+
 ## 🎯 Development Guidelines
 
 **Critical Reference**: [React Development Guidelines](./docs/REACT_DEVELOPMENT_GUIDELINES.md)

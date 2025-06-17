@@ -67,10 +67,10 @@ const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({
       {statistics.totalGames === 0 && (
         <CyberCard title='📈 Get Started' theme='primary' size='md'>
           <div className='text-center py-2' data-testid='empty-state'>
-            <div className={`text-gray-500 ${TYPOGRAPHY.BODY_TEXT}`}>
+            <div className={`text-theme-muted ${TYPOGRAPHY.BODY_TEXT}`}>
               {t('statistics.noStatistics')}
             </div>
-            <div className={`text-gray-600 ${TYPOGRAPHY.SMALL_LABEL} mt-1`}>
+            <div className={`text-theme-muted ${TYPOGRAPHY.SMALL_LABEL} mt-1`}>
               {t('statistics.playGameToViewStats')}
             </div>
           </div>

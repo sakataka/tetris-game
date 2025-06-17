@@ -36,14 +36,14 @@ const GameButtonsPanel = memo(function GameButtonsPanel({
         className={cn(
           buttonWidthClass,
           // Cyberpunk pause/resume button styling
-          'bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400',
-          'disabled:from-gray-600 disabled:to-gray-700 font-bold',
+          'bg-gradient-to-r from-theme-primary to-theme-secondary hover:from-theme-primary/80 hover:to-theme-secondary/80',
+          'disabled:from-theme-muted disabled:to-theme-muted font-bold',
           'transition-all duration-300 transform hover:scale-105 disabled:scale-100',
-          'shadow-[0_0_20px_rgba(0,255,255,0.3)] hover:shadow-[0_0_30px_rgba(0,255,255,0.5)]',
-          'border border-cyan-400/50 relative overflow-hidden font-mono'
+          'shadow-[0_0_20px_rgba(var(--theme-primary),0.3)] hover:shadow-[0_0_30px_rgba(var(--theme-primary),0.5)]',
+          'border border-theme-primary/50 relative overflow-hidden font-mono'
         )}
       >
-        <div className='absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-blue-400/20 blur-sm' />
+        <div className='absolute inset-0 bg-gradient-to-r from-theme-primary/20 to-theme-secondary/20 blur-sm' />
         <span className='relative'>{isPaused ? t('game.resume') : t('game.pause')}</span>
       </Button>
 
@@ -53,13 +53,13 @@ const GameButtonsPanel = memo(function GameButtonsPanel({
         className={cn(
           buttonWidthClass,
           // Cyberpunk reset button styling
-          'bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-400 hover:to-pink-400',
+          'bg-gradient-to-r from-theme-error to-theme-error hover:from-theme-error/80 hover:to-theme-error/80',
           'font-bold transition-all duration-300 transform hover:scale-105',
-          'shadow-[0_0_20px_rgba(255,0,0,0.3)] hover:shadow-[0_0_30px_rgba(255,0,0,0.5)]',
-          'border border-red-400/50 relative overflow-hidden font-mono'
+          'shadow-[0_0_20px_rgba(var(--theme-error),0.3)] hover:shadow-[0_0_30px_rgba(var(--theme-error),0.5)]',
+          'border border-theme-error/50 relative overflow-hidden font-mono'
         )}
       >
-        <div className='absolute inset-0 bg-gradient-to-r from-red-400/20 to-pink-400/20 blur-sm' />
+        <div className='absolute inset-0 bg-gradient-to-r from-theme-error/20 to-theme-error/20 blur-sm' />
         <span className='relative'>{t('buttons.reset')}</span>
       </Button>
 

@@ -27,42 +27,42 @@ const EfficiencyMetrics: React.FC<EfficiencyMetricsProps> = ({ statistics, advan
         data-testid='efficiency-stats'
       >
         <div className='flex justify-between items-center'>
-          <span className='text-gray-400'>{t('statistics.efficiency')}</span>
+          <span className='text-theme-muted'>{t('statistics.efficiency')}</span>
           <span className={`text-theme-primary ${TYPOGRAPHY.BODY_WEIGHT}`}>
             {statistics.efficiency.toFixed(1)} LPM
           </span>
         </div>
 
         <div className='flex justify-between items-center'>
-          <span className='text-gray-400'>{t('statistics.consistency')}</span>
+          <span className='text-theme-muted'>{t('statistics.consistency')}</span>
           <span className={`text-theme-warning ${TYPOGRAPHY.BODY_WEIGHT}`}>
             {statistics.consistency.toFixed(1)}%
           </span>
         </div>
 
         <div className='flex justify-between items-center'>
-          <span className='text-gray-400'>{t('statistics.metrics.scorePerLine')}</span>
+          <span className='text-theme-muted'>{t('statistics.metrics.scorePerLine')}</span>
           <span className={`text-theme-primary ${TYPOGRAPHY.BODY_WEIGHT}`}>
             {Math.round(statistics.scorePerLine)}
           </span>
         </div>
 
         <div className='flex justify-between items-center'>
-          <span className='text-gray-400'>{t('statistics.tetrisRate')}</span>
+          <span className='text-theme-muted'>{t('statistics.tetrisRate')}</span>
           <span className={`text-theme-warning ${TYPOGRAPHY.BODY_WEIGHT}`}>
             {advancedMetrics?.tetrisRate.toFixed(1) || '0.0'}%
           </span>
         </div>
 
         <div className='flex justify-between items-center'>
-          <span className='text-gray-400'>{t('statistics.averageScore')}</span>
+          <span className='text-theme-muted'>{t('statistics.averageScore')}</span>
           <span className={`text-theme-warning ${TYPOGRAPHY.BODY_WEIGHT}`}>
             {statistics.favoriteLevel}
           </span>
         </div>
 
         <div className='flex justify-between items-center'>
-          <span className='text-gray-400'>{t('statistics.playTime')}</span>
+          <span className='text-theme-muted'>{t('statistics.playTime')}</span>
           <span className={`text-theme-primary ${TYPOGRAPHY.BODY_WEIGHT}`}>
             {advancedMetrics ? `${Math.floor(advancedMetrics.averageGameDuration / 60)}m` : '0m'}
           </span>

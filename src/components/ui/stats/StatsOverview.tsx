@@ -43,7 +43,7 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({
   return (
     <CyberCard title={`📊 ${t('statistics.title')}`} theme='primary' size='lg'>
       <div className='flex justify-between items-center mb-4'>
-        <span className='text-gray-400'>{t('statistics.period.label')}</span>
+        <span className='text-theme-muted'>{t('statistics.period.label')}</span>
         <Select value={selectedPeriod} onValueChange={onPeriodChange}>
           <SelectTrigger
             className={cn(
@@ -73,7 +73,7 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({
       {/* Main statistics grid */}
       <div className='grid grid-cols-2 gap-3' data-testid='main-stats'>
         <div className='bg-theme-primary/10 p-3 rounded border border-theme-primary/30'>
-          <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400 text-left`}>
+          <div className={`${TYPOGRAPHY.SMALL_LABEL} text-theme-muted text-left`}>
             {t('statistics.totalGames')}
           </div>
           <div
@@ -84,7 +84,7 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({
         </div>
 
         <div className='bg-theme-primary/10 p-3 rounded border border-theme-primary/30'>
-          <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400 text-left`}>
+          <div className={`${TYPOGRAPHY.SMALL_LABEL} text-theme-muted text-left`}>
             {t('statistics.bestScore')}
           </div>
           <div
@@ -95,7 +95,7 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({
         </div>
 
         <div className='bg-theme-primary/10 p-3 rounded border border-theme-primary/30'>
-          <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400 text-left`}>
+          <div className={`${TYPOGRAPHY.SMALL_LABEL} text-theme-muted text-left`}>
             {t('statistics.totalLines')}
           </div>
           <div
@@ -106,7 +106,7 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({
         </div>
 
         <div className='bg-theme-primary/10 p-3 rounded border border-theme-primary/30'>
-          <div className={`${TYPOGRAPHY.SMALL_LABEL} text-gray-400 text-left`}>
+          <div className={`${TYPOGRAPHY.SMALL_LABEL} text-theme-muted text-left`}>
             {t('statistics.playTime')}
           </div>
           <div

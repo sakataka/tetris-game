@@ -199,7 +199,7 @@ export default function ThemeSettings({
                 </div>
                 <div className={SPACING.LOOSE}>
                   <div
-                    className='p-3 rounded border border-cyber-cyan-30 text-center bg-cyber-cyan-10'
+                    className='p-3 rounded border border-theme-primary/30 text-center bg-theme-primary/10'
                     style={{
                       filter: `brightness(${0.8 + effectIntensity * 0.4}) saturate(${0.8 + effectIntensity * 0.4})`,
                       animation: animations ? 'pulse 2s infinite' : 'none',
@@ -208,7 +208,7 @@ export default function ThemeSettings({
                     {t('themes.effects.neon')}
                   </div>
                   <div
-                    className='p-3 rounded bg-cyber-cyan-10 border border-cyber-cyan-30 text-center'
+                    className='p-3 rounded bg-theme-primary/10 border border-theme-primary/30 text-center'
                     style={{
                       backdropFilter: `blur(${5 + effectIntensity * 10}px)`,
                       animation: animations ? 'float 3s ease-in-out infinite' : 'none',

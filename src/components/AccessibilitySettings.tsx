@@ -78,7 +78,7 @@ export default function AccessibilitySettings({
   return (
     <div className={`accessibility-settings ${className}`}>
       <h3
-        className={`${TYPOGRAPHY.PANEL_TITLE} ${TYPOGRAPHY.TITLE_WEIGHT} text-cyber-cyan ${SPACING.PANEL_TITLE_BOTTOM}`}
+        className={`${TYPOGRAPHY.PANEL_TITLE} ${TYPOGRAPHY.TITLE_WEIGHT} text-theme-primary ${SPACING.PANEL_TITLE_BOTTOM}`}
       >
         {t('settings.accessibility')}
       </h3>
@@ -88,7 +88,7 @@ export default function AccessibilitySettings({
         <div>
           <Label
             htmlFor='color-blindness-select'
-            className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-cyber-cyan`}
+            className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-theme-primary`}
           >
             {t('accessibility.colorVisionSupport')}
           </Label>
@@ -96,27 +96,27 @@ export default function AccessibilitySettings({
             <SelectTrigger
               id='color-blindness-select'
               className={cn(
-                'w-full bg-cyber-cyan-10 border-cyber-cyan-30 text-foreground',
-                'hover:bg-cyber-cyan-20 focus:ring-cyber-cyan focus:border-cyber-cyan',
-                'data-[state=open]:border-cyber-cyan transition-colors',
+                'w-full bg-theme-primary/10 border-theme-primary/30 text-foreground',
+                'hover:bg-theme-primary/20 focus:ring-theme-primary focus:border-theme-primary',
+                'data-[state=open]:border-theme-primary transition-colors',
                 '[&>span]:text-foreground'
               )}
             >
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className='bg-background border-cyber-cyan-30'>
+            <SelectContent className='bg-background border-theme-primary/30'>
               {colorBlindnessOptions.map((option) => (
                 <SelectItem
                   key={option.value}
                   value={option.value}
-                  className='text-foreground hover:bg-cyber-cyan-20 focus:bg-cyber-cyan-20 focus:text-cyber-cyan'
+                  className='text-foreground hover:bg-theme-primary/20 focus:bg-theme-primary/20 focus:text-theme-primary'
                 >
                   {option.label}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-          <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple mt-1`}>
+          <p className={`${TYPOGRAPHY.SMALL_LABEL} text-theme-muted mt-1`}>
             {t('accessibility.colorVisionSupportDescription')}
           </p>
         </div>
@@ -125,7 +125,7 @@ export default function AccessibilitySettings({
         <div>
           <Label
             htmlFor='contrast-select'
-            className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-cyber-cyan`}
+            className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-theme-primary`}
           >
             {t('accessibility.contrast')}
           </Label>
@@ -133,27 +133,27 @@ export default function AccessibilitySettings({
             <SelectTrigger
               id='contrast-select'
               className={cn(
-                'w-full bg-cyber-cyan-10 border-cyber-cyan-30 text-foreground',
-                'hover:bg-cyber-cyan-20 focus:ring-cyber-cyan focus:border-cyber-cyan',
-                'data-[state=open]:border-cyber-cyan transition-colors',
+                'w-full bg-theme-primary/10 border-theme-primary/30 text-foreground',
+                'hover:bg-theme-primary/20 focus:ring-theme-primary focus:border-theme-primary',
+                'data-[state=open]:border-theme-primary transition-colors',
                 '[&>span]:text-foreground'
               )}
             >
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className='bg-background border-cyber-cyan-30'>
+            <SelectContent className='bg-background border-theme-primary/30'>
               {contrastOptions.map((option) => (
                 <SelectItem
                   key={option.value}
                   value={option.value}
-                  className='text-foreground hover:bg-cyber-cyan-20 focus:bg-cyber-cyan-20 focus:text-cyber-cyan'
+                  className='text-foreground hover:bg-theme-primary/20 focus:bg-theme-primary/20 focus:text-theme-primary'
                 >
                   {option.label}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-          <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple mt-1`}>
+          <p className={`${TYPOGRAPHY.SMALL_LABEL} text-theme-muted mt-1`}>
             {t('accessibility.contrastDescription')}
           </p>
         </div>
@@ -162,7 +162,7 @@ export default function AccessibilitySettings({
         <div>
           <Label
             htmlFor='animation-intensity-select'
-            className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-cyber-cyan`}
+            className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-theme-primary`}
           >
             {t('accessibility.animationIntensity')}
           </Label>
@@ -170,27 +170,27 @@ export default function AccessibilitySettings({
             <SelectTrigger
               id='animation-intensity-select'
               className={cn(
-                'w-full bg-cyber-cyan-10 border-cyber-cyan-30 text-foreground',
-                'hover:bg-cyber-cyan-20 focus:ring-cyber-cyan focus:border-cyber-cyan',
-                'data-[state=open]:border-cyber-cyan transition-colors',
+                'w-full bg-theme-primary/10 border-theme-primary/30 text-foreground',
+                'hover:bg-theme-primary/20 focus:ring-theme-primary focus:border-theme-primary',
+                'data-[state=open]:border-theme-primary transition-colors',
                 '[&>span]:text-foreground'
               )}
             >
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className='bg-background border-cyber-cyan-30'>
+            <SelectContent className='bg-background border-theme-primary/30'>
               {animationOptions.map((option) => (
                 <SelectItem
                   key={option.value}
                   value={option.value}
-                  className='text-foreground hover:bg-cyber-cyan-20 focus:bg-cyber-cyan-20 focus:text-cyber-cyan'
+                  className='text-foreground hover:bg-theme-primary/20 focus:bg-theme-primary/20 focus:text-theme-primary'
                 >
                   {option.label}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-          <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple mt-1`}>
+          <p className={`${TYPOGRAPHY.SMALL_LABEL} text-theme-muted mt-1`}>
             {t('accessibility.animationIntensityDescription')}
           </p>
         </div>
@@ -203,16 +203,16 @@ export default function AccessibilitySettings({
               checked={reducedMotion}
               onCheckedChange={() => handleReducedMotionToggle()}
               className={cn(
-                'data-[state=checked]:bg-cyber-cyan data-[state=unchecked]:bg-gray-600',
-                'border-2 data-[state=checked]:border-cyber-cyan data-[state=unchecked]:border-gray-500'
+                'data-[state=checked]:bg-theme-primary data-[state=unchecked]:bg-theme-muted',
+                'border-2 data-[state=checked]:border-theme-primary data-[state=unchecked]:border-theme-muted/50'
               )}
               aria-label={t('settings.reducedMotion')}
             />
             <Label htmlFor='reduced-motion-switch' className='cursor-pointer'>
-              <span className={`${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} text-cyber-cyan`}>
+              <span className={`${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} text-theme-primary`}>
                 {t('settings.reducedMotion')}
               </span>
-              <p className={`${TYPOGRAPHY.SMALL_LABEL} text-cyber-purple`}>
+              <p className={`${TYPOGRAPHY.SMALL_LABEL} text-theme-muted`}>
                 {t('accessibility.animationIntensityDescription')}
               </p>
             </Label>
@@ -222,25 +222,25 @@ export default function AccessibilitySettings({
         {/* Preview area */}
         <div className='mt-4 p-3 rounded-lg hologram'>
           <div
-            className={`${TYPOGRAPHY.SECTION_HEADER} ${TYPOGRAPHY.TITLE_WEIGHT} ${SPACING.SECTION_TITLE_BOTTOM} text-cyber-cyan`}
+            className={`${TYPOGRAPHY.SECTION_HEADER} ${TYPOGRAPHY.TITLE_WEIGHT} ${SPACING.SECTION_TITLE_BOTTOM} text-theme-primary`}
           >
             {t('accessibility.currentSettings')}
           </div>
           <div className={`${TYPOGRAPHY.BODY_TEXT} ${SPACING.PANEL_INTERNAL}`}>
-            <div className='text-cyber-purple'>
+            <div className='text-theme-muted'>
               {t('accessibility.colorVisionSupport')}:{' '}
               {colorBlindnessOptions.find((opt) => opt.value === colorBlindnessType)?.label}
             </div>
-            <div className='text-cyber-purple'>
+            <div className='text-theme-muted'>
               {t('accessibility.contrast')}:{' '}
               {contrastOptions.find((opt) => opt.value === contrast)?.label}
             </div>
-            <div className='text-cyber-purple'>
+            <div className='text-theme-muted'>
               {t('accessibility.animationIntensity')}:{' '}
               {animationOptions.find((opt) => opt.value === animationIntensity)?.label}
             </div>
             {reducedMotion && (
-              <div className='text-cyber-yellow'>{t('accessibility.reducedMotionActive')}</div>
+              <div className='text-theme-accent'>{t('accessibility.reducedMotionActive')}</div>
             )}
           </div>
         </div>
