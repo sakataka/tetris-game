@@ -63,9 +63,6 @@ export default function ThemeSelector({
               />
             ))}
         </div>
-        <div className='text-xs text-theme-primary mt-2'>
-          Glow: {(THEME_PRESETS[currentTheme].effects as any)?.glow || 0}px
-        </div>
       </div>
     </div>
   );
