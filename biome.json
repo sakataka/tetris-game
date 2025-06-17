@@ -1,7 +1,7 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
   "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
-  "files": { "ignoreUnknown": false, "ignore": [] },
+  "files": { "ignoreUnknown": false, "includes": ["**"] },
   "formatter": {
     "enabled": true,
     "useEditorconfig": true,
@@ -12,52 +12,54 @@
     "lineWidth": 100,
     "attributePosition": "auto",
     "bracketSpacing": true,
-    "ignore": [
-      "**/node_modules/",
-      "**/.pnpm-store/",
-      "**/out/",
-      "**/dist/",
-      "**/build/",
-      "**/.cache/",
-      "**/*.log",
-      "**/npm-debug.log*",
-      "**/yarn-debug.log*",
-      "**/yarn-error.log*",
-      "**/pnpm-debug.log*",
-      "**/pnpm-lock.yaml",
-      "**/package-lock.json",
-      "**/yarn.lock",
-      "**/*.d.ts",
-      "**/coverage/",
-      "**/.vscode/",
-      "**/.idea/",
-      "**/*.swp",
-      "**/*.swo",
-      "**/*~",
-      "**/.DS_Store",
-      "**/Thumbs.db",
-      "**/.env*",
-      "**/.git/",
-      "**/.gitignore",
-      "**/CHANGELOG.md",
-      "**/LICENSE*"
+    "includes": [
+      "**",
+      "!**/node_modules/",
+      "!**/.pnpm-store/",
+      "!**/out/",
+      "!**/dist/",
+      "!**/build/",
+      "!**/.cache/",
+      "!**/*.log",
+      "!**/npm-debug.log*",
+      "!**/yarn-debug.log*",
+      "!**/yarn-error.log*",
+      "!**/pnpm-debug.log*",
+      "!**/pnpm-lock.yaml",
+      "!**/package-lock.json",
+      "!**/yarn.lock",
+      "!**/*.d.ts",
+      "!**/coverage/",
+      "!**/.vscode/",
+      "!**/.idea/",
+      "!**/*.swp",
+      "!**/*.swo",
+      "!**/*~",
+      "!**/.DS_Store",
+      "!**/Thumbs.db",
+      "!**/.env*",
+      "!**/.git/",
+      "!**/.gitignore",
+      "!**/CHANGELOG.md",
+      "!**/LICENSE*"
     ]
   },
-  "organizeImports": { "enabled": true },
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "linter": {
     "enabled": true,
     "rules": {
       "recommended": true,
       "suspicious": {
         "noExplicitAny": "warn",
-        "noConsoleLog": "off",
         "noDoubleEquals": "error",
         "noGlobalIsFinite": "error",
         "noGlobalIsNan": "error",
         "noImplicitAnyLet": "error",
         "noMisleadingCharacterClass": "warn",
         "noUnsafeDeclarationMerging": "error",
-        "noArrayIndexKey": "off"
+        "noArrayIndexKey": "off",
+        "noConsole": { "level": "off", "options": { "allow": ["log"] } },
+        "noWith": "error"
       },
       "correctness": {
         "useExhaustiveDependencies": "warn",
@@ -77,8 +79,8 @@
         "noUselessLabel": "error",
         "noUselessRename": "error",
         "noUselessSwitchCase": "error",
-        "noWith": "error",
-        "useLiteralKeys": "off"
+        "useLiteralKeys": "off",
+        "useNumericLiterals": "error"
       },
       "style": {
         "useImportType": "error",
@@ -92,12 +94,16 @@
         "useFragmentSyntax": "error",
         "useNamingConvention": "off",
         "useNumberNamespace": "error",
-        "useNumericLiterals": "error",
         "useSelfClosingElements": "error",
-        "useShorthandArrayType": "error",
         "useShorthandAssign": "error",
         "useSingleVarDeclarator": "error",
-        "useTemplate": "error"
+        "useTemplate": "error",
+        "noParameterAssign": "error",
+        "useAsConstAssertion": "error",
+        "noUnusedTemplateLiteral": "error",
+        "noInferrableTypes": "error",
+        "noUselessElse": "error",
+        "useConsistentArrayType": { "level": "error", "options": { "syntax": "shorthand" } }
       },
       "performance": {
         "noAccumulatingSpread": "warn",
@@ -128,13 +134,13 @@
   },
   "overrides": [
     {
-      "include": ["*.json"],
+      "includes": ["**/*.json"],
       "formatter": { "indentWidth": 2, "lineWidth": 120 }
     },
-    { "include": ["*.md"], "formatter": { "lineWidth": 80 } },
-    { "include": ["*.css"], "formatter": { "lineWidth": 120 } },
+    { "includes": ["**/*.md"], "formatter": { "lineWidth": 80 } },
+    { "includes": ["**/*.css"], "formatter": { "lineWidth": 120 } },
     {
-      "include": ["src/test/**/*.ts", "src/test/**/*.tsx"],
+      "includes": ["**/src/test/**/*.ts", "**/src/test/**/*.tsx"],
       "linter": {
         "rules": {
           "suspicious": {
@@ -147,11 +153,11 @@
       }
     },
     {
-      "include": [
-        "src/utils/audio/audioFallback.ts",
-        "src/utils/audio/audioPreloader.ts",
-        "src/utils/audio/audioManager.ts",
-        "src/utils/ui/themeLoader.ts"
+      "includes": [
+        "**/src/utils/audio/audioFallback.ts",
+        "**/src/utils/audio/audioPreloader.ts",
+        "**/src/utils/audio/audioManager.ts",
+        "**/src/utils/ui/themeLoader.ts"
       ],
       "linter": {
         "rules": {
