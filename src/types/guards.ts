@@ -8,7 +8,6 @@
 import type {
   AnimationIntensity,
   Board,
-  ColorPalette,
   DifficultyLevel,
   GameSettings,
   GameState,
@@ -145,19 +144,6 @@ export function isAnimationIntensity(value: unknown): value is AnimationIntensit
   return typeof value === 'string' && ['none', 'reduced', 'normal', 'enhanced'].includes(value);
 }
 
-export function isColorPalette(value: unknown): value is ColorPalette {
-  if (typeof value !== 'object' || value === null) return false;
-
-  const palette = value as ColorPalette;
-  return (
-    typeof palette.primary === 'string' &&
-    typeof palette.secondary === 'string' &&
-    typeof palette.tertiary === 'string' &&
-    typeof palette.background === 'string' &&
-    typeof palette.foreground === 'string' &&
-    typeof palette.accent === 'string'
-  );
-}
 
 export function isThemeConfig(value: unknown): value is ThemeConfig {
   if (typeof value !== 'object' || value === null) return false;
@@ -165,7 +151,7 @@ export function isThemeConfig(value: unknown): value is ThemeConfig {
   const theme = value as ThemeConfig;
   return (
     typeof theme.name === 'string' &&
-    isColorPalette(theme.colors) &&
+    typeof theme.colors === 'object' && theme.colors !== null &&
     typeof theme.effects === 'object' &&
     typeof theme.accessibility === 'object'
   );

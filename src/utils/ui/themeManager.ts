@@ -318,20 +318,6 @@ export function generateTransparencyVariants(baseColor: string, variantName: str
   });
 }
 
-/**
- * Update custom color overrides
- */
-export function applyCustomColors(customColors: Partial<SemanticColorTokens>): void {
-  Object.entries(customColors).forEach(([tokenName, colorValue]) => {
-    const cssVariable = CSS_VARIABLE_MAP[tokenName as keyof SemanticColorTokens];
-    if (cssVariable && colorValue) {
-      document.documentElement.style.setProperty(cssVariable, colorValue);
-
-      // Generate transparency variants for custom colors
-      generateTransparencyVariants(colorValue, tokenName);
-    }
-  });
-}
 
 /**
  * Get current comprehensive theme configuration

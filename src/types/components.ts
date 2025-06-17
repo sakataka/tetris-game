@@ -147,12 +147,6 @@ export interface ThemeSelectorProps extends BaseComponentProps {
   allowCustomThemes?: boolean;
 }
 
-export interface ColorPaletteEditorProps extends BaseComponentProps {
-  colors: ThemeConfig['colors'];
-  onChange: (colors: ThemeConfig['colors']) => void;
-  showAccessibilityInfo?: boolean;
-  validateContrast?: boolean;
-}
 
 // Virtual controls
 export interface VirtualControlsProps extends BaseComponentProps {

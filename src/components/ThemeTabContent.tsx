@@ -4,7 +4,6 @@ import { useTheme as useThemeManager } from '../hooks/useTheme';
 import {
   useResetThemeToDefault,
   useSetAccessibilityOptions,
-  useSetCustomColors,
   useSetTheme,
   useTheme,
   useUpdateThemeState,
@@ -21,7 +20,6 @@ const ThemeTabContent = memo(function ThemeTabContent({ className = '' }: ThemeT
   // Theme-related state and actions
   const themeState = useTheme();
   const setTheme = useSetTheme();
-  const setCustomColors = useSetCustomColors();
   const setAccessibilityOptions = useSetAccessibilityOptions();
   const updateThemeState = useUpdateThemeState();
   const resetThemeToDefault = useResetThemeToDefault();
@@ -38,7 +36,6 @@ const ThemeTabContent = memo(function ThemeTabContent({ className = '' }: ThemeT
       <CyberCard title={t('themes.title') || t('tabs.themes')} theme='primary' size='lg'>
         <ThemeSettingsMemo
           currentTheme={themeState.current}
-          colors={themeState.config.colors}
           colorBlindnessType={themeState.accessibility.colorBlindnessType}
           contrast={themeState.accessibility.contrast}
           animationIntensity={themeState.accessibility.animationIntensity}
@@ -46,7 +43,6 @@ const ThemeTabContent = memo(function ThemeTabContent({ className = '' }: ThemeT
           effectIntensity={themeState.effectIntensity}
           animations={themeState.animations}
           onThemeChange={themeManager.changeTheme}
-          onColorsChange={setCustomColors}
           onAccessibilityChange={themeManager.updateAccessibility}
           onEffectIntensityChange={themeManager.updateEffectIntensity}
           onAnimationsToggle={themeManager.toggleAnimations}

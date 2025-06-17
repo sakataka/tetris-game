@@ -1,12 +1,9 @@
 import type {
-  ColorBlindnessType,
-  ColorPalette,
-  ContrastLevel,
   ThemeConfig,
   ThemeVariant,
 } from '../../types/tetris';
 import { ColorConverter } from './colorConverter';
-import { COLOR_BLIND_PALETTES, getThemePreset } from './themePresets';
+import { getCurrentThemeConfig } from './themeManager';
 
 /**
  * Apply theme configuration to CSS variables
@@ -33,11 +30,14 @@ export function applyThemeToCSS(config: ThemeConfig): void {
     root.style.setProperty(varName, value);
   });
 
-  // Effect configuration
-  root.style.setProperty('--neon-blur-sm', `${config.effects.blur * 0.5}px`);
-  root.style.setProperty('--neon-blur-md', `${config.effects.blur}px`);
-  root.style.setProperty('--neon-blur-lg', `${config.effects.blur * 1.5}px`);
-  root.style.setProperty('--neon-blur-xl', `${config.effects.blur * 2}px`);
+  // Effect configuration (using any type to handle mixed structure)
+  const effects = config.effects as any;
+  if (effects && typeof effects.blur === 'number') {
+    root.style.setProperty('--neon-blur-sm', `${effects.blur * 0.5}px`);
+    root.style.setProperty('--neon-blur-md', `${effects.blur}px`);
+    root.style.setProperty('--neon-blur-lg', `${effects.blur * 1.5}px`);
+    root.style.setProperty('--neon-blur-xl', `${effects.blur * 2}px`);
+  }
 
   // Dynamically generate hologram background
   const hologramBg =
@@ -64,17 +64,19 @@ const COLOR_NAME_MAPPING = {
 /**
  * Generate transparency variations using ColorConverter
  */
-function generateTransparencyVariables(colors: ColorPalette): Record<string, string> {
+function generateTransparencyVariables(colors: any): Record<string, string> {
   const variables: Record<string, string> = {};
 
   Object.entries(COLOR_NAME_MAPPING).forEach(([colorKey, cssName]) => {
-    const hexColor = colors[colorKey as keyof ColorPalette];
-    const transparencies = ColorConverter.generateTransparencies(hexColor, TRANSPARENCY_LEVELS);
+    const hexColor = colors[colorKey];
+    if (hexColor) {
+      const transparencies = ColorConverter.generateTransparencies(hexColor, TRANSPARENCY_LEVELS);
 
-    Object.entries(transparencies).forEach(([level, rgba]) => {
-      const varName = `--cyber-${cssName}-${level}`;
-      variables[varName] = rgba;
-    });
+      Object.entries(transparencies).forEach(([level, rgba]) => {
+        const varName = `--cyber-${cssName}-${level}`;
+        variables[varName] = rgba;
+      });
+    }
   });
 
   return variables;
@@ -82,44 +84,7 @@ function generateTransparencyVariables(colors: ColorPalette): Record<string, str
 
 // Removed: hexToRgb function replaced by ColorConverter.hexToRgb
 
-/**
- * Generate color palette adapted for color blindness
- */
-export function applyColorBlindnessFilter(
-  originalColors: ColorPalette,
-  colorBlindnessType: ColorBlindnessType
-): ColorPalette {
-  if (colorBlindnessType === 'none') {
-    return originalColors;
-  }
 
-  const adjustments = COLOR_BLIND_PALETTES[colorBlindnessType];
-  return {
-    ...originalColors,
-    ...adjustments,
-  };
-}
-
-/**
- * Adjust colors based on contrast level
- */
-export function adjustColorsForContrast(
-  colors: ColorPalette,
-  contrastLevel: ContrastLevel
-): ColorPalette {
-  if (contrastLevel === 'normal') {
-    return colors;
-  }
-
-  const adjustmentFactor = contrastLevel === 'high' ? 1.3 : 0.8;
-
-  return {
-    ...colors,
-    primary: ColorConverter.adjustContrast(colors.primary, adjustmentFactor),
-    secondary: ColorConverter.adjustContrast(colors.secondary, adjustmentFactor),
-    tertiary: ColorConverter.adjustContrast(colors.tertiary, adjustmentFactor),
-  };
-}
 
 // Removed: adjustColorBrightness function replaced by ColorConverter methods
 
@@ -130,10 +95,10 @@ export function adjustColorsForContrast(
  */
 export function createCustomTheme(
   baseTheme: ThemeVariant,
-  customColors?: Partial<ColorPalette>,
-  customEffects?: Partial<ThemeConfig['effects']>
+  customColors?: any,
+  customEffects?: any
 ): ThemeConfig {
-  const baseConfig = getThemePreset(baseTheme);
+  const baseConfig = getCurrentThemeConfig(baseTheme);
 
   return {
     ...baseConfig,
@@ -143,8 +108,8 @@ export function createCustomTheme(
       ...customColors,
     },
     effects: {
-      ...baseConfig.effects,
-      ...customEffects,
+      ...(baseConfig.effects || {}),
+      ...(customEffects || {}),
     },
   };
 }
@@ -180,15 +145,20 @@ export function applyAnimationSettings(intensity: string): void {
  */
 export function initializeTheme(config: ThemeConfig): void {
   applyThemeToCSS(config);
-  applyAnimationSettings(config.accessibility.animationIntensity);
-
-  // Configure reduced motion preferences
-  if (
-    config.accessibility.animationIntensity === 'none' ||
-    config.accessibility.animationIntensity === 'reduced'
-  ) {
-    document.body.classList.add('reduce-motion');
-  } else {
-    document.body.classList.remove('reduce-motion');
+  
+  // Handle accessibility settings if available
+  const accessibility = (config as any).accessibility;
+  if (accessibility && accessibility.animationIntensity) {
+    applyAnimationSettings(accessibility.animationIntensity);
+    
+    // Configure reduced motion preferences
+    if (
+      accessibility.animationIntensity === 'none' ||
+      accessibility.animationIntensity === 'reduced'
+    ) {
+      document.body.classList.add('reduce-motion');
+    } else {
+      document.body.classList.remove('reduce-motion');
+    }
   }
 }

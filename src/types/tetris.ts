@@ -148,32 +148,9 @@ export interface GameSettings {
   readonly showParticles?: boolean;
 }
 
-// Custom color palette settings
-export interface ColorPalette {
-  readonly primary: string;
-  readonly secondary: string;
-  readonly tertiary: string;
-  readonly background: string;
-  readonly foreground: string;
-  readonly accent: string;
-}
 
-// Theme detail settings
-export interface ThemeConfig {
-  readonly name: string;
-  readonly colors: ColorPalette;
-  readonly effects: {
-    readonly blur: number;
-    readonly glow: number;
-    readonly saturation: number;
-    readonly brightness: number;
-  };
-  readonly accessibility: {
-    readonly colorBlindnessType: ColorBlindnessType;
-    readonly contrast: ContrastLevel;
-    readonly animationIntensity: AnimationIntensity;
-  };
-}
+// Import ThemeConfig from new theme manager
+export type { ThemeConfig } from '../utils/ui/themeManager';
 
 // Extended theme state
 export interface ThemeState {
@@ -181,7 +158,7 @@ export interface ThemeState {
   readonly customColors?: Record<string, string>;
   readonly effectIntensity: number;
   readonly animations: boolean;
-  readonly config: ThemeConfig;
+  readonly config: any; // Using any during transition to new theme system
   readonly accessibility: {
     readonly colorBlindnessType: ColorBlindnessType;
     readonly contrast: ContrastLevel;
@@ -232,7 +209,6 @@ export interface GameStoreActions {
   // Theme actions
   setTheme: (theme: ThemeVariant) => void;
   updateThemeState: (themeState: Partial<ThemeState>) => void;
-  setCustomColors: (colors: Partial<ColorPalette>) => void;
   setAccessibilityOptions: (accessibility: Partial<ThemeState['accessibility']>) => void;
   resetThemeToDefault: () => void;
 

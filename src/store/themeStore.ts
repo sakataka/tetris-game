@@ -2,24 +2,22 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type {
   ColorBlindnessType,
-  ColorPalette,
   ContrastLevel,
   ThemeState,
   ThemeVariant,
 } from '../types/tetris';
 import {
-  applyCustomColors,
   applyThemeToDocument,
+  getCurrentThemeConfig,
   initializeThemeSystem,
 } from '../utils/ui/themeManager';
-import { getThemePreset } from '../utils/ui/themePresets';
 
 // Default theme state
 const DEFAULT_THEME_STATE: ThemeState = {
   current: 'cyberpunk' as ThemeVariant,
   effectIntensity: 1.0,
   animations: true,
-  config: getThemePreset('cyberpunk'),
+  config: getCurrentThemeConfig('cyberpunk') as any,
   accessibility: {
     colorBlindnessType: 'none' as ColorBlindnessType,
     contrast: 'normal' as ContrastLevel,
@@ -35,7 +33,6 @@ interface ThemeStore {
   // Actions
   setTheme: (theme: ThemeVariant) => void;
   updateThemeState: (themeState: Partial<ThemeState>) => void;
-  setCustomColors: (colors: Partial<ColorPalette>) => void;
   setAccessibilityOptions: (accessibility: Partial<ThemeState['accessibility']>) => void;
   resetThemeToDefault: () => void;
 
@@ -59,7 +56,7 @@ export const useThemeStore = create<ThemeStore>()(
           theme: {
             ...state.theme,
             current: themeVariant,
-            config: getThemePreset(themeVariant),
+            config: getCurrentThemeConfig(themeVariant) as any,
           },
         }));
       },
@@ -69,21 +66,6 @@ export const useThemeStore = create<ThemeStore>()(
           theme: { ...state.theme, ...themeState },
         })),
 
-      setCustomColors: (colors) => {
-        // Apply custom colors to document immediately
-        applyCustomColors(colors);
-
-        set((state) => ({
-          theme: {
-            ...state.theme,
-            config: {
-              ...state.theme.config,
-              colors: { ...state.theme.config.colors, ...colors },
-            },
-            customColors: { ...state.theme.customColors, ...colors },
-          },
-        }));
-      },
 
       setAccessibilityOptions: (accessibility) =>
         set((state) => ({
@@ -145,7 +127,6 @@ export const useThemeAccessibility = () => useThemeStore((state) => state.theme.
 // Individual action hooks (function reference stabilization)
 export const useSetTheme = () => useThemeStore((state) => state.setTheme);
 export const useUpdateThemeState = () => useThemeStore((state) => state.updateThemeState);
-export const useSetCustomColors = () => useThemeStore((state) => state.setCustomColors);
 export const useSetAccessibilityOptions = () =>
   useThemeStore((state) => state.setAccessibilityOptions);
 export const useResetThemeToDefault = () => useThemeStore((state) => state.resetThemeToDefault);

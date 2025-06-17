@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import type { ThemeConfig, ThemeState } from '../types/tetris';
-import { adjustColorsForContrast, applyColorBlindnessFilter } from '../utils/ui';
+// import { adjustColorsForContrast, applyColorBlindnessFilter } from '../utils/ui'; // Removed with Color Palette Settings
 
 export interface AccessibilityFiltersAPI {
   processedConfig: ThemeConfig;
@@ -17,26 +17,18 @@ export function useAccessibilityFilters(
   accessibility: ThemeState['accessibility']
 ): AccessibilityFiltersAPI {
   const processedConfig = useMemo(() => {
-    let config = { ...baseConfig };
+    const config = { ...baseConfig };
 
-    // Apply color vision deficiency filters
-    if (accessibility.colorBlindnessType !== 'none') {
-      config.colors = applyColorBlindnessFilter(config.colors, accessibility.colorBlindnessType);
-    }
+    // Color vision deficiency filters and contrast adjustment temporarily disabled
+    // These features were removed along with Color Palette Settings
+    // TODO: Implement new accessibility filters if needed
+    
+    // Note: accessibility.colorBlindnessType and accessibility.contrast are preserved
+    // but not currently applied to theme colors
 
-    // Apply contrast adjustment
-    if (accessibility.contrast !== 'normal') {
-      config.colors = adjustColorsForContrast(config.colors, accessibility.contrast);
-    }
-
-    // Update animation settings
-    config = {
-      ...config,
-      accessibility: {
-        ...config.accessibility,
-        animationIntensity: accessibility.animationIntensity,
-      },
-    };
+    // Animation settings are now handled by the theme manager
+    // This was previously part of the old ThemeConfig structure
+    // TODO: Update this when integrating with new theme system
 
     return config;
   }, [baseConfig, accessibility]);

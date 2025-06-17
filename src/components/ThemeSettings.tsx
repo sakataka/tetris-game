@@ -11,17 +11,14 @@ import { SPACING, TYPOGRAPHY } from '../constants/layout';
 import type {
   AnimationIntensity,
   ColorBlindnessType,
-  ColorPalette,
   ContrastLevel,
   ThemeVariant,
 } from '../types/tetris';
-import { ColorPaletteEditorMemo } from './ColorPaletteEditor';
 import { ThemeSelectorMemo } from './ThemeSelector';
 import { ConfirmationDialog } from './ui/ConfirmationDialog';
 
 interface ThemeSettingsProps {
   currentTheme: ThemeVariant;
-  colors: ColorPalette;
   colorBlindnessType: ColorBlindnessType;
   contrast: ContrastLevel;
   animationIntensity: AnimationIntensity;
@@ -29,7 +26,6 @@ interface ThemeSettingsProps {
   effectIntensity: number;
   animations: boolean;
   onThemeChange: (theme: ThemeVariant) => void;
-  onColorsChange: (colors: Partial<ColorPalette>) => void;
   onAccessibilityChange: (settings: {
     colorBlindnessType?: ColorBlindnessType;
     contrast?: ContrastLevel;
@@ -44,7 +40,6 @@ interface ThemeSettingsProps {
 
 export default function ThemeSettings({
   currentTheme,
-  colors,
   colorBlindnessType: _colorBlindnessType, // Unused after accessibility removal
   contrast: _contrast, // Unused after accessibility removal
   animationIntensity: _animationIntensity, // Unused after accessibility removal
@@ -52,7 +47,6 @@ export default function ThemeSettings({
   effectIntensity,
   animations,
   onThemeChange,
-  onColorsChange,
   onAccessibilityChange: _onAccessibilityChange, // Unused after accessibility removal
   onEffectIntensityChange,
   onAnimationsToggle,
@@ -60,7 +54,7 @@ export default function ThemeSettings({
   className = '',
 }: ThemeSettingsProps) {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState<'theme' | 'colors' | 'effects'>('theme');
+  const [activeTab, setActiveTab] = useState<'theme' | 'effects'>('theme');
   const [showResetConfirmation, setShowResetConfirmation] = useState(false);
   
   // Generate unique IDs for form elements
@@ -82,7 +76,6 @@ export default function ThemeSettings({
 
   const tabs = [
     { id: 'theme', label: t('themes.preview'), icon: '🎨' },
-    { id: 'colors', label: t('colorPalette.title'), icon: '🌈' },
     { id: 'effects', label: t('accessibility.motion'), icon: '✨' },
   ] as const;
 
@@ -136,9 +129,6 @@ export default function ThemeSettings({
             </div>
           )}
 
-          {activeTab === 'colors' && (
-            <ColorPaletteEditorMemo colors={colors} onColorsChange={onColorsChange} />
-          )}
 
           {activeTab === 'effects' && (
             <div className={SPACING.PANEL_INTERNAL}>
