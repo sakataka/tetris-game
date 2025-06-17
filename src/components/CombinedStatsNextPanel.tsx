@@ -87,7 +87,7 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
               <span className={`text-theme-muted ${TYPOGRAPHY.SMALL_LABEL}`}>
                 {t('game.levelProgress')}
               </span>
-              <span className={`text-theme-primary ${TYPOGRAPHY.SMALL_LABEL} font-mono`}>
+              <span className={`font-mono ${TYPOGRAPHY.STAT_VALUE} text-theme-primary font-bold`}>
                 {lines % 10}/10
               </span>
             </div>
