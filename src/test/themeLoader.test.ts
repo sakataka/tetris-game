@@ -33,8 +33,12 @@ describe('ThemeLoader - JSON-based theme system', () => {
       expect(theme.colors.primary).toBe('#00ffff');
       expect(theme.colors.secondary).toBe('#ff00ff');
       expect(theme.colors.tertiary).toBe('#ffff00');
-      expect(theme.effects.blur).toBe(10);
-      expect(theme.effects.glow).toBe(16);
+      expect(theme.effects.blur).toEqual({ sm: '6px', md: '10px', lg: '16px' });
+      expect(theme.effects.glow).toEqual({ sm: '8px', md: '16px', lg: '24px' });
+      expect(theme.effects.shadow).toEqual({ sm: '4px', md: '8px', lg: '12px' });
+      expect(theme.effects.saturation).toBe(1.8);
+      expect(theme.effects.brightness).toBe(1.2);
+      expect(theme.effects.contrast).toBe(1.1);
       // accessibility property removed from theme presets
     });
 
@@ -54,12 +58,26 @@ describe('ThemeLoader - JSON-based theme system', () => {
         expect(theme.colors.primary).toMatch(/^#[0-9a-fA-F]{6}$/);
         expect(theme.colors.secondary).toMatch(/^#[0-9a-fA-F]{6}$/);
         expect(theme.colors.tertiary).toMatch(/^#[0-9a-fA-F]{6}$/);
+        
+        // Validate semantic colors
+        expect(theme.colors.warning).toMatch(/^#[0-9a-fA-F]{6}$/);
+        expect(theme.colors.error).toMatch(/^#[0-9a-fA-F]{6}$/);
+        expect(theme.colors.success).toMatch(/^#[0-9a-fA-F]{6}$/);
+        expect(theme.colors.info).toMatch(/^#[0-9a-fA-F]{6}$/);
+        expect(theme.colors.muted).toMatch(/^#[0-9a-fA-F]{6}$/);
+        expect(theme.colors.surface).toMatch(/^#[0-9a-fA-F]{6}$/);
+        expect(theme.colors.border).toMatch(/^#[0-9a-fA-F]{6}$/);
 
         // Validate effect values
-        expect(typeof theme.effects.blur).toBe('number');
-        expect(typeof theme.effects.glow).toBe('number');
+        expect(typeof theme.effects.blur).toBe('object');
+        expect(typeof theme.effects.glow).toBe('object');
+        expect(typeof theme.effects.shadow).toBe('object');
+        expect(theme.effects.blur['sm']).toMatch(/^\d+px$/);
+        expect(theme.effects.glow['md']).toMatch(/^\d+px$/);
+        expect(theme.effects.shadow['lg']).toMatch(/^\d+px$/);
         expect(theme.effects.saturation).toBeGreaterThan(0);
         expect(theme.effects.brightness).toBeGreaterThan(0);
+        expect(theme.effects.contrast).toBeGreaterThan(0);
       }
     });
 
@@ -76,8 +94,8 @@ describe('ThemeLoader - JSON-based theme system', () => {
       // Check integrity of each theme
       Object.values(allThemes).forEach((theme) => {
         expect(theme.name).toBeTruthy();
-        expect(Object.keys(theme.colors)).toHaveLength(6);
-        expect(Object.keys(theme.effects)).toHaveLength(4);
+        expect(Object.keys(theme.colors)).toHaveLength(13); // Updated for semantic colors
+        expect(Object.keys(theme.effects)).toHaveLength(6); // Updated for new effects structure
         // accessibility property removed from theme presets
       });
     });
