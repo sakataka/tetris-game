@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import { ConfirmationDialog } from '../components/ui/ConfirmationDialog';
 import { Button } from '../components/ui/button';
 import { useTogglePause } from '../store/gameStateStore';
+import { useCurrentTheme } from '../store/themeStore';
 import ErrorBoundary from './ErrorBoundary';
 import GameInfo from './GameInfo';
 import type { GameControllerAPI } from './GameLogicController';
@@ -25,6 +26,7 @@ interface GameLayoutManagerProps {
  */
 const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutManagerProps) {
   const { t } = useTranslation();
+  const currentTheme = useCurrentTheme();
   const {
     gameState,
     isMobile,
@@ -42,13 +44,23 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
   // Toggle pause function for overlay
   const togglePause = useTogglePause();
 
+  // Define which themes should have gradients
+  const gradientThemes = ['cyberpunk', 'neon', 'retro'];
+  const hasGradients = gradientThemes.includes(currentTheme);
+
   // Desktop Layout
   if (!isMobile) {
     return (
-      <div className='min-h-dvh bg-gradient-to-br from-theme-surface via-black to-theme-surface/80 relative overflow-hidden'>
+      <div className={`min-h-dvh relative overflow-hidden ${
+        hasGradients 
+          ? 'bg-gradient-to-br from-theme-surface via-black to-theme-surface/80'
+          : 'bg-theme-surface'
+      }`}>
         {/* Background effects */}
         <div className='absolute inset-0 bg-grid-pattern opacity-5' />
-        <div className='absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/50' />
+        {hasGradients && (
+          <div className='absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/50' />
+        )}
 
         {/* Menu Button - Top Right */}
         <div className='absolute top-4 right-4 z-20'>
@@ -114,10 +126,16 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
 
   // Mobile Layout
   return (
-    <div className='min-h-dvh bg-gradient-to-br from-theme-surface via-black to-theme-surface/80 relative overflow-hidden'>
+    <div className={`min-h-dvh relative overflow-hidden ${
+      hasGradients 
+        ? 'bg-gradient-to-br from-theme-surface via-black to-theme-surface/80'
+        : 'bg-theme-surface'
+    }`}>
       {/* Background effects */}
       <div className='absolute inset-0 bg-grid-pattern opacity-5' />
-      <div className='absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/50' />
+      {hasGradients && (
+        <div className='absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/50' />
+      )}
 
       {/* Menu Button - Top Right (Mobile) */}
       <div className='absolute top-2 right-2 z-20'>

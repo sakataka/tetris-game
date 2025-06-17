@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useCurrentTheme } from '../../store/themeStore';
 
 interface GameHeaderProps {
   showTitle?: boolean;
@@ -25,15 +26,22 @@ const GameHeader = memo(function GameHeader({
   className = '',
 }: GameHeaderProps) {
   const { t } = useTranslation();
+  const currentTheme = useCurrentTheme();
 
   if (!showTitle) {
     return null;
   }
 
+  // Define which themes should have gradients
+  const gradientThemes = ['cyberpunk', 'neon', 'retro'];
+  const hasGradients = gradientThemes.includes(currentTheme);
+
   const getTitleClasses = () => {
     const baseClasses = [
-      'font-bold text-white mb-2 relative',
-      'bg-gradient-to-r from-theme-primary via-theme-secondary to-theme-accent bg-clip-text text-transparent',
+      'font-bold mb-2 relative',
+      hasGradients 
+        ? 'bg-gradient-to-r from-theme-primary via-theme-secondary to-theme-accent bg-clip-text text-transparent'
+        : 'text-theme-foreground',
     ];
 
     switch (variant) {
@@ -46,7 +54,7 @@ const GameHeader = memo(function GameHeader({
     }
   };
 
-  const shouldShowEffects = variant !== 'minimal';
+  const shouldShowEffects = variant !== 'minimal' && hasGradients;
 
   return (
     <header className={`text-center ${className}`}>

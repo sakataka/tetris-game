@@ -2,6 +2,7 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { cn } from '../../utils/ui/cn';
+import { useCurrentTheme } from '../../store/themeStore';
 import { Button } from '../ui/button';
 import BackgroundEffects from './BackgroundEffects';
 import GameHeader from './GameHeader';
@@ -37,10 +38,19 @@ const MainLayout = memo(function MainLayout({
   className = '',
 }: MainLayoutProps) {
   const { t } = useTranslation();
+  const currentTheme = useCurrentTheme();
+  
+  // Define which themes should have gradients
+  const gradientThemes = ['cyberpunk', 'neon', 'retro'];
+  const hasGradients = gradientThemes.includes(currentTheme);
+  
   return (
     <div
       className={cn(
-        'min-h-screen bg-gradient-to-br from-theme-surface via-black to-theme-surface/80 relative overflow-hidden',
+        'min-h-screen relative overflow-hidden',
+        hasGradients 
+          ? 'bg-gradient-to-br from-theme-surface via-black to-theme-surface/80'
+          : 'bg-theme-surface',
         className
       )}
     >

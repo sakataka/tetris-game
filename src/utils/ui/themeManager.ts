@@ -21,6 +21,11 @@ export interface ComprehensiveThemePreset {
     background: string;
     foreground: string;
     accent: string;
+    success: string;
+    warning: string;
+    error: string;
+    muted: string;
+    surface: string;
   };
   typography: {
     fontFamily: {
@@ -145,12 +150,12 @@ function mapThemeToSemanticColors(themeVariant: ThemeVariant): SemanticColorToke
     background: preset.colors.background,
     foreground: preset.colors.foreground,
     accent: preset.colors.accent,
-    surface: preset.colors.background,
-    muted: preset.colors.tertiary,
+    surface: preset.colors.surface,
+    muted: preset.colors.muted,
     border: preset.colors.primary,
-    success: preset.colors.accent,
-    warning: preset.colors.tertiary,
-    error: preset.colors.secondary,
+    success: preset.colors.success,
+    warning: preset.colors.warning,
+    error: preset.colors.error,
     info: preset.colors.primary,
   };
 

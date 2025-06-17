@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { useCurrentTheme } from '../../store/themeStore';
 
 interface BackgroundEffectsProps {
   variant?: 'default' | 'minimal' | 'intense';
@@ -21,6 +22,12 @@ const BackgroundEffects = memo(function BackgroundEffects({
   variant = 'default',
   className = '',
 }: BackgroundEffectsProps) {
+  const currentTheme = useCurrentTheme();
+  
+  // Define which themes should have gradients and effects
+  const gradientThemes = ['cyberpunk', 'neon', 'retro'];
+  const hasGradients = gradientThemes.includes(currentTheme);
+  
   const getOrbsConfig = () => {
     switch (variant) {
       case 'minimal':
@@ -52,8 +59,10 @@ const BackgroundEffects = memo(function BackgroundEffects({
       {/* Grid pattern overlay */}
       <div className='absolute inset-0 bg-grid-pattern opacity-5' />
 
-      {/* Radial gradient effects */}
-      <div className='absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/50' />
+      {/* Radial gradient effects - only for gradient themes */}
+      {hasGradients && (
+        <div className='absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/50' />
+      )}
 
       {/* Floating orbs */}
       {orbs.map((orb, index) => (
@@ -78,8 +87,8 @@ const BackgroundEffects = memo(function BackgroundEffects({
         />
       ))}
 
-      {/* Additional atmospheric effects for intense variant */}
-      {variant === 'intense' && (
+      {/* Additional atmospheric effects for intense variant - only for gradient themes */}
+      {variant === 'intense' && hasGradients && (
         <>
           <div className='absolute inset-0 bg-gradient-to-br from-theme-primary/5 via-transparent to-theme-secondary/5' />
           <div className='absolute inset-0 bg-noise-pattern opacity-[0.02]' />
