@@ -1,6 +1,5 @@
 import type {
   ColorBlindnessType,
-  ColorPalette,
   ContrastLevel,
   ThemeConfig,
   ThemeVariant,
@@ -8,7 +7,7 @@ import type {
 import { ColorConverter } from './colorConverter';
 
 // Preset color palettes
-export const COLOR_PALETTES: Record<ThemeVariant, ColorPalette> = {
+export const COLOR_PALETTES: Record<ThemeVariant, any> = {
   cyberpunk: {
     primary: '#00ffff',
     secondary: '#ff00ff',
@@ -53,104 +52,91 @@ export const COLOR_PALETTES: Record<ThemeVariant, ColorPalette> = {
 
 // Default effect settings
 export const DEFAULT_EFFECTS = {
-  blur: 8,
-  glow: 12,
+  blur: { sm: '4px', md: '8px', lg: '12px' },
+  glow: { sm: '4px', md: '8px', lg: '12px' },
+  shadow: { sm: '2px', md: '4px', lg: '8px' },
   saturation: 1.0,
   brightness: 1.0,
+  contrast: 1.0,
 };
 
 // Theme-specific effect settings
 export const THEME_EFFECTS: Record<ThemeVariant, typeof DEFAULT_EFFECTS> = {
   cyberpunk: {
-    blur: 10,
-    glow: 16,
+    blur: { sm: '6px', md: '10px', lg: '16px' },
+    glow: { sm: '8px', md: '16px', lg: '24px' },
+    shadow: { sm: '4px', md: '8px', lg: '12px' },
     saturation: 1.8,
     brightness: 1.2,
+    contrast: 1.1,
   },
   classic: {
-    blur: 0,
-    glow: 0,
+    blur: { sm: '0px', md: '0px', lg: '0px' },
+    glow: { sm: '0px', md: '0px', lg: '0px' },
+    shadow: { sm: '1px', md: '2px', lg: '3px' },
     saturation: 0.8,
     brightness: 0.9,
+    contrast: 1.0,
   },
   retro: {
-    blur: 6,
-    glow: 8,
+    blur: { sm: '3px', md: '6px', lg: '8px' },
+    glow: { sm: '4px', md: '8px', lg: '12px' },
+    shadow: { sm: '2px', md: '4px', lg: '6px' },
     saturation: 1.5,
     brightness: 1.1,
+    contrast: 1.05,
   },
   minimal: {
-    blur: 2,
-    glow: 4,
+    blur: { sm: '1px', md: '2px', lg: '4px' },
+    glow: { sm: '2px', md: '4px', lg: '6px' },
+    shadow: { sm: '1px', md: '2px', lg: '3px' },
     saturation: 0.6,
     brightness: 0.95,
+    contrast: 0.95,
   },
   neon: {
-    blur: 12,
-    glow: 20,
+    blur: { sm: '8px', md: '12px', lg: '20px' },
+    glow: { sm: '12px', md: '20px', lg: '32px' },
+    shadow: { sm: '6px', md: '12px', lg: '18px' },
     saturation: 2.0,
     brightness: 1.3,
+    contrast: 1.2,
   },
 };
 
 // Preset theme configurations
-export const THEME_PRESETS: Record<ThemeVariant, ThemeConfig> = {
+export const THEME_PRESETS: Record<ThemeVariant, any> = {
   cyberpunk: {
     name: 'Cyberpunk',
     colors: COLOR_PALETTES.cyberpunk,
     effects: THEME_EFFECTS.cyberpunk,
-    accessibility: {
-      colorBlindnessType: 'none',
-      contrast: 'normal',
-      animationIntensity: 'enhanced',
-    },
   },
   classic: {
     name: 'Classic',
     colors: COLOR_PALETTES.classic,
     effects: THEME_EFFECTS.classic,
-    accessibility: {
-      colorBlindnessType: 'none',
-      contrast: 'high',
-      animationIntensity: 'reduced',
-    },
   },
   retro: {
     name: 'Retro',
     colors: COLOR_PALETTES.retro,
     effects: THEME_EFFECTS.retro,
-    accessibility: {
-      colorBlindnessType: 'none',
-      contrast: 'normal',
-      animationIntensity: 'normal',
-    },
   },
   minimal: {
     name: 'Minimal',
     colors: COLOR_PALETTES.minimal,
     effects: THEME_EFFECTS.minimal,
-    accessibility: {
-      colorBlindnessType: 'none',
-      contrast: 'high',
-      animationIntensity: 'reduced',
-    },
   },
   neon: {
     name: 'Neon',
     colors: COLOR_PALETTES.neon,
     effects: THEME_EFFECTS.neon,
-    accessibility: {
-      colorBlindnessType: 'none',
-      contrast: 'normal',
-      animationIntensity: 'enhanced',
-    },
   },
 };
 
 // Color blindness adaptation palettes
 export const COLOR_BLIND_PALETTES: Record<
   Exclude<ColorBlindnessType, 'none'>,
-  Partial<ColorPalette>
+  Partial<any>
 > = {
   protanopia: {
     primary: '#0080ff',

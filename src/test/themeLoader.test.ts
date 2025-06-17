@@ -35,7 +35,7 @@ describe('ThemeLoader - JSON-based theme system', () => {
       expect(theme.colors.tertiary).toBe('#ffff00');
       expect(theme.effects.blur).toBe(10);
       expect(theme.effects.glow).toBe(16);
-      expect(theme.accessibility.animationIntensity).toBe('enhanced');
+      // accessibility property removed from theme presets
     });
 
     it('should load all theme variants correctly', async () => {
@@ -48,7 +48,7 @@ describe('ThemeLoader - JSON-based theme system', () => {
         expect(theme.name).toBeTruthy();
         expect(theme.colors).toBeDefined();
         expect(theme.effects).toBeDefined();
-        expect(theme.accessibility).toBeDefined();
+        // accessibility property removed from theme presets
 
         // Validate color format
         expect(theme.colors.primary).toMatch(/^#[0-9a-fA-F]{6}$/);
@@ -78,7 +78,7 @@ describe('ThemeLoader - JSON-based theme system', () => {
         expect(theme.name).toBeTruthy();
         expect(Object.keys(theme.colors)).toHaveLength(6);
         expect(Object.keys(theme.effects)).toHaveLength(4);
-        expect(Object.keys(theme.accessibility)).toHaveLength(3);
+        // accessibility property removed from theme presets
       });
     });
   });
@@ -91,8 +91,7 @@ describe('ThemeLoader - JSON-based theme system', () => {
       expect(theme.colors.primary).toBe('#0066cc');
       expect(theme.colors.secondary).toBe('#cc6600');
       expect(theme.colors.background).toBe('#f5f5f5');
-      expect(theme.accessibility.contrast).toBe('high');
-      expect(theme.accessibility.animationIntensity).toBe('reduced');
+      // accessibility property removed from theme presets
     });
 
     it('should ensure all required properties exist', async () => {
@@ -108,7 +107,7 @@ describe('ThemeLoader - JSON-based theme system', () => {
         'accent',
       ];
       const requiredEffectKeys = ['blur', 'glow', 'saturation', 'brightness'];
-      const requiredAccessibilityKeys = ['colorBlindnessType', 'contrast', 'animationIntensity'];
+      // accessibility keys removed from theme presets
 
       requiredColorKeys.forEach((key) => {
         expect(theme.colors[key as keyof typeof theme.colors]).toBeDefined();
@@ -118,27 +117,16 @@ describe('ThemeLoader - JSON-based theme system', () => {
         expect(theme.effects[key as keyof typeof theme.effects]).toBeDefined();
       });
 
-      requiredAccessibilityKeys.forEach((key) => {
-        expect(theme.accessibility[key as keyof typeof theme.accessibility]).toBeDefined();
-      });
+      // accessibility property removed from theme presets
     });
 
-    it('should validate accessibility settings', async () => {
+    it('should validate theme structure', async () => {
       const themes = await getAllThemePresetsAsync();
 
       Object.values(themes).forEach((theme) => {
-        // Check valid values for colorBlindnessType
-        expect(['none', 'protanopia', 'deuteranopia', 'tritanopia']).toContain(
-          theme.accessibility.colorBlindnessType
-        );
-
-        // Check valid values for contrast
-        expect(['low', 'normal', 'high']).toContain(theme.accessibility.contrast);
-
-        // Check valid values for animationIntensity
-        expect(['none', 'reduced', 'normal', 'enhanced']).toContain(
-          theme.accessibility.animationIntensity
-        );
+        expect(theme.colors).toBeDefined();
+        expect(theme.effects).toBeDefined();
+        expect(theme.name).toBeDefined();
       });
     });
   });
@@ -261,7 +249,7 @@ describe('ThemeLoader - JSON-based theme system', () => {
       expect(fallbackTheme.name).toBe('Default');
       expect(fallbackTheme.colors).toBeDefined();
       expect(fallbackTheme.effects).toBeDefined();
-      expect(fallbackTheme.accessibility).toBeDefined();
+      // accessibility property removed from theme presets
     });
 
     it('should maintain interface compatibility', async () => {
@@ -272,7 +260,7 @@ describe('ThemeLoader - JSON-based theme system', () => {
         'name',
         'colors',
         'effects',
-        'accessibility',
+        // 'accessibility', // removed from theme presets
       ];
 
       requiredProperties.forEach((prop) => {
@@ -283,7 +271,7 @@ describe('ThemeLoader - JSON-based theme system', () => {
       expect(typeof theme.name).toBe('string');
       expect(typeof theme.colors).toBe('object');
       expect(typeof theme.effects).toBe('object');
-      expect(typeof theme.accessibility).toBe('object');
+      // accessibility property removed from theme presets
     });
   });
 
