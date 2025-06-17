@@ -1,5 +1,5 @@
 import { cn } from '@/utils/ui/cn';
-import React from 'react';
+import React, { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
 import type { AnimationIntensity, ColorBlindnessType, ContrastLevel } from '../types/tetris';
@@ -30,6 +30,12 @@ export default function AccessibilitySettings({
   className = '',
 }: AccessibilitySettingsProps) {
   const { t } = useTranslation();
+  
+  // Generate unique IDs for form elements
+  const colorBlindnessSelectId = useId();
+  const contrastSelectId = useId();
+  const animationSelectId = useId();
+  const reducedMotionSwitchId = useId();
   // Event handlers (React Compiler will optimize these)
   const handleColorBlindnessChange = (value: string) => {
     onSettingsChange({ colorBlindnessType: value as ColorBlindnessType });
@@ -87,14 +93,14 @@ export default function AccessibilitySettings({
         {/* Color blindness support */}
         <div>
           <Label
-            htmlFor='color-blindness-select'
+            htmlFor={colorBlindnessSelectId}
             className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-theme-primary`}
           >
             {t('accessibility.colorVisionSupport')}
           </Label>
           <Select value={colorBlindnessType} onValueChange={handleColorBlindnessChange}>
             <SelectTrigger
-              id='color-blindness-select'
+              id={colorBlindnessSelectId}
               className={cn(
                 'w-full bg-theme-primary/10 border-theme-primary/30 text-foreground',
                 'hover:bg-theme-primary/20 focus:ring-theme-primary focus:border-theme-primary',
@@ -124,14 +130,14 @@ export default function AccessibilitySettings({
         {/* Contrast settings */}
         <div>
           <Label
-            htmlFor='contrast-select'
+            htmlFor={contrastSelectId}
             className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-theme-primary`}
           >
             {t('accessibility.contrast')}
           </Label>
           <Select value={contrast} onValueChange={handleContrastChange}>
             <SelectTrigger
-              id='contrast-select'
+              id={contrastSelectId}
               className={cn(
                 'w-full bg-theme-primary/10 border-theme-primary/30 text-foreground',
                 'hover:bg-theme-primary/20 focus:ring-theme-primary focus:border-theme-primary',
@@ -161,14 +167,14 @@ export default function AccessibilitySettings({
         {/* Animation intensity */}
         <div>
           <Label
-            htmlFor='animation-intensity-select'
+            htmlFor={animationSelectId}
             className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-theme-primary`}
           >
             {t('accessibility.animationIntensity')}
           </Label>
           <Select value={animationIntensity} onValueChange={handleAnimationChange}>
             <SelectTrigger
-              id='animation-intensity-select'
+              id={animationSelectId}
               className={cn(
                 'w-full bg-theme-primary/10 border-theme-primary/30 text-foreground',
                 'hover:bg-theme-primary/20 focus:ring-theme-primary focus:border-theme-primary',
@@ -199,7 +205,7 @@ export default function AccessibilitySettings({
         <div>
           <div className='flex items-center space-x-3'>
             <Switch
-              id='reduced-motion-switch'
+              id={reducedMotionSwitchId}
               checked={reducedMotion}
               onCheckedChange={() => handleReducedMotionToggle()}
               className={cn(
@@ -208,7 +214,7 @@ export default function AccessibilitySettings({
               )}
               aria-label={t('settings.reducedMotion')}
             />
-            <Label htmlFor='reduced-motion-switch' className='cursor-pointer'>
+            <Label htmlFor={reducedMotionSwitchId} className='cursor-pointer'>
               <span className={`${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} text-theme-primary`}>
                 {t('settings.reducedMotion')}
               </span>

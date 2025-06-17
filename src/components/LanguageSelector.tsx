@@ -1,5 +1,5 @@
 import { cn } from '@/utils/ui/cn';
-import { memo } from 'react';
+import { memo, useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TYPOGRAPHY } from '../constants/layout';
 import { type SupportedLanguage, languageNames, supportedLanguages } from '../i18n';
@@ -18,6 +18,9 @@ const LanguageSelector = memo(function LanguageSelector({
   const { t } = useTranslation();
   const currentLanguage = useCurrentLanguage();
   const setLanguage = useSetLanguage();
+  
+  // Generate unique ID for form element
+  const languageSelectId = useId();
 
   const handleLanguageChange = (value: string) => {
     const newLanguage = value as SupportedLanguage;
@@ -28,7 +31,7 @@ const LanguageSelector = memo(function LanguageSelector({
     <div className={`flex items-center gap-2 ${className}`}>
       {showLabel && (
         <label
-          htmlFor='language-select'
+          htmlFor={languageSelectId}
           className={cn(TYPOGRAPHY.BODY_TEXT, TYPOGRAPHY.BODY_WEIGHT, 'text-theme-primary')}
         >
           {t('settings.language')}:
@@ -36,7 +39,7 @@ const LanguageSelector = memo(function LanguageSelector({
       )}
       <Select value={currentLanguage} onValueChange={handleLanguageChange}>
         <SelectTrigger
-          id='language-select'
+          id={languageSelectId}
           data-testid='language-selector'
           className={cn(
             'w-[180px] bg-theme-primary/10 border-theme-primary/30 text-theme-primary',

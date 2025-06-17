@@ -4,7 +4,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/utils/ui/cn';
-import React, { useState } from 'react';
+import React, { useState, useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
@@ -62,6 +62,10 @@ export default function ThemeSettings({
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'theme' | 'colors' | 'effects'>('theme');
   const [showResetConfirmation, setShowResetConfirmation] = useState(false);
+  
+  // Generate unique IDs for form elements
+  const effectIntensityRangeId = useId();
+  const animationsSwitchId = useId();
 
   // Event handler (React Compiler will optimize this)
   const handleEffectIntensityChange = (value: number[]) => {
@@ -141,13 +145,13 @@ export default function ThemeSettings({
               {/* Effect intensity */}
               <div>
                 <Label
-                  htmlFor='effect-intensity-range'
+                  htmlFor={effectIntensityRangeId}
                   className={`block ${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} ${SPACING.FORM_LABEL_BOTTOM} text-theme-primary`}
                 >
                   {t('accessibility.effectIntensity')}: {(effectIntensity * 100).toFixed(0)}%
                 </Label>
                 <Slider
-                  id='effect-intensity-range'
+                  id={effectIntensityRangeId}
                   value={[effectIntensity]}
                   onValueChange={handleEffectIntensityChange}
                   min={0.5}
@@ -168,7 +172,7 @@ export default function ThemeSettings({
               <div>
                 <div className='flex items-center space-x-3'>
                   <Switch
-                    id='animations-switch'
+                    id={animationsSwitchId}
                     checked={animations}
                     onCheckedChange={() => onAnimationsToggle()}
                     className={cn(
@@ -177,7 +181,7 @@ export default function ThemeSettings({
                     )}
                     aria-label={t('accessibility.fullAnimation')}
                   />
-                  <Label htmlFor='animations-switch' className='cursor-pointer'>
+                  <Label htmlFor={animationsSwitchId} className='cursor-pointer'>
                     <span
                       className={`${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} text-theme-primary`}
                     >

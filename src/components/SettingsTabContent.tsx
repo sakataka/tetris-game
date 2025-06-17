@@ -1,4 +1,4 @@
-import { Suspense, memo } from 'react';
+import { Suspense, memo, useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TYPOGRAPHY } from '../constants/layout';
 import { useAudioVolumeState } from '../store/audioStore';
@@ -15,6 +15,9 @@ const SettingsTabContent = memo(function SettingsTabContent() {
   const { volume, isMuted, setVolume, toggleMute } = useAudioVolumeState();
   const settings = useSettings();
   const updateSettings = useUpdateSettings();
+  
+  // Generate unique ID for form element
+  const debugModeCheckboxId = useId();
 
   return (
     <div className='space-y-6 max-w-4xl'>
@@ -44,7 +47,7 @@ const SettingsTabContent = memo(function SettingsTabContent() {
         <div className='space-y-3'>
           <div className='flex items-center space-x-3'>
             <Checkbox
-              id='debug-mode-checkbox'
+              id={debugModeCheckboxId}
               checked={settings.gameMode === 'debug'}
               onCheckedChange={(checked) => {
                 updateSettings({
@@ -55,7 +58,7 @@ const SettingsTabContent = memo(function SettingsTabContent() {
               aria-label={t('settings.debugMode')}
             />
             <Label
-              htmlFor='debug-mode-checkbox'
+              htmlFor={debugModeCheckboxId}
               className='text-theme-foreground hover:text-theme-primary transition-colors cursor-pointer'
             >
               <span className={TYPOGRAPHY.BODY_TEXT}>{t('settings.debugMode')}</span>

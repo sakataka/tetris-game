@@ -1,7 +1,7 @@
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/utils/ui/cn';
-import { memo } from 'react';
+import { memo, useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GAME_UI_SIZES, SPACING, TYPOGRAPHY, UI_SIZES } from '../constants/layout';
 import type { ExtendedGameSettings } from '../store/settingsStore';
@@ -41,6 +41,10 @@ const AudioPanel = memo(function AudioPanel({
   audioSystemStatus,
 }: AudioPanelProps) {
   const { t } = useTranslation();
+  
+  // Generate unique IDs for form elements
+  const muteSwitchId = useId();
+  const virtualControlsSwitchId = useId();
 
   return (
     <CyberCard title={t('settings.audioUpper')} theme='primary'>
@@ -99,11 +103,11 @@ const AudioPanel = memo(function AudioPanel({
           </div>
         </div>
         <div className='flex justify-between items-center'>
-          <label htmlFor='mute-switch' className={`text-theme-foreground ${TYPOGRAPHY.BODY_TEXT}`}>
+          <label htmlFor={muteSwitchId} className={`text-theme-foreground ${TYPOGRAPHY.BODY_TEXT}`}>
             {t('settings.mute')}
           </label>
           <Switch
-            id='mute-switch'
+            id={muteSwitchId}
             checked={!isMuted}
             onCheckedChange={() => onToggleMute()}
             className={cn(
@@ -115,13 +119,13 @@ const AudioPanel = memo(function AudioPanel({
         </div>
         <div className='flex justify-between items-center'>
           <label
-            htmlFor='virtual-controls-switch'
+            htmlFor={virtualControlsSwitchId}
             className={`text-theme-foreground ${TYPOGRAPHY.BODY_TEXT}`}
           >
             {t('settings.virtualControls')}
           </label>
           <Switch
-            id='virtual-controls-switch'
+            id={virtualControlsSwitchId}
             checked={settings.virtualControlsEnabled}
             onCheckedChange={(checked) => onUpdateSettings({ virtualControlsEnabled: checked })}
             className={cn(
