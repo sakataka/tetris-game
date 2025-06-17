@@ -1,12 +1,65 @@
 /**
- * Theme Manager - Dynamic Theme Application System
+ * Theme Manager - Comprehensive Dynamic Theme Application System
  *
- * Provides a unified interface for applying themes across the entire UI.
+ * Provides a unified interface for applying comprehensive themes across the entire UI.
+ * Applies colors, typography, spacing, sizing, borders, effects, and animations.
  * Bridges theme store with CSS variables for dynamic theme switching.
  */
 
 import type { ThemeVariant } from '../../types/tetris';
-import { getThemePreset } from './themePresets';
+import comprehensiveThemePresets from '../../data/comprehensiveThemePresets.json';
+
+/**
+ * Comprehensive theme preset interface
+ */
+export interface ComprehensiveThemePreset {
+  name: string;
+  colors: {
+    primary: string;
+    secondary: string;
+    tertiary: string;
+    background: string;
+    foreground: string;
+    accent: string;
+  };
+  typography: {
+    fontFamily: {
+      primary: string;
+      secondary: string;
+      body: string;
+    };
+    fontSize: Record<string, string>;
+    fontWeight: Record<string, string>;
+    lineHeight: Record<string, string>;
+    letterSpacing: Record<string, string>;
+  };
+  spacing: Record<string, string>;
+  sizing: {
+    button: Record<string, { height: string; padding: string }>;
+    card: Record<string, { padding: string }>;
+    input: Record<string, { height: string; padding: string }>;
+  };
+  borders: {
+    width: Record<string, string>;
+    radius: Record<string, string>;
+    style: string;
+  };
+  effects: {
+    blur: Record<string, string>;
+    glow: Record<string, string>;
+    shadow: Record<string, string>;
+    saturation: number;
+    brightness: number;
+    contrast: number;
+  };
+  animations: {
+    duration: Record<string, string>;
+    easing: Record<string, string>;
+    enabled: boolean;
+    particles: boolean;
+    intensity: string;
+  };
+}
 
 /**
  * Semantic color tokens for consistent theming
@@ -36,18 +89,26 @@ export interface SemanticColorTokens {
 }
 
 /**
- * Theme configuration with semantic color mapping
+ * Theme configuration with comprehensive theming
  */
 export interface ThemeConfig {
   name: string;
   variant: ThemeVariant;
   colors: SemanticColorTokens;
-  effects: {
-    blur: number;
-    glow: number;
-    saturation: number;
-    brightness: number;
-  };
+  typography: ComprehensiveThemePreset['typography'];
+  spacing: ComprehensiveThemePreset['spacing'];
+  sizing: ComprehensiveThemePreset['sizing'];
+  borders: ComprehensiveThemePreset['borders'];
+  effects: ComprehensiveThemePreset['effects'];
+  animations: ComprehensiveThemePreset['animations'];
+}
+
+/**
+ * Get comprehensive theme preset
+ */
+function getComprehensiveThemePreset(themeVariant: ThemeVariant): ComprehensiveThemePreset {
+  const presets = comprehensiveThemePresets as Record<ThemeVariant, ComprehensiveThemePreset>;
+  return presets[themeVariant] || presets.cyberpunk;
 }
 
 /**
@@ -71,10 +132,10 @@ const CSS_VARIABLE_MAP: Record<keyof SemanticColorTokens, string> = {
 
 /**
  * Theme preset to semantic color mapping
- * Converts theme presets to semantic color tokens
+ * Converts comprehensive theme presets to semantic color tokens
  */
 function mapThemeToSemanticColors(themeVariant: ThemeVariant): SemanticColorTokens {
-  const preset = getThemePreset(themeVariant);
+  const preset = getComprehensiveThemePreset(themeVariant);
 
   // Map preset colors to semantic roles using theme palette
   const baseColors: SemanticColorTokens = {
@@ -93,17 +154,15 @@ function mapThemeToSemanticColors(themeVariant: ThemeVariant): SemanticColorToke
     info: preset.colors.primary,
   };
 
-  // All themes now use the consistent preset-based mapping
-  // No per-theme overrides needed - colors come from theme presets
   return baseColors;
 }
 
 /**
- * Apply theme to CSS variables dynamically
+ * Apply comprehensive theme to CSS variables dynamically
  */
 export function applyThemeToDocument(themeVariant: ThemeVariant): void {
   const semanticColors = mapThemeToSemanticColors(themeVariant);
-  const preset = getThemePreset(themeVariant);
+  const preset = getComprehensiveThemePreset(themeVariant);
 
   // Apply semantic color tokens
   Object.entries(semanticColors).forEach(([tokenName, colorValue]) => {
@@ -111,17 +170,87 @@ export function applyThemeToDocument(themeVariant: ThemeVariant): void {
     document.documentElement.style.setProperty(cssVariable, colorValue);
   });
 
+  // Apply typography variables
+  document.documentElement.style.setProperty('--theme-font-primary', preset.typography.fontFamily.primary);
+  document.documentElement.style.setProperty('--theme-font-secondary', preset.typography.fontFamily.secondary);
+  document.documentElement.style.setProperty('--theme-font-body', preset.typography.fontFamily.body);
+  
+  Object.entries(preset.typography.fontSize).forEach(([key, value]) => {
+    document.documentElement.style.setProperty(`--theme-text-${key}`, value);
+  });
+  
+  Object.entries(preset.typography.fontWeight).forEach(([key, value]) => {
+    document.documentElement.style.setProperty(`--theme-font-${key}`, value);
+  });
+  
+  Object.entries(preset.typography.lineHeight).forEach(([key, value]) => {
+    document.documentElement.style.setProperty(`--theme-leading-${key}`, value);
+  });
+  
+  Object.entries(preset.typography.letterSpacing).forEach(([key, value]) => {
+    document.documentElement.style.setProperty(`--theme-tracking-${key}`, value);
+  });
+
+  // Apply spacing variables
+  Object.entries(preset.spacing).forEach(([key, value]) => {
+    document.documentElement.style.setProperty(`--theme-spacing-${key}`, value);
+  });
+
+  // Apply sizing variables
+  Object.entries(preset.sizing.button).forEach(([key, sizes]) => {
+    document.documentElement.style.setProperty(`--theme-button-${key}-height`, sizes.height);
+    document.documentElement.style.setProperty(`--theme-button-${key}-padding`, sizes.padding);
+  });
+  
+  Object.entries(preset.sizing.card).forEach(([key, sizes]) => {
+    document.documentElement.style.setProperty(`--theme-card-${key}-padding`, sizes.padding);
+  });
+  
+  Object.entries(preset.sizing.input).forEach(([key, sizes]) => {
+    document.documentElement.style.setProperty(`--theme-input-${key}-height`, sizes.height);
+    document.documentElement.style.setProperty(`--theme-input-${key}-padding`, sizes.padding);
+  });
+
+  // Apply border variables
+  Object.entries(preset.borders.width).forEach(([key, value]) => {
+    document.documentElement.style.setProperty(`--theme-border-${key}`, value);
+  });
+  
+  Object.entries(preset.borders.radius).forEach(([key, value]) => {
+    document.documentElement.style.setProperty(`--theme-rounded-${key}`, value);
+  });
+  
+  document.documentElement.style.setProperty('--theme-border-style', preset.borders.style);
+
   // Apply effect variables
-  document.documentElement.style.setProperty('--theme-blur', `${preset.effects.blur}px`);
-  document.documentElement.style.setProperty('--theme-glow', `${preset.effects.glow}px`);
-  document.documentElement.style.setProperty(
-    '--theme-saturation',
-    preset.effects.saturation.toString()
-  );
-  document.documentElement.style.setProperty(
-    '--theme-brightness',
-    preset.effects.brightness.toString()
-  );
+  Object.entries(preset.effects.blur).forEach(([key, value]) => {
+    document.documentElement.style.setProperty(`--theme-blur-${key}`, value);
+  });
+  
+  Object.entries(preset.effects.glow).forEach(([key, value]) => {
+    document.documentElement.style.setProperty(`--theme-glow-${key}`, value);
+  });
+  
+  Object.entries(preset.effects.shadow).forEach(([key, value]) => {
+    document.documentElement.style.setProperty(`--theme-shadow-${key}`, value);
+  });
+  
+  document.documentElement.style.setProperty('--theme-saturation', preset.effects.saturation.toString());
+  document.documentElement.style.setProperty('--theme-brightness', preset.effects.brightness.toString());
+  document.documentElement.style.setProperty('--theme-contrast', preset.effects.contrast.toString());
+
+  // Apply animation variables
+  Object.entries(preset.animations.duration).forEach(([key, value]) => {
+    document.documentElement.style.setProperty(`--theme-duration-${key}`, value);
+  });
+  
+  Object.entries(preset.animations.easing).forEach(([key, value]) => {
+    document.documentElement.style.setProperty(`--theme-ease-${key}`, value);
+  });
+  
+  document.documentElement.style.setProperty('--theme-animations-enabled', preset.animations.enabled ? '1' : '0');
+  document.documentElement.style.setProperty('--theme-particles-enabled', preset.animations.particles ? '1' : '0');
+  document.documentElement.style.setProperty('--theme-animation-intensity', preset.animations.intensity);
 
   // Apply theme class to body for CSS-based theming
   document.body.className = document.body.className
@@ -159,25 +288,30 @@ export function applyCustomColors(customColors: Partial<SemanticColorTokens>): v
 }
 
 /**
- * Get current theme configuration
+ * Get current comprehensive theme configuration
  */
 export function getCurrentThemeConfig(themeVariant: ThemeVariant): ThemeConfig {
-  const preset = getThemePreset(themeVariant);
+  const preset = getComprehensiveThemePreset(themeVariant);
   const semanticColors = mapThemeToSemanticColors(themeVariant);
 
   return {
     name: preset.name,
     variant: themeVariant,
     colors: semanticColors,
+    typography: preset.typography,
+    spacing: preset.spacing,
+    sizing: preset.sizing,
+    borders: preset.borders,
     effects: preset.effects,
+    animations: preset.animations,
   };
 }
 
 /**
- * Initialize theme system on app startup
+ * Initialize comprehensive theme system on app startup
  */
 export function initializeThemeSystem(initialTheme: ThemeVariant = 'cyberpunk'): void {
-  // Apply initial theme
+  // Apply initial theme with all properties
   applyThemeToDocument(initialTheme);
 
   // Generate transparency variants for all semantic colors
@@ -186,7 +320,8 @@ export function initializeThemeSystem(initialTheme: ThemeVariant = 'cyberpunk'):
     generateTransparencyVariants(colorValue, tokenName);
   });
 
-  console.log(`🎨 Theme system initialized with ${initialTheme} theme`);
+  console.log(`🎨 Comprehensive theme system initialized with ${initialTheme} theme`);
+  console.log('✨ Typography, spacing, sizing, borders, effects, and animations applied');
 }
 
 /**

@@ -14,8 +14,8 @@ const GameOverMessage = memo(function GameOverMessage({ className = '' }: GameOv
     <div
       className={cn('absolute inset-0 hologram flex items-center justify-center', className)}
       style={{
-        background: 'rgba(0,0,0,0.9)',
-        backdropFilter: 'blur(10px)',
+        background: 'var(--overlay-background)',
+        backdropFilter: 'blur(var(--overlay-blur))',
       }}
     >
       <Alert className='max-w-md border-red-400/50 bg-red-500/10 backdrop-blur-sm neon-border'>

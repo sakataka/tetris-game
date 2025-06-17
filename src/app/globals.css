@@ -30,6 +30,163 @@
   --theme-glow: 12px;
   --theme-saturation: 1.0;
   --theme-brightness: 1.0;
+  --theme-contrast: 1.0;
+
+  /* ===== TYPOGRAPHY TOKENS ===== */
+  /* Font families - dynamically updated by ThemeManager */
+  --theme-font-primary: 'Orbitron, monospace';
+  --theme-font-secondary: 'Courier New, monospace';
+  --theme-font-body: 'Inter, sans-serif';
+
+  /* Font sizes */
+  --theme-text-xs: 0.75rem;
+  --theme-text-sm: 0.875rem;
+  --theme-text-base: 1rem;
+  --theme-text-lg: 1.125rem;
+  --theme-text-xl: 1.25rem;
+  --theme-text-2xl: 1.5rem;
+  --theme-text-3xl: 1.875rem;
+
+  /* Font weights */
+  --theme-font-light: 300;
+  --theme-font-normal: 400;
+  --theme-font-medium: 500;
+  --theme-font-semibold: 600;
+  --theme-font-bold: 700;
+  --theme-font-extrabold: 800;
+
+  /* Line heights */
+  --theme-leading-tight: 1.25;
+  --theme-leading-normal: 1.5;
+  --theme-leading-relaxed: 1.75;
+
+  /* Letter spacing */
+  --theme-tracking-tight: -0.025em;
+  --theme-tracking-normal: 0em;
+  --theme-tracking-wide: 0.025em;
+  --theme-tracking-wider: 0.05em;
+
+  /* ===== SPACING TOKENS ===== */
+  /* Spacing scale - dynamically updated by ThemeManager */
+  --theme-spacing-xs: 0.25rem;
+  --theme-spacing-sm: 0.5rem;
+  --theme-spacing-md: 0.75rem;
+  --theme-spacing-lg: 1rem;
+  --theme-spacing-xl: 1.5rem;
+  --theme-spacing-2xl: 2rem;
+  --theme-spacing-3xl: 3rem;
+  --theme-spacing-4xl: 4rem;
+
+  /* ===== SIZING TOKENS ===== */
+  /* Button sizes */
+  --theme-button-sm-height: 2rem;
+  --theme-button-sm-padding: 0.5rem 0.75rem;
+  --theme-button-md-height: 2.25rem;
+  --theme-button-md-padding: 0.5rem 1rem;
+  --theme-button-lg-height: 2.5rem;
+  --theme-button-lg-padding: 0.75rem 1.5rem;
+
+  /* Card sizes */
+  --theme-card-sm-padding: 0.75rem;
+  --theme-card-md-padding: 1rem;
+  --theme-card-lg-padding: 1.5rem;
+
+  /* Input sizes */
+  --theme-input-sm-height: 2rem;
+  --theme-input-sm-padding: 0.25rem 0.5rem;
+  --theme-input-md-height: 2.25rem;
+  --theme-input-md-padding: 0.5rem 0.75rem;
+  --theme-input-lg-height: 2.5rem;
+  --theme-input-lg-padding: 0.75rem 1rem;
+
+  /* ===== BORDER TOKENS ===== */
+  /* Border widths */
+  --theme-border-thin: 1px;
+  --theme-border-normal: 2px;
+  --theme-border-thick: 3px;
+
+  /* Border radius */
+  --theme-rounded-none: 0;
+  --theme-rounded-sm: 0.25rem;
+  --theme-rounded-md: 0.375rem;
+  --theme-rounded-lg: 0.5rem;
+  --theme-rounded-xl: 0.75rem;
+  --theme-rounded-2xl: 1rem;
+
+  /* Border style */
+  --theme-border-style: solid;
+
+  /* ===== EFFECT TOKENS ===== */
+  /* Blur effects */
+  --theme-blur-sm: 4px;
+  --theme-blur-md: 8px;
+  --theme-blur-lg: 12px;
+  --theme-blur-xl: 16px;
+
+  /* Glow effects */
+  --theme-glow-sm: 0 0 8px;
+  --theme-glow-md: 0 0 12px;
+  --theme-glow-lg: 0 0 16px;
+  --theme-glow-xl: 0 0 24px;
+
+  /* Shadow effects */
+  --theme-shadow-sm: 0 1px 2px 0 rgba(0, 255, 255, 0.1);
+  --theme-shadow-md: 0 4px 6px -1px rgba(0, 255, 255, 0.2);
+  --theme-shadow-lg: 0 10px 15px -3px rgba(0, 255, 255, 0.3);
+  --theme-shadow-xl: 0 20px 25px -5px rgba(0, 255, 255, 0.4);
+
+  /* ===== ANIMATION TOKENS ===== */
+  /* Animation durations */
+  --theme-duration-fast: 150ms;
+  --theme-duration-normal: 300ms;
+  --theme-duration-slow: 500ms;
+  --theme-duration-slower: 750ms;
+
+  /* Animation easing */
+  --theme-ease-linear: linear;
+  --theme-ease-ease: ease;
+  --theme-ease-easeIn: cubic-bezier(0.4, 0, 1, 1);
+  --theme-ease-easeOut: cubic-bezier(0, 0, 0.2, 1);
+  --theme-ease-easeInOut: cubic-bezier(0.4, 0, 0.2, 1);
+  --theme-ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* Animation settings */
+  --theme-animations-enabled: 1;
+  --theme-particles-enabled: 1;
+  --theme-animation-intensity: enhanced;
+
+  /* Game board gradient backgrounds */
+  --game-board-gradient: linear-gradient(
+    135deg,
+    color-mix(in oklch, var(--theme-primary) 10%, transparent) 0%,
+    transparent 50%,
+    color-mix(in oklch, var(--theme-secondary) 10%, transparent) 100%
+  );
+
+  /* ===== GAME-SPECIFIC TOKENS ===== */
+  /* Game board dimensions */
+  --game-board-min-width-sm: 280px;
+  --game-board-min-height-sm: 560px;
+  --game-board-min-width-md: 360px;
+  --game-board-min-height-md: 720px;
+  --game-board-min-width-lg: 400px;
+  --game-board-min-height-lg: 800px;
+
+  /* Overlay effects */
+  --overlay-background: rgba(0, 0, 0, 0.9);
+  --overlay-blur: 10px;
+
+  /* Game piece effects */
+  --piece-glow-blur: 2px;
+  --piece-glow-opacity: 0.2;
+  --piece-shadow-base: 0 0 10px rgba(255, 255, 255, 0.3);
+  --piece-shadow-sm: 0 0 5px rgba(255, 255, 255, 0.3);
+
+  /* Button glow effects */
+  --button-glow-base: 0 0 10px;
+  --button-glow-hover: 0 0 15px;
+  --button-glow-strong: 0 0 20px;
+  --button-glow-intense: 0 0 30px;
 
   /* Cyberpunk color palette (legacy support) */
   --cyber-cyan: #00ffff;
@@ -187,6 +344,86 @@
   --color-cyber-yellow-10: color-mix(in oklch, var(--color-cyber-yellow) 10%, transparent);
   --color-cyber-yellow-20: color-mix(in oklch, var(--color-cyber-yellow) 20%, transparent);
   --color-cyber-yellow-30: color-mix(in oklch, var(--color-cyber-yellow) 30%, transparent);
+
+  /* ===== TAILWIND THEME TOKENS ===== */
+  /* Typography tokens for Tailwind */
+  --color-font-primary: var(--theme-font-primary);
+  --color-font-secondary: var(--theme-font-secondary);
+  --color-font-body: var(--theme-font-body);
+
+  /* Font size tokens */
+  --fontSize-theme-xs: var(--theme-text-xs);
+  --fontSize-theme-sm: var(--theme-text-sm);
+  --fontSize-theme-base: var(--theme-text-base);
+  --fontSize-theme-lg: var(--theme-text-lg);
+  --fontSize-theme-xl: var(--theme-text-xl);
+  --fontSize-theme-2xl: var(--theme-text-2xl);
+  --fontSize-theme-3xl: var(--theme-text-3xl);
+
+  /* Font weight tokens */
+  --fontWeight-theme-light: var(--theme-font-light);
+  --fontWeight-theme-normal: var(--theme-font-normal);
+  --fontWeight-theme-medium: var(--theme-font-medium);
+  --fontWeight-theme-semibold: var(--theme-font-semibold);
+  --fontWeight-theme-bold: var(--theme-font-bold);
+  --fontWeight-theme-extrabold: var(--theme-font-extrabold);
+
+  /* Line height tokens */
+  --lineHeight-theme-tight: var(--theme-leading-tight);
+  --lineHeight-theme-normal: var(--theme-leading-normal);
+  --lineHeight-theme-relaxed: var(--theme-leading-relaxed);
+
+  /* Letter spacing tokens */
+  --letterSpacing-theme-tight: var(--theme-tracking-tight);
+  --letterSpacing-theme-normal: var(--theme-tracking-normal);
+  --letterSpacing-theme-wide: var(--theme-tracking-wide);
+  --letterSpacing-theme-wider: var(--theme-tracking-wider);
+
+  /* Spacing tokens for Tailwind */
+  --spacing-theme-xs: var(--theme-spacing-xs);
+  --spacing-theme-sm: var(--theme-spacing-sm);
+  --spacing-theme-md: var(--theme-spacing-md);
+  --spacing-theme-lg: var(--theme-spacing-lg);
+  --spacing-theme-xl: var(--theme-spacing-xl);
+  --spacing-theme-2xl: var(--theme-spacing-2xl);
+  --spacing-theme-3xl: var(--theme-spacing-3xl);
+  --spacing-theme-4xl: var(--theme-spacing-4xl);
+
+  /* Border tokens */
+  --borderWidth-theme-thin: var(--theme-border-thin);
+  --borderWidth-theme-normal: var(--theme-border-normal);
+  --borderWidth-theme-thick: var(--theme-border-thick);
+
+  --borderRadius-theme-none: var(--theme-rounded-none);
+  --borderRadius-theme-sm: var(--theme-rounded-sm);
+  --borderRadius-theme-md: var(--theme-rounded-md);
+  --borderRadius-theme-lg: var(--theme-rounded-lg);
+  --borderRadius-theme-xl: var(--theme-rounded-xl);
+  --borderRadius-theme-2xl: var(--theme-rounded-2xl);
+
+  /* Effect tokens */
+  --blur-theme-sm: var(--theme-blur-sm);
+  --blur-theme-md: var(--theme-blur-md);
+  --blur-theme-lg: var(--theme-blur-lg);
+  --blur-theme-xl: var(--theme-blur-xl);
+
+  --boxShadow-theme-sm: var(--theme-shadow-sm);
+  --boxShadow-theme-md: var(--theme-shadow-md);
+  --boxShadow-theme-lg: var(--theme-shadow-lg);
+  --boxShadow-theme-xl: var(--theme-shadow-xl);
+
+  /* Animation tokens */
+  --transitionDuration-theme-fast: var(--theme-duration-fast);
+  --transitionDuration-theme-normal: var(--theme-duration-normal);
+  --transitionDuration-theme-slow: var(--theme-duration-slow);
+  --transitionDuration-theme-slower: var(--theme-duration-slower);
+
+  --transitionTimingFunction-theme-linear: var(--theme-ease-linear);
+  --transitionTimingFunction-theme-ease: var(--theme-ease-ease);
+  --transitionTimingFunction-theme-easeIn: var(--theme-ease-easeIn);
+  --transitionTimingFunction-theme-easeOut: var(--theme-ease-easeOut);
+  --transitionTimingFunction-theme-easeInOut: var(--theme-ease-easeInOut);
+  --transitionTimingFunction-theme-bounce: var(--theme-ease-bounce);
 
   /* ===== RESPONSIVE SYSTEM ===== */
   /* Enhanced fluid typography for better desktop display */
@@ -415,6 +652,26 @@ body {
 .ultra-compact-layout {
   padding: 0.125rem 0.25rem; /* py-0.5 px-1 */
   margin: 0;
+}
+
+/* Game board responsive sizing */
+.game-board-responsive {
+  min-width: var(--game-board-min-width-sm);
+  min-height: var(--game-board-min-height-sm);
+}
+
+@media (min-width: 768px) {
+  .game-board-responsive {
+    min-width: var(--game-board-min-width-md);
+    min-height: var(--game-board-min-height-md);
+  }
+}
+
+@media (min-width: 1024px) {
+  .game-board-responsive {
+    min-width: var(--game-board-min-width-lg);
+    min-height: var(--game-board-min-height-lg);
+  }
 }
 
 .ultra-compact-spacing {

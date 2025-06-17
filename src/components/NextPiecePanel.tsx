@@ -33,10 +33,11 @@ const NextPiecePanel = memo(function NextPiecePanel({
                 <div
                   key={`${y}-${x}`}
                   className={`${cellSize} border border-gray-600/50 relative ${
-                    cell ? 'shadow-[0_0_10px_rgba(255,255,255,0.3)]' : 'bg-transparent'
+                    cell ? '' : 'bg-transparent'
                   }`}
                   style={{
                     backgroundColor: cell ? nextPiece.color : 'transparent',
+                    boxShadow: cell ? 'var(--piece-shadow-base)' : 'none',
                   }}
                 >
                   {cell === 1 && <div className='absolute inset-0 bg-current opacity-20 blur-sm' />}

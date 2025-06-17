@@ -14,8 +14,8 @@ const PausedMessage = memo(function PausedMessage({ className = '' }: PausedMess
     <div
       className={cn('absolute inset-0 hologram flex items-center justify-center', className)}
       style={{
-        background: 'rgba(0,0,0,0.9)',
-        backdropFilter: 'blur(10px)',
+        background: 'var(--overlay-background)',
+        backdropFilter: 'blur(var(--overlay-blur))',
       }}
     >
       <Alert className='max-w-md border-yellow-400/50 bg-yellow-500/10 backdrop-blur-sm neon-border'>
