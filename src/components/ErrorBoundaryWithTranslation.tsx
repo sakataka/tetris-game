@@ -1,5 +1,6 @@
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import ErrorBoundary, { withErrorBoundary, useErrorBoundary } from './ErrorBoundary';
 
 // Wrapper component that provides translations to ErrorBoundary
@@ -18,7 +19,7 @@ interface FallbackComponentProps {
   maxRetries: number;
   errorId: string | null;
   level: 'page' | 'component' | 'section';
-  t: (key: string, options?: any) => string; // biome-ignore lint/suspicious/noExplicitAny: i18next TFunction type
+  t: TFunction;
 }
 
 const FallbackComponent = ({

@@ -164,15 +164,16 @@ describe('ThemeUtils - Automatic CSS variable generation system', () => {
 
       applyThemeToCSS(cyberpunkTheme);
 
-      // Basic variables: 10 (background, foreground, 4×accent, 4×cyber)
-      // Transparency variables: 36 (4 colors × 9 levels)
+      // Basic variables: 12 (background, foreground, 6×theme colors, 4×cyber)
+      // Theme variables: 8 (primary, secondary, tertiary, accent, warning, error, success, muted)
+      // Transparency variables: 72 (8 colors × 9 levels for both cyber and theme)
       // Effect variables: 4 (blur)
       // Hologram variables: 2 (bg, border)
-      // Total: Expected 52 setProperty calls
+      // Total: Expected ~170 setProperty calls
 
       const setPropertyCalls = mockDocumentElement.style.setProperty.mock.calls.length;
-      expect(setPropertyCalls).toBeGreaterThanOrEqual(45);
-      expect(setPropertyCalls).toBeLessThanOrEqual(50);
+      expect(setPropertyCalls).toBeGreaterThanOrEqual(160);
+      expect(setPropertyCalls).toBeLessThanOrEqual(180);
     });
 
     it('should handle multiple theme applications efficiently', () => {
@@ -187,7 +188,7 @@ describe('ThemeUtils - Automatic CSS variable generation system', () => {
       // Verify second application still works correctly
       expect(mockDocumentElement.style.setProperty).toHaveBeenCalled();
       const secondCallCount = mockDocumentElement.style.setProperty.mock.calls.length;
-      expect(secondCallCount).toBeGreaterThanOrEqual(45);
+      expect(secondCallCount).toBeGreaterThanOrEqual(160);
     });
   });
 
