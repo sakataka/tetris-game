@@ -88,7 +88,7 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({
             {t('statistics.bestScore')}
           </div>
           <div
-            className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-theme-warning text-right`}
+            className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-theme-primary text-right`}
           >
             {statistics.bestScore.toLocaleString()}
           </div>

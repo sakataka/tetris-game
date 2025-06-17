@@ -28,28 +28,28 @@ const PlayHistory: React.FC<PlayHistoryProps> = ({ statistics, advancedMetrics }
       >
         <div className='flex justify-between items-center'>
           <span className='text-theme-muted'>{t('statistics.gamesPlayed')}</span>
-          <span className={`text-theme-accent ${TYPOGRAPHY.BODY_WEIGHT}`}>
+          <span className={`text-theme-primary ${TYPOGRAPHY.BODY_WEIGHT}`}>
             {statistics.sessionCount}
           </span>
         </div>
 
         <div className='flex justify-between items-center'>
           <span className='text-theme-muted'>{t('statistics.bestScore')}</span>
-          <span className={`text-theme-accent ${TYPOGRAPHY.BODY_WEIGHT}`}>
+          <span className={`text-theme-primary ${TYPOGRAPHY.BODY_WEIGHT}`}>
             {Math.floor(statistics.longestSession / 60)}m
           </span>
         </div>
 
         <div className='flex justify-between items-center'>
           <span className='text-theme-muted'>{t('statistics.gamesPlayed')}</span>
-          <span className={`text-theme-accent ${TYPOGRAPHY.BODY_WEIGHT}`}>
+          <span className={`text-theme-primary ${TYPOGRAPHY.BODY_WEIGHT}`}>
             {advancedMetrics?.gamesPerSession.toFixed(1) || '0.0'}
           </span>
         </div>
 
         <div className='flex justify-between items-center'>
           <span className='text-theme-muted'>{t('statistics.efficiency')}</span>
-          <span className={`text-theme-accent ${TYPOGRAPHY.BODY_WEIGHT}`}>
+          <span className={`text-theme-primary ${TYPOGRAPHY.BODY_WEIGHT}`}>
             {advancedMetrics
               ? `${
                   (advancedMetrics.improvementTrend > 0 ? '+' : '') +
@@ -61,7 +61,7 @@ const PlayHistory: React.FC<PlayHistoryProps> = ({ statistics, advancedMetrics }
 
         <div className='flex justify-between items-center'>
           <span className='text-theme-muted'>{t('statistics.playTime')}</span>
-          <span className={`text-theme-accent ${TYPOGRAPHY.BODY_WEIGHT}`}>
+          <span className={`text-theme-primary ${TYPOGRAPHY.BODY_WEIGHT}`}>
             {statistics.lastPlayDate > 0
               ? `${Math.floor((Date.now() - statistics.lastPlayDate) / 3600000)}h ago`
               : t('statistics.never')}

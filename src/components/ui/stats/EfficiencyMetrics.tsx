@@ -35,7 +35,7 @@ const EfficiencyMetrics: React.FC<EfficiencyMetricsProps> = ({ statistics, advan
 
         <div className='flex justify-between items-center'>
           <span className='text-theme-muted'>{t('statistics.consistency')}</span>
-          <span className={`text-theme-warning ${TYPOGRAPHY.BODY_WEIGHT}`}>
+          <span className={`text-theme-primary ${TYPOGRAPHY.BODY_WEIGHT}`}>
             {statistics.consistency.toFixed(1)}%
           </span>
         </div>
@@ -49,14 +49,14 @@ const EfficiencyMetrics: React.FC<EfficiencyMetricsProps> = ({ statistics, advan
 
         <div className='flex justify-between items-center'>
           <span className='text-theme-muted'>{t('statistics.tetrisRate')}</span>
-          <span className={`text-theme-warning ${TYPOGRAPHY.BODY_WEIGHT}`}>
+          <span className={`text-theme-primary ${TYPOGRAPHY.BODY_WEIGHT}`}>
             {advancedMetrics?.tetrisRate.toFixed(1) || '0.0'}%
           </span>
         </div>
 
         <div className='flex justify-between items-center'>
           <span className='text-theme-muted'>{t('statistics.averageScore')}</span>
-          <span className={`text-theme-warning ${TYPOGRAPHY.BODY_WEIGHT}`}>
+          <span className={`text-theme-primary ${TYPOGRAPHY.BODY_WEIGHT}`}>
             {statistics.favoriteLevel}
           </span>
         </div>

@@ -10,6 +10,7 @@ import {
 } from '../../constants';
 import type { Particle, Tetromino, TetrominoType } from '../../types/tetris';
 import { particlePool } from '../performance/particlePool';
+import { getTetrominoColors } from '../ui/themeAwareTetrominoes';
 
 export function createEmptyBoard(): (string | null)[][] {
   return Array(BOARD_HEIGHT)
@@ -17,14 +18,20 @@ export function createEmptyBoard(): (string | null)[][] {
     .map(() => Array(BOARD_WIDTH).fill(null));
 }
 
-export function getRandomTetromino(debugMode = false): Tetromino {
+export function getRandomTetromino(
+  debugMode = false, 
+  customColors?: Record<string, string>
+): Tetromino {
+  // Use theme-aware colors if available, otherwise fall back to default colors
+  const colors = customColors || getTetrominoColors();
+  
   // In debug mode, always return I-piece for easy line clearing
   if (debugMode) {
     return {
       type: 'I',
       shape: TETROMINO_SHAPES.I,
       position: { x: Math.floor(BOARD_WIDTH / 2) - 1, y: 0 },
-      color: TETROMINO_COLORS.I,
+      color: colors['I'] || TETROMINO_COLORS.I,
     };
   }
 
@@ -39,7 +46,7 @@ export function getRandomTetromino(debugMode = false): Tetromino {
     type,
     shape: TETROMINO_SHAPES[type],
     position: { x: Math.floor(BOARD_WIDTH / 2) - 1, y: 0 },
-    color: TETROMINO_COLORS[type],
+    color: colors[type] || TETROMINO_COLORS[type],
   };
 }
 

@@ -14,6 +14,15 @@
       "muted": "#888899",
       "surface": "#1a1a2e"
     },
+    "tetrominoes": {
+      "I": "#00ffff",
+      "O": "#ffff00",
+      "T": "#ff00ff",
+      "S": "#00ff00",
+      "Z": "#ff0040",
+      "J": "#4080ff",
+      "L": "#ff8000"
+    },
     "typography": {
       "fontFamily": {
         "primary": "Orbitron, monospace",
@@ -149,6 +158,15 @@
       "error": "#d32f2f",
       "muted": "#616161",
       "surface": "#f5f5f5"
+    },
+    "tetrominoes": {
+      "I": "#1976d2",
+      "O": "#f57c00",
+      "T": "#7b1fa2",
+      "S": "#388e3c",
+      "Z": "#d32f2f",
+      "J": "#303f9f",
+      "L": "#f57c00"
     },
     "typography": {
       "fontFamily": {
@@ -286,6 +304,15 @@
       "muted": "#b39ddb",
       "surface": "#3f2a7a"
     },
+    "tetrominoes": {
+      "I": "#00ffff",
+      "O": "#ffd23f",
+      "T": "#ff6b35",
+      "S": "#00ff41",
+      "Z": "#ff1744",
+      "J": "#7c4dff",
+      "L": "#f7931e"
+    },
     "typography": {
       "fontFamily": {
         "primary": "Press Start 2P, monospace",
@@ -422,6 +449,15 @@
       "muted": "#718096",
       "surface": "#f7fafc"
     },
+    "tetrominoes": {
+      "I": "#3182ce",
+      "O": "#d69e2e",
+      "T": "#805ad5",
+      "S": "#38a169",
+      "Z": "#e53e3e",
+      "J": "#2b6cb0",
+      "L": "#dd6b20"
+    },
     "typography": {
       "fontFamily": {
         "primary": "Inter, sans-serif",
@@ -557,6 +593,15 @@
       "error": "#ff004d",
       "muted": "#666677",
       "surface": "#111122"
+    },
+    "tetrominoes": {
+      "I": "#00ffff",
+      "O": "#ffff00",
+      "T": "#ff0080",
+      "S": "#00ff80",
+      "Z": "#ff004d",
+      "J": "#4080ff",
+      "L": "#ff8000"
     },
     "typography": {
       "fontFamily": {

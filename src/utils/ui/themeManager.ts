@@ -27,6 +27,15 @@ export interface ComprehensiveThemePreset {
     muted: string;
     surface: string;
   };
+  tetrominoes: {
+    I: string;
+    O: string;
+    T: string;
+    S: string;
+    Z: string;
+    J: string;
+    L: string;
+  };
   typography: {
     fontFamily: {
       primary: string;
@@ -284,6 +293,11 @@ export function applyThemeToDocument(themeVariant: ThemeVariant): void {
     preset.animations.intensity
   );
 
+  // Apply tetromino colors
+  Object.entries(preset.tetrominoes).forEach(([piece, color]) => {
+    document.documentElement.style.setProperty(`--tetromino-${piece.toLowerCase()}`, color);
+  });
+
   // Apply theme class to body for CSS-based theming
   document.body.className = document.body.className
     .replace(/theme-\w+/g, '')
@@ -357,6 +371,14 @@ export function initializeThemeSystem(initialTheme: ThemeVariant = 'cyberpunk'):
 }
 
 /**
+ * Get tetromino colors for the current theme
+ */
+export function getThemeTetrominoColors(themeVariant: ThemeVariant): Record<string, string> {
+  const preset = getComprehensiveThemePreset(themeVariant);
+  return preset.tetrominoes;
+}
+
+/**
  * Theme utility functions for components
  */
 export const themeUtils = {
@@ -370,6 +392,12 @@ export const themeUtils = {
    */
   getCSSVarWithOpacity: (tokenName: keyof SemanticColorTokens, opacity: number) =>
     `var(--theme-${tokenName}-${opacity})`,
+
+  /**
+   * Get tetromino color CSS variable
+   */
+  getTetrominoCSSVar: (piece: 'I' | 'O' | 'T' | 'S' | 'Z' | 'J' | 'L') => 
+    `var(--tetromino-${piece.toLowerCase()})`,
 
   /**
    * Check if color is light (for contrast calculations)
