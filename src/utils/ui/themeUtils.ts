@@ -15,6 +15,20 @@ export function applyThemeToCSS(config: ThemeConfig): void {
   root.style.setProperty('--accent-secondary', config.colors.secondary);
   root.style.setProperty('--accent-tertiary', config.colors.tertiary);
 
+  // Theme semantic colors
+  root.style.setProperty('--theme-primary', config.colors.primary);
+  root.style.setProperty('--theme-secondary', config.colors.secondary);
+  root.style.setProperty('--theme-tertiary', config.colors.tertiary);
+  root.style.setProperty('--theme-accent', config.colors.accent);
+  root.style.setProperty('--theme-foreground', config.colors.foreground);
+  root.style.setProperty('--theme-background', config.colors.background);
+  root.style.setProperty('--theme-warning', config.colors.warning);
+  root.style.setProperty('--theme-error', config.colors.error);
+  root.style.setProperty('--theme-success', config.colors.success);
+  root.style.setProperty('--theme-muted', config.colors.muted);
+  root.style.setProperty('--theme-surface', config.colors.surface);
+  root.style.setProperty('--theme-border', config.colors.border);
+
   // Cyberpunk color palette (backward compatibility)
   root.style.setProperty('--cyber-cyan', config.colors.primary);
   root.style.setProperty('--cyber-purple', config.colors.secondary);
@@ -49,13 +63,31 @@ export function applyThemeToCSS(config: ThemeConfig): void {
 const TRANSPARENCY_LEVELS = [10, 20, 30, 40, 50, 60, 70, 80, 90] as const;
 
 /**
- * Color name mapping (backward compatibility)
+ * Color name mapping for transparency generation
  */
 const COLOR_NAME_MAPPING = {
   primary: 'cyan',
   secondary: 'purple',
   tertiary: 'yellow',
   accent: 'green',
+  warning: 'warning',
+  error: 'error',
+  success: 'success',
+  muted: 'muted',
+} as const;
+
+/**
+ * Theme color mapping for CSS variables
+ */
+const THEME_COLOR_MAPPING = {
+  primary: 'primary',
+  secondary: 'secondary',
+  tertiary: 'tertiary',
+  accent: 'accent',
+  warning: 'warning',
+  error: 'error',
+  success: 'success',
+  muted: 'muted',
 } as const;
 
 /**
@@ -64,6 +96,7 @@ const COLOR_NAME_MAPPING = {
 function generateTransparencyVariables(colors: any): Record<string, string> {
   const variables: Record<string, string> = {};
 
+  // Generate legacy cyber-* transparency variables
   Object.entries(COLOR_NAME_MAPPING).forEach(([colorKey, cssName]) => {
     const hexColor = colors[colorKey];
     if (hexColor) {
@@ -71,6 +104,19 @@ function generateTransparencyVariables(colors: any): Record<string, string> {
 
       Object.entries(transparencies).forEach(([level, rgba]) => {
         const varName = `--cyber-${cssName}-${level}`;
+        variables[varName] = rgba;
+      });
+    }
+  });
+
+  // Generate theme-* transparency variables
+  Object.entries(THEME_COLOR_MAPPING).forEach(([colorKey, cssName]) => {
+    const hexColor = colors[colorKey];
+    if (hexColor) {
+      const transparencies = ColorConverter.generateTransparencies(hexColor, TRANSPARENCY_LEVELS);
+
+      Object.entries(transparencies).forEach(([level, rgba]) => {
+        const varName = `--theme-${cssName}-${level}`;
         variables[varName] = rgba;
       });
     }
