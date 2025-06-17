@@ -106,10 +106,6 @@
     "resetConfirmation": {
       "title": "テーマ設定をリセットしますか？",
       "description": "すべてのテーマ設定をデフォルトにリセットしてもよろしいですか？カスタムカラーと設定がすべて失われます。"
-    },
-    "effects": {
-      "neon": "ネオンエフェクト",
-      "hologram": "ホログラム + ブラー"
     }
   },
   "statistics": {

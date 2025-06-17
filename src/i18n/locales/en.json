@@ -106,10 +106,6 @@
     "resetConfirmation": {
       "title": "Reset Theme Settings?",
       "description": "Are you sure you want to reset all theme settings to default? All custom colors and preferences will be lost."
-    },
-    "effects": {
-      "neon": "Neon Effect",
-      "hologram": "Hologram + Blur"
     }
   },
   "statistics": {

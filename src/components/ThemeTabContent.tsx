@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { useTheme as useThemeManager } from '../hooks/useTheme';
 import {
   useResetThemeToDefault,
-  useSetAccessibilityOptions,
   useSetTheme,
   useTheme,
   useUpdateThemeState,
@@ -20,7 +19,6 @@ const ThemeTabContent = memo(function ThemeTabContent({ className = '' }: ThemeT
   // Theme-related state and actions
   const themeState = useTheme();
   const setTheme = useSetTheme();
-  const setAccessibilityOptions = useSetAccessibilityOptions();
   const updateThemeState = useUpdateThemeState();
   const resetThemeToDefault = useResetThemeToDefault();
 
@@ -28,7 +26,7 @@ const ThemeTabContent = memo(function ThemeTabContent({ className = '' }: ThemeT
     themeState,
     setTheme,
     updateThemeState,
-    setAccessibilityOptions,
+    setAccessibilityOptions: () => {}, // Placeholder since accessibility options are disabled
   });
 
   return (
@@ -36,14 +34,9 @@ const ThemeTabContent = memo(function ThemeTabContent({ className = '' }: ThemeT
       <CyberCard title={t('themes.title') || t('tabs.themes')} theme='primary' size='lg'>
         <ThemeSettingsMemo
           currentTheme={themeState.current}
-          colorBlindnessType={themeState.accessibility.colorBlindnessType}
-          contrast={themeState.accessibility.contrast}
-          animationIntensity={themeState.accessibility.animationIntensity}
-          reducedMotion={themeState.accessibility.reducedMotion}
           effectIntensity={themeState.effectIntensity}
           animations={themeState.animations}
           onThemeChange={themeManager.changeTheme}
-          onAccessibilityChange={themeManager.updateAccessibility}
           onEffectIntensityChange={themeManager.updateEffectIntensity}
           onAnimationsToggle={themeManager.toggleAnimations}
           onResetToDefault={resetThemeToDefault}
