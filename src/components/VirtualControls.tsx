@@ -51,16 +51,13 @@ const VirtualControls = memo(function VirtualControls({
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                variant='default'
+                variant='primary'
                 size='default'
                 onTouchStart={handleTouchStart(onRotate)}
                 className={cn(
                   'absolute left-1/2 -translate-x-1/2 -translate-y-full mb-1',
                   UI_SIZES.VIRTUAL_BUTTON.STANDARD,
-                  'bg-gradient-to-r from-theme-primary to-theme-primary',
-                  'hover:from-theme-primary/80 hover:to-theme-primary/80 active:scale-95',
-                  'border border-theme-primary/50 shadow-[0_0_10px_rgba(var(--theme-primary),0.3)]',
-                  'text-white font-bold text-sm mobile-touch-zone select-none'
+                  'active:scale-95 text-sm mobile-touch-zone select-none'
                 )}
                 aria-label={t('controls.rotate')}
               >
@@ -81,7 +78,7 @@ const VirtualControls = memo(function VirtualControls({
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                  variant='default'
+                  variant='secondary'
                   size='default'
                   onTouchStart={handleTouchStart(moveHandlers.left)}
                   className={cn(
@@ -108,15 +105,12 @@ const VirtualControls = memo(function VirtualControls({
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                  variant='default'
+                  variant='secondary'
                   size='default'
                   onTouchStart={handleTouchStart(moveHandlers.down)}
                   className={cn(
                     UI_SIZES.VIRTUAL_BUTTON.STANDARD,
-                    'bg-gradient-to-r from-theme-secondary to-theme-secondary',
-                    'hover:from-theme-secondary/80 hover:to-theme-secondary/80 active:scale-95',
-                    'border border-theme-secondary/50 shadow-[0_0_10px_rgba(var(--theme-secondary),0.3)]',
-                    'text-white font-bold text-sm mobile-touch-zone select-none'
+                    'active:scale-95 text-sm mobile-touch-zone select-none'
                   )}
                   aria-label={t('controls.moveDown')}
                 >
@@ -137,15 +131,12 @@ const VirtualControls = memo(function VirtualControls({
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                  variant='default'
+                  variant='secondary'
                   size='default'
                   onTouchStart={handleTouchStart(moveHandlers.right)}
                   className={cn(
                     UI_SIZES.VIRTUAL_BUTTON.STANDARD,
-                    'bg-gradient-to-r from-theme-secondary to-theme-secondary',
-                    'hover:from-theme-secondary/80 hover:to-theme-secondary/80 active:scale-95',
-                    'border border-theme-secondary/50 shadow-[0_0_10px_rgba(var(--theme-secondary),0.3)]',
-                    'text-white font-bold text-sm mobile-touch-zone select-none'
+                    'active:scale-95 text-sm mobile-touch-zone select-none'
                   )}
                   aria-label={t('controls.moveRight')}
                 >
@@ -166,15 +157,12 @@ const VirtualControls = memo(function VirtualControls({
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              variant='default'
+              variant='ghost'
               size='default'
               onTouchStart={handleTouchStart(onHardDrop)}
               className={cn(
                 UI_SIZES.VIRTUAL_BUTTON.LARGE,
-                'bg-gradient-to-r from-theme-error to-theme-error',
-                'hover:from-theme-error/80 hover:to-theme-error/80 active:scale-95',
-                'border border-theme-error/50 shadow-[0_0_15px_rgba(var(--theme-error),0.4)]',
-                'flex flex-col items-center justify-center text-white font-bold',
+                'active:scale-95 flex flex-col items-center justify-center',
                 'mobile-touch-zone select-none'
               )}
               aria-label={t('controls.hardDrop')}

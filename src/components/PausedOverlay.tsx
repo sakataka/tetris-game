@@ -24,7 +24,7 @@ const PausedOverlay = memo(function PausedOverlay({ isVisible, onResume }: Pause
 
       {/* Dialog Content */}
       <div className='relative z-10 mx-4 w-full max-w-md'>
-        <CyberCard title={t('game.paused')} theme='warning' size='lg'>
+        <CyberCard title={t('game.paused')} theme='primary' size='lg'>
           <div className='space-y-6 p-2'>
             {/* Pause Message */}
             <div className='text-center'>

@@ -66,9 +66,8 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
         <div className='absolute top-4 right-4 z-20'> {/* top-4 right-4 = 16px (8-point grid) */}
           <Link to='/settings'>
             <Button
-              variant='outline'
+              variant='secondary'
               size='sm'
-              className='bg-theme-surface/80 border-theme-primary/50 text-theme-primary hover:bg-theme-primary/20 hover:border-theme-primary transition-all duration-200 text-xs'
             >
               {t('tabs.settings')}
             </Button>
@@ -140,9 +139,8 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
       <div className='absolute top-2 right-2 z-20'>
         <Link to='/settings'>
           <Button
-            variant='outline'
+            variant='secondary'
             size='sm'
-            className='bg-theme-surface/80 border-theme-primary/50 text-theme-primary hover:bg-theme-primary/20 hover:border-theme-primary transition-all duration-200 text-xs px-2 py-1'
           >
             {t('tabs.settings')}
           </Button>

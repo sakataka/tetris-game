@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import { cn } from '@/utils/ui/cn';
 import { GAP_SCALE } from '@/constants/layout';
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -34,15 +33,8 @@ const GameButtonsPanel = memo(function GameButtonsPanel({
         onClick={onTogglePause}
         disabled={gameOver}
         size={buttonSize}
-        className={cn(
-          buttonWidthClass,
-          // Simplified button styling
-          'bg-theme-primary/20 hover:bg-theme-primary/30',
-          'disabled:bg-theme-muted/20 font-semibold',
-          'transition-colors duration-150',
-          'border border-theme-primary/40 text-theme-primary',
-          'disabled:border-theme-muted/40 disabled:text-theme-muted'
-        )}
+        variant="primary"
+        className={buttonWidthClass}
       >
         {isPaused ? t('game.resume') : t('game.pause')}
       </Button>
@@ -50,13 +42,8 @@ const GameButtonsPanel = memo(function GameButtonsPanel({
       <Button
         onClick={() => setShowResetConfirmation(true)}
         size={buttonSize}
-        className={cn(
-          buttonWidthClass,
-          // Simplified reset button styling
-          'bg-theme-error/20 hover:bg-theme-error/30',
-          'font-semibold transition-colors duration-150',
-          'border border-theme-error/40 text-theme-error'
-        )}
+        variant="ghost"
+        className={buttonWidthClass}
       >
         {t('buttons.reset')}
       </Button>

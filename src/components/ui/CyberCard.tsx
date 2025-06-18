@@ -8,16 +8,23 @@ import type { ReactNode } from 'react';
  *
  * Uses semantic color tokens for dynamic theming across all themes.
  * Automatically adapts to current theme without hardcoded colors.
+ *
+ * Theme Usage Guidelines:
+ * - primary: Main game information (Score, Level, Next Piece)
+ * - default: Secondary information (Settings, Statistics, Options)
+ * - muted: Background or less important content (Help, About)
+ *
+ * Size Guidelines:
+ * - xs: Compact mobile displays
+ * - sm: Mobile/tablet secondary content
+ * - md: Standard desktop content
+ * - lg: Hero sections or important panels
  */
 
 export type CyberTheme =
-  | 'primary'
-  | 'secondary'
-  | 'accent'
-  | 'success'
-  | 'warning'
-  | 'error'
-  | 'default';
+  | 'primary'   // Main information (score, game stats)
+  | 'default'   // Secondary information (settings, options)
+  | 'muted';    // Background or less important content
 
 interface CyberCardProps {
   title: string;
@@ -29,7 +36,7 @@ interface CyberCardProps {
   size?: 'xs' | 'sm' | 'md' | 'lg';
 }
 
-// Semantic theme configurations for dynamic theming
+// Simplified theme configurations for clear visual hierarchy
 const CYBER_THEMES: Record<
   CyberTheme,
   {
@@ -45,41 +52,17 @@ const CYBER_THEMES: Record<
     backgroundClass: 'bg-theme-primary-20',
     borderGlow: 'border border-theme-primary-40',
   },
-  secondary: {
-    cardClass: 'bg-theme-secondary/15 border-theme-secondary/40',
-    titleClass: 'text-theme-secondary',
-    backgroundClass: 'bg-theme-secondary-20',
-    borderGlow: 'border border-theme-secondary-40',
-  },
-  accent: {
-    cardClass: 'bg-theme-accent/15 border-theme-accent/40',
-    titleClass: 'text-theme-accent',
-    backgroundClass: 'bg-theme-accent-20',
-    borderGlow: 'border border-theme-accent-40',
-  },
-  success: {
-    cardClass: 'bg-theme-success/15 border-theme-success/40',
-    titleClass: 'text-theme-success',
-    backgroundClass: 'bg-theme-success-20',
-    borderGlow: 'border border-theme-success-40',
-  },
-  warning: {
-    cardClass: 'bg-theme-warning/15 border-theme-warning/40',
-    titleClass: 'text-theme-warning',
-    backgroundClass: 'bg-theme-warning-20',
-    borderGlow: 'border border-theme-warning-40',
-  },
-  error: {
-    cardClass: 'bg-theme-error/15 border-theme-error/40',
-    titleClass: 'text-theme-error',
-    backgroundClass: 'bg-theme-error-20',
-    borderGlow: 'border border-theme-error-40',
-  },
   default: {
-    cardClass: 'bg-theme-muted/15 border-theme-muted/40',
+    cardClass: 'bg-theme-surface/50 border-theme-border/40',
+    titleClass: 'text-theme-foreground',
+    backgroundClass: 'bg-theme-surface/60',
+    borderGlow: 'border border-theme-border/50',
+  },
+  muted: {
+    cardClass: 'bg-theme-muted/10 border-theme-muted/30',
     titleClass: 'text-theme-muted',
-    backgroundClass: 'bg-theme-surface/50',
-    borderGlow: 'border border-theme-border/60',
+    backgroundClass: 'bg-theme-surface/30',
+    borderGlow: 'border border-theme-border/30',
   },
 };
 

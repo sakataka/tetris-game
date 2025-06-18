@@ -132,3 +132,11 @@ export const GAP_SCALE = {
   lg: 'gap-8', // 32px
   xl: 'gap-12', // 48px
 } as const;
+
+// Design tokens for consistent styling
+export const DESIGN_TOKENS = {
+  borderRadius: '6px',
+  transition: '150ms ease',
+  focusRing: '2px solid var(--theme-primary)',
+  hoverScale: '1.02',
+} as const;

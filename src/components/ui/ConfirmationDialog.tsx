@@ -46,7 +46,7 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
 
       {/* Dialog Content */}
       <div className='relative z-10 mx-4 w-full max-w-md'>
-        <CyberCard title={title} theme={variant === 'destructive' ? 'error' : 'primary'} size='lg'>
+        <CyberCard title={title} theme={variant === 'destructive' ? 'muted' : 'primary'} size='lg'>
           <div className='space-y-6 p-2'>
             {/* Description */}
             <div className='text-center'>
@@ -56,28 +56,16 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
             {/* Action Buttons */}
             <div className='flex justify-center gap-3'>
               <Button
-                variant='outline'
+                variant='secondary'
                 onClick={onClose}
-                className='px-6 py-2 border-theme-primary/30 text-theme-foreground hover:bg-theme-primary/10'
               >
                 {cancelText || t('common.cancel')}
               </Button>
               <Button
                 onClick={handleConfirm}
-                className={`px-6 py-2 font-bold transition-all duration-300 transform hover:scale-105 relative overflow-hidden font-mono ${
-                  variant === 'destructive'
-                    ? 'bg-gradient-to-r from-theme-error to-theme-error/80 hover:from-theme-error/80 hover:to-theme-error/60 shadow-[0_0_20px_rgba(var(--theme-error),0.3)] hover:shadow-[0_0_30px_rgba(var(--theme-error),0.5)] border border-theme-error/50'
-                    : 'bg-gradient-to-r from-theme-primary to-theme-accent hover:from-theme-primary/80 hover:to-theme-accent/80 shadow-[0_0_20px_rgba(var(--theme-primary),0.3)] hover:shadow-[0_0_30px_rgba(var(--theme-primary),0.5)] border border-theme-primary/50'
-                }`}
+                variant={variant === 'destructive' ? 'ghost' : 'primary'}
               >
-                <div
-                  className={`absolute inset-0 blur-sm ${
-                    variant === 'destructive'
-                      ? 'bg-gradient-to-r from-theme-error/20 to-theme-error/20'
-                      : 'bg-gradient-to-r from-theme-primary/20 to-theme-secondary/20'
-                  }`}
-                />
-                <span className='relative'>{confirmText || t('common.confirm')}</span>
+                {confirmText || t('common.confirm')}
               </Button>
             </div>
           </div>

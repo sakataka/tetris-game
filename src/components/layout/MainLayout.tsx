@@ -65,9 +65,8 @@ const MainLayout = memo(function MainLayout({
               <GameHeader variant={headerVariant} />
               <Link to='/'>
                 <Button
-                  variant='outline'
+                  variant='secondary'
                   size='sm'
-                  className='bg-theme-surface/80 border-theme-primary/50 text-theme-primary hover:bg-theme-primary/20 hover:border-theme-primary transition-all duration-200 text-xs'
                 >
                   {t('tabs.game')}
                 </Button>

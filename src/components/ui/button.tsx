@@ -4,31 +4,34 @@ import type * as React from 'react';
 
 import { cn } from '@/utils/ui/cn';
 
+/**
+ * Button Component Usage Guidelines
+ * 
+ * Variants:
+ * - primary: Main actions (Start, Pause, Resume, Play)
+ * - secondary: Options and settings (Settings, Cancel, Back)
+ * - ghost: Destructive or low-priority actions (Reset, Clear, Delete)
+ * 
+ * Sizes:
+ * - sm: 32px height for compact spaces
+ * - default: 40px height for standard use
+ * - lg: 48px height for important actions
+ * - icon: 40px square for icon-only buttons
+ */
+
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90',
-        destructive:
-          'bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
-        outline:
-          'border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
-        secondary: 'bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80',
-        ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
-        link: 'text-primary underline-offset-4 hover:underline',
-
-        // Cyberpunk themed variants using semantic color tokens
-        'cyber-primary':
-          'bg-theme-primary/20 text-theme-primary border border-theme-primary/50 hover:bg-theme-primary/30 transition-all shadow-[var(--theme-glow-sm)_var(--theme-primary)] hover:shadow-[var(--theme-glow-md)_var(--theme-primary)]',
-        'cyber-secondary':
-          'bg-theme-secondary/20 text-theme-secondary border border-theme-secondary/50 hover:bg-theme-secondary/30 transition-all shadow-[var(--theme-glow-sm)_var(--theme-secondary)] hover:shadow-[var(--theme-glow-md)_var(--theme-secondary)]',
-        'cyber-accent':
-          'bg-theme-accent/20 text-theme-accent border border-theme-accent/50 hover:bg-theme-accent/30 transition-all shadow-[var(--theme-glow-sm)_var(--theme-accent)] hover:shadow-[var(--theme-glow-md)_var(--theme-accent)]',
-        'cyber-outline':
-          'bg-transparent text-theme-foreground border border-theme-border hover:bg-theme-primary/10 hover:border-theme-primary/50 hover:text-theme-primary transition-all',
-        'cyber-ghost':
-          'bg-transparent text-theme-foreground hover:bg-theme-primary/10 hover:text-theme-primary transition-all',
+        // Primary: Main actions (Start, Pause, Resume)
+        primary: 'bg-theme-primary/20 text-theme-primary border border-theme-primary/40 hover:bg-theme-primary/30 transition-colors duration-150',
+        
+        // Secondary: Options and settings
+        secondary: 'bg-theme-surface/50 text-theme-foreground border border-theme-border/40 hover:bg-theme-surface/70 transition-colors duration-150',
+        
+        // Ghost: Destructive or low-priority actions (Reset, Clear)
+        ghost: 'bg-transparent text-theme-muted border border-transparent hover:bg-theme-error/20 hover:text-theme-error hover:border-theme-error/40 transition-colors duration-150',
       },
       size: {
         default: 'h-10 px-4 py-2 has-[>svg]:px-3', // 40px height (8-point grid: 5 units)
@@ -38,7 +41,7 @@ const buttonVariants = cva(
       },
     },
     defaultVariants: {
-      variant: 'default',
+      variant: 'primary',
       size: 'default',
     },
   }
