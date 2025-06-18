@@ -31,10 +31,10 @@ const buttonVariants = cva(
           'bg-transparent text-theme-foreground hover:bg-theme-primary/10 hover:text-theme-primary transition-all',
       },
       size: {
-        default: 'h-9 px-4 py-2 has-[>svg]:px-3',
-        sm: 'h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5',
-        lg: 'h-10 rounded-md px-6 has-[>svg]:px-4',
-        icon: 'size-9',
+        default: 'h-10 px-4 py-2 has-[>svg]:px-3', // 40px height (8-point grid: 5 units)
+        sm: 'h-8 rounded-md gap-2 px-4 has-[>svg]:px-3', // 32px height (8-point grid: 4 units), gap-2=8px
+        lg: 'h-12 rounded-md px-6 has-[>svg]:px-4', // 48px height (8-point grid: 6 units)
+        icon: 'size-10', // 40px square (8-point grid: 5 units)
       },
     },
     defaultVariants: {

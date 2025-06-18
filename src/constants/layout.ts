@@ -53,9 +53,9 @@ export const UI_SIZES = {
     HEIGHT: 'h-2', // 8px
   },
   PADDING: {
-    SMALL: 'p-3 md:p-4',
-    MEDIUM: 'p-4 md:p-6',
-    LARGE: 'p-6 md:p-8',
+    SMALL: 'p-2 md:p-4', // 8px -> 16px (8-point grid)
+    MEDIUM: 'p-4 md:p-6', // 16px -> 24px (8-point grid)
+    LARGE: 'p-6 md:p-8', // 24px -> 32px (8-point grid)
   },
   TEXT_SIZES: {
     SMALL: 'text-base md:text-lg',
@@ -72,9 +72,9 @@ export const GAME_UI_SIZES = {
   },
   VOLUME_DISPLAY: 'w-8', // 32px
   GAP_SIZES: {
-    SMALL: 'gap-1', // 4px
-    MEDIUM: 'gap-2', // 8px
-    LARGE: 'gap-4', // 16px
+    SMALL: 'gap-2', // 8px (8-point grid)
+    MEDIUM: 'gap-4', // 16px (8-point grid)
+    LARGE: 'gap-6', // 24px (8-point grid)
   },
 } as const;
 
@@ -92,15 +92,43 @@ export const TYPOGRAPHY = {
   LABEL_WEIGHT: 'font-normal',
 } as const;
 
-// Standardized spacing patterns
+// 8-point grid spacing system
+export const SPACING_SCALE = {
+  xs: '0.5rem', // 8px
+  sm: '1rem', // 16px
+  md: '1.5rem', // 24px
+  lg: '2rem', // 32px
+  xl: '3rem', // 48px
+} as const;
+
+// Standardized spacing patterns using 8-point grid
 export const SPACING = {
-  PANEL_INTERNAL: 'space-y-1.5', // Internal panel spacing (improved from space-y-1)
-  SECTION_GAP: 'space-y-2', // Between major sections
-  FORM_ELEMENTS: 'space-y-2', // Form element spacing (improved from space-y-1.5)
-  TIGHT: 'space-y-1', // Very tight spacing (improved from space-y-0.5)
-  LOOSE: 'space-y-3', // Loose spacing for breathing room
-  // Margins
-  PANEL_TITLE_BOTTOM: 'mb-1', // Space after panel titles
-  SECTION_TITLE_BOTTOM: 'mb-0.5', // Space after section titles
-  FORM_LABEL_BOTTOM: 'mb-0.5', // Space after form labels
+  // Vertical spacing (using 8-point grid)
+  PANEL_INTERNAL: 'space-y-2', // 8px (internal panel spacing)
+  SECTION_GAP: 'space-y-4', // 16px (between major sections)
+  FORM_ELEMENTS: 'space-y-3', // 12px (form element spacing)
+  TIGHT: 'space-y-2', // 8px (tight spacing)
+  LOOSE: 'space-y-6', // 24px (loose spacing)
+  // Margins (using 8-point grid)
+  PANEL_TITLE_BOTTOM: 'mb-2', // 8px after panel titles
+  SECTION_TITLE_BOTTOM: 'mb-2', // 8px after section titles
+  FORM_LABEL_BOTTOM: 'mb-1', // 4px after form labels
+} as const;
+
+// Component padding using 8-point grid
+export const PADDING_SCALE = {
+  xs: 'p-2', // 8px
+  sm: 'p-4', // 16px
+  md: 'p-6', // 24px
+  lg: 'p-8', // 32px
+  xl: 'p-12', // 48px
+} as const;
+
+// Gap sizes using 8-point grid
+export const GAP_SCALE = {
+  xs: 'gap-2', // 8px
+  sm: 'gap-4', // 16px
+  md: 'gap-6', // 24px
+  lg: 'gap-8', // 32px
+  xl: 'gap-12', // 48px
 } as const;

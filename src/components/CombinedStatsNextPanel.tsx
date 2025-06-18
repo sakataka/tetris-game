@@ -26,9 +26,9 @@ const CombinedStatsNextPanel = memo(function CombinedStatsNextPanel({
   const { t } = useTranslation();
 
   const cellSize =
-    size === 'xs' ? 'w-2 h-2' : size === 'sm' ? 'w-3 h-3' : GAME_UI_SIZES.NEXT_PIECE.CELL;
+    size === 'xs' ? 'w-2 h-2' : size === 'sm' ? 'w-4 h-4' : GAME_UI_SIZES.NEXT_PIECE.CELL; // w-4 h-4 = 16px (8-point grid)
   const containerSize =
-    size === 'xs' ? 'w-8 h-8' : size === 'sm' ? 'w-12 h-12' : GAME_UI_SIZES.NEXT_PIECE.CONTAINER;
+    size === 'xs' ? 'w-8 h-8' : size === 'sm' ? 'w-16 h-16' : GAME_UI_SIZES.NEXT_PIECE.CONTAINER; // w-16 h-16 = 64px (8-point grid)
 
   // Game status badge - only for game over
   const getGameStatusBadge = () => {

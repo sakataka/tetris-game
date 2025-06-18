@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/ui/cn';
+import { GAP_SCALE } from '@/constants/layout';
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGameButtons } from '../hooks/useGameButtons';
@@ -20,7 +21,7 @@ const GameButtonsPanel = memo(function GameButtonsPanel({
 
   // Map size to shadcn/ui Button size variants
   const buttonSize = size === 'xs' ? 'sm' : size === 'lg' ? 'lg' : 'default';
-  const containerClasses = layout === 'horizontal' ? 'flex space-x-2' : 'space-y-2';
+  const containerClasses = layout === 'horizontal' ? `flex ${GAP_SCALE.xs}` : 'space-y-2'; // Using 8-point grid
   const buttonWidthClass = layout === 'horizontal' ? 'flex-1' : 'w-full';
 
   const handleResetConfirm = () => {

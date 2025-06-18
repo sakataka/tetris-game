@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
+import { GAP_SCALE, PADDING_SCALE } from '../constants/layout';
 import { ConfirmationDialog } from '../components/ui/ConfirmationDialog';
 import { Button } from '../components/ui/button';
 import { useTogglePause } from '../store/gameStateStore';
@@ -65,7 +66,7 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
         )}
 
         {/* Menu Button - Top Right */}
-        <div className='absolute top-4 right-4 z-20'>
+        <div className='absolute top-4 right-4 z-20'> {/* top-4 right-4 = 16px (8-point grid) */}
           <Link to='/settings'>
             <Button
               variant='outline'
@@ -77,8 +78,8 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
           </Link>
         </div>
 
-        <div className='relative z-10 h-dvh flex items-center justify-center px-4 py-4'>
-          <div className='grid grid-cols-[minmax(400px,auto)_350px] gap-6 items-stretch max-h-[calc(100vh-2rem)] max-w-7xl'>
+        <div className={`relative z-10 h-dvh flex items-center justify-center ${PADDING_SCALE.sm}`}>
+          <div className={`grid grid-cols-[minmax(400px,auto)_350px] ${GAP_SCALE.md} items-stretch max-h-[calc(100vh-2rem)] max-w-7xl`}>
             {/* Game Board */}
             <div className='flex items-center'>
               <ErrorBoundary level='component'>

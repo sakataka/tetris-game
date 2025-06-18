@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/utils/ui/cn';
+import { PADDING_SCALE } from '@/constants/layout';
 import type { ReactNode } from 'react';
 
 /**
@@ -82,7 +83,7 @@ const CYBER_THEMES: Record<
   },
 };
 
-// Responsive size configurations
+// Responsive size configurations using 8-point grid
 const CYBER_SIZES: Record<
   'xs' | 'sm' | 'md' | 'lg',
   {
@@ -93,28 +94,28 @@ const CYBER_SIZES: Record<
   }
 > = {
   xs: {
-    cardPadding: 'p-2',
+    cardPadding: PADDING_SCALE.xs, // 8px
     titleSize: 'text-xs',
-    titleSpacing: 'mb-1',
-    contentSpacing: 'space-y-1',
+    titleSpacing: 'mb-2', // 8px (8-point grid)
+    contentSpacing: 'space-y-2', // 8px (8-point grid)
   },
   sm: {
-    cardPadding: 'p-3',
+    cardPadding: PADDING_SCALE.sm, // 16px
     titleSize: 'text-sm',
-    titleSpacing: 'mb-1 md:mb-2',
-    contentSpacing: 'space-y-2',
+    titleSpacing: 'mb-2 md:mb-2', // 8px consistent (8-point grid)
+    contentSpacing: 'space-y-2', // 8px (8-point grid)
   },
   md: {
-    cardPadding: 'p-4',
+    cardPadding: PADDING_SCALE.md, // 24px
     titleSize: 'text-base',
-    titleSpacing: 'mb-2 md:mb-3',
-    contentSpacing: 'space-y-3',
+    titleSpacing: 'mb-2 md:mb-4', // 8px -> 16px (8-point grid)
+    contentSpacing: 'space-y-4', // 16px (8-point grid)
   },
   lg: {
-    cardPadding: 'p-6',
+    cardPadding: PADDING_SCALE.lg, // 32px
     titleSize: 'text-lg',
-    titleSpacing: 'mb-3 md:mb-4',
-    contentSpacing: 'space-y-4',
+    titleSpacing: 'mb-4 md:mb-4', // 16px consistent (8-point grid)
+    contentSpacing: 'space-y-4', // 16px (8-point grid)
   },
 };
 
