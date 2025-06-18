@@ -27,13 +27,13 @@ const HighScoreDisplay = memo(function HighScoreDisplay({
   const getRankingBadgeStyle = (position: number) => {
     switch (position) {
       case 0:
-        return 'bg-theme-warning text-black border-theme-warning';
+        return 'bg-theme-foreground/20 text-theme-foreground border-theme-foreground/30';
       case 1:
-        return 'bg-theme-muted text-black border-theme-muted';
+        return 'bg-theme-foreground/20 text-theme-foreground border-theme-foreground/30';
       case 2:
-        return 'bg-theme-accent text-white border-theme-accent';
+        return 'bg-theme-foreground/20 text-theme-foreground border-theme-foreground/30';
       default:
-        return 'bg-theme-primary/20 text-theme-primary border-theme-primary/30';
+        return 'bg-theme-foreground/20 text-theme-foreground border-theme-foreground/30';
     }
   };
 
