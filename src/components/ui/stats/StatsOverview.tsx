@@ -43,25 +43,25 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({
   return (
     <CyberCard title={t('statistics.title')} theme='primary' size='lg'>
       <div className='flex justify-between items-center mb-4'>
-        <span className='text-theme-muted'>{t('statistics.period.label')}</span>
+        <span className='text-theme-foreground opacity-70'>{t('statistics.period.label')}</span>
         <Select value={selectedPeriod} onValueChange={onPeriodChange}>
           <SelectTrigger
             className={cn(
-              'w-[140px] bg-theme-primary/10 border-theme-primary/30 text-theme-primary',
-              'hover:bg-theme-primary/20 focus:ring-theme-primary focus:border-theme-primary',
-              'data-[state=open]:border-theme-primary',
+              'w-[140px] bg-theme-foreground/10 border-theme-foreground/30 text-theme-foreground',
+              'hover:bg-theme-foreground/20 focus:ring-theme-foreground focus:border-theme-foreground',
+              'data-[state=open]:border-theme-foreground',
               TYPOGRAPHY.SMALL_LABEL
             )}
             data-testid='period-selector'
           >
             <SelectValue />
           </SelectTrigger>
-          <SelectContent className='bg-background border-theme-primary/30'>
+          <SelectContent className='bg-background border-theme-foreground/30'>
             {STATISTICS_PERIODS.map((period) => (
               <SelectItem
                 key={period.label}
                 value={period.label}
-                className='text-foreground hover:bg-theme-primary/20 focus:bg-theme-primary/20 focus:text-theme-primary'
+                className='text-foreground hover:bg-theme-foreground/20 focus:bg-theme-foreground/20 focus:text-theme-foreground'
               >
                 {t(getTranslationKey(period.label))}
               </SelectItem>
@@ -72,45 +72,45 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({
 
       {/* Main statistics grid */}
       <div className='grid grid-cols-2 gap-3' data-testid='main-stats'>
-        <div className='bg-theme-primary/10 p-3 rounded border border-theme-primary/30'>
-          <div className={`${TYPOGRAPHY.SMALL_LABEL} text-theme-muted text-left`}>
+        <div className='bg-theme-foreground/10 p-3 rounded border border-theme-foreground/30'>
+          <div className={`${TYPOGRAPHY.SMALL_LABEL} text-theme-foreground opacity-70 text-left`}>
             {t('statistics.totalGames')}
           </div>
           <div
-            className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-theme-primary text-right`}
+            className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-theme-foreground text-right`}
           >
             {statistics.totalGames}
           </div>
         </div>
 
-        <div className='bg-theme-primary/10 p-3 rounded border border-theme-primary/30'>
-          <div className={`${TYPOGRAPHY.SMALL_LABEL} text-theme-muted text-left`}>
+        <div className='bg-theme-foreground/10 p-3 rounded border border-theme-foreground/30'>
+          <div className={`${TYPOGRAPHY.SMALL_LABEL} text-theme-foreground opacity-70 text-left`}>
             {t('statistics.bestScore')}
           </div>
           <div
-            className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-theme-primary text-right`}
+            className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-theme-foreground text-right`}
           >
             {statistics.bestScore.toLocaleString()}
           </div>
         </div>
 
-        <div className='bg-theme-primary/10 p-3 rounded border border-theme-primary/30'>
-          <div className={`${TYPOGRAPHY.SMALL_LABEL} text-theme-muted text-left`}>
+        <div className='bg-theme-foreground/10 p-3 rounded border border-theme-foreground/30'>
+          <div className={`${TYPOGRAPHY.SMALL_LABEL} text-theme-foreground opacity-70 text-left`}>
             {t('statistics.totalLines')}
           </div>
           <div
-            className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-theme-primary text-right`}
+            className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-theme-foreground text-right`}
           >
             {statistics.totalLines.toLocaleString()}
           </div>
         </div>
 
-        <div className='bg-theme-primary/10 p-3 rounded border border-theme-primary/30'>
-          <div className={`${TYPOGRAPHY.SMALL_LABEL} text-theme-muted text-left`}>
+        <div className='bg-theme-foreground/10 p-3 rounded border border-theme-foreground/30'>
+          <div className={`${TYPOGRAPHY.SMALL_LABEL} text-theme-foreground opacity-70 text-left`}>
             {t('statistics.playTime')}
           </div>
           <div
-            className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-theme-primary text-right`}
+            className={`${TYPOGRAPHY.STAT_VALUE} ${TYPOGRAPHY.TITLE_WEIGHT} text-theme-foreground text-right`}
           >
             {Math.floor(statistics.playTime / 3600)}h{' '}
             {Math.floor((statistics.playTime % 3600) / 60)}m
