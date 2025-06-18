@@ -22,15 +22,16 @@
   --muted: color-mix(in srgb, var(--theme-foreground) 30%, var(--theme-background));
 
   /* ===== TETROMINO PIECE COLORS ===== */
-  /* Fixed colors for tetromino pieces - independent of theme changes */
-  /* These remain consistent across all themes for gameplay recognition */
-  --tetromino-i: #00ffff; /* I-piece: Cyan */
-  --tetromino-o: #ffaa00; /* O-piece: Orange */
-  --tetromino-t: #9900ff; /* T-piece: Purple */
-  --tetromino-s: #00ff88; /* S-piece: Green */
-  --tetromino-z: #ff0055; /* Z-piece: Red */
-  --tetromino-j: #0088ff; /* J-piece: Blue */
-  --tetromino-l: #ff0099; /* L-piece: Magenta */
+  /* Default fallback colors - these are dynamically overridden by theme system */
+  /* Each theme (cyberpunk, classic, retro, minimal, neon) has its own tetromino color set */
+  /* Theme system (unifiedThemeSystem.ts) updates these CSS variables when theme changes */
+  --tetromino-i: #00ffff; /* I-piece: Default Cyan (overridden by theme) */
+  --tetromino-o: #ffaa00; /* O-piece: Default Orange (overridden by theme) */
+  --tetromino-t: #9900ff; /* T-piece: Default Purple (overridden by theme) */
+  --tetromino-s: #00ff88; /* S-piece: Default Green (overridden by theme) */
+  --tetromino-z: #ff0055; /* Z-piece: Default Red (overridden by theme) */
+  --tetromino-j: #0088ff; /* J-piece: Default Blue (overridden by theme) */
+  --tetromino-l: #ff0099; /* L-piece: Default Magenta (overridden by theme) */
 }
 
 /* ===== BASE STYLES ===== */
