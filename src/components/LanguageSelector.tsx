@@ -32,7 +32,7 @@ const LanguageSelector = memo(function LanguageSelector({
       {showLabel && (
         <label
           htmlFor={languageSelectId}
-          className={cn(TYPOGRAPHY.BODY_TEXT, TYPOGRAPHY.BODY_WEIGHT, 'text-theme-primary')}
+          className={cn(TYPOGRAPHY.BODY_TEXT, TYPOGRAPHY.BODY_WEIGHT, 'text-theme-foreground')}
         >
           {t('settings.language')}:
         </label>
@@ -42,23 +42,23 @@ const LanguageSelector = memo(function LanguageSelector({
           id={languageSelectId}
           data-testid='language-selector'
           className={cn(
-            'w-[180px] bg-theme-primary/10 border-theme-primary/30 text-theme-primary',
-            'hover:bg-theme-primary/20 hover:border-theme-primary transition-colors',
-            'focus:ring-theme-primary focus:border-theme-primary',
-            'data-[state=open]:border-theme-primary',
-            '[&>span]:text-theme-primary',
+            'w-[180px] bg-theme-foreground/10 border-theme-foreground/30 text-theme-foreground',
+            'hover:bg-theme-foreground/20 hover:border-theme-foreground transition-colors',
+            'focus:ring-theme-foreground focus:border-theme-foreground',
+            'data-[state=open]:border-theme-foreground',
+            '[&>span]:text-theme-foreground',
             TYPOGRAPHY.BODY_TEXT
           )}
           aria-label={t('aria.changeLanguage')}
         >
           <SelectValue />
         </SelectTrigger>
-        <SelectContent className='bg-background border-theme-primary/30'>
+        <SelectContent className='bg-background border-theme-foreground/30'>
           {supportedLanguages.map((lang) => (
             <SelectItem
               key={lang}
               value={lang}
-              className='text-foreground hover:bg-theme-primary/20 focus:bg-theme-primary/20 focus:text-theme-primary'
+              className='text-foreground hover:bg-theme-foreground/20 focus:bg-theme-foreground/20 focus:text-theme-foreground'
             >
               {languageNames[lang]}
             </SelectItem>

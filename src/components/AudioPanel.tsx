@@ -58,16 +58,16 @@ const AudioPanel = memo(function AudioPanel({
               Loading Audio: {audioSystemStatus.preloadProgress.loaded}/
               {audioSystemStatus.preloadProgress.total}
             </span>
-            <span className={`text-theme-primary ${TYPOGRAPHY.SMALL_LABEL} font-mono`}>
+            <span className={`text-theme-foreground ${TYPOGRAPHY.SMALL_LABEL} font-mono`}>
               {Math.round(audioSystemStatus.preloadProgress.progress)}%
             </span>
           </div>
           <Progress
             value={audioSystemStatus.preloadProgress.progress}
-            className='h-2 bg-theme-muted/50 [&>div]:bg-theme-primary'
+            className='h-2 bg-theme-foreground/10 [&>div]:bg-theme-foreground'
           />
           {audioSystemStatus.preloadProgress.failed > 0 && (
-            <div className={`text-theme-error ${TYPOGRAPHY.SMALL_LABEL} mt-1`}>
+            <div className={`text-theme-foreground ${TYPOGRAPHY.SMALL_LABEL} mt-1`}>
               {audioSystemStatus.preloadProgress.failed} files failed to load
             </div>
           )}
@@ -89,14 +89,14 @@ const AudioPanel = memo(function AudioPanel({
               data-testid='volume-slider'
               className={cn(
                 UI_SIZES.SLIDER.WIDTH,
-                '[&>span[data-slot=slider-track]]:bg-theme-muted',
-                '[&>span[data-slot=slider-range]]:bg-theme-primary',
-                '[&>span[data-slot=slider-thumb]]:border-theme-primary [&>span[data-slot=slider-thumb]]:bg-theme-primary',
+                '[&>span[data-slot=slider-track]]:bg-theme-foreground/20',
+                '[&>span[data-slot=slider-range]]:bg-theme-foreground',
+                '[&>span[data-slot=slider-thumb]]:border-theme-foreground [&>span[data-slot=slider-thumb]]:bg-theme-foreground',
                 '[&>span[data-slot=slider-thumb]]:shadow-[var(--button-glow-base)_var(--theme-primary)]'
               )}
             />
             <span
-              className={`font-mono text-theme-primary ${TYPOGRAPHY.BODY_TEXT} ${GAME_UI_SIZES.VOLUME_DISPLAY}`}
+              className={`font-mono text-theme-foreground ${TYPOGRAPHY.BODY_TEXT} ${GAME_UI_SIZES.VOLUME_DISPLAY}`}
             >
               {Math.round(volume * 100)}
             </span>
@@ -111,8 +111,8 @@ const AudioPanel = memo(function AudioPanel({
             checked={!isMuted}
             onCheckedChange={() => onToggleMute()}
             className={cn(
-              'data-[state=checked]:bg-theme-primary data-[state=unchecked]:bg-theme-muted',
-              'border-2 data-[state=checked]:border-theme-primary data-[state=unchecked]:border-theme-border'
+              'data-[state=checked]:bg-theme-foreground data-[state=unchecked]:bg-theme-foreground/20',
+              'border-2 data-[state=checked]:border-theme-foreground data-[state=unchecked]:border-theme-border'
             )}
             aria-label={t('settings.mute')}
           />
@@ -129,8 +129,8 @@ const AudioPanel = memo(function AudioPanel({
             checked={settings.virtualControlsEnabled}
             onCheckedChange={(checked) => onUpdateSettings({ virtualControlsEnabled: checked })}
             className={cn(
-              'data-[state=checked]:bg-theme-primary data-[state=unchecked]:bg-theme-muted',
-              'border-2 data-[state=checked]:border-theme-primary data-[state=unchecked]:border-theme-border'
+              'data-[state=checked]:bg-theme-foreground data-[state=unchecked]:bg-theme-foreground/20',
+              'border-2 data-[state=checked]:border-theme-foreground data-[state=unchecked]:border-theme-border'
             )}
             aria-label={t('settings.virtualControls')}
           />
