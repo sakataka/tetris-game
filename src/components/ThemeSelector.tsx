@@ -72,7 +72,7 @@ export default function ThemeSelector({
         {/* Background & Foreground */}
         <div className='mb-3'>
           <div className='flex items-center gap-4 mb-2'>
-            <span className='text-xs w-20 text-theme-foreground opacity-70'>
+            <span className='text-xs w-20 font-medium text-theme-foreground'>
               {t('themes.background')}:
             </span>
             <div
@@ -81,7 +81,7 @@ export default function ThemeSelector({
             />
           </div>
           <div className='flex items-center gap-4 mb-2'>
-            <span className='text-xs w-20 text-theme-foreground opacity-70'>
+            <span className='text-xs w-20 font-medium text-theme-foreground'>
               {t('themes.foreground')}:
             </span>
             <div
