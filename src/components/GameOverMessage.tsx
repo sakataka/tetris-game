@@ -1,7 +1,7 @@
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { cn } from '@/utils/ui/cn';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { cn } from '@/utils/ui/cn';
 
 interface GameOverMessageProps {
   className?: string;
@@ -12,7 +12,10 @@ const GameOverMessage = memo(function GameOverMessage({ className = '' }: GameOv
 
   return (
     <div
-      className={cn('absolute inset-0 bg-theme-background/80 flex items-center justify-center', className)}
+      className={cn(
+        'absolute inset-0 bg-theme-background/80 flex items-center justify-center',
+        className
+      )}
       style={{
         background: 'var(--overlay-background)',
         backdropFilter: 'blur(var(--overlay-blur))',

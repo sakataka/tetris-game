@@ -1,7 +1,7 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { cn } from '@/utils/ui/cn';
-import { PADDING_SCALE } from '@/constants/layout';
 import type { ReactNode } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { PADDING_SCALE } from '@/constants/layout';
+import { cn } from '@/utils/ui/cn';
 
 /**
  * Cyberpunk-themed Card component based on shadcn/ui Card
@@ -22,9 +22,9 @@ import type { ReactNode } from 'react';
  */
 
 export type CyberTheme =
-  | 'primary'   // Main information (score, game stats)
-  | 'default'   // Secondary information (settings, options)
-  | 'muted';    // Background or less important content
+  | 'primary' // Main information (score, game stats)
+  | 'default' // Secondary information (settings, options)
+  | 'muted'; // Background or less important content
 
 interface CyberCardProps {
   title: string;

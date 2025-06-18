@@ -1,12 +1,11 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
-import type { MetaFunction } from './types/route';
-
 // Global providers
 import ErrorBoundaryWithTranslation from './components/ErrorBoundaryWithTranslation';
 import ErrorStoreInitializer from './components/ErrorStoreInitializer';
 import ErrorToastAdapter from './components/ErrorToastAdapter';
 import I18nProvider from './components/I18nProvider';
 import { Toaster } from './components/ui/sonner';
+import type { MetaFunction } from './types/route';
 
 // Font configuration (React Router compatible)
 import '@fontsource/geist-sans/400.css';
@@ -70,7 +69,7 @@ export default function Root() {
         <Meta />
         <Links />
       </head>
-      <body className='antialiased' style={{fontFamily: 'var(--theme-font-primary)'}}>
+      <body className='antialiased' style={{ fontFamily: 'var(--theme-font-primary)' }}>
         <I18nProvider>
           <ErrorBoundaryWithTranslation level='page'>
             <ErrorStoreInitializer />
@@ -94,7 +93,7 @@ export function ErrorBoundary() {
         <Meta />
         <Links />
       </head>
-      <body className='antialiased' style={{fontFamily: 'var(--theme-font-primary)'}}>
+      <body className='antialiased' style={{ fontFamily: 'var(--theme-font-primary)' }}>
         <div className='min-h-screen flex items-center justify-center'>
           <div className='text-center'>
             <h1 className='text-2xl font-bold text-theme-error mb-4'>Application Error</h1>

@@ -1,6 +1,6 @@
 /**
  * Theme Color Usage System
- * 
+ *
  * Defines how theme colors should be used across different UI components
  * to ensure consistent visual hierarchy and proper contrast
  */
@@ -50,20 +50,20 @@ export const THEME_COLOR_USAGE = {
   // Game Elements
   game: {
     // Tetromino colors should use the 6-color palette
-    tetrominoI: 'primary',    // Cyan in most themes
-    tetrominoO: 'secondary',   // Yellow/Orange
-    tetrominoT: 'tertiary',    // Purple/Green
-    tetrominoS: 'accent',      // Green/Red accent
-    tetrominoZ: 'error',       // Red
-    tetrominoJ: 'info',        // Blue
-    tetrominoL: 'warning',     // Orange/Yellow
-    
+    tetrominoI: 'primary', // Cyan in most themes
+    tetrominoO: 'secondary', // Yellow/Orange
+    tetrominoT: 'tertiary', // Purple/Green
+    tetrominoS: 'accent', // Green/Red accent
+    tetrominoZ: 'error', // Red
+    tetrominoJ: 'info', // Blue
+    tetrominoL: 'warning', // Orange/Yellow
+
     // Game board
     gridLines: 'neutral + 20% opacity',
     ghostPiece: 'primary + 30% opacity',
     lockedPiece: 'neutral',
     boardBorder: 'border',
-    
+
     // Effects
     lineClearFlash: 'accent',
     levelUpEffect: 'primary',
@@ -101,12 +101,12 @@ export function getThemeColor(usage: string): string {
   const parts = usage.split('.');
   // biome-ignore lint/suspicious/noExplicitAny: Required for recursive object traversal
   let current: any = THEME_COLOR_USAGE;
-  
+
   for (const part of parts) {
     current = current[part];
     if (!current) return 'var(--theme-foreground)'; // fallback
   }
-  
+
   // Handle opacity modifiers
   if (typeof current === 'string' && current.includes('+')) {
     const [color, opacity] = current.split(' + ');
@@ -115,11 +115,11 @@ export function getThemeColor(usage: string): string {
       return `color-mix(in oklch, var(--theme-${color}) ${opacityValue * 100}%, transparent)`;
     }
   }
-  
+
   if (typeof current === 'string') {
     return `var(--theme-${current})`;
   }
-  
+
   return 'var(--theme-foreground)'; // fallback
 }
 
@@ -129,16 +129,16 @@ export function getThemeColor(usage: string): string {
 export const THEME_COLOR_RULES = {
   // Primary + Secondary: Main UI elements
   primarySecondary: ['buttons.primaryAction', 'buttons.secondaryAction'],
-  
+
   // Surface + Border: Card and panel styling
   surfaceBorder: ['panels.gamePanel', 'panels.cardBorder'],
-  
+
   // Background + Surface: Layout hierarchy
   backgroundSurface: ['layout.pageBackground', 'panels.gamePanel'],
-  
+
   // Accent for highlights only
   accentHighlight: ['text.scoreValue', 'game.lineClearFlash'],
-  
+
   // Neutral for non-interactive elements
   neutralElements: ['text.label', 'game.gridLines', 'effects.divider'],
 } as const;

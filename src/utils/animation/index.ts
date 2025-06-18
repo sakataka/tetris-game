@@ -5,16 +5,16 @@
  */
 
 // Animation manager
-export { AnimationManager, animationManager, type AnimationOptions } from './animationManager';
+export { AnimationManager, type AnimationOptions, animationManager } from './animationManager';
 
 // Custom hooks
 export {
-  useAnimationFrame,
-  useSimpleAnimation,
-  useConditionalAnimation,
-  useTimerAnimation,
-  usePerformanceAnimation,
   type UseAnimationOptions,
+  useAnimationFrame,
+  useConditionalAnimation,
+  usePerformanceAnimation,
+  useSimpleAnimation,
+  useTimerAnimation,
 } from './useAnimationFrame';
 
 // Convenient constants

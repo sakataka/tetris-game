@@ -7,16 +7,16 @@
 
 // Mock factories
 export {
-  createMockAudioSystem,
   createMockAudioManager,
+  createMockAudioSystem,
   createMockDOMEnvironment,
-  createMockStore,
-  createMockStatisticsStore,
   createMockGameStateStore,
+  createMockStatisticsStore,
+  createMockStore,
   createTestFixtures,
-  setupAsyncTest,
   expectToThrow,
   measurePerformance,
+  setupAsyncTest,
 } from './mockFactory';
 
 // Common test utilities

@@ -7,7 +7,7 @@
 
 import { useEffect } from 'react';
 import { useThemeStore } from '../../store/themeStore';
-import { initializeThemeSystem } from '../../utils/ui/themeManager';
+import { applyUnifiedThemeToDocument } from '../../utils/ui/unifiedThemeSystem';
 
 interface ThemeProviderProps {
   children: React.ReactNode;
@@ -18,11 +18,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
   useEffect(() => {
     // Initialize theme system on mount
-    if (theme.current) {
-      initializeThemeSystem(theme.current);
-    } else {
-      initializeThemeSystem();
-    }
+    applyUnifiedThemeToDocument(theme.current || 'cyberpunk');
   }, [theme.current]);
 
   return <>{children}</>;

@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import CyberCard from './ui/CyberCard';
 import { Button } from './ui/button';
+import CyberCard from './ui/CyberCard';
 
 interface PausedOverlayProps {
   isVisible: boolean;
@@ -37,8 +37,8 @@ const PausedOverlay = memo(function PausedOverlay({ isVisible, onResume }: Pause
             <div className='flex justify-center'>
               <Button
                 onClick={onResume}
-                variant="primary"
-                size="lg"
+                variant='primary'
+                size='lg'
                 className='px-8 font-bold font-mono'
               >
                 {t('game.resume')}

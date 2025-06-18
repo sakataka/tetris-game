@@ -6,8 +6,8 @@
  */
 
 import {
-  type BoardRenderState,
   type BoardRendererConfig,
+  type BoardRenderState,
   type BoardStyleTheme,
   type CellRenderContext,
   type CellStyle,

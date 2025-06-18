@@ -1,9 +1,9 @@
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import CyberCard from './ui/CyberCard';
-import StatisticsDashboard from './StatisticsDashboard';
 import { useHighScores, useStatistics } from '../store/statisticsStore';
 import type { GameSession } from '../utils/data/statisticsUtils';
+import StatisticsDashboard from './StatisticsDashboard';
+import CyberCard from './ui/CyberCard';
 
 interface StatisticsTabContentProps {
   className?: string;

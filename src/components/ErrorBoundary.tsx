@@ -1,5 +1,5 @@
 import i18next from 'i18next';
-import React, { Component, type ReactNode, type ErrorInfo } from 'react';
+import React, { Component, type ErrorInfo, type ReactNode } from 'react';
 import { DEFAULT_VALUES, GAME_TIMING } from '../constants';
 import { createUIError } from '../types/errors';
 import { errorHandler } from '../utils/data';

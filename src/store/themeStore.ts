@@ -1,18 +1,14 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { ColorBlindnessType, ContrastLevel, ThemeState, ThemeVariant } from '../types/tetris';
-import {
-  applyThemeToDocument,
-  getCurrentThemeConfig,
-  initializeThemeSystem,
-} from '../utils/ui/themeManager';
+import { applyUnifiedThemeToDocument, getUnifiedThemeConfig } from '../utils/ui/unifiedThemeSystem';
 
 // Default theme state
 const DEFAULT_THEME_STATE: ThemeState = {
   current: 'cyberpunk' as ThemeVariant,
   effectIntensity: 1.0,
   animations: true,
-  config: getCurrentThemeConfig('cyberpunk'),
+  config: getUnifiedThemeConfig('cyberpunk'),
   accessibility: {
     colorBlindnessType: 'none' as ColorBlindnessType,
     contrast: 'normal' as ContrastLevel,
@@ -44,13 +40,13 @@ export const useThemeStore = create<ThemeStore>()(
       // Actions
       setTheme: (themeVariant) => {
         // Apply theme to document immediately
-        applyThemeToDocument(themeVariant);
+        applyUnifiedThemeToDocument(themeVariant);
 
         set((state) => ({
           theme: {
             ...state.theme,
             current: themeVariant,
-            config: getCurrentThemeConfig(themeVariant),
+            config: getUnifiedThemeConfig(themeVariant),
           },
         }));
       },
@@ -71,7 +67,6 @@ export const useThemeStore = create<ThemeStore>()(
             },
           },
         })),
-
 
       setEffectIntensity: (intensity) =>
         set((state) => ({
@@ -96,11 +91,11 @@ export const useThemeStore = create<ThemeStore>()(
       onRehydrateStorage: () => (state) => {
         if (state?.theme?.current) {
           // Reapply theme on hydration
-          applyThemeToDocument(state.theme.current);
+          applyUnifiedThemeToDocument(state.theme.current);
           console.log('🎨 Theme rehydrated:', state.theme.current);
         } else {
           // Initialize with default theme
-          initializeThemeSystem();
+          applyUnifiedThemeToDocument('cyberpunk');
         }
       },
     }

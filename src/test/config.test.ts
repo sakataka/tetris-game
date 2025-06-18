@@ -6,9 +6,9 @@
 
 import { beforeEach, describe, expect, it } from 'vitest';
 import {
+  createGameConfig,
   ENV_CONFIG,
   type GameConfiguration,
-  createGameConfig,
   mergeGameConfig,
   validateEnvironmentConfig,
   validateGameConfig,

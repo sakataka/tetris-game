@@ -58,7 +58,7 @@ describe('ThemeLoader - JSON-based theme system', () => {
         expect(theme.colors.primary).toMatch(/^#[0-9a-fA-F]{6}$/);
         expect(theme.colors.secondary).toMatch(/^#[0-9a-fA-F]{6}$/);
         expect(theme.colors.tertiary).toMatch(/^#[0-9a-fA-F]{6}$/);
-        
+
         // Validate semantic colors
         expect(theme.colors.warning).toMatch(/^#[0-9a-fA-F]{6}$/);
         expect(theme.colors.error).toMatch(/^#[0-9a-fA-F]{6}$/);

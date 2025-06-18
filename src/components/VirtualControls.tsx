@@ -1,7 +1,7 @@
-import { cn } from '@/utils/ui/cn';
 import type React from 'react';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { cn } from '@/utils/ui/cn';
 import { UI_SIZES } from '../constants';
 import { Button } from './ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';

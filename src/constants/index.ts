@@ -19,21 +19,16 @@ export * from './layout';
 
 // System limits and thresholds
 export * from './limits';
-
-// Tetromino definitions
-export * from './tetrominoes';
-
 // Performance optimization
 export * from './performance';
-
 // Storage management
 export * from './storage';
-
-// Timing and internationalization
-export * from './timing';
-
 // String resources
 export * from './strings';
+// Tetromino definitions
+export * from './tetrominoes';
+// Timing and internationalization
+export * from './timing';
 
 // Aliases for backward compatibility
 export const EFFECT_RESET_DELAY = 300; // Alias for EFFECTS.RESET_DELAY

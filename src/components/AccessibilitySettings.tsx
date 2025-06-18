@@ -1,6 +1,6 @@
-import { cn } from '@/utils/ui/cn';
 import React, { useId } from 'react';
 import { useTranslation } from 'react-i18next';
+import { cn } from '@/utils/ui/cn';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
 import type { AnimationIntensity, ColorBlindnessType, ContrastLevel } from '../types/tetris';
 import { Label } from './ui/label';

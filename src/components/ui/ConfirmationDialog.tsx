@@ -55,10 +55,7 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
 
             {/* Action Buttons */}
             <div className='flex justify-center gap-3'>
-              <Button
-                variant='secondary'
-                onClick={onClose}
-              >
+              <Button variant='secondary' onClick={onClose}>
                 {cancelText || t('common.cancel')}
               </Button>
               <Button

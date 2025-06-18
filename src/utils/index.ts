@@ -4,23 +4,18 @@
  * Re-exports from utilities split by functionality
  */
 
-// Game logic
-export * from './game';
-
-// Audio system
-export * from './audio';
-
-// UI and themes
-export * from './ui';
-
-// Performance optimization
-export * from './performance';
-
 // Unified animation management
 export * from './animation';
 
+// Audio system
+export * from './audio';
 // Data management
 export * from './data';
-
+// Game logic
+export * from './game';
 // Logging system
 export * from './logging';
+// Performance optimization
+export * from './performance';
+// UI and themes
+export * from './ui';

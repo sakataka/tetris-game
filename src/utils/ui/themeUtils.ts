@@ -1,11 +1,11 @@
-import type { ThemeConfig, ThemeVariant } from '../../types/tetris';
+import type { ThemeVariant } from '../../types/tetris';
 import { ColorConverter } from './colorConverter';
-import { getCurrentThemeConfig } from './themeManager';
+import type { UnifiedThemeConfig } from './unifiedThemeSystem';
 
 /**
  * Apply theme configuration to CSS variables
  */
-export function applyThemeToCSS(config: ThemeConfig): void {
+export function applyThemeToCSS(config: UnifiedThemeConfig): void {
   const root = document.documentElement;
 
   // Basic color configuration
@@ -28,7 +28,7 @@ export function applyThemeToCSS(config: ThemeConfig): void {
   root.style.setProperty('--theme-muted', config.colors.muted);
   root.style.setProperty('--theme-surface', config.colors.surface);
   root.style.setProperty('--theme-border', config.colors.border);
-  
+
   // Set neutral color (fallback to muted if not available)
   root.style.setProperty('--theme-neutral', config.colors.neutral || config.colors.muted);
 
@@ -44,8 +44,15 @@ export function applyThemeToCSS(config: ThemeConfig): void {
     root.style.setProperty(varName, value);
   });
 
-  // Effect configuration (using any type to handle mixed structure)
-  const effects = config.effects as any;
+  // Effect configuration (handle mixed structure safely)
+  const effects = config.effects as {
+    blur?: { sm: string; md: string; lg: string } | number;
+    glow?: { sm: string; md: string; lg: string } | number;
+    shadow?: { sm: string; md: string; lg: string } | number;
+    saturation?: number;
+    brightness?: number;
+    contrast?: number;
+  };
   if (effects && typeof effects.blur === 'number') {
     root.style.setProperty('--neon-blur-sm', `${effects.blur * 0.5}px`);
     root.style.setProperty('--neon-blur-md', `${effects.blur}px`);
@@ -98,7 +105,7 @@ const THEME_COLOR_MAPPING = {
 /**
  * Generate transparency variations using ColorConverter
  */
-function generateTransparencyVariables(colors: any): Record<string, string> {
+function generateTransparencyVariables(colors: Record<string, string>): Record<string, string> {
   const variables: Record<string, string> = {};
 
   // Generate legacy cyber-* transparency variables
@@ -140,24 +147,14 @@ function generateTransparencyVariables(colors: any): Record<string, string> {
  * Create custom theme configuration
  */
 export function createCustomTheme(
-  baseTheme: ThemeVariant,
-  customColors?: any,
-  customEffects?: any
-): ThemeConfig {
-  const baseConfig = getCurrentThemeConfig(baseTheme);
+  _baseTheme: ThemeVariant,
+  _customColors?: Record<string, string>,
+  _customEffects?: Record<string, unknown>
+): UnifiedThemeConfig {
+  // This function is deprecated, use getUnifiedThemeConfig directly
+  throw new Error('Use getUnifiedThemeConfig from unifiedThemeSystem instead');
 
-  return {
-    ...baseConfig,
-    name: 'Custom',
-    colors: {
-      ...baseConfig.colors,
-      ...customColors,
-    },
-    effects: {
-      ...(baseConfig.effects || {}),
-      ...(customEffects || {}),
-    },
-  };
+  // Function body removed - deprecated
 }
 
 /**
@@ -189,12 +186,13 @@ export function applyAnimationSettings(intensity: string): void {
 /**
  * Initialize theme configuration
  */
-export function initializeTheme(config: ThemeConfig): void {
+export function initializeTheme(config: UnifiedThemeConfig): void {
   applyThemeToCSS(config);
 
   // Handle accessibility settings if available
-  const accessibility = (config as any).accessibility;
-  if (accessibility && accessibility.animationIntensity) {
+  const accessibility = (config as { accessibility?: { animationIntensity?: string } })
+    .accessibility;
+  if (accessibility?.animationIntensity) {
     applyAnimationSettings(accessibility.animationIntensity);
 
     // Configure reduced motion preferences

@@ -135,7 +135,7 @@ function validateThemeConfig(data: ThemeConfigData, themeName: string): ThemeCon
   const effects = data.effects;
   const requiredEffectObjectKeys = ['blur', 'glow', 'shadow'];
   const requiredEffectNumberKeys = ['saturation', 'brightness', 'contrast'];
-  
+
   for (const key of requiredEffectObjectKeys) {
     const effectObj = effects[key as keyof typeof effects];
     if (typeof effectObj !== 'object' || effectObj === null) {
@@ -144,11 +144,13 @@ function validateThemeConfig(data: ThemeConfigData, themeName: string): ThemeCon
     const requiredSizes = ['sm', 'md', 'lg'] as const;
     for (const size of requiredSizes) {
       if (typeof (effectObj as Record<string, string>)[size] !== 'string') {
-        throw new Error(`Invalid theme config: missing or invalid effects.${key}.${size} for ${themeName}`);
+        throw new Error(
+          `Invalid theme config: missing or invalid effects.${key}.${size} for ${themeName}`
+        );
       }
     }
   }
-  
+
   for (const key of requiredEffectNumberKeys) {
     if (typeof effects[key as keyof typeof effects] !== 'number') {
       throw new Error(`Invalid theme config: missing or invalid effects.${key} for ${themeName}`);
@@ -201,11 +203,11 @@ function validateThemeConfig(data: ThemeConfigData, themeName: string): ThemeCon
       brightness: effects.brightness,
       contrast: effects.contrast,
     },
-    typography: {} as any,
-    spacing: {} as any,
-    sizing: {} as any,
-    borders: {} as any,
-    animations: {} as any,
+    typography: {} as Record<string, unknown>,
+    spacing: {} as Record<string, unknown>,
+    sizing: {} as Record<string, unknown>,
+    borders: {} as Record<string, unknown>,
+    animations: {} as Record<string, unknown>,
   } as ThemeConfig;
 }
 
@@ -336,10 +338,10 @@ export function getThemePresetSync(theme: ThemeVariant): ThemeConfig {
       brightness: 1.0,
       contrast: 1.0,
     },
-    typography: {} as any,
-    spacing: {} as any,
-    sizing: {} as any,
-    borders: {} as any,
-    animations: {} as any,
+    typography: {} as Record<string, unknown>,
+    spacing: {} as Record<string, unknown>,
+    sizing: {} as Record<string, unknown>,
+    borders: {} as Record<string, unknown>,
+    animations: {} as Record<string, unknown>,
   } as ThemeConfig;
 }

@@ -6,10 +6,9 @@
 
 import { act } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { ErrorInfo } from '../types/errors';
-
 // Import the actual store
 import { useErrorStore } from '../store/errorStore';
+import type { ErrorInfo } from '../types/errors';
 
 describe('errorStore', () => {
   beforeEach(() => {

@@ -1,9 +1,9 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { GAP_SCALE, PADDING_SCALE } from '../constants/layout';
-import { ConfirmationDialog } from '../components/ui/ConfirmationDialog';
 import { Button } from '../components/ui/button';
+import { ConfirmationDialog } from '../components/ui/ConfirmationDialog';
+import { GAP_SCALE, PADDING_SCALE } from '../constants/layout';
 import { useTogglePause } from '../store/gameStateStore';
 import { useCurrentTheme } from '../store/themeStore';
 import ErrorBoundary from './ErrorBoundary';
@@ -64,12 +64,11 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
         <div className='absolute inset-0 bg-grid-pattern opacity-3' />
 
         {/* Menu Button - Top Right */}
-        <div className='absolute top-4 right-4 z-20'> {/* top-4 right-4 = 16px (8-point grid) */}
+        <div className='absolute top-4 right-4 z-20'>
+          {' '}
+          {/* top-4 right-4 = 16px (8-point grid) */}
           <Link to='/settings'>
-            <Button
-              variant='secondary'
-              size='sm'
-            >
+            <Button variant='secondary' size='sm'>
               {t('tabs.settings')}
             </Button>
           </Link>
@@ -83,35 +82,37 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
 
           {/* Game Content */}
           <div className='flex-1 flex items-center justify-center'>
-            <div className={`grid grid-cols-[minmax(400px,auto)_350px] ${GAP_SCALE.md} items-stretch max-h-[calc(100vh-8rem)] max-w-7xl`}>
-            {/* Game Board */}
-            <div className='flex items-center'>
-              <ErrorBoundary level='component'>
-                <TetrisBoard
-                  board={gameState.board}
-                  currentPiece={gameState.currentPiece}
-                  gameOver={gameState.gameOver}
-                  isPaused={gameState.isPaused}
-                  lineEffect={gameState.lineEffect}
-                  onParticleUpdate={onParticleUpdate}
-                />
-              </ErrorBoundary>
-            </div>
+            <div
+              className={`grid grid-cols-[minmax(400px,auto)_350px] ${GAP_SCALE.md} items-stretch max-h-[calc(100vh-8rem)] max-w-7xl`}
+            >
+              {/* Game Board */}
+              <div className='flex items-center'>
+                <ErrorBoundary level='component'>
+                  <TetrisBoard
+                    board={gameState.board}
+                    currentPiece={gameState.currentPiece}
+                    gameOver={gameState.gameOver}
+                    isPaused={gameState.isPaused}
+                    lineEffect={gameState.lineEffect}
+                    onParticleUpdate={onParticleUpdate}
+                  />
+                </ErrorBoundary>
+              </div>
 
-            {/* Game Information Panel */}
-            <div className='h-full'>
-              <ErrorBoundary level='component'>
-                <GameInfo
-                  score={gameState.score}
-                  level={gameState.level}
-                  lines={gameState.lines}
-                  nextPiece={gameState.nextPiece}
-                  gameOver={gameState.gameOver}
-                />
-              </ErrorBoundary>
+              {/* Game Information Panel */}
+              <div className='h-full'>
+                <ErrorBoundary level='component'>
+                  <GameInfo
+                    score={gameState.score}
+                    level={gameState.level}
+                    lines={gameState.lines}
+                    nextPiece={gameState.nextPiece}
+                    gameOver={gameState.gameOver}
+                  />
+                </ErrorBoundary>
+              </div>
             </div>
           </div>
-        </div>
         </div>
 
         {/* Paused Overlay */}
@@ -147,10 +148,7 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
       {/* Menu Button - Top Right (Mobile) */}
       <div className='absolute top-2 right-2 z-20'>
         <Link to='/settings'>
-          <Button
-            variant='secondary'
-            size='sm'
-          >
+          <Button variant='secondary' size='sm'>
             {t('tabs.settings')}
           </Button>
         </Link>

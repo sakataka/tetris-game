@@ -1,8 +1,8 @@
-import { cn } from '@/utils/ui/cn';
 import { memo, useId } from 'react';
 import { useTranslation } from 'react-i18next';
+import { cn } from '@/utils/ui/cn';
 import { TYPOGRAPHY } from '../constants/layout';
-import { type SupportedLanguage, languageNames, supportedLanguages } from '../i18n';
+import { languageNames, type SupportedLanguage, supportedLanguages } from '../i18n';
 import { useCurrentLanguage, useSetLanguage } from '../store/i18nStore';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 

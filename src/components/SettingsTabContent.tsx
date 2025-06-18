@@ -1,4 +1,4 @@
-import { Suspense, memo, useId } from 'react';
+import { memo, Suspense, useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TYPOGRAPHY } from '../constants/layout';
 import { useAudioVolumeState } from '../store/audioStore';

@@ -4,5 +4,5 @@
  * Statistics calculation, error handling
  */
 
-export * from './statisticsUtils';
 export * from './errorHandler';
+export * from './statisticsUtils';

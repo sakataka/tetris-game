@@ -35,7 +35,7 @@
     "name": "Classic",
     "colors": {
       "primary": "#0f380f",
-      "secondary": "#8bac0f", 
+      "secondary": "#8bac0f",
       "tertiary": "#ffa500",
       "background": "#c9d93a",
       "foreground": "#0a1a0a",
@@ -67,7 +67,7 @@
     "name": "Retro",
     "colors": {
       "primary": "#ff6b35",
-      "secondary": "#ffd23f", 
+      "secondary": "#ffd23f",
       "tertiary": "#3742fa",
       "background": "#2d1b3d",
       "foreground": "#ffffff",
@@ -164,7 +164,13 @@
     "description": "Tetris Game Theme Presets - Updated with Semantic Colors",
     "lastUpdated": "2025-06-17",
     "totalThemes": 5,
-    "supportedFeatures": ["semanticColors", "colorBlindnessSupport", "contrastAdjustment", "animationIntensity", "dynamicEffects"],
+    "supportedFeatures": [
+      "semanticColors",
+      "colorBlindnessSupport",
+      "contrastAdjustment",
+      "animationIntensity",
+      "dynamicEffects"
+    ],
     "defaultEffects": {
       "blur": { "sm": "4px", "md": "8px", "lg": "12px" },
       "glow": { "sm": "4px", "md": "8px", "lg": "12px" },

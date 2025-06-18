@@ -1,8 +1,8 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { cn } from '../../utils/ui/cn';
 import { useCurrentTheme } from '../../store/themeStore';
+import { cn } from '../../utils/ui/cn';
 import { Button } from '../ui/button';
 import BackgroundEffects from './BackgroundEffects';
 import GameHeader from './GameHeader';
@@ -64,10 +64,7 @@ const MainLayout = memo(function MainLayout({
             <div className='flex items-center justify-between mb-4'>
               <GameHeader variant={headerVariant} />
               <Link to='/'>
-                <Button
-                  variant='secondary'
-                  size='sm'
-                >
+                <Button variant='secondary' size='sm'>
                   {t('tabs.game')}
                 </Button>
               </Link>

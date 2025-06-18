@@ -1,7 +1,7 @@
-import { Button } from '@/components/ui/button';
-import { GAP_SCALE } from '@/constants/layout';
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Button } from '@/components/ui/button';
+import { GAP_SCALE } from '@/constants/layout';
 import { useGameButtons } from '../hooks/useGameButtons';
 import { ConfirmationDialog } from './ui/ConfirmationDialog';
 
@@ -33,7 +33,7 @@ const GameButtonsPanel = memo(function GameButtonsPanel({
         onClick={onTogglePause}
         disabled={gameOver}
         size={buttonSize}
-        variant="primary"
+        variant='primary'
         className={buttonWidthClass}
       >
         {isPaused ? t('game.resume') : t('game.pause')}
@@ -42,7 +42,7 @@ const GameButtonsPanel = memo(function GameButtonsPanel({
       <Button
         onClick={() => setShowResetConfirmation(true)}
         size={buttonSize}
-        variant="secondary"
+        variant='secondary'
         className={buttonWidthClass}
       >
         {t('buttons.reset')}

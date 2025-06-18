@@ -1,10 +1,10 @@
+import React, { useId } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/utils/ui/cn';
-import React, { useId } from 'react';
-import { useTranslation } from 'react-i18next';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
 import type { ThemeVariant } from '../types/tetris';
 import { ThemeSelectorMemo } from './ThemeSelector';
@@ -38,7 +38,6 @@ export default function ThemeSettings({
   const handleEffectIntensityChange = (value: number[]) => {
     onEffectIntensityChange(value[0] ?? 1);
   };
-
 
   return (
     <div className={`theme-settings ${className}`}>
@@ -114,10 +113,8 @@ export default function ThemeSettings({
               </div>
             </div>
           </div>
-
         </div>
       </ScrollArea>
-
     </div>
   );
 }

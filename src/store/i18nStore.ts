@@ -9,7 +9,7 @@
 import { useEffect, useRef } from 'react';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import i18n, { type SupportedLanguage, defaultLanguage, supportedLanguages } from '../i18n';
+import i18n, { defaultLanguage, type SupportedLanguage, supportedLanguages } from '../i18n';
 import { log } from '../utils/logging';
 
 // Unified interface combining language and locale functionality

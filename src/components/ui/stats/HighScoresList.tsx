@@ -3,13 +3,13 @@
  * Displays recent high scores with ranking
  */
 
-import { cn } from '@/utils/ui/cn';
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
+import { cn } from '@/utils/ui/cn';
 import { TYPOGRAPHY } from '../../../constants/layout';
 import type { HighScore } from '../../../types/tetris';
-import CyberCard from '../CyberCard';
 import { Badge } from '../badge';
+import CyberCard from '../CyberCard';
 
 interface HighScoresListProps {
   highScores: readonly HighScore[];

@@ -5,12 +5,11 @@
  * clean composition hooks that are optimized by React Compiler.
  */
 
-export { useAudioController } from './useAudioController';
-export { useDeviceController } from './useDeviceController';
-export { useEventController } from './useEventController';
-export { useGameStateController } from './useGameStateController';
-
 export type { AudioSystemAPI } from './useAudioController';
+export { useAudioController } from './useAudioController';
 export type { DeviceSystemAPI } from './useDeviceController';
+export { useDeviceController } from './useDeviceController';
 export type { EventSystemAPI } from './useEventController';
+export { useEventController } from './useEventController';
 export type { GameStateAPI } from './useGameStateController';
+export { useGameStateController } from './useGameStateController';

@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { RouterProvider, createBrowserRouter } from 'react-router';
+import { createBrowserRouter, RouterProvider } from 'react-router';
 
 // Sentry monitoring initialization
 import { initSentry } from './utils/sentry';

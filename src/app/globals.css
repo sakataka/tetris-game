@@ -373,9 +373,9 @@
   --shadow-neon-xl: 0 0 var(--blur-neon-xl) color-mix(in oklch, var(--color-cyber-cyan) 30%, transparent);
 
   /* ===== UNIFIED CYBERPUNK FONTS ===== */
-  --font-sans: var(--theme-font-primary);      /* Use cyberpunk primary font */
-  --font-mono: var(--theme-font-secondary);    /* Use cyberpunk secondary font */
-  --font-cyber: var(--theme-font-primary);     /* Unified with primary */
+  --font-sans: var(--theme-font-primary); /* Use cyberpunk primary font */
+  --font-mono: var(--theme-font-secondary); /* Use cyberpunk secondary font */
+  --font-cyber: var(--theme-font-primary); /* Unified with primary */
 
   /* Advanced font features */
   --font-feature-settings: "liga" 1, "kern" 1, "calt" 1;

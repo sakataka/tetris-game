@@ -1,7 +1,7 @@
+import type { TFunction } from 'i18next';
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
-import type { TFunction } from 'i18next';
-import ErrorBoundary, { withErrorBoundary, useErrorBoundary } from './ErrorBoundary';
+import ErrorBoundary, { useErrorBoundary, withErrorBoundary } from './ErrorBoundary';
 
 // Wrapper component that provides translations to ErrorBoundary
 interface ErrorBoundaryWithTranslationProps {

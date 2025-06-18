@@ -8,7 +8,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { ThemeVariant } from '../types/tetris';
 import { log } from '../utils/logging';
 import { getThemePresetAsync as getJsonTheme, themeCache } from '../utils/ui/themeLoader';
-import { getThemePreset as getLegacyTheme } from '../utils/ui/themePresets';
+import { getUnifiedThemeConfig as getLegacyTheme } from '../utils/ui/unifiedThemeSystem';
 
 describe('Theme System Performance Comparison', () => {
   beforeEach(() => {
@@ -28,14 +28,14 @@ describe('Theme System Performance Comparison', () => {
       const iterations = 1000;
       const themeName: ThemeVariant = 'cyberpunk';
 
-      // Legacy TypeScript implementation performance measurement
-      const legacyStartTime = performance.now();
+      // Unified TypeScript implementation performance measurement
+      const unifiedStartTime = performance.now();
       for (let i = 0; i < iterations; i++) {
         const theme = getLegacyTheme(themeName);
         expect(theme).toBeDefined();
       }
-      const legacyEndTime = performance.now();
-      const legacyTime = legacyEndTime - legacyStartTime;
+      const unifiedEndTime = performance.now();
+      const unifiedTime = unifiedEndTime - unifiedStartTime;
 
       // JSON implementation performance measurement (including initial load)
       const jsonStartTime = performance.now();
@@ -52,22 +52,22 @@ describe('Theme System Performance Comparison', () => {
       const jsonTime = jsonEndTime - jsonStartTime;
 
       log.performance(
-        `Legacy TypeScript: ${legacyTime.toFixed(2)}ms for ${iterations} loads`,
-        legacyTime,
+        `Unified TypeScript: ${unifiedTime.toFixed(2)}ms for ${iterations} loads`,
+        unifiedTime,
         { component: 'ThemePerformanceTest' }
       );
       log.performance(`JSON + Cache: ${jsonTime.toFixed(2)}ms for ${iterations} loads`, jsonTime, {
         component: 'ThemePerformanceTest',
       });
-      log.debug(`Performance ratio: ${(jsonTime / legacyTime).toFixed(2)}x`, {
+      log.debug(`Performance ratio: ${(jsonTime / unifiedTime).toFixed(2)}x`, {
         component: 'ThemePerformanceTest',
-        metadata: { ratio: jsonTime / legacyTime },
+        metadata: { ratio: jsonTime / unifiedTime },
       });
 
       // JSON implementation should be fast after caching
       // Advantageous for bulk loading even considering initial load overhead
       // Allow margin considering CI environment variations
-      expect(jsonTime).toBeLessThan(legacyTime * 50); // Allow larger margin for CI environment variations
+      expect(jsonTime).toBeLessThan(unifiedTime * 50); // Allow larger margin for CI environment variations
     });
 
     it('should measure memory usage comparison', async () => {
@@ -96,21 +96,21 @@ describe('Theme System Performance Comparison', () => {
 
       const initialMemory = measureMemory();
 
-      // Memory usage measurement with Legacy implementation
-      const legacyThemes = [];
+      // Memory usage measurement with Unified implementation
+      const unifiedThemes = [];
       for (let i = 0; i < 100; i++) {
-        legacyThemes.push(getLegacyTheme('cyberpunk'));
-        legacyThemes.push(getLegacyTheme('classic'));
-        legacyThemes.push(getLegacyTheme('retro'));
+        unifiedThemes.push(getLegacyTheme('cyberpunk'));
+        unifiedThemes.push(getLegacyTheme('classic'));
+        unifiedThemes.push(getLegacyTheme('retro'));
       }
 
-      const legacyMemory = measureMemory();
+      const unifiedMemory = measureMemory();
 
-      // Confirm Legacy measurement results (prevent unused collection)
-      expect(legacyThemes.length).toBe(300);
+      // Confirm Unified measurement results (prevent unused collection)
+      expect(unifiedThemes.length).toBe(300);
 
       // Clear memory
-      legacyThemes.length = 0;
+      unifiedThemes.length = 0;
       if (global.gc) global.gc();
 
       // Memory usage measurement with JSON implementation
@@ -126,36 +126,36 @@ describe('Theme System Performance Comparison', () => {
       // Confirm JSON measurement results (prevent unused collection)
       expect(jsonThemes.length).toBe(300);
 
-      if (initialMemory && legacyMemory && jsonMemory) {
-        const legacyMemoryDiff = legacyMemory.used - initialMemory.used;
+      if (initialMemory && unifiedMemory && jsonMemory) {
+        const unifiedMemoryDiff = unifiedMemory.used - initialMemory.used;
         const jsonMemoryDiff = jsonMemory.used - initialMemory.used;
 
-        log.debug(`Legacy memory usage: ${(legacyMemoryDiff / 1024).toFixed(2)} KB`, {
+        log.debug(`Unified memory usage: ${(unifiedMemoryDiff / 1024).toFixed(2)} KB`, {
           component: 'ThemePerformanceTest',
-          metadata: { memoryKB: legacyMemoryDiff / 1024 },
+          metadata: { memoryKB: unifiedMemoryDiff / 1024 },
         });
         log.debug(`JSON memory usage: ${(jsonMemoryDiff / 1024).toFixed(2)} KB`, {
           component: 'ThemePerformanceTest',
           metadata: { memoryKB: jsonMemoryDiff / 1024 },
         });
-        log.debug(`Memory efficiency: ${(jsonMemoryDiff / legacyMemoryDiff).toFixed(2)}x`, {
+        log.debug(`Memory efficiency: ${(jsonMemoryDiff / unifiedMemoryDiff).toFixed(2)}x`, {
           component: 'ThemePerformanceTest',
-          metadata: { efficiency: jsonMemoryDiff / legacyMemoryDiff },
+          metadata: { efficiency: jsonMemoryDiff / unifiedMemoryDiff },
         });
 
         // JSON implementation is memory efficient by avoiding duplicate object creation through caching
-        expect(jsonMemoryDiff).toBeLessThan(legacyMemoryDiff);
+        expect(jsonMemoryDiff).toBeLessThan(unifiedMemoryDiff);
       }
     });
   });
 
   describe('Initialization time comparison', () => {
     it('should compare module loading time', async () => {
-      // Legacy implementation module loading time (actually resolved at bundle time)
-      const legacyStartTime = performance.now();
-      const legacyModule = await import('../utils/ui/themePresets');
-      const legacyEndTime = performance.now();
-      const legacyModuleTime = legacyEndTime - legacyStartTime;
+      // Unified implementation module loading time (actually resolved at bundle time)
+      const unifiedStartTime = performance.now();
+      const unifiedModule = await import('../utils/ui/unifiedThemeSystem');
+      const unifiedEndTime = performance.now();
+      const unifiedModuleTime = unifiedEndTime - unifiedStartTime;
 
       // JSON implementation module loading time
       const jsonStartTime = performance.now();
@@ -163,25 +163,25 @@ describe('Theme System Performance Comparison', () => {
       const jsonEndTime = performance.now();
       const jsonModuleTime = jsonEndTime - jsonStartTime;
 
-      log.performance('Legacy module load', legacyModuleTime, {
+      log.performance('Unified module load', unifiedModuleTime, {
         component: 'ThemePerformanceTest',
       });
       log.performance('JSON module load', jsonModuleTime, { component: 'ThemePerformanceTest' });
 
-      expect(legacyModule).toBeDefined();
+      expect(unifiedModule).toBeDefined();
       expect(jsonModule).toBeDefined();
 
       // Module loading time is usually fast for both
-      expect(legacyModuleTime).toBeLessThan(50);
+      expect(unifiedModuleTime).toBeLessThan(50);
       expect(jsonModuleTime).toBeLessThan(50);
     });
 
     it('should measure first theme access time', async () => {
-      // First access with Legacy implementation
-      const legacyStartTime = performance.now();
-      const legacyTheme = getLegacyTheme('cyberpunk');
-      const legacyEndTime = performance.now();
-      const legacyFirstAccess = legacyEndTime - legacyStartTime;
+      // First access with Unified implementation
+      const unifiedStartTime = performance.now();
+      const unifiedTheme = getLegacyTheme('cyberpunk');
+      const unifiedEndTime = performance.now();
+      const unifiedFirstAccess = unifiedEndTime - unifiedStartTime;
 
       // First access with JSON implementation (including JSON file loading)
       const jsonStartTime = performance.now();
@@ -189,16 +189,16 @@ describe('Theme System Performance Comparison', () => {
       const jsonEndTime = performance.now();
       const jsonFirstAccess = jsonEndTime - jsonStartTime;
 
-      log.performance('Legacy first access', legacyFirstAccess, {
+      log.performance('Unified first access', unifiedFirstAccess, {
         component: 'ThemePerformanceTest',
       });
       log.performance('JSON first access', jsonFirstAccess, { component: 'ThemePerformanceTest' });
 
-      expect(legacyTheme).toBeDefined();
+      expect(unifiedTheme).toBeDefined();
       expect(jsonTheme).toBeDefined();
 
-      // Legacy implementation is immediately accessible
-      expect(legacyFirstAccess).toBeLessThan(1);
+      // Unified implementation is immediately accessible
+      expect(unifiedFirstAccess).toBeLessThan(1);
 
       // JSON implementation has file loading overhead only on first access (expect within 10ms)
       expect(jsonFirstAccess).toBeLessThan(10);
@@ -209,14 +209,14 @@ describe('Theme System Performance Comparison', () => {
     it('should test performance with many concurrent requests', async () => {
       const concurrentRequests = 50;
 
-      // Concurrent access with Legacy implementation
-      const legacyStartTime = performance.now();
-      const legacyPromises = Array.from({ length: concurrentRequests }, () =>
+      // Concurrent access with Unified implementation
+      const unifiedStartTime = performance.now();
+      const unifiedPromises = Array.from({ length: concurrentRequests }, () =>
         Promise.resolve(getLegacyTheme('cyberpunk'))
       );
-      await Promise.all(legacyPromises);
-      const legacyEndTime = performance.now();
-      const legacyConcurrentTime = legacyEndTime - legacyStartTime;
+      await Promise.all(unifiedPromises);
+      const unifiedEndTime = performance.now();
+      const unifiedConcurrentTime = unifiedEndTime - unifiedStartTime;
 
       // Concurrent access with JSON implementation
       const jsonStartTime = performance.now();
@@ -227,7 +227,7 @@ describe('Theme System Performance Comparison', () => {
       const jsonEndTime = performance.now();
       const jsonConcurrentTime = jsonEndTime - jsonStartTime;
 
-      log.performance(`Legacy concurrent (${concurrentRequests})`, legacyConcurrentTime, {
+      log.performance(`Unified concurrent (${concurrentRequests})`, unifiedConcurrentTime, {
         component: 'ThemePerformanceTest',
       });
       log.performance(`JSON concurrent (${concurrentRequests})`, jsonConcurrentTime, {
@@ -235,7 +235,7 @@ describe('Theme System Performance Comparison', () => {
       });
 
       // Verify that performance doesn't degrade with concurrent access
-      expect(legacyConcurrentTime).toBeLessThan(50);
+      expect(unifiedConcurrentTime).toBeLessThan(50);
       expect(jsonConcurrentTime).toBeLessThan(50);
     });
 
@@ -272,14 +272,14 @@ describe('Theme System Performance Comparison', () => {
 
   describe('Bundle size impact evaluation', () => {
     it('should validate theme data structure size', () => {
-      // Legacy implementation data size estimation
-      const legacyTheme = getLegacyTheme('cyberpunk');
-      const legacyJsonSize = JSON.stringify(legacyTheme).length;
+      // Unified implementation data size estimation
+      const unifiedTheme = getLegacyTheme('cyberpunk');
+      const unifiedJsonSize = JSON.stringify(unifiedTheme).length;
 
       // JSON implementation data size is equivalent (same structure)
-      const expectedJsonSize = legacyJsonSize;
+      const expectedJsonSize = unifiedJsonSize;
 
-      log.debug(`Theme data size: ${legacyJsonSize} characters`, {
+      log.debug(`Theme data size: ${unifiedJsonSize} characters`, {
         component: 'ThemePerformanceTest',
       });
       log.debug(`Expected JSON size: ${expectedJsonSize} characters`, {
@@ -287,29 +287,29 @@ describe('Theme System Performance Comparison', () => {
       });
 
       // Same data structure, so size is also equivalent
-      expect(legacyJsonSize).toBeGreaterThan(0);
-      expect(legacyJsonSize).toBeLessThan(1000); // Reasonable size under 1KB
+      expect(unifiedJsonSize).toBeGreaterThan(0);
+      expect(unifiedJsonSize).toBeLessThan(3000); // Reasonable size under 3KB (includes design tokens)
     });
 
     it('should estimate total bundle impact', async () => {
       // Data size of all themes
-      const allLegacyThemes = ['cyberpunk', 'classic', 'retro', 'minimal', 'neon'].map((theme) =>
+      const allUnifiedThemes = ['cyberpunk', 'classic', 'retro', 'minimal', 'neon'].map((theme) =>
         getLegacyTheme(theme as ThemeVariant)
       );
 
-      const totalLegacySize = JSON.stringify(allLegacyThemes).length;
+      const totalUnifiedSize = JSON.stringify(allUnifiedThemes).length;
 
       log.debug(
-        `Total theme data size: ${totalLegacySize} characters (${(totalLegacySize / 1024).toFixed(2)} KB)`,
-        { component: 'ThemePerformanceTest', metadata: { totalSizeKB: totalLegacySize / 1024 } }
+        `Total theme data size: ${totalUnifiedSize} characters (${(totalUnifiedSize / 1024).toFixed(2)} KB)`,
+        { component: 'ThemePerformanceTest', metadata: { totalSizeKB: totalUnifiedSize / 1024 } }
       );
 
-      // Verify theme data is reasonable size (under 5KB)
-      expect(totalLegacySize).toBeLessThan(5 * 1024);
+      // Verify theme data is reasonable size (under 15KB with design tokens)
+      expect(totalUnifiedSize).toBeLessThan(15 * 1024);
 
       // Additional overhead from JSON conversion is minimal
-      const jsonOverhead = totalLegacySize * 0.1; // Assume overhead under 10%
-      expect(jsonOverhead).toBeLessThan(512); // Under 512 bytes
+      const jsonOverhead = totalUnifiedSize * 0.1; // Assume overhead under 10%
+      expect(jsonOverhead).toBeLessThan(2048); // Under 2KB (adjusted for design tokens)
     });
   });
 
@@ -323,14 +323,14 @@ describe('Theme System Performance Comparison', () => {
         'cyberpunk',
       ];
 
-      // Theme switching with Legacy implementation
-      const legacyStartTime = performance.now();
+      // Theme switching with Unified implementation
+      const unifiedStartTime = performance.now();
       for (const themeName of themeSequence) {
         const theme = getLegacyTheme(themeName);
         expect(theme).toBeDefined();
       }
-      const legacyEndTime = performance.now();
-      const legacySwitchTime = legacyEndTime - legacyStartTime;
+      const unifiedEndTime = performance.now();
+      const unifiedSwitchTime = unifiedEndTime - unifiedStartTime;
 
       // Theme switching with JSON implementation
       const jsonStartTime = performance.now();
@@ -341,7 +341,7 @@ describe('Theme System Performance Comparison', () => {
       const jsonEndTime = performance.now();
       const jsonSwitchTime = jsonEndTime - jsonStartTime;
 
-      log.performance('Legacy theme switching', legacySwitchTime, {
+      log.performance('Unified theme switching', unifiedSwitchTime, {
         component: 'ThemePerformanceTest',
       });
       log.performance('JSON theme switching', jsonSwitchTime, {
@@ -349,7 +349,7 @@ describe('Theme System Performance Comparison', () => {
       });
 
       // Verify it's within range that doesn't affect user experience (under 100ms)
-      expect(legacySwitchTime).toBeLessThan(100);
+      expect(unifiedSwitchTime).toBeLessThan(100);
       expect(jsonSwitchTime).toBeLessThan(100);
     });
 

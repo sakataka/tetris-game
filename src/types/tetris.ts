@@ -149,7 +149,7 @@ export interface GameSettings {
 }
 
 // Import ThemeConfig from new theme manager
-export type { ThemeConfig } from '../utils/ui/themeManager';
+export type { UnifiedThemeConfig as ThemeConfig } from '../utils/ui/unifiedThemeSystem';
 
 // Extended theme state
 export interface ThemeState {
@@ -157,7 +157,7 @@ export interface ThemeState {
   readonly customColors?: Record<string, string>;
   readonly effectIntensity: number;
   readonly animations: boolean;
-  readonly config: any; // Using any during transition to new theme system
+  readonly config: Record<string, unknown>; // Theme configuration object
   readonly accessibility: {
     readonly colorBlindnessType: ColorBlindnessType;
     readonly contrast: ContrastLevel;

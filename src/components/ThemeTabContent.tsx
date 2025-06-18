@@ -1,11 +1,7 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTheme as useThemeManager } from '../hooks/useTheme';
-import {
-  useSetTheme,
-  useTheme,
-  useUpdateThemeState,
-} from '../store/themeStore';
+import { useSetTheme, useTheme, useUpdateThemeState } from '../store/themeStore';
 import { ThemeSettingsMemo } from './ThemeSettings';
 import CyberCard from './ui/CyberCard';
 

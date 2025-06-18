@@ -19,7 +19,7 @@ import './app/globals.css';
 
 export default function App() {
   return (
-    <div className='antialiased' style={{fontFamily: 'var(--theme-font-primary)'}}>
+    <div className='antialiased' style={{ fontFamily: 'var(--theme-font-primary)' }}>
       <ThemeProvider>
         <I18nProvider>
           <ErrorBoundaryWithTranslation level='page'>

@@ -3,9 +3,9 @@
  * Displays main statistics and period selector
  */
 
-import { cn } from '@/utils/ui/cn';
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
+import { cn } from '@/utils/ui/cn';
 import { TYPOGRAPHY } from '../../../constants/layout';
 import { STATISTICS_PERIODS } from '../../../utils/data/StatisticsService';
 import type { EnhancedStatistics } from '../../../utils/data/statisticsUtils';

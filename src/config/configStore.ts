@@ -9,8 +9,8 @@ import { persist } from 'zustand/middleware';
 import { STORAGE_KEYS } from '../constants/storage';
 import { logger } from '../utils/logging/logger';
 import {
-  type GameConfiguration,
   createGameConfig,
+  type GameConfiguration,
   mergeGameConfig,
   validateGameConfig,
 } from './gameConfig';

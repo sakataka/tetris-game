@@ -180,6 +180,7 @@ pnpm preview            # Preview build
 # Quality
 pnpm lint               # Biome linting
 pnpm format             # Biome formatting
+pnpm biome check --write # Auto-fix issues including unused imports
 pnpm quality:check      # Full pipeline (lint + typecheck + test)
 
 # Testing

@@ -5,9 +5,9 @@
  * while maintaining good distinguishability between pieces.
  */
 
-import type { ThemeVariant } from '../../types/tetris';
-import { getThemeTetrominoColors } from './themeManager';
 import { TETROMINO_COLORS as FALLBACK_COLORS } from '../../constants/tetrominoes';
+import type { ThemeVariant } from '../../types/tetris';
+import { getUnifiedThemeConfig } from './unifiedThemeSystem';
 
 /**
  * Get tetromino colors for the current theme
@@ -36,7 +36,8 @@ export function getTetrominoColors(themeVariant?: ThemeVariant): Record<string, 
   }
 
   try {
-    return getThemeTetrominoColors(themeVariant);
+    const themeConfig = getUnifiedThemeConfig(themeVariant);
+    return themeConfig.tetrominoes;
   } catch {
     // Fallback to default colors if theme colors are not available
     return FALLBACK_COLORS;

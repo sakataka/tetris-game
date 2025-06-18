@@ -4,45 +4,43 @@
  * Central export point for all configuration-related functionality
  */
 
+// Configuration store
+export {
+  type ConfigStore,
+  useConfigActions,
+  useConfigMonitoring,
+  useConfigStore,
+  useFeatureFlags,
+  useGameConfig,
+  useGameplayConfig,
+  usePerformanceConfig,
+  useUIConfig,
+} from './configStore';
 // Environment configuration
 export {
+  type AudioConfig,
+  type DebugConfig,
   ENV_CONFIG,
-  validateEnvironmentConfig,
-  getConfigurationInfo,
   type EnvironmentConfig,
   type FeatureFlags,
-  type PerformanceConfig,
-  type AudioConfig,
   type GameConfig,
-  type DebugConfig,
+  getConfigurationInfo,
+  type PerformanceConfig,
+  validateEnvironmentConfig,
 } from './environment';
-
 // Game configuration
 export {
   createGameConfig,
-  validateGameConfig,
-  mergeGameConfig,
   GAME_CONFIG,
-  getGameConfigInfo,
   type GameConfiguration,
-  type GamePerformanceConfig,
   type GameFeatureConfig,
-  type GameUIConfig,
+  type GamePerformanceConfig,
   type GameplayConfig,
+  type GameUIConfig,
+  getGameConfigInfo,
+  mergeGameConfig,
+  validateGameConfig,
 } from './gameConfig';
-
-// Configuration store
-export {
-  useConfigStore,
-  useGameConfig,
-  useFeatureFlags,
-  usePerformanceConfig,
-  useUIConfig,
-  useGameplayConfig,
-  useConfigActions,
-  useConfigMonitoring,
-  type ConfigStore,
-} from './configStore';
 
 // Configuration utilities
 export * from './utils';
