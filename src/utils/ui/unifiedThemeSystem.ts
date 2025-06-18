@@ -79,6 +79,8 @@ export interface UnifiedThemeConfig {
     particles: boolean;
     intensity: string;
   };
+  // Allow additional properties for backward compatibility
+  [key: string]: unknown;
 }
 
 /**

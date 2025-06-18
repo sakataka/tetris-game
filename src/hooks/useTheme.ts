@@ -3,6 +3,7 @@ import type { ThemeConfig, ThemeState, ThemeVariant } from '../types/tetris';
 import { animationManager } from '../utils/animation/animationManager';
 import { log } from '../utils/logging';
 import { initializeTheme } from '../utils/ui';
+import type { UnifiedThemeConfig } from '../utils/ui/unifiedThemeSystem';
 import { useAccessibilityFilters } from './useAccessibilityFilters';
 import { useSystemPreferences } from './useSystemPreferences';
 
@@ -79,7 +80,7 @@ export function useTheme({
   // ===== Accessibility Processing =====
 
   // Process theme config with accessibility filters
-  const { processedConfig } = useAccessibilityFilters(themeState.config, themeState.accessibility);
+  const { processedConfig } = useAccessibilityFilters(themeState.config as unknown as UnifiedThemeConfig, themeState.accessibility);
 
   // ===== Theme Application =====
 

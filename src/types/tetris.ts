@@ -4,6 +4,9 @@ export type ThemeVariant = 'cyberpunk' | 'classic' | 'retro' | 'minimal' | 'neon
 export type GameMode = 'single' | 'versus' | 'cooperative' | 'debug';
 export type DifficultyLevel = 'easy' | 'normal' | 'hard' | 'extreme';
 
+// Import unified theme config
+import type { UnifiedThemeConfig } from '../utils/ui/unifiedThemeSystem';
+
 // Type definitions for accessibility features
 export type ColorBlindnessType = 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia';
 export type ContrastLevel = 'low' | 'normal' | 'high';
@@ -157,7 +160,7 @@ export interface ThemeState {
   readonly customColors?: Record<string, string>;
   readonly effectIntensity: number;
   readonly animations: boolean;
-  readonly config: Record<string, unknown>; // Theme configuration object
+  readonly config: UnifiedThemeConfig | Record<string, unknown>; // Theme configuration object
   readonly accessibility: {
     readonly colorBlindnessType: ColorBlindnessType;
     readonly contrast: ContrastLevel;
