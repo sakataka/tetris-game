@@ -1,7 +1,9 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { cn } from '@/utils/ui/cn';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
 import type { HighScore } from '../types/tetris';
+import { Badge } from './ui/badge';
 import CyberCard from './ui/CyberCard';
 
 interface HighScoreDisplayProps {
@@ -22,6 +24,19 @@ const HighScoreDisplay = memo(function HighScoreDisplay({
   const { t, i18n } = useTranslation();
   const displayScores = highScores.slice(0, maxDisplay);
 
+  const getRankingBadgeStyle = (position: number) => {
+    switch (position) {
+      case 0:
+        return 'bg-theme-warning text-black border-theme-warning';
+      case 1:
+        return 'bg-theme-muted text-black border-theme-muted';
+      case 2:
+        return 'bg-theme-accent text-white border-theme-accent';
+      default:
+        return 'bg-theme-primary/20 text-theme-primary border-theme-primary/30';
+    }
+  };
+
   return (
     <CyberCard
       title={t('statistics.highScores')}
@@ -39,11 +54,15 @@ const HighScoreDisplay = memo(function HighScoreDisplay({
           >
             <div className='flex items-center gap-1'>
               {showRank && (
-                <span
-                  className={`text-theme-foreground ${TYPOGRAPHY.TITLE_WEIGHT} w-6 ${TYPOGRAPHY.BODY_TEXT}`}
+                <Badge
+                  variant='outline'
+                  className={cn(
+                    'font-mono font-bold min-w-[32px] justify-center',
+                    getRankingBadgeStyle(index)
+                  )}
                 >
                   #{index + 1}
-                </span>
+                </Badge>
               )}
               <div>
                 <div
