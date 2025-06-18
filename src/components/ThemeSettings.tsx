@@ -95,18 +95,18 @@ export default function ThemeSettings({
                   checked={animations}
                   onCheckedChange={onAnimationsToggle}
                   className={cn(
-                    'data-[state=checked]:bg-theme-primary data-[state=unchecked]:bg-theme-muted',
-                    'border-2 data-[state=checked]:border-theme-primary data-[state=unchecked]:border-theme-border'
+                    'data-[state=checked]:bg-theme-foreground data-[state=unchecked]:bg-theme-background',
+                    'border-2 data-[state=checked]:border-theme-foreground data-[state=unchecked]:border-theme-foreground data-[state=unchecked]:border-opacity-30'
                   )}
                   aria-label={t('accessibility.fullAnimation')}
                 />
                 <Label htmlFor={animationsSwitchId} className='cursor-pointer'>
                   <span
-                    className={`${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} text-theme-primary`}
+                    className={`${TYPOGRAPHY.BODY_TEXT} ${TYPOGRAPHY.BODY_WEIGHT} text-theme-foreground`}
                   >
                     {t('accessibility.fullAnimation')}
                   </span>
-                  <p className={`${TYPOGRAPHY.SMALL_LABEL} text-theme-primary`}>
+                  <p className={`${TYPOGRAPHY.SMALL_LABEL} text-theme-foreground opacity-70`}>
                     {t('accessibility.fullAnimationDesc')}
                   </p>
                 </Label>

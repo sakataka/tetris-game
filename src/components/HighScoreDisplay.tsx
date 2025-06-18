@@ -40,18 +40,18 @@ const HighScoreDisplay = memo(function HighScoreDisplay({
             <div className='flex items-center gap-1'>
               {showRank && (
                 <span
-                  className={`text-theme-primary ${TYPOGRAPHY.TITLE_WEIGHT} w-6 ${TYPOGRAPHY.BODY_TEXT}`}
+                  className={`text-theme-foreground ${TYPOGRAPHY.TITLE_WEIGHT} w-6 ${TYPOGRAPHY.BODY_TEXT}`}
                 >
                   #{index + 1}
                 </span>
               )}
               <div>
                 <div
-                  className={`${TYPOGRAPHY.TITLE_WEIGHT} text-theme-primary ${TYPOGRAPHY.BODY_TEXT}`}
+                  className={`${TYPOGRAPHY.TITLE_WEIGHT} text-theme-foreground ${TYPOGRAPHY.BODY_TEXT}`}
                 >
                   {score.score.toLocaleString()}
                 </div>
-                <div className={`${TYPOGRAPHY.SMALL_LABEL} text-theme-muted`}>
+                <div className={`${TYPOGRAPHY.SMALL_LABEL} text-theme-foreground opacity-70`}>
                   {t('game.levelPrefix')}
                   {score.level}
                 </div>

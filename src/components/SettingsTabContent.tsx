@@ -54,17 +54,17 @@ const SettingsTabContent = memo(function SettingsTabContent() {
                   gameMode: checked ? 'debug' : 'single',
                 });
               }}
-              className='data-[state=checked]:bg-theme-primary data-[state=checked]:border-theme-primary data-[state=unchecked]:border-theme-muted data-[state=unchecked]:bg-theme-surface'
+              className='data-[state=checked]:bg-theme-foreground data-[state=checked]:border-theme-foreground data-[state=unchecked]:border-theme-foreground data-[state=unchecked]:border-opacity-30'
               aria-label={t('settings.debugMode')}
             />
             <Label
               htmlFor={debugModeCheckboxId}
-              className='text-theme-foreground hover:text-theme-primary transition-colors cursor-pointer'
+              className='text-theme-foreground hover:opacity-80 transition-opacity cursor-pointer'
             >
               <span className={TYPOGRAPHY.BODY_TEXT}>{t('settings.debugMode')}</span>
             </Label>
           </div>
-          <p className='text-xs text-theme-muted'>{t('settings.debugModeDescription')}</p>
+          <p className='text-xs text-theme-foreground opacity-70'>{t('settings.debugModeDescription')}</p>
         </div>
       </CyberCard>
     </div>
