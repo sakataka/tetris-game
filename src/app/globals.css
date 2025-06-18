@@ -80,6 +80,14 @@ body {
   color: var(--theme-foreground);
 }
 
+.text-theme-primary {
+  color: var(--primary);
+}
+
+.text-theme-secondary {
+  color: var(--theme-foreground);
+}
+
 .bg-theme-background {
   background-color: var(--theme-background);
 }
@@ -88,12 +96,41 @@ body {
   background-color: var(--theme-foreground);
 }
 
+.bg-theme-primary {
+  background-color: var(--primary);
+}
+
+.bg-theme-surface {
+  background-color: color-mix(in srgb, var(--theme-foreground) 5%, var(--theme-background));
+}
+
 .border-theme-background {
   border-color: var(--theme-background);
 }
 
 .border-theme-foreground {
   border-color: var(--theme-foreground);
+}
+
+.border-theme-primary {
+  border-color: var(--primary);
+}
+
+.border-theme-muted {
+  border-color: var(--muted);
+}
+
+/* Shadow utilities for theme colors */
+.shadow-theme-primary {
+  box-shadow: 0 4px 6px -1px color-mix(in srgb, var(--primary) 10%, transparent), 0 2px 4px -2px color-mix(in srgb, var(--primary) 10%, transparent);
+}
+
+.shadow-theme-secondary {
+  box-shadow: 0 4px 6px -1px color-mix(in srgb, var(--theme-foreground) 10%, transparent), 0 2px 4px -2px color-mix(in srgb, var(--theme-foreground) 10%, transparent);
+}
+
+.shadow-theme-accent {
+  box-shadow: 0 4px 6px -1px color-mix(in srgb, var(--theme-foreground) 20%, transparent), 0 2px 4px -2px color-mix(in srgb, var(--theme-foreground) 20%, transparent);
 }
 
 /* Opacity utilities for theme colors */
