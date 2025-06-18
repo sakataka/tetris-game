@@ -40,7 +40,7 @@ const HighScoreDisplay = memo(function HighScoreDisplay({
             <div className='flex items-center gap-1'>
               {showRank && (
                 <span
-                  className={`text-cyber-yellow ${TYPOGRAPHY.TITLE_WEIGHT} w-6 ${TYPOGRAPHY.BODY_TEXT}`}
+                  className={`text-theme-primary ${TYPOGRAPHY.TITLE_WEIGHT} w-6 ${TYPOGRAPHY.BODY_TEXT}`}
                 >
                   #{index + 1}
                 </span>

@@ -93,7 +93,7 @@ export default function ThemeSettings({
                 <Switch
                   id={animationsSwitchId}
                   checked={animations}
-                  onCheckedChange={() => onAnimationsToggle()}
+                  onCheckedChange={onAnimationsToggle}
                   className={cn(
                     'data-[state=checked]:bg-theme-primary data-[state=unchecked]:bg-theme-muted',
                     'border-2 data-[state=checked]:border-theme-primary data-[state=unchecked]:border-theme-border'
