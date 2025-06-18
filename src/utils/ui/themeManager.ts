@@ -26,6 +26,7 @@ export interface ComprehensiveThemePreset {
     error: string;
     muted: string;
     surface: string;
+    neutral?: string;
   };
   tetrominoes: {
     I: string;

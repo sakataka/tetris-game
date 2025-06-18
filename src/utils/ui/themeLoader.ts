@@ -25,6 +25,7 @@ interface ThemeConfigData {
     muted: string;
     surface: string;
     border: string;
+    neutral?: string;
   };
   effects: {
     blur: { sm: string; md: string; lg: string };
@@ -115,11 +116,19 @@ function validateThemeConfig(data: ThemeConfigData, themeName: string): ThemeCon
       throw new Error(`Invalid theme config: missing or invalid color.${key} for ${themeName}`);
     }
     // Simple validation of hex color code format
-    if (!/^#[0-9a-fA-F]{6}$/.test(colors[key as keyof typeof colors])) {
+    const colorValue = colors[key as keyof typeof colors];
+    if (colorValue && !/^#[0-9a-fA-F]{6}$/.test(colorValue)) {
       throw new Error(
         `Invalid theme config: invalid hex color format for ${themeName}.colors.${key}`
       );
     }
+  }
+
+  // Optional neutral color validation
+  if (colors.neutral && !/^#[0-9a-fA-F]{6}$/.test(colors.neutral)) {
+    throw new Error(
+      `Invalid theme config: invalid hex color format for ${themeName}.colors.neutral`
+    );
   }
 
   // Effects validation

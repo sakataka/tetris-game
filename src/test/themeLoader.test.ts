@@ -105,10 +105,10 @@ describe('ThemeLoader - JSON-based theme system', () => {
     it('should validate color format correctly', async () => {
       const theme = await getThemePresetAsync('classic');
 
-      // Validate Classic theme specific values
-      expect(theme.colors.primary).toBe('#0066cc');
-      expect(theme.colors.secondary).toBe('#cc6600');
-      expect(theme.colors.background).toBe('#f5f5f5');
+      // Validate Classic theme specific values (Game Boy style)
+      expect(theme.colors.primary).toBe('#306230');
+      expect(theme.colors.secondary).toBe('#0f380f');
+      expect(theme.colors.background).toBe('#9bbc0f');
       // accessibility property removed from theme presets
     });
 
