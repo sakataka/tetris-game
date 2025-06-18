@@ -2,8 +2,8 @@ import { useCallback, useEffect } from 'react';
 import type { ThemeConfig, ThemeState, ThemeVariant } from '../types/tetris';
 import { animationManager } from '../utils/animation/animationManager';
 import { log } from '../utils/logging';
-import { initializeTheme } from '../utils/ui';
 import type { UnifiedThemeConfig } from '../utils/ui/unifiedThemeSystem';
+import { applyUnifiedThemeToDocument } from '../utils/ui/unifiedThemeSystem';
 import { useAccessibilityFilters } from './useAccessibilityFilters';
 import { useSystemPreferences } from './useSystemPreferences';
 
@@ -80,14 +80,19 @@ export function useTheme({
   // ===== Accessibility Processing =====
 
   // Process theme config with accessibility filters
-  const { processedConfig } = useAccessibilityFilters(themeState.config as unknown as UnifiedThemeConfig, themeState.accessibility);
+  const { processedConfig } = useAccessibilityFilters(
+    themeState.config as unknown as UnifiedThemeConfig,
+    themeState.accessibility
+  );
 
   // ===== Theme Application =====
 
   // Apply theme configuration to DOM
   useEffect(() => {
-    initializeTheme(processedConfig);
-  }, [processedConfig]);
+    if (themeState.current) {
+      applyUnifiedThemeToDocument(themeState.current);
+    }
+  }, [themeState.current]);
 
   // Sync animation settings with AnimationManager
   useEffect(() => {
@@ -229,8 +234,12 @@ export function useTheme({
 
   // Get current theme colors
   const getCurrentThemeColors = useCallback(() => {
-    return processedConfig.colors;
-  }, [processedConfig.colors]);
+    return {
+      background: processedConfig.background,
+      foreground: processedConfig.foreground,
+      tetrominoes: processedConfig.tetrominoes,
+    };
+  }, [processedConfig.background, processedConfig.foreground, processedConfig.tetrominoes]);
 
   // Check if theme is dark mode
   const isDarkMode = useCallback(() => {
@@ -284,7 +293,9 @@ export function useTheme({
     areAnimationsEnabled,
 
     // Backward compatibility
-    applyTheme: (config: ThemeConfig) => initializeTheme(config),
+    applyTheme: (_config: ThemeConfig) => {
+      /* deprecated */
+    },
   };
 }
 
@@ -293,10 +304,10 @@ export function useTheme({
 /**
  * Theme application hook for backward compatibility
  */
-export function useThemeApplication(themeConfig: ThemeConfig): void {
+export function useThemeApplication(_themeConfig: ThemeConfig): void {
   useEffect(() => {
-    initializeTheme(themeConfig);
-  }, [themeConfig]);
+    // Deprecated - using new unified theme system
+  }, []);
 }
 
 /**

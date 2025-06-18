@@ -41,6 +41,10 @@ export class StyleCalculator implements IStyleCalculator {
       baseClassName += ` ${this.theme.ghost}`;
     } else {
       baseClassName += ` ${this.theme.filled}`;
+      // Only add piece-specific CSS class if cell is a tetromino type (not color code)
+      if (!cell.startsWith('#')) {
+        baseClassName += ` piece-${cell}`;
+      }
     }
 
     // Apply flashing effect for line clearing
@@ -56,11 +60,17 @@ export class StyleCalculator implements IStyleCalculator {
 
     // Apply background color for filled cells
     if (cell && cell !== 'ghost') {
-      // Override background color during flashing effect
       if (context.isFlashing) {
         style.backgroundColor = '#ffffff';
       } else {
-        style.backgroundColor = cell;
+        // Check if cell is a color code (starts with #) or tetromino type
+        if (typeof cell === 'string' && cell.startsWith('#')) {
+          // Direct color from piece.color
+          style.backgroundColor = cell;
+        } else {
+          // CSS variable for tetromino type
+          style.backgroundColor = `var(--tetromino-${cell.toLowerCase()})`;
+        }
       }
     }
 

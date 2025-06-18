@@ -75,13 +75,14 @@ const TetrisBoard = memo(function TetrisBoard({
 
             return (
               <div key={`${y}-${x}`} className={cellStyle.className} style={cellStyle.style}>
-                {/* Neon effect for filled pieces */}
+                {/* Neon glow effect - uses same color as parent */}
                 {cell && cell !== 'ghost' && (
                   <div
-                    className='absolute inset-0 bg-current'
+                    className='absolute inset-0 pointer-events-none'
                     style={{
-                      opacity: 'var(--piece-glow-opacity)',
-                      filter: 'blur(var(--piece-glow-blur))',
+                      backgroundColor: 'inherit',
+                      opacity: 0.3,
+                      filter: 'blur(1px)',
                     }}
                   />
                 )}

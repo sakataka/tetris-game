@@ -5,19 +5,7 @@
  * through a unified interface
  */
 
-// Mock factories
-export {
-  createMockAudioManager,
-  createMockAudioSystem,
-  createMockDOMEnvironment,
-  createMockGameStateStore,
-  createMockStatisticsStore,
-  createMockStore,
-  createTestFixtures,
-  expectToThrow,
-  measurePerformance,
-  setupAsyncTest,
-} from './mockFactory';
+// Note: mockFactory was removed as part of theme system simplification
 
 // Common test utilities
 export * from './testUtils';

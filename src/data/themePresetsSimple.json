@@ -1,0 +1,72 @@
+{
+  "cyberpunk": {
+    "name": "Cyberpunk",
+    "background": "#0a0a15",
+    "foreground": "#f0f0ff",
+    "tetrominoes": {
+      "I": "#00ffff",
+      "O": "#ffaa00",
+      "T": "#9900ff",
+      "S": "#00ff88",
+      "Z": "#ff0055",
+      "J": "#0088ff",
+      "L": "#ff0099"
+    }
+  },
+  "classic": {
+    "name": "Classic",
+    "background": "#c9d93a",
+    "foreground": "#0a1a0a",
+    "tetrominoes": {
+      "I": "#0f380f",
+      "O": "#cc6600",
+      "T": "#4a5d0a",
+      "S": "#3d5c00",
+      "Z": "#cc3300",
+      "J": "#0066cc",
+      "L": "#445025"
+    }
+  },
+  "retro": {
+    "name": "Retro",
+    "background": "#2d1b69",
+    "foreground": "#f9f9f9",
+    "tetrominoes": {
+      "I": "#00d4aa",
+      "O": "#ffd700",
+      "T": "#da70d6",
+      "S": "#98fb98",
+      "Z": "#ff6347",
+      "J": "#4169e1",
+      "L": "#ff8c00"
+    }
+  },
+  "minimal": {
+    "name": "Minimal",
+    "background": "#ffffff",
+    "foreground": "#2c2c2c",
+    "tetrominoes": {
+      "I": "#007acc",
+      "O": "#ff7f00",
+      "T": "#8e44ad",
+      "S": "#27ae60",
+      "Z": "#e74c3c",
+      "J": "#3498db",
+      "L": "#f39c12"
+    }
+  },
+  "neon": {
+    "name": "Neon",
+    "background": "#000814",
+    "foreground": "#e0aaff",
+    "tetrominoes": {
+      "I": "#00f5ff",
+      "O": "#ffbf00",
+      "T": "#c77dff",
+      "S": "#39ff14",
+      "Z": "#ff073a",
+      "J": "#0080ff",
+      "L": "#ff69b4"
+    }
+  }
+}

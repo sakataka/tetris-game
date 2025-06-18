@@ -163,7 +163,7 @@ function placePieceRow(newBoard: (string | null)[][], piece: Tetromino, pieceY: 
       if (boardX >= 0 && boardX < BOARD_WIDTH) {
         const targetRow = newBoard[boardY];
         if (targetRow) {
-          targetRow[boardX] = piece.color;
+          targetRow[boardX] = piece.type; // Store piece type, not color
         }
       }
     }

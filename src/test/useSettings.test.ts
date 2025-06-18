@@ -1,10 +1,11 @@
 import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useSettings } from '../hooks/useSettings';
-import { clearTestStorage, createMockDOMEnvironment } from './fixtures';
+// Note: Mock functions were removed as part of theme system simplification
 
 // Setup DOM environment mock
-const domMocks = createMockDOMEnvironment();
+const clearTestStorage = () => { localStorage.clear(); };
+const domMocks = { localStorageMock: { clear: () => localStorage.clear() } };
 
 describe('useSettings', () => {
   beforeEach(() => {

@@ -269,6 +269,22 @@ src/
 - **Tests validate real behavior** - Hardcoding circumvents the purpose of testing
 - **Write honest implementations** - If a test fails, fix the actual implementation, not bypass it
 
+### Error Handling Philosophy
+**Critical: Root Cause Analysis**
+- **Never add temporary workarounds or guard clauses** - These mask the real problem and complicate code
+- **Always investigate the root cause first** - Understand why the error occurs, not just where
+- **Fix the source, not the symptom** - Address the fundamental issue that causes the problem
+- **Temporary fixes are debt** - They delay proper solutions and make code harder to maintain
+- **Clean, simple solutions are preferred** - The best fix addresses the core issue directly
+
+### Development Server Guidelines
+**Critical: No Blind Server Operations**
+- **Never start dev server for "verification"** - Cannot actually access or verify the results
+- **Use tests and static analysis instead** - TypeScript checks, unit tests, linting are verifiable
+- **Only start server when logs/debugging needed** - And only when you can actually capture output
+- **Time efficiency is crucial** - Don't waste time on operations that provide no feedback
+- **Prefer deterministic verification** - Tests and builds give concrete results
+
 ### React Compiler Guidelines
 **DO:**
 - Write clean, readable code

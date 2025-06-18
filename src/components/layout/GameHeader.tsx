@@ -1,6 +1,5 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useCurrentTheme } from '../../store/themeStore';
 
 interface GameHeaderProps {
   showTitle?: boolean;
@@ -26,22 +25,15 @@ const GameHeader = memo(function GameHeader({
   className = '',
 }: GameHeaderProps) {
   const { t } = useTranslation();
-  const currentTheme = useCurrentTheme();
 
   if (!showTitle) {
     return null;
   }
 
-  // Define which themes should have gradients
-  const gradientThemes = ['cyberpunk', 'neon', 'retro'];
-  const hasGradients = gradientThemes.includes(currentTheme);
-
   const getTitleClasses = () => {
     const baseClasses = [
       'font-bold relative tracking-wider',
-      hasGradients
-        ? 'bg-gradient-to-r from-theme-primary via-theme-secondary to-theme-tertiary bg-clip-text text-transparent'
-        : 'text-theme-primary', // Use primary color for better brand consistency
+      'text-theme-foreground', // Always use theme foreground color for consistency
     ];
 
     switch (variant) {
@@ -54,7 +46,7 @@ const GameHeader = memo(function GameHeader({
     }
   };
 
-  const shouldShowEffects = variant !== 'minimal' && hasGradients;
+  const shouldShowEffects = variant !== 'minimal';
 
   return (
     <header className={`text-center ${className}`}>
@@ -62,11 +54,7 @@ const GameHeader = memo(function GameHeader({
         <h1 className={getTitleClasses()}>
           <span className='relative z-10'>{t('app.title', 'TETRIS')}</span>
           {shouldShowEffects && (
-            <div className='absolute -inset-1 bg-gradient-to-r from-theme-primary via-theme-secondary to-theme-tertiary rounded-lg blur opacity-20' />
-          )}
-          {/* Subtle glow for all themes */}
-          {!hasGradients && variant !== 'minimal' && (
-            <div className='absolute inset-0 bg-theme-primary opacity-10 rounded blur-sm' />
+            <div className='absolute inset-0 bg-theme-foreground opacity-10 rounded blur-sm' />
           )}
         </h1>
       </div>

@@ -1,14 +1,20 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { ColorBlindnessType, ContrastLevel, ThemeState, ThemeVariant } from '../types/tetris';
-import { applyUnifiedThemeToDocument, getUnifiedThemeConfig, type UnifiedThemeConfig } from '../utils/ui/unifiedThemeSystem';
+import {
+  applyUnifiedThemeToDocument,
+  getUnifiedThemeConfig,
+  type UnifiedThemeConfig,
+} from '../utils/ui/unifiedThemeSystem';
 
 // Default theme state
 const DEFAULT_THEME_STATE: ThemeState = {
   current: 'cyberpunk' as ThemeVariant,
   effectIntensity: 1.0,
   animations: true,
-  config: getUnifiedThemeConfig('cyberpunk') as unknown as UnifiedThemeConfig | Record<string, unknown>,
+  config: getUnifiedThemeConfig('cyberpunk') as unknown as
+    | UnifiedThemeConfig
+    | Record<string, unknown>,
   accessibility: {
     colorBlindnessType: 'none' as ColorBlindnessType,
     contrast: 'normal' as ContrastLevel,
@@ -46,7 +52,9 @@ export const useThemeStore = create<ThemeStore>()(
           theme: {
             ...state.theme,
             current: themeVariant,
-            config: getUnifiedThemeConfig(themeVariant) as unknown as UnifiedThemeConfig | Record<string, unknown>,
+            config: getUnifiedThemeConfig(themeVariant) as unknown as
+              | UnifiedThemeConfig
+              | Record<string, unknown>,
           },
         }));
       },
@@ -63,7 +71,12 @@ export const useThemeStore = create<ThemeStore>()(
             accessibility: { ...state.theme.accessibility, ...accessibility },
             config: {
               ...state.theme.config,
-              accessibility: { ...(state.theme.config['accessibility'] as Record<string, unknown> || {}), ...accessibility },
+              accessibility: {
+                ...(state.theme.config && 'accessibility' in state.theme.config
+                  ? (state.theme.config as { accessibility: Record<string, unknown> }).accessibility
+                  : {}),
+                ...accessibility,
+              },
             },
           },
         })),

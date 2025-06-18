@@ -1,6 +1,8 @@
 import React, { useId } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ThemeVariant } from '../types/tetris';
-import { THEME_PRESETS } from '../utils/ui/unifiedThemeSystem';
+import { getTetrominoColors } from '../utils/ui/themeAwareTetrominoes';
+import { getUnifiedThemeConfig } from '../utils/ui/unifiedThemeSystem';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 interface ThemeSelectorProps {
@@ -14,6 +16,7 @@ export default function ThemeSelector({
   onThemeChange,
   className = '',
 }: ThemeSelectorProps) {
+  const { t } = useTranslation();
   // Generate unique ID for form element
   const themeSelectorId = useId();
 
@@ -21,7 +24,28 @@ export default function ThemeSelector({
     onThemeChange(value as ThemeVariant);
   };
 
-  const themes = Object.entries(THEME_PRESETS);
+  // Use the EXACT same source as actual game rendering
+  const currentThemeConfig = getUnifiedThemeConfig(currentTheme);
+  
+  // Get all available themes using the same function as actual rendering
+  const themes: Array<{ variant: ThemeVariant; config: typeof currentThemeConfig; name: string }> = (
+    ['cyberpunk', 'classic', 'retro', 'minimal', 'neon'] as ThemeVariant[]
+  ).map((variant) => ({
+    variant,
+    config: getUnifiedThemeConfig(variant),
+    name: getUnifiedThemeConfig(variant).name
+  }));
+  const actualTetrominoColors = getTetrominoColors(currentTheme);
+
+  // Get actual colors from CSS variables (same as game uses)
+  const actualBackgroundColor =
+    typeof window !== 'undefined'
+      ? getComputedStyle(document.documentElement).getPropertyValue('--theme-background').trim()
+      : currentThemeConfig.background;
+  const actualForegroundColor =
+    typeof window !== 'undefined'
+      ? getComputedStyle(document.documentElement).getPropertyValue('--theme-foreground').trim()
+      : currentThemeConfig.foreground;
 
   return (
     <div className={`theme-selector ${className}`}>
@@ -29,78 +53,100 @@ export default function ThemeSelector({
         <SelectTrigger
           id={themeSelectorId}
           data-testid='theme-selector'
-          className='w-full p-3 rounded-lg bg-theme-primary/10 border border-theme-primary/30 
-                     text-foreground focus:outline-none focus:ring-2 focus:ring-theme-primary
-                     hover:bg-theme-primary/20 transition-colors
-                     [&>span]:text-foreground'
+          className='w-full p-3 rounded-lg border focus:outline-none focus:ring-2 transition-colors'
+          style={{
+            backgroundColor: actualBackgroundColor,
+            borderColor: `${actualForegroundColor}40`, // 25% opacity
+            color: actualForegroundColor,
+          }}
         >
           <SelectValue />
         </SelectTrigger>
-        <SelectContent className='bg-background border-theme-primary/30'>
-          {themes.map(([variant, config]) => (
+        <SelectContent
+          className='border rounded-lg'
+          style={{
+            backgroundColor: actualBackgroundColor,
+            borderColor: `${actualForegroundColor}40`,
+          }}
+        >
+          {themes.map(({ variant, name }) => (
             <SelectItem
               key={variant}
               value={variant}
-              className='text-foreground hover:bg-theme-primary/20 focus:bg-theme-primary/20 focus:text-theme-primary'
+              className='transition-colors'
+              style={{
+                color: actualForegroundColor,
+              }}
             >
-              {config.name}
+              {name}
             </SelectItem>
           ))}
         </SelectContent>
       </Select>
 
-      {/* Theme preview - Role-based color display */}
-      <div className='mt-3 p-3 rounded-lg bg-theme-primary/10 border border-theme-primary/30'>
-        <div className='text-xs text-theme-foreground mb-2 font-medium'>Color Roles:</div>
-        <div className='space-y-2'>
-          {/* Background colors row */}
-          <div className='flex items-center gap-2'>
-            <span className='text-xs text-theme-muted w-16'>背景:</span>
+      {/* Simplified theme preview - Only 3 color types */}
+      <div
+        className='mt-3 p-3 rounded-lg border'
+        style={{
+          backgroundColor: actualBackgroundColor,
+          borderColor: `${actualForegroundColor}40`,
+        }}
+      >
+        <div className='text-xs mb-3 font-medium' style={{ color: actualForegroundColor }}>
+          {t('themes.preview')}
+        </div>
+
+        {/* Background & Foreground */}
+        <div className='mb-3'>
+          <div className='flex items-center gap-4 mb-2'>
+            <span className='text-xs w-20 opacity-70' style={{ color: actualForegroundColor }}>
+              Background:
+            </span>
             <div
-              className='w-6 h-6 rounded border border-theme-primary/30'
-              style={{ backgroundColor: THEME_PRESETS[currentTheme].colors.background }}
-              title={`Background: ${THEME_PRESETS[currentTheme].colors.background}`}
-            />
-            <div
-              className='w-6 h-6 rounded border border-theme-primary/30'
-              style={{ backgroundColor: THEME_PRESETS[currentTheme].colors.surface }}
-              title={`Surface: ${THEME_PRESETS[currentTheme].colors.surface}`}
+              className='w-6 h-6 rounded border'
+              style={{
+                backgroundColor: actualBackgroundColor,
+                borderColor: `${actualForegroundColor}60`,
+              }}
+              title={`Background: ${actualBackgroundColor}`}
             />
           </div>
-
-          {/* Text and accent colors row */}
-          <div className='flex items-center gap-2'>
-            <span className='text-xs text-theme-muted w-16'>文字:</span>
+          <div className='flex items-center gap-4 mb-2'>
+            <span className='text-xs w-20 opacity-70' style={{ color: actualForegroundColor }}>
+              Text:
+            </span>
             <div
-              className='w-6 h-6 rounded border border-theme-primary/30'
-              style={{ backgroundColor: THEME_PRESETS[currentTheme].colors.foreground }}
-              title={`Foreground: ${THEME_PRESETS[currentTheme].colors.foreground}`}
-            />
-            <div
-              className='w-6 h-6 rounded border border-theme-primary/30'
-              style={{ backgroundColor: THEME_PRESETS[currentTheme].colors.muted }}
-              title={`Muted: ${THEME_PRESETS[currentTheme].colors.muted}`}
+              className='w-6 h-6 rounded border'
+              style={{
+                backgroundColor: actualForegroundColor,
+                borderColor: `${actualForegroundColor}60`,
+              }}
+              title={`Text: ${actualForegroundColor}`}
             />
           </div>
+        </div>
 
-          {/* Primary colors row */}
-          <div className='flex items-center gap-2'>
-            <span className='text-xs text-theme-muted w-16'>強調:</span>
-            <div
-              className='w-6 h-6 rounded border border-theme-primary/30'
-              style={{ backgroundColor: THEME_PRESETS[currentTheme].colors.primary }}
-              title={`Primary: ${THEME_PRESETS[currentTheme].colors.primary}`}
-            />
-            <div
-              className='w-6 h-6 rounded border border-theme-primary/30'
-              style={{ backgroundColor: THEME_PRESETS[currentTheme].colors.secondary }}
-              title={`Secondary: ${THEME_PRESETS[currentTheme].colors.secondary}`}
-            />
-            <div
-              className='w-6 h-6 rounded border border-theme-primary/30'
-              style={{ backgroundColor: THEME_PRESETS[currentTheme].colors.accent }}
-              title={`Accent: ${THEME_PRESETS[currentTheme].colors.accent}`}
-            />
+        {/* Tetromino Colors - Using EXACT same source as game */}
+        <div>
+          <div className='text-xs mb-2 font-medium' style={{ color: actualForegroundColor }}>
+            {t('themes.tetrominoColors')}
+          </div>
+          <div className='flex items-center gap-1 flex-wrap'>
+            {Object.entries(actualTetrominoColors).map(([piece, color]) => (
+              <div key={piece} className='flex flex-col items-center gap-1'>
+                <div
+                  className='w-5 h-5 rounded border'
+                  style={{
+                    backgroundColor: color,
+                    borderColor: `${actualForegroundColor}60`,
+                  }}
+                  title={`${piece} piece: ${color}`}
+                />
+                <span className='text-xs opacity-60' style={{ color: actualForegroundColor }}>
+                  {piece}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </div>

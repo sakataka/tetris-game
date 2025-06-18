@@ -25,7 +25,7 @@ export {
 } from './errors';
 export * from './events';
 export * from './generics';
-export * from './guards';
+// Note: guards was removed as part of theme system simplification
 // Core game types
 export * from './tetris';
 // Utility types (avoiding conflicts with generics.ts)

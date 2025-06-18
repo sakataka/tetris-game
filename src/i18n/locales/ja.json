@@ -101,7 +101,24 @@
     "primary": "プライマリ",
     "secondary": "セカンダリ",
     "accent": "アクセント",
-    "background": "背景"
+    "background": "背景",
+    "preview": "テーマプレビュー:",
+    "uiColors": "UI色:",
+    "tetrominoColors": "テトロミノ色:",
+    "colorLabels": {
+      "background": "背景",
+      "text": "文字",
+      "theme": "強調"
+    },
+    "colorUsage": {
+      "backgroundMain": "背景 (アプリメイン)",
+      "surface": "サーフェス (パネル/カード)",
+      "foregroundPrimary": "前景 (メインテキスト)",
+      "muted": "ミュート (セカンダリテキスト)",
+      "primaryUsage": "プライマリ (ボタン/ボーダー/フォーカス)",
+      "secondaryRare": "セカンダリ (あまり使用されない)",
+      "accentRare": "アクセント (あまり使用されない)"
+    }
   },
   "statistics": {
     "title": "統計",

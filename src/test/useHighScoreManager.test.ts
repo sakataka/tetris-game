@@ -2,10 +2,13 @@ import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useHighScoreManager } from '../hooks/useHighScoreManager';
 import type { GameState } from '../types/tetris';
-import { createTestFixtures } from './fixtures';
+// Note: createTestFixtures was removed as part of theme system simplification
 
 // Create test fixtures and mocks
-const fixtures = createTestFixtures();
+const fixtures = {
+  highScores: [] as Array<{ id: string; score: number; level: number; lines: number; date: number }>,
+  statistics: { totalGames: 0, totalScore: 0, totalLines: 0, averageScore: 0 }
+};
 const mockActions = {
   addHighScore: vi.fn(),
   updateStatistics: vi.fn(),

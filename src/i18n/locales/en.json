@@ -98,10 +98,10 @@
     "custom": "Custom",
     "resetToDefault": "Reset to Default",
     "customColors": "Custom Colors",
-    "primary": "Primary",
-    "secondary": "Secondary",
-    "accent": "Accent",
-    "background": "Background"
+    "background": "Background",
+    "foreground": "Text",
+    "preview": "Theme Preview:",
+    "tetrominoColors": "Tetromino Colors:"
   },
   "statistics": {
     "title": "Statistics",
