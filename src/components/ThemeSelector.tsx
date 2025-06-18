@@ -107,7 +107,7 @@ export default function ThemeSelector({
                 backgroundColor: actualBackgroundColor,
                 borderColor: `${actualForegroundColor}60`,
               }}
-              title={`Background: ${actualBackgroundColor}`}
+              title={t('themes.backgroundTooltip', { color: actualBackgroundColor })}
             />
           </div>
           <div className='flex items-center gap-4 mb-2'>
@@ -120,7 +120,7 @@ export default function ThemeSelector({
                 backgroundColor: actualForegroundColor,
                 borderColor: `${actualForegroundColor}60`,
               }}
-              title={`Text: ${actualForegroundColor}`}
+              title={t('themes.textTooltip', { color: actualForegroundColor })}
             />
           </div>
         </div>
@@ -139,7 +139,7 @@ export default function ThemeSelector({
                     backgroundColor: color,
                     borderColor: `${actualForegroundColor}60`,
                   }}
-                  title={`${piece} piece: ${color}`}
+                  title={t('themes.pieceTooltip', { piece, color })}
                 />
                 <span className='text-xs opacity-60' style={{ color: actualForegroundColor }}>
                   {piece}

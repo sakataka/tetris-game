@@ -102,9 +102,13 @@
     "secondary": "セカンダリ",
     "accent": "アクセント",
     "background": "背景",
+    "foreground": "文字",
     "preview": "テーマプレビュー:",
     "uiColors": "UI色:",
     "tetrominoColors": "テトロミノ色:",
+    "backgroundTooltip": "背景: {{color}}",
+    "textTooltip": "文字: {{color}}",
+    "pieceTooltip": "{{piece}}ピース: {{color}}",
     "colorLabels": {
       "background": "背景",
       "text": "文字",
@@ -122,6 +126,7 @@
   },
   "statistics": {
     "title": "統計",
+    "getStarted": "はじめに",
     "highScores": "ハイスコア",
     "rank": "順位",
     "gamesPlayed": "プレイ回数",
@@ -267,7 +272,8 @@
     "unmuteAudio": "音声のミュートを解除",
     "changeTheme": "テーマを変更",
     "changeLanguage": "言語を変更",
-    "closeNotification": "通知を閉じる"
+    "closeNotification": "通知を閉じる",
+    "closeDialog": "ダイアログを閉じる"
   },
   "errors": {
     "systemError": "システムエラー",

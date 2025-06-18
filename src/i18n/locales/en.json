@@ -101,10 +101,14 @@
     "background": "Background",
     "foreground": "Text",
     "preview": "Theme Preview:",
-    "tetrominoColors": "Tetromino Colors:"
+    "tetrominoColors": "Tetromino Colors:",
+    "backgroundTooltip": "Background: {{color}}",
+    "textTooltip": "Text: {{color}}",
+    "pieceTooltip": "{{piece}} piece: {{color}}"
   },
   "statistics": {
     "title": "Statistics",
+    "getStarted": "Get Started",
     "highScores": "High Scores",
     "rank": "Rank",
     "gamesPlayed": "Games Played",
@@ -247,7 +251,8 @@
     "unmuteAudio": "Unmute audio",
     "changeTheme": "Change theme",
     "changeLanguage": "Change language",
-    "closeNotification": "Close notification"
+    "closeNotification": "Close notification",
+    "closeDialog": "Close dialog"
   },
   "errors": {
     "systemError": "System Error",
