@@ -1,17 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  /* Legacy aliases for compatibility */
-  --background: var(--theme-background);
-  --foreground: var(--theme-foreground);
-
-  /* ===== SIMPLIFIED THEME COLORS ===== */
-  /* Only 3 types: background, foreground, and tetromino colors */
+  /* ===== CORE THEME COLORS ===== */
+  /* Simplified theme system with only background and foreground */
   --theme-background: #0a0a0f;
   --theme-foreground: #ffffff;
 
-  /* ===== SHADCN/UI COMPATIBILITY COLORS ===== */
-  /* These are required for the checkbox, switch, and other UI components */
+  /* ===== SHADCN/UI COMPATIBILITY ===== */
+  /* Required for shadcn/ui components (checkbox, switch, button, etc.) */
+  --background: var(--theme-background);
+  --foreground: var(--theme-foreground);
   --primary: var(--theme-foreground);
   --primary-foreground: var(--theme-background);
   --input: color-mix(in srgb, var(--theme-foreground) 10%, var(--theme-background));
@@ -20,17 +18,18 @@
   --destructive: #ff0040;
   --muted: color-mix(in srgb, var(--theme-foreground) 30%, var(--theme-background));
 
-  /* Tetromino piece colors */
-  --tetromino-i: #00ffff;
-  --tetromino-o: #ffaa00;
-  --tetromino-t: #9900ff;
-  --tetromino-s: #00ff88;
-  --tetromino-z: #ff0055;
-  --tetromino-j: #0088ff;
-  --tetromino-l: #ff0099;
+  /* ===== TETROMINO PIECE COLORS ===== */
+  /* Fixed colors for tetromino pieces - independent of theme */
+  --tetromino-i: #00ffff; /* I-piece: Cyan */
+  --tetromino-o: #ffaa00; /* O-piece: Orange */
+  --tetromino-t: #9900ff; /* T-piece: Purple */
+  --tetromino-s: #00ff88; /* S-piece: Green */
+  --tetromino-z: #ff0055; /* Z-piece: Red */
+  --tetromino-j: #0088ff; /* J-piece: Blue */
+  --tetromino-l: #ff0099; /* L-piece: Magenta */
 }
 
-/* Base styles */
+/* ===== BASE STYLES ===== */
 body {
   background-color: var(--theme-background);
   color: var(--theme-foreground);
@@ -39,7 +38,8 @@ body {
   padding: 0;
 }
 
-/* Game board styles */
+/* ===== GAME-SPECIFIC STYLES ===== */
+/* Tetris board cells */
 .tetris-cell {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -48,30 +48,39 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-/* Tetromino piece styles */
+/* Tetromino piece colors */
 .piece-I {
   background-color: var(--tetromino-i);
 }
+
 .piece-O {
   background-color: var(--tetromino-o);
 }
+
 .piece-T {
   background-color: var(--tetromino-t);
 }
+
 .piece-S {
   background-color: var(--tetromino-s);
 }
+
 .piece-Z {
   background-color: var(--tetromino-z);
 }
+
 .piece-J {
   background-color: var(--tetromino-j);
 }
+
 .piece-L {
   background-color: var(--tetromino-l);
 }
 
-/* Theme-aware utility classes */
+/* ===== THEME-AWARE UTILITY CLASSES ===== */
+/* Unified theme system using only theme-background and theme-foreground */
+
+/* Text colors */
 .text-theme-background {
   color: var(--theme-background);
 }
@@ -80,14 +89,7 @@ body {
   color: var(--theme-foreground);
 }
 
-.text-theme-primary {
-  color: var(--primary);
-}
-
-.text-theme-secondary {
-  color: var(--theme-foreground);
-}
-
+/* Background colors */
 .bg-theme-background {
   background-color: var(--theme-background);
 }
@@ -96,14 +98,11 @@ body {
   background-color: var(--theme-foreground);
 }
 
-.bg-theme-primary {
-  background-color: var(--primary);
-}
-
 .bg-theme-surface {
   background-color: color-mix(in srgb, var(--theme-foreground) 5%, var(--theme-background));
 }
 
+/* Border colors */
 .border-theme-background {
   border-color: var(--theme-background);
 }
@@ -112,28 +111,7 @@ body {
   border-color: var(--theme-foreground);
 }
 
-.border-theme-primary {
-  border-color: var(--primary);
-}
-
-.border-theme-muted {
-  border-color: var(--muted);
-}
-
-/* Shadow utilities for theme colors */
-.shadow-theme-primary {
-  box-shadow: 0 4px 6px -1px color-mix(in srgb, var(--primary) 10%, transparent), 0 2px 4px -2px color-mix(in srgb, var(--primary) 10%, transparent);
-}
-
-.shadow-theme-secondary {
-  box-shadow: 0 4px 6px -1px color-mix(in srgb, var(--theme-foreground) 10%, transparent), 0 2px 4px -2px color-mix(in srgb, var(--theme-foreground) 10%, transparent);
-}
-
-.shadow-theme-accent {
-  box-shadow: 0 4px 6px -1px color-mix(in srgb, var(--theme-foreground) 20%, transparent), 0 2px 4px -2px color-mix(in srgb, var(--theme-foreground) 20%, transparent);
-}
-
-/* Opacity utilities for theme colors */
+/* Border opacity utilities */
 .border-opacity-30 {
   border-color: color-mix(in srgb, var(--theme-foreground) 30%, transparent);
 }
@@ -142,38 +120,11 @@ body {
   border-color: color-mix(in srgb, var(--theme-foreground) 60%, transparent);
 }
 
+/* Opacity utilities */
 .opacity-60 {
   opacity: 0.6;
 }
 
 .opacity-70 {
   opacity: 0.7;
-}
-
-/* Basic UI styles */
-button {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: var(--theme-foreground);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-button:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-button:focus {
-  outline: 2px solid rgba(255, 255, 255, 0.5);
-  outline-offset: 2px;
-}
-
-/* Card/panel styles */
-.panel {
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0.5rem;
-  padding: 1rem;
 }
