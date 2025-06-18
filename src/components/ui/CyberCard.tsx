@@ -47,10 +47,10 @@ const CYBER_THEMES: Record<
   }
 > = {
   primary: {
-    cardClass: 'bg-theme-primary/15 border-theme-primary/40',
-    titleClass: 'text-theme-primary',
-    backgroundClass: 'bg-theme-primary-20',
-    borderGlow: 'border border-theme-primary-40',
+    cardClass: 'bg-theme-foreground/15 border-theme-foreground/40',
+    titleClass: 'text-theme-foreground',
+    backgroundClass: 'bg-theme-foreground-20',
+    borderGlow: 'border border-theme-foreground-40',
   },
   default: {
     cardClass: 'bg-theme-surface/50 border-theme-border/40',
@@ -59,8 +59,8 @@ const CYBER_THEMES: Record<
     borderGlow: 'border border-theme-border/50',
   },
   muted: {
-    cardClass: 'bg-theme-muted/10 border-theme-muted/30',
-    titleClass: 'text-theme-muted',
+    cardClass: 'bg-theme-foreground/10 border-theme-foreground/30',
+    titleClass: 'text-theme-foreground opacity-70',
     backgroundClass: 'bg-theme-surface/30',
     borderGlow: 'border border-theme-border/30',
   },

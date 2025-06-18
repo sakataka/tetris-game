@@ -26,15 +26,15 @@ const buttonVariants = cva(
       variant: {
         // Primary: Main actions (Start, Pause, Resume) - Uses theme's primary color palette
         primary:
-          'bg-theme-primary/15 text-theme-primary border border-theme-primary/50 hover:bg-theme-primary/25 hover:border-theme-primary/70 hover:shadow-lg hover:shadow-theme-primary/20 transition-all duration-200',
+          'bg-theme-foreground/15 text-theme-foreground border border-theme-foreground/50 hover:bg-theme-foreground/25 hover:border-theme-foreground/70 hover:shadow-lg hover:shadow-theme-primary/20 transition-all duration-200',
 
         // Secondary: Options and settings - Uses theme's secondary color palette
         secondary:
-          'bg-theme-secondary/15 text-theme-secondary border border-theme-secondary/50 hover:bg-theme-secondary/25 hover:border-theme-secondary/70 hover:shadow-lg hover:shadow-theme-secondary/20 transition-all duration-200',
+          'bg-theme-foreground/15 text-theme-foreground border border-theme-foreground/50 hover:bg-theme-foreground/25 hover:border-theme-foreground/70 hover:shadow-lg hover:shadow-theme-secondary/20 transition-all duration-200',
 
         // Ghost: Destructive or low-priority actions (Reset, Clear) - Uses theme's accent/warning colors
         ghost:
-          'bg-transparent text-theme-accent border border-theme-accent/30 hover:bg-theme-accent/15 hover:text-theme-accent hover:border-theme-accent/60 hover:shadow-md hover:shadow-theme-accent/15 transition-all duration-200',
+          'bg-transparent text-theme-foreground border border-theme-foreground/30 hover:bg-theme-foreground/15 hover:text-theme-foreground hover:border-theme-foreground/60 hover:shadow-md hover:shadow-theme-accent/15 transition-all duration-200',
       },
       size: {
         default: 'h-10 px-4 py-2 has-[>svg]:px-3', // 40px height (8-point grid: 5 units)

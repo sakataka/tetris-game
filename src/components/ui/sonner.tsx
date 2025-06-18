@@ -16,17 +16,17 @@ const Toaster = ({ ...props }: ToasterProps) => {
       toastOptions={{
         classNames: {
           toast:
-            'group-[.toaster]:bg-background/90 group-[.toaster]:text-foreground group-[.toaster]:border-theme-primary/30 group-[.toaster]:backdrop-blur-sm group-[.toaster]:shadow-lg',
+            'group-[.toaster]:bg-background/90 group-[.toaster]:text-foreground group-[.toaster]:border-theme-foreground/30 group-[.toaster]:backdrop-blur-sm group-[.toaster]:shadow-lg',
           description: 'group-[.toaster]:text-cyber-purple',
-          actionButton: 'group-[.toaster]:bg-theme-primary group-[.toaster]:text-background',
-          cancelButton: 'group-[.toaster]:bg-theme-error/20 group-[.toaster]:text-theme-error',
+          actionButton: 'group-[.toaster]:bg-theme-foreground group-[.toaster]:text-background',
+          cancelButton: 'group-[.toaster]:bg-theme-foreground/20 group-[.toaster]:text-theme-foreground',
           error:
-            'group-[.toaster]:bg-theme-error/10 group-[.toaster]:border-theme-error/30 group-[.toaster]:text-theme-error',
+            'group-[.toaster]:bg-theme-foreground/10 group-[.toaster]:border-theme-foreground/30 group-[.toaster]:text-theme-foreground',
           success:
-            'group-[.toaster]:bg-theme-success/10 group-[.toaster]:border-theme-success/30 group-[.toaster]:text-theme-success',
+            'group-[.toaster]:bg-theme-foreground/10 group-[.toaster]:border-theme-foreground/30 group-[.toaster]:text-theme-foreground',
           warning:
-            'group-[.toaster]:bg-theme-warning/10 group-[.toaster]:border-theme-warning/30 group-[.toaster]:text-theme-warning',
-          info: 'group-[.toaster]:bg-theme-secondary/10 group-[.toaster]:border-theme-secondary/30 group-[.toaster]:text-theme-secondary',
+            'group-[.toaster]:bg-theme-foreground/10 group-[.toaster]:border-theme-foreground/30 group-[.toaster]:text-theme-foreground',
+          info: 'group-[.toaster]:bg-theme-foreground/10 group-[.toaster]:border-theme-foreground/30 group-[.toaster]:text-theme-foreground',
         },
       }}
       {...props}

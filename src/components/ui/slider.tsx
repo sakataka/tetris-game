@@ -38,14 +38,14 @@ function Slider({
         data-slot='slider-track'
         className={cn(
           'bg-muted relative grow overflow-hidden rounded-full data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5',
-          'bg-theme-muted'
+          'bg-theme-foreground/20'
         )}
       >
         <SliderPrimitive.Range
           data-slot='slider-range'
           className={cn(
             'bg-primary absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full',
-            'bg-theme-primary'
+            'bg-theme-foreground'
           )}
         />
       </SliderPrimitive.Track>
@@ -55,7 +55,7 @@ function Slider({
           key={index}
           className={cn(
             'border-primary bg-background ring-ring/50 block size-4 shrink-0 rounded-full border shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50',
-            'border-theme-primary bg-theme-primary ring-theme-primary/50 shadow-[0_0_10px_var(--theme-primary-shadow)]',
+            'border-theme-foreground bg-theme-foreground ring-theme-primary/50 shadow-[0_0_10px_var(--theme-primary-shadow)]',
             'hover:ring-theme-primary/50 focus-visible:ring-theme-primary/50'
           )}
         />

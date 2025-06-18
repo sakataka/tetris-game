@@ -12,13 +12,13 @@ const alertVariants = cva(
         destructive:
           'text-destructive bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-destructive/90',
         cyberpunk:
-          'bg-theme-surface/90 border-theme-primary/30 text-theme-foreground shadow-[0_0_15px_rgba(var(--theme-primary),0.3)] backdrop-blur-sm',
+          'bg-theme-surface/90 border-theme-foreground/30 text-theme-foreground shadow-[0_0_15px_rgba(var(--theme-primary),0.3)] backdrop-blur-sm',
         'cyberpunk-warning':
-          'bg-theme-warning/10 border-theme-warning/50 text-theme-warning shadow-[0_0_15px_rgba(var(--theme-warning),0.3)] backdrop-blur-sm',
+          'bg-theme-foreground/10 border-theme-foreground/50 text-theme-foreground shadow-[0_0_15px_rgba(var(--theme-warning),0.3)] backdrop-blur-sm',
         'cyberpunk-error':
-          'bg-theme-error/10 border-theme-error/50 text-theme-error shadow-[0_0_15px_rgba(var(--theme-error),0.3)] backdrop-blur-sm',
+          'bg-theme-foreground/10 border-theme-foreground/50 text-theme-foreground shadow-[0_0_15px_rgba(var(--theme-error),0.3)] backdrop-blur-sm',
         'cyberpunk-success':
-          'bg-theme-success/10 border-theme-success/50 text-theme-success shadow-[0_0_15px_rgba(var(--theme-success),0.3)] backdrop-blur-sm',
+          'bg-theme-foreground/10 border-theme-foreground/50 text-theme-foreground shadow-[0_0_15px_rgba(var(--theme-success),0.3)] backdrop-blur-sm',
       },
     },
     defaultVariants: {
