@@ -37,10 +37,11 @@ const PausedOverlay = memo(function PausedOverlay({ isVisible, onResume }: Pause
             <div className='flex justify-center'>
               <Button
                 onClick={onResume}
-                className='px-8 py-3 bg-gradient-to-r from-theme-primary to-theme-accent hover:from-theme-primary/80 hover:to-theme-accent/80 font-bold transition-all duration-300 transform hover:scale-105 shadow-[0_0_20px_rgba(var(--theme-primary),0.3)] hover:shadow-[0_0_30px_rgba(var(--theme-primary),0.5)] border border-theme-primary/50 relative overflow-hidden font-mono'
+                variant="primary"
+                size="lg"
+                className='px-8 font-bold font-mono'
               >
-                <div className='absolute inset-0 bg-gradient-to-r from-theme-primary/20 to-theme-secondary/20 blur-sm' />
-                <span className='relative'>{t('game.resume')}</span>
+                {t('game.resume')}
               </Button>
             </div>
           </div>

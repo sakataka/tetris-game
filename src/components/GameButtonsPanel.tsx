@@ -42,7 +42,7 @@ const GameButtonsPanel = memo(function GameButtonsPanel({
       <Button
         onClick={() => setShowResetConfirmation(true)}
         size={buttonSize}
-        variant="ghost"
+        variant="secondary"
         className={buttonWidthClass}
       >
         {t('buttons.reset')}
