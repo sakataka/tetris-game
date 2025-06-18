@@ -49,19 +49,20 @@ export default function ThemeSelector({
         </SelectContent>
       </Select>
 
-      {/* Theme preview */}
+      {/* Theme preview - 6 core colors */}
       <div className='mt-3 p-3 rounded-lg bg-theme-primary/10 border border-theme-primary/30'>
-        <div className='flex gap-2'>
-          {Object.entries(THEME_PRESETS[currentTheme].colors)
-            .slice(0, 3)
-            .map(([key, color]) => (
+        <div className='grid grid-cols-6 gap-2'>
+          {['primary', 'secondary', 'tertiary', 'accent', 'neutral', 'surface'].map((colorKey) => {
+            const color = THEME_PRESETS[currentTheme].colors[colorKey as keyof typeof THEME_PRESETS[typeof currentTheme]['colors']];
+            return (
               <div
-                key={key}
+                key={colorKey}
                 className='w-6 h-6 rounded border border-theme-primary/30'
                 style={{ backgroundColor: color as string }}
-                title={`${key}: ${color}`}
+                title={`${colorKey}: ${color}`}
               />
-            ))}
+            );
+          })}
         </div>
       </div>
     </div>

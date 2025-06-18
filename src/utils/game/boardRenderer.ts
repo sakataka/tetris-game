@@ -278,7 +278,7 @@ export class BoardRenderer implements IBoardRenderer {
    */
   getBoardContainerClassName(effects: RenderEffects): string {
     let className =
-      'grid grid-cols-10 gap-0 neon-border hologram transition-transform relative overflow-hidden';
+      'grid grid-cols-10 gap-0 border border-theme-primary/40 bg-theme-surface/20 transition-transform relative overflow-hidden';
 
     // Add responsive padding
     className += ' md:p-3 p-1';

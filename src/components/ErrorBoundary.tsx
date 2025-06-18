@@ -180,7 +180,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     const { retryCount } = this.state;
 
     return (
-      <div className='hologram neon-border p-6 rounded-lg text-center'>
+      <div className='bg-theme-warning/15 border border-theme-warning/40 p-6 rounded-lg text-center'>
         <div className='text-theme-warning text-4xl mb-4'>⚠️</div>
         <h3 className='text-lg font-bold text-theme-warning mb-2'>
           {i18next.t('errors.sectionError')}

@@ -81,7 +81,7 @@ const FallbackComponent = ({
   }
   if (level === 'section') {
     return (
-      <div className='hologram neon-border p-6 rounded-lg text-center'>
+      <div className='bg-theme-warning/15 border border-theme-warning/40 p-6 rounded-lg text-center'>
         <div className='text-theme-warning text-4xl mb-4'>⚠️</div>
         <h3 className='text-lg font-bold text-theme-warning mb-2'>{t('errors.sectionError')}</h3>
         <p className='text-theme-foreground text-sm mb-4'>{t('errors.sectionDisplayError')}</p>
@@ -101,7 +101,7 @@ const FallbackComponent = ({
   }
   // Default 'component' level
   return (
-    <div className='p-4 hologram neon-border rounded-lg'>
+    <div className='p-4 bg-theme-error/15 border border-theme-error/40 rounded-lg'>
       <div className='flex items-center space-x-2 text-theme-error'>
         <span className='text-2xl'>⚠️</span>
         <span className='font-bold'>{t('errors.componentError')}</span>

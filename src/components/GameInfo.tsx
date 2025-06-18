@@ -2,7 +2,6 @@ import { memo } from 'react';
 import type { Tetromino } from '../types/tetris';
 import GameTabContent from './GameTabContent';
 import MobileGameInfo from './MobileGameInfo';
-import GameHeader from './layout/GameHeader';
 
 interface GameInfoProps {
   score: number;
@@ -20,14 +19,9 @@ const GameInfo = memo(function GameInfo({
   gameOver,
 }: GameInfoProps) {
   return (
-    <div className='text-white h-full flex flex-col'>
+    <div className='text-theme-foreground h-full flex flex-col'>
       {/* Desktop: Game Title + Game Info */}
       <div className='hidden md:flex flex-col h-full space-y-4'>
-        {/* TETRIS Title with large decorative styling matching Settings */}
-        <div className='mb-4'>
-          <GameHeader variant='default' />
-        </div>
-
         {/* Game Information */}
         <div className='flex-1'>
           <GameTabContent

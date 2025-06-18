@@ -57,7 +57,7 @@ const BackgroundEffects = memo(function BackgroundEffects({
   return (
     <div className={`absolute inset-0 pointer-events-none ${className}`}>
       {/* Grid pattern overlay */}
-      <div className='absolute inset-0 bg-grid-pattern opacity-5' />
+      <div className='absolute inset-0 bg-grid-pattern opacity-3' />
 
       {/* Radial gradient effects - only for gradient themes */}
       {hasGradients && (

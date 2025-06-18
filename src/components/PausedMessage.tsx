@@ -12,13 +12,13 @@ const PausedMessage = memo(function PausedMessage({ className = '' }: PausedMess
 
   return (
     <div
-      className={cn('absolute inset-0 hologram flex items-center justify-center', className)}
+      className={cn('absolute inset-0 bg-theme-background/80 flex items-center justify-center', className)}
       style={{
         background: 'var(--overlay-background)',
         backdropFilter: 'blur(var(--overlay-blur))',
       }}
     >
-      <Alert className='max-w-md border-theme-warning/50 bg-theme-warning/10 backdrop-blur-sm neon-border'>
+      <Alert className='max-w-md border-theme-warning/50 bg-theme-warning/10 backdrop-blur-sm'>
         <AlertTitle className='text-center md:text-4xl text-2xl font-bold mb-2 md:mb-4 bg-gradient-to-r from-theme-warning to-theme-warning bg-clip-text text-transparent'>
           {t('game.paused')}
         </AlertTitle>

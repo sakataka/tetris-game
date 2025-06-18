@@ -49,7 +49,7 @@ const MainLayout = memo(function MainLayout({
       className={cn(
         'min-h-screen relative overflow-hidden',
         hasGradients
-          ? 'bg-gradient-to-br from-theme-surface via-black to-theme-surface/80'
+          ? 'bg-gradient-to-br from-theme-surface to-theme-surface/60'
           : 'bg-theme-surface',
         className
       )}
