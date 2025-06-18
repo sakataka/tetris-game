@@ -9,6 +9,7 @@ import { useCurrentTheme } from '../store/themeStore';
 import ErrorBoundary from './ErrorBoundary';
 import GameInfo from './GameInfo';
 import type { GameControllerAPI } from './GameLogicController';
+import GameHeader from './layout/GameHeader';
 import PausedOverlay from './PausedOverlay';
 import TetrisBoard from './TetrisBoard';
 import VirtualControls from './VirtualControls';
@@ -74,8 +75,15 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
           </Link>
         </div>
 
-        <div className={`relative z-10 h-dvh flex items-center justify-center ${PADDING_SCALE.sm}`}>
-          <div className={`grid grid-cols-[minmax(400px,auto)_350px] ${GAP_SCALE.md} items-stretch max-h-[calc(100vh-2rem)] max-w-7xl`}>
+        <div className={`relative z-10 h-dvh flex flex-col ${PADDING_SCALE.sm}`}>
+          {/* Game Title */}
+          <div className='flex-shrink-0 pt-4 pb-2'>
+            <GameHeader variant='compact' className='text-center' />
+          </div>
+
+          {/* Game Content */}
+          <div className='flex-1 flex items-center justify-center'>
+            <div className={`grid grid-cols-[minmax(400px,auto)_350px] ${GAP_SCALE.md} items-stretch max-h-[calc(100vh-8rem)] max-w-7xl`}>
             {/* Game Board */}
             <div className='flex items-center'>
               <ErrorBoundary level='component'>
@@ -103,6 +111,7 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
               </ErrorBoundary>
             </div>
           </div>
+        </div>
         </div>
 
         {/* Paused Overlay */}
@@ -148,8 +157,13 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
       </div>
 
       <div className='relative z-10 flex flex-col h-dvh'>
+        {/* Game Title - Mobile */}
+        <div className='flex-shrink-0 pt-2 pb-1'>
+          <GameHeader variant='minimal' className='text-center' />
+        </div>
+
         {/* Game Info Panel - Top */}
-        <div className='flex-shrink-0 px-2 pt-2'>
+        <div className='flex-shrink-0 px-2 pt-1'>
           <ErrorBoundary level='component'>
             <GameInfo
               score={gameState.score}

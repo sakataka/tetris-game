@@ -95,6 +95,7 @@ export interface SemanticColorTokens {
   accent: string;
   muted: string;
   border: string;
+  neutral: string;
 
   // Semantic feedback colors
   success: string;
@@ -129,7 +130,7 @@ function getComprehensiveThemePreset(themeVariant: ThemeVariant): ComprehensiveT
 /**
  * CSS variable mapping for dynamic theme application
  */
-const CSS_VARIABLE_MAP: Record<keyof SemanticColorTokens, string> = {
+const CSS_VARIABLE_MAP: Record<keyof Omit<SemanticColorTokens, 'neutral'> | 'neutral', string> = {
   primary: '--theme-primary',
   secondary: '--theme-secondary',
   tertiary: '--theme-tertiary',
@@ -139,6 +140,7 @@ const CSS_VARIABLE_MAP: Record<keyof SemanticColorTokens, string> = {
   accent: '--theme-accent',
   muted: '--theme-muted',
   border: '--theme-border',
+  neutral: '--theme-neutral',
   success: '--theme-success',
   warning: '--theme-warning',
   error: '--theme-error',
@@ -163,6 +165,7 @@ function mapThemeToSemanticColors(themeVariant: ThemeVariant): SemanticColorToke
     surface: preset.colors.surface,
     muted: preset.colors.muted,
     border: preset.colors.primary,
+    neutral: preset.colors.neutral || preset.colors.muted,
     success: preset.colors.success,
     warning: preset.colors.warning,
     error: preset.colors.error,

@@ -308,6 +308,7 @@ export const createTestFixtures = () => ({
       muted: '#666666',
       surface: '#1a1a2e',
       border: '#333333',
+      neutral: '#4a4a6a',
     },
     effects: {
       blur: { sm: '4px', md: '8px', lg: '12px' },

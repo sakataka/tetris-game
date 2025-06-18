@@ -28,6 +28,9 @@ export function applyThemeToCSS(config: ThemeConfig): void {
   root.style.setProperty('--theme-muted', config.colors.muted);
   root.style.setProperty('--theme-surface', config.colors.surface);
   root.style.setProperty('--theme-border', config.colors.border);
+  
+  // Set neutral color (fallback to muted if not available)
+  root.style.setProperty('--theme-neutral', config.colors.neutral || config.colors.muted);
 
   // Cyberpunk color palette (backward compatibility)
   root.style.setProperty('--cyber-cyan', config.colors.primary);

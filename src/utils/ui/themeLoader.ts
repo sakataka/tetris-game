@@ -191,6 +191,7 @@ function validateThemeConfig(data: ThemeConfigData, themeName: string): ThemeCon
       muted: colors.muted,
       surface: colors.surface,
       border: colors.border,
+      neutral: colors.neutral || colors.muted,
     },
     effects: {
       blur: effects.blur,
@@ -325,6 +326,7 @@ export function getThemePresetSync(theme: ThemeVariant): ThemeConfig {
       muted: '#666666',
       surface: '#1a1a2e',
       border: '#333333',
+      neutral: '#4a4a6a',
     },
     effects: {
       blur: { sm: '4px', md: '8px', lg: '12px' },
