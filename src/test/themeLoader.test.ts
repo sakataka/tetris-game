@@ -33,9 +33,9 @@ describe('ThemeLoader - JSON-based theme system', () => {
       expect(theme.colors.primary).toBe('#00ffff');
       expect(theme.colors.secondary).toBe('#ff00ff');
       expect(theme.colors.tertiary).toBe('#ffff00');
-      expect(theme.effects.blur).toEqual({ sm: '6px', md: '10px', lg: '16px' });
-      expect(theme.effects.glow).toEqual({ sm: '8px', md: '16px', lg: '24px' });
-      expect(theme.effects.shadow).toEqual({ sm: '4px', md: '8px', lg: '12px' });
+      expect(theme.effects.blur).toEqual({ sm: '3px', md: '6px', lg: '10px' });
+      expect(theme.effects.glow).toEqual({ sm: '4px', md: '8px', lg: '12px' });
+      expect(theme.effects.shadow).toEqual({ sm: '2px', md: '4px', lg: '6px' });
       expect(theme.effects.saturation).toBe(1.8);
       expect(theme.effects.brightness).toBe(1.2);
       expect(theme.effects.contrast).toBe(1.1);

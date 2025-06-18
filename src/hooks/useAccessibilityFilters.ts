@@ -14,7 +14,7 @@ export interface AccessibilityFiltersAPI {
  */
 export function useAccessibilityFilters(
   baseConfig: ThemeConfig,
-  accessibility: ThemeState['accessibility']
+  _accessibility: ThemeState['accessibility']
 ): AccessibilityFiltersAPI {
   const processedConfig = useMemo(() => {
     const config = { ...baseConfig };
@@ -31,7 +31,7 @@ export function useAccessibilityFilters(
     // TODO: Update this when integrating with new theme system
 
     return config;
-  }, [baseConfig, accessibility]);
+  }, [baseConfig]);
 
   return {
     processedConfig,
