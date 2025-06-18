@@ -70,7 +70,7 @@ export default function Root() {
         <Meta />
         <Links />
       </head>
-      <body className='font-geist-sans antialiased'>
+      <body className='antialiased' style={{fontFamily: 'var(--theme-font-primary)'}}>
         <I18nProvider>
           <ErrorBoundaryWithTranslation level='page'>
             <ErrorStoreInitializer />
@@ -94,7 +94,7 @@ export function ErrorBoundary() {
         <Meta />
         <Links />
       </head>
-      <body className='font-geist-sans antialiased'>
+      <body className='antialiased' style={{fontFamily: 'var(--theme-font-primary)'}}>
         <div className='min-h-screen flex items-center justify-center'>
           <div className='text-center'>
             <h1 className='text-2xl font-bold text-theme-error mb-4'>Application Error</h1>

@@ -196,16 +196,10 @@
   --cyber-red: #ff0040;
   --cyber-blue: #0080ff;
 
-  /* Legacy transparency variants - use @theme variants above */
-  --cyber-cyan-10: var(--color-cyber-cyan-10);
-  --cyber-cyan-20: var(--color-cyber-cyan-20);
-  --cyber-cyan-30: var(--color-cyber-cyan-30);
-  --cyber-cyan-60: var(--color-cyber-cyan-60);
-  --cyber-purple-10: var(--color-cyber-purple-10);
-  --cyber-purple-20: var(--color-cyber-purple-20);
-  --cyber-purple-30: var(--color-cyber-purple-30);
-  --cyber-yellow-10: var(--color-cyber-yellow-10);
-  --cyber-yellow-20: var(--color-cyber-yellow-20);
+  /* ===== COLOR USAGE GUIDELINES ===== */
+  /* Dynamic themes: var(--theme-primary), var(--theme-secondary), etc. */
+  /* Fixed cyberpunk: var(--color-cyber-cyan), var(--color-cyber-purple), etc. */
+  /* Transparency: color-mix(in oklch, var(--color) X%, transparent) */
 
   /* Legacy effect values - use @theme variants above */
   --neon-blur-sm: var(--blur-neon-sm);
@@ -235,80 +229,13 @@
   --color-foreground: var(--foreground);
 
   /* ===== SEMANTIC COLOR TOKENS FOR TAILWIND ===== */
-  /* Primary theme colors - dynamically updated */
-  --color-theme-primary: var(--theme-primary);
-  --color-theme-secondary: var(--theme-secondary);
-  --color-theme-tertiary: var(--theme-tertiary);
-  --color-theme-background: var(--theme-background);
-  --color-theme-foreground: var(--theme-foreground);
-  --color-theme-surface: var(--theme-surface);
-  --color-theme-accent: var(--theme-accent);
-  --color-theme-muted: var(--theme-muted);
-  --color-theme-border: var(--theme-border);
+  /* ===== UNIFIED COLOR SYSTEM ===== */
+  /* Note: Use --theme-* for dynamic theme-aware colors */
+  /* Use --color-cyber-* for fixed cyberpunk elements */
 
-  /* Semantic feedback colors */
-  --color-theme-success: var(--theme-success);
-  --color-theme-warning: var(--theme-warning);
-  --color-theme-error: var(--theme-error);
-  --color-theme-info: var(--theme-info);
-
-  /* Transparency variants for theme colors */
-  --color-theme-primary-5: color-mix(in oklch, var(--theme-primary) 5%, transparent);
-  --color-theme-primary-10: color-mix(in oklch, var(--theme-primary) 10%, transparent);
-  --color-theme-primary-20: color-mix(in oklch, var(--theme-primary) 20%, transparent);
-  --color-theme-primary-30: color-mix(in oklch, var(--theme-primary) 30%, transparent);
-  --color-theme-primary-40: color-mix(in oklch, var(--theme-primary) 40%, transparent);
-  --color-theme-primary-50: color-mix(in oklch, var(--theme-primary) 50%, transparent);
-  --color-theme-primary-60: color-mix(in oklch, var(--theme-primary) 60%, transparent);
-  --color-theme-primary-70: color-mix(in oklch, var(--theme-primary) 70%, transparent);
-  --color-theme-primary-80: color-mix(in oklch, var(--theme-primary) 80%, transparent);
-  --color-theme-primary-90: color-mix(in oklch, var(--theme-primary) 90%, transparent);
-
-  --color-theme-secondary-5: color-mix(in oklch, var(--theme-secondary) 5%, transparent);
-  --color-theme-secondary-10: color-mix(in oklch, var(--theme-secondary) 10%, transparent);
-  --color-theme-secondary-20: color-mix(in oklch, var(--theme-secondary) 20%, transparent);
-  --color-theme-secondary-30: color-mix(in oklch, var(--theme-secondary) 30%, transparent);
-  --color-theme-secondary-50: color-mix(in oklch, var(--theme-secondary) 50%, transparent);
-
-  --color-theme-accent-5: color-mix(in oklch, var(--theme-accent) 5%, transparent);
-  --color-theme-accent-10: color-mix(in oklch, var(--theme-accent) 10%, transparent);
-  --color-theme-accent-20: color-mix(in oklch, var(--theme-accent) 20%, transparent);
-  --color-theme-accent-30: color-mix(in oklch, var(--theme-accent) 30%, transparent);
-  --color-theme-accent-50: color-mix(in oklch, var(--theme-accent) 50%, transparent);
-
-  /* Success color transparency variants */
-  --color-theme-success-5: color-mix(in oklch, var(--theme-success) 5%, transparent);
-  --color-theme-success-10: color-mix(in oklch, var(--theme-success) 10%, transparent);
-  --color-theme-success-20: color-mix(in oklch, var(--theme-success) 20%, transparent);
-  --color-theme-success-30: color-mix(in oklch, var(--theme-success) 30%, transparent);
-  --color-theme-success-50: color-mix(in oklch, var(--theme-success) 50%, transparent);
-
-  /* Warning color transparency variants */
-  --color-theme-warning-5: color-mix(in oklch, var(--theme-warning) 5%, transparent);
-  --color-theme-warning-10: color-mix(in oklch, var(--theme-warning) 10%, transparent);
-  --color-theme-warning-20: color-mix(in oklch, var(--theme-warning) 20%, transparent);
-  --color-theme-warning-30: color-mix(in oklch, var(--theme-warning) 30%, transparent);
-  --color-theme-warning-50: color-mix(in oklch, var(--theme-warning) 50%, transparent);
-
-  /* Error color transparency variants */
-  --color-theme-error-5: color-mix(in oklch, var(--theme-error) 5%, transparent);
-  --color-theme-error-10: color-mix(in oklch, var(--theme-error) 10%, transparent);
-  --color-theme-error-20: color-mix(in oklch, var(--theme-error) 20%, transparent);
-  --color-theme-error-30: color-mix(in oklch, var(--theme-error) 30%, transparent);
-  --color-theme-error-50: color-mix(in oklch, var(--theme-error) 50%, transparent);
-
-  /* Muted and border transparency variants */
-  --color-theme-muted-5: color-mix(in oklch, var(--theme-muted) 5%, transparent);
-  --color-theme-muted-10: color-mix(in oklch, var(--theme-muted) 10%, transparent);
-  --color-theme-muted-30: color-mix(in oklch, var(--theme-muted) 30%, transparent);
-  --color-theme-border-50: color-mix(in oklch, var(--theme-border) 50%, transparent);
-
-  /* Surface color transparency variants */
-  --color-theme-surface-5: color-mix(in oklch, var(--theme-surface) 5%, transparent);
-  --color-theme-surface-10: color-mix(in oklch, var(--theme-surface) 10%, transparent);
-  --color-theme-surface-20: color-mix(in oklch, var(--theme-surface) 20%, transparent);
-  --color-theme-surface-30: color-mix(in oklch, var(--theme-surface) 30%, transparent);
-  --color-theme-surface-50: color-mix(in oklch, var(--theme-surface) 50%, transparent);
+  /* ===== STREAMLINED TRANSPARENCY SYSTEM ===== */
+  /* Use color-mix() directly in CSS instead of pre-defined variants */
+  /* Example: color-mix(in oklch, var(--theme-primary) 20%, transparent) */
 
   /* Enhanced cyberpunk palette with full spectrum */
   --color-cyber-cyan: #00ffff;
@@ -322,28 +249,16 @@
   --color-cyber-teal: #40ff80;
   --color-cyber-violet: #8040ff;
 
-  /* Full transparency scale using color-mix() - v4.1 optimized */
-  --color-cyber-cyan-5: color-mix(in oklch, var(--color-cyber-cyan) 5%, transparent);
+  /* Essential transparency variants (commonly used in components) */
   --color-cyber-cyan-10: color-mix(in oklch, var(--color-cyber-cyan) 10%, transparent);
   --color-cyber-cyan-20: color-mix(in oklch, var(--color-cyber-cyan) 20%, transparent);
   --color-cyber-cyan-30: color-mix(in oklch, var(--color-cyber-cyan) 30%, transparent);
-  --color-cyber-cyan-40: color-mix(in oklch, var(--color-cyber-cyan) 40%, transparent);
-  --color-cyber-cyan-50: color-mix(in oklch, var(--color-cyber-cyan) 50%, transparent);
-  --color-cyber-cyan-60: color-mix(in oklch, var(--color-cyber-cyan) 60%, transparent);
-  --color-cyber-cyan-70: color-mix(in oklch, var(--color-cyber-cyan) 70%, transparent);
-  --color-cyber-cyan-80: color-mix(in oklch, var(--color-cyber-cyan) 80%, transparent);
-  --color-cyber-cyan-90: color-mix(in oklch, var(--color-cyber-cyan) 90%, transparent);
 
-  --color-cyber-purple-5: color-mix(in oklch, var(--color-cyber-purple) 5%, transparent);
   --color-cyber-purple-10: color-mix(in oklch, var(--color-cyber-purple) 10%, transparent);
   --color-cyber-purple-20: color-mix(in oklch, var(--color-cyber-purple) 20%, transparent);
-  --color-cyber-purple-30: color-mix(in oklch, var(--color-cyber-purple) 30%, transparent);
-  --color-cyber-purple-50: color-mix(in oklch, var(--color-cyber-purple) 50%, transparent);
 
-  --color-cyber-yellow-5: color-mix(in oklch, var(--color-cyber-yellow) 5%, transparent);
   --color-cyber-yellow-10: color-mix(in oklch, var(--color-cyber-yellow) 10%, transparent);
   --color-cyber-yellow-20: color-mix(in oklch, var(--color-cyber-yellow) 20%, transparent);
-  --color-cyber-yellow-30: color-mix(in oklch, var(--color-cyber-yellow) 30%, transparent);
 
   /* ===== TAILWIND THEME TOKENS ===== */
   /* Typography tokens for Tailwind */
@@ -457,10 +372,10 @@
   --shadow-neon-lg: 0 0 var(--blur-neon-lg) color-mix(in oklch, var(--color-cyber-cyan) 40%, transparent);
   --shadow-neon-xl: 0 0 var(--blur-neon-xl) color-mix(in oklch, var(--color-cyber-cyan) 30%, transparent);
 
-  /* ===== FONTS & TYPOGRAPHY ===== */
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-cyber: "Orbitron", "Courier New", monospace;
+  /* ===== UNIFIED CYBERPUNK FONTS ===== */
+  --font-sans: var(--theme-font-primary);      /* Use cyberpunk primary font */
+  --font-mono: var(--theme-font-secondary);    /* Use cyberpunk secondary font */
+  --font-cyber: var(--theme-font-primary);     /* Unified with primary */
 
   /* Advanced font features */
   --font-feature-settings: "liga" 1, "kern" 1, "calt" 1;
@@ -1066,6 +981,28 @@ body {
   }
   .text-fluid-3xl {
     font-size: var(--font-size-3xl);
+  }
+
+  /* ===== CYBERPUNK FONT UTILITIES ===== */
+  .font-cyber-primary {
+    font-family: var(--theme-font-primary);
+  }
+
+  .font-cyber-secondary {
+    font-family: var(--theme-font-secondary);
+  }
+
+  .font-cyber-body {
+    font-family: var(--theme-font-body);
+  }
+
+  /* Override Tailwind defaults to use cyberpunk fonts */
+  .font-sans {
+    font-family: var(--theme-font-primary);
+  }
+
+  .font-mono {
+    font-family: var(--theme-font-secondary);
   }
 
   .p-fluid-xs {

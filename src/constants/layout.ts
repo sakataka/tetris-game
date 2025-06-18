@@ -140,3 +140,19 @@ export const DESIGN_TOKENS = {
   focusRing: '2px solid var(--theme-primary)',
   hoverScale: '1.02',
 } as const;
+
+// Cyberpunk typography system for unified font usage
+export const CYBERPUNK_TYPOGRAPHY = {
+  FONTS: {
+    PRIMARY: 'font-cyber-primary', // Orbitron for headers, main UI
+    SECONDARY: 'font-cyber-secondary', // Courier New for monospace data
+    BODY: 'font-cyber-body', // Inter for body text (minimal use)
+  },
+  USAGE_RULES: {
+    TITLES: 'font-cyber-primary font-bold', // Panel titles, headers
+    STATS: 'font-cyber-secondary font-bold', // Score, level, lines data
+    BUTTONS: 'font-cyber-primary font-medium', // Button text
+    LABELS: 'font-cyber-primary font-normal', // Field labels
+    BODY: 'font-cyber-primary font-normal', // General text
+  },
+} as const;

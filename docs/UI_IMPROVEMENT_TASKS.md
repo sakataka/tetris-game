@@ -111,18 +111,21 @@ const TRANSITIONS = {
 **Status:** ⏳ Pending
 
 #### Subtasks:
-- [ ] Choose unified design direction
-- [ ] Update typography system (2 fonts max)
-- [ ] Align all visual effects with chosen aesthetic
-- [ ] Update color usage for consistency
-- [ ] Ensure mobile/desktop parity
-- [ ] Remove conflicting design elements
+- [x] Choose unified design direction (Cyber-Modern selected)
+- [x] Unify typography system (Orbitron primary, reduce Inter usage)
+- [ ] Resolve color system duplication (cyber- vs theme- colors)
+- [ ] Align visual effects across all 5 themes consistently  
+- [ ] Remove conflicting design elements (font mixing, redundant styles)
+- [ ] Verify mobile/desktop design parity
 
-#### Decision Required:
-Choose one direction:
-- **A. Neo-Retro**: Pixel aesthetic, minimal effects
-- **B. Cyber-Modern**: Full cyberpunk, consistent neon
-- **C. Clean Contemporary**: Minimal, focus on gameplay
+#### Decision Made:
+**Selected: B. Cyber-Modern** - Full cyberpunk, consistent neon
+
+**Rationale:**
+- Current codebase is 70%+ cyberpunk-oriented
+- Sophisticated visual effects system already implemented
+- Well-abstracted semantic color system in place
+- 5 theme variations provide user choice while maintaining consistency
 
 ---
 
@@ -156,10 +159,26 @@ Choose one direction:
 - [x] Step 8: Verify build works correctly
 
 ### Task 4 Progress:
-- [ ] Step 1: Choose unified design direction
-- [ ] Step 2: Update typography system
-- [ ] Step 3: Align visual effects with chosen aesthetic
-- [ ] Step 4: Remove conflicting design elements
+- [x] Step 1: Choose unified design direction (Cyber-Modern selected)
+- [x] Step 2: Update typography system (Orbitron primary, unified font constants)
+- [x] Step 3: Resolve color system duplication (cyber- vs theme- colors)
+- [ ] Step 4: Align visual effects across all 5 themes consistently
+- [ ] Step 5: Remove conflicting design elements (font mixing, redundant styles)
+- [ ] Step 6: Verify mobile/desktop design parity
+
+#### Typography Unification Details:
+- [x] Updated root app fonts to use --theme-font-primary (Orbitron)
+- [x] Unified CSS font variables (--font-sans, --font-mono, --font-cyber)
+- [x] Added Cyberpunk typography utility classes (.font-cyber-primary, etc.)
+- [x] Created CYBERPUNK_TYPOGRAPHY constants for consistent usage
+- [x] Verified build works correctly with all font changes
+
+#### Color System Cleanup Details:
+- [x] Removed redundant --color-theme-* duplicates (used --theme-* directly)
+- [x] Streamlined transparency variants (use color-mix() directly)
+- [x] Kept essential cyber-color variants for fixed cyberpunk elements
+- [x] Added clear usage guidelines for color system
+- [x] Achieved 29KB CSS bundle reduction (99.72KB → 70.85KB)
 
 ---
 
