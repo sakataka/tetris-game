@@ -4,7 +4,6 @@ import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
-import { cn } from '@/utils/ui/cn';
 import { SPACING, TYPOGRAPHY } from '../constants/layout';
 import type { ThemeVariant } from '../types/tetris';
 import { ThemeSelectorMemo } from './ThemeSelector';
@@ -94,10 +93,7 @@ export default function ThemeSettings({
                   id={animationsSwitchId}
                   checked={animations}
                   onCheckedChange={onAnimationsToggle}
-                  className={cn(
-                    'data-[state=checked]:bg-theme-foreground data-[state=unchecked]:bg-theme-background',
-                    'border-2 data-[state=checked]:border-theme-foreground data-[state=unchecked]:border-theme-foreground data-[state=unchecked]:border-opacity-30'
-                  )}
+                  className=''
                   aria-label={t('accessibility.fullAnimation')}
                 />
                 <Label htmlFor={animationsSwitchId} className='cursor-pointer'>

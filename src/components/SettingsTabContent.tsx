@@ -54,7 +54,7 @@ const SettingsTabContent = memo(function SettingsTabContent() {
                   gameMode: checked ? 'debug' : 'single',
                 });
               }}
-              className='data-[state=checked]:bg-theme-foreground data-[state=checked]:border-theme-foreground data-[state=unchecked]:border-theme-foreground data-[state=unchecked]:border-opacity-30'
+              className=''
               aria-label={t('settings.debugMode')}
             />
             <Label

@@ -10,6 +10,16 @@
   --theme-background: #0a0a0f;
   --theme-foreground: #ffffff;
 
+  /* ===== SHADCN/UI COMPATIBILITY COLORS ===== */
+  /* These are required for the checkbox, switch, and other UI components */
+  --primary: var(--theme-foreground);
+  --primary-foreground: var(--theme-background);
+  --input: color-mix(in srgb, var(--theme-foreground) 10%, var(--theme-background));
+  --border: color-mix(in srgb, var(--theme-foreground) 20%, transparent);
+  --ring: var(--theme-foreground);
+  --destructive: #ff0040;
+  --muted: color-mix(in srgb, var(--theme-foreground) 30%, var(--theme-background));
+
   /* Tetromino piece colors */
   --tetromino-i: #00ffff;
   --tetromino-o: #ffaa00;
