@@ -2,12 +2,15 @@
 
 :root {
   /* ===== CORE THEME COLORS ===== */
-  /* Simplified theme system with only background and foreground */
-  --theme-background: #0a0a0f;
-  --theme-foreground: #ffffff;
+  /* Default fallback colors - these are dynamically overridden by the theme system */
+  /* Theme system (unifiedThemeSystem.ts) updates these CSS variables at runtime */
+  /* User-selected themes (cyberpunk, classic, retro, etc.) take priority over these defaults */
+  --theme-background: #0a0a0f; /* Default: Dark blue-black */
+  --theme-foreground: #ffffff; /* Default: White */
 
   /* ===== SHADCN/UI COMPATIBILITY ===== */
   /* Required for shadcn/ui components (checkbox, switch, button, etc.) */
+  /* These automatically adapt to theme changes through CSS variable references */
   --background: var(--theme-background);
   --foreground: var(--theme-foreground);
   --primary: var(--theme-foreground);
@@ -15,11 +18,12 @@
   --input: color-mix(in srgb, var(--theme-foreground) 10%, var(--theme-background));
   --border: color-mix(in srgb, var(--theme-foreground) 20%, transparent);
   --ring: var(--theme-foreground);
-  --destructive: #ff0040;
+  --destructive: #ff0040; /* Fixed red color - not theme-dependent */
   --muted: color-mix(in srgb, var(--theme-foreground) 30%, var(--theme-background));
 
   /* ===== TETROMINO PIECE COLORS ===== */
-  /* Fixed colors for tetromino pieces - independent of theme */
+  /* Fixed colors for tetromino pieces - independent of theme changes */
+  /* These remain consistent across all themes for gameplay recognition */
   --tetromino-i: #00ffff; /* I-piece: Cyan */
   --tetromino-o: #ffaa00; /* O-piece: Orange */
   --tetromino-t: #9900ff; /* T-piece: Purple */
@@ -79,6 +83,7 @@ body {
 
 /* ===== THEME-AWARE UTILITY CLASSES ===== */
 /* Unified theme system using only theme-background and theme-foreground */
+/* These classes automatically update when theme system changes CSS variables */
 
 /* Text colors */
 .text-theme-background {
