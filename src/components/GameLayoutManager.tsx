@@ -55,15 +55,12 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
       <div
         className={`min-h-dvh relative overflow-hidden ${
           hasGradients
-            ? 'bg-gradient-to-br from-theme-surface via-black to-theme-surface/80'
+            ? 'bg-gradient-to-br from-theme-surface to-theme-surface/60'
             : 'bg-theme-surface'
         }`}
       >
-        {/* Background effects */}
-        <div className='absolute inset-0 bg-grid-pattern opacity-5' />
-        {hasGradients && (
-          <div className='absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/50' />
-        )}
+        {/* Background effects - simplified */}
+        <div className='absolute inset-0 bg-grid-pattern opacity-3' />
 
         {/* Menu Button - Top Right */}
         <div className='absolute top-4 right-4 z-20'> {/* top-4 right-4 = 16px (8-point grid) */}
@@ -132,15 +129,12 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
     <div
       className={`min-h-dvh relative overflow-hidden ${
         hasGradients
-          ? 'bg-gradient-to-br from-theme-surface via-black to-theme-surface/80'
+          ? 'bg-gradient-to-br from-theme-surface to-theme-surface/60'
           : 'bg-theme-surface'
       }`}
     >
-      {/* Background effects */}
-      <div className='absolute inset-0 bg-grid-pattern opacity-5' />
-      {hasGradients && (
-        <div className='absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/50' />
-      )}
+      {/* Background effects - simplified */}
+      <div className='absolute inset-0 bg-grid-pattern opacity-3' />
 
       {/* Menu Button - Top Right (Mobile) */}
       <div className='absolute top-2 right-2 z-20'>

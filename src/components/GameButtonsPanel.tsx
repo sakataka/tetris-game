@@ -36,16 +36,15 @@ const GameButtonsPanel = memo(function GameButtonsPanel({
         size={buttonSize}
         className={cn(
           buttonWidthClass,
-          // Cyberpunk pause/resume button styling
-          'bg-gradient-to-r from-theme-primary to-theme-secondary hover:from-theme-primary/80 hover:to-theme-secondary/80',
-          'disabled:from-theme-muted disabled:to-theme-muted font-bold',
-          'transition-all duration-300 transform hover:scale-105 disabled:scale-100',
-          'shadow-[0_0_20px_rgba(var(--theme-primary),0.3)] hover:shadow-[0_0_30px_rgba(var(--theme-primary),0.5)]',
-          'border border-theme-primary/50 relative overflow-hidden font-mono'
+          // Simplified button styling
+          'bg-theme-primary/20 hover:bg-theme-primary/30',
+          'disabled:bg-theme-muted/20 font-semibold',
+          'transition-colors duration-150',
+          'border border-theme-primary/40 text-theme-primary',
+          'disabled:border-theme-muted/40 disabled:text-theme-muted'
         )}
       >
-        <div className='absolute inset-0 bg-gradient-to-r from-theme-primary/20 to-theme-secondary/20 blur-sm' />
-        <span className='relative'>{isPaused ? t('game.resume') : t('game.pause')}</span>
+        {isPaused ? t('game.resume') : t('game.pause')}
       </Button>
 
       <Button
@@ -53,15 +52,13 @@ const GameButtonsPanel = memo(function GameButtonsPanel({
         size={buttonSize}
         className={cn(
           buttonWidthClass,
-          // Cyberpunk reset button styling
-          'bg-gradient-to-r from-theme-error to-theme-error hover:from-theme-error/80 hover:to-theme-error/80',
-          'font-bold transition-all duration-300 transform hover:scale-105',
-          'shadow-[0_0_20px_rgba(var(--theme-error),0.3)] hover:shadow-[0_0_30px_rgba(var(--theme-error),0.5)]',
-          'border border-theme-error/50 relative overflow-hidden font-mono'
+          // Simplified reset button styling
+          'bg-theme-error/20 hover:bg-theme-error/30',
+          'font-semibold transition-colors duration-150',
+          'border border-theme-error/40 text-theme-error'
         )}
       >
-        <div className='absolute inset-0 bg-gradient-to-r from-theme-error/20 to-theme-error/20 blur-sm' />
-        <span className='relative'>{t('buttons.reset')}</span>
+        {t('buttons.reset')}
       </Button>
 
       <ConfirmationDialog

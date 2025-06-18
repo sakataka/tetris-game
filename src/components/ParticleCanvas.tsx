@@ -16,7 +16,7 @@ const ParticleCanvas = memo(function ParticleCanvas({
   width = 400,
   height = 600,
   enablePerformanceMode = true,
-  maxParticles = 100,
+  maxParticles = 50, // Reduced from 100 to 50 for less visual noise
 }: ParticleCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rendererRef = useRef<CanvasRenderer | null>(null);

@@ -43,15 +43,15 @@ const SPACING = {
 
 ### 2. Visual Noise Reduction
 **Priority:** High - Improves readability and focus
-**Status:** ⏳ Pending
+**Status:** ✅ Completed
 
 #### Subtasks:
-- [ ] Reduce glow effects intensity
-- [ ] Simplify gradient usage (one per component max)
-- [ ] Remove unnecessary particle effects
-- [ ] Reduce shadow complexity
-- [ ] Increase background opacity for better contrast
-- [ ] Remove decorative elements without purpose
+- [x] Reduce glow effects intensity
+- [x] Simplify gradient usage (one per component max)
+- [x] Remove unnecessary particle effects
+- [x] Reduce shadow complexity
+- [x] Increase background opacity for better contrast
+- [x] Remove decorative elements without purpose
 
 #### Implementation Details:
 ```css
@@ -139,10 +139,17 @@ Choose one direction:
 - [x] Step 4: Commit changes
 
 ### Task 2 Progress:
-- [ ] Step 1: Reduce glow effects intensity
-- [ ] Step 2: Simplify gradient usage  
-- [ ] Step 3: Remove unnecessary particle effects
-- [ ] Step 4: Increase background opacity
+- [x] Step 1: Reduce glow effects intensity (themePresets.json: reduced by ~50%)
+- [x] Step 2: Simplify gradient usage (GameLayoutManager: single gradient)
+- [x] Step 3: Remove unnecessary particle effects (ParticleCanvas: 100→50 particles)
+- [x] Step 4: Increase background opacity (CyberCard: 5%→15%, borders 30%→40%)
+- [x] Step 5: Simplify button effects (GameButtonsPanel: removed complex gradients/shadows)
+
+### Task 3 Progress:
+- [ ] Step 1: Reduce button variants to 3
+- [ ] Step 2: Reduce CyberCard themes to 3
+- [ ] Step 3: Standardize hover/focus states
+- [ ] Step 4: Document usage guidelines
 
 ---
 
