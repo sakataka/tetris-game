@@ -12,7 +12,7 @@ const DEFAULT_THEME_STATE: ThemeState = {
   current: 'cyberpunk' as ThemeVariant,
   effectIntensity: 1.0,
   animations: true,
-  config: getCurrentThemeConfig('cyberpunk') as any,
+  config: getCurrentThemeConfig('cyberpunk'),
   accessibility: {
     colorBlindnessType: 'none' as ColorBlindnessType,
     contrast: 'normal' as ContrastLevel,

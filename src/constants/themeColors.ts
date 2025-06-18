@@ -99,6 +99,7 @@ export const THEME_COLOR_USAGE = {
  */
 export function getThemeColor(usage: string): string {
   const parts = usage.split('.');
+  // biome-ignore lint/suspicious/noExplicitAny: Required for recursive object traversal
   let current: any = THEME_COLOR_USAGE;
   
   for (const part of parts) {
