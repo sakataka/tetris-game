@@ -58,7 +58,7 @@ export default function ThemeSelector({
               <div
                 key={key}
                 className='w-6 h-6 rounded border border-theme-primary/30'
-                style={{ backgroundColor: color }}
+                style={{ backgroundColor: color as string }}
                 title={`${key}: ${color}`}
               />
             ))}

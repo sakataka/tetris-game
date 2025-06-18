@@ -292,24 +292,36 @@ export const createTestFixtures = () => ({
 
   // Theme settings
   themeConfig: {
-    name: 'cyberpunk',
+    name: 'Cyberpunk',
+    variant: 'cyberpunk' as const,
     colors: {
       primary: '#00ffff',
       secondary: '#ff00ff',
-      accent: '#ffff00',
-      background: '#000011',
+      tertiary: '#ffff00',
+      background: '#0a0a0f',
+      foreground: '#ffffff',
+      accent: '#00ff00',
+      warning: '#ffaa00',
+      error: '#ff0040',
+      success: '#00ff00',
+      info: '#0080ff',
+      muted: '#666666',
+      surface: '#1a1a2e',
+      border: '#333333',
     },
     effects: {
-      blur: 0.5,
-      glow: 1.0,
-      saturation: 1.2,
-      brightness: 1.0,
+      blur: { sm: '4px', md: '8px', lg: '12px' },
+      glow: { sm: '4px', md: '12px', lg: '16px' },
+      shadow: { sm: '2px', md: '4px', lg: '8px' },
+      saturation: 1.8,
+      brightness: 1.2,
+      contrast: 1.1,
     },
-    accessibility: {
-      colorBlindnessType: 'none' as const,
-      contrast: 'normal' as const,
-      animationIntensity: 'normal' as const,
-    },
+    typography: {} as any,
+    spacing: {} as any,
+    sizing: {} as any,
+    borders: {} as any,
+    animations: {} as any,
   } as ThemeConfig,
 
   // Game state

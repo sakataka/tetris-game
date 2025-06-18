@@ -14,7 +14,7 @@ pre-commit:
       
     # TypeScript type checking (critical for preventing errors)
     type-check:
-      run: pnpm tsc --noEmit
+      run: rm -f tsconfig.tsbuildinfo && pnpm tsc --noEmit
       
   # Output configuration
   output:
