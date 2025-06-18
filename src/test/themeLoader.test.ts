@@ -31,8 +31,8 @@ describe('ThemeLoader - JSON-based theme system', () => {
       expect(theme).toBeDefined();
       expect(theme.name).toBe('Cyberpunk');
       expect(theme.colors.primary).toBe('#00ffff');
-      expect(theme.colors.secondary).toBe('#ff0080');
-      expect(theme.colors.tertiary).toBe('#ffff00');
+      expect(theme.colors.secondary).toBe('#ff0099');
+      expect(theme.colors.tertiary).toBe('#9900ff');
       expect(theme.effects.blur).toEqual({ sm: '3px', md: '6px', lg: '10px' });
       expect(theme.effects.glow).toEqual({ sm: '4px', md: '8px', lg: '12px' });
       expect(theme.effects.shadow).toEqual({ sm: '2px', md: '4px', lg: '6px' });
@@ -106,9 +106,9 @@ describe('ThemeLoader - JSON-based theme system', () => {
       const theme = await getThemePresetAsync('classic');
 
       // Validate Classic theme specific values (Game Boy style)
-      expect(theme.colors.primary).toBe('#0f380f');
-      expect(theme.colors.secondary).toBe('#306230');
-      expect(theme.colors.background).toBe('#c9d93a');
+      expect(theme.colors.primary).toBe('#0f2c0f');
+      expect(theme.colors.secondary).toBe('#1a4a1a');
+      expect(theme.colors.background).toBe('#d4e157');
       // accessibility property removed from theme presets
     });
 

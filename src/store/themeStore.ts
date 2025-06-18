@@ -50,7 +50,7 @@ export const useThemeStore = create<ThemeStore>()(
           theme: {
             ...state.theme,
             current: themeVariant,
-            config: getCurrentThemeConfig(themeVariant) as any,
+            config: getCurrentThemeConfig(themeVariant),
           },
         }));
       },

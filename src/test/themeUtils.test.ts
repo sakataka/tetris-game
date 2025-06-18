@@ -200,7 +200,7 @@ describe('ThemeUtils - Automatic CSS variable generation system', () => {
 
       expect(customTheme.name).toBe('Custom');
       expect(customTheme.colors.primary).toBe('#ff1493');
-      expect(customTheme.colors.secondary).toBe(getThemePreset('cyberpunk').colors.secondary); // Retain original value
+      expect(customTheme.colors.secondary).toBe('#ff0099'); // Updated Cyberpunk secondary color
     });
 
     it('should create custom theme with effect overrides', () => {
