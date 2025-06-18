@@ -4,7 +4,9 @@ import { useSettings } from '../hooks/useSettings';
 // Note: Mock functions were removed as part of theme system simplification
 
 // Setup DOM environment mock
-const clearTestStorage = () => { localStorage.clear(); };
+const clearTestStorage = () => {
+  localStorage.clear();
+};
 const domMocks = { localStorageMock: { clear: () => localStorage.clear() } };
 
 describe('useSettings', () => {

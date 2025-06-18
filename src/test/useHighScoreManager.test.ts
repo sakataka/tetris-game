@@ -6,8 +6,14 @@ import type { GameState } from '../types/tetris';
 
 // Create test fixtures and mocks
 const fixtures = {
-  highScores: [] as Array<{ id: string; score: number; level: number; lines: number; date: number }>,
-  statistics: { totalGames: 0, totalScore: 0, totalLines: 0, averageScore: 0 }
+  highScores: [] as Array<{
+    id: string;
+    score: number;
+    level: number;
+    lines: number;
+    date: number;
+  }>,
+  statistics: { totalGames: 0, totalScore: 0, totalLines: 0, averageScore: 0 },
 };
 const mockActions = {
   addHighScore: vi.fn(),

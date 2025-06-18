@@ -26,15 +26,14 @@ export default function ThemeSelector({
 
   // Use the EXACT same source as actual game rendering
   const currentThemeConfig = getUnifiedThemeConfig(currentTheme);
-  
+
   // Get all available themes using the same function as actual rendering
-  const themes: Array<{ variant: ThemeVariant; config: typeof currentThemeConfig; name: string }> = (
-    ['cyberpunk', 'classic', 'retro', 'minimal', 'neon'] as ThemeVariant[]
-  ).map((variant) => ({
-    variant,
-    config: getUnifiedThemeConfig(variant),
-    name: getUnifiedThemeConfig(variant).name
-  }));
+  const themes: Array<{ variant: ThemeVariant; config: typeof currentThemeConfig; name: string }> =
+    (['cyberpunk', 'classic', 'retro', 'minimal', 'neon'] as ThemeVariant[]).map((variant) => ({
+      variant,
+      config: getUnifiedThemeConfig(variant),
+      name: getUnifiedThemeConfig(variant).name,
+    }));
   const actualTetrominoColors = getTetrominoColors(currentTheme);
 
   // Get actual colors from CSS variables (same as game uses)
@@ -100,7 +99,7 @@ export default function ThemeSelector({
         <div className='mb-3'>
           <div className='flex items-center gap-4 mb-2'>
             <span className='text-xs w-20 opacity-70' style={{ color: actualForegroundColor }}>
-              Background:
+              {t('themes.background')}:
             </span>
             <div
               className='w-6 h-6 rounded border'
@@ -113,7 +112,7 @@ export default function ThemeSelector({
           </div>
           <div className='flex items-center gap-4 mb-2'>
             <span className='text-xs w-20 opacity-70' style={{ color: actualForegroundColor }}>
-              Text:
+              {t('themes.foreground')}:
             </span>
             <div
               className='w-6 h-6 rounded border'
