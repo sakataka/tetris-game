@@ -6,6 +6,7 @@
  */
 
 import type { ErrorCategory, ErrorContext, ErrorLevel, GameAppError } from '@/types/errors';
+import { type ISingleton, SingletonMixin } from './patterns/singletonMixin';
 
 // Error type configurations
 interface ErrorTypeConfig {
@@ -59,19 +60,12 @@ interface ErrorMetadata {
   [key: string]: unknown;
 }
 
-export class ErrorFactory {
-  private static instance: ErrorFactory;
+export class ErrorFactory extends SingletonMixin(class {}) implements ISingleton {
   private errorHandlers: Map<ErrorCategory, Set<(error: GameAppError) => void>> = new Map();
 
-  private constructor() {
+  constructor() {
+    super();
     this.initializeHandlers();
-  }
-
-  public static getInstance(): ErrorFactory {
-    if (!ErrorFactory.instance) {
-      ErrorFactory.instance = new ErrorFactory();
-    }
-    return ErrorFactory.instance;
   }
 
   private initializeHandlers(): void {
@@ -293,11 +287,18 @@ export class ErrorFactory {
   }
 
   /**
-   * Reset the factory (useful for testing)
+   * Reset singleton state (implements ISingleton)
    */
-  public reset(): void {
+  public override reset(): void {
     this.errorHandlers.clear();
     this.initializeHandlers();
+  }
+
+  /**
+   * Clean up all resources (implements ISingleton)
+   */
+  public override destroy(): void {
+    this.errorHandlers.clear();
   }
 }
 

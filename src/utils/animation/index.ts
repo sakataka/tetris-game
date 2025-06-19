@@ -8,6 +8,7 @@ import { GAME_TIMING } from '@/constants/timing';
 
 // Animation manager
 export { AnimationManager, type AnimationOptions, animationManager } from './animationManager';
+export { type AnimationPriority, AnimationQueue, type PerformanceMetrics } from './animationQueue';
 
 // Custom hooks
 export {
@@ -21,6 +22,9 @@ export {
 
 // Convenient constants
 export const ANIMATION_PRESETS = {
+  /** Critical game operations (60FPS) */
+  GAME_CRITICAL: { fps: 60, priority: 'critical' as const },
+
   /** High-performance game loop (60FPS) */
   GAME_LOOP: { fps: 60, priority: 'high' as const },
 

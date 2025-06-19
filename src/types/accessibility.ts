@@ -67,8 +67,8 @@ export interface FeedbackSettings {
 }
 
 export interface InputAccessibilityState {
-  keyboard: KeyboardNavigation;
-  feedback: FeedbackSettings;
+  keyboardNavigation: KeyboardNavigation;
+  feedbackSettings: FeedbackSettings;
 }
 
 // Complete accessibility state (composition of all parts)
@@ -115,13 +115,13 @@ export const DEFAULT_COGNITIVE_ACCESSIBILITY: CognitiveAccessibilityState = {
 };
 
 export const DEFAULT_INPUT_ACCESSIBILITY: InputAccessibilityState = {
-  keyboard: {
+  keyboardNavigation: {
     enabled: true,
     focusOutline: true,
     skipLinks: false,
     tabOrder: 'default',
   },
-  feedback: {
+  feedbackSettings: {
     soundEffects: true,
     voiceAnnouncements: false,
     hapticFeedback: false,
@@ -150,13 +150,13 @@ export const ACCESSIBILITY_PRESETS: Record<AccessibilityLevel, Partial<Accessibi
       cursorSize: 'normal',
     },
     animationIntensity: 'normal',
-    keyboard: {
+    keyboardNavigation: {
       enabled: true,
       focusOutline: false,
       skipLinks: false,
       tabOrder: 'default',
     },
-    feedback: {
+    feedbackSettings: {
       soundEffects: true,
       voiceAnnouncements: false,
       hapticFeedback: false,
@@ -181,13 +181,13 @@ export const ACCESSIBILITY_PRESETS: Record<AccessibilityLevel, Partial<Accessibi
       cursorSize: 'normal',
     },
     animationIntensity: 'normal',
-    keyboard: {
+    keyboardNavigation: {
       enabled: true,
       focusOutline: true,
       skipLinks: false,
       tabOrder: 'default',
     },
-    feedback: {
+    feedbackSettings: {
       soundEffects: true,
       voiceAnnouncements: false,
       hapticFeedback: false,
@@ -212,13 +212,13 @@ export const ACCESSIBILITY_PRESETS: Record<AccessibilityLevel, Partial<Accessibi
       cursorSize: 'normal',
     },
     animationIntensity: 'reduced',
-    keyboard: {
+    keyboardNavigation: {
       enabled: true,
       focusOutline: true,
       skipLinks: true,
       tabOrder: 'optimized',
     },
-    feedback: {
+    feedbackSettings: {
       soundEffects: true,
       voiceAnnouncements: true,
       hapticFeedback: false,
@@ -246,13 +246,13 @@ export const ACCESSIBILITY_PRESETS: Record<AccessibilityLevel, Partial<Accessibi
     },
     animationIntensity: 'none',
     reducedMotion: true,
-    keyboard: {
+    keyboardNavigation: {
       enabled: true,
       focusOutline: true,
       skipLinks: true,
       tabOrder: 'optimized',
     },
-    feedback: {
+    feedbackSettings: {
       soundEffects: true,
       voiceAnnouncements: true,
       hapticFeedback: true,

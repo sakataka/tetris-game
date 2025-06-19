@@ -8,6 +8,7 @@
 
 import { animationManager } from '../animation/animationManager';
 import { log } from '../logging';
+import { type ISingleton, SingletonMixin } from '../patterns/singletonMixin';
 
 interface ManagedTimeout {
   callback: () => void;
@@ -26,21 +27,9 @@ interface ManagedTimeout {
  * - Automatic cleanup and memory management
  * - Debug logging for timeout tracking
  */
-export class TimeoutManager {
-  private static instance: TimeoutManager;
+export class TimeoutManager extends SingletonMixin(class {}) implements ISingleton {
   private timeouts = new Map<string, ManagedTimeout>();
   private nextId = 1;
-
-  private constructor() {
-    // Private constructor for singleton pattern
-  }
-
-  public static getInstance(): TimeoutManager {
-    if (!TimeoutManager.instance) {
-      TimeoutManager.instance = new TimeoutManager();
-    }
-    return TimeoutManager.instance;
-  }
 
   /**
    * Set a timeout using AnimationManager
@@ -151,6 +140,21 @@ export class TimeoutManager {
       component: 'TimeoutManager',
       metadata: { clearedCount: timeoutIds.length },
     });
+  }
+
+  /**
+   * Reset singleton state (implements ISingleton)
+   */
+  public override reset(): void {
+    this.clearAllTimeouts();
+    this.nextId = 1;
+  }
+
+  /**
+   * Clean up all resources (implements ISingleton)
+   */
+  public override destroy(): void {
+    this.clearAllTimeouts();
   }
 
   /**

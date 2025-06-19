@@ -6,6 +6,7 @@
 import { createAudioError } from '@/types/errors';
 import type { SoundKey } from '@/types/tetris';
 import { log } from '../logging';
+import { type ISingleton, SingletonMixin } from '../patterns/singletonMixin';
 import {
   type AudioState,
   type AudioStrategy,
@@ -15,27 +16,20 @@ import {
   WebAudioStrategy,
 } from './strategies';
 
-export class AudioManagerV2 {
-  private static instance: AudioManagerV2 | null = null;
+export class AudioManagerV2 extends SingletonMixin(class {}) implements ISingleton {
   private currentStrategy: AudioStrategy;
   private strategies: AudioStrategy[] = [];
   private strategyIndex = 0;
   private initialized = false;
 
-  private constructor() {
+  constructor() {
+    super();
     this.initializeStrategies();
     const firstStrategy = this.strategies[0];
     if (!firstStrategy) {
       throw new Error('No audio strategies available');
     }
     this.currentStrategy = firstStrategy;
-  }
-
-  public static getInstance(): AudioManagerV2 {
-    if (!AudioManagerV2.instance) {
-      AudioManagerV2.instance = new AudioManagerV2();
-    }
-    return AudioManagerV2.instance;
   }
 
   private initializeStrategies(): void {
@@ -330,9 +324,17 @@ export class AudioManagerV2 {
   }
 
   /**
-   * Clean up all resources
+   * Reset singleton state (implements ISingleton)
    */
-  public dispose(): void {
+  public override reset(): void {
+    this.stopAllSounds();
+    this.initialized = false;
+  }
+
+  /**
+   * Clean up all resources (implements ISingleton)
+   */
+  public override destroy(): void {
     if (this.currentStrategy) {
       this.currentStrategy.dispose();
     }
@@ -343,7 +345,6 @@ export class AudioManagerV2 {
 
     this.strategies = [];
     this.initialized = false;
-    AudioManagerV2.instance = null;
   }
 }
 

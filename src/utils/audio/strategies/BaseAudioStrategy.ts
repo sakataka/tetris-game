@@ -28,6 +28,7 @@ export interface AudioState {
 export abstract class BaseAudioStrategy {
   protected masterVolume = 0.5;
   protected isMuted = false;
+  protected initialized = false;
 
   // Sound file path definitions (shared across all strategies)
   protected readonly soundFiles: Record<SoundKey, string> = {
@@ -107,6 +108,79 @@ export abstract class BaseAudioStrategy {
       throw error;
     }
   }
+
+  // Common initialization framework
+  protected async initializeStrategy(strategyName: string): Promise<void> {
+    if (typeof window === 'undefined') {
+      log.warn('Audio initialization skipped - no window object', {
+        component: strategyName,
+        metadata: { operation: 'initialize' },
+      });
+      return;
+    }
+
+    if (!this.canPlayAudio()) {
+      throw createAudioError(
+        `${strategyName} is not supported in this environment`,
+        {
+          component: strategyName,
+          metadata: { operation: 'audio_support_check' },
+        },
+        undefined
+      );
+    }
+
+    try {
+      await this.doInitialize();
+      this.initialized = true;
+
+      log.debug('Audio strategy initialized successfully', {
+        component: strategyName,
+        metadata: {
+          operation: 'initialize',
+          masterVolume: this.masterVolume,
+          isMuted: this.isMuted,
+        },
+      });
+    } catch (error) {
+      const audioError = createAudioError(
+        `Failed to initialize ${strategyName}`,
+        {
+          component: strategyName,
+          metadata: { error, operation: 'strategy_initialization' },
+        },
+        undefined
+      );
+
+      log.warn('Audio strategy initialization failed', {
+        component: strategyName,
+        metadata: { error: audioError },
+      });
+
+      throw audioError;
+    }
+  }
+
+  protected isInitialized(): boolean {
+    return this.initialized;
+  }
+
+  protected async safeAudioOperation<T>(
+    operation: string,
+    fn: () => Promise<T> | T,
+    soundKey?: SoundKey
+  ): Promise<T | undefined> {
+    try {
+      return await fn();
+    } catch (error) {
+      this.handleAudioError(error, operation, soundKey);
+      // Return undefined instead of throwing to maintain non-blocking behavior
+      return undefined;
+    }
+  }
+
+  // Strategy-specific initialization (must be implemented by concrete strategies)
+  protected abstract doInitialize(): Promise<void>;
 
   // Abstract methods that must be implemented by concrete strategies
   abstract canPlayAudio(): boolean;

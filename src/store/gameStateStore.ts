@@ -14,7 +14,7 @@ import { useSettingsStore } from './settingsStore';
 
 // Helper function to create initial game state with debug mode consideration
 const createInitialGameState = (): GameState => {
-  const isDebugMode = useSettingsStore.getState().settings.gameMode === 'debug';
+  const isDebugMode = useSettingsStore.getState().gameMode === 'debug';
   return {
     board: createEmptyBoard(),
     currentPiece: getRandomTetromino(isDebugMode),
@@ -87,7 +87,7 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
 
   resetGame: () =>
     set(() => {
-      const isDebugMode = useSettingsStore.getState().settings.gameMode === 'debug';
+      const isDebugMode = useSettingsStore.getState().gameMode === 'debug';
       return {
         gameState: {
           board: createEmptyBoard(),
@@ -141,7 +141,7 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
   calculatePiecePlacementState: (piece, bonusPoints, playSound) =>
     set((state) => {
       // Check debug mode
-      const isDebugMode = useSettingsStore.getState().settings.gameMode === 'debug';
+      const isDebugMode = useSettingsStore.getState().gameMode === 'debug';
 
       // 0. Play piece landing sound (before line clear sound)
       if (playSound) {

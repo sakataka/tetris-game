@@ -6,6 +6,7 @@
 import { createAudioError } from '@/types/errors';
 import type { SoundKey } from '@/types/tetris';
 import { log } from '../logging/logger';
+import { type ISingleton, SingletonMixin } from '../patterns/singletonMixin';
 import { audioManager } from './audioManager';
 
 interface PreloadStrategy {
@@ -29,9 +30,7 @@ interface SoundPriority {
   size?: number; // Estimated file size in bytes
 }
 
-class AudioPreloader {
-  private static instance: AudioPreloader | null = null;
-
+class AudioPreloader extends SingletonMixin(class {}) implements ISingleton {
   private preloadProgress: Map<SoundKey, 'pending' | 'loading' | 'loaded' | 'failed'> = new Map();
   private loadTimestamps: Map<SoundKey, number> = new Map();
   private retryCounters: Map<SoundKey, number> = new Map();
@@ -68,15 +67,6 @@ class AudioPreloader {
       memoryLimit: 20, // 20MB for slow connections
     },
   };
-
-  private constructor() {}
-
-  public static getInstance(): AudioPreloader {
-    if (!AudioPreloader.instance) {
-      AudioPreloader.instance = new AudioPreloader();
-    }
-    return AudioPreloader.instance;
-  }
 
   /**
    * Priority-based audio preloading with staggered start times
@@ -289,13 +279,20 @@ class AudioPreloader {
   }
 
   /**
-   * Reset preloader state for fresh start
+   * Reset singleton state (implements ISingleton)
    */
-  public reset(): void {
+  public override reset(): void {
     this.preloadProgress.clear();
     this.loadTimestamps.clear();
     this.retryCounters.clear();
     this.memoryUsage = 0;
+  }
+
+  /**
+   * Clean up all resources (implements ISingleton)
+   */
+  public override destroy(): void {
+    this.reset();
   }
 
   /**

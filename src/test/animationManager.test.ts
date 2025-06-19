@@ -118,6 +118,28 @@ describe('AnimationManager', () => {
       expect(stats).toHaveProperty('globalFPSLimit');
     });
 
+    it('should provide AnimationQueue statistics', () => {
+      const stats = animationManager.getStats();
+
+      // Verify AnimationQueue metrics are included
+      expect(stats).toHaveProperty('queue');
+      expect(stats.queue).toHaveProperty('totalAnimations');
+      expect(stats.queue).toHaveProperty('animationsByPriority');
+      expect(stats.queue).toHaveProperty('averageExecutionTimes');
+      expect(stats.queue).toHaveProperty('fps');
+      expect(stats.queue).toHaveProperty('frameTime');
+      expect(stats.queue).toHaveProperty('budgetUtilization');
+      expect(stats.queue).toHaveProperty('queuedAnimations');
+      expect(stats.queue).toHaveProperty('droppedFrames');
+      expect(stats.queue).toHaveProperty('lastFrameTimestamp');
+
+      // Verify the structure of animationsByPriority
+      expect(stats.queue.animationsByPriority).toHaveProperty('critical');
+      expect(stats.queue.animationsByPriority).toHaveProperty('high');
+      expect(stats.queue.animationsByPriority).toHaveProperty('normal');
+      expect(stats.queue.animationsByPriority).toHaveProperty('low');
+    });
+
     it('should set global FPS limit', () => {
       animationManager.setGlobalFPSLimit(30);
 

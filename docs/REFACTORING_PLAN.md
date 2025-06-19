@@ -7,44 +7,6 @@ This document outlines a comprehensive refactoring plan for the Tetris game code
 
 ### 🔴 Large-Scale Refactoring
 
-#### 1.1 Zustand Store Pattern Unification and Optimization
-**Purpose**: Reduce redundant methods and improve store consistency
-
-**Current Issues**:
-- `accessibilityStore.ts` has 862 lines with many repetitive toggle/update methods
-- Similar patterns repeated across all stores (gameStateStore, settingsStore, etc.)
-- Each store implements its own version of toggle and update methods
-
-**Proposed Solution**:
-- [x] ✅ Create a generic store factory with common patterns
-- [x] ✅ Implement a unified toggle method: `toggle<K extends keyof State>(key: K)`
-- [x] ✅ Create a generic update method: `update<K extends keyof State>(key: K, value: State[K])`
-- [x] ✅ Reduce accessibilityStore from 862 lines to 340 lines (60% reduction)
-
-**Example Implementation**:
-```typescript
-// Before: Multiple toggle methods
-toggleLargeText: () => set(state => ({ visual: { ...state.visual, largeText: !state.visual.largeText } }))
-toggleReducedMotion: () => set(state => ({ reducedMotion: !state.reducedMotion }))
-
-// After: Single generic toggle
-toggle: (path: string) => set(state => updateNestedValue(state, path, !getNestedValue(state, path)))
-```
-
-#### 1.2 Singleton Pattern Unification
-**Purpose**: Eliminate duplicate code and ensure consistent instance management
-
-**Current Issues**:
-- AudioManagerV2, AnimationManager, TimeoutManager all implement similar singleton patterns
-- Each has its own getInstance() implementation
-- No shared interface or base implementation
-
-**Proposed Solution**:
-- [ ] Create a `SingletonMixin` or base class
-- [ ] Standardize getInstance() implementation
-- [ ] Add lifecycle management (reset, destroy methods)
-- [ ] Implement proper TypeScript typing for singleton pattern
-
 #### 1.3 Configuration Comparison Logic Generalization
 **Purpose**: Eliminate redundancy in compareConfigurations function
 
@@ -209,37 +171,6 @@ src/
 - [ ] Use React Context for service injection
 - [ ] Update tests to use injected mocks
 
-## Implementation Plan
-
-### Phase 1: Quick Wins (Week 1)
-1. Variable naming consistency (3.1)
-2. Import path organization (3.2)
-3. Constant management (3.4)
-
-### Phase 2: Core Improvements (Week 2-3) ✅ COMPLETED
-1. ✅ Zustand store pattern unification (1.1)
-2. ✅ Error handling unification (2.1)
-3. ✅ Type definition consolidation (3.3)
-
-**Phase 2 Results:**
-- **Generic Store Factory**: Created `storeFactory.ts` with common patterns for toggle/update/batch operations
-- **AccessibilityStore Simplified**: Reduced from 862 to 244 lines (71% reduction) using new factory patterns
-- **SettingsStore Enhanced**: Converted to use generic factory with backward compatibility maintained
-- **Error Handling Unified**: Single `ErrorFactory` replaces multiple `createXError` functions
-- **Type System Improved**: Generic action types and reusable store patterns in `storeActions.ts`
-- **All Tests Passing**: 341 tests maintained, full backward compatibility preserved
-- **Code Quality**: Biome formatting applied, TypeScript strict compliance
-
-### Phase 3: Architecture (Week 4-5)
-1. Singleton pattern unification (1.2)
-2. Configuration comparison generalization (1.3)
-3. Audio strategy improvements (2.2)
-
-### Phase 4: Future Considerations (Month 2+)
-1. Feature-based directory structure (4.1)
-2. Dependency injection pattern (4.2)
-3. Animation management optimization (2.3)
-
 ## Success Metrics
 - **Code Reduction**: Target 20% reduction in total lines
 - **Test Coverage**: Maintain or improve current coverage
@@ -251,12 +182,6 @@ src/
 2. **Test First**: Update tests before refactoring
 3. **Feature Flags**: Use flags for major architectural changes
 4. **Rollback Plan**: Each phase should be reversible
-
-## Next Steps
-1. Review and approve this plan
-2. Create feature branches for each phase
-3. Begin with Phase 1 quick wins
-4. Weekly progress reviews
 
 ## Additional Considerations
 

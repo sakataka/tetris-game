@@ -2,19 +2,22 @@
  * Unified Animation Management System
  *
  * Integrates previously scattered requestAnimationFrame management,
- * providing a centralized animation manager that improves performance and maintainability
+ * providing a centralized animation manager that improves performance and maintainability.
+ * Now uses the advanced AnimationQueue system for better frame budget management.
  */
 
-import { ENV_CONFIG } from '@/config/environment';
-import { PERFORMANCE_LIMITS } from '@/constants/performance';
-import { GAME_TIMING, INTERVALS } from '@/constants/timing';
+import { ENV_CONFIG } from '../../config/environment';
+import { PERFORMANCE_LIMITS } from '../../constants/performance';
+import { INTERVALS } from '../../constants/timing';
 import { log } from '../logging';
+import { type ISingleton, SingletonMixin } from '../patterns/singletonMixin';
+import { type AnimationPriority, AnimationQueue } from './animationQueue';
 
 export interface AnimationOptions {
   /** Target FPS (default: 60) */
   fps?: number;
-  /** Animation priority (high priority continues even at low FPS) */
-  priority?: 'low' | 'normal' | 'high';
+  /** Animation priority (affects execution order and budget allocation) */
+  priority?: AnimationPriority;
   /** Auto-stop conditions */
   autoStop?: {
     /** Maximum execution time (milliseconds) */
@@ -22,53 +25,57 @@ export interface AnimationOptions {
     /** Condition function (stops when true) */
     condition?: () => boolean;
   };
+  /** Estimated execution duration for budget planning (milliseconds) */
+  estimatedDuration?: number;
 }
 
 interface ActiveAnimation {
   id: string;
   callback: FrameRequestCallback;
-  options: Required<AnimationOptions>;
-  requestId: number;
+  options: {
+    fps: number;
+    priority: AnimationPriority;
+    estimatedDuration: number;
+    autoStop: {
+      maxDuration: number;
+      condition: () => boolean;
+    };
+  };
   startTime: number;
-  lastFrameTime: number;
-  frameCount: number;
+  autoStopChecked?: boolean;
 }
 
 /**
- * Singleton Animation Manager
+ * Enhanced Animation Manager with Queue-Based Optimization
  *
  * Features:
- * - Unified requestAnimationFrame management
- * - FPS limiting and priority-based execution control
+ * - Advanced frame budget management via AnimationQueue
+ * - Priority-based execution with intelligent scheduling
  * - Performance monitoring and auto-optimization
- * - Debug statistics
+ * - Graceful degradation under performance pressure
+ * - Debug statistics and metrics
  */
-export class AnimationManager {
-  private static instance: AnimationManager;
+export class AnimationManager extends SingletonMixin(class {}) implements ISingleton {
+  private animationQueue: AnimationQueue;
   private activeAnimations = new Map<string, ActiveAnimation>();
   private isPaused = false;
   private isReducedMotion = false;
   private globalFPSLimit = 60;
-  private performanceThreshold = PERFORMANCE_LIMITS.PERFORMANCE_THRESHOLD_MS;
+  // private performanceThreshold = PERFORMANCE_LIMITS.PERFORMANCE_THRESHOLD_MS;
 
   // Performance statistics
   private stats = {
     totalFrames: 0,
     droppedFrames: 0,
     averageFrameTime: 0,
-    lastPerformanceCheck: 0,
+    lastPerformanceCheck: performance.now(),
   };
 
-  private constructor() {
+  constructor() {
+    super();
+    this.animationQueue = new AnimationQueue();
     this.initializeSettings();
     this.startPerformanceMonitoring();
-  }
-
-  public static getInstance(): AnimationManager {
-    if (!AnimationManager.instance) {
-      AnimationManager.instance = new AnimationManager();
-    }
-    return AnimationManager.instance;
   }
 
   /**
@@ -86,9 +93,10 @@ export class AnimationManager {
       }
 
       // Set default option values
-      const fullOptions: Required<AnimationOptions> = {
+      const fullOptions = {
         fps: options.fps ?? this.globalFPSLimit,
-        priority: options.priority ?? 'normal',
+        priority: options.priority ?? ('normal' as AnimationPriority),
+        estimatedDuration: options.estimatedDuration ?? 1,
         autoStop: {
           maxDuration: options.autoStop?.maxDuration ?? Number.POSITIVE_INFINITY,
           condition: options.autoStop?.condition ?? (() => false),
@@ -100,57 +108,48 @@ export class AnimationManager {
         return;
       }
 
-      const animation: ActiveAnimation = {
-        id,
-        callback,
-        options: fullOptions,
-        requestId: 0,
-        startTime: performance.now(),
-        lastFrameTime: 0,
-        frameCount: 0,
-      };
+      // Create wrapped callback with auto-stop logic
+      const wrappedCallback: FrameRequestCallback = (timestamp) => {
+        const animation = this.activeAnimations.get(id);
+        if (!animation) return;
 
-      // Animation execution loop
-      const animate = (currentTime: number) => {
-        if (this.isPaused || !this.activeAnimations.has(id)) {
+        // Check auto-stop conditions
+        const elapsed = timestamp - animation.startTime;
+        if (elapsed >= fullOptions.autoStop.maxDuration || fullOptions.autoStop.condition()) {
+          this.unregisterAnimation(id);
           return;
         }
 
-        const targetInterval = GAME_TIMING.MS_PER_SECOND / fullOptions.fps;
-        const deltaTime = currentTime - animation.lastFrameTime;
-
-        // FPS limit check (first frame or interval elapsed)
-        if (animation.lastFrameTime === 0 || deltaTime >= targetInterval) {
-          // Auto-stop condition check
-          const elapsed = currentTime - animation.startTime;
-          const maxDuration = fullOptions.autoStop.maxDuration ?? Number.POSITIVE_INFINITY;
-          if (elapsed >= maxDuration || fullOptions.autoStop.condition?.()) {
-            this.unregisterAnimation(id);
-            return;
-          }
-
-          try {
-            callback(currentTime);
-            animation.frameCount++;
-            animation.lastFrameTime = currentTime;
-
-            // Update performance statistics
-            this.updatePerformanceStats(deltaTime);
-          } catch (error) {
-            log.warn('Animation callback error', {
-              component: 'AnimationManager',
-              metadata: { animationId: id, error },
-            });
-            this.unregisterAnimation(id);
-            return;
-          }
-        }
-
-        animation.requestId = requestAnimationFrame(animate);
+        // Execute original callback
+        callback(timestamp);
       };
 
-      animation.requestId = requestAnimationFrame(animate);
+      const animation: ActiveAnimation = {
+        id,
+        callback: wrappedCallback,
+        options: fullOptions,
+        startTime: performance.now(),
+      };
+
+      // Store animation reference
       this.activeAnimations.set(id, animation);
+
+      // Add animation to the queue for optimized execution
+      this.animationQueue.addAnimation(id, wrappedCallback, {
+        priority: fullOptions.priority,
+        fps: fullOptions.fps,
+        estimatedDuration: fullOptions.estimatedDuration,
+      });
+
+      log.debug('Animation registered', {
+        component: 'AnimationManager',
+        metadata: {
+          id,
+          priority: fullOptions.priority,
+          fps: fullOptions.fps,
+          totalAnimations: this.activeAnimations.size,
+        },
+      });
     } catch (error) {
       log.warn('Failed to register animation', {
         component: 'AnimationManager',
@@ -165,8 +164,14 @@ export class AnimationManager {
   public unregisterAnimation(id: string): void {
     const animation = this.activeAnimations.get(id);
     if (animation) {
-      cancelAnimationFrame(animation.requestId);
+      // Remove from queue and local tracking
+      this.animationQueue.removeAnimation(id);
       this.activeAnimations.delete(id);
+
+      log.debug('Animation unregistered', {
+        component: 'AnimationManager',
+        metadata: { id, remainingAnimations: this.activeAnimations.size },
+      });
     }
   }
 
@@ -175,8 +180,11 @@ export class AnimationManager {
    */
   public pauseAll(): void {
     this.isPaused = true;
-    this.activeAnimations.forEach((animation) => {
-      cancelAnimationFrame(animation.requestId);
+    this.animationQueue.stop();
+
+    log.debug('All animations paused', {
+      component: 'AnimationManager',
+      metadata: { totalAnimations: this.activeAnimations.size },
     });
   }
 
@@ -187,9 +195,11 @@ export class AnimationManager {
     if (!this.isPaused) return;
 
     this.isPaused = false;
-    this.activeAnimations.forEach((animation, id) => {
-      // Start new requestAnimationFrame on resume
-      this.registerAnimation(id, animation.callback, animation.options);
+    this.animationQueue.start();
+
+    log.debug('All animations resumed', {
+      component: 'AnimationManager',
+      metadata: { totalAnimations: this.activeAnimations.size },
     });
   }
 
@@ -208,10 +218,14 @@ export class AnimationManager {
    * Force stop all animations
    */
   public stopAll(): void {
-    this.activeAnimations.forEach((animation) => {
-      cancelAnimationFrame(animation.requestId);
-    });
+    // Remove all animations from the queue
+    this.animationQueue.clear();
     this.activeAnimations.clear();
+
+    log.debug('All animations stopped', {
+      component: 'AnimationManager',
+      metadata: { totalAnimations: 0 },
+    });
   }
 
   /**
@@ -229,18 +243,39 @@ export class AnimationManager {
    */
   public setGlobalFPSLimit(fps: number): void {
     this.globalFPSLimit = Math.max(1, Math.min(120, fps));
+    // Update the animation queue's frame budget accordingly
+    this.animationQueue.updateFrameBudget(this.globalFPSLimit);
   }
 
   /**
-   * Get debug statistics
+   * Get comprehensive statistics including AnimationQueue metrics
    */
   public getStats() {
+    const queueStats = this.animationQueue.getQueueStatistics();
+    const queueMetrics = this.animationQueue.getPerformanceMetrics();
+
     return {
+      // AnimationManager stats
       ...this.stats,
       activeAnimations: this.activeAnimations.size,
       isPaused: this.isPaused,
       isReducedMotion: this.isReducedMotion,
       globalFPSLimit: this.globalFPSLimit,
+
+      // AnimationQueue stats
+      queue: {
+        totalAnimations: queueStats.totalAnimations,
+        animationsByPriority: queueStats.animationsByPriority,
+        averageExecutionTimes: queueStats.averageExecutionTimes,
+
+        // Performance metrics from queue
+        fps: queueMetrics.fps,
+        frameTime: queueMetrics.frameTime,
+        budgetUtilization: queueMetrics.budgetUtilization,
+        queuedAnimations: queueMetrics.queuedAnimations,
+        droppedFrames: queueMetrics.droppedFrames,
+        lastFrameTimestamp: queueMetrics.lastFrameTimestamp,
+      },
     };
   }
 
@@ -271,17 +306,18 @@ export class AnimationManager {
   }
 
   /**
-   * Update performance statistics
+   * Update performance statistics from AnimationQueue metrics
    */
-  private updatePerformanceStats(frameTime: number): void {
-    this.stats.totalFrames++;
+  private updatePerformanceStats(): void {
+    const queueMetrics = this.animationQueue.getPerformanceMetrics();
 
-    if (frameTime > this.performanceThreshold * 2) {
-      this.stats.droppedFrames++;
-    }
-
-    // Calculate frame time with moving average
-    this.stats.averageFrameTime = this.stats.averageFrameTime * 0.9 + frameTime * 0.1;
+    // Sync stats with queue metrics
+    this.stats.totalFrames = Math.max(
+      this.stats.totalFrames,
+      queueMetrics.droppedFrames + Math.floor(queueMetrics.lastFrameTimestamp / 16.67)
+    );
+    this.stats.droppedFrames = queueMetrics.droppedFrames;
+    this.stats.averageFrameTime = queueMetrics.frameTime;
   }
 
   /**
@@ -290,6 +326,9 @@ export class AnimationManager {
   private checkPerformance(): void {
     const now = performance.now();
     if (now - this.stats.lastPerformanceCheck < INTERVALS.PERFORMANCE_CHECK) return;
+
+    // Update performance stats from AnimationQueue
+    this.updatePerformanceStats();
 
     const dropRate =
       this.stats.totalFrames > 0 ? this.stats.droppedFrames / this.stats.totalFrames : 0;
@@ -318,6 +357,25 @@ export class AnimationManager {
     }
 
     this.stats.lastPerformanceCheck = now;
+  }
+
+  /**
+   * Reset singleton state (implements ISingleton)
+   */
+  public override reset(): void {
+    this.stopAll();
+    this.resetPerformanceStats();
+    this.isPaused = false;
+    this.isReducedMotion = false;
+    this.globalFPSLimit = 60;
+  }
+
+  /**
+   * Clean up all resources (implements ISingleton)
+   */
+  public override destroy(): void {
+    this.stopAll();
+    this.animationQueue.destroy();
   }
 
   /**

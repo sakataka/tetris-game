@@ -6,7 +6,7 @@
 import { createAudioError } from '../../../types/errors';
 import type { SoundKey } from '../../../types/tetris';
 import { log } from '../../logging/logger';
-import { type AudioState, AudioStrategy, type SoundConfig } from './AudioStrategy';
+import { type AudioState, BaseAudioStrategy, type SoundConfig } from './BaseAudioStrategy';
 
 interface AudioContextState {
   context: AudioContext | null;
@@ -27,7 +27,7 @@ type AudioBufferCache = {
   [K in SoundKey]?: AudioBuffer;
 };
 
-export class WebAudioStrategy extends AudioStrategy {
+export class WebAudioStrategy extends BaseAudioStrategy {
   private audioState: AudioContextState = {
     context: null,
     gainNode: null,
@@ -50,51 +50,29 @@ export class WebAudioStrategy extends AudioStrategy {
   }
 
   async initialize(): Promise<void> {
-    if (typeof window === 'undefined') return;
+    await this.initializeStrategy('WebAudioStrategy');
+  }
 
-    try {
-      const AudioContextClass =
-        window.AudioContext ||
-        (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+  protected async doInitialize(): Promise<void> {
+    const AudioContextClass =
+      window.AudioContext ||
+      (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
 
-      if (!AudioContextClass) {
-        throw createAudioError(
-          'Web Audio API is not supported',
-          {
-            component: 'WebAudioStrategy',
-            metadata: { operation: 'audio_context_init' },
-          },
-          undefined // No user message for audio errors (they're suppressed)
-        );
-      }
+    if (!AudioContextClass) {
+      throw new Error('Web Audio API is not supported');
+    }
 
-      this.audioState.context = new AudioContextClass();
-      this.audioState.gainNode = this.audioState.context.createGain();
-      this.audioState.gainNode.connect(this.audioState.context.destination);
+    this.audioState.context = new AudioContextClass();
+    this.audioState.gainNode = this.audioState.context.createGain();
+    this.audioState.gainNode.connect(this.audioState.context.destination);
 
-      this.updateVolume();
-      this.audioState.initialized = true;
+    this.updateVolume();
+    this.audioState.initialized = true;
 
-      // Handle browser autoplay policy
-      if (this.audioState.context.state === 'suspended') {
-        this.audioState.suspended = true;
-        this.setupUserInteractionUnlock();
-      }
-    } catch (error) {
-      const audioError = createAudioError(
-        'Failed to initialize AudioContext',
-        {
-          component: 'WebAudioStrategy',
-          metadata: { error, operation: 'audio_context_init' },
-        },
-        undefined // No user message for audio errors (they're suppressed)
-      );
-      log.warn('AudioContext initialization failed', {
-        component: 'WebAudioStrategy',
-        action: 'audio_context_init',
-        metadata: { audioError },
-      });
-      throw audioError;
+    // Handle browser autoplay policy
+    if (this.audioState.context.state === 'suspended') {
+      this.audioState.suspended = true;
+      this.setupUserInteractionUnlock();
     }
   }
 

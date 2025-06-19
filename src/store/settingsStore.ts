@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import type { GameSettings, ThemeVariant } from '@/types/tetris';
-import { log } from '@/utils/logging';
+import type { GameSettings, ThemeVariant } from '../types/tetris';
+import { log } from '../utils/logging';
 
 // Navigation types
 export type TabType = 'game' | 'stats' | 'theme' | 'settings';
@@ -28,179 +28,180 @@ export interface ExtendedGameSettings extends Omit<GameSettings, 'keyBindings'> 
   activeTab: TabType;
 }
 
-// Default settings values
-const DEFAULT_SETTINGS: ExtendedGameSettings = {
+interface SettingsStoreState extends ExtendedGameSettings {
+  isInitialized: boolean;
+}
+
+// Settings store with additional actions
+interface SettingsStore extends SettingsStoreState {
+  // Settings management
+  updateSettings: (newSettings: Partial<ExtendedGameSettings>) => void;
+
+  // Audio controls
+  enableAudio: (enabled: boolean) => void;
+  setVolume: (volume: number) => void;
+
+  // Visual controls
+  setShowGhost: (enabled: boolean) => void;
+  setShowParticles: (enabled: boolean) => void;
+
+  // Theme controls
+  setTheme: (theme: ThemeVariant) => void;
+
+  // Key binding management
+  setKeyBinding: (action: keyof ExtendedKeyBindings, keys: string[]) => void;
+
+  // Navigation
+  setActiveTab: (tab: TabType) => void;
+
+  // System actions
+  resetSettings: () => void;
+  initialize: () => void;
+
+  // Legacy toggle methods for backward compatibility
+  toggleMute: () => void;
+  toggleGhost: () => void;
+  toggleParticles: () => void;
+  toggleInitialized: () => void;
+}
+
+// Default key bindings
+const defaultKeyBindings: ExtendedKeyBindings = {
+  moveLeft: ['ArrowLeft', 'a', 'A'],
+  moveRight: ['ArrowRight', 'd', 'D'],
+  moveDown: ['ArrowDown', 's', 'S'],
+  rotate: ['ArrowUp', 'w', 'W', ' '],
+  hardDrop: ['Space'],
+  pause: ['p', 'P', 'Escape'],
+  reset: ['r', 'R'],
+};
+
+// Initial state
+const INITIAL_SETTINGS_STATE: SettingsStoreState = {
   // Audio settings
   audioEnabled: true,
   volume: 0.5,
   isMuted: false,
 
   // Visual settings
-  theme: 'cyberpunk' as const,
   showGhost: true,
   showParticles: true,
+  theme: 'cyberpunk' as ThemeVariant,
 
-  // Key bindings (now supports multiple keys)
-  keyBindings: {
-    moveLeft: ['ArrowLeft', 'a', 'A'],
-    moveRight: ['ArrowRight', 'd', 'D'],
-    moveDown: ['ArrowDown', 's', 'S'],
-    rotate: ['ArrowUp', 'w', 'W'],
-    hardDrop: [' '],
-    pause: ['p', 'P'],
-    reset: ['r', 'R'],
-  },
-
-  // Game settings
+  // Game controls
+  keyBindings: defaultKeyBindings,
   difficulty: 'normal' as const,
   gameMode: 'single' as const,
   virtualControlsEnabled: false,
 
-  // Navigation settings
-  activeTab: 'game' as const,
+  // Navigation
+  activeTab: 'game',
+
+  // System
+  isInitialized: false,
 };
-
-interface SettingsStore {
-  // State
-  settings: ExtendedGameSettings;
-
-  // Actions
-  updateSettings: (newSettings: Partial<ExtendedGameSettings>) => void;
-  resetSettings: () => void;
-  updateTheme: (theme: ThemeVariant) => void;
-
-  // Navigation management
-  setActiveTab: (tab: TabType) => void;
-
-  // Key binding management
-  updateKeyBinding: (action: keyof ExtendedKeyBindings, newKeys: string[]) => void;
-  addKeyBinding: (action: keyof ExtendedKeyBindings, newKey: string) => void;
-  removeKeyBinding: (action: keyof ExtendedKeyBindings, key: string) => void;
-  resetKeyBindings: () => void;
-  isKeyBound: (key: string) => boolean;
-  getKeyBinding: (action: keyof ExtendedKeyBindings) => string[];
-
-  // Legacy compatibility
-  updateVolume: (volume: number) => void;
-  toggleMute: () => void;
-  toggleAudioEnabled: () => void;
-  toggleShowGhost: () => void;
-  toggleShowParticles: () => void;
-}
 
 export const useSettingsStore = create<SettingsStore>()(
   persist(
     (set, get) => ({
-      // Initial state
-      settings: DEFAULT_SETTINGS,
+      ...INITIAL_SETTINGS_STATE,
 
-      // Actions
-      updateSettings: (newSettings) =>
-        set((state) => {
-          const updatedSettings = { ...state.settings, ...newSettings };
-          log.debug('Settings updated', {
-            component: 'SettingsStore',
-            metadata: { changes: newSettings },
-          });
-          return { settings: updatedSettings };
-        }),
+      // Settings management
+      updateSettings: (newSettings: Partial<ExtendedGameSettings>) => {
+        const store = get();
+        set((state) => ({ ...state, ...newSettings }));
 
-      resetSettings: () =>
-        set(() => {
-          log.info('Settings reset to defaults', { component: 'SettingsStore' });
-          return { settings: DEFAULT_SETTINGS };
-        }),
+        log.info('Settings updated', {
+          component: 'SettingsStore',
+          metadata: {
+            changes: Object.keys(newSettings),
+            newState: { ...store, ...newSettings },
+          },
+        });
+      },
 
-      updateTheme: (theme) =>
-        set((state) => ({
-          settings: { ...state.settings, theme },
-        })),
+      // Audio controls
+      enableAudio: (enabled: boolean) => {
+        set((state) => ({ ...state, audioEnabled: enabled }));
+      },
 
-      // Navigation management
-      setActiveTab: (tab) =>
-        set((state) => ({
-          settings: { ...state.settings, activeTab: tab },
-        })),
+      setVolume: (volume: number) => {
+        set((state) => ({ ...state, volume }));
+      },
+
+      // Visual controls
+      setShowGhost: (enabled: boolean) => {
+        set((state) => ({ ...state, showGhost: enabled }));
+      },
+
+      setShowParticles: (enabled: boolean) => {
+        set((state) => ({ ...state, showParticles: enabled }));
+      },
+
+      // Theme controls
+      setTheme: (theme: ThemeVariant) => {
+        set((state) => ({ ...state, theme }));
+      },
 
       // Key binding management
-      updateKeyBinding: (action, newKeys) =>
+      setKeyBinding: (action: keyof ExtendedKeyBindings, keys: string[]) => {
         set((state) => ({
-          settings: {
-            ...state.settings,
-            keyBindings: {
-              ...state.settings.keyBindings,
-              [action]: newKeys,
-            },
+          ...state,
+          keyBindings: {
+            ...state.keyBindings,
+            [action]: keys,
           },
-        })),
-
-      addKeyBinding: (action, newKey) => {
-        const currentKeys = get().settings.keyBindings[action];
-        if (currentKeys && !currentKeys.includes(newKey)) {
-          get().updateKeyBinding(action, [...currentKeys, newKey]);
-        }
+        }));
       },
 
-      removeKeyBinding: (action, key) => {
-        const currentKeys = get().settings.keyBindings[action];
-        if (currentKeys) {
-          get().updateKeyBinding(
-            action,
-            currentKeys.filter((k) => k !== key)
-          );
-        }
+      // Navigation
+      setActiveTab: (tab: TabType) => {
+        set((state) => ({ ...state, activeTab: tab }));
       },
 
-      resetKeyBindings: () =>
-        set((state) => ({
-          settings: {
-            ...state.settings,
-            keyBindings: DEFAULT_SETTINGS.keyBindings,
-          },
-        })),
-
-      isKeyBound: (key) => {
-        const { keyBindings } = get().settings;
-        return Object.values(keyBindings).some((keys) => keys.includes(key));
+      // System actions
+      resetSettings: () => {
+        set(() => ({ ...INITIAL_SETTINGS_STATE }));
       },
 
-      getKeyBinding: (action) => get().settings.keyBindings[action] || [],
+      initialize: () => {
+        set((state) => ({ ...state, isInitialized: true }));
+      },
 
-      // Legacy compatibility helpers
-      updateVolume: (volume) =>
-        set((state) => ({
-          settings: { ...state.settings, volume: Math.max(0, Math.min(1, volume)) },
-        })),
+      // Legacy toggle methods for backward compatibility
+      toggleMute: () => {
+        set((state) => ({ ...state, audioEnabled: !state.audioEnabled }));
+      },
 
-      toggleMute: () =>
-        set((state) => ({
-          settings: { ...state.settings, isMuted: !state.settings.isMuted },
-        })),
+      toggleGhost: () => {
+        set((state) => ({ ...state, showGhost: !state.showGhost }));
+      },
 
-      toggleAudioEnabled: () =>
-        set((state) => ({
-          settings: { ...state.settings, audioEnabled: !state.settings.audioEnabled },
-        })),
+      toggleParticles: () => {
+        set((state) => ({ ...state, showParticles: !state.showParticles }));
+      },
 
-      toggleShowGhost: () =>
-        set((state) => ({
-          settings: { ...state.settings, showGhost: !state.settings.showGhost },
-        })),
-
-      toggleShowParticles: () =>
-        set((state) => ({
-          settings: { ...state.settings, showParticles: !state.settings.showParticles },
-        })),
+      toggleInitialized: () => {
+        set((state) => ({ ...state, isInitialized: !state.isInitialized }));
+      },
     }),
     {
-      name: 'tetris-game-settings',
+      name: 'settings-storage',
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({ settings: state.settings }),
+      version: 1,
+      migrate: (persistedState: unknown, version: number) => {
+        log.info('Migrating settings from version', {
+          component: 'SettingsStore',
+          metadata: { version, persistedState },
+        });
+        // Migration logic can be added here if needed
+        return persistedState as SettingsStore;
+      },
       onRehydrateStorage: () => (state) => {
         if (state) {
-          log.info('Settings loaded from localStorage', {
+          log.info('Settings rehydrated from storage', {
             component: 'SettingsStore',
-            metadata: { settings: state.settings },
+            metadata: { isInitialized: state.isInitialized },
           });
         }
       },
@@ -208,34 +209,41 @@ export const useSettingsStore = create<SettingsStore>()(
   )
 );
 
-// Selector hooks for optimized access
-export const useSettings = () => useSettingsStore((state) => state.settings);
-export const useVolume = () => useSettingsStore((state) => state.settings.volume);
-export const useIsMuted = () => useSettingsStore((state) => state.settings.isMuted);
-export const useAudioEnabled = () => useSettingsStore((state) => state.settings.audioEnabled);
-export const useTheme = () => useSettingsStore((state) => state.settings.theme);
-export const useShowGhost = () => useSettingsStore((state) => state.settings.showGhost);
-export const useShowParticles = () => useSettingsStore((state) => state.settings.showParticles);
-export const useKeyBindings = () => useSettingsStore((state) => state.settings.keyBindings);
+// Export individual hooks for convenience
+export const useAudioSettings = () =>
+  useSettingsStore((state) => ({
+    audioEnabled: state.audioEnabled,
+    volume: state.volume,
+    enableAudio: state.enableAudio,
+    setVolume: state.setVolume,
+    toggleMute: state.toggleMute,
+  }));
 
-// Navigation selectors (integrated from navigationStore)
-export const useActiveTab = () => useSettingsStore((state) => state.settings.activeTab);
+export const useVisualSettings = () =>
+  useSettingsStore((state) => ({
+    showGhost: state.showGhost,
+    showParticles: state.showParticles,
+    theme: state.theme,
+    setShowGhost: state.setShowGhost,
+    setShowParticles: state.setShowParticles,
+    setTheme: state.setTheme,
+    toggleGhost: state.toggleGhost,
+    toggleParticles: state.toggleParticles,
+  }));
 
-// Individual action hooks (function reference stabilization)
+export const useKeyBindings = () =>
+  useSettingsStore((state) => ({
+    keyBindings: state.keyBindings,
+    setKeyBinding: state.setKeyBinding,
+  }));
+
+export const useNavigation = () =>
+  useSettingsStore((state) => ({
+    activeTab: state.activeTab,
+    setActiveTab: state.setActiveTab,
+  }));
+
+export const useSettings = () => useSettingsStore();
+
+// Legacy export for backward compatibility
 export const useUpdateSettings = () => useSettingsStore((state) => state.updateSettings);
-export const useResetSettings = () => useSettingsStore((state) => state.resetSettings);
-export const useUpdateTheme = () => useSettingsStore((state) => state.updateTheme);
-export const useUpdateKeyBinding = () => useSettingsStore((state) => state.updateKeyBinding);
-export const useAddKeyBinding = () => useSettingsStore((state) => state.addKeyBinding);
-export const useRemoveKeyBinding = () => useSettingsStore((state) => state.removeKeyBinding);
-export const useResetKeyBindings = () => useSettingsStore((state) => state.resetKeyBindings);
-export const useIsKeyBound = () => useSettingsStore((state) => state.isKeyBound);
-export const useGetKeyBinding = () => useSettingsStore((state) => state.getKeyBinding);
-export const useUpdateVolume = () => useSettingsStore((state) => state.updateVolume);
-export const useToggleMute = () => useSettingsStore((state) => state.toggleMute);
-export const useToggleAudioEnabled = () => useSettingsStore((state) => state.toggleAudioEnabled);
-export const useToggleShowGhost = () => useSettingsStore((state) => state.toggleShowGhost);
-export const useToggleShowParticles = () => useSettingsStore((state) => state.toggleShowParticles);
-
-// Navigation action hooks (integrated from navigationStore)
-export const useSetActiveTab = () => useSettingsStore((state) => state.setActiveTab);

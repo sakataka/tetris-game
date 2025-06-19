@@ -7,7 +7,7 @@ import { GAME_TIMING } from '../../../constants/timing';
 import { createAudioError } from '../../../types/errors';
 import type { SoundKey } from '../../../types/tetris';
 import { log } from '../../logging';
-import { type AudioState, AudioStrategy, type SoundConfig } from './AudioStrategy';
+import { type AudioState, BaseAudioStrategy, type SoundConfig } from './BaseAudioStrategy';
 
 interface HTMLAudioElement extends globalThis.HTMLAudioElement {
   volume: number;
@@ -20,11 +20,10 @@ interface ActiveHTMLSound {
   startTime: number;
 }
 
-export class HTMLAudioStrategy extends AudioStrategy {
+export class HTMLAudioStrategy extends BaseAudioStrategy {
   private audioElements: Map<SoundKey, HTMLAudioElement[]> = new Map();
   private activeSounds: Map<string, ActiveHTMLSound> = new Map();
   private loadedSounds: Set<SoundKey> = new Set();
-  private initialized = false;
 
   canPlayAudio(): boolean {
     if (typeof window === 'undefined') return false;
@@ -32,34 +31,19 @@ export class HTMLAudioStrategy extends AudioStrategy {
   }
 
   async initialize(): Promise<void> {
-    if (typeof window === 'undefined') return;
+    await this.initializeStrategy('HTMLAudioStrategy');
+  }
 
-    try {
-      if (!this.canPlayAudio()) {
-        throw createAudioError(
-          'HTML Audio is not supported',
-          { component: 'HTMLAudioStrategy', metadata: { action: 'html_audio_init' } },
-          undefined
-        );
-      }
-
-      this.initialized = true;
-    } catch (error) {
-      const audioError = createAudioError(
-        'Failed to initialize HTML Audio',
-        { component: 'HTMLAudioStrategy', metadata: { action: 'html_audio_init', error } },
-        undefined
-      );
-      log.warn('HTML Audio initialization failed', {
-        component: 'HTMLAudioStrategy',
-        metadata: { audioError },
-      });
-      throw audioError;
+  protected async doInitialize(): Promise<void> {
+    // HTML Audio initialization is minimal - just verify support
+    // Actual audio elements are created lazily when needed
+    if (!this.canPlayAudio()) {
+      throw new Error('HTML Audio is not supported');
     }
   }
 
   async playSound(soundKey: SoundKey, config: Partial<SoundConfig> = {}): Promise<void> {
-    if (this.isMuted || !this.initialized) return;
+    if (this.isMuted || !this.isInitialized()) return;
 
     try {
       // Get or create audio element
