@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import MainLayout from '../components/layout/MainLayout';
-import ConfigComparisonCard from '../components/shared/ConfigComparisonCard';
-import CyberCard from '../components/ui/CyberCard';
-import { createGameConfig } from '../config';
-import { useSettingsStore } from '../store/settingsStore';
+import MainLayout from '@/components/layout/MainLayout';
+import ConfigComparisonCard from '@/components/shared/ConfigComparisonCard';
+import CyberCard from '@/components/ui/CyberCard';
+import { createGameConfig } from '@/config';
+import { useSettingsStore } from '@/store/settingsStore';
 
 export default function AboutPage() {
   const { t } = useTranslation();

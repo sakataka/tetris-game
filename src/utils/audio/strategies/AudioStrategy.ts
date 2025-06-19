@@ -3,7 +3,7 @@
  * Defines common interface for different audio implementations
  */
 
-import type { SoundKey } from '../../../types/tetris';
+import type { SoundKey } from '@/types/tetris';
 
 export interface SoundConfig {
   volume: number;

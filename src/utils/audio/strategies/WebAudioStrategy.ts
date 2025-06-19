@@ -3,9 +3,9 @@
  * High-performance audio with object pooling and concurrent playback
  */
 
-import { createAudioError } from '../../../types/errors';
-import type { SoundKey } from '../../../types/tetris';
-import { log } from '../../logging/logger';
+import { createAudioError } from '@/types/errors';
+import type { SoundKey } from '@/types/tetris';
+import { log } from '@/utils/logging/logger';
 import { type AudioState, BaseAudioStrategy, type SoundConfig } from './BaseAudioStrategy';
 
 interface AudioContextState {

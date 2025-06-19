@@ -10,7 +10,7 @@ import type {
   FontSizeLevel,
   VisualAssistance,
 } from '@/types/accessibility';
-import { log } from '../logging';
+import { log } from '@/utils/logging';
 
 /**
  * Apply accessibility settings to CSS variables
@@ -210,7 +210,10 @@ export function checkWCAGCompliance(accessibility: AccessibilityState): WCAGComp
   }
 
   // Text alternatives and feedback (WCAG 1.1.1 - Level A)
-  if (!accessibility.feedbackSettings.soundEffects && !accessibility.feedbackSettings.voiceAnnouncements) {
+  if (
+    !accessibility.feedbackSettings.soundEffects &&
+    !accessibility.feedbackSettings.voiceAnnouncements
+  ) {
     recommendations.push('Consider providing audio feedback for game events (WCAG 1.1.1)');
     score -= 5;
   }
@@ -393,10 +396,9 @@ export function generateAccessibilityReport(accessibility: AccessibilityState): 
         {
           name: 'Focus Outlines',
           value: accessibility.keyboardNavigation.focusOutline ? 'Enabled' : 'Disabled',
-          status: (accessibility.keyboardNavigation.focusOutline ? 'optimal' : 'needs-improvement') as
-            | 'optimal'
-            | 'acceptable'
-            | 'needs-improvement',
+          status: (accessibility.keyboardNavigation.focusOutline
+            ? 'optimal'
+            : 'needs-improvement') as 'optimal' | 'acceptable' | 'needs-improvement',
         },
       ],
     },

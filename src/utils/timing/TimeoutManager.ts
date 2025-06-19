@@ -6,9 +6,9 @@
  * appropriate behavior for long-duration timeouts.
  */
 
-import { animationManager } from '../animation/animationManager';
-import { log } from '../logging';
-import { type ISingleton, SingletonMixin, BaseClass } from '../patterns/singletonMixin';
+import { animationManager } from '@/utils/animation/animationManager';
+import { log } from '@/utils/logging';
+import { BaseClass, type ISingleton, SingletonMixin } from '@/utils/patterns/singletonMixin';
 
 interface ManagedTimeout {
   callback: () => void;
@@ -27,7 +27,10 @@ interface ManagedTimeout {
  * - Automatic cleanup and memory management
  * - Debug logging for timeout tracking
  */
-export class TimeoutManager extends SingletonMixin(class extends BaseClass {}) implements ISingleton {
+export class TimeoutManager
+  extends SingletonMixin(class extends BaseClass {})
+  implements ISingleton
+{
   private timeouts = new Map<string, ManagedTimeout>();
   private nextId = 1;
 

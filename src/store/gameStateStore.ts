@@ -10,7 +10,7 @@ import {
   processLineClear,
   updateGameStateWithPiece,
 } from '@/utils/game';
-import { useSettingsStore } from './settingsStore';
+import { useSettingsStore } from '@/store/settingsStore';
 
 // Helper function to create initial game state with debug mode consideration
 const createInitialGameState = (): GameState => {

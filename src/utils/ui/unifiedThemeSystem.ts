@@ -5,8 +5,8 @@
  * This eliminates complexity and ensures consistency
  */
 
+import themePresetsData from '@/data/themePresetsSimple.json';
 import type { ThemeVariant } from '@/types/tetris';
-import themePresetsData from '../../data/themePresetsSimple.json';
 
 // Validate JSON import and provide fallback
 if (!themePresetsData || typeof themePresetsData !== 'object') {

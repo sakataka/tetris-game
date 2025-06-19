@@ -6,11 +6,11 @@
  * Now uses the advanced AnimationQueue system for better frame budget management.
  */
 
-import { ENV_CONFIG } from '../../config/environment';
-import { PERFORMANCE_LIMITS } from '../../constants/performance';
-import { INTERVALS } from '../../constants/timing';
-import { log } from '../logging';
-import { type ISingleton, SingletonMixin, BaseClass } from '../patterns/singletonMixin';
+import { ENV_CONFIG } from '@/config/environment';
+import { PERFORMANCE_LIMITS } from '@/constants/performance';
+import { INTERVALS } from '@/constants/timing';
+import { log } from '@/utils/logging';
+import { BaseClass, type ISingleton, SingletonMixin } from '@/utils/patterns/singletonMixin';
 import { type AnimationPriority, AnimationQueue } from './animationQueue';
 
 export interface AnimationOptions {
@@ -55,7 +55,10 @@ interface ActiveAnimation {
  * - Graceful degradation under performance pressure
  * - Debug statistics and metrics
  */
-export class AnimationManager extends SingletonMixin(class extends BaseClass {}) implements ISingleton {
+export class AnimationManager
+  extends SingletonMixin(class extends BaseClass {})
+  implements ISingleton
+{
   private animationQueue: AnimationQueue;
   private activeAnimations = new Map<string, ActiveAnimation>();
   private isPaused = false;

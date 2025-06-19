@@ -3,10 +3,10 @@
  * Cross-browser compatible audio implementation
  */
 
-import { GAME_TIMING } from '../../../constants/timing';
-import { createAudioError } from '../../../types/errors';
-import type { SoundKey } from '../../../types/tetris';
-import { log } from '../../logging';
+import { GAME_TIMING } from '@/constants/timing';
+import { createAudioError } from '@/types/errors';
+import type { SoundKey } from '@/types/tetris';
+import { log } from '@/utils/logging';
 import { type AudioState, BaseAudioStrategy, type SoundConfig } from './BaseAudioStrategy';
 
 interface HTMLAudioElement extends globalThis.HTMLAudioElement {

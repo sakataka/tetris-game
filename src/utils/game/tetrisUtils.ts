@@ -9,8 +9,8 @@ import {
   TETROMINO_SHAPES,
 } from '@/constants';
 import type { Particle, Tetromino, TetrominoType } from '@/types/tetris';
-import { particlePool } from '../performance/particlePool';
-import { getTetrominoColors } from '../ui/themeAwareTetrominoes';
+import { particlePool } from '@/utils/performance/particlePool';
+import { getTetrominoColors } from '@/utils/ui/themeAwareTetrominoes';
 
 export function createEmptyBoard(): (string | null)[][] {
   return Array(BOARD_HEIGHT)

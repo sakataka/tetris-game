@@ -5,8 +5,8 @@
 
 import { createAudioError } from '@/types/errors';
 import type { SoundKey } from '@/types/tetris';
-import { log } from '../logging/logger';
-import { type ISingleton, SingletonMixin, BaseClass } from '../patterns/singletonMixin';
+import { log } from '@/utils/logging/logger';
+import { BaseClass, type ISingleton, SingletonMixin } from '@/utils/patterns/singletonMixin';
 import { audioManager } from './audioManager';
 
 interface PreloadStrategy {

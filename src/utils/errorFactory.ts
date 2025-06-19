@@ -6,7 +6,7 @@
  */
 
 import type { ErrorCategory, ErrorContext, ErrorLevel, GameAppError } from '@/types/errors';
-import { type ISingleton, SingletonMixin, BaseClass } from './patterns/singletonMixin';
+import { BaseClass, type ISingleton, SingletonMixin } from './patterns/singletonMixin';
 
 // Error type configurations
 interface ErrorTypeConfig {

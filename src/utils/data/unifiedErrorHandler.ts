@@ -7,7 +7,7 @@
 
 import { GAME_TIMING } from '@/constants/timing';
 import { GameAppError } from '@/types/errors';
-import { log } from '../logging';
+import { log } from '@/utils/logging';
 import { errorHandler } from './errorHandler';
 
 /**

@@ -3,9 +3,9 @@
  * Extracts shared functionality from concrete implementations
  */
 
-import { createAudioError } from '../../../types/errors';
-import type { SoundKey } from '../../../types/tetris';
-import { log } from '../../logging';
+import { createAudioError } from '@/types/errors';
+import type { SoundKey } from '@/types/tetris';
+import { log } from '@/utils/logging';
 
 export interface SoundConfig {
   volume: number;

@@ -84,6 +84,6 @@ export const TETROMINO_CSS_VARS = {
 export function createThemeAwareTetromino(debugMode = false, themeVariant?: ThemeVariant) {
   const colors = getTetrominoColors(themeVariant);
   // We'll import this dynamically to avoid circular dependencies
-  const { getRandomTetromino } = require('../game/tetrisUtils');
+  const { getRandomTetromino } = require('@/utils/game/tetrisUtils');
   return getRandomTetromino(debugMode, colors);
 }
