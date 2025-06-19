@@ -132,7 +132,6 @@ describe('Configuration Utilities', () => {
     config1 = createGameConfig('test');
   });
 
-
   it('should create and restore configuration backups', () => {
     const backup = createConfigurationBackup(config1, '1.0.0');
     expect(backup.config).toEqual(config1);
@@ -180,7 +179,6 @@ describe('Configuration Utilities', () => {
     expect(lowEndOptimized.performance.maxParticles).toBeLessThanOrEqual(50);
     expect(lowEndOptimized.features.particlesEnabled).toBe(false);
   });
-
 });
 
 describe('Configuration Store Integration', () => {

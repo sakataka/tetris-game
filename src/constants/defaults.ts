@@ -52,4 +52,3 @@ export const DEFAULT_VALUES = {
     SHOW_PARTICLES: true,
   },
 } as const;
-

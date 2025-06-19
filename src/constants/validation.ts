@@ -225,7 +225,13 @@ export const gameConfigSchema: ValidationSchema<GameRulesConfig> = {
           )
         );
         errors.push(
-          ...validators.isInRange(progression['minLevel'], 1, 999, 'levelProgression.minLevel', 'game')
+          ...validators.isInRange(
+            progression['minLevel'],
+            1,
+            999,
+            'levelProgression.minLevel',
+            'game'
+          )
         );
         errors.push(
           ...validators.isInRange(
@@ -256,7 +262,9 @@ export const gameConfigSchema: ValidationSchema<GameRulesConfig> = {
         }
 
         const physics = value as Record<string, unknown>;
-        errors.push(...validators.isInRange(physics['cellSize'], 8, 64, 'physics.cellSize', 'game'));
+        errors.push(
+          ...validators.isInRange(physics['cellSize'], 8, 64, 'physics.cellSize', 'game')
+        );
         errors.push(...validators.isNonNegative(physics['moveDelay'], 'physics.moveDelay', 'game'));
 
         return errors;
@@ -401,7 +409,9 @@ export const audioConfigSchema: ValidationSchema<AudioConfiguration> = {
         }
 
         const sounds = value as Record<string, unknown>;
-        errors.push(...validators.isNonNegative(sounds['maxRetries'], 'sounds.maxRetries', 'audio'));
+        errors.push(
+          ...validators.isNonNegative(sounds['maxRetries'], 'sounds.maxRetries', 'audio')
+        );
         errors.push(
           ...validators.isPositive(
             sounds['maxConcurrentSounds'],

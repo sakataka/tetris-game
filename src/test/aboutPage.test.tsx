@@ -33,7 +33,6 @@ vi.mock('../components/layout/MainLayout', () => ({
   ),
 }));
 
-
 describe('AboutPage', () => {
   it('should render main about information', () => {
     render(<AboutPage />);
@@ -60,7 +59,6 @@ describe('AboutPage', () => {
     expect(screen.getByText('v1.0.0')).toBeInTheDocument();
     expect(screen.getByText('Built with React and TypeScript')).toBeInTheDocument();
   });
-
 
   it('should be wrapped in MainLayout', () => {
     render(<AboutPage />);

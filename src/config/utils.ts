@@ -8,7 +8,6 @@ import { logger } from '@/utils/logging';
 import { ENV_CONFIG } from './environment';
 import type { GameConfiguration } from './gameConfig';
 
-
 // Configuration backup and restore
 export interface ConfigurationBackup {
   config: GameConfiguration;
@@ -205,4 +204,3 @@ export function validateConfigurationSection<T extends keyof GameConfiguration>(
     errors,
   };
 }
-

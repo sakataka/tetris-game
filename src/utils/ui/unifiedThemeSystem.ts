@@ -109,7 +109,6 @@ export function applyUnifiedThemeToDocument(variant: ThemeVariant): void {
   Object.entries(config.tetrominoes).forEach(([piece, color]) => {
     root.style.setProperty(`--tetromino-${piece.toLowerCase()}`, color);
   });
-
 }
 
 /**
