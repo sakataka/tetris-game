@@ -7,23 +7,19 @@
  * backward compatibility for existing code.
  */
 
+// Import timing constants
+import { GAME_TIMING } from './timing';
+
+// Re-export timing constants
+export { GAME_TIMING } from './timing';
+
+// Re-export individual timing values for compatibility
+export const INITIAL_DROP_TIME = GAME_TIMING.INITIAL_DROP_TIME;
+
 // Re-export from new configuration system
 export {
-  DROP_TIME_MULTIPLIER,
-  GAME_PHYSICS,
-  INITIAL_DROP_TIME,
-  LEVEL_UP_LINES,
-  MAX_HIGH_SCORES,
-  MAX_LEVEL,
-  MAX_SCORE,
-  MIN_LEVEL,
-  MIN_SCORE,
-  PARTICLE_SYSTEM,
-  PREVIEW_PIECES,
   SCORES,
   type ScoreType,
-  SESSION_TIMEOUT,
-  VALIDATION,
 } from './gameConfig';
 
 // Legacy compatibility constants with updated naming

@@ -53,9 +53,3 @@ export const DEFAULT_VALUES = {
   },
 } as const;
 
-export const INITIAL_STATES = {
-  GAME_PAUSED: false,
-  GAME_OVER: false,
-  SETTINGS_OPEN: false,
-  MUTED: false,
-} as const;

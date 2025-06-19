@@ -414,18 +414,3 @@ class AudioConfigManager {
 }
 
 export const audioConfigManager = new AudioConfigManager();
-
-// Export current configuration and computed values
-export const AUDIO_CONFIG = audioConfigManager.getConfig();
-export const COMPUTED_AUDIO = audioConfigManager.getComputedValues();
-
-// Backward compatibility exports
-export const SOUND_FILES = COMPUTED_AUDIO.soundPaths;
-export const AUDIO_SETTINGS = {
-  MAX_RETRIES: AUDIO_CONFIG.sounds.maxRetries,
-  THROTTLE_MS: AUDIO_CONFIG.sounds.throttleMs,
-  PRELOAD_PROGRESS_COMPLETE: AUDIO_CONFIG.sounds.preloadProgressComplete,
-  FADE_IN_DURATION: AUDIO_CONFIG.sounds.fadeInDuration,
-  FADE_OUT_DURATION: AUDIO_CONFIG.sounds.fadeOutDuration,
-  MAX_CONCURRENT_SOUNDS: AUDIO_CONFIG.sounds.maxConcurrentSounds,
-} as const;

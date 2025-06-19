@@ -4,7 +4,7 @@
  * Unified configuration management with environment-based overrides
  */
 
-import { DEFAULT_VALUES, GAME_TIMING, PERFORMANCE_LIMITS, PREVIEW_PIECES } from '@/constants';
+import { DEFAULT_VALUES, GAME_TIMING, PERFORMANCE_LIMITS } from '@/constants';
 import { ENV_CONFIG } from './environment';
 
 // Configuration interfaces
@@ -78,7 +78,7 @@ const createDefaultGameplayConfig = (): GameplayConfig => ({
   initialSpeed: GAME_TIMING.INITIAL_DROP_TIME,
   speedIncrement: GAME_TIMING.SPEED_INCREMENT_PER_LEVEL,
   maxSpeed: GAME_TIMING.MIN_DROP_TIME,
-  previewPieces: PREVIEW_PIECES,
+  previewPieces: 3, // Default preview pieces
 });
 
 // Environment-specific configuration creators

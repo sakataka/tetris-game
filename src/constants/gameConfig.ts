@@ -289,25 +289,6 @@ export const SCORES = {
   HARD_DROP_BONUS: GAME_CONFIG.scoring.hardDropBonus,
   SOFT_DROP_BONUS: GAME_CONFIG.scoring.softDropBonus,
 } as const;
-export const LEVEL_UP_LINES = GAME_CONFIG.levelProgression.linesPerLevel;
-export const MIN_LEVEL = GAME_CONFIG.levelProgression.minLevel;
-export const MAX_LEVEL = GAME_CONFIG.levelProgression.maxLevel;
-export const PREVIEW_PIECES = GAME_CONFIG.mechanics.previewPieces;
-export const INITIAL_DROP_TIME = GAME_CONFIG.levelProgression.initialDropTime;
-export const DROP_TIME_MULTIPLIER = GAME_CONFIG.levelProgression.dropTimeMultiplier;
-export const MAX_HIGH_SCORES = GAME_CONFIG.mechanics.maxHighScores;
-export const MIN_SCORE = GAME_CONFIG.validation.minScore;
-export const MAX_SCORE = GAME_CONFIG.validation.maxScore;
-export const SESSION_TIMEOUT = GAME_CONFIG.mechanics.sessionTimeout;
-export const GAME_PHYSICS = GAME_CONFIG.physics;
-export const PARTICLE_SYSTEM = GAME_CONFIG.particles;
-
-export const VALIDATION = {
-  MIN_SCORE: GAME_CONFIG.validation.minScore,
-  MAX_SCORE: GAME_CONFIG.validation.maxScore,
-  MIN_LEVEL: GAME_CONFIG.levelProgression.minLevel,
-  MAX_LEVEL: GAME_CONFIG.levelProgression.maxLevel,
-  SESSION_TIMEOUT: GAME_CONFIG.mechanics.sessionTimeout,
-} as const;
+// All individual constants removed - use GAME_CONFIG object instead
 
 export type ScoreType = 'single' | 'double' | 'triple' | 'tetris';

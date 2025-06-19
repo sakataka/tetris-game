@@ -7,8 +7,6 @@
 
 // Audio configuration system (new)
 export * from './audioConfig';
-// Color and visual constants
-export * from './colors';
 // Default values and initial settings
 export * from './defaults';
 // Game configuration system (new)

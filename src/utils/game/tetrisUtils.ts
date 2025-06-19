@@ -1,9 +1,8 @@
 import {
   BOARD_HEIGHT,
   BOARD_WIDTH,
-  GAME_PHYSICS,
+  GAME_CONFIG,
   PARTICLE_LIFE_DURATION,
-  PARTICLE_SYSTEM,
   PARTICLES_PER_CELL,
   TETROMINO_COLORS,
   TETROMINO_SHAPES,
@@ -243,14 +242,14 @@ export function createParticles(linesToClear: number[], board: (string | null)[]
         for (let i = 0; i < PARTICLES_PER_CELL; i++) {
           const particle = particlePool.getParticle(
             `${Date.now()}-${lineIndex}-${x}-${i}-${Math.random()}`,
-            x * GAME_PHYSICS.cellSize +
-              GAME_PHYSICS.cellCenterOffset +
-              GAME_PHYSICS.boardPositionOffset, // Cell center + board position adjustment
-            lineIndex * GAME_PHYSICS.cellSize +
-              GAME_PHYSICS.cellCenterOffset +
-              GAME_PHYSICS.boardPositionOffset,
+            x * GAME_CONFIG.physics.cellSize +
+              GAME_CONFIG.physics.cellCenterOffset +
+              GAME_CONFIG.physics.boardPositionOffset, // Cell center + board position adjustment
+            lineIndex * GAME_CONFIG.physics.cellSize +
+              GAME_CONFIG.physics.cellCenterOffset +
+              GAME_CONFIG.physics.boardPositionOffset,
             cellColor,
-            ((Math.random() - 0.5) * PARTICLE_SYSTEM.positionVarianceX) / 2.5, // Random horizontal velocity
+            ((Math.random() - 0.5) * GAME_CONFIG.particles.positionVarianceX) / 2.5, // Random horizontal velocity
             Math.random() * -4 - 2, // Upward velocity
             PARTICLE_LIFE_DURATION
           );
