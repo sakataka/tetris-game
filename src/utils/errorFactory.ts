@@ -6,7 +6,7 @@
  */
 
 import type { ErrorCategory, ErrorContext, ErrorLevel, GameAppError } from '@/types/errors';
-import { type ISingleton, SingletonMixin } from './patterns/singletonMixin';
+import { type ISingleton, SingletonMixin, BaseClass } from './patterns/singletonMixin';
 
 // Error type configurations
 interface ErrorTypeConfig {
@@ -60,7 +60,7 @@ interface ErrorMetadata {
   [key: string]: unknown;
 }
 
-export class ErrorFactory extends SingletonMixin(class {}) implements ISingleton {
+export class ErrorFactory extends SingletonMixin(class extends BaseClass {}) implements ISingleton {
   private errorHandlers: Map<ErrorCategory, Set<(error: GameAppError) => void>> = new Map();
 
   constructor() {
@@ -135,7 +135,7 @@ export class ErrorFactory extends SingletonMixin(class {}) implements ISingleton
    */
   public handleError(error: GameAppError): void {
     const shouldLog = (error.context.metadata?.['shouldLog'] as boolean) ?? true;
-    const _shouldNotify = (error.context.metadata?.['shouldNotify'] as boolean) ?? true;
+    // const _shouldNotify = (error.context.metadata?.['shouldNotify'] as boolean) ?? true;
 
     // Log error if configured
     if (shouldLog) {
@@ -212,7 +212,7 @@ export class ErrorFactory extends SingletonMixin(class {}) implements ISingleton
     }
 
     return this.createError(type, message, {
-      context,
+      ...(context && { context }),
       metadata: { ...(stack && { stack }), originalError: unknownError },
     });
   }

@@ -28,8 +28,9 @@ const singletonRegistry = new Map<Constructor, SingletonState>();
  * @returns Extended class with singleton pattern
  */
 export function SingletonMixin<TBase extends Constructor>(Base: TBase) {
-  return class Singleton extends Base implements ISingleton {
+  return class Singleton extends Base implements ISingleton, Record<string, unknown> {
     private static _singletonKey: Constructor;
+    [key: string]: unknown;
 
     constructor(...args: any[]) {
       super(...args);
@@ -63,7 +64,7 @@ export function SingletonMixin<TBase extends Constructor>(Base: TBase) {
       if (!state.instance) {
         throw new Error('Failed to create singleton instance');
       }
-      
+
       return state.instance as T;
     }
 
@@ -83,8 +84,9 @@ export function SingletonMixin<TBase extends Constructor>(Base: TBase) {
       const state = singletonRegistry.get(Singleton);
       if (state?.instance) {
         // Call reset method if available
-        if (typeof (state.instance as any).reset === 'function') {
-          (state.instance as any).reset();
+        const instance = state.instance as ISingleton;
+        if (instance && typeof instance.reset === 'function') {
+          instance.reset();
         }
       }
     }
@@ -96,8 +98,9 @@ export function SingletonMixin<TBase extends Constructor>(Base: TBase) {
       const state = singletonRegistry.get(Singleton);
       if (state?.instance) {
         // Call destroy method if available
-        if (typeof (state.instance as any).destroy === 'function') {
-          (state.instance as any).destroy();
+        const instance = state.instance as ISingleton;
+        if (instance && typeof instance.destroy === 'function') {
+          instance.destroy();
         }
 
         state.instance = null;
@@ -124,8 +127,9 @@ export function SingletonMixin<TBase extends Constructor>(Base: TBase) {
      */
     public static clearAllInstances(): void {
       for (const [, state] of singletonRegistry) {
-        if (state.instance && typeof (state.instance as any).destroy === 'function') {
-          (state.instance as any).destroy();
+        const instance = state.instance as ISingleton;
+        if (instance && typeof instance.destroy === 'function') {
+          instance.destroy();
         }
         state.instance = null;
         state.isDestroyed = true;
@@ -150,7 +154,7 @@ export function SingletonMixin<TBase extends Constructor>(Base: TBase) {
  * Can be extended directly for simple singleton implementations
  */
 // Base class that can be used for singleton implementations
-class BaseClass implements Record<string, unknown> {
+export class BaseClass implements Record<string, unknown> {
   constructor(..._args: any[]) {}
   [key: string]: unknown;
 }

@@ -29,13 +29,10 @@ export type ValueAtPath<T, P extends string> = P extends `${infer K}.${infer Res
 // Generic store base interface
 export interface BaseStoreActions<T> {
   // Generic toggle method for boolean values
-  toggle: <P extends NestedKeyOf<T>>(path: P) => ValueAtPath<T, P> extends boolean ? void : never;
+  toggle: (path: string) => void;
 
   // Generic update method for any value
-  update: <P extends NestedKeyOf<T>>(
-    path: P,
-    value: ValueAtPath<T, P> | ((current: ValueAtPath<T, P>) => ValueAtPath<T, P>)
-  ) => void;
+  update: (path: string, value: unknown) => void;
 
   // Generic batch update method
   batchUpdate: (updates: Partial<T>) => void;
@@ -49,7 +46,7 @@ export function getNestedValue<T>(obj: T, path: string): unknown {
   return path
     .split('.')
     .reduce(
-      (current: Record<string, unknown>, key: string) => current?.[key],
+      (current: Record<string, unknown>, key: string) => (current as any)?.[key],
       obj as Record<string, unknown>
     );
 }

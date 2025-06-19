@@ -59,7 +59,7 @@ export function applyAccessibilityToCSS(accessibility: AccessibilityState): void
   root.style.setProperty('--cursor-size', cursorSizeMap[accessibility.visual.cursorSize]);
 
   // Focus outline
-  if (accessibility.keyboard.focusOutline) {
+  if (accessibility.keyboardNavigation.focusOutline) {
     root.style.setProperty('--focus-outline', '2px solid var(--theme-primary)');
     root.style.setProperty('--focus-outline-offset', '2px');
   } else {
@@ -196,21 +196,21 @@ export function checkWCAGCompliance(accessibility: AccessibilityState): WCAGComp
   }
 
   // Keyboard accessibility (WCAG 2.1.1 - Level A)
-  if (!accessibility.keyboard.enabled) {
+  if (!accessibility.keyboardNavigation.enabled) {
     issues.push('Keyboard navigation is disabled (WCAG 2.1.1 - Level A)');
     recommendations.push('Enable keyboard navigation for full accessibility');
     score -= 30;
   }
 
   // Focus indicators (WCAG 2.4.7 - Level AA)
-  if (!accessibility.keyboard.focusOutline) {
+  if (!accessibility.keyboardNavigation.focusOutline) {
     issues.push('Focus outlines are disabled (WCAG 2.4.7 - Level AA)');
     recommendations.push('Enable focus outlines for keyboard users');
     score -= 15;
   }
 
   // Text alternatives and feedback (WCAG 1.1.1 - Level A)
-  if (!accessibility.feedback.soundEffects && !accessibility.feedback.voiceAnnouncements) {
+  if (!accessibility.feedbackSettings.soundEffects && !accessibility.feedbackSettings.voiceAnnouncements) {
     recommendations.push('Consider providing audio feedback for game events (WCAG 1.1.1)');
     score -= 5;
   }
@@ -267,8 +267,8 @@ export function generateAccessibilityRecommendations(
 
   if (userNeeds?.motorImpairment) {
     recommendations.animationIntensity = 'reduced';
-    recommendations.keyboard = {
-      ...currentSettings.keyboard,
+    recommendations.keyboardNavigation = {
+      ...currentSettings.keyboardNavigation,
       enabled: true,
       focusOutline: true,
       tabOrder: 'optimized',
@@ -293,8 +293,8 @@ export function generateAccessibilityRecommendations(
   }
 
   if (userNeeds?.hearingImpairment) {
-    recommendations.feedback = {
-      ...currentSettings.feedback,
+    recommendations.feedbackSettings = {
+      ...currentSettings.feedbackSettings,
       voiceAnnouncements: false,
       hapticFeedback: true,
     };
@@ -384,16 +384,16 @@ export function generateAccessibilityReport(accessibility: AccessibilityState): 
       items: [
         {
           name: 'Keyboard Navigation',
-          value: accessibility.keyboard.enabled ? 'Enabled' : 'Disabled',
-          status: (accessibility.keyboard.enabled ? 'optimal' : 'needs-improvement') as
+          value: accessibility.keyboardNavigation.enabled ? 'Enabled' : 'Disabled',
+          status: (accessibility.keyboardNavigation.enabled ? 'optimal' : 'needs-improvement') as
             | 'optimal'
             | 'acceptable'
             | 'needs-improvement',
         },
         {
           name: 'Focus Outlines',
-          value: accessibility.keyboard.focusOutline ? 'Enabled' : 'Disabled',
-          status: (accessibility.keyboard.focusOutline ? 'optimal' : 'needs-improvement') as
+          value: accessibility.keyboardNavigation.focusOutline ? 'Enabled' : 'Disabled',
+          status: (accessibility.keyboardNavigation.focusOutline ? 'optimal' : 'needs-improvement') as
             | 'optimal'
             | 'acceptable'
             | 'needs-improvement',

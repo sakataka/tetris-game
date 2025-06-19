@@ -6,7 +6,7 @@
 import { createAudioError } from '@/types/errors';
 import type { SoundKey } from '@/types/tetris';
 import { log } from '../logging/logger';
-import { type ISingleton, SingletonMixin } from '../patterns/singletonMixin';
+import { type ISingleton, SingletonMixin, BaseClass } from '../patterns/singletonMixin';
 import { audioManager } from './audioManager';
 
 interface PreloadStrategy {
@@ -30,7 +30,7 @@ interface SoundPriority {
   size?: number; // Estimated file size in bytes
 }
 
-class AudioPreloader extends SingletonMixin(class {}) implements ISingleton {
+class AudioPreloader extends SingletonMixin(class extends BaseClass {}) implements ISingleton {
   private preloadProgress: Map<SoundKey, 'pending' | 'loading' | 'loaded' | 'failed'> = new Map();
   private loadTimestamps: Map<SoundKey, number> = new Map();
   private retryCounters: Map<SoundKey, number> = new Map();

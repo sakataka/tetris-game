@@ -6,7 +6,7 @@
 import { createAudioError } from '@/types/errors';
 import type { SoundKey } from '@/types/tetris';
 import { log } from '../logging';
-import { type ISingleton, SingletonMixin } from '../patterns/singletonMixin';
+import { type ISingleton, SingletonMixin, BaseClass } from '../patterns/singletonMixin';
 import {
   type AudioState,
   type AudioStrategy,
@@ -16,7 +16,7 @@ import {
   WebAudioStrategy,
 } from './strategies';
 
-export class AudioManagerV2 extends SingletonMixin(class {}) implements ISingleton {
+export class AudioManagerV2 extends SingletonMixin(class extends BaseClass {}) implements ISingleton {
   private currentStrategy: AudioStrategy;
   private strategies: AudioStrategy[] = [];
   private strategyIndex = 0;

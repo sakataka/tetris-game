@@ -10,7 +10,7 @@ import { ENV_CONFIG } from '../../config/environment';
 import { PERFORMANCE_LIMITS } from '../../constants/performance';
 import { INTERVALS } from '../../constants/timing';
 import { log } from '../logging';
-import { type ISingleton, SingletonMixin } from '../patterns/singletonMixin';
+import { type ISingleton, SingletonMixin, BaseClass } from '../patterns/singletonMixin';
 import { type AnimationPriority, AnimationQueue } from './animationQueue';
 
 export interface AnimationOptions {
@@ -55,7 +55,7 @@ interface ActiveAnimation {
  * - Graceful degradation under performance pressure
  * - Debug statistics and metrics
  */
-export class AnimationManager extends SingletonMixin(class {}) implements ISingleton {
+export class AnimationManager extends SingletonMixin(class extends BaseClass {}) implements ISingleton {
   private animationQueue: AnimationQueue;
   private activeAnimations = new Map<string, ActiveAnimation>();
   private isPaused = false;
@@ -375,7 +375,7 @@ export class AnimationManager extends SingletonMixin(class {}) implements ISingl
    */
   public override destroy(): void {
     this.stopAll();
-    this.animationQueue.destroy();
+    // AnimationQueue cleanup is handled by stopAll()
   }
 
   /**

@@ -60,13 +60,13 @@ function detectSystemVisualPreferences(): Partial<AccessibilityStoreState> {
   return preferences;
 }
 
-// Complete accessibility store state interface 
+// Complete accessibility store state interface
 // This includes all properties from the three component interfaces
 interface AccessibilityStoreState {
   // Core accessibility properties
   level: AccessibilityLevel;
   enabled: boolean;
-  
+
   // Visual accessibility properties (from VisualAccessibilityState)
   colorBlindnessType: ColorBlindnessType;
   contrast: ContrastLevel;
@@ -75,7 +75,7 @@ interface AccessibilityStoreState {
   reducedMotion: boolean;
   animationIntensity: AnimationIntensity;
   respectSystemPreferences: boolean;
-  
+
   // Cognitive accessibility properties (from CognitiveAccessibilityState)
   cognitive: CognitiveAssistance;
   gameSpecific: {
@@ -85,7 +85,7 @@ interface AccessibilityStoreState {
     gridLines: boolean;
     dropPreview: boolean;
   };
-  
+
   // Input accessibility properties (from InputAccessibilityState)
   keyboardNavigation: KeyboardNavigation;
   feedbackSettings: FeedbackSettings;
@@ -201,7 +201,8 @@ export const useAccessibilityStore = create<UnifiedAccessibilityStore>()(
           if (presetConfig.cognitive !== undefined) updates.cognitive = presetConfig.cognitive;
           if (presetConfig.keyboardNavigation !== undefined)
             updates.keyboardNavigation = presetConfig.keyboardNavigation;
-          if (presetConfig.feedbackSettings !== undefined) updates.feedbackSettings = presetConfig.feedbackSettings;
+          if (presetConfig.feedbackSettings !== undefined)
+            updates.feedbackSettings = presetConfig.feedbackSettings;
 
           return { ...state, ...updates };
         });

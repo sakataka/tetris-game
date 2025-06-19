@@ -24,14 +24,16 @@ export interface AudioState {
   strategyType: string;
 }
 
+import { AudioStrategy } from './AudioStrategy';
+
 // Common audio utility functions
-export abstract class BaseAudioStrategy {
-  protected masterVolume = 0.5;
-  protected isMuted = false;
+export abstract class BaseAudioStrategy extends AudioStrategy {
+  protected override masterVolume = 0.5;
+  protected override isMuted = false;
   protected initialized = false;
 
   // Sound file path definitions (shared across all strategies)
-  protected readonly soundFiles: Record<SoundKey, string> = {
+  protected override readonly soundFiles: Record<SoundKey, string> = {
     lineClear: '/sounds/line-clear.mp3',
     pieceLand: '/sounds/piece-land.mp3',
     pieceRotate: '/sounds/piece-rotate.mp3',
@@ -41,25 +43,25 @@ export abstract class BaseAudioStrategy {
   };
 
   // Common volume management
-  setMasterVolume(volume: number): void {
+  override setMasterVolume(volume: number): void {
     this.masterVolume = Math.max(0, Math.min(1, volume));
     this.updateVolume();
   }
 
-  getMasterVolume(): number {
+  override getMasterVolume(): number {
     return this.masterVolume;
   }
 
-  setMuted(muted: boolean): void {
+  override setMuted(muted: boolean): void {
     this.isMuted = muted;
     this.updateVolume();
   }
 
-  isMutedState(): boolean {
+  override isMutedState(): boolean {
     return this.isMuted;
   }
 
-  protected getEffectiveVolume(): number {
+  protected override getEffectiveVolume(): number {
     return this.isMuted ? 0 : this.masterVolume;
   }
 
@@ -183,13 +185,13 @@ export abstract class BaseAudioStrategy {
   protected abstract doInitialize(): Promise<void>;
 
   // Abstract methods that must be implemented by concrete strategies
-  abstract canPlayAudio(): boolean;
-  abstract initialize(): Promise<void>;
-  abstract playSound(soundKey: SoundKey, config?: Partial<SoundConfig>): Promise<void>;
-  abstract stopSound(soundKey: SoundKey): void;
-  abstract stopAllSounds(): void;
-  abstract preloadSounds(): Promise<void>;
-  abstract getAudioState(): AudioState;
-  abstract dispose(): void;
-  protected abstract updateVolume(): void;
+  abstract override canPlayAudio(): boolean;
+  abstract override initialize(): Promise<void>;
+  abstract override playSound(soundKey: SoundKey, config?: Partial<SoundConfig>): Promise<void>;
+  abstract override stopSound(soundKey: SoundKey): void;
+  abstract override stopAllSounds(): void;
+  abstract override preloadSounds(): Promise<void>;
+  abstract override getAudioState(): AudioState;
+  abstract override dispose(): void;
+  protected abstract override updateVolume(): void;
 }
