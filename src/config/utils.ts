@@ -9,48 +9,94 @@ import { ENV_CONFIG } from './environment';
 import type { GameConfiguration } from './gameConfig';
 
 // Configuration comparison utilities
-export function compareConfigurations(
-  config1: GameConfiguration,
-  config2: GameConfiguration
-): { identical: boolean; differences: string[] } {
+export type ComparisonResult = {
+  identical: boolean;
+  differences: string[];
+};
+
+/**
+ * Generic deep comparison function that can handle any object structure.
+ * This function recursively compares objects and reports differences as path-based strings.
+ * 
+ * Examples:
+ * - compareObjectsDeep({ a: 1 }, { a: 2 }) → ["a: 1 → 2"]
+ * - compareObjectsDeep({ user: { name: "John" } }, { user: { name: "Jane" } }) → ["user.name: John → Jane"]
+ * 
+ * @param obj1 First object to compare
+ * @param obj2 Second object to compare
+ * @param path Current path for difference reporting (used internally for recursion)
+ * @returns Array of difference strings in format "path: oldValue → newValue"
+ */
+export function compareObjectsDeep<T extends Record<string, unknown>>(
+  obj1: T,
+  obj2: T,
+  path = ''
+): string[] {
   const differences: string[] = [];
+  const allKeys = new Set([...Object.keys(obj1), ...Object.keys(obj2)]);
 
-  // Compare performance settings
-  Object.keys(config1.performance).forEach((key) => {
-    const k = key as keyof GameConfiguration['performance'];
-    if (config1.performance[k] !== config2.performance[k]) {
-      differences.push(`performance.${key}: ${config1.performance[k]} → ${config2.performance[k]}`);
-    }
-  });
+  for (const key of allKeys) {
+    const currentPath = path ? `${path}.${key}` : key;
+    const val1 = obj1[key];
+    const val2 = obj2[key];
 
-  // Compare feature flags
-  Object.keys(config1.features).forEach((key) => {
-    const k = key as keyof GameConfiguration['features'];
-    if (config1.features[k] !== config2.features[k]) {
-      differences.push(`features.${key}: ${config1.features[k]} → ${config2.features[k]}`);
+    if (val1 === undefined && val2 !== undefined) {
+      differences.push(`${currentPath}: undefined → ${val2}`);
+    } else if (val1 !== undefined && val2 === undefined) {
+      differences.push(`${currentPath}: ${val1} → undefined`);
+    } else if (
+      typeof val1 === 'object' &&
+      typeof val2 === 'object' &&
+      val1 !== null &&
+      val2 !== null
+    ) {
+      // Recursive comparison for nested objects
+      const nestedDiffs = compareObjectsDeep(
+        val1 as Record<string, unknown>,
+        val2 as Record<string, unknown>,
+        currentPath
+      );
+      differences.push(...nestedDiffs);
+    } else if (val1 !== val2) {
+      differences.push(`${currentPath}: ${val1} → ${val2}`);
     }
-  });
+  }
 
-  // Compare UI settings
-  Object.keys(config1.ui).forEach((key) => {
-    const k = key as keyof GameConfiguration['ui'];
-    if (config1.ui[k] !== config2.ui[k]) {
-      differences.push(`ui.${key}: ${config1.ui[k]} → ${config2.ui[k]}`);
-    }
-  });
+  return differences;
+}
 
-  // Compare gameplay settings
-  Object.keys(config1.gameplay).forEach((key) => {
-    const k = key as keyof GameConfiguration['gameplay'];
-    if (config1.gameplay[k] !== config2.gameplay[k]) {
-      differences.push(`gameplay.${key}: ${config1.gameplay[k]} → ${config2.gameplay[k]}`);
-    }
-  });
+/**
+ * Generic comparison function for any object structure.
+ * This is a convenient wrapper around compareObjectsDeep that returns a structured result.
+ * 
+ * Example:
+ * ```typescript
+ * const result = compareObjects({ a: 1 }, { a: 2 });
+ * // result: { identical: false, differences: ["a: 1 → 2"] }
+ * ```
+ * 
+ * @param obj1 First object to compare
+ * @param obj2 Second object to compare
+ * @returns Comparison result with identical flag and array of difference strings
+ */
+export function compareObjects<T extends Record<string, unknown>>(
+  obj1: T,
+  obj2: T
+): ComparisonResult {
+  const differences = compareObjectsDeep(obj1, obj2);
 
   return {
     identical: differences.length === 0,
     differences,
   };
+}
+
+export function compareConfigurations(
+  config1: GameConfiguration,
+  config2: GameConfiguration
+): ComparisonResult {
+  // Use the generic comparison function
+  return compareObjects(config1 as unknown as Record<string, unknown>, config2 as unknown as Record<string, unknown>);
 }
 
 // Configuration backup and restore
@@ -257,25 +303,26 @@ export function getConfigurationDiff(
 ): Record<string, { before: unknown; after: unknown }> {
   const diff: Record<string, { before: unknown; after: unknown }> = {};
 
-  // Helper function to recursively find differences
-  function findDiffs(obj1: Record<string, unknown>, obj2: Record<string, unknown>, path = '') {
-    Object.keys(obj1).forEach((key) => {
-      const currentPath = path ? `${path}.${key}` : key;
-      const val1 = obj1[key];
-      const val2 = obj2[key];
-
-      if (typeof val1 === 'object' && typeof val2 === 'object' && val1 !== null && val2 !== null) {
-        findDiffs(val1 as Record<string, unknown>, val2 as Record<string, unknown>, currentPath);
-      } else if (val1 !== val2) {
-        diff[currentPath] = { before: val1, after: val2 };
-      }
-    });
-  }
-
-  findDiffs(
+  // Use the generic comparison function to get differences
+  const differences = compareObjectsDeep(
     before as unknown as Record<string, unknown>,
     after as unknown as Record<string, unknown>
   );
+
+  // Convert difference strings to diff object format
+  for (const diffStr of differences) {
+    const match = diffStr.match(/^(.+): (.+) → (.+)$/);
+    if (match) {
+      const [, path, beforeVal, afterVal] = match;
+      if (path) {
+        diff[path] = {
+          before: beforeVal === 'undefined' ? undefined : beforeVal,
+          after: afterVal === 'undefined' ? undefined : afterVal,
+        };
+      }
+    }
+  }
+
   return diff;
 }
 

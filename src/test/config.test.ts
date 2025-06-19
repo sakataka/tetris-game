@@ -15,6 +15,7 @@ import {
 } from '../config';
 import {
   compareConfigurations,
+  compareObjects,
   createConfigurationBackup,
   exportConfiguration,
   importConfiguration,
@@ -199,6 +200,34 @@ describe('Configuration Utilities', () => {
     });
     expect(lowEndOptimized.performance.maxParticles).toBeLessThanOrEqual(50);
     expect(lowEndOptimized.features.particlesEnabled).toBe(false);
+  });
+
+  it('should compare generic objects with compareObjects', () => {
+    const obj1 = { a: 1, b: { c: 'hello' }, d: true };
+    const obj2 = { a: 2, b: { c: 'world' }, d: true };
+
+    const result = compareObjects(obj1, obj2);
+    expect(result.identical).toBe(false);
+    expect(result.differences).toContain('a: 1 → 2');
+    expect(result.differences).toContain('b.c: hello → world');
+    expect(result.differences.some(diff => diff.includes('d:'))).toBe(false); // d is identical
+  });
+
+  it('should handle undefined values in compareObjects', () => {
+    const obj1 = { a: 1, b: 'exists' } as Record<string, unknown>;
+    const obj2 = { a: 1, c: 'new' } as Record<string, unknown>;
+
+    const result = compareObjects(obj1, obj2);
+    expect(result.identical).toBe(false);
+    expect(result.differences).toContain('b: exists → undefined');
+    expect(result.differences).toContain('c: undefined → new');
+  });
+
+  it('should return identical true for same objects', () => {
+    const obj = { a: 1, b: { c: 'test' } };
+    const result = compareObjects(obj, obj);
+    expect(result.identical).toBe(true);
+    expect(result.differences).toHaveLength(0);
   });
 });
 

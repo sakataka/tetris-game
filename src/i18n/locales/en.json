@@ -161,7 +161,17 @@
     "feature3": "Multiple themes and languages",
     "feature4": "Statistics and high scores",
     "version": "Version",
-    "builtWith": "Built with React and TypeScript"
+    "builtWith": "Built with React and TypeScript",
+    "systemInfo": "System Information",
+    "currentConfig": "Current Configuration",
+    "defaultConfig": "Default Configuration",
+    "configComparison": "Configuration Comparison",
+    "envComparison": "Environment Comparison",
+    "currentVsDefault": "Current vs Default",
+    "devVsProduction": "Development vs Production",
+    "architecture": "Architecture",
+    "performance": "Performance",
+    "technicalDetails": "Technical Details"
   },
   "buttons": {
     "ok": "OK",
@@ -275,5 +285,17 @@
     "displayError": "An error occurred in screen display",
     "validationError": "Input data is incorrect",
     "systemErrorReload": "A system error occurred. Please reload the page"
+  },
+  "comparison": {
+    "notReady": "Comparison not available",
+    "identical": "Identical",
+    "differencesFound": "{{count}} difference found",
+    "differencesFound_other": "{{count}} differences found",
+    "noChanges": "No changes detected",
+    "hasChanges": "Changes detected",
+    "modified": "Modified",
+    "current": "Current",
+    "default": "Default",
+    "original": "Original"
   }
 }

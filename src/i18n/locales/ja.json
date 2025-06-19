@@ -182,7 +182,17 @@
     "feature3": "複数のテーマと言語対応",
     "feature4": "統計とハイスコア機能",
     "version": "バージョン",
-    "builtWith": "ReactとTypeScriptで構築"
+    "builtWith": "ReactとTypeScriptで構築",
+    "systemInfo": "システム情報",
+    "currentConfig": "現在の設定",
+    "defaultConfig": "デフォルト設定",
+    "configComparison": "設定比較",
+    "envComparison": "環境比較",
+    "currentVsDefault": "現在 vs デフォルト",
+    "devVsProduction": "開発 vs 本番",
+    "architecture": "アーキテクチャ",
+    "performance": "パフォーマンス",
+    "technicalDetails": "技術詳細"
   },
   "buttons": {
     "ok": "OK",
@@ -296,5 +306,16 @@
     "displayError": "画面表示でエラーが発生しました",
     "validationError": "入力データが正しくありません",
     "systemErrorReload": "システムエラーが発生しました。ページを再読み込みしてください"
+  },
+  "comparison": {
+    "notReady": "比較できません",
+    "identical": "同一",
+    "differencesFound": "{{count}}個の違いが見つかりました",
+    "noChanges": "変更はありません",
+    "hasChanges": "変更が検出されました",
+    "modified": "変更済み",
+    "current": "現在",
+    "default": "デフォルト",
+    "original": "元の設定"
   }
 }
