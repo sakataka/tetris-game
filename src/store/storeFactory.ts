@@ -46,8 +46,13 @@ export function getNestedValue<T>(obj: T, path: string): unknown {
   return path
     .split('.')
     .reduce(
-      (current: Record<string, unknown>, key: string) => (current as any)?.[key],
-      obj as Record<string, unknown>
+      (current: unknown, key: string) => {
+        if (current && typeof current === 'object') {
+          return (current as Record<string, unknown>)[key];
+        }
+        return undefined;
+      },
+      obj as unknown
     );
 }
 

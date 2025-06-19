@@ -5,6 +5,7 @@
  */
 
 // Type for constructor function
+// biome-ignore lint/suspicious/noExplicitAny: Required for TypeScript mixin pattern
 type Constructor<T = Record<string, unknown>> = new (...args: any[]) => T;
 
 // Singleton interface with lifecycle methods
@@ -32,6 +33,7 @@ export function SingletonMixin<TBase extends Constructor>(Base: TBase) {
     private static _singletonKey: Constructor;
     [key: string]: unknown;
 
+    // biome-ignore lint/suspicious/noExplicitAny: Required for TypeScript mixin constructor compatibility
     constructor(...args: any[]) {
       super(...args);
 
@@ -155,7 +157,6 @@ export function SingletonMixin<TBase extends Constructor>(Base: TBase) {
  */
 // Base class that can be used for singleton implementations
 export class BaseClass implements Record<string, unknown> {
-  constructor(..._args: any[]) {}
   [key: string]: unknown;
 }
 
