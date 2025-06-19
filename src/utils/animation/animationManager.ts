@@ -9,8 +9,7 @@
 import { ENV_CONFIG } from '@/config/environment';
 import { PERFORMANCE_LIMITS } from '@/constants/performance';
 import { INTERVALS } from '@/constants/timing';
-import { log } from '@/utils/logging';
-import { BaseClass, type ISingleton, SingletonMixin } from '@/utils/patterns/singletonMixin';
+import { log } from '@/utils/logging/logger';
 import { type AnimationPriority, AnimationQueue } from './animationQueue';
 
 export interface AnimationOptions {
@@ -55,10 +54,8 @@ interface ActiveAnimation {
  * - Graceful degradation under performance pressure
  * - Debug statistics and metrics
  */
-export class AnimationManager
-  extends SingletonMixin(class extends BaseClass {})
-  implements ISingleton
-{
+export class AnimationManager {
+  private static instance: AnimationManager | null = null;
   private animationQueue: AnimationQueue;
   private activeAnimations = new Map<string, ActiveAnimation>();
   private isPaused = false;
@@ -74,11 +71,20 @@ export class AnimationManager
     lastPerformanceCheck: performance.now(),
   };
 
-  constructor() {
-    super();
+  private constructor() {
     this.animationQueue = new AnimationQueue();
     this.initializeSettings();
     this.startPerformanceMonitoring();
+  }
+
+  /**
+   * Get singleton instance
+   */
+  public static getInstance(): AnimationManager {
+    if (!AnimationManager.instance) {
+      AnimationManager.instance = new AnimationManager();
+    }
+    return AnimationManager.instance;
   }
 
   /**
@@ -365,7 +371,7 @@ export class AnimationManager
   /**
    * Reset singleton state (implements ISingleton)
    */
-  public override reset(): void {
+  public reset(): void {
     this.stopAll();
     this.resetPerformanceStats();
     this.isPaused = false;
@@ -376,7 +382,7 @@ export class AnimationManager
   /**
    * Clean up all resources (implements ISingleton)
    */
-  public override destroy(): void {
+  public destroy(): void {
     this.stopAll();
     // AnimationQueue cleanup is handled by stopAll()
   }

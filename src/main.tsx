@@ -16,17 +16,9 @@ import SettingsRoute from './routes/settings';
 import StatisticsRoute from './routes/statistics';
 import ThemesRoute from './routes/themes';
 
-// Debug: Log initialization
-console.log('🎮 Tetris Game initializing...', {
-  env: import.meta.env.MODE,
-  prod: import.meta.env.PROD,
-  vite: import.meta.env['VITE_APP_ENV'],
-});
-
 // Initialize Sentry in production environment
 try {
   initSentry();
-  console.log('✅ Sentry initialization complete');
 } catch (error) {
   console.error('❌ Sentry initialization failed:', error);
 }
@@ -61,15 +53,11 @@ const router = createBrowserRouter([
   },
 ]);
 
-console.log('🎯 Router created successfully');
-
 const rootElement = document.getElementById('root');
 if (!rootElement) {
   console.error('❌ Root element not found!');
   throw new Error('Root element not found');
 }
-
-console.log('✅ Root element found, starting React app...');
 
 try {
   createRoot(rootElement).render(
@@ -77,7 +65,6 @@ try {
       <RouterProvider router={router} />
     </StrictMode>
   );
-  console.log('🚀 React app rendered successfully!');
 } catch (error) {
   console.error('❌ React app render failed:', error);
   throw error;

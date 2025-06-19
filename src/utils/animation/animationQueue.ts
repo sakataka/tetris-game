@@ -5,7 +5,7 @@
  * to optimize animation performance and prevent frame drops.
  */
 
-import { log } from '@/utils/logging';
+import { log } from '@/utils/logging/logger';
 
 export type AnimationPriority = 'critical' | 'high' | 'normal' | 'low';
 

@@ -105,7 +105,6 @@ export const useThemeStore = create<ThemeStore>()(
         if (state?.theme?.current) {
           // Reapply theme on hydration
           applyUnifiedThemeToDocument(state.theme.current);
-          console.log('🎨 Theme rehydrated:', state.theme.current);
         } else {
           // Initialize with default theme
           applyUnifiedThemeToDocument('cyberpunk');

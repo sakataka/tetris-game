@@ -110,11 +110,6 @@ export function applyUnifiedThemeToDocument(variant: ThemeVariant): void {
     root.style.setProperty(`--tetromino-${piece.toLowerCase()}`, color);
   });
 
-  console.log(`🎨 Applied simplified theme: ${variant}`, {
-    background: config.background,
-    foreground: config.foreground,
-    primary: config.foreground,
-  });
 }
 
 /**

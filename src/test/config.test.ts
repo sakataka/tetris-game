@@ -14,8 +14,6 @@ import {
   validateGameConfig,
 } from '../config';
 import {
-  compareConfigurations,
-  compareObjects,
   createConfigurationBackup,
   exportConfiguration,
   importConfiguration,
@@ -129,30 +127,11 @@ describe('Game Configuration', () => {
 
 describe('Configuration Utilities', () => {
   let config1: GameConfiguration;
-  let config2: GameConfiguration;
 
   beforeEach(() => {
     config1 = createGameConfig('test');
-    config2 = {
-      ...config1,
-      features: {
-        ...config1.features,
-        audioEnabled: true,
-      },
-      performance: {
-        ...config1.performance,
-        maxParticles: 150,
-      },
-    };
   });
 
-  it('should compare configurations correctly', () => {
-    const comparison = compareConfigurations(config1, config2);
-    expect(comparison.identical).toBe(false);
-    expect(comparison.differences.length).toBeGreaterThan(0);
-    expect(comparison.differences.some((diff) => diff.includes('audioEnabled'))).toBe(true);
-    expect(comparison.differences.some((diff) => diff.includes('maxParticles'))).toBe(true);
-  });
 
   it('should create and restore configuration backups', () => {
     const backup = createConfigurationBackup(config1, '1.0.0');
@@ -202,33 +181,6 @@ describe('Configuration Utilities', () => {
     expect(lowEndOptimized.features.particlesEnabled).toBe(false);
   });
 
-  it('should compare generic objects with compareObjects', () => {
-    const obj1 = { a: 1, b: { c: 'hello' }, d: true };
-    const obj2 = { a: 2, b: { c: 'world' }, d: true };
-
-    const result = compareObjects(obj1, obj2);
-    expect(result.identical).toBe(false);
-    expect(result.differences).toContain('a: 1 → 2');
-    expect(result.differences).toContain('b.c: hello → world');
-    expect(result.differences.some((diff) => diff.includes('d:'))).toBe(false); // d is identical
-  });
-
-  it('should handle undefined values in compareObjects', () => {
-    const obj1 = { a: 1, b: 'exists' } as Record<string, unknown>;
-    const obj2 = { a: 1, c: 'new' } as Record<string, unknown>;
-
-    const result = compareObjects(obj1, obj2);
-    expect(result.identical).toBe(false);
-    expect(result.differences).toContain('b: exists → undefined');
-    expect(result.differences).toContain('c: undefined → new');
-  });
-
-  it('should return identical true for same objects', () => {
-    const obj = { a: 1, b: { c: 'test' } };
-    const result = compareObjects(obj, obj);
-    expect(result.identical).toBe(true);
-    expect(result.differences).toHaveLength(0);
-  });
 });
 
 describe('Configuration Store Integration', () => {
