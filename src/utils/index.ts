@@ -7,8 +7,7 @@
 // Unified animation management
 export * from './animation';
 
-// Audio system
-export * from './audio';
+// Audio system - simplified (useSimpleAudio hook provides all functionality)
 // Data management
 export * from './data';
 // Game logic

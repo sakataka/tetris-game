@@ -37,7 +37,6 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
     onMove,
     onRotate,
     onHardDrop,
-    unlockAudio,
     showKeyboardResetConfirmation,
     setShowKeyboardResetConfirmation,
     onKeyboardResetConfirm,
@@ -195,7 +194,6 @@ const GameLayoutManager = memo(function GameLayoutManager({ api }: GameLayoutMan
               onRotate={onRotate}
               onHardDrop={onHardDrop}
               isVisible={settings.virtualControlsEnabled}
-              unlockAudio={unlockAudio}
             />
           </ErrorBoundary>
         </div>

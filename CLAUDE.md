@@ -14,22 +14,6 @@ You prefer typescript mcp (`mcp__typescript_*`) to fix code over the default `Re
 3. **Diagnostics**: TypeScript error checking
 4. **Safe Refactoring**: Moving files/directories with automatic import updates
 
-### Tool Priority (Highest to Lowest):
-```typescript
-// 1st Priority: TypeScript MCP tools
-mcp__typescript__rename_symbol     // Symbol renaming across codebase
-mcp__typescript__find_references   // Find all symbol usages
-mcp__typescript__get_diagnostics   // TypeScript error checking
-mcp__typescript__move_file         // Move files with import updates
-mcp__typescript__delete_symbol     // Safe symbol deletion
-
-// 2nd Priority: Search tools for discovery
-Grep, Glob, Bash with rg/fd
-
-// 3rd Priority: Traditional tools for complex edits
-Read, Edit, MultiEdit for complex logic changes
-```
-
 ### MCP TypeScript Best Practices:
 - Use `get_diagnostics` before and after major changes
 - Use `find_references` before renaming/deleting symbols
@@ -71,19 +55,6 @@ rg "pattern" --type tsx src/  # Error: unrecognized file type: tsx
 rg "pattern" --type ts src/   # May work but prefer --include
 ```
 
-**Common Search Patterns for Theme Colors:**
-```bash
-# Search for hardcoded colors
-rg "gray-[0-9]+" src/
-rg "cyan-[0-9]+" src/
-rg "cyber-cyan" src/
-rg "blue-[0-9]+" src/
-rg "red-[0-9]+" src/
-rg "green-[0-9]+" src/
-rg "yellow-[0-9]+" src/
-rg "purple-[0-9]+" src/
-```
-
 ## 🎯 Development Guidelines
 
 **Critical Reference**: [React Development Guidelines](./docs/REACT_DEVELOPMENT_GUIDELINES.md)
@@ -113,61 +84,14 @@ rg "purple-[0-9]+" src/
 
 ## Key Architecture Patterns
 
-### 1. Component Structure (3-Layer)
-```
-TetrisGame (Entry)
-├── GameOrchestrator (Lifecycle)
-├── GameLogicController (Business Logic)
-│   ├── Zustand stores integration
-│   ├── Audio system coordination
-│   └── Game controls aggregation
-└── GameLayoutManager (UI Layout)
-    ├── Responsive layouts
-    └── Component composition
-```
+### 1. Component Structure
 
-### 2. State Management (Zustand)
-**Core Stores:**
-- `gameStateStore`: Game logic, piece movement, line clearing
-- `settingsStore`: User preferences with localStorage persistence
-- `audioStore`: Audio system state centralization
-- `themeStore`: Theme management with cyberpunk variants
-- `errorStore`: Error tracking with categorization and UI integration
-
-**Accessibility Stores:**
-- `accessibilityStore`, `cognitiveAccessibility`, `inputAccessibility`, `visualAccessibility`
-
-**System Stores:**
-- `statisticsStore`, `sessionStore`, `languageStore`, `localeStore`, `configStore`, `navigationStore`
+### 2. State Management
 
 ### 3. Audio System (Strategy Pattern)
-```
-AudioManagerV2 (Coordinator)
-├── WebAudioStrategy (Primary)
-├── HTMLAudioStrategy (Fallback)
-└── SilentStrategy (Silent mode)
-```
-
-**Error Suppression**: Three-layer system prevents audio loading/initialization errors from showing to users:
-- ErrorHandler: Suppresses notifications for loading errors
-- Console Logs: Filtered for development environment
-- Toast Notifications: Filtered in ErrorToastAdapter
 
 ### 4. UI Components (shadcn/ui + Cyberpunk)
-**Core Components:**
-- `CyberCard`: Enhanced Card with 6 themes (cyan, purple, green, yellow, red, default)
-- `Button`: Cyberpunk variants with neon effects
-- `Tabs`: Navigation with accessibility support
-- `Slider`: Volume/settings controls with neon styling
 
-**Integration Pattern:**
-```typescript
-<CyberCard title="GAME STATS" theme="cyan" size="md">
-  <Button variant="outline" className="border-cyber-cyan">
-    Reset Settings
-  </Button>
-</CyberCard>
-```
 
 ## Quick Commands
 
@@ -191,25 +115,15 @@ pnpm test:e2e           # Playwright E2E tests
 ## Critical Systems
 
 ### Error Handling
-- **ErrorStore**: Centralized error tracking with categories (audio, game, ui, etc.)
-- **ErrorToastAdapter**: Filters audio errors from user notifications
-- **Three-Layer Suppression**: ErrorHandler + Console + Toast filtering
+
 
 ### Internationalization
-- **i18next**: EN/JA support with React integration
-- **Dual Store**: `languageStore` + `localeStore` for comprehensive i18n
-- **Component Integration**: All UI text uses `{t('key')}` pattern
+
 
 ### Audio System
-- **Strategy Pattern**: WebAudio → HTMLAudio → Silent fallback
-- **Error Suppression**: Loading/initialization errors hidden from users
-- **Preloading**: Automatic sound preloading with progress tracking
+
 
 ### Performance
-- **React Compiler**: Automatic optimization (40+ manual optimizations removed)
-- **Object Pooling**: Particles and audio buffer reuse
-- **Selective Rendering**: Board updates only changed cells
-- **Bundle Splitting**: Automatic code splitting for optimal loading
 
 ## File Organization
 
@@ -263,38 +177,12 @@ src/
 6. **Run `pnpm pre-push` before pushing** (recommended)
 
 ### Testing Guidelines
-**Critical: No Hardcoding**
-- **Never hardcode implementation to pass tests** - Tests must verify actual functionality
-- **Avoid test-specific code paths** - Implementation should work correctly in all scenarios
-- **Tests validate real behavior** - Hardcoding circumvents the purpose of testing
-- **Write honest implementations** - If a test fails, fix the actual implementation, not bypass it
 
 ### Error Handling Philosophy
-**Critical: Root Cause Analysis**
-- **Never add temporary workarounds or guard clauses** - These mask the real problem and complicate code
-- **Always investigate the root cause first** - Understand why the error occurs, not just where
-- **Fix the source, not the symptom** - Address the fundamental issue that causes the problem
-- **Temporary fixes are debt** - They delay proper solutions and make code harder to maintain
-- **Clean, simple solutions are preferred** - The best fix addresses the core issue directly
 
 ### Development Server Guidelines
-**Critical: No Blind Server Operations**
-- **Never start dev server for "verification"** - Cannot actually access or verify the results
-- **Use tests and static analysis instead** - TypeScript checks, unit tests, linting are verifiable
-- **Only start server when logs/debugging needed** - And only when you can actually capture output
-- **Time efficiency is crucial** - Don't waste time on operations that provide no feedback
-- **Prefer deterministic verification** - Tests and builds give concrete results
 
 ### React Compiler Guidelines
-**DO:**
-- Write clean, readable code
-- Use standard React patterns
-- Trust compiler for memoization
-
-**DON'T:**
-- Add manual useMemo/useCallback unless critical
-- Over-optimize code
-- Assume manual optimization is faster
 
 ### Build Configuration
 - **Vite**: React plugin with babel-plugin-react-compiler
@@ -305,25 +193,18 @@ src/
 ## Production Deployment
 
 ### Vercel Configuration
-- **SPA Mode**: Static site generation with client-side routing
-- **Security Headers**: CSP, XSS protection, frame options
-- **Compression**: Brotli/gzip for 70% size reduction
-- **Caching**: 1-year TTL for static assets
 
 ### Environment Variables
-- **Sentry**: Error tracking (production only)
-- **Audio**: File paths and configuration
-- **Build**: React Compiler and optimization settings
 
 ## Important Notes
 
-- **Package Manager**: pnpm required (not npm/yarn)
-- **React Version**: 19.1.0 with React Compiler enabled
+- **Package Manager**
+- **React Version**:
 - **Comments/Commits**: English only for source code
-- **Pre-commit**: Husky runs Biome format + lint + TypeScript check (fast: ~0.9s)
-- **Pre-push**: Full validation with tests available via `pnpm pre-push` (~3.5s)
-- **Performance**: React Compiler handles optimization automatically
-- **Testing**: Use React Testing Library + Vitest for component tests
+- **Pre-commit**:
+- **Pre-push**: 
+- **Performance**:
+- **Testing**: 
 
 ## Future Feature Roadmap
 
@@ -352,5 +233,3 @@ The current architecture supports expansion through:
 - **Store Pattern**: Easy addition of new Zustand stores
 - **Strategy Pattern**: Audio system can add new strategies
 - **Component System**: shadcn/ui base for consistent UI expansion
-
-This foundation ensures maintainability and developer experience for future enhancements.

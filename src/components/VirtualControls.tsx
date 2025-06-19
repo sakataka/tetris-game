@@ -11,7 +11,6 @@ interface VirtualControlsProps {
   onRotate: () => void;
   onHardDrop: () => void;
   isVisible: boolean;
-  unlockAudio?: () => Promise<void>;
 }
 
 const VirtualControls = memo(function VirtualControls({
@@ -19,17 +18,12 @@ const VirtualControls = memo(function VirtualControls({
   onRotate,
   onHardDrop,
   isVisible,
-  unlockAudio,
 }: VirtualControlsProps) {
   const { t } = useTranslation();
 
   // Event handlers (React Compiler will optimize these)
   const handleTouchStart = (action: () => void) => (e: React.TouchEvent) => {
     e.preventDefault();
-    // Unlock audio on first touch
-    if (unlockAudio) {
-      unlockAudio();
-    }
     action();
   };
 

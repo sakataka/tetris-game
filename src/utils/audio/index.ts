@@ -1,11 +1,8 @@
 /**
  * Audio system utilities
  *
- * Strategy Pattern based audio management with automatic fallback
+ * Simplified audio system - no exports needed as useSimpleAudio is self-contained
  */
 
-export * from './audioManager';
-export * from './audioPreloader';
-
-// Strategy Pattern implementation
-export * from './strategies';
+// This file is kept for backward compatibility but exports are removed
+// All audio functionality is now provided by useSimpleAudio hook

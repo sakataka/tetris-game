@@ -6,7 +6,6 @@ import { GAME_UI_SIZES, SPACING, TYPOGRAPHY, UI_SIZES } from '@/constants/layout
 import type { ExtendedGameSettings } from '@/store/settingsStore';
 import { cn } from '@/utils/ui/cn';
 import CyberCard from './ui/CyberCard';
-import { Progress } from './ui/progress';
 
 interface AudioPanelProps {
   isMuted: boolean;
@@ -15,20 +14,6 @@ interface AudioPanelProps {
   onToggleMute: () => void;
   onVolumeChange: (volume: number) => void;
   onUpdateSettings: (settings: Partial<ExtendedGameSettings>) => void;
-  audioSystemStatus?: {
-    isWebAudioEnabled: boolean;
-    preloadProgress?: {
-      total: number;
-      loaded: number;
-      failed: number;
-      progress: number;
-    };
-    fallbackStatus?: {
-      currentLevel: number;
-      availableLevels: string[];
-      silentMode: boolean;
-    };
-  };
 }
 
 const AudioPanel = memo(function AudioPanel({
@@ -38,7 +23,6 @@ const AudioPanel = memo(function AudioPanel({
   onToggleMute,
   onVolumeChange,
   onUpdateSettings,
-  audioSystemStatus,
 }: AudioPanelProps) {
   const { t } = useTranslation();
 
@@ -48,32 +32,6 @@ const AudioPanel = memo(function AudioPanel({
 
   return (
     <CyberCard title={t('settings.audioUpper')} theme='primary'>
-      {/* Audio System Status - Hidden per requirement */}
-
-      {/* Audio Preload Progress */}
-      {audioSystemStatus?.preloadProgress && audioSystemStatus.preloadProgress.progress < 100 && (
-        <div className='mb-3'>
-          <div className='flex justify-between items-center mb-1'>
-            <span className={`text-theme-foreground ${TYPOGRAPHY.SMALL_LABEL}`}>
-              Loading Audio: {audioSystemStatus.preloadProgress.loaded}/
-              {audioSystemStatus.preloadProgress.total}
-            </span>
-            <span className={`text-theme-foreground ${TYPOGRAPHY.SMALL_LABEL} font-mono`}>
-              {Math.round(audioSystemStatus.preloadProgress.progress)}%
-            </span>
-          </div>
-          <Progress
-            value={audioSystemStatus.preloadProgress.progress}
-            className='h-2 bg-theme-foreground/10 [&>div]:bg-theme-foreground'
-          />
-          {audioSystemStatus.preloadProgress.failed > 0 && (
-            <div className={`text-theme-foreground ${TYPOGRAPHY.SMALL_LABEL} mt-1`}>
-              {audioSystemStatus.preloadProgress.failed} files failed to load
-            </div>
-          )}
-        </div>
-      )}
-
       <div className={SPACING.FORM_ELEMENTS}>
         <div className='flex justify-between items-center'>
           <span className={`text-theme-foreground ${TYPOGRAPHY.BODY_TEXT}`}>
