@@ -29,6 +29,20 @@ export const DEFAULT_VALUES = {
     RECENT_ERROR_COUNT: 5,
   },
 
+  // Audio system
+  AUDIO: {
+    MAX_RETRIES: 3,
+    THROTTLE_MS: 100,
+    PRELOAD_PROGRESS_COMPLETE: 100,
+  },
+
+  // UI Display
+  UI: {
+    HIGH_SCORE_MAX_DISPLAY: 10,
+    ANIMATION_LAST_TICK_INITIAL: 0 as const,
+    RETRY_COUNT_INITIAL: 0 as const,
+  },
+
   // Game settings
   GAME: {
     LEVEL: 1,

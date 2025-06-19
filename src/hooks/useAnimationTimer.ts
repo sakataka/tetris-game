@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { DEFAULT_VALUES } from '@/constants';
 import { animationManager } from '@/utils/animation/animationManager';
 
 interface UseAnimationTimerProps {
@@ -27,11 +28,11 @@ export function useAnimationTimer({ isActive, interval, onTick }: UseAnimationTi
       const animationId = `game-timer-${Date.now()}-${Math.random()}`;
       animationIdRef.current = animationId;
 
-      let lastTickTime = 0;
+      let lastTickTime: number = DEFAULT_VALUES.UI.ANIMATION_LAST_TICK_INITIAL;
 
       // Animation callback that simulates setInterval behavior
       const tickCallback = (currentTime: number) => {
-        if (lastTickTime === 0) {
+        if (lastTickTime === DEFAULT_VALUES.UI.ANIMATION_LAST_TICK_INITIAL) {
           lastTickTime = currentTime;
         }
 

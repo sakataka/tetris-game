@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { DEFAULT_VALUES } from '@/constants';
 import { SPACING, TYPOGRAPHY } from '@/constants/layout';
 import type { HighScore } from '@/types/tetris';
 import { cn } from '@/utils/ui/cn';
@@ -17,7 +18,7 @@ interface HighScoreDisplayProps {
 const HighScoreDisplay = memo(function HighScoreDisplay({
   highScores,
   showRank = true,
-  maxDisplay = 10,
+  maxDisplay = DEFAULT_VALUES.UI.HIGH_SCORE_MAX_DISPLAY,
   className = '',
   size = 'md',
 }: HighScoreDisplayProps) {

@@ -17,11 +17,11 @@ export type ComparisonResult = {
 /**
  * Generic deep comparison function that can handle any object structure.
  * This function recursively compares objects and reports differences as path-based strings.
- * 
+ *
  * Examples:
  * - compareObjectsDeep({ a: 1 }, { a: 2 }) → ["a: 1 → 2"]
  * - compareObjectsDeep({ user: { name: "John" } }, { user: { name: "Jane" } }) → ["user.name: John → Jane"]
- * 
+ *
  * @param obj1 First object to compare
  * @param obj2 Second object to compare
  * @param path Current path for difference reporting (used internally for recursion)
@@ -68,13 +68,13 @@ export function compareObjectsDeep<T extends Record<string, unknown>>(
 /**
  * Generic comparison function for any object structure.
  * This is a convenient wrapper around compareObjectsDeep that returns a structured result.
- * 
+ *
  * Example:
  * ```typescript
  * const result = compareObjects({ a: 1 }, { a: 2 });
  * // result: { identical: false, differences: ["a: 1 → 2"] }
  * ```
- * 
+ *
  * @param obj1 First object to compare
  * @param obj2 Second object to compare
  * @returns Comparison result with identical flag and array of difference strings
@@ -96,7 +96,10 @@ export function compareConfigurations(
   config2: GameConfiguration
 ): ComparisonResult {
   // Use the generic comparison function
-  return compareObjects(config1 as unknown as Record<string, unknown>, config2 as unknown as Record<string, unknown>);
+  return compareObjects(
+    config1 as unknown as Record<string, unknown>,
+    config2 as unknown as Record<string, unknown>
+  );
 }
 
 // Configuration backup and restore

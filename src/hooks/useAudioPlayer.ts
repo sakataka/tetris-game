@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
+import { DEFAULT_VALUES } from '@/constants';
 import type { SoundKey } from '@/types/tetris';
 import { audioManager } from '@/utils/audio';
 import { log } from '@/utils/logging/logger';
@@ -37,7 +38,7 @@ interface AudioPlayerAPI {
  * - Integration with audio manager utility
  */
 export function useAudioPlayer({
-  throttleMs = 100,
+  throttleMs = DEFAULT_VALUES.AUDIO.THROTTLE_MS,
   onPlaySound,
   onPlayError,
   enablePlayCount = true,

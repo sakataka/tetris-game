@@ -6,7 +6,12 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { DEFAULT_VALUES } from '@/constants';
 import { EFFECTS } from '@/constants/layout';
+import { useGameControls } from '@/hooks/useGameControls';
+import { useGameLoop } from '@/hooks/useGameLoop';
+import { useHighScoreManager } from '@/hooks/useHighScoreManager';
+import { useSession } from '@/hooks/useSession';
 import {
   useCalculatePiecePlacementState,
   useClearLineEffect,
@@ -22,10 +27,6 @@ import {
 } from '@/store/gameStateStore';
 import type { GameState, LineEffectState, SoundKey, Tetromino } from '@/types/tetris';
 import { animationManager } from '@/utils/animation/animationManager';
-import { useGameControls } from '@/hooks/useGameControls';
-import { useGameLoop } from '@/hooks/useGameLoop';
-import { useHighScoreManager } from '@/hooks/useHighScoreManager';
-import { useSession } from '@/hooks/useSession';
 
 export interface GameStateAPI {
   gameState: GameState;
@@ -90,11 +91,11 @@ export function useGameStateController({
       const animationId = `line-effect-cleanup-${Date.now()}`;
       effectCleanupIdRef.current = animationId;
 
-      let startTime = 0;
+      let startTime: number = DEFAULT_VALUES.UI.ANIMATION_LAST_TICK_INITIAL;
       let flashCleared = false;
 
       const cleanupCallback = (currentTime: number) => {
-        if (startTime === 0) {
+        if (startTime === DEFAULT_VALUES.UI.ANIMATION_LAST_TICK_INITIAL) {
           startTime = currentTime;
         }
 

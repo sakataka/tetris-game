@@ -38,7 +38,9 @@ vi.mock('react-i18next', () => ({
 }));
 
 vi.mock('../components/layout/MainLayout', () => ({
-  default: ({ children }: { children: React.ReactNode }) => <div data-testid="main-layout">{children}</div>,
+  default: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid='main-layout'>{children}</div>
+  ),
 }));
 
 vi.mock('../store/settingsStore', () => ({

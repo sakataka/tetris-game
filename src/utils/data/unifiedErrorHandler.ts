@@ -5,6 +5,7 @@
  * Consolidates handleError, handleAsyncError, and withErrorHandling patterns.
  */
 
+import { DEFAULT_VALUES } from '@/constants';
 import { GAME_TIMING } from '@/constants/timing';
 import { GameAppError } from '@/types/errors';
 import { log } from '@/utils/logging';
@@ -117,7 +118,7 @@ export async function safeAsync<T>(
  */
 export async function withRetry<T>(
   operation: () => Promise<T>,
-  maxRetries = 3,
+  maxRetries = DEFAULT_VALUES.ERROR_LIMITS.MAX_RETRIES,
   delay = GAME_TIMING.DEFAULT_SOUND_DURATION,
   context?: Record<string, unknown>
 ): Promise<T> {

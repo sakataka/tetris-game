@@ -63,7 +63,7 @@ describe('ConfigComparisonCard', () => {
   it('should render basic comparison', () => {
     render(
       <ConfigComparisonCard
-        title="Test Comparison"
+        title='Test Comparison'
         object1={sampleConfig1}
         object2={sampleConfig2}
       />
@@ -76,7 +76,7 @@ describe('ConfigComparisonCard', () => {
   it('should show identical status', () => {
     render(
       <ConfigComparisonCard
-        title="Identical Test"
+        title='Identical Test'
         object1={identicalConfig}
         object2={sampleConfig2}
       />
@@ -88,7 +88,7 @@ describe('ConfigComparisonCard', () => {
   it('should hide when identical and showWhenIdentical is false', () => {
     const { container } = render(
       <ConfigComparisonCard
-        title="Hidden Test"
+        title='Hidden Test'
         object1={identicalConfig}
         object2={sampleConfig2}
         showWhenIdentical={false}
@@ -99,13 +99,7 @@ describe('ConfigComparisonCard', () => {
   });
 
   it('should handle null objects', () => {
-    render(
-      <ConfigComparisonCard
-        title="Null Test"
-        object1={null}
-        object2={null}
-      />
-    );
+    render(<ConfigComparisonCard title='Null Test' object1={null} object2={null} />);
 
     expect(screen.getByText('Comparison not available')).toBeInTheDocument();
   });
@@ -113,7 +107,7 @@ describe('ConfigComparisonCard', () => {
   it('should limit differences when maxDifferences is set', () => {
     render(
       <ConfigComparisonCard
-        title="Limited Test"
+        title='Limited Test'
         object1={sampleConfig1}
         object2={sampleConfig2}
         maxDifferences={1}
@@ -126,7 +120,7 @@ describe('ConfigComparisonCard', () => {
   it('should show categories when enabled', () => {
     render(
       <ConfigComparisonCard
-        title="Categorized Test"
+        title='Categorized Test'
         object1={sampleConfig1}
         object2={sampleConfig2}
         showCategories={true}
@@ -140,7 +134,7 @@ describe('ConfigComparisonCard', () => {
   it('should use custom labels', () => {
     render(
       <ConfigComparisonCard
-        title="Custom Labels Test"
+        title='Custom Labels Test'
         object1={identicalConfig}
         object2={sampleConfig2}
         labels={{

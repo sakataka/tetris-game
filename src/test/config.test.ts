@@ -210,7 +210,7 @@ describe('Configuration Utilities', () => {
     expect(result.identical).toBe(false);
     expect(result.differences).toContain('a: 1 → 2');
     expect(result.differences).toContain('b.c: hello → world');
-    expect(result.differences.some(diff => diff.includes('d:'))).toBe(false); // d is identical
+    expect(result.differences.some((diff) => diff.includes('d:'))).toBe(false); // d is identical
   });
 
   it('should handle undefined values in compareObjects', () => {

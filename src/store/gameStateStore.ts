@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { INITIAL_DROP_TIME } from '@/constants';
+import { useSettingsStore } from '@/store/settingsStore';
 import type { GameState, LineEffectState, Particle, SoundKey, Tetromino } from '@/types/tetris';
 import {
   calculateScoreIncrease,
@@ -10,7 +11,6 @@ import {
   processLineClear,
   updateGameStateWithPiece,
 } from '@/utils/game';
-import { useSettingsStore } from '@/store/settingsStore';
 
 // Helper function to create initial game state with debug mode consideration
 const createInitialGameState = (): GameState => {

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { DEFAULT_VALUES } from '@/constants';
 import { audioManager } from '@/utils/audio';
 import { log } from '@/utils/logging/logger';
 
@@ -49,7 +50,7 @@ export function useAudioStrategy({
   // ===== Refs =====
   const initializationAttempted = useRef(false);
   const retryCount = useRef(0);
-  const maxRetries = 3;
+  const maxRetries = DEFAULT_VALUES.AUDIO.MAX_RETRIES;
 
   // ===== Strategy Detection =====
 
@@ -98,7 +99,7 @@ export function useAudioStrategy({
             initializationError: null,
           }));
           onStrategyChange?.(strategy);
-          retryCount.current = 0;
+          retryCount.current = DEFAULT_VALUES.UI.RETRY_COUNT_INITIAL;
           log.audio(`Successfully switched to ${strategy} strategy`, {
             action: 'switchToStrategy',
           });
@@ -161,7 +162,7 @@ export function useAudioStrategy({
       action: 'retryInitialization',
     });
     await determineStrategy();
-  }, [determineStrategy, switchToStrategy]);
+  }, [determineStrategy, switchToStrategy, maxRetries]);
 
   // ===== Initialization Effect =====
   useEffect(() => {

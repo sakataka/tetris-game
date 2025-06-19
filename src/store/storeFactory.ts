@@ -43,17 +43,12 @@ export interface BaseStoreActions<T> {
 
 // Utility functions for nested object operations
 export function getNestedValue<T>(obj: T, path: string): unknown {
-  return path
-    .split('.')
-    .reduce(
-      (current: unknown, key: string) => {
-        if (current && typeof current === 'object') {
-          return (current as Record<string, unknown>)[key];
-        }
-        return undefined;
-      },
-      obj as unknown
-    );
+  return path.split('.').reduce((current: unknown, key: string) => {
+    if (current && typeof current === 'object') {
+      return (current as Record<string, unknown>)[key];
+    }
+    return undefined;
+  }, obj as unknown);
 }
 
 export function setNestedValue<T>(obj: T, path: string, value: unknown): T {

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { DEFAULT_VALUES } from '@/constants';
 import type { SoundKey } from '@/types/tetris';
 import { getAudioPreloadProgress, preloadAudioSmart } from '@/utils/audio';
 import { log } from '@/utils/logging/logger';
@@ -214,7 +215,7 @@ export function useAudioPreloader({
     try {
       // Check current progress from audio utils
       const currentProgress = getAudioPreloadProgress();
-      if (currentProgress.progress >= 100) {
+      if (currentProgress.progress >= DEFAULT_VALUES.AUDIO.PRELOAD_PROGRESS_COMPLETE) {
         log.audio('All sounds already preloaded', { action: 'preloadSounds' });
 
         // Update state to reflect completed preload
