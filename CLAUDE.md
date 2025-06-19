@@ -71,27 +71,139 @@ rg "pattern" --type ts src/   # May work but prefer --include
 
 ### Tech Stack
 - **Framework**: React 19.1 + React Router 7.6.2 (SPA mode)
-- **Build**: Vite 6.3.5 + TypeScript ES2024
-- **State**: Zustand 5 (15 stores)
+- **Build**: Vite 6.3.5 + TypeScript ES2024 + babel-plugin-react-compiler 19.1.0-rc.2
+- **State**: Zustand 5 (7 optimized stores)
 - **UI**: shadcn/ui + Tailwind CSS v4.1 + Cyberpunk theme
-- **Package Manager**: pnpm (required)
-- **Quality**: Biome (linting/formatting) + Husky pre-commit
+- **Package Manager**: pnpm (required) 
+- **Quality**: Biome (linting/formatting) + Lefthook pre-commit
 
 ### Bundle Performance
 - **Production Build**: 322.02 kB (gzip: 95.68 kB)
-- **Components**: 60 total (40 game + 20 shadcn/ui)
+- **Components**: 58 total (38 game + 20 shadcn/ui)
 - **Tests**: 349 tests across 24 files (Vitest)
 
 ## Key Architecture Patterns
 
-### 1. Component Structure
+### 1. Modern Controller Pattern (Hook Composition)
+The architecture replaces complex render props with elegant hook composition:
 
-### 2. State Management
+```typescript
+// Before: 5 levels of render prop nesting (72 lines)
+// After: Single hook call (15 lines)
+export default function GameLogicController({ children }: GameLogicControllerProps) {
+  const gameControllerAPI = useGameController();
+  return children(gameControllerAPI);
+}
+```
 
-### 3. Audio System (Strategy Pattern)
+**useGameController** consolidates all subsystem APIs:
+- **Game State Controller** - Core game logic and state management
+- **Audio Controller** - Sound system with useSimpleAudio strategy
+- **Event Controller** - Analytics and game events
+- **Device Controller** - Responsive behavior detection
+- **Settings Management** - User preferences persistence
 
-### 4. UI Components (shadcn/ui + Cyberpunk)
+### 2. Optimized Zustand State Management
+Individual selector pattern for minimal re-renders:
 
+```typescript
+// Granular selectors prevent unnecessary re-renders
+const gameState = useGameState();
+const togglePause = useTogglePause();
+const updateParticles = useUpdateParticles();
+```
+
+### 3. React 19.1 Compiler Integration
+Automatic optimization without manual memoization:
+- Natural code flow - focus on business logic
+- React Compiler handles memoization decisions
+- No useCallback/useMemo boilerplate
+
+### 4. Unified Animation System
+Single AnimationManager for all animations:
+- requestAnimationFrame optimization
+- Automatic cleanup on component unmount
+- Centralized animation queue management
+
+## Zustand Store Architecture (7 Stores)
+
+### Core Game Stores
+1. **gameStateStore** - Main game state management
+   - Board state, current/next pieces
+   - Score, level, lines cleared
+   - Line effects and particle animations
+   - Game over and pause states
+
+2. **settingsStore** - User preferences
+   - Game difficulty and controls
+   - Debug mode settings
+   - Keyboard configurations
+   - Persistent storage integration
+
+3. **statisticsStore** - Game statistics
+   - High scores management
+   - Play history tracking
+   - Performance metrics
+   - Session data
+
+### UI/UX Stores
+4. **themeStore** - Visual customization
+   - Theme presets (default, dark, light, cyberpunk)
+   - Color scheme management
+   - Accessibility filters
+   - System preference sync
+
+5. **audioStore** - Sound management
+   - Volume and mute controls
+   - Sound effect triggers
+   - Audio strategy pattern integration
+
+### System Stores
+6. **i18nStore** - Internationalization
+   - Language selection (en/ja)
+   - Translation management
+   - Locale persistence
+
+7. **errorStore** - Error handling
+   - Global error state
+   - Toast notifications
+   - Error boundary integration
+
+## Constants Management System
+
+### Comprehensive Configuration Architecture
+The project uses a sophisticated constants management system with validation:
+
+```typescript
+// Centralized configuration with validation
+import { gameConfig, audioConfig, uiConfig } from '@/constants';
+import { validateAllConfigs } from '@/constants/validation';
+
+// Runtime validation ensures configuration integrity
+const validation = validateAllConfigs(customConfig);
+```
+
+### Configuration Categories
+1. **Game Configuration** (`gameConfig.ts`)
+   - Scoring rules and multipliers
+   - Level progression mechanics
+   - Physics and timing settings
+   - Particle system configuration
+
+2. **Audio Configuration** (`audioConfig.ts`)
+   - Sound effect mappings
+   - Volume defaults
+   - Audio file paths
+
+3. **UI Configuration** (`uiConfig.ts`)
+   - Layout dimensions
+   - Animation timings
+   - Responsive breakpoints
+
+4. **Validation System** (`validation.ts`)
+   - Type-safe configuration validation
+   - Runtime checks for all configs
+   - Error and warning reporting
 
 ## Quick Commands
 
@@ -112,18 +224,97 @@ pnpm test               # Vitest watch mode
 pnpm test:e2e           # Playwright E2E tests
 ```
 
+## Component Architecture Details
+
+### Core Component Hierarchy
+```
+TetrisGame (Root)
+├── GameOrchestrator (App initialization)
+│   └── GameLogicController (Hook composition)
+│       └── GameLayoutManager (UI orchestration)
+│           ├── GameHeader
+│           ├── MainLayout
+│           │   ├── TetrisBoard
+│           │   ├── GameInfo
+│           │   │   ├── NextPiecePanel
+│           │   │   ├── ScoringPanel
+│           │   │   └── ControlsPanel
+│           │   └── GameButtonsPanel
+│           ├── VirtualControls (mobile)
+│           └── Overlays (PausedMessage, GameOverMessage)
+```
+
+### Component Responsibilities
+
+#### **TetrisGame** (`/src/components/TetrisGame.tsx`)
+- Root component with error boundary
+- Minimal logic, pure composition
+- Entry point for the game
+
+#### **GameOrchestrator** (`/src/components/GameOrchestrator.tsx`)
+- I18n initialization
+- SPA mode detection
+- Global app lifecycle
+
+#### **GameLogicController** (`/src/components/GameLogicController.tsx`)
+- Consolidates all game logic via `useGameController` hook
+- Provides unified API to children
+- Replaces 5 levels of render props with single hook
+
+#### **GameLayoutManager** (`/src/components/GameLayoutManager.tsx`)
+- Responsive layout orchestration
+- Mobile/desktop UI adaptation
+- Dialog and overlay management
+
+### Hook Architecture
+
+#### **useGameController** (Master Hook)
+Combines all subsystem controllers:
+```typescript
+{
+  // Game state management
+  gameState, isPaused, isGameOver, togglePause, resetGame,
+  
+  // Piece controls
+  movePiece, rotatePiece, dropPiece, hardDropPiece,
+  
+  // Audio controls  
+  volume, isMuted, toggleMute, setVolume,
+  
+  // Settings & device info
+  settings, updateSettings, isMobile, 
+  
+  // UI state
+  showSettings, setShowSettings
+}
+```
+
 ## Critical Systems
 
 ### Error Handling
-
+- **Multiple Error Boundaries**: Page-level and component-level protection
+- **Error Store Integration**: Global error state with toast notifications
+- **Graceful Degradation**: Game continues with reduced functionality on errors
+- **Sentry Integration**: Production error tracking and monitoring
 
 ### Internationalization
-
+- **i18n Store**: Centralized language management
+- **Supported Languages**: English (en) and Japanese (ja)
+- **Browser Detection**: Automatic language selection
+- **Persistent Selection**: Language preference saved to localStorage
 
 ### Audio System
+- **Strategy Pattern**: Pluggable audio backends via useSimpleAudio
+- **Optimized Loading**: Lazy loading with preload support
+- **Volume Control**: Independent volume and mute settings
+- **Sound Effects**: 6 game sounds (rotate, land, clear, tetris, game-over, hard-drop)
 
-
-### Performance
+### Performance Optimizations
+- **React Compiler**: Automatic memoization without manual optimization
+- **Animation Manager**: Centralized RAF-based animation queue
+- **Particle Pool**: Object pooling for particle effects
+- **Canvas Rendering**: Optimized board rendering with minimal redraws
+- **Individual Selectors**: Zustand selectors prevent unnecessary re-renders
 
 ## File Organization
 
@@ -146,6 +337,45 @@ src/
 ├── hooks/         # Custom hooks (17 total)
 ├── types/         # TypeScript definitions
 └── test/          # Vitest test files
+```
+
+## Recent Refactoring Achievements
+
+### Phase-based Architecture Evolution
+The project underwent comprehensive refactoring through multiple phases:
+
+#### Phase 1: Foundation Improvements
+- **Import Path Standardization**: All imports now use `@/` prefix
+- **Constants Consolidation**: Unified constant definitions
+- **Naming Consistency**: Standardized naming conventions across codebase
+
+#### Phase 2: Major Architecture Improvements  
+- **Component Structure**: Simplified component hierarchy
+- **State Management**: Optimized Zustand store structure
+- **Performance**: Enhanced rendering performance
+
+#### Phase 3: Configuration Management System
+- **Phase 3.2**: Import path organization completion
+- **Phase 3.4**: Comprehensive constants management with validation
+- **Configuration Comparison**: Runtime config validation system
+
+#### Phase 4: Final Optimizations
+- **Dead Code Elimination**: Removed unused files and exports
+- **Bundle Optimization**: Reduced component count from 60 to 58
+- **Animation System**: Optimized with unified AnimationManager
+- **TypeScript Cleanup**: Complete type safety across codebase
+
+### Import Path Standards
+All imports use the `@/` prefix for absolute paths:
+
+```typescript
+// ✅ Correct - uses @/ prefix
+import { useGameState } from '@/store/gameStateStore';
+import { TetrisBoard } from '@/components/TetrisBoard';
+import { GAME_CONFIG } from '@/constants';
+
+// ❌ Incorrect - relative paths
+import { useGameState } from '../store/gameStateStore';
 ```
 
 ## Development Workflow
@@ -198,13 +428,16 @@ src/
 
 ## Important Notes
 
-- **Package Manager**
-- **React Version**:
-- **Comments/Commits**: English only for source code
-- **Pre-commit**:
-- **Pre-push**: 
-- **Performance**:
-- **Testing**: 
+- **Package Manager**: pnpm (required) - enforced via engines field
+- **React Version**: 19.1 with React Compiler optimization
+- **Comments/Commits**: English only for source code documentation
+- **Pre-commit**: Automatic Biome formatting/linting via Lefthook (~0.9s)
+- **Pre-push**: Run `pnpm pre-push` for full quality check + tests (~3.5s)
+- **Performance**: Bundle size optimized to 95.68 kB (gzip)
+- **Testing**: 349 tests with Vitest, full E2E coverage with Playwright
+- **Import Paths**: Always use `@/` prefix for absolute imports
+- **State Management**: Use individual Zustand selectors to prevent re-renders
+- **No Manual Memoization**: Let React Compiler handle optimization 
 
 ## Future Feature Roadmap
 
