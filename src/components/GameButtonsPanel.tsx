@@ -2,7 +2,7 @@ import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { GAP_SCALE } from '@/constants/layout';
-import { useGameButtons } from '../hooks/useGameButtons';
+import { useGameButtons } from '@/hooks/useGameButtons';
 import { ConfirmationDialog } from './ui/ConfirmationDialog';
 
 interface GameButtonsPanelProps {

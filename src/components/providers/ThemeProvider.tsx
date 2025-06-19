@@ -6,8 +6,8 @@
  */
 
 import { useEffect } from 'react';
-import { useThemeStore } from '../../store/themeStore';
-import { applyUnifiedThemeToDocument } from '../../utils/ui/unifiedThemeSystem';
+import { useThemeStore } from '@/store/themeStore';
+import { applyUnifiedThemeToDocument } from '@/utils/ui/unifiedThemeSystem';
 
 interface ThemeProviderProps {
   children: React.ReactNode;

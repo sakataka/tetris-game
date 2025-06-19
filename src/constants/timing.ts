@@ -47,6 +47,15 @@ export const GAME_TIMING = {
   KEY_REPEAT_DELAY: 150, // Key repeat initial delay
   KEY_REPEAT_INTERVAL: 50, // Key repeat interval
   TOUCH_FEEDBACK_DURATION: 100, // Touch feedback duration
+
+  // Animation and effect timings
+  EFFECT_RESET_DELAY: 300, // Effect reset delay (ms)
+  UI_EFFECT_MAX_DURATION: 5000, // Maximum UI effect duration (ms)
+  PARTICLE_EFFECT_MAX_DURATION: 10000, // Maximum particle effect duration (ms)
+
+  // FPS and frame calculations
+  MS_PER_SECOND: 1000, // Milliseconds per second
+  TARGET_FPS: 60, // Target frames per second
 } as const;
 
 // Timer intervals

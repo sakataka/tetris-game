@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import type { ThemeConfig, ThemeState } from '../types/tetris';
-// import { adjustColorsForContrast, applyColorBlindnessFilter } from '../utils/ui'; // Removed with Color Palette Settings
+import type { ThemeConfig, ThemeState } from '@/types/tetris';
+// import { adjustColorsForContrast, applyColorBlindnessFilter } from '@/utils/ui'; // Removed with Color Palette Settings
 
 export interface AccessibilityFiltersAPI {
   processedConfig: ThemeConfig;

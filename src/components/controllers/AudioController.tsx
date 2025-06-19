@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { useAudio } from '../../hooks/useAudio';
-import { useSettings, useUpdateSettings } from '../../store/settingsStore';
-import type { SoundKey } from '../../types/tetris';
+import { useAudio } from '@/hooks/useAudio';
+import { useSettings, useUpdateSettings } from '@/store/settingsStore';
+import type { SoundKey } from '@/types/tetris';
 
 export interface AudioSystemAPI {
   isMuted: boolean;

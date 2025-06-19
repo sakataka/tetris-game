@@ -5,9 +5,9 @@
 
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
+import { TYPOGRAPHY } from '@/constants/layout';
+import type { HighScore } from '@/types/tetris';
 import { cn } from '@/utils/ui/cn';
-import { TYPOGRAPHY } from '../../../constants/layout';
-import type { HighScore } from '../../../types/tetris';
 import { Badge } from '../badge';
 import CyberCard from '../CyberCard';
 

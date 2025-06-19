@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { SPACING, TYPOGRAPHY } from '../constants/layout';
+import { SPACING, TYPOGRAPHY } from '@/constants/layout';
 import CyberCard from './ui/CyberCard';
 
 interface ControlsPanelProps {

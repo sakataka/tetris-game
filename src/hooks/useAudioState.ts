@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { log } from '../utils/logging/logger';
+import { log } from '@/utils/logging/logger';
 
 interface AudioVolumeState {
   volume: number;

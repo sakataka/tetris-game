@@ -1,7 +1,7 @@
 import { memo, useEffect, useRef, useState } from 'react';
-import type { LineEffectState } from '../types/tetris';
-import { log } from '../utils/logging';
-import { CanvasRenderer, performanceMonitor } from '../utils/performance';
+import type { LineEffectState } from '@/types/tetris';
+import { log } from '@/utils/logging';
+import { CanvasRenderer, performanceMonitor } from '@/utils/performance';
 
 interface ParticleCanvasProps {
   lineEffect: LineEffectState;

@@ -2,6 +2,7 @@ import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useHighScoreManager } from '../hooks/useHighScoreManager';
 import type { GameState } from '../types/tetris';
+
 // Note: createTestFixtures was removed as part of theme system simplification
 
 // Create test fixtures and mocks

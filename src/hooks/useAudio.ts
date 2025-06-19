@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import type { SoundKey } from '../types/tetris';
-import { getAudioPreloadProgress } from '../utils/audio';
+import type { SoundKey } from '@/types/tetris';
+import { getAudioPreloadProgress } from '@/utils/audio';
 import { useAudioPlayer } from './useAudioPlayer';
 import { useAudioPreloader } from './useAudioPreloader';
 import { useAudioState } from './useAudioState';

@@ -7,7 +7,7 @@
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { GameStatistics, HighScore, PlaySession } from '../types/tetris';
+import type { GameStatistics, HighScore, PlaySession } from '@/types/tetris';
 
 // Session-related types
 export interface SessionStats {

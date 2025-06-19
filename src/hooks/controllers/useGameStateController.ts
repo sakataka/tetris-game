@@ -6,7 +6,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { EFFECTS } from '../../constants/layout';
+import { EFFECTS } from '@/constants/layout';
 import {
   useCalculatePiecePlacementState,
   useClearLineEffect,
@@ -19,9 +19,9 @@ import {
   useTogglePause,
   useUpdateLineEffect,
   useUpdateParticles,
-} from '../../store/gameStateStore';
-import type { GameState, LineEffectState, SoundKey, Tetromino } from '../../types/tetris';
-import { animationManager } from '../../utils/animation/animationManager';
+} from '@/store/gameStateStore';
+import type { GameState, LineEffectState, SoundKey, Tetromino } from '@/types/tetris';
+import { animationManager } from '@/utils/animation/animationManager';
 import { useGameControls } from '../useGameControls';
 import { useGameLoop } from '../useGameLoop';
 import { useHighScoreManager } from '../useHighScoreManager';

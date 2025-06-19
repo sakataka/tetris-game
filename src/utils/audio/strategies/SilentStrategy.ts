@@ -3,7 +3,7 @@
  * Provides no-op audio implementation when all other strategies fail
  */
 
-import type { SoundKey } from '../../../types/tetris';
+import type { SoundKey } from '@/types/tetris';
 import { type AudioState, AudioStrategy, type SoundConfig } from './AudioStrategy';
 
 export class SilentStrategy extends AudioStrategy {

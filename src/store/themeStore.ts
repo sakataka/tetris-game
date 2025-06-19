@@ -1,11 +1,11 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { ColorBlindnessType, ContrastLevel, ThemeState, ThemeVariant } from '../types/tetris';
+import type { ColorBlindnessType, ContrastLevel, ThemeState, ThemeVariant } from '@/types/tetris';
 import {
   applyUnifiedThemeToDocument,
   getUnifiedThemeConfig,
   type UnifiedThemeConfig,
-} from '../utils/ui/unifiedThemeSystem';
+} from '@/utils/ui/unifiedThemeSystem';
 
 // Default theme state
 const DEFAULT_THEME_STATE: ThemeState = {

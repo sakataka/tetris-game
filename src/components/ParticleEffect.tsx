@@ -1,5 +1,4 @@
 import { memo, useEffect, useRef, useState } from 'react';
-import { useFeatureFlags, usePerformanceConfig } from '../config';
 import {
   PARTICLE_GRAVITY,
   PARTICLE_LIFE_DURATION,
@@ -7,11 +6,12 @@ import {
   PARTICLE_OPACITY_MULTIPLIER,
   PARTICLE_SCALE_BASE,
   PARTICLE_SCALE_MULTIPLIER,
-} from '../constants';
-import type { LineEffectState } from '../types/tetris';
-import { ANIMATION_PRESETS, useConditionalAnimation } from '../utils/animation';
-import { log } from '../utils/logging';
-import { globalFpsController, particlePool, performanceMonitor } from '../utils/performance';
+} from '@/constants';
+import type { LineEffectState } from '@/types/tetris';
+import { ANIMATION_PRESETS, useConditionalAnimation } from '@/utils/animation';
+import { log } from '@/utils/logging';
+import { globalFpsController, particlePool, performanceMonitor } from '@/utils/performance';
+import { useFeatureFlags, usePerformanceConfig } from '../config';
 import ParticleCanvas from './ParticleCanvas';
 
 interface ParticleEffectProps {

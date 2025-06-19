@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { INITIAL_DROP_TIME } from '../constants';
-import type { GameState, LineEffectState, Particle, SoundKey, Tetromino } from '../types/tetris';
+import { INITIAL_DROP_TIME } from '@/constants';
+import type { GameState, LineEffectState, Particle, SoundKey, Tetromino } from '@/types/tetris';
 import {
   calculateScoreIncrease,
   checkGameOver,
@@ -9,7 +9,7 @@ import {
   getRandomTetromino,
   processLineClear,
   updateGameStateWithPiece,
-} from '../utils/game';
+} from '@/utils/game';
 import { useSettingsStore } from './settingsStore';
 
 // Helper function to create initial game state with debug mode consideration

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { GAME_TIMING } from '../constants';
+import { GAME_TIMING } from '@/constants';
 
 interface UseDropTimeCalculatorProps {
   level: number;

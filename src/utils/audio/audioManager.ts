@@ -3,8 +3,8 @@
  * Provides fallback chain: Web Audio API → HTML Audio → Silent
  */
 
-import { createAudioError } from '../../types/errors';
-import type { SoundKey } from '../../types/tetris';
+import { createAudioError } from '@/types/errors';
+import type { SoundKey } from '@/types/tetris';
 import { log } from '../logging';
 import {
   type AudioState,

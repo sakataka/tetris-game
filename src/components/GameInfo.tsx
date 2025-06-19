@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import type { Tetromino } from '../types/tetris';
+import type { Tetromino } from '@/types/tetris';
 import GameTabContent from './GameTabContent';
 import MobileGameInfo from './MobileGameInfo';
 

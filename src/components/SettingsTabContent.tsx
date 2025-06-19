@@ -1,8 +1,8 @@
 import { memo, Suspense, useId } from 'react';
 import { useTranslation } from 'react-i18next';
-import { TYPOGRAPHY } from '../constants/layout';
-import { useAudioVolumeState } from '../store/audioStore';
-import { useSettings, useUpdateSettings } from '../store/settingsStore';
+import { TYPOGRAPHY } from '@/constants/layout';
+import { useAudioVolumeState } from '@/store/audioStore';
+import { useSettings, useUpdateSettings } from '@/store/settingsStore';
 import AudioPanel from './AudioPanel';
 import LanguageSelector from './LanguageSelector';
 import CyberCard from './ui/CyberCard';
@@ -64,7 +64,9 @@ const SettingsTabContent = memo(function SettingsTabContent() {
               <span className={TYPOGRAPHY.BODY_TEXT}>{t('settings.debugMode')}</span>
             </Label>
           </div>
-          <p className='text-xs text-theme-foreground opacity-70'>{t('settings.debugModeDescription')}</p>
+          <p className='text-xs text-theme-foreground opacity-70'>
+            {t('settings.debugModeDescription')}
+          </p>
         </div>
       </CyberCard>
     </div>

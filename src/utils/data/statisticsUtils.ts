@@ -1,4 +1,4 @@
-import type { GameStatistics, HighScore } from '../../types/tetris';
+import type { GameStatistics, HighScore } from '@/types/tetris';
 
 // Extended statistics type definition
 export interface EnhancedStatistics extends GameStatistics {

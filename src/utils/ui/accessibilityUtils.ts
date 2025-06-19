@@ -9,7 +9,7 @@ import type {
   AnimationIntensity,
   FontSizeLevel,
   VisualAssistance,
-} from '../../types/accessibility';
+} from '@/types/accessibility';
 import { log } from '../logging';
 
 /**

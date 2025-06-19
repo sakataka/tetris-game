@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
-import type { SoundKey } from '../types/tetris';
-import { audioManager } from '../utils/audio';
-import { log } from '../utils/logging/logger';
+import type { SoundKey } from '@/types/tetris';
+import { audioManager } from '@/utils/audio';
+import { log } from '@/utils/logging/logger';
 
 interface PlaybackState {
   playCount: Record<SoundKey, number>;

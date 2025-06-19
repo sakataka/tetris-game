@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { useCurrentTheme } from '../../store/themeStore';
+import { useCurrentTheme } from '@/store/themeStore';
 
 interface BackgroundEffectsProps {
   variant?: 'default' | 'minimal' | 'intense';

@@ -6,7 +6,7 @@
  */
 
 import { useCallback } from 'react';
-import { log } from '../utils/logging';
+import { log } from '@/utils/logging';
 
 export interface GameSettings {
   audioEnabled: boolean;

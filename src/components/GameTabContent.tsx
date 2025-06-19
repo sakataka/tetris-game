@@ -1,7 +1,7 @@
 import { memo } from 'react';
-import { SPACING, TYPOGRAPHY } from '../constants/layout';
-import { useHighScores } from '../store/statisticsStore';
-import type { Tetromino } from '../types/tetris';
+import { SPACING, TYPOGRAPHY } from '@/constants/layout';
+import { useHighScores } from '@/store/statisticsStore';
+import type { Tetromino } from '@/types/tetris';
 import CombinedStatsNextPanel from './CombinedStatsNextPanel';
 import ControlsPanel from './ControlsPanel';
 import HighScoreDisplay from './HighScoreDisplay';

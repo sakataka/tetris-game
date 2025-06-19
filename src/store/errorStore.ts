@@ -11,7 +11,7 @@ import {
   type ErrorConfig,
   type ErrorInfo,
   type ErrorLevel,
-} from '../types/errors';
+} from '@/types/errors';
 
 // Simplified error store state
 export interface ErrorState {

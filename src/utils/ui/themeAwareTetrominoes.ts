@@ -5,8 +5,8 @@
  * while maintaining good distinguishability between pieces.
  */
 
-import { TETROMINO_COLORS as FALLBACK_COLORS } from '../../constants/tetrominoes';
-import type { ThemeVariant } from '../../types/tetris';
+import { TETROMINO_COLORS as FALLBACK_COLORS } from '@/constants/tetrominoes';
+import type { ThemeVariant } from '@/types/tetris';
 import { getUnifiedThemeConfig } from './unifiedThemeSystem';
 
 /**

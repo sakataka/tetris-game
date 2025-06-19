@@ -8,8 +8,8 @@ import {
   PARTICLE_OPACITY_MULTIPLIER,
   PARTICLE_SCALE_BASE,
   PARTICLE_SCALE_MULTIPLIER,
-} from '../../constants';
-import type { Particle } from '../../types/tetris';
+} from '@/constants';
+import type { Particle } from '@/types/tetris';
 
 interface CanvasRendererConfig {
   enableShadows?: boolean;

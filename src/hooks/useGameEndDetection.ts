@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
-import { useAddHighScore, useStatisticsStore, useUpdateStatistics } from '../store/statisticsStore';
-import type { GameState, SoundKey } from '../types/tetris';
+import { useAddHighScore, useStatisticsStore, useUpdateStatistics } from '@/store/statisticsStore';
+import type { GameState, SoundKey } from '@/types/tetris';
 import {
   createHighScoreEntry,
   getHighScoreMessage,
   getHighScoreRank,
   isHighScore,
-} from '../utils/game';
+} from '@/utils/game';
 
 interface HighScoreResult {
   isNewHighScore: boolean;

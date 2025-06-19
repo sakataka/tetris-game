@@ -31,4 +31,5 @@ export * from './tetrominoes';
 export * from './timing';
 
 // Aliases for backward compatibility
-export const EFFECT_RESET_DELAY = 300; // Alias for EFFECTS.RESET_DELAY
+import { GAME_TIMING } from './timing';
+export const EFFECT_RESET_DELAY = GAME_TIMING.EFFECT_RESET_DELAY; // Alias for backward compatibility

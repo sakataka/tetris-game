@@ -19,7 +19,8 @@ const Toaster = ({ ...props }: ToasterProps) => {
             'group-[.toaster]:bg-background/90 group-[.toaster]:text-foreground group-[.toaster]:border-theme-foreground/30 group-[.toaster]:backdrop-blur-sm group-[.toaster]:shadow-lg',
           description: 'group-[.toaster]:text-cyber-purple',
           actionButton: 'group-[.toaster]:bg-theme-foreground group-[.toaster]:text-background',
-          cancelButton: 'group-[.toaster]:bg-theme-foreground/20 group-[.toaster]:text-theme-foreground',
+          cancelButton:
+            'group-[.toaster]:bg-theme-foreground/20 group-[.toaster]:text-theme-foreground',
           error:
             'group-[.toaster]:bg-theme-foreground/10 group-[.toaster]:border-theme-foreground/30 group-[.toaster]:text-theme-foreground',
           success:

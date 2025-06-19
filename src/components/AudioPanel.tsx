@@ -2,9 +2,9 @@ import { memo, useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
+import { GAME_UI_SIZES, SPACING, TYPOGRAPHY, UI_SIZES } from '@/constants/layout';
+import type { ExtendedGameSettings } from '@/store/settingsStore';
 import { cn } from '@/utils/ui/cn';
-import { GAME_UI_SIZES, SPACING, TYPOGRAPHY, UI_SIZES } from '../constants/layout';
-import type { ExtendedGameSettings } from '../store/settingsStore';
 import CyberCard from './ui/CyberCard';
 import { Progress } from './ui/progress';
 

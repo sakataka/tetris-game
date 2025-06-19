@@ -8,7 +8,7 @@ import {
   type ErrorConfig,
   type ErrorHandler,
   GameAppError,
-} from '../../types/errors';
+} from '@/types/errors';
 
 // Simplified error handler service
 class ErrorHandlerService {

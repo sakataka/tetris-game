@@ -1,8 +1,8 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { SPACING, TYPOGRAPHY } from '@/constants/layout';
+import type { HighScore } from '@/types/tetris';
 import { cn } from '@/utils/ui/cn';
-import { SPACING, TYPOGRAPHY } from '../constants/layout';
-import type { HighScore } from '../types/tetris';
 import { Badge } from './ui/badge';
 import CyberCard from './ui/CyberCard';
 

@@ -1,5 +1,5 @@
-import { PARTICLE_LIMITS } from '../../constants';
-import type { Particle } from '../../types/tetris';
+import { PARTICLE_LIMITS } from '@/constants';
+import type { Particle } from '@/types/tetris';
 
 /**
  * Optimized Particle Pool with batch processing and memory efficiency

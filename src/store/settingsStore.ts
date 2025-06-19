@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import type { GameSettings, ThemeVariant } from '../types/tetris';
-import { log } from '../utils/logging';
+import type { GameSettings, ThemeVariant } from '@/types/tetris';
+import { log } from '@/utils/logging';
 
 // Navigation types
 export type TabType = 'game' | 'stats' | 'theme' | 'settings';

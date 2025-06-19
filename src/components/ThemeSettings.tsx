@@ -4,8 +4,8 @@ import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
-import { SPACING, TYPOGRAPHY } from '../constants/layout';
-import type { ThemeVariant } from '../types/tetris';
+import { SPACING, TYPOGRAPHY } from '@/constants/layout';
+import type { ThemeVariant } from '@/types/tetris';
 import { ThemeSelectorMemo } from './ThemeSelector';
 
 interface ThemeSettingsProps {

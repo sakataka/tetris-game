@@ -1,5 +1,5 @@
-import { SCORES } from '../../constants';
-import type { GameState, LineEffectState, SoundKey, Tetromino } from '../../types/tetris';
+import { SCORES } from '@/constants';
+import type { GameState, LineEffectState, SoundKey, Tetromino } from '@/types/tetris';
 import {
   clearLines,
   createParticles,

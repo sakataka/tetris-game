@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { GAP_SCALE, PADDING_SCALE } from '../constants/layout';
-import type { Tetromino } from '../types/tetris';
+import { GAP_SCALE, PADDING_SCALE } from '@/constants/layout';
+import type { Tetromino } from '@/types/tetris';
 import GameButtonsPanel from './GameButtonsPanel';
 import NextPiecePanel from './NextPiecePanel';
 

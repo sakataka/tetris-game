@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { toast } from 'sonner';
-import type { ErrorInfo, ErrorLevel } from '../types/errors';
-import { errorHandler } from '../utils/data';
+import type { ErrorInfo, ErrorLevel } from '@/types/errors';
+import { errorHandler } from '@/utils/data';
 
 const ErrorToastAdapter = () => {
   useEffect(() => {

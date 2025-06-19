@@ -5,10 +5,10 @@
 
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
-import { TYPOGRAPHY } from '../constants/layout';
-import { useStatisticsCalculation } from '../hooks/useStatisticsCalculation';
-import type { GameStatistics, HighScore } from '../types/tetris';
-import type { GameSession } from '../utils/data/statisticsUtils';
+import { TYPOGRAPHY } from '@/constants/layout';
+import { useStatisticsCalculation } from '@/hooks/useStatisticsCalculation';
+import type { GameStatistics, HighScore } from '@/types/tetris';
+import type { GameSession } from '@/utils/data/statisticsUtils';
 import CyberCard from './ui/CyberCard';
 import EfficiencyMetrics from './ui/stats/EfficiencyMetrics';
 import HighScoresList from './ui/stats/HighScoresList';

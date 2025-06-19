@@ -5,7 +5,8 @@
  * Consolidates handleError, handleAsyncError, and withErrorHandling patterns.
  */
 
-import { GameAppError } from '../../types/errors';
+import { GAME_TIMING } from '@/constants/timing';
+import { GameAppError } from '@/types/errors';
 import { log } from '../logging';
 import { errorHandler } from './errorHandler';
 
@@ -117,7 +118,7 @@ export async function safeAsync<T>(
 export async function withRetry<T>(
   operation: () => Promise<T>,
   maxRetries = 3,
-  delay = 1000,
+  delay = GAME_TIMING.DEFAULT_SOUND_DURATION,
   context?: Record<string, unknown>
 ): Promise<T> {
   let lastError: Error = new Error('No attempts made');

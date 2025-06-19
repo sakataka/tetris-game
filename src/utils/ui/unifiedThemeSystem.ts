@@ -5,8 +5,8 @@
  * This eliminates complexity and ensures consistency
  */
 
+import type { ThemeVariant } from '@/types/tetris';
 import themePresetsData from '../../data/themePresetsSimple.json';
-import type { ThemeVariant } from '../../types/tetris';
 
 // Validate JSON import and provide fallback
 if (!themePresetsData || typeof themePresetsData !== 'object') {
@@ -94,12 +94,12 @@ export function applyUnifiedThemeToDocument(variant: ThemeVariant): void {
   // These are required for the checkbox, switch, and other UI components
   root.style.setProperty('--primary', config.foreground);
   root.style.setProperty('--primary-foreground', config.background);
-  
+
   // Generate dynamic colors using color-mix
   const inputColor = `color-mix(in srgb, ${config.foreground} 10%, ${config.background})`;
   const borderColor = `color-mix(in srgb, ${config.foreground} 20%, transparent)`;
   const mutedColor = `color-mix(in srgb, ${config.foreground} 30%, ${config.background})`;
-  
+
   root.style.setProperty('--input', inputColor);
   root.style.setProperty('--border', borderColor);
   root.style.setProperty('--ring', config.foreground);
@@ -113,7 +113,7 @@ export function applyUnifiedThemeToDocument(variant: ThemeVariant): void {
   console.log(`🎨 Applied simplified theme: ${variant}`, {
     background: config.background,
     foreground: config.foreground,
-    primary: config.foreground
+    primary: config.foreground,
   });
 }
 

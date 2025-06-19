@@ -1,5 +1,5 @@
 import type React from 'react';
-import { useSession } from '../../hooks/useSession';
+import { useSession } from '@/hooks/useSession';
 
 export interface EventSystemAPI {
   onGameStart: () => void;

@@ -3,9 +3,9 @@
  * Handles complex statistics calculations and caching
  */
 
-import type { GameStatistics, HighScore } from '../types/tetris';
-import { StatisticsService } from '../utils/data/StatisticsService';
-import type { EnhancedStatistics, GameSession } from '../utils/data/statisticsUtils';
+import type { GameStatistics, HighScore } from '@/types/tetris';
+import { StatisticsService } from '@/utils/data/StatisticsService';
+import type { EnhancedStatistics, GameSession } from '@/utils/data/statisticsUtils';
 
 interface UseStatisticsCalculationProps {
   baseStatistics: GameStatistics;

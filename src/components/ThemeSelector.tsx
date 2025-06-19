@@ -1,8 +1,8 @@
 import React, { useId } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { ThemeVariant } from '../types/tetris';
-import { getTetrominoColors } from '../utils/ui/themeAwareTetrominoes';
-import { getUnifiedThemeConfig } from '../utils/ui/unifiedThemeSystem';
+import type { ThemeVariant } from '@/types/tetris';
+import { getTetrominoColors } from '@/utils/ui/themeAwareTetrominoes';
+import { getUnifiedThemeConfig } from '@/utils/ui/unifiedThemeSystem';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 interface ThemeSelectorProps {
@@ -48,9 +48,7 @@ export default function ThemeSelector({
         >
           <SelectValue />
         </SelectTrigger>
-        <SelectContent
-          className='border rounded-lg bg-theme-background border-theme-foreground border-opacity-30'
-        >
+        <SelectContent className='border rounded-lg bg-theme-background border-theme-foreground border-opacity-30'>
           {themes.map(({ variant, name }) => (
             <SelectItem
               key={variant}
@@ -65,9 +63,7 @@ export default function ThemeSelector({
 
       {/* Simplified theme preview - Only 3 color types */}
       <div className='mt-3 p-3 rounded-lg border bg-theme-background border-theme-foreground border-opacity-30'>
-        <div className='text-xs mb-3 font-medium text-theme-foreground'>
-          {t('themes.preview')}
-        </div>
+        <div className='text-xs mb-3 font-medium text-theme-foreground'>{t('themes.preview')}</div>
 
         {/* Background & Foreground */}
         <div className='mb-3'>
@@ -104,9 +100,7 @@ export default function ThemeSelector({
                   style={{ backgroundColor: color }}
                   title={t('themes.pieceTooltip', { piece, color })}
                 />
-                <span className='text-xs text-theme-foreground opacity-60'>
-                  {piece}
-                </span>
+                <span className='text-xs text-theme-foreground opacity-60'>{piece}</span>
               </div>
             ))}
           </div>

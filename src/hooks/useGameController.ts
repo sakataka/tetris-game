@@ -5,7 +5,7 @@
  * with a clean composition hooks pattern.
  */
 
-import { useSettings, useUpdateSettings } from '../store/settingsStore';
+import { useSettings, useUpdateSettings } from '@/store/settingsStore';
 import {
   type AudioSystemAPI,
   type DeviceSystemAPI,

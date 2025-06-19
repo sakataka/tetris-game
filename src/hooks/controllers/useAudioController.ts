@@ -6,8 +6,8 @@
  */
 
 import { useCallback, useEffect, useRef } from 'react';
-import { useSettings, useUpdateSettings } from '../../store/settingsStore';
-import type { SoundKey } from '../../types/tetris';
+import { useSettings, useUpdateSettings } from '@/store/settingsStore';
+import type { SoundKey } from '@/types/tetris';
 import { useAudio } from '../useAudio';
 
 export interface AudioSystemAPI {

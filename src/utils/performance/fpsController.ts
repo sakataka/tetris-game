@@ -3,6 +3,8 @@
  * Separates FPS control from rendering logic for better performance optimization
  */
 
+import { GAME_TIMING } from '@/constants/timing';
+
 interface FpsControllerConfig {
   targetFps?: number;
   minFps?: number;
@@ -39,7 +41,7 @@ export class FpsController {
       performanceThreshold: config.performanceThreshold ?? 50, // milliseconds
     };
 
-    this.frameInterval = 1000 / this.config.targetFps;
+    this.frameInterval = GAME_TIMING.MS_PER_SECOND / this.config.targetFps;
     this.adaptiveInterval = this.frameInterval;
   }
 
@@ -61,7 +63,7 @@ export class FpsController {
 
     // Calculate current FPS
     this.frameCount++;
-    if (timestamp - this.lastFpsCalculation >= 1000) {
+    if (timestamp - this.lastFpsCalculation >= GAME_TIMING.MS_PER_SECOND) {
       this.currentFps = this.frameCount;
       this.frameCount = 0;
       this.lastFpsCalculation = timestamp;
@@ -114,7 +116,10 @@ export class FpsController {
     // Adjust interval based on performance
     if (avgFps < this.config.minFps) {
       // Performance is poor, reduce target FPS
-      this.adaptiveInterval = Math.min(this.adaptiveInterval * 1.1, 1000 / this.config.minFps);
+      this.adaptiveInterval = Math.min(
+        this.adaptiveInterval * 1.1,
+        GAME_TIMING.MS_PER_SECOND / this.config.minFps
+      );
       this.isThrottling = true;
     } else if (avgFps > this.config.targetFps * 1.1 && this.isThrottling) {
       // Performance is good, try to restore target FPS
@@ -160,7 +165,7 @@ export class FpsController {
     Object.assign(this.config, newConfig);
 
     if (newConfig.targetFps) {
-      this.frameInterval = 1000 / this.config.targetFps;
+      this.frameInterval = GAME_TIMING.MS_PER_SECOND / this.config.targetFps;
       if (!this.isThrottling) {
         this.adaptiveInterval = this.frameInterval;
       }

@@ -5,9 +5,9 @@
  * providing a centralized animation manager that improves performance and maintainability
  */
 
-import { ENV_CONFIG } from '../../config/environment';
-import { PERFORMANCE_LIMITS } from '../../constants/performance';
-import { INTERVALS } from '../../constants/timing';
+import { ENV_CONFIG } from '@/config/environment';
+import { PERFORMANCE_LIMITS } from '@/constants/performance';
+import { GAME_TIMING, INTERVALS } from '@/constants/timing';
 import { log } from '../logging';
 
 export interface AnimationOptions {
@@ -116,7 +116,7 @@ export class AnimationManager {
           return;
         }
 
-        const targetInterval = 1000 / fullOptions.fps;
+        const targetInterval = GAME_TIMING.MS_PER_SECOND / fullOptions.fps;
         const deltaTime = currentTime - animation.lastFrameTime;
 
         // FPS limit check (first frame or interval elapsed)

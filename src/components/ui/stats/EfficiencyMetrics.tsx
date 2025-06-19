@@ -5,8 +5,8 @@
 
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
-import { TYPOGRAPHY } from '../../../constants/layout';
-import type { EnhancedStatistics } from '../../../utils/data/statisticsUtils';
+import { TYPOGRAPHY } from '@/constants/layout';
+import type { EnhancedStatistics } from '@/utils/data/statisticsUtils';
 import CyberCard from '../CyberCard';
 
 interface EfficiencyMetricsProps {

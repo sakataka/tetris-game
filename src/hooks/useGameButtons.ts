@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
-import { useGameState, useResetGame, useTogglePause } from '../store/gameStateStore';
+import { useGameState, useResetGame, useTogglePause } from '@/store/gameStateStore';
 import { useSession } from './useSession';
 
 /**

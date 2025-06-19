@@ -1,6 +1,7 @@
 import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useSettings } from '../hooks/useSettings';
+
 // Note: Mock functions were removed as part of theme system simplification
 
 // Setup DOM environment mock

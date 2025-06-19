@@ -1,11 +1,11 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
+import { GAP_SCALE, PADDING_SCALE } from '@/constants/layout';
+import { useTogglePause } from '@/store/gameStateStore';
+import { useCurrentTheme } from '@/store/themeStore';
 import { Button } from '../components/ui/button';
 import { ConfirmationDialog } from '../components/ui/ConfirmationDialog';
-import { GAP_SCALE, PADDING_SCALE } from '../constants/layout';
-import { useTogglePause } from '../store/gameStateStore';
-import { useCurrentTheme } from '../store/themeStore';
 import ErrorBoundary from './ErrorBoundary';
 import GameInfo from './GameInfo';
 import type { GameControllerAPI } from './GameLogicController';

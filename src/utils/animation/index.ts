@@ -4,6 +4,8 @@
  * Integrated export of all animation-related utilities and hooks
  */
 
+import { GAME_TIMING } from '@/constants/timing';
+
 // Animation manager
 export { AnimationManager, type AnimationOptions, animationManager } from './animationManager';
 
@@ -52,7 +54,7 @@ export const ANIMATION_BEST_PRACTICES = {
   /**
    * Animation settings for UI effects
    */
-  uiEffect: (maxDuration = 5000) => ({
+  uiEffect: (maxDuration = GAME_TIMING.UI_EFFECT_MAX_DURATION) => ({
     ...ANIMATION_PRESETS.UI_ANIMATION,
     autoStop: { maxDuration },
   }),
@@ -60,7 +62,7 @@ export const ANIMATION_BEST_PRACTICES = {
   /**
    * Animation settings for particles
    */
-  particleEffect: (maxDuration = 10000) => ({
+  particleEffect: (maxDuration = GAME_TIMING.PARTICLE_EFFECT_MAX_DURATION) => ({
     ...ANIMATION_PRESETS.PARTICLE_EFFECT,
     autoStop: { maxDuration },
   }),

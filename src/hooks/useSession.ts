@@ -6,7 +6,7 @@ import {
   useIsSessionActive,
   useSessionStats,
   useStartPlaySession,
-} from '../store/statisticsStore';
+} from '@/store/statisticsStore';
 
 /**
  * Unified session tracking hook

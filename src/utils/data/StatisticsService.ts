@@ -5,7 +5,7 @@
  * following Single Responsibility Principle and Service pattern.
  */
 
-import type { GameStatistics, HighScore } from '../../types/tetris';
+import type { GameStatistics, HighScore } from '@/types/tetris';
 import type {
   EnhancedStatistics,
   GameSession,

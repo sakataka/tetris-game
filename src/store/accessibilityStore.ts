@@ -33,8 +33,8 @@ import {
   type VisualAccessibilityActions,
   type VisualAccessibilityState,
   type VisualAssistance,
-} from '../types/accessibility';
-import type { ColorBlindnessType, ContrastLevel } from '../types/tetris';
+} from '@/types/accessibility';
+import type { ColorBlindnessType, ContrastLevel } from '@/types/tetris';
 
 // System preference detection for visual settings
 function detectSystemVisualPreferences(): Partial<VisualAccessibilityState> {

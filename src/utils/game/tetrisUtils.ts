@@ -7,8 +7,8 @@ import {
   PARTICLES_PER_CELL,
   TETROMINO_COLORS,
   TETROMINO_SHAPES,
-} from '../../constants';
-import type { Particle, Tetromino, TetrominoType } from '../../types/tetris';
+} from '@/constants';
+import type { Particle, Tetromino, TetrominoType } from '@/types/tetris';
 import { particlePool } from '../performance/particlePool';
 import { getTetrominoColors } from '../ui/themeAwareTetrominoes';
 

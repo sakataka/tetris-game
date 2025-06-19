@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { animationManager } from '../utils/animation/animationManager';
+import { animationManager } from '@/utils/animation/animationManager';
 
 interface UseAnimationTimerProps {
   isActive: boolean;

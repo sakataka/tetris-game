@@ -1,8 +1,8 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
-import { useCurrentTheme } from '../../store/themeStore';
-import { cn } from '../../utils/ui/cn';
+import { useCurrentTheme } from '@/store/themeStore';
+import { cn } from '@/utils/ui/cn';
 
 interface NavigationItem {
   key: string;

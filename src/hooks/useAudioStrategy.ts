@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { audioManager } from '../utils/audio';
-import { log } from '../utils/logging/logger';
+import { audioManager } from '@/utils/audio';
+import { log } from '@/utils/logging/logger';
 
 export type AudioStrategyType = 'webaudio' | 'htmlaudio' | 'silent';
 

@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { GAME_UI_SIZES } from '../constants/layout';
-import type { Tetromino } from '../types/tetris';
+import { GAME_UI_SIZES } from '@/constants/layout';
+import type { Tetromino } from '@/types/tetris';
 import CyberCard from './ui/CyberCard';
 
 interface NextPiecePanelProps {

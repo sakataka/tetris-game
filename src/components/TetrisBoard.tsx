@@ -3,9 +3,9 @@ import {
   type BoardRenderState,
   DEFAULT_RENDERING_OPTIONS,
   type RenderEffects,
-} from '../types/rendering';
-import type { LineEffectState, Tetromino } from '../types/tetris';
-import { BoardRendererFactory } from '../utils/game/boardRenderer';
+} from '@/types/rendering';
+import type { LineEffectState, Tetromino } from '@/types/tetris';
+import { BoardRendererFactory } from '@/utils/game/boardRenderer';
 import GameOverMessage from './GameOverMessage';
 import PausedMessage from './PausedMessage';
 

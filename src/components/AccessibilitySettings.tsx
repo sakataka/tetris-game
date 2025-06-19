@@ -1,8 +1,8 @@
 import React, { useId } from 'react';
 import { useTranslation } from 'react-i18next';
+import { SPACING, TYPOGRAPHY } from '@/constants/layout';
+import type { AnimationIntensity, ColorBlindnessType, ContrastLevel } from '@/types/tetris';
 import { cn } from '@/utils/ui/cn';
-import { SPACING, TYPOGRAPHY } from '../constants/layout';
-import type { AnimationIntensity, ColorBlindnessType, ContrastLevel } from '../types/tetris';
 import { Label } from './ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Switch } from './ui/switch';
@@ -248,7 +248,9 @@ export default function AccessibilitySettings({
               {animationOptions.find((opt) => opt.value === animationIntensity)?.label}
             </div>
             {reducedMotion && (
-              <div className='text-theme-foreground opacity-90'>{t('accessibility.reducedMotionActive')}</div>
+              <div className='text-theme-foreground opacity-90'>
+                {t('accessibility.reducedMotionActive')}
+              </div>
             )}
           </div>
         </div>

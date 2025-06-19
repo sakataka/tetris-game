@@ -1,4 +1,4 @@
-import type { HighScore } from '../../types/tetris';
+import type { HighScore } from '@/types/tetris';
 
 /**
  * Determine if the specified score qualifies for the high score list

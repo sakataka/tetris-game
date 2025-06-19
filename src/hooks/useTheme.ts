@@ -1,9 +1,9 @@
 import { useCallback, useEffect } from 'react';
-import type { ThemeConfig, ThemeState, ThemeVariant } from '../types/tetris';
-import { animationManager } from '../utils/animation/animationManager';
-import { log } from '../utils/logging';
-import type { UnifiedThemeConfig } from '../utils/ui/unifiedThemeSystem';
-import { applyUnifiedThemeToDocument } from '../utils/ui/unifiedThemeSystem';
+import type { ThemeConfig, ThemeState, ThemeVariant } from '@/types/tetris';
+import { animationManager } from '@/utils/animation/animationManager';
+import { log } from '@/utils/logging';
+import type { UnifiedThemeConfig } from '@/utils/ui/unifiedThemeSystem';
+import { applyUnifiedThemeToDocument } from '@/utils/ui/unifiedThemeSystem';
 import { useAccessibilityFilters } from './useAccessibilityFilters';
 import { useSystemPreferences } from './useSystemPreferences';
 

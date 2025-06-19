@@ -4,7 +4,7 @@ import {
   getPageMetadata,
   pageMetadata,
   updateDocumentMetadata,
-} from '../../utils/metadata/pageMetadata';
+} from '@/utils/metadata/pageMetadata';
 
 /**
  * Page Metadata Tests for React Router Migration

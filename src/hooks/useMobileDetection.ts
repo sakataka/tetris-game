@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BREAKPOINTS } from '../constants/layout';
+import { BREAKPOINTS } from '@/constants/layout';
 
 interface MobileDetectionResult {
   isMobile: boolean;

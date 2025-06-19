@@ -21,8 +21,8 @@ import {
   type RenderEffects,
   RenderError,
   type RenderingOptions,
-} from '../../types/rendering';
-import type { Tetromino } from '../../types/tetris';
+} from '@/types/rendering';
+import type { Tetromino } from '@/types/tetris';
 import { getDropPosition } from './tetrisUtils';
 
 /**
