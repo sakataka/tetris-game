@@ -4,7 +4,7 @@
  * Type-safe event handlers for game controls and UI interactions
  */
 
-import { log } from '../utils/logging';
+import { log } from '@/utils/logging';
 import type { KeyBinding, VirtualControl } from './tetris';
 
 // Game-specific keyboard events

@@ -4,7 +4,7 @@
  * Helper functions for configuration management and validation
  */
 
-import { logger } from '../utils/logging/logger';
+import { logger } from '@/utils/logging';
 import { ENV_CONFIG } from './environment';
 import type { GameConfiguration } from './gameConfig';
 

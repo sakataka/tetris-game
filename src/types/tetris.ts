@@ -5,7 +5,7 @@ export type GameMode = 'single' | 'versus' | 'cooperative' | 'debug';
 export type DifficultyLevel = 'easy' | 'normal' | 'hard' | 'extreme';
 
 // Import unified theme config
-import type { UnifiedThemeConfig } from '../utils/ui/unifiedThemeSystem';
+import type { UnifiedThemeConfig } from '@/utils/ui/unifiedThemeSystem';
 
 // Type definitions for accessibility features
 export type ColorBlindnessType = 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia';
@@ -152,7 +152,7 @@ export interface GameSettings {
 }
 
 // Import ThemeConfig from new theme manager
-export type { UnifiedThemeConfig as ThemeConfig } from '../utils/ui/unifiedThemeSystem';
+export type { UnifiedThemeConfig as ThemeConfig } from '@/utils/ui/unifiedThemeSystem';
 
 // Extended theme state
 export interface ThemeState {

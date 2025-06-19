@@ -8,7 +8,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useSettings, useUpdateSettings } from '@/store/settingsStore';
 import type { SoundKey } from '@/types/tetris';
-import { useAudio } from '../useAudio';
+import { useAudio } from '@/hooks/useAudio';
 
 export interface AudioSystemAPI {
   isMuted: boolean;

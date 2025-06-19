@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { TYPOGRAPHY } from '@/constants/layout';
 import { useCurrentLanguage, useSetLanguage } from '@/store/i18nStore';
 import { cn } from '@/utils/ui/cn';
-import { languageNames, type SupportedLanguage, supportedLanguages } from '../i18n';
+import { languageNames, type SupportedLanguage, supportedLanguages } from '@/i18n';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 interface LanguageSelectorProps {

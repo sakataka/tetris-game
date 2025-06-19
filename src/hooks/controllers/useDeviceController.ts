@@ -5,7 +5,7 @@
  * Manages device detection and platform-specific optimizations.
  */
 
-import { useMobileDetection } from '../useMobileDetection';
+import { useMobileDetection } from '@/hooks/useMobileDetection';
 
 export interface DeviceSystemAPI {
   isMobile: boolean;

@@ -6,7 +6,7 @@
  */
 
 import { useCallback } from 'react';
-import { useSession } from '../useSession';
+import { useSession } from '@/hooks/useSession';
 
 export interface EventSystemAPI {
   onGameStart: () => void;

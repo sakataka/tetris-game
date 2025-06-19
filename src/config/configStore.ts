@@ -6,8 +6,8 @@
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { STORAGE_KEYS } from '../constants/storage';
-import { logger } from '../utils/logging/logger';
+import { STORAGE_KEYS } from '@/constants/storage';
+import { logger } from '@/utils/logging/logger';
 import {
   createGameConfig,
   type GameConfiguration,

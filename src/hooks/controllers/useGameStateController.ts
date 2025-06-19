@@ -22,10 +22,10 @@ import {
 } from '@/store/gameStateStore';
 import type { GameState, LineEffectState, SoundKey, Tetromino } from '@/types/tetris';
 import { animationManager } from '@/utils/animation/animationManager';
-import { useGameControls } from '../useGameControls';
-import { useGameLoop } from '../useGameLoop';
-import { useHighScoreManager } from '../useHighScoreManager';
-import { useSession } from '../useSession';
+import { useGameControls } from '@/hooks/useGameControls';
+import { useGameLoop } from '@/hooks/useGameLoop';
+import { useHighScoreManager } from '@/hooks/useHighScoreManager';
+import { useSession } from '@/hooks/useSession';
 
 export interface GameStateAPI {
   gameState: GameState;

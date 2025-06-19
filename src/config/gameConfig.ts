@@ -4,7 +4,7 @@
  * Unified configuration management with environment-based overrides
  */
 
-import { DEFAULT_VALUES, GAME_TIMING, PERFORMANCE_LIMITS, PREVIEW_PIECES } from '../constants';
+import { DEFAULT_VALUES, GAME_TIMING, PERFORMANCE_LIMITS, PREVIEW_PIECES } from '@/constants';
 import { ENV_CONFIG } from './environment';
 
 // Configuration interfaces

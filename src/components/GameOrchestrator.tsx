@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useMobileDetection } from '@/hooks/useMobileDetection';
 import { useInitializeLanguage } from '@/store/i18nStore';
-import '../i18n'; // Initialize i18n
+import '@/i18n'; // Initialize i18n
 
 interface GameOrchestratorProps {
   children: React.ReactNode;
